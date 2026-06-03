@@ -6,6 +6,8 @@
 #include <QJsonObject>
 
 #include "../mainWindows/mainWindow.h"
+
+#include "../msgInfo/messageErrorOut.h"
 Application::Application( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
 	mainWindowPtr = nullptr;
 	firstShow = false;
@@ -22,18 +24,18 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 			QJsonParseError err;
 			QJsonDocument doc = QJsonDocument::fromJson( byteArray, &err );
 			if( err.error != QJsonParseError::NoError ) {
-				qDebug( ) << tr( "文件读取失败:%1:%2" ).arg( appSettingPath ).arg( err.errorString( ) );
+				MessageErrorOut( ) << tr( "文件读取失败:%1:%2" ).arg( appSettingPath ).arg( err.errorString( ) );
 			} else {
 				*appSetting = doc.object( );
 			}
 		} else
-			qDebug( ) << tr( "文件打开失败:%1" ).arg( appSettingPath );
+			MessageErrorOut( ) << tr( "文件打开失败:%1" ).arg( appSettingPath );
 
 	} else {
 		QDir dir = fileInfoTool->dir( );
 		auto absolutePath = dir.absolutePath( );
 		if( dir.mkdir( absolutePath ) == false )
-			qDebug( ) << tr( "构建路径异常:%1" ).arg( absolutePath );
+			MessageErrorOut( ) << tr( "构建路径异常:%1" ).arg( absolutePath );
 	}
 }
 Application::~Application( ) {
@@ -42,7 +44,7 @@ Application::~Application( ) {
 		QDir dir = fileInfoTool->dir( );
 		auto absolutePath = dir.absolutePath( );
 		if( dir.mkdir( absolutePath ) == false )
-			qDebug( ) << tr( "构建路径异常:%1" ).arg( absolutePath );
+			MessageErrorOut( ) << tr( "构建路径异常:%1" ).arg( absolutePath );
 	}
 	QFile file( appSettingPath );
 	if( file.open( QIODeviceBase::WriteOnly | QIODeviceBase::Text | QIODeviceBase::Truncate ) ) {
@@ -67,20 +69,23 @@ bool Application::notify( QObject *object, QEvent *event ) {
 			break;
 		case QEvent::Close :
 			// 主窗口关闭，则退出软件
-			if( mainWindowPtr == object )
+			if( mainWindowPtr == object ) {
+				QString objectName = mainWindowPtr->objectName( );
+				auto mainWindowXKey = objectName + ".x";
+				auto mainWindowYKey = objectName + ".y";
+				auto mainWindowWKey = objectName + ".w";
+				auto mainWindowHKey = objectName + ".h";
+				int valueX, valueY, valueW, valueH;
+				mainWindowPtr->getSuggestGeometry( valueX, valueY, valueW, valueH );
+				MessageErrorOut( ) << tr( "x : %1, y : %2, w : %3, h : %4" ).arg( valueX ).arg( valueY ).arg( valueW ).arg( valueH );
+				appSetting->insert( mainWindowXKey, valueX );
+				appSetting->insert( mainWindowYKey, valueY );
+				appSetting->insert( mainWindowWKey, valueW );
+				appSetting->insert( mainWindowHKey, valueH );
 				quit( );
+			}
 			break;
 		case QEvent::Quit :
-
-			QString objectName = mainWindowPtr->objectName( );
-			auto mainWindowXKey = objectName + ".x";
-			auto mainWindowYKey = objectName + ".y";
-			auto mainWindowWKey = objectName + ".w";
-			auto mainWindowHKey = objectName + ".h";
-			appSetting->insert( mainWindowXKey, mainWindowPtr->x( ) );
-			appSetting->insert( mainWindowYKey, mainWindowPtr->y( ) );
-			appSetting->insert( mainWindowWKey, mainWindowPtr->width( ) );
-			appSetting->insert( mainWindowHKey, mainWindowPtr->height( ) );
 			delete mainWindowPtr;
 			mainWindowPtr = nullptr;
 			break;
@@ -126,6 +131,8 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 			++containsKeyCount;
 		}
 		if( containsKeyCount == 4 ) {
+
+			MessageErrorOut( ) << tr( "x : %1, y : %2, w : %3, h : %4" ).arg( screenX ).arg( screenY ).arg( screenWidth ).arg( screenHeight );
 			first_show_main_window->suggestGeometry( screenX, screenY, screenWidth, screenHeight );
 			break;
 		}

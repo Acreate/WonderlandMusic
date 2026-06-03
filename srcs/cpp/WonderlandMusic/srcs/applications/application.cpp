@@ -75,9 +75,10 @@ bool Application::notify( QObject *object, QEvent *event ) {
 				auto mainWindowYKey = objectName + ".y";
 				auto mainWindowWKey = objectName + ".w";
 				auto mainWindowHKey = objectName + ".h";
-				int valueX, valueY, valueW, valueH;
-				mainWindowPtr->getSuggestGeometry( valueX, valueY, valueW, valueH );
-				MessageErrorOut( ) << tr( "x : %1, y : %2, w : %3, h : %4" ).arg( valueX ).arg( valueY ).arg( valueW ).arg( valueH );
+				int valueX = mainWindowPtr->x( );
+				int valueY = mainWindowPtr->y( );
+				int valueW = mainWindowPtr->width( );
+				int valueH = mainWindowPtr->height( );
 				appSetting->insert( mainWindowXKey, valueX );
 				appSetting->insert( mainWindowYKey, valueY );
 				appSetting->insert( mainWindowWKey, valueW );
@@ -131,9 +132,9 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 			++containsKeyCount;
 		}
 		if( containsKeyCount == 4 ) {
-
-			MessageErrorOut( ) << tr( "x : %1, y : %2, w : %3, h : %4" ).arg( screenX ).arg( screenY ).arg( screenWidth ).arg( screenHeight );
-			first_show_main_window->suggestGeometry( screenX, screenY, screenWidth, screenHeight );
+			first_show_main_window->move( screenX, screenY );
+			if( screenWidth > 0 && screenHeight > 0 )
+				first_show_main_window->resize( screenWidth, screenHeight );
 			break;
 		}
 	}

@@ -168,10 +168,10 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 			screenBottmY = screenY + screenHeight;
 			if( screenBottmY < cursorY )
 				continue; // 下侧小于鼠标
-			// 找到匹配的屏幕
-			screenX = screenX + screenWidth / 2;
-			screenY = screenY + screenHeight / 2;
-			first_show_main_window->suggestGeometry( screenX, screenY, 0, 0 );
+			// 找到匹配的屏幕，并且移动到中间
+			screenX = screenX + ( screenWidth - first_show_main_window->width( ) ) / 2;
+			screenY = screenY + ( screenHeight - first_show_main_window->height( ) ) / 2;
+			first_show_main_window->move( screenX, screenY );
 			break; // 移动完成，则跳出屏幕检索
 		}
 

@@ -5,7 +5,9 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 	mainWindowPtr = nullptr;
 	firstShow = false;
 }
-Application::~Application( ) { }
+Application::~Application( ) {
+
+}
 bool Application::notify( QObject *object, QEvent *event ) {
 	switch( event->type( ) ) {
 		case QEvent::Show :
@@ -36,8 +38,7 @@ void Application::setMainWindowPtr( MainWindow *main_window_ptr ) {
 		oldMainWindow->deleteLater( );
 	}
 	firstShow = false;
-	main_window_ptr->show( );
-
+	mainWindowPtr->show( );
 }
 void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 

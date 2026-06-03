@@ -1,3 +1,10 @@
 ﻿#include "mainWindow.h"
-MainWindow::MainWindow( ) { }
-MainWindow::~MainWindow( ) { }
+
+#include "../widgets/musicWidget.h"
+MainWindow::MainWindow( ) {
+	musicWidget = new MusicWidget( this );
+	this->setCentralWidget( musicWidget );
+}
+MainWindow::~MainWindow( ) {
+
+}

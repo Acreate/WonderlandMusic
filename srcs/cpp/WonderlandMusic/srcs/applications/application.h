@@ -2,7 +2,10 @@
 #define APPLICATION_H_H_HEAD__FILE__
 
 #include <QApplication>
+class QFileInfo;
+class QDir;
 class MainWindow;
+class QJsonObject;
 class Application : public QApplication {
 	Q_OBJECT;
 public:
@@ -14,6 +17,14 @@ private:
 	MainWindow *mainWindowPtr;
 	/// @brief 是否第一次显示
 	bool firstShow;
+	/// @brief 软件配置
+	QJsonObject *appSetting;
+	/// @brief 软件配置路径
+	QString appSettingPath;
+	/// @brief 目录工具
+	QDir *qDirTool;
+	/// @brief 路径工具
+	QFileInfo *fileInfoTool;
 public:
 	/// @brief 获取配置的主要窗口
 	/// @return 主要窗口

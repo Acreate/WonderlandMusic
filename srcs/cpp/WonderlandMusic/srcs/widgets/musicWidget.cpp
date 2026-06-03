@@ -3,6 +3,8 @@
 #include <QMediaFormat>
 #include <QMetaEnum>
 #include <QFileInfo>
+
+#include "../musics/music.h"
 MusicWidget::MusicWidget( QWidget *parent, const Qt::WindowFlags &f ) : QWidget( parent, f ) {
 	dirPtr = new QDir;
 
@@ -22,11 +24,20 @@ MusicWidget::MusicWidget( QWidget *parent, const Qt::WindowFlags &f ) : QWidget(
 
 }
 MusicWidget::~MusicWidget( ) {
+
+	size_t count = musicsLoadPlanVector.size( );
+	if( count ) {
+		size_t index = 0;
+		auto data = musicsLoadPlanVector.data( );
+		for( ; index < count; ++index )
+			delete data[ index ];
+		musicsLoadPlanVector.clear( );
+	}
+
 	delete dirPtr;
 	delete fileInfo;
 }
 void MusicWidget::loadPathMusicFile( const std::vector< QString > &path ) {
-	std::vector< Music * > result;
 	size_t count = path.size( );
 	if( count == 0 )
 		return;
@@ -39,10 +50,7 @@ void MusicWidget::loadPathMusicFile( const QString &path ) {
 	if( dirPtr->exists( path ) == false )
 		return;
 	fileInfo->setFile( path );
-	if( fileInfo->isFile( ) ) {
-		if( isSupportedAudioCodecs( fileInfo->absoluteFilePath( ) ) == false )
-			return;
-	} else {
+	if( fileInfo->isFile( ) == false ) {
 		dirPtr->setCurrent( path );
 		auto entryInfoList = dirPtr->entryInfoList( QDir::NoDotAndDotDot );
 		qsizetype count = entryInfoList.size( );
@@ -52,7 +60,23 @@ void MusicWidget::loadPathMusicFile( const QString &path ) {
 		qsizetype index = 0;
 		for( ; index < count; ++index )
 			loadPathMusicFile( fileInfoArray[ index ].absoluteFilePath( ) );
+		return; // 目录完成递归检查，则返回
 	}
+	QString absoluteFilePath = fileInfo->absoluteFilePath( );
+	if( isSupportedAudioCodecs( absoluteFilePath ) == false )
+		return; // 不支持格式，则返回
+	size_t count = musicsLoadPlanVector.size( );
+	// 检查是否存在重复
+	if( count > 0 ) {
+		size_t index = 0;
+		auto data = musicsLoadPlanVector.data( );
+		for( ; index < count; ++index )
+			if( data[ index ]->getMusicPath( ) == absoluteFilePath )
+				return; // 如果已经存在，则返回
+	}
+	// 未重复，则加入新对象
+	auto newMusic = new Music( absoluteFilePath );
+	musicsLoadPlanVector.emplace_back( newMusic );
 }
 bool MusicWidget::isSupportedAudioCodecs( const QString &file_name ) const {
 	qsizetype lastIndexOf = file_name.lastIndexOf( "." );

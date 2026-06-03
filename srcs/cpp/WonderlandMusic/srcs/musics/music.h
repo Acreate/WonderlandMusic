@@ -9,6 +9,7 @@ private:
 	QString musicPath;
 public:
 	Music( const QString &music_path, QObject *const parent = nullptr );
+	virtual const QString & getMusicPath( ) const { return musicPath; }
 };
 
 #endif // MUSIC_H_H_HEAD__FILE__

@@ -92,7 +92,7 @@ else()
     endif()
 endif()
 
-target_link_libraries( ${prject_name} PRIVATE Qt6::Widgets Qt6::Core Qt6::Network )
+target_link_libraries( ${prject_name} PRIVATE ${qt_link_lib_list} )
 
 if( ${QT_VERSION} VERSION_LESS 6.1.0 )
     set( BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.${prject_name} )

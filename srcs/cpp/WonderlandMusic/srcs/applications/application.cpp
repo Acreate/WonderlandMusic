@@ -5,6 +5,8 @@
 #include <QFileInfo>
 #include <QJsonObject>
 
+#include "applicationInstance.h"
+
 #include "../mainWindows/mainWindow.h"
 
 #include "../msgInfo/messageErrorOut.h"
@@ -14,6 +16,8 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 	appSetting = new QJsonObject;
 	qDirTool = new QDir;
 	fileInfoTool = new QFileInfo;
+	applicationInstance = new ApplicationInstance( this );
+	ApplicationInstance::instance = applicationInstance;
 	appSettingPath = qDirTool->currentPath( ) + "/program/setting/app.json";
 	fileInfoTool->setFile( appSettingPath );
 	if( fileInfoTool->exists( ) ) {
@@ -54,6 +58,7 @@ Application::~Application( ) {
 		file.write( byteArray );
 		file.close( );
 	}
+	delete applicationInstance;
 	delete appSetting;
 	delete qDirTool;
 	delete fileInfoTool;
@@ -83,6 +88,7 @@ bool Application::notify( QObject *object, QEvent *event ) {
 				appSetting->insert( mainWindowYKey, valueY );
 				appSetting->insert( mainWindowWKey, valueW );
 				appSetting->insert( mainWindowHKey, valueH );
+				ApplicationInstance::instance = nullptr;
 				quit( );
 			}
 			break;
@@ -92,6 +98,9 @@ bool Application::notify( QObject *object, QEvent *event ) {
 			break;
 	}
 	return notify;
+}
+bool Application::event( QEvent *event ) {
+	return QApplication::event( event );
 }
 void Application::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )

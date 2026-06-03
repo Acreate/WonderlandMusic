@@ -2,6 +2,7 @@
 #define APPLICATION_H_H_HEAD__FILE__
 
 #include <QApplication>
+class ApplicationInstance;
 class QFileInfo;
 class QDir;
 class MainWindow;
@@ -12,11 +13,15 @@ public:
 	Application( int &argc, char **const argv, const int i = ApplicationFlags );
 	~Application( ) override;
 	bool notify( QObject *object, QEvent *event ) override;
+protected:
+	bool event( QEvent * ) override;
 private:
 	/// @brief 主要先显示的窗口
 	MainWindow *mainWindowPtr;
 	/// @brief 是否第一次显示
 	bool firstShow;
+	/// @brief 软件实例
+	ApplicationInstance *applicationInstance;
 	/// @brief 软件配置
 	QJsonObject *appSetting;
 	/// @brief 软件配置路径

@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonObject>
+#include <QTranslator>
 
 #include "applicationInstance.h"
 
@@ -11,20 +12,23 @@
 
 #include "../msgInfo/messageErrorOut.h"
 Application::Application( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
+
 	mainWindowPtr = nullptr;
 	firstShow = false;
 	appSetting = new QJsonObject;
 	qDirTool = new QDir;
 	fileInfoTool = new QFileInfo;
 	translate = new Translate;
+	QString currentPath = qDirTool->currentPath( );
+
 	appStartRunTime = new QDateTime( );
 	*appStartRunTime = QDateTime::currentDateTime( );
-	applicationInstance = new ApplicationInstance( this );
-	ApplicationInstance::instance = applicationInstance;
-	appSettingPath = qDirTool->currentPath( ) + "/program/setting/app.json";
+
+	QString prefix;
+
+	appSettingPath = currentPath + "/program/setting/app.json";
 	fileInfoTool->setFile( appSettingPath );
 	if( fileInfoTool->exists( ) ) {
-
 		QFile file( appSettingPath );
 		if( file.open( QIODeviceBase::Text | QIODeviceBase::ReadOnly ) ) {
 			auto byteArray = file.readAll( );
@@ -32,8 +36,12 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 			QJsonDocument doc = QJsonDocument::fromJson( byteArray, &err );
 			if( err.error != QJsonParseError::NoError ) {
 				MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath << " : " << err.errorString( );
-			} else
+			} else {
 				*appSetting = doc.object( );
+				auto jsonValue = appSetting->find( translate->app_QTranslator_path_key );
+				if( jsonValue != appSetting->end( ) )
+					prefix = jsonValue->toString( );
+			}
 		} else
 			MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath;
 
@@ -44,6 +52,34 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 			if( dir.mkdir( absolutePath ) == false )
 				MessageErrorOut( ) << translate->createDirError << " : " << absolutePath;
 	}
+	// 加载语言文件
+	fileInfoTool->setFile( prefix );
+	// 语言文件不存在，则使用自定义路径
+	if( fileInfoTool->exists( ) == false ) {
+		QLocale locale = QLocale::system( );
+		auto localeName = locale.name( );
+		prefix = currentPath + "/program/translations/" + applicationName( ) + "_" + localeName + ".qm";
+		if( fileInfoTool->exists( prefix ) == false )
+			prefix = currentPath + "/program/translations/" + applicationName( ) + ".qm";
+	}
+	qTranslator = new QTranslator;
+	if( qTranslator->load( prefix ) == false ) {
+		MessageErrorOut( ) << translate->loadQTranslatorFile << " : " << prefix;
+		// 失败则删除语言文件路径
+		appSetting->remove( translate->app_QTranslator_path_key );
+	} else if( installTranslator( qTranslator ) == false ) {
+		MessageErrorOut( ) << translate->loadQTranslatorApp << " : " << prefix;
+		// 失败则删除语言文件路径
+		appSetting->remove( translate->app_QTranslator_path_key );
+	} else {
+		// 刷新翻译
+		delete translate;
+		translate = new Translate;
+		// 插入语言文件路径
+		appSetting->insert( translate->app_QTranslator_path_key, prefix );
+	}
+	applicationInstance = new ApplicationInstance( this );
+	ApplicationInstance::instance = applicationInstance;
 }
 Application::~Application( ) {
 	fileInfoTool->setFile( appSettingPath );
@@ -67,6 +103,7 @@ Application::~Application( ) {
 	delete fileInfoTool;
 	delete appStartRunTime;
 	delete translate;
+	delete qTranslator;
 }
 bool Application::notify( QObject *object, QEvent *event ) {
 	bool notify = QApplication::notify( object, event );
@@ -80,19 +117,14 @@ bool Application::notify( QObject *object, QEvent *event ) {
 		case QEvent::Close :
 			// 主窗口关闭，则退出软件
 			if( mainWindowPtr == object ) {
-				QString objectName = mainWindowPtr->objectName( );
-				auto mainWindowXKey = objectName + ".x";
-				auto mainWindowYKey = objectName + ".y";
-				auto mainWindowWKey = objectName + ".w";
-				auto mainWindowHKey = objectName + ".h";
 				int valueX = mainWindowPtr->x( );
 				int valueY = mainWindowPtr->y( );
 				int valueW = mainWindowPtr->width( );
 				int valueH = mainWindowPtr->height( );
-				appSetting->insert( mainWindowXKey, valueX );
-				appSetting->insert( mainWindowYKey, valueY );
-				appSetting->insert( mainWindowWKey, valueW );
-				appSetting->insert( mainWindowHKey, valueH );
+				appSetting->insert( translate->main_window_x_key, valueX );
+				appSetting->insert( translate->main_window_y_key, valueY );
+				appSetting->insert( translate->main_window_w_key, valueW );
+				appSetting->insert( translate->main_window_h_key, valueH );
 				ApplicationInstance::instance = nullptr;
 				// 删除所有窗口
 				QWidgetList levelWidgets = topLevelWidgets( );
@@ -118,6 +150,15 @@ bool Application::event( QEvent *event ) {
 Application::Translate::Translate( ) {
 	createDirError = QObject::tr( "创建目录失败" );
 	openFileError = QObject::tr( "打开文件失败" );
+
+	loadQTranslatorFile = QObject::tr( "打开语言文件失败" );
+	loadQTranslatorApp = QObject::tr( "加载语言到软件失败" );
+	/* 配置文件 */
+	app_QTranslator_path_key = "app.QTranslator.path";
+	main_window_x_key = "app.MainWindow.x";
+	main_window_y_key = "app.MainWindow.y";
+	main_window_w_key = "app.MainWindow.w";
+	main_window_h_key = "app.MainWindow.h";
 }
 void Application::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )
@@ -135,25 +176,22 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 
 	int screenX, screenY, screenRightX, screenBottmY, screenWidth, screenHeight;
 	QString objectName = first_show_main_window->objectName( );
-	auto mainWindowXKey = objectName + ".x";
-	auto mainWindowYKey = objectName + ".y";
-	auto mainWindowWKey = objectName + ".w";
-	auto mainWindowHKey = objectName + ".h";
+
 	int containsKeyCount = 0;
 	auto iterator = appSetting->begin( );
 	auto end = appSetting->end( );
 	for( ; iterator != end; ++iterator ) {
 		objectName = iterator.key( );
-		if( objectName == mainWindowXKey ) {
+		if( objectName == translate->main_window_x_key ) {
 			screenX = iterator.value( ).toInt( 0 );
 			++containsKeyCount;
-		} else if( objectName == mainWindowYKey ) {
+		} else if( objectName == translate->main_window_y_key ) {
 			screenY = iterator.value( ).toInt( 0 );
 			++containsKeyCount;
-		} else if( objectName == mainWindowWKey ) {
+		} else if( objectName == translate->main_window_w_key ) {
 			screenWidth = iterator.value( ).toInt( 200 );
 			++containsKeyCount;
-		} else if( objectName == mainWindowHKey ) {
+		} else if( objectName == translate->main_window_h_key ) {
 			screenHeight = iterator.value( ).toInt( 100 );
 			++containsKeyCount;
 		}

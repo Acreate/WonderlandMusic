@@ -22,10 +22,26 @@ private:
 		QString createDirError;
 		/// @brief 打开文件错误
 		QString openFileError;
+		/// @brief 打开语言文件失败
+		QString loadQTranslatorFile;
+		/// @brief 加载语言文件打软件失败
+		QString loadQTranslatorApp;
+		/// @brief 语言文件关键字
+		QString app_QTranslator_path_key;
+		/// @brief 主窗口横向关键字
+		QString main_window_x_key;
+		/// @brief 主窗口纵向关键字
+		QString main_window_y_key;
+		/// @brief 主窗口宽度关键字
+		QString main_window_h_key;
+		/// @brief 主窗口高度关键字
+		QString main_window_w_key;
 	public:
 		Translate( );
 	} *translate;
 private:
+	/// @brief 语言
+	QTranslator *qTranslator;
 	/// @brief 主要先显示的窗口
 	MainWindow *mainWindowPtr;
 	/// @brief 是否第一次显示

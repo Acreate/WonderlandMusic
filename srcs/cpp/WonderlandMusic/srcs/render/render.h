@@ -34,6 +34,12 @@ public:
 	/// @param color 填充颜色
 	/// @return 失败返回 false
 	virtual bool renderColorImage( QImage &result_image, const QColor &color ) = 0;
+	/// @brief 替换图像中的颜色
+	/// @param result_image 替换图像
+	/// @param old_color 被替换的颜色
+	/// @param new_color 新的颜色
+	/// @return 失败返回 false
+	virtual bool renderColorReplaceColorImage( QImage &result_image, const QColor &old_color, const QColor &new_color ) =0;
 };
 
 #endif // RENDER_H_H_HEAD__FILE__

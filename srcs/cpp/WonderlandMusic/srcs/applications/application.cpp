@@ -196,5 +196,4 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 		}
 
 	}
-	MessageErrorOut( ) << tr( "第一次" );
 }

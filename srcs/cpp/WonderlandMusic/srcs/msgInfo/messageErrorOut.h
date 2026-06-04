@@ -11,6 +11,8 @@ public:
 	MessageErrorOut( const QString &log_home_path = "log", const std::source_location &source_location = std::source_location::current( ) );
 	MessageErrorOut & operator<<( const QString &msg );
 	virtual ~MessageErrorOut( );
+private:
+	virtual QString & formatMessageOut( QString &result_msg, const std::source_location &source_location, const QString &msg ) const;
 };
 
 #endif // MESSAGEERROROUT_H_H_HEAD__FILE__

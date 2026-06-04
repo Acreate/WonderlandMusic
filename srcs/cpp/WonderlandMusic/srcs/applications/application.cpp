@@ -30,18 +30,18 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 			QJsonParseError err;
 			QJsonDocument doc = QJsonDocument::fromJson( byteArray, &err );
 			if( err.error != QJsonParseError::NoError ) {
-				MessageErrorOut( ) << tr( "文件读取失败:%1:%2" ).arg( appSettingPath ).arg( err.errorString( ) );
+				MessageErrorOut( ) << translate.openFileError << " : " << appSettingPath << " : " << err.errorString( );
 			} else {
 				*appSetting = doc.object( );
 			}
 		} else
-			MessageErrorOut( ) << tr( "文件打开失败:%1" ).arg( appSettingPath );
+			MessageErrorOut( ) << translate.openFileError << " : " << appSettingPath;
 
 	} else {
 		QDir dir = fileInfoTool->dir( );
 		auto absolutePath = dir.absolutePath( );
 		if( dir.mkdir( absolutePath ) == false )
-			MessageErrorOut( ) << tr( "构建路径异常:%1" ).arg( absolutePath );
+			MessageErrorOut( ) << translate.createDirError << " : " << absolutePath;
 	}
 }
 Application::~Application( ) {
@@ -50,7 +50,7 @@ Application::~Application( ) {
 		QDir dir = fileInfoTool->dir( );
 		auto absolutePath = dir.absolutePath( );
 		if( dir.mkdir( absolutePath ) == false )
-			MessageErrorOut( ) << tr( "构建路径异常:%1" ).arg( absolutePath );
+			MessageErrorOut( ) << translate.createDirError << " : " << absolutePath;
 	}
 	QFile file( appSettingPath );
 	if( file.open( QIODeviceBase::WriteOnly | QIODeviceBase::Text | QIODeviceBase::Truncate ) ) {
@@ -112,6 +112,10 @@ bool Application::notify( QObject *object, QEvent *event ) {
 }
 bool Application::event( QEvent *event ) {
 	return QApplication::event( event );
+}
+Application::Translate::Translate( ) {
+	createDirError = QObject::tr( "创建目录失败" );
+	openFileError = QObject::tr( "打开文件失败" );
 }
 void Application::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )
@@ -196,4 +200,5 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 		}
 
 	}
+	MessageErrorOut( ) << tr( "第一次" );
 }

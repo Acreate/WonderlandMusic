@@ -16,6 +16,16 @@ public:
 protected:
 	bool event( QEvent * ) override;
 private:
+	class Translate {
+		friend class Application;
+		/// @brief 创建目录错误
+		QString createDirError;
+		/// @brief 打开文件错误
+		QString openFileError;
+	public:
+		Translate( );
+	} translate;
+private:
 	/// @brief 主要先显示的窗口
 	MainWindow *mainWindowPtr;
 	/// @brief 是否第一次显示

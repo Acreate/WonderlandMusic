@@ -4,7 +4,18 @@
 
 #include "../applications/application.h"
 #include "../applications/applicationInstance.h"
-MessageErrorOut::MessageErrorOut( const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ) { }
+
+#include "../tools/dateTimeFormat.h"
+MessageErrorOut::Translate::Translate( ) {
+	sourceFile = QObject::tr( "源文件" );
+	sourceFunction = QObject::tr( "源函数" );
+	sourceLine = QObject::tr( "源行号" );
+	createDirError = QObject::tr( "创建目录失败" );
+	openFileError = QObject::tr( "打开文件失败" );
+}
+MessageErrorOut::MessageErrorOut( const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ) {
+
+}
 MessageErrorOut & MessageErrorOut::operator<<( const QString &msg ) {
 	outMsgVector.emplace_back( msg );
 	return *this;
@@ -24,7 +35,10 @@ MessageErrorOut::~MessageErrorOut( ) {
 	formatMessageOut( outString, location, jion );
 	qDebug( ) << outString.toStdString( ).c_str( );
 	auto &appStartRunDataTime = ApplicationInstance::getInstance( )->getApplication( )->getAppStartRunDataTime( );
-	QString writeFilePath = logHomePtah + "/" + appStartRunDataTime.toString( "yyyy年MM月dd日" ) + ".log";
+	auto date = appStartRunDataTime.date( );
+	QString dateTimeFormatString;
+	dateTimeFormat.formatData( dateTimeFormatString, date );
+	QString writeFilePath = logHomePtah + "/" + dateTimeFormatString + ".log";
 	QFileInfo fileInfo( writeFilePath );
 	auto dir = fileInfo.dir( );
 	writeFilePath = fileInfo.absoluteFilePath( );
@@ -32,7 +46,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 	if( dir.exists( ) == false ) {
 		if( dir.mkdir( logHomePtah ) == false ) {
 			outString.clear( );
-			formatMessageOut( outString, std::source_location::current( ), QObject::tr( "无法创建目录 : %1" ).arg( logHomePtah ) );
+			formatMessageOut( outString, std::source_location::current( ), translate.createDirError + " : " + logHomePtah );
 			qDebug( ) << outString.toStdString( ).c_str( );
 			return;
 		}
@@ -43,7 +57,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 		flags = flags | QIODeviceBase::Append;
 	if( openFile.open( flags ) == false ) {
 		outString.clear( );
-		formatMessageOut( outString, std::source_location::current( ), QObject::tr( "无法打开文件 : %1" ).arg( writeFilePath ) );
+		formatMessageOut( outString, std::source_location::current( ), translate.openFileError + " : " + writeFilePath );
 		qDebug( ) << outString.toStdString( ).c_str( );
 		return;
 	}
@@ -59,7 +73,10 @@ QString & MessageErrorOut::formatMessageOut( QString &result_msg, const std::sou
 	QDir cmakeRootPath( Cmake_Source_Dir );
 	auto relativeFilePath = cmakeRootPath.relativeFilePath( msgCodeFileName );
 
-	result_msg.append( "\n-----\n :: \n : 源文件 = " ).append( relativeFilePath ).append( "\n : 函数 = " ).append( msgCodeFunctionName ).append( "\n : 行号 = " ).append( QString::number( msgCodeLine ) ).append( "\n : " ).append( QDateTime::currentDateTime( ).toString( "yyyy 年 MM 月 dd 日 hh : mm : ss . z" ) ).append( " ->\n ::\n" ).append( msg ).append( "\n-----\n" );
+	QString currentDataTimeToString;
+	dateTimeFormat.formatData( currentDataTimeToString ).append( dateTimeFormat.formatTime( ) );
+
+	result_msg.append( "\n-----\n :: \n : " ).append( translate.sourceFile ).append( " = " ).append( relativeFilePath ).append( "\n : " ).append( translate.sourceFunction ).append( " = " ).append( msgCodeFunctionName ).append( "\n : " ).append( translate.sourceLine ).append( " = " ).append( QString::number( msgCodeLine ) ).append( "\n : " ).append( currentDataTimeToString ).append( " ->\n ::\n" ).append( msg ).append( "\n-----\n" );
 
 	return result_msg;
 }

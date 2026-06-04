@@ -6,6 +6,16 @@ class MusicWidget;
 class MainWindow : public QMainWindow {
 	Q_OBJECT;
 private:
+	class Translate {
+		friend class MainWindow;
+		/// @brief 窗口对象名称
+		QString appWindowObjectName;
+		/// @brief 窗口标题名称
+		QString windowTitleName;
+	public:
+		Translate( );
+	} translate;
+private:
 	MusicWidget *musicWidget;
 public:
 	MainWindow( );

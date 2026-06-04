@@ -21,19 +21,31 @@ private:
 protected:
 	~AppRenderObj( ) override { }
 public:
-	bool render( QImage &result_image, const QString &text ) override;
+	bool renderTextImage( QImage &result_image, const QString &text ) override;
+	bool renderTextImage( QImage &result_image, const QString &text, const QColor &draw_color ) override;
+	bool renderTextImage( QImage &result_image, const QString &text, const QFont &draw_font ) override;
+	bool renderTextImage( QImage &result_image, const QString &text, const QFont &draw_font, const QColor &draw_color ) override;
 	bool renderOverlapImage( QImage &result_image, const QImage &top_image ) override;
 	bool renderExpandImage( QImage &result_image, const QImage &expand_image, const QPoint &pos ) override;
 	bool renderColorImage( QImage &result_image, const QColor &color ) override;
 	bool renderColorReplaceColorImage( QImage &result_image, const QColor &old_color, const QColor &new_color ) override;
 };
 
-bool AppRenderObj::render( QImage &result_image, const QString &text ) {
+bool AppRenderObj::renderTextImage( QImage &result_image, const QString &text ) {
+	return renderTextImage( result_image, text, font, color );
+}
+bool AppRenderObj::renderTextImage( QImage &result_image, const QString &text, const QColor &draw_color ) {
+	return renderTextImage( result_image, text, font, draw_color );
+}
+bool AppRenderObj::renderTextImage( QImage &result_image, const QString &text, const QFont &draw_font ) {
+	return renderTextImage( result_image, text, draw_font, color );
+}
+bool AppRenderObj::renderTextImage( QImage &result_image, const QString &text, const QFont &draw_font, const QColor &draw_color ) {
 	qsizetype length = text.length( );
 	if( length == 0 )
 		return true;
 
-	QFontMetrics fontMetrics( font );
+	QFontMetrics fontMetrics( draw_font );
 	int ascent = fontMetrics.ascent( );
 	int height = fontMetrics.height( );
 	int horizontalAdvance = fontMetrics.horizontalAdvance( text );
@@ -43,9 +55,10 @@ bool AppRenderObj::render( QImage &result_image, const QString &text ) {
 	image.fill( 0 );
 	QPainter painter;
 	painter.begin( &image );
-	painter.setFont( font );
+	painter.drawImage( 0, 0, result_image );
+	painter.setFont( draw_font );
 	QPen pen = painter.pen( );
-	pen.setColor( color );
+	pen.setColor( draw_color );
 	painter.setPen( pen );
 	painter.drawText( 0, ascent, text );
 	painter.end( );
@@ -108,7 +121,7 @@ bool AppRenderObj::renderColorImage( QImage &result_image, const QColor &color )
 	QImage buff = QImage( resultWidth, resultHeight, QImage::Format_RGBA8888 );
 	if( buff.isNull( ) )
 		return false;
-	buff.fill( color );
+	result_image.fill( color );
 	result_image = buff;
 	return true;
 }

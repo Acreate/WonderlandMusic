@@ -10,16 +10,7 @@
 
 MusicWidget::MusicWidget( QWidget *parent, const Qt::WindowFlags &f ) : QWidget( parent, f ) {
 	dirPtr = new QDir;
-
 	fileInfo = new QFileInfo;
-
-	if( isSupportedAudioCodecs( "./program/music/20Hz-stero.wav" ) )
-		MessageErrorOut( ) << "支持 wav";
-	if( isSupportedAudioCodecs( "./program/music/20kHz.flac" ) )
-		MessageErrorOut( ) << "支持 flac";
-	if( isSupportedAudioCodecs( "./program/music/20kHz.mp3" ) )
-		MessageErrorOut( ) << "支持 mp3";
-
 }
 MusicWidget::~MusicWidget( ) {
 

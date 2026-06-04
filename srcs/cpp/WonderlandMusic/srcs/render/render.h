@@ -1,6 +1,7 @@
 ﻿#ifndef RENDER_H_H_HEAD__FILE__
 #define RENDER_H_H_HEAD__FILE__
 
+class QFont;
 class QColor;
 class QPoint;
 class QImage;
@@ -17,7 +18,26 @@ public:
 	/// @param result_image 目标页面，同时用于返回
 	/// @param text 字符串
 	/// @return 失败返回 false
-	virtual bool render( QImage &result_image, const QString &text ) = 0;
+	virtual bool renderTextImage( QImage &result_image, const QString &text ) = 0;
+	/// @brief 渲染字符串到页面
+	/// @param result_image 目标页面，同时用于返回
+	/// @param text 字符串
+	/// @param draw_color 字体颜色
+	/// @return 失败返回 false
+	virtual bool renderTextImage( QImage &result_image, const QString &text, const QColor &draw_color ) = 0;
+	/// @brief 渲染字符串到页面
+	/// @param result_image 目标页面，同时用于返回
+	/// @param text 字符串
+	/// @param draw_font 绘制字体
+	/// @return 失败返回 false
+	virtual bool renderTextImage( QImage &result_image, const QString &text, const QFont &draw_font ) = 0;
+	/// @brief 渲染字符串到页面
+	/// @param result_image 目标页面，同时用于返回
+	/// @param text 字符串
+	/// @param draw_font 绘制字体
+	/// @param draw_color 字体颜色
+	/// @return 失败返回 false
+	virtual bool renderTextImage( QImage &result_image, const QString &text, const QFont &draw_font, const QColor &draw_color ) = 0;
 	/// @brief 重叠图像
 	/// @param result_image 底层图像，同时用于返回
 	/// @param top_image 上层图像

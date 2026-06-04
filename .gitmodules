@@ -1,3 +1,6 @@
 [submodule "srcs/cmake/cmakeFuncs"]
 	path = srcs/cmake/cmakeFuncs
 	url = https://gitee.com/ChenYLhuman/cmakeFuncs.git
+[submodule "srcs/cpp/WonderlandMusic/qrc/music/766e6"]
+	path = srcs/cpp/WonderlandMusic/qrc/music/766e6
+	url = https://gitcode.com/open-source-toolkit/766e6.git

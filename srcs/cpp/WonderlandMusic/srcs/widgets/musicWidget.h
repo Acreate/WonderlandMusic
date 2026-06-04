@@ -13,8 +13,6 @@ private:
 	QDir *dirPtr;
 	/// @brief 文件工具
 	QFileInfo *fileInfo;
-	/// @brief 支持音乐类型列表
-	std::vector< QString > supportedAudioCodecs;
 	/// @brief 所有音乐
 	std::vector< Music * > musicsLoadPlanVector;
 public:
@@ -31,9 +29,6 @@ public:
 	/// @param path 路径
 	/// @return 成功加载的音乐列表
 	void loadPathMusicFile( const QString &path );
-	/// @brief 获取支持音乐类型列表
-	/// @return 获取支持音乐类型列表
-	const std::vector< QString > & getSupportedAudioCodecs( ) const { return supportedAudioCodecs; }
 	/// @brief 检查文件是否支持
 	/// @param file_name 音乐文件
 	/// @return false 表示不支持

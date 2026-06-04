@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>png/播放.png</file>
-        <file>png/上一曲.png</file>
-        <file>png/停止.png</file>
-        <file>png/下一曲.png</file>
-        <file>png/添加.png</file>
-    </qresource>
-</RCC>

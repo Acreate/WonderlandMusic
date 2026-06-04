@@ -180,7 +180,7 @@ ApplicationInstance *ApplicationInstance::instance = nullptr;
 ApplicationInstance::ApplicationInstance( Application *const application ) : application( application ) {
 	QFont customFont = QFont( "Microsoft YaHei", 14 ); // 使用外部字体
 	// 加载字体
-	int fontId = QFontDatabase::addApplicationFont( ":/font/Alibaba/Alibaba-PuHuiTi-Medium.ttf" );
+	int fontId = QFontDatabase::addApplicationFont( "./program/font/Alibaba/Alibaba-PuHuiTi-Medium.ttf" );
 
 	QStringList familyList;
 	if( fontId != -1 ) {

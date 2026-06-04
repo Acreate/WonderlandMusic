@@ -9,10 +9,8 @@
 #include "applicationInstance.h"
 
 #include "../mainWindows/mainWindow.h"
-
 #include "../msgInfo/messageErrorOut.h"
 
-#include "../render/render.h"
 Application::Application( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
 
 	mainWindowPtr = nullptr;

@@ -51,18 +51,6 @@ append_source_file_extensions( LANGUAGES C CXX SUFFIXS h hpp hc H HPP HC )
 
 get_path_sources( project_src_file PATHS "${CMAKE_CURRENT_LIST_DIR}/srcs" LANGUAGES CXX C )
 
-list( APPEND image_sources
-	"${CMAKE_CURRENT_LIST_DIR}/qrc/resource.qrc"
-	"${CMAKE_CURRENT_LIST_DIR}/qrc/font.qrc"
-	"${CMAKE_CURRENT_LIST_DIR}/qrc/png.qrc"
-)
-qt_add_resources(
-	resource_qrc
-	${image_sources}
-)
-
-list( APPEND project_src_file ${image_sources} ${resource_qrc} )
-
 set( app_run_bin "${Project_Run_Bin_Path}/${prject_name}" )
 set( app_static_lib_bin "${Project_Run_Static_Lib_Path}/${prject_name}" )
 set( app_pdb_bin "${Project_Run_Pbd_Path}/${prject_name}" )
@@ -151,7 +139,9 @@ qt_add_translations(
 )
 
 set( copy_file_src_dir "${CMAKE_CURRENT_SOURCE_DIR}/resources" )
-copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/setting" "${app_resouce_path}" )
+copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/font" "${app_resouce_path}" )
 copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/music" "${app_resouce_path}" )
+copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/png" "${app_resouce_path}" )
+copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/setting" "${app_resouce_path}" )
 
 set_property( TARGET "${prject_name}" PROPERTY appResoucePath "${app_resouce_path}" )

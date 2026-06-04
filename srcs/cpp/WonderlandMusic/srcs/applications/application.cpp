@@ -16,6 +16,7 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 	appSetting = new QJsonObject;
 	qDirTool = new QDir;
 	fileInfoTool = new QFileInfo;
+	translate = new Translate;
 	appStartRunTime = new QDateTime( );
 	*appStartRunTime = QDateTime::currentDateTime( );
 	applicationInstance = new ApplicationInstance( this );
@@ -30,18 +31,18 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 			QJsonParseError err;
 			QJsonDocument doc = QJsonDocument::fromJson( byteArray, &err );
 			if( err.error != QJsonParseError::NoError ) {
-				MessageErrorOut( ) << translate.openFileError << " : " << appSettingPath << " : " << err.errorString( );
-			} else {
+				MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath << " : " << err.errorString( );
+			} else
 				*appSetting = doc.object( );
-			}
 		} else
-			MessageErrorOut( ) << translate.openFileError << " : " << appSettingPath;
+			MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath;
 
 	} else {
 		QDir dir = fileInfoTool->dir( );
 		auto absolutePath = dir.absolutePath( );
-		if( dir.mkdir( absolutePath ) == false )
-			MessageErrorOut( ) << translate.createDirError << " : " << absolutePath;
+		if( fileInfoTool->exists( absolutePath ) == false )
+			if( dir.mkdir( absolutePath ) == false )
+				MessageErrorOut( ) << translate->createDirError << " : " << absolutePath;
 	}
 }
 Application::~Application( ) {
@@ -50,10 +51,10 @@ Application::~Application( ) {
 		QDir dir = fileInfoTool->dir( );
 		auto absolutePath = dir.absolutePath( );
 		if( dir.mkdir( absolutePath ) == false )
-			MessageErrorOut( ) << translate.createDirError << " : " << absolutePath;
+			MessageErrorOut( ) << translate->createDirError << " : " << absolutePath;
 	}
 	QFile file( appSettingPath );
-	if( file.open( QIODeviceBase::WriteOnly | QIODeviceBase::Text | QIODeviceBase::Truncate ) ) {
+	if( file.open( QIODeviceBase::ReadWrite | QIODeviceBase::Text | QIODeviceBase::Truncate ) ) {
 		QJsonDocument doc( *appSetting );
 		QString jsonStr = doc.toJson( QJsonDocument::Indented ); //格式化字符串
 		auto byteArray = jsonStr.toUtf8( );
@@ -65,6 +66,7 @@ Application::~Application( ) {
 	delete qDirTool;
 	delete fileInfoTool;
 	delete appStartRunTime;
+	delete translate;
 }
 bool Application::notify( QObject *object, QEvent *event ) {
 	bool notify = QApplication::notify( object, event );

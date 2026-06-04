@@ -24,7 +24,7 @@ private:
 		QString openFileError;
 	public:
 		Translate( );
-	} translate;
+	} *translate;
 private:
 	/// @brief 主要先显示的窗口
 	MainWindow *mainWindowPtr;

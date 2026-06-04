@@ -16,6 +16,8 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 	appSetting = new QJsonObject;
 	qDirTool = new QDir;
 	fileInfoTool = new QFileInfo;
+	appStartRunTime = new QDateTime( );
+	*appStartRunTime = QDateTime::currentDateTime( );
 	applicationInstance = new ApplicationInstance( this );
 	ApplicationInstance::instance = applicationInstance;
 	appSettingPath = qDirTool->currentPath( ) + "/program/setting/app.json";
@@ -62,6 +64,7 @@ Application::~Application( ) {
 	delete appSetting;
 	delete qDirTool;
 	delete fileInfoTool;
+	delete appStartRunTime;
 }
 bool Application::notify( QObject *object, QEvent *event ) {
 	bool notify = QApplication::notify( object, event );
@@ -89,6 +92,14 @@ bool Application::notify( QObject *object, QEvent *event ) {
 				appSetting->insert( mainWindowWKey, valueW );
 				appSetting->insert( mainWindowHKey, valueH );
 				ApplicationInstance::instance = nullptr;
+				// 删除所有窗口
+				QWidgetList levelWidgets = topLevelWidgets( );
+				qsizetype count = levelWidgets.size( );
+				auto data = levelWidgets.data( );
+				qsizetype index = 0;
+				for( ; index < count; ++index )
+					if( data[ index ] != mainWindowPtr )
+						delete data[ index ];
 				quit( );
 			}
 			break;
@@ -185,5 +196,5 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 		}
 
 	}
-
+	MessageErrorOut( ) << tr( "第一次" );
 }

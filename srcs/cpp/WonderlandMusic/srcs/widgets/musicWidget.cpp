@@ -5,6 +5,16 @@
 #include <QFileInfo>
 
 #include "../musics/music.h"
+
+#include "../applications/applicationInstance.h"
+
+#include "../msgInfo/messageErrorOut.h"
+
+#include "../render/render.h"
+
+#include <QLabel>
+#include <QVBoxLayout>
+
 MusicWidget::MusicWidget( QWidget *parent, const Qt::WindowFlags &f ) : QWidget( parent, f ) {
 	dirPtr = new QDir;
 
@@ -22,6 +32,17 @@ MusicWidget::MusicWidget( QWidget *parent, const Qt::WindowFlags &f ) : QWidget(
 	for( ; index < count; ++index )
 		data[ index ] = metaEnum.valueToKey( ( quint64 ) ( audioCodec[ index ] ) ), data[ index ] = data[ index ].toUpper( );
 
+	auto applicationInstance = ApplicationInstance::getInstance( );
+
+	QImage buff;
+	if( applicationInstance->getRender( )->render( buff, tr( "L I l i k g 一起 打怪罪" ) ) == false )
+		MessageErrorOut( ) << tr( "加载失败" );
+	else
+		buff.save( "log/buff.png" );
+	QLabel *showRender = new QLabel( this );
+	showRender->setPixmap( QPixmap::fromImage( buff ) );
+	QVBoxLayout *mainLayout = new QVBoxLayout( this );
+	mainLayout->addWidget( showRender, 0, Qt::AlignTop | Qt::AlignmentFlag::AlignLeft );
 }
 MusicWidget::~MusicWidget( ) {
 

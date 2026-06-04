@@ -11,6 +11,8 @@
 #include "../mainWindows/mainWindow.h"
 
 #include "../msgInfo/messageErrorOut.h"
+
+#include "../render/render.h"
 Application::Application( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
 
 	mainWindowPtr = nullptr;
@@ -79,6 +81,7 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 	}
 	applicationInstance = new ApplicationInstance( this );
 	ApplicationInstance::instance = applicationInstance;
+
 }
 Application::~Application( ) {
 	fileInfoTool->setFile( appSettingPath );
@@ -242,5 +245,4 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 		}
 
 	}
-	MessageErrorOut( ) << tr( "第一次" );
 }

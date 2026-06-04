@@ -26,6 +26,11 @@ private:
 		QString loadQTranslatorFile;
 		/// @brief 加载语言文件打软件失败
 		QString loadQTranslatorApp;
+	public:
+		Translate( );
+	} *translate;
+	class JSonKey {
+		friend class Application;
 		/// @brief 语言文件关键字
 		QString app_QTranslator_path_key;
 		/// @brief 主窗口横向关键字
@@ -37,8 +42,8 @@ private:
 		/// @brief 主窗口高度关键字
 		QString main_window_w_key;
 	public:
-		Translate( );
-	} *translate;
+		JSonKey( );
+	} jsonKey;
 private:
 	/// @brief 语言
 	QTranslator *qTranslator;

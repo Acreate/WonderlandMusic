@@ -38,7 +38,7 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 				MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath << " : " << err.errorString( );
 			} else {
 				*appSetting = doc.object( );
-				auto jsonValue = appSetting->find( translate->app_QTranslator_path_key );
+				auto jsonValue = appSetting->find( jsonKey.app_QTranslator_path_key );
 				if( jsonValue != appSetting->end( ) )
 					prefix = jsonValue->toString( );
 			}
@@ -66,17 +66,16 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 	if( qTranslator->load( prefix ) == false ) {
 		MessageErrorOut( ) << translate->loadQTranslatorFile << " : " << prefix;
 		// 失败则删除语言文件路径
-		appSetting->remove( translate->app_QTranslator_path_key );
+		appSetting->remove( jsonKey.app_QTranslator_path_key );
 	} else if( installTranslator( qTranslator ) == false ) {
 		MessageErrorOut( ) << translate->loadQTranslatorApp << " : " << prefix;
 		// 失败则删除语言文件路径
-		appSetting->remove( translate->app_QTranslator_path_key );
+		appSetting->remove( jsonKey.app_QTranslator_path_key );
 	} else {
 		// 刷新翻译
-		delete translate;
-		translate = new Translate;
+		*translate = Translate( );
 		// 插入语言文件路径
-		appSetting->insert( translate->app_QTranslator_path_key, prefix );
+		appSetting->insert( jsonKey.app_QTranslator_path_key, prefix );
 	}
 	applicationInstance = new ApplicationInstance( this );
 	ApplicationInstance::instance = applicationInstance;
@@ -121,10 +120,10 @@ bool Application::notify( QObject *object, QEvent *event ) {
 				int valueY = mainWindowPtr->y( );
 				int valueW = mainWindowPtr->width( );
 				int valueH = mainWindowPtr->height( );
-				appSetting->insert( translate->main_window_x_key, valueX );
-				appSetting->insert( translate->main_window_y_key, valueY );
-				appSetting->insert( translate->main_window_w_key, valueW );
-				appSetting->insert( translate->main_window_h_key, valueH );
+				appSetting->insert( jsonKey.main_window_x_key, valueX );
+				appSetting->insert( jsonKey.main_window_y_key, valueY );
+				appSetting->insert( jsonKey.main_window_w_key, valueW );
+				appSetting->insert( jsonKey.main_window_h_key, valueH );
 				ApplicationInstance::instance = nullptr;
 				// 删除所有窗口
 				QWidgetList levelWidgets = topLevelWidgets( );
@@ -153,6 +152,9 @@ Application::Translate::Translate( ) {
 
 	loadQTranslatorFile = QObject::tr( "打开语言文件失败" );
 	loadQTranslatorApp = QObject::tr( "加载语言到软件失败" );
+
+}
+Application::JSonKey::JSonKey( ) {
 	/* 配置文件 */
 	app_QTranslator_path_key = "app.QTranslator.path";
 	main_window_x_key = "app.MainWindow.x";
@@ -182,16 +184,16 @@ void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
 	auto end = appSetting->end( );
 	for( ; iterator != end; ++iterator ) {
 		objectName = iterator.key( );
-		if( objectName == translate->main_window_x_key ) {
+		if( objectName == jsonKey.main_window_x_key ) {
 			screenX = iterator.value( ).toInt( 0 );
 			++containsKeyCount;
-		} else if( objectName == translate->main_window_y_key ) {
+		} else if( objectName == jsonKey.main_window_y_key ) {
 			screenY = iterator.value( ).toInt( 0 );
 			++containsKeyCount;
-		} else if( objectName == translate->main_window_w_key ) {
+		} else if( objectName == jsonKey.main_window_w_key ) {
 			screenWidth = iterator.value( ).toInt( 200 );
 			++containsKeyCount;
-		} else if( objectName == translate->main_window_h_key ) {
+		} else if( objectName == jsonKey.main_window_h_key ) {
 			screenHeight = iterator.value( ).toInt( 100 );
 			++containsKeyCount;
 		}

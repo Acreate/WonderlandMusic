@@ -103,12 +103,29 @@ bool AppRenderObj::renderExpandImage( QImage &result_image, const QImage &expand
 bool AppRenderObj::renderColorImage( QImage &result_image, const QColor &color ) {
 	if( result_image.isNull( ) )
 		return false;
-	result_image.fill( color );
+	int resultWidth = result_image.width( );
+	int resultHeight = result_image.height( );
+	QImage buff = QImage( resultWidth, resultHeight, QImage::Format_RGBA8888 );
+	if( buff.isNull( ) )
+		return false;
+	buff.fill( color );
+	result_image = buff;
 	return true;
 }
 bool AppRenderObj::renderColorReplaceColorImage( QImage &result_image, const QColor &old_color, const QColor &new_color ) {
 	if( result_image.isNull( ) )
 		return false;
+	int resultWidth = result_image.width( );
+	int resultHeight = result_image.height( );
+	QImage buff = QImage( resultWidth, resultHeight, QImage::Format_RGBA8888 );
+	if( buff.isNull( ) )
+		return false;
+	buff.fill( 0 );
+	QPainter painter;
+	painter.begin( &buff );
+	painter.drawImage( 0, 0, result_image );
+	painter.end( );
+
 	// 旧的透明
 	int oldAlpha = old_color.alpha( );
 	// 旧的红
@@ -128,10 +145,10 @@ bool AppRenderObj::renderColorReplaceColorImage( QImage &result_image, const QCo
 	int newBlue = new_color.blue( );
 
 	// 首地址
-	uchar *pData = result_image.bits( );
-	int bytesPerLine = result_image.bytesPerLine( );
-	int imageWidth = result_image.width( );
-	int imageHeight = result_image.height( );
+	uchar *pData = buff.bits( );
+	int bytesPerLine = buff.bytesPerLine( );
+	int imageWidth = buff.width( );
+	int imageHeight = buff.height( );
 	int bitY;
 	int bitX;
 	// pLine[0]=B
@@ -156,6 +173,7 @@ bool AppRenderObj::renderColorReplaceColorImage( QImage &result_image, const QCo
 				pLine[ alphaOffset ] = newAlpha;
 			}
 		}
+	result_image = buff;
 	return true;
 }
 ApplicationInstance *ApplicationInstance::instance = nullptr;

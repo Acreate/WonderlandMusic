@@ -52,17 +52,13 @@ MessageErrorOut::~MessageErrorOut( ) {
 		}
 	}
 	QFile openFile( writeFilePath );
-	QFlags< QIODevice::OpenMode::enum_type > flags = QIODeviceBase::ReadWrite;
-	if( fileInfo.exists( ) )
-		flags = flags | QIODeviceBase::Append;
+	QFlags< QIODevice::OpenMode::enum_type > flags = QIODeviceBase::ReadWrite | QIODeviceBase::Append;
 	if( openFile.open( flags ) == false ) {
 		outString.clear( );
 		formatMessageOut( outString, std::source_location::current( ), translate.openFileError + " : " + writeFilePath );
 		qDebug( ) << outString.toStdString( ).c_str( );
 		return;
 	}
-	const uchar utfBom[ ] = { 0xEF, 0xBB, 0xBF };
-	openFile.write( ( const char * ) utfBom, sizeof utfBom );
 	openFile.write( outString.toUtf8( ) );
 	openFile.close( );
 }

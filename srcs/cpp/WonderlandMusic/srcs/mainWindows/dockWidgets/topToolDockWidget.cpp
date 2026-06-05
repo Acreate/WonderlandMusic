@@ -3,11 +3,10 @@
 #include <QPainter>
 
 #include "../mainWindow.h"
-TopToolDockWidget::TopToolDockWidget( MainWindow *parent ) : QDockWidget( parent ), mainWindow( parent ) {
 
-}
-void TopToolDockWidget::paintEvent( QPaintEvent *event ) {
-	QDockWidget::paintEvent( event );
-	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkBlue );
+#include "topToolWidget/topToolWidget.h"
+TopToolDockWidget::TopToolDockWidget( MainWindow *parent ) : QDockWidget( parent ), mainWindow( parent ) {
+	topToolWidget = new TopToolWidget( this );
+	setWidget( topToolWidget );
+	setContentsMargins( 0, 0, 0, 0 );
 }

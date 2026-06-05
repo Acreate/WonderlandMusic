@@ -2,6 +2,9 @@
 #define MUSICWIDGET_H_H_HEAD__FILE__
 #include <qwidget.h>
 
+class MusicVectorInfoWidget;
+class MusicPlayerWidget;
+class AppFunctionWidget;
 class QFileInfo;
 class QDir;
 class Music;
@@ -15,6 +18,12 @@ private:
 	QFileInfo *fileInfo;
 	/// @brief 所有音乐
 	std::vector< Music * > musicsLoadPlanVector;
+	/// @brief 显示软件功能
+	AppFunctionWidget *appFunctionWidget;
+	/// @brief 显示播放列表
+	MusicPlayerWidget *musicPlayerWidget;
+	/// @brief 显示音乐列表
+	MusicVectorInfoWidget *musicVectorInfoWidget;
 public:
 	/// @brief 创建音乐组件
 	/// @param parent 父组件
@@ -33,6 +42,8 @@ public:
 	/// @param file_name 音乐文件
 	/// @return false 表示不支持
 	bool isSupportedAudioCodecs( const QString &file_name ) const;
+protected:
+	void resizeEvent( QResizeEvent *event ) override;
 };
 
 #endif // MUSICWIDGET_H_H_HEAD__FILE__

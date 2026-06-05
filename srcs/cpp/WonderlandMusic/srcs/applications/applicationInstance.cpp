@@ -172,13 +172,15 @@ bool AppRenderObj::renderColorReplaceColorImage( QImage &result_image, const QCo
 	int redOffset;
 	// pLine[3]=A
 	int alphaOffset;
+	int offset;
 	uchar *pLine;
 	for( bitY = 0; bitY < imageHeight; bitY++ )
 		for( bitX = 0, pLine = pData + bitY * bytesPerLine; bitX < imageWidth; bitX++ ) {
-			blueOffset = bitX * 4 + 0;
-			greenOffset = bitX * 4 + 1;
-			redOffset = bitX * 4 + 2;
-			alphaOffset = bitX * 4 + 3;
+			offset = bitX * 4;
+			blueOffset = offset + 0;
+			greenOffset = offset + 1;
+			redOffset = offset + 2;
+			alphaOffset = offset + 3;
 			if( pLine[ blueOffset ] == oldBlue && pLine[ greenOffset ] == oldGreen && pLine[ redOffset ] == oldRed && pLine[ alphaOffset ] == oldAlpha ) {
 				pLine[ blueOffset ] = newBlue;
 				pLine[ greenOffset ] = newGreen;

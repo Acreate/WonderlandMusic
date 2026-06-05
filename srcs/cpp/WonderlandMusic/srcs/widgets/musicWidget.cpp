@@ -8,9 +8,16 @@
 #include "../musics/music.h"
 #include "../msgInfo/messageErrorOut.h"
 
+#include "subWidget/appFunctionWidget.h"
+#include "subWidget/musicPlayerWidget.h"
+#include "subWidget/musicVectorInfoWidget.h"
+
 MusicWidget::MusicWidget( QWidget *parent, const Qt::WindowFlags &f ) : QWidget( parent, f ) {
 	dirPtr = new QDir;
 	fileInfo = new QFileInfo;
+	appFunctionWidget = new AppFunctionWidget( this );
+	musicPlayerWidget = new MusicPlayerWidget( this );
+	musicVectorInfoWidget = new MusicVectorInfoWidget( this );
 }
 MusicWidget::~MusicWidget( ) {
 
@@ -71,4 +78,38 @@ bool MusicWidget::isSupportedAudioCodecs( const QString &file_name ) const {
 	QAudioDecoder audioDecoder;
 	audioDecoder.setSource( QUrl::fromLocalFile( file_name ) );
 	return audioDecoder.isSupported( );
+}
+void MusicWidget::resizeEvent( QResizeEvent *event ) {
+	QWidget::resizeEvent( event );
+	// 当前面板矩阵
+	auto currentMainWidgetContentsRect = contentsRect( );
+	// 当前主要窗口高度
+	int currentMainWidgetHieght = currentMainWidgetContentsRect.height( ) - currentMainWidgetContentsRect.y( );
+	// 当前主要窗口宽度
+	int currentMainWidgetWidth = currentMainWidgetContentsRect.width( ) - currentMainWidgetContentsRect.x( );
+	// 分成百份
+	int percentage = currentMainWidgetWidth / 100;
+
+	// 面板起始的位置
+	int widgetStartX = 0;
+
+	/// @brief 获取组件的宽度偏移
+	/// @param get_widget 获取偏移的组件
+	#define get_offset_start( get_widget ) ((get_widget->width( ) )+ (get_widget->x( )))
+
+	// 配置功能面板位置与大小
+	int appFunctionWidgetOccupy = 10;
+	appFunctionWidget->setGeometry( widgetStartX, 0, appFunctionWidgetOccupy * percentage, currentMainWidgetHieght );
+
+	// 下一个面板
+	widgetStartX = get_offset_start( appFunctionWidget );
+	// 配置播放面板
+	int musicPlayerWidgetOccupy = 30;
+	musicPlayerWidget->setGeometry( widgetStartX, 0, musicPlayerWidgetOccupy * percentage, currentMainWidgetHieght );
+
+	// 下一个面板
+	widgetStartX = get_offset_start( musicPlayerWidget );
+	musicVectorInfoWidget->setGeometry( widgetStartX, 0, currentMainWidgetWidth - widgetStartX, currentMainWidgetHieght );
+
+	#undef get_offset_start
 }

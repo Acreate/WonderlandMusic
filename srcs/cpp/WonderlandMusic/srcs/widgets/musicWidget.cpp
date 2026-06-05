@@ -1,25 +1,23 @@
 ﻿#include "musicWidget.h"
 #include <QDir>
 #include <QUrl>
-#include <QMediaFormat>
 #include <QAudioDecoder>
-#include <QMetaEnum>
 #include <QFileInfo>
 #include "../musics/music.h"
 #include "../msgInfo/messageErrorOut.h"
 
-#include "subWidget/appFunctionWidget.h"
-#include "subWidget/musicPlayerButtonWidget.h"
-#include "subWidget/musicPlayerWidget.h"
-#include "subWidget/musicVectorInfoWidget.h"
+#include "subWidget/scrollArea/appFunctionScrollArea.h"
+#include "subWidget/scrollArea/musicPlayerButtonScrollArea.h"
+#include "subWidget/scrollArea/musicPlayerScrollArea.h"
+#include "subWidget/scrollArea/musicVectorInfoScrollArea.h"
 
 MusicWidget::MusicWidget( QWidget *parent, const Qt::WindowFlags &f ) : QWidget( parent, f ) {
 	dirPtr = new QDir;
 	fileInfo = new QFileInfo;
-	appFunctionWidget = new AppFunctionWidget( this );
-	musicPlayerWidget = new MusicPlayerWidget( this );
-	musicVectorInfoWidget = new MusicVectorInfoWidget( this );
-	musicPlayerButtonWidget = new MusicPlayerButtonWidget( this );
+	appFunctionScrollArea = new AppFunctionScrollArea( this );
+	musicPlayerScrollArea = new MusicPlayerScrollArea( this );
+	musicVectorInfoScrollArea = new MusicVectorInfoScrollArea( this );
+	musicPlayerButtonScrollArea = new MusicPlayerButtonScrollArea( this );
 }
 MusicWidget::~MusicWidget( ) {
 
@@ -93,26 +91,26 @@ void MusicWidget::resizeEvent( QResizeEvent *event ) {
 	// 面板起始的位置
 	int widgetStartX = 0;
 	// 播放功能高度
-	int musicPlayerButtonWidgetHeight = musicPlayerButtonWidget->height( );
+	int musicPlayerButtonWidgetHeight = musicPlayerButtonScrollArea->height( );
 	// 剩余高度
 	int modHeight = currentMainWidgetHieght - musicPlayerButtonWidgetHeight;
 	// 配置播放功能面板
-	musicPlayerButtonWidget->setGeometry( widgetStartX, modHeight, currentMainWidgetWidth, musicPlayerButtonWidgetHeight );
+	musicPlayerButtonScrollArea->setGeometry( widgetStartX, modHeight, currentMainWidgetWidth, musicPlayerButtonWidgetHeight );
 
 	// 配置功能面板位置与大小
-	int appFunctionWidgetWidth = appFunctionWidget->width( );
-	appFunctionWidget->setGeometry( widgetStartX, 0, appFunctionWidgetWidth, modHeight );
+	int appFunctionWidgetWidth = appFunctionScrollArea->width( );
+	appFunctionScrollArea->setGeometry( widgetStartX, 0, appFunctionWidgetWidth, modHeight );
 
 	// 下一个面板
 	widgetStartX = appFunctionWidgetWidth + widgetStartX;
 	// 配置播放面板
-	int musicPlayerWidgetWidth = musicPlayerWidget->width( );
-	musicPlayerWidget->setGeometry( widgetStartX, 0, musicPlayerWidgetWidth, modHeight );
+	int musicPlayerWidgetWidth = musicPlayerScrollArea->width( );
+	musicPlayerScrollArea->setGeometry( widgetStartX, 0, musicPlayerWidgetWidth, modHeight );
 
 	// 下一个面板
 	widgetStartX = musicPlayerWidgetWidth + widgetStartX;
 	// 剩余宽度
 	int modWidth = currentMainWidgetWidth - widgetStartX;
 	// 配置音乐列表信息面板
-	musicVectorInfoWidget->setGeometry( widgetStartX, 0, modWidth, modHeight );
+	musicVectorInfoScrollArea->setGeometry( widgetStartX, 0, modWidth, modHeight );
 }

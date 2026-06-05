@@ -2,10 +2,10 @@
 #define MUSICWIDGET_H_H_HEAD__FILE__
 #include <qwidget.h>
 
-class MusicPlayerButtonWidget;
-class MusicVectorInfoWidget;
-class MusicPlayerWidget;
-class AppFunctionWidget;
+class MusicPlayerButtonScrollArea;
+class MusicVectorInfoScrollArea;
+class MusicPlayerScrollArea;
+class AppFunctionScrollArea;
 class QFileInfo;
 class QDir;
 class Music;
@@ -20,13 +20,13 @@ private:
 	/// @brief 所有音乐
 	std::vector< Music * > musicsLoadPlanVector;
 	/// @brief 显示软件功能
-	AppFunctionWidget *appFunctionWidget;
+	AppFunctionScrollArea *appFunctionScrollArea;
 	/// @brief 显示播放列表
-	MusicPlayerWidget *musicPlayerWidget;
+	MusicPlayerScrollArea *musicPlayerScrollArea;
 	/// @brief 显示音乐列表
-	MusicVectorInfoWidget *musicVectorInfoWidget;
+	MusicVectorInfoScrollArea *musicVectorInfoScrollArea;
 	/// @brief 显示播放功能
-	MusicPlayerButtonWidget* musicPlayerButtonWidget;
+	MusicPlayerButtonScrollArea *musicPlayerButtonScrollArea;
 public:
 	/// @brief 创建音乐组件
 	/// @param parent 父组件

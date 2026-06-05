@@ -80,6 +80,7 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 	applicationInstance = new ApplicationInstance( this );
 	ApplicationInstance::instance = applicationInstance;
 
+	setMainWindowPtr( new MainWindow );
 }
 Application::~Application( ) {
 	fileInfoTool->setFile( appSettingPath );

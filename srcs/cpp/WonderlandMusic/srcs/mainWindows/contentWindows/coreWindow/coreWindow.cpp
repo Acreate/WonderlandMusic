@@ -3,8 +3,11 @@
 #include <QPainter>
 
 #include "../contentWindow.h"
-CoreWindow::CoreWindow( ContentWindow *parent ) : QMainWindow( parent ), contentWindow( parent ) {
 
+#include "coreStackedWidget/coreStackedWidget.h"
+CoreWindow::CoreWindow( ContentWindow *parent ) : QMainWindow( parent ), contentWindow( parent ) {
+	coreStackedWidget = new CoreStackedWidget( this );
+	setCentralWidget( coreStackedWidget );
 }
 void CoreWindow::paintEvent( QPaintEvent *event ) {
 	QMainWindow::paintEvent( event );

@@ -3,7 +3,8 @@
 #include "mainWindows/mainWindow.h"
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {
-	Application application( argc, argv );
-	application.setMainWindowPtr( new MainWindow );
-	return application.exec( );
+	Application *application = new Application( argc, argv );
+	int exec = application->exec( );
+	delete application;
+	return exec;
 }

@@ -9,6 +9,8 @@ protected:
 	ContentWindow *contentWindow;
 public:
 	CoreWindow( ContentWindow *parent );
+protected:
+	void paintEvent( QPaintEvent *event ) override;
 };
 class CoreInfo {
 

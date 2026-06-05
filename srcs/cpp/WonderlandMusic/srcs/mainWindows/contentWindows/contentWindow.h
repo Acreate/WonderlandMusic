@@ -26,8 +26,6 @@ protected:
 	CoreWindow *coreWindow;
 public:
 	ContentWindow( MainWindow *parent );
-protected:
-	void paintEvent( QPaintEvent *event ) override;
 private:
 	virtual size_t triggerFindEvent( FindDockWidget *sender_find_dock_widget, const FindInfo &find_info ) {
 		return 0;

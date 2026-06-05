@@ -7,6 +7,8 @@
 #include "contentWidgetConpoment/findDockWidget.h"
 #include "contentWidgetConpoment/playerDockWidget.h"
 
+#include "coreWindow/coreWindow.h"
+
 ContentWindow::ContentWindow( MainWindow *parent ) : QMainWindow( parent ), mainWindow( parent ) {
 
 	Qt::DockWidgetArea dockWidgetArea;
@@ -23,11 +25,7 @@ ContentWindow::ContentWindow( MainWindow *parent ) : QMainWindow( parent ), main
 	playerDockWidget->setAllowedAreas( dockWidgetArea );
 	addDockWidget( dockWidgetArea, playerDockWidget );
 
-	setCentralWidget( new QWidget );
-}
-void ContentWindow::paintEvent( QPaintEvent *event ) {
-	QMainWindow::paintEvent( event );
-
-	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::black );
+	coreWindow = new CoreWindow( this );
+	coreWindow->setWindowFlags( Qt::WindowType::Widget );
+	setCentralWidget( coreWindow );
 }

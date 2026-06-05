@@ -82,8 +82,8 @@ bool MusicWidget::isSupportedAudioCodecs( const QString &file_name ) const {
 	return audioDecoder.isSupported( );
 }
 void MusicWidget::resizeEvent( QResizeEvent *event ) {
-	QWidget::resizeEvent( event );
-	// 当前面板矩阵
+
+	// 当前面板矩形
 	auto currentMainWidgetContentsRect = contentsRect( );
 	// 当前主要窗口高度
 	int currentMainWidgetHieght = currentMainWidgetContentsRect.height( ) - currentMainWidgetContentsRect.y( );
@@ -115,6 +115,4 @@ void MusicWidget::resizeEvent( QResizeEvent *event ) {
 	int modWidth = currentMainWidgetWidth - widgetStartX;
 	// 配置音乐列表信息面板
 	musicVectorInfoWidget->setGeometry( widgetStartX, 0, modWidth, modHeight );
-
-	#undef get_offset_start
 }

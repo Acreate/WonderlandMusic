@@ -2,6 +2,7 @@
 #define MUSICWIDGET_H_H_HEAD__FILE__
 #include <qwidget.h>
 
+class MusicPlayerButtonWidget;
 class MusicVectorInfoWidget;
 class MusicPlayerWidget;
 class AppFunctionWidget;
@@ -24,6 +25,8 @@ private:
 	MusicPlayerWidget *musicPlayerWidget;
 	/// @brief 显示音乐列表
 	MusicVectorInfoWidget *musicVectorInfoWidget;
+	/// @brief 显示播放功能
+	MusicPlayerButtonWidget* musicPlayerButtonWidget;
 public:
 	/// @brief 创建音乐组件
 	/// @param parent 父组件

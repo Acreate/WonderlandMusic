@@ -9,6 +9,7 @@
 #include "../msgInfo/messageErrorOut.h"
 
 #include "subWidget/appFunctionWidget.h"
+#include "subWidget/musicPlayerButtonWidget.h"
 #include "subWidget/musicPlayerWidget.h"
 #include "subWidget/musicVectorInfoWidget.h"
 
@@ -18,6 +19,7 @@ MusicWidget::MusicWidget( QWidget *parent, const Qt::WindowFlags &f ) : QWidget(
 	appFunctionWidget = new AppFunctionWidget( this );
 	musicPlayerWidget = new MusicPlayerWidget( this );
 	musicVectorInfoWidget = new MusicVectorInfoWidget( this );
+	musicPlayerButtonWidget = new MusicPlayerButtonWidget( this );
 }
 MusicWidget::~MusicWidget( ) {
 
@@ -87,29 +89,32 @@ void MusicWidget::resizeEvent( QResizeEvent *event ) {
 	int currentMainWidgetHieght = currentMainWidgetContentsRect.height( ) - currentMainWidgetContentsRect.y( );
 	// 当前主要窗口宽度
 	int currentMainWidgetWidth = currentMainWidgetContentsRect.width( ) - currentMainWidgetContentsRect.x( );
-	// 分成百份
-	int percentage = currentMainWidgetWidth / 100;
 
 	// 面板起始的位置
 	int widgetStartX = 0;
-
-	/// @brief 获取组件的宽度偏移
-	/// @param get_widget 获取偏移的组件
-	#define get_offset_start( get_widget ) ((get_widget->width( ) )+ (get_widget->x( )))
+	// 播放功能高度
+	int musicPlayerButtonWidgetHeight = musicPlayerButtonWidget->height( );
+	// 剩余高度
+	int modHeight = currentMainWidgetHieght - musicPlayerButtonWidgetHeight;
+	// 配置播放功能面板
+	musicPlayerButtonWidget->setGeometry( widgetStartX, modHeight, currentMainWidgetWidth, musicPlayerButtonWidgetHeight );
 
 	// 配置功能面板位置与大小
-	int appFunctionWidgetOccupy = 10;
-	appFunctionWidget->setGeometry( widgetStartX, 0, appFunctionWidgetOccupy * percentage, currentMainWidgetHieght );
+	int appFunctionWidgetWidth = appFunctionWidget->width( );
+	appFunctionWidget->setGeometry( widgetStartX, 0, appFunctionWidgetWidth, modHeight );
 
 	// 下一个面板
-	widgetStartX = get_offset_start( appFunctionWidget );
+	widgetStartX = appFunctionWidgetWidth + widgetStartX;
 	// 配置播放面板
-	int musicPlayerWidgetOccupy = 30;
-	musicPlayerWidget->setGeometry( widgetStartX, 0, musicPlayerWidgetOccupy * percentage, currentMainWidgetHieght );
+	int musicPlayerWidgetWidth = musicPlayerWidget->width( );
+	musicPlayerWidget->setGeometry( widgetStartX, 0, musicPlayerWidgetWidth, modHeight );
 
 	// 下一个面板
-	widgetStartX = get_offset_start( musicPlayerWidget );
-	musicVectorInfoWidget->setGeometry( widgetStartX, 0, currentMainWidgetWidth - widgetStartX, currentMainWidgetHieght );
+	widgetStartX = musicPlayerWidgetWidth + widgetStartX;
+	// 剩余宽度
+	int modWidth = currentMainWidgetWidth - widgetStartX;
+	// 配置音乐列表信息面板
+	musicVectorInfoWidget->setGeometry( widgetStartX, 0, modWidth, modHeight );
 
 	#undef get_offset_start
 }

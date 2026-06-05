@@ -14,4 +14,7 @@ protected:
 	void paintEvent( QPaintEvent *event ) override;
 };
 
+class FunctionDockEventInfo {
+
+};
 #endif // FUNCTIONDOCKWIDGET_H_H_HEAD__FILE__

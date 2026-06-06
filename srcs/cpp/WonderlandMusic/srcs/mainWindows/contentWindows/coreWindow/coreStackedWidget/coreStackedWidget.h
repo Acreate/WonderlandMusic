@@ -9,13 +9,15 @@ class CoreStackedWidget : public QStackedWidget {
 	Q_OBJECT;
 protected:
 	CoreWindow *coreWindow;
-	MusicListWindow* musicListWindow;
-	SettingWindow* settingWindow;
+	MusicListWindow *musicListWindow;
+	SettingWindow *settingWindow;
 public:
 	CoreStackedWidget( CoreWindow *parent );
 };
 
-class CoreStackedWidgeEventInfo {
+#include <event/eventMacroDefine.h>
+#define CoreStackedWidgetEventTypeName Event_Default_Event_Info_Type_Name( CoreStackedWidget )
+class CoreStackedWidgetEventTypeName {
 
 };
 

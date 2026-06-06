@@ -4,29 +4,23 @@
 
 #include "../event/eventMacroDefine.h"
 
-class TopToolDockEventInfo;
-class FunctionDockEventInfo;
-class TopToolEventInfo;
-class TopToolDockWidget;
+#define FunctionDockEventClassName Event_Default_ClassName( FunctionDockWidget )
+#define FunctionDockEventDefaultEventCallFunction Event_Default_Receive_Call_Function( FunctionDockWidget )
+#define FunctionDockEventDefineClass Event_Define_Event_Class_type( FunctionDockWidget, MainWindow )
+class Event_Default_Event_Info_Type_Name( FunctionDockWidget );
+
+#define TopToolDockEventClass Event_Default_ClassName( TopToolDockWidget )
+#define TopToolDockEventDefaultEventCallFunction Event_Default_Receive_Call_Function( TopToolDockWidget )
+#define TopToolDockEventDefineClass Event_Define_Event_Class_type( TopToolDockWidget, MainWindow)
+class Event_Default_Event_Info_Type_Name( TopToolDockWidget );
+
 class ContentWindow;
 class FunctionDockWidget;
-class PlayerDockWidget;
-class FunctionDockEvent;
-class ToolTopToolDockEvent;
-class MainWindow;
-
-#define FunctionDockEventClassName Event_Default_ClassName( FunctionDock )
-#define FunctionDockEventTrigger Event_Default_Event_Call_Function_Name(  FunctionDock )
-#define FunctionDockEventDefineClass Event_Define_Event_Class_type( FunctionDock, MainWindow, FunctionDockWidget, FunctionDockEventInfo )
-
-#define ToolTopToolDockEventClass Event_Default_ClassName( TopToolDock )
-#define TopToolDockEventTrigger Event_Default_Event_Call_Function_Name(  TopToolDock )
-#define ToolTopToolDockEventDefineClass Event_Define_Event_Class_type( TopToolDock, MainWindow, TopToolDockWidget, TopToolDockEventInfo )
-
+class TopToolDockWidget;
 class MainWindow : public QMainWindow {
 	Q_OBJECT;
 	friend class FunctionDockEventClassName;
-	friend class ToolTopToolDockEventClass;
+	friend class TopToolDockEventClass;
 public:
 	class Translate {
 		friend class MainWindow;
@@ -49,12 +43,12 @@ public:
 	MainWindow( );
 	~MainWindow( ) override;
 private:
-	virtual size_t FunctionDockEventTrigger( FunctionDockWidget *event_dock_widget, const FunctionDockEventInfo &function_dock_event_info );
-	virtual size_t TopToolDockEventTrigger( TopToolDockWidget *event_dock_widget, const TopToolDockEventInfo &top_tool_event_info );
+	virtual FunctionDockEventDefaultEventCallFunction;
+	virtual TopToolDockEventDefaultEventCallFunction;
 };
 
 FunctionDockEventDefineClass;
 
-ToolTopToolDockEventDefineClass;
+TopToolDockEventDefineClass;
 
 #endif // MAINWINDOW_H_H_HEAD__FILE__

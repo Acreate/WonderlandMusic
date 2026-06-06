@@ -2,6 +2,7 @@
 #define FUNCTIONWIDGET_H_H_HEAD__FILE__
 
 #include <QWidget>
+#include <event/eventMacroDefine.h>
 class QPushButton;
 class FunctionDockWidget;
 class FunctionWidget : public QWidget {
@@ -16,7 +17,8 @@ protected:
 	void resizeEvent( QResizeEvent *event ) override;
 };
 
-class FunctionWidgetEventInfo {
+#define FunctionWidgetEventTypeName Event_Default_Event_Info_Type_Name( FunctionWidget )
+class FunctionWidgetEventTypeName {
 public:
 	enum class EventType {
 		None,
@@ -26,8 +28,8 @@ public:
 protected:
 	EventType eventType;
 public:
-	virtual ~FunctionWidgetEventInfo( ) = default;
-	FunctionWidgetEventInfo( const EventType event_type )
+	virtual ~FunctionWidgetEventTypeName( ) = default;
+	FunctionWidgetEventTypeName( const EventType event_type )
 		: eventType( event_type ) { }
 	virtual EventType getEventType( ) const { return eventType; }
 };

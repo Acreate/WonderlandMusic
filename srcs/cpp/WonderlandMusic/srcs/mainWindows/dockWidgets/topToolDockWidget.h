@@ -2,12 +2,19 @@
 #define TOPTOOLDOCKWIDGET_H_H_HEAD__FILE__
 
 #include <QDockWidget>
-class TopToolEventInfo;
-class TopToolEvent;
+#include <event/eventMacroDefine.h>
+
 class TopToolWidget;
 class MainWindow;
+
+#define TopToolWidgetEventClassName Event_Default_ClassName( TopToolWidget )
+#define TopToolWidgetEventDefaultEventCallFunction Event_Default_Receive_Call_Function(TopToolWidget)
+#define TopToolWidgetEventDefineClass Event_Define_Event_Class_type( TopToolWidget, TopToolDockWidget )
+
+class Event_Default_Event_Info_Type_Name( TopToolWidget );
+
 class TopToolDockWidget : public QDockWidget {
-	friend class TopToolEvent;
+	friend class TopToolWidgetEventClassName;
 	Q_OBJECT;
 protected:
 	MainWindow *mainWindow;
@@ -15,10 +22,12 @@ protected:
 public:
 	TopToolDockWidget( MainWindow *parent );
 private:
-	virtual size_t triggerTopToolEvent( TopToolWidget *sender_top_tool_widget, const TopToolEventInfo &top_tool_event_info );
+	virtual TopToolWidgetEventDefaultEventCallFunction;
 };
 
-class TopToolDockEventInfo {
+#define TopToolDockWidgetEventTypeName Event_Default_Event_Info_Type_Name( TopToolDockWidget )
+#define TopToolWidgetEventTypeName Event_Default_Event_Info_Type_Name( TopToolWidget )
+class TopToolDockWidgetEventTypeName {
 	friend class TopToolDockWidget;
 public:
 	enum class EventType {
@@ -27,29 +36,25 @@ public:
 	};
 	class TopToolEventData {
 		TopToolWidget *sender_top_tool_widget;
-		const TopToolEventInfo *top_tool_event_info;
+		const TopToolWidgetEventTypeName *top_tool_event_info;
 	public:
 		virtual ~TopToolEventData( ) = default;
-		TopToolEventData( ::TopToolWidget *const sender_top_tool_widget, const ::TopToolEventInfo *const top_tool_event_info )
+		TopToolEventData( ::TopToolWidget *const sender_top_tool_widget, const ::TopToolWidgetEventTypeName *const top_tool_event_info )
 			: sender_top_tool_widget( sender_top_tool_widget ),
 			top_tool_event_info( top_tool_event_info ) { }
 		virtual TopToolWidget * getSenderTopToolWidget( ) const { return sender_top_tool_widget; }
-		virtual const TopToolEventInfo * getTopToolEventInfo( ) const { return top_tool_event_info; }
+		virtual const TopToolWidgetEventTypeName * getTopToolEventInfo( ) const { return top_tool_event_info; }
 	};
 protected:
 	EventType eventType = EventType::None;
 	TopToolEventData *topToolEventData = nullptr;
 public:
-	TopToolDockEventInfo( ) { }
-	virtual ~TopToolDockEventInfo( ) = default;
+	TopToolDockWidgetEventTypeName( ) { }
+	virtual ~TopToolDockWidgetEventTypeName( ) = default;
 	virtual EventType getEventType( ) const { return eventType; }
 	virtual TopToolEventData * getTopToolEventData( ) const { return topToolEventData; }
 };
 
-class TopToolEvent {
-	friend class TopToolWidget;
-	static size_t triggerTopToolEvent( TopToolDockWidget *receive_top_tool_dock_widget, TopToolWidget *sender_top_tool_widget, const TopToolEventInfo &top_tool_event_info ) {
-		return receive_top_tool_dock_widget->triggerTopToolEvent( sender_top_tool_widget, top_tool_event_info );
-	}
-};
+TopToolWidgetEventDefineClass;
+
 #endif // TOPTOOLDOCKWIDGET_H_H_HEAD__FILE__

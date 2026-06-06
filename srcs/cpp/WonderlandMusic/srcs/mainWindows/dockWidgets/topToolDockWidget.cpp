@@ -10,10 +10,10 @@ TopToolDockWidget::TopToolDockWidget( MainWindow *parent ) : QDockWidget( parent
 	setWidget( topToolWidget );
 	setContentsMargins( 0, 0, 0, 0 );
 }
-size_t TopToolDockWidget::triggerTopToolEvent( TopToolWidget *sender_top_tool_widget, const TopToolEventInfo &top_tool_event_info ) {
-	auto topToolDockEventInfo = TopToolDockEventInfo( );
-	topToolDockEventInfo.eventType = TopToolDockEventInfo::EventType::TopToolEvent;
-	TopToolDockEventInfo::TopToolEventData topData( sender_top_tool_widget, &top_tool_event_info );
+size_t TopToolDockWidget::triggerTopToolWidgetEvent( TopToolWidget *sender, const TopToolWidgetEventInfo &info ) {
+	auto topToolDockEventInfo = TopToolDockWidgetEventInfo( );
+	topToolDockEventInfo.eventType = TopToolDockWidgetEventInfo::EventType::TopToolEvent;
+	TopToolDockWidgetEventInfo::TopToolEventData topData( sender, &info );
 	topToolDockEventInfo.topToolEventData = &topData;
-	return ToolTopToolDockEvent::triggerTopToolDockEvent( mainWindow, this, topToolDockEventInfo );
+	return TopToolDockEventClass::triggerTopToolDockWidgetEvent( mainWindow, this, topToolDockEventInfo );
 }

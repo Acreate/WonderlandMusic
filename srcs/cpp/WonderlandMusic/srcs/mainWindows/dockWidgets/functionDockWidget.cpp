@@ -20,9 +20,9 @@ size_t FunctionDockWidget::triggerFunctionWidgetEvent( FunctionWidget *sender_fu
 		case FunctionWidgetEventInfo::EventType::None :
 			break;
 		case FunctionWidgetEventInfo::EventType::Show_Music :
-			return FunctionDockEvent::triggerFunctionDockEvent( mainWindow, this, FunctionDockEventInfo( FunctionDockEventInfo::EventType::Show_Music ) );
+			return FunctionDockWidgetEvent::triggerFunctionDockWidgetEvent( mainWindow, this, FunctionDockWidgetEventInfo( FunctionDockWidgetEventInfo::EventType::Show_Music ) );
 		case FunctionWidgetEventInfo::EventType::Show_Setting :
-			return FunctionDockEvent::triggerFunctionDockEvent( mainWindow, this, FunctionDockEventInfo( FunctionDockEventInfo::EventType::Show_Setting ) );
+			return FunctionDockWidgetEvent::triggerFunctionDockWidgetEvent( mainWindow, this, FunctionDockWidgetEventInfo( FunctionDockWidgetEventInfo::EventType::Show_Setting ) );
 	}
 	return 0;
 }

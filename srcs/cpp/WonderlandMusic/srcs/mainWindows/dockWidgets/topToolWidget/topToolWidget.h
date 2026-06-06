@@ -4,6 +4,11 @@
 #include <QWidget>
 class QPushButton;
 class TopToolDockWidget;
+
+// 事件头文件
+#include <event/eventMacroDefine.h>
+
+
 class TopToolWidget : public QWidget {
 	Q_OBJECT;
 protected:
@@ -22,7 +27,8 @@ protected:
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 };
-class TopToolEventInfo {
+#define TopToolWidgetEventTypeName Event_Default_Event_Info_Type_Name( TopToolWidget )
+class TopToolWidgetEventTypeName {
 	friend class TopToolWidget;
 public:
 	enum class Type {
@@ -35,9 +41,9 @@ protected:
 	QPoint oldMousePos;
 	QPoint newMousePos;
 public:
-	virtual ~TopToolEventInfo( ) = default;
-	TopToolEventInfo( const Type type ) : type( type ) { }
-	TopToolEventInfo( const QPoint &old_mouse_pos, const QPoint &new_mouse_pos )
+	virtual ~TopToolWidgetEventTypeName( ) = default;
+	TopToolWidgetEventTypeName( const Type type ) : type( type ) { }
+	TopToolWidgetEventTypeName( const QPoint &old_mouse_pos, const QPoint &new_mouse_pos )
 		: type( Type::MoveTargetOffsetWindow ),
 		oldMousePos( old_mouse_pos ),
 		newMousePos( new_mouse_pos ) { }

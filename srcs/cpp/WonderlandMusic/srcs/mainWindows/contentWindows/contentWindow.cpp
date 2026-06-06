@@ -29,3 +29,12 @@ ContentWindow::ContentWindow( MainWindow *parent ) : QMainWindow( parent ), main
 	coreWindow->setWindowFlags( Qt::WindowType::Widget );
 	setCentralWidget( coreWindow );
 }
+size_t ContentWindow::triggerFindDockWidgetEvent( FindDockWidget *sender, const FindDockWidgetEventInfo &info ) {
+	return 0;
+}
+size_t ContentWindow::triggerPlayerDockWidgetEvent( PlayerDockWidget *sender, const PlayerDockWidgetEventInfo &info ) {
+	return 0;
+}
+size_t ContentWindow::triggerCoreWindowEvent( CoreWindow *sender, const CoreWindowEventInfo &info ) {
+	return 0;
+}

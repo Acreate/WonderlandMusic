@@ -13,7 +13,10 @@ public:
 protected:
 	void paintEvent( QPaintEvent *event ) override;
 };
-class PlayerInfo {
+
+#include <event/eventMacroDefine.h>
+#define PlayerDockWidgetEventTypeName Event_Default_Event_Info_Type_Name( PlayerDockWidget )
+class PlayerDockWidgetEventTypeName {
 
 };
 #endif // PLAYERDOCKWIDGET_H_H_HEAD__FILE__

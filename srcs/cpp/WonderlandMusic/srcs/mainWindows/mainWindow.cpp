@@ -51,13 +51,15 @@ MainWindow::MainWindow( ) {
 MainWindow::~MainWindow( ) {
 
 }
-size_t MainWindow::triggerFunctionDockEvent( FunctionDockWidget *event_dock_widget, const FunctionDockEventInfo &function_dock_event_info ) {
-	switch( function_dock_event_info.getType( ) ) {
 
-		case FunctionDockEventInfo::EventType::Show_Music :
+size_t MainWindow::triggerFunctionDockWidgetEvent( FunctionDockWidget *sender, const FunctionDockWidgetEventInfo &info ) {
+	FunctionDockWidgetEventInfo::EventType type = info.getType( );
+	switch( type ) {
+
+		case FunctionDockWidgetEventInfo::EventType::Show_Music :
 			MessageErrorOut( ) << tr( "显示音乐面板" );
 			break;
-		case FunctionDockEventInfo::EventType::Show_Setting :
+		case FunctionDockWidgetEventInfo::EventType::Show_Setting :
 			MessageErrorOut( ) << tr( "显示配置面板" );
 			break;
 		default :
@@ -66,29 +68,30 @@ size_t MainWindow::triggerFunctionDockEvent( FunctionDockWidget *event_dock_widg
 	}
 	return 0;
 }
-size_t MainWindow::triggerTopToolDockEvent( TopToolDockWidget *event_dock_widget, const TopToolDockEventInfo &top_tool_event_info ) {
+size_t MainWindow::triggerTopToolDockWidgetEvent( TopToolDockWidget *sender, const TopToolDockWidgetEventInfo &info ) {
 
-	auto eventType = top_tool_event_info.getEventType( );
-	const TopToolDockEventInfo::TopToolEventData *topToolEventData;
-	TopToolEventInfo::Type type;
-	const TopToolEventInfo *topToolEventInfo;
+	TopToolDockWidgetEventInfo::EventType eventType = info.getEventType( );
+
+	const TopToolDockWidgetEventInfo::TopToolEventData *topToolEventData;
+	TopToolWidgetEventInfo::Type type;
+	const TopToolWidgetEventInfo *topToolEventInfo;
 	const QPoint *oldMousePos, *newMousePos;
 
 	switch( eventType ) {
-		case TopToolDockEventInfo::EventType::None :
+		case TopToolDockWidgetEventInfo::EventType::None :
 			break;
-		case TopToolDockEventInfo::EventType::TopToolEvent :
-			topToolEventData = top_tool_event_info.getTopToolEventData( );
+		case TopToolDockWidgetEventInfo::EventType::TopToolEvent :
+			topToolEventData = info.getTopToolEventData( );
 			topToolEventInfo = topToolEventData->getTopToolEventInfo( );
 			type = topToolEventInfo->getType( );
 			switch( type ) {
-				case TopToolEventInfo::Type::Close :
+				case TopToolWidgetEventInfo::Type::Close :
 					ApplicationInstance::getInstance( )->getApplication( )->quit( );
 					break;
-				case TopToolEventInfo::Type::Min :
+				case TopToolWidgetEventInfo::Type::Min :
 					showMinimized( );
 					break;
-				case TopToolEventInfo::Type::MoveTargetOffsetWindow :
+				case TopToolWidgetEventInfo::Type::MoveTargetOffsetWindow :
 					oldMousePos = topToolEventInfo->getOldMousePos( );
 					newMousePos = topToolEventInfo->getNewMousePos( );
 					move( *newMousePos - *oldMousePos + pos( ) );

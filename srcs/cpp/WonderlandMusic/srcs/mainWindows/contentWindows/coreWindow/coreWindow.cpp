@@ -14,3 +14,6 @@ void CoreWindow::paintEvent( QPaintEvent *event ) {
 	QPainter painter( this );
 	painter.fillRect( contentsRect( ), "#9932CC" );
 }
+size_t CoreWindow::triggerCoreStackedWidgetEvent( CoreStackedWidget *sender, const CoreStackedWidgetEventInfo &info ) {
+	return 0;
+}

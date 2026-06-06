@@ -7,11 +7,11 @@ FunctionWidget::FunctionWidget( FunctionDockWidget *parent ) : QWidget( parent )
 
 	showMusicBtn = new QPushButton( tr( "音乐" ), this );
 	connect( showMusicBtn, &QPushButton::clicked, [this]( ) {
-		FunctionWidgetEvent::triggerTopToolEvent( functionDockWidget, this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Music ) );
+		FunctionWidgetEvent::triggerFunctionWidgetEvent( functionDockWidget, this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Music ) );
 	} );
 	showSettingBtn = new QPushButton( tr( "设置" ), this );
 	connect( showSettingBtn, &QPushButton::clicked, [this]( ) {
-		FunctionWidgetEvent::triggerTopToolEvent( functionDockWidget, this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Setting ) );
+		FunctionWidgetEvent::triggerFunctionWidgetEvent( functionDockWidget, this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Setting ) );
 	} );
 }
 void FunctionWidget::resizeEvent( QResizeEvent *event ) {

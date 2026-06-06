@@ -13,7 +13,9 @@ protected:
 	void paintEvent( QPaintEvent *event ) override;
 };
 
-class FindInfo {
+#include <event/eventMacroDefine.h>
+#define FindDockWidgetEventTypeName Event_Default_Event_Info_Type_Name( FindDockWidget )
+class FindDockWidgetEventTypeName {
 
 };
 #endif // FINDDOCKWIDGET_H_H_HEAD__FILE__

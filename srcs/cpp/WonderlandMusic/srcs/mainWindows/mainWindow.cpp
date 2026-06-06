@@ -12,6 +12,10 @@
 
 #include <QMouseEvent>
 
+#include "../msgInfo/messageErrorOut.h"
+
+#include "dockWidgets/functionWidget/functionWidgetBarWidget.h"
+
 MainWindow::Translate::Translate( ) {
 	appWindowObjectName = tr( "仙村音乐播放器" );
 	windowTitleName = tr( "仙村音乐播放器主窗口" );
@@ -30,6 +34,7 @@ MainWindow::MainWindow( ) {
 	functionDockWidget->setFeatures( QDockWidget::NoDockWidgetFeatures );
 	functionDockWidget->setAllowedAreas( Qt::DockWidgetArea::LeftDockWidgetArea );
 	functionDockWidget->setContextMenuPolicy( Qt::NoContextMenu );
+	functionDockWidget->setTitleBarWidget( new FunctionWidgetBarWidget( functionDockWidget ) );
 	addDockWidget( Qt::DockWidgetArea::LeftDockWidgetArea, functionDockWidget );
 
 	topToolDockWidget = new TopToolDockWidget( this );
@@ -45,6 +50,21 @@ MainWindow::MainWindow( ) {
 }
 MainWindow::~MainWindow( ) {
 
+}
+size_t MainWindow::triggerFunctionDockEvent( FunctionDockWidget *event_dock_widget, const FunctionDockEventInfo &function_dock_event_info ) {
+	switch( function_dock_event_info.getType( ) ) {
+
+		case FunctionDockEventInfo::EventType::Show_Music :
+			MessageErrorOut( ) << tr( "显示音乐面板" );
+			break;
+		case FunctionDockEventInfo::EventType::Show_Setting :
+			MessageErrorOut( ) << tr( "显示配置面板" );
+			break;
+		default :
+			MessageErrorOut( ) << tr( "未配置" );
+			break;
+	}
+	return 0;
 }
 size_t MainWindow::triggerTopToolDockEvent( TopToolDockWidget *event_dock_widget, const TopToolDockEventInfo &top_tool_event_info ) {
 

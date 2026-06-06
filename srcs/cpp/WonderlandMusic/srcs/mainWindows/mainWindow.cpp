@@ -103,3 +103,24 @@ size_t MainWindow::triggerTopToolDockWidgetEvent( TopToolDockWidget *sender, con
 
 	return false;
 }
+size_t MainWindow::triggerContentWindowEvent( ContentWindow *sender, const ContentWindowEventInfo &info ) {
+	switch( info.getEventType( ) ) {
+
+		case ContentWindowEventInfo::EventType::None :
+			MessageErrorOut( ) << "EventType::None";
+			break;
+		case ContentWindowEventInfo::EventType::Player :
+			MessageErrorOut( ) << "EventType::Player";
+			break;
+		case ContentWindowEventInfo::EventType::Pause :
+			MessageErrorOut( ) << "EventType::Pause";
+			break;
+		case ContentWindowEventInfo::EventType::Next_Track :
+			MessageErrorOut( ) << "EventType::Next_Track";
+			break;
+		case ContentWindowEventInfo::EventType::Previous_Track :
+			MessageErrorOut( ) << "EventType::Previous_Track";
+			break;
+	}
+	return 0;
+}

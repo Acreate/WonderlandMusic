@@ -15,5 +15,5 @@ size_t TopToolDockWidget::triggerTopToolWidgetEvent( TopToolWidget *sender, cons
 	topToolDockEventInfo.eventType = TopToolDockWidgetEventInfo::EventType::TopToolEvent;
 	TopToolDockWidgetEventInfo::TopToolEventData topData( sender, &info );
 	topToolDockEventInfo.topToolEventData = &topData;
-	return TopToolDockEventClass::triggerTopToolDockWidgetEvent( mainWindow, this, topToolDockEventInfo );
+	return TopToolDockEventClassName::triggerTopToolDockWidgetEvent( mainWindow, this, topToolDockEventInfo );
 }

@@ -9,10 +9,17 @@
 #define FunctionDockEventDefineClass Event_Define_Event_Class_type( FunctionDockWidget, MainWindow )
 class Event_Default_Event_Info_Type_Name( FunctionDockWidget );
 
-#define TopToolDockEventClass Event_Default_ClassName( TopToolDockWidget )
+#define TopToolDockEventClassName Event_Default_ClassName( TopToolDockWidget )
 #define TopToolDockEventDefaultEventCallFunction Event_Default_Receive_Call_Function( TopToolDockWidget )
 #define TopToolDockEventDefineClass Event_Define_Event_Class_type( TopToolDockWidget, MainWindow)
 class Event_Default_Event_Info_Type_Name( TopToolDockWidget );
+
+
+
+#define ContentWindowEventClassName Event_Default_ClassName( ContentWindow )
+#define ContentWindowEventDefaultEventCallFunction Event_Default_Receive_Call_Function( ContentWindow )
+#define ContentWindowEventDefineClass Event_Define_Event_Class_type( ContentWindow, MainWindow)
+class Event_Default_Event_Info_Type_Name( ContentWindow );
 
 class ContentWindow;
 class FunctionDockWidget;
@@ -20,7 +27,8 @@ class TopToolDockWidget;
 class MainWindow : public QMainWindow {
 	Q_OBJECT;
 	friend class FunctionDockEventClassName;
-	friend class TopToolDockEventClass;
+	friend class TopToolDockEventClassName;
+	friend class ContentWindowEventClassName;
 public:
 	class Translate {
 		friend class MainWindow;
@@ -45,10 +53,12 @@ public:
 private:
 	virtual FunctionDockEventDefaultEventCallFunction;
 	virtual TopToolDockEventDefaultEventCallFunction;
+	virtual ContentWindowEventDefaultEventCallFunction;
 };
 
 FunctionDockEventDefineClass;
-
 TopToolDockEventDefineClass;
+ContentWindowEventDefineClass;
+
 
 #endif // MAINWINDOW_H_H_HEAD__FILE__

@@ -54,6 +54,26 @@ private:
 	virtual PlayerEventDefaultEventCallFunction;
 	virtual CoreWindowDefaultEventCallFunction;
 };
+
+#define ContentWindowEventTypeName Event_Default_Event_Info_Type_Name( ContentWindow )
+class ContentWindowEventTypeName {
+public:
+	enum class EventType {
+		None,
+		Player,
+		Pause,
+		Next_Track,
+		Previous_Track,
+	};
+protected:
+	EventType eventType;
+public:
+	virtual ~ContentWindowEventTypeName( ) = default;
+	ContentWindowEventTypeName( const EventType event_type )
+		: eventType( event_type ) { }
+	virtual EventType getEventType( ) const { return eventType; }
+};
+
 FindEventDefineClass;
 PlayerEventDefineClass;
 CoreWindowEventDefineClass;

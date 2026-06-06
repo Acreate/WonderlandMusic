@@ -10,6 +10,22 @@ CoreStackedWidget::CoreStackedWidget( CoreWindow *parent ) : QStackedWidget( par
 	addWidget( musicListWindow );
 
 	settingWindow = new SettingWindow( this );
-	setWindowFlags( Qt::WindowType::Widget );
+	settingWindow->setWindowFlags( Qt::WindowType::Widget );
 	addWidget( settingWindow );
+}
+bool CoreStackedWidget::showMusicWidget( ) {
+	if( currentWidget( ) == musicListWindow )
+		return true;
+	setCurrentWidget( musicListWindow );
+	if( currentWidget( ) == musicListWindow )
+		return true;
+	return false;
+}
+bool CoreStackedWidget::showSettingWidget( ) {
+	if( currentWidget( ) == settingWindow )
+		return true;
+	setCurrentWidget( settingWindow );
+	if( currentWidget( ) == settingWindow )
+		return true;
+	return false;
 }

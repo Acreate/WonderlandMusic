@@ -9,11 +9,13 @@ CoreWindow::CoreWindow( ContentWindow *parent ) : QMainWindow( parent ), content
 	coreStackedWidget = new CoreStackedWidget( this );
 	setCentralWidget( coreStackedWidget );
 }
-void CoreWindow::paintEvent( QPaintEvent *event ) {
-	QMainWindow::paintEvent( event );
-	QPainter painter( this );
-	painter.fillRect( contentsRect( ), "#9932CC" );
+bool CoreWindow::showMusicWidget( ) {
+	return coreStackedWidget->showMusicWidget( );
 }
+bool CoreWindow::showSettingWidget( ) {
+	return coreStackedWidget->showSettingWidget( );
+}
+
 size_t CoreWindow::triggerCoreStackedWidgetEvent( CoreStackedWidget *sender, const CoreStackedWidgetEventInfo &info ) {
 	return 0;
 }

@@ -55,12 +55,13 @@ MainWindow::~MainWindow( ) {
 size_t MainWindow::triggerFunctionDockWidgetEvent( FunctionDockWidget *sender, const FunctionDockWidgetEventInfo &info ) {
 	FunctionDockWidgetEventInfo::EventType type = info.getType( );
 	switch( type ) {
-
 		case FunctionDockWidgetEventInfo::EventType::Show_Music :
-			MessageErrorOut( ) << tr( "显示音乐面板" );
+			if( contentWindow->showMusicWidget( ) == false )
+				MessageErrorOut( ) << tr( "音乐面板显示失败" );
 			break;
 		case FunctionDockWidgetEventInfo::EventType::Show_Setting :
-			MessageErrorOut( ) << tr( "显示配置面板" );
+			if( contentWindow->showSettingWidget( ) == false )
+				MessageErrorOut( ) << tr( "配置面板显示失败" );
 			break;
 		default :
 			MessageErrorOut( ) << tr( "未配置" );

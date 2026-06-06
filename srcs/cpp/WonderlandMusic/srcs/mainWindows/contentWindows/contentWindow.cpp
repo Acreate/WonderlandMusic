@@ -29,6 +29,12 @@ ContentWindow::ContentWindow( MainWindow *parent ) : QMainWindow( parent ), main
 	coreWindow->setWindowFlags( Qt::WindowType::Widget );
 	setCentralWidget( coreWindow );
 }
+bool ContentWindow::showMusicWidget( ) {
+	return coreWindow->showMusicWidget( );
+}
+bool ContentWindow::showSettingWidget( ) {
+	return coreWindow->showSettingWidget( );
+}
 size_t ContentWindow::triggerFindDockWidgetEvent( FindDockWidget *sender, const FindDockWidgetEventInfo &info ) {
 	return 0;
 }

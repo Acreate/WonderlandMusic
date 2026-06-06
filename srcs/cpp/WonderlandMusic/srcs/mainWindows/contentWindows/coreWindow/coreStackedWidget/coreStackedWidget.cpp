@@ -2,16 +2,10 @@
 
 #include "../coreWindow.h"
 
+#include <macro/widgetMarcoDefine.h>
+
 #include "coreWidget/musicListWindow.h"
 #include "coreWidget/settingWindow.h"
-
-#define Show_Stack_Sub_Widget( show_widget ) \
-	if( currentWidget( ) == show_widget ) \
-		return true; \
-	setCurrentWidget( show_widget ); \
-	if( currentWidget( ) == show_widget ) \
-		return true;\
-	return false
 
 CoreStackedWidget::CoreStackedWidget( CoreWindow *parent ) : QStackedWidget( parent ), coreWindow( parent ) {
 	musicListWindow = new MusicListWindow( this );
@@ -23,9 +17,12 @@ CoreStackedWidget::CoreStackedWidget( CoreWindow *parent ) : QStackedWidget( par
 	addWidget( settingWindow );
 }
 bool CoreStackedWidget::showMusicWidget( ) {
-	Show_Stack_Sub_Widget( musicListWindow );
 
+	Stack_Widget_Show_Widget( this, musicListWindow );
 }
 bool CoreStackedWidget::showSettingWidget( ) {
-	Show_Stack_Sub_Widget( settingWindow );
+	Stack_Widget_Show_Widget( this, settingWindow );
+}
+size_t CoreStackedWidget::triggerSettingWindowEvent( SettingWindow *sender, const SettingWindowEventInfo &info ) {
+	return 0;
 }

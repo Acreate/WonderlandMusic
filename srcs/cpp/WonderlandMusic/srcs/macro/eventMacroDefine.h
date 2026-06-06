@@ -13,7 +13,7 @@
 /// @brief 生成事件触发函数类名
 /// @param event_name 事件函数类名
 #define Event_Default_Event_Info_Type_Name( event_name ) \
-		 event_name##EventInfo
+		event_name##EventInfo
 
 /// @brief 生成事件触发函数类名
 /// @param event_name 事件函数类名，并且作为 消息类型名称（使用 Event_Default_Event_Info_Type_Name 宏）

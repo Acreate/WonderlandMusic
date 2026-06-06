@@ -2,6 +2,7 @@
 #define PLAYERDOCKWIDGET_H_H_HEAD__FILE__
 
 #include <QDockWidget>
+#include <macro/eventMacroDefine.h>
 class QPushButton;
 class ContentWindow;
 
@@ -28,7 +29,6 @@ public:
 	PlayerDockWidget( ContentWindow *parent );
 };
 
-#include <event/eventMacroDefine.h>
 #define PlayerDockWidgetEventTypeName Event_Default_Event_Info_Type_Name( PlayerDockWidget )
 class PlayerDockWidgetEventTypeName {
 public:

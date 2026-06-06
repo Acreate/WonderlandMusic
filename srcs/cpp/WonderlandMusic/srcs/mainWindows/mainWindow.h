@@ -2,7 +2,7 @@
 #define MAINWINDOW_H_H_HEAD__FILE__
 #include <QMainWindow>
 
-#include "../event/eventMacroDefine.h"
+#include <macro/eventMacroDefine.h>
 
 #define FunctionDockEventClassName Event_Default_ClassName( FunctionDockWidget )
 #define FunctionDockEventDefaultEventCallFunction Event_Default_Receive_Call_Function( FunctionDockWidget )

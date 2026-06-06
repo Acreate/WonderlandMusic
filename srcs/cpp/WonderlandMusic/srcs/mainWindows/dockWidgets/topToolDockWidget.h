@@ -2,7 +2,7 @@
 #define TOPTOOLDOCKWIDGET_H_H_HEAD__FILE__
 
 #include <QDockWidget>
-#include <event/eventMacroDefine.h>
+#include <macro/eventMacroDefine.h>
 
 class TopToolWidget;
 class MainWindow;

@@ -2,7 +2,7 @@
 #define FUNCTIONWIDGET_H_H_HEAD__FILE__
 
 #include <QWidget>
-#include <event/eventMacroDefine.h>
+#include <macro/eventMacroDefine.h>
 class QPushButton;
 class FunctionDockWidget;
 class FunctionWidget : public QWidget {

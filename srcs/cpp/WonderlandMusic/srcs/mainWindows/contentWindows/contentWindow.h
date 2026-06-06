@@ -2,7 +2,7 @@
 #define CONTENTWINDOW_H_H_HEAD__FILE__
 
 #include <QMainWindow>
-#include <event/eventMacroDefine.h>
+#include <macro/eventMacroDefine.h>
 class CoreInfo;
 class CoreWindow;
 class PlayerInfo;

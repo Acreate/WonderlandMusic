@@ -7,7 +7,7 @@ class FunctionWidget;
 class MainWindow;
 
 // 事件头文件
-#include <event/eventMacroDefine.h>
+#include <macro/eventMacroDefine.h>
 /// @brief 展开事件类名
 #define FunctionWidgetEventClassName Event_Default_ClassName( FunctionWidget )
 /// @brief 展开事件发送函数声明

@@ -15,7 +15,7 @@ class MainWindow : public QMainWindow {
 	Q_OBJECT;
 	friend class FunctionDockEvent;
 	friend class ToolTopToolDockEvent;
-private:
+protected:
 	class Translate {
 		friend class MainWindow;
 		/// @brief 窗口对象名称
@@ -25,6 +25,18 @@ private:
 	public:
 		Translate( );
 	} translate;
+	/// @brief 缩放状态
+	enum class ScaleStatus {
+		None = 0, // 没有
+		Top = 0x1, // 顶部
+		Bottom = 0x10, // 底部
+		Left = 0x100, // 左侧
+		Right = 0x1000, // 右侧
+		LeftTop = Left | Top, // 左上
+		RightTop = Right | Top, // 右上
+		LeftBottom = Left | Bottom, // 左下
+		RightBottom = Right | Bottom, // 右下
+	};
 protected:
 	/// @brief 顶部工具
 	TopToolDockWidget *topToolDockWidget;
@@ -32,9 +44,26 @@ protected:
 	FunctionDockWidget *functionDockWidget;
 	/// @brief 内容面板
 	ContentWindow *contentWindow;
+	/// @brief 缩放检测许可
+	bool scalePermission;
+	/// @brief 缩放状态
+	ScaleStatus scaleStatus;
+	/// @brief 当前宽度
+	int currenWidth;
+	/// @brief 当前高度
+	int currentHeight;
+	/// @brief 放大缩小检测边缘大小
+	int checkScaleMargin;
 public:
 	MainWindow( );
 	~MainWindow( ) override;
+protected:
+	void resizeEvent( QResizeEvent *event ) override;
+	void enterEvent( QEnterEvent *event ) override;
+	void leaveEvent( QEvent *event ) override;
+	void mouseMoveEvent( QMouseEvent *event ) override;
+	void mousePressEvent( QMouseEvent *event ) override;
+	void mouseReleaseEvent( QMouseEvent *event ) override;
 private:
 	virtual size_t triggerFunctionDockEvent( FunctionDockWidget *event_dock_widget, const FunctionDockEventInfo &function_dock_event_info ) {
 		return false;

@@ -5,7 +5,7 @@
 
 #include <macro/eventMacroDefine.h>
 
-#define SettingWindowEventClassName Event_Default_ClassName( SettingWindow )
+#define SettingWindowEventClassName Event_Default_Event_Class_Type_Name( SettingWindow )
 #define SettingWindowDefaultEventCallFunction Event_Default_Receive_Call_Function( SettingWindow )
 #define SettingWindowEventDefineClass Event_Define_Event_Class_type( SettingWindow, CoreStackedWidget )
 class Event_Default_Event_Info_Type_Name( SettingWindow );

@@ -9,7 +9,7 @@ class MainWindow;
 // 事件头文件
 #include <macro/eventMacroDefine.h>
 /// @brief 展开事件类名
-#define FunctionWidgetEventClassName Event_Default_ClassName( FunctionWidget )
+#define FunctionWidgetEventClassName Event_Default_Event_Class_Type_Name( FunctionWidget )
 /// @brief 展开事件发送函数声明
 #define FunctionWidgetDefaultEventCallFunction Event_Default_Receive_Call_Function( FunctionWidget )
 /// @brief 展开定义事件类

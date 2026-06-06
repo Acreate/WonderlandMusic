@@ -4,19 +4,19 @@
 
 #include <macro/eventMacroDefine.h>
 
-#define FunctionDockEventClassName Event_Default_ClassName( FunctionDockWidget )
+#define FunctionDockEventClassName Event_Default_Event_Class_Type_Name( FunctionDockWidget )
 #define FunctionDockEventDefaultEventCallFunction Event_Default_Receive_Call_Function( FunctionDockWidget )
 #define FunctionDockEventDefineClass Event_Define_Event_Class_type( FunctionDockWidget, MainWindow )
 class Event_Default_Event_Info_Type_Name( FunctionDockWidget );
 
-#define TopToolDockEventClassName Event_Default_ClassName( TopToolDockWidget )
+#define TopToolDockEventClassName Event_Default_Event_Class_Type_Name( TopToolDockWidget )
 #define TopToolDockEventDefaultEventCallFunction Event_Default_Receive_Call_Function( TopToolDockWidget )
 #define TopToolDockEventDefineClass Event_Define_Event_Class_type( TopToolDockWidget, MainWindow)
 class Event_Default_Event_Info_Type_Name( TopToolDockWidget );
 
 
 
-#define ContentWindowEventClassName Event_Default_ClassName( ContentWindow )
+#define ContentWindowEventClassName Event_Default_Event_Class_Type_Name( ContentWindow )
 #define ContentWindowEventDefaultEventCallFunction Event_Default_Receive_Call_Function( ContentWindow )
 #define ContentWindowEventDefineClass Event_Define_Event_Class_type( ContentWindow, MainWindow)
 class Event_Default_Event_Info_Type_Name( ContentWindow );

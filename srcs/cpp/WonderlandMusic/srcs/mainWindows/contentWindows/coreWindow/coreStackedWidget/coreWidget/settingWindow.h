@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <macro/eventMacroDefine.h>
 
-#define OptionNavigationWidgetEventClassName Event_Default_ClassName( OptionNavigationDockWidget )
+#define OptionNavigationWidgetEventClassName Event_Default_Event_Class_Type_Name( OptionNavigationDockWidget )
 #define OptionNavigationWidgetDefaultEventCallFunction Event_Default_Receive_Call_Function( OptionNavigationDockWidget )
 #define OptionNavigationWidgetEventDefineClass Event_Define_Event_Class_type( OptionNavigationDockWidget, SettingWindow )
 class OptionNavigationDockWidget;

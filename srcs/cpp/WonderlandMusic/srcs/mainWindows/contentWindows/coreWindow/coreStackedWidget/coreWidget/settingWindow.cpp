@@ -22,10 +22,10 @@ size_t SettingWindow::triggerOptionNavigationDockWidgetEvent( OptionNavigationDo
 
 		case OptionNavigationDockWidgetEventInfo::EventType::None :
 			break;
-		case OptionNavigationDockWidgetEventInfo::EventType::Path :
+		case OptionNavigationDockWidgetEventInfo::EventType::Show_Path_Widget :
 			optionStackWidget->showPathSettingWidget( );
 			break;
-		case OptionNavigationDockWidgetEventInfo::EventType::About :
+		case OptionNavigationDockWidgetEventInfo::EventType::Show_About_Widget :
 			optionStackWidget->showAboutInfoWidget( );
 			break;
 	}

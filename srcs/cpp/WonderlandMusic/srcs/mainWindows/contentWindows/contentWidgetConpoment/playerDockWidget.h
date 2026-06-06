@@ -3,30 +3,21 @@
 
 #include <QDockWidget>
 #include <macro/eventMacroDefine.h>
+class PlayerWidget;
 class QPushButton;
 class ContentWindow;
 
+class Event_Default_Event_Info_Type_Name( PlayerWidget );
+
 class PlayerDockWidget : public QDockWidget {
+	friend class Event_Default_Event_Class_Type_Name( PlayerWidget );
 	Q_OBJECT;
-public:
-	/// @brief 播放状态
-	enum class ControlStatus {
-		None,
-		Player,
-		Pause,
-	};
 protected:
 	ContentWindow *contentWindow;
-	/// @brief 上一曲
-	QPushButton *previousTrackBtn;
-	/// @brief 控制当前播放
-	QPushButton *controlCurrentBtn;
-	/// @brief 下一曲
-	QPushButton *nextTrackBtn;
-	/// @brief 
-	ControlStatus controlStatus;
+	PlayerWidget *playerWidget;
 public:
 	PlayerDockWidget( ContentWindow *parent );
+	virtual Event_Default_Receive_Call_Function( PlayerWidget );
 };
 
 #define PlayerDockWidgetEventTypeName Event_Default_Event_Info_Type_Name( PlayerDockWidget )
@@ -47,4 +38,6 @@ public:
 		: eventType( event_type ) { }
 	virtual EventType getEventType( ) const { return eventType; }
 };
+
+Event_Define_Event_Class_type( PlayerWidget, PlayerDockWidget );
 #endif // PLAYERDOCKWIDGET_H_H_HEAD__FILE__

@@ -3,7 +3,7 @@
 
 /// @brief 生成友元事件类名
 /// @param event_name 事件类名
-#define Event_Default_ClassName( event_name ) \
+#define Event_Default_Event_Class_Type_Name( event_name ) \
 		event_name##Event
 
 /// @brief 生成事件触发函数类名
@@ -30,7 +30,7 @@
 /// @param event_name 事件名称，并且作为该类的名称，并作为消息发送方，生成该类友元，可访问该静态成员的函数，并且作为 消息类型名称（使用 Event_Default_Event_Info_Type_Name 宏）
 /// @param receive_class_type 接受信号的类型，并且使用该变量进行调用，需在类中配置友元(可使用 Event_Friend_Macro 宏配置)
 #define Event_Define_Event_Class_type( event_name, receive_class_type)  \
-class Event_Default_ClassName(event_name) { \
+class Event_Default_Event_Class_Type_Name(event_name) { \
 	friend class event_name;  \
 	static Event_Default_Event_Call_Function(event_name,receive_class_type){ \
 		return receive->Event_Default_Event_Call_Function_Name(event_name)( sender, info ); \

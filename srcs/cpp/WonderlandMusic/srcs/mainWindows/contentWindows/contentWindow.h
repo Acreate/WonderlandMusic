@@ -11,17 +11,17 @@ class MainWindow;
 class FindDockWidget;
 class PlayerDockWidget;
 
-#define FindEventClassName Event_Default_ClassName( FindDockWidget )
+#define FindEventClassName Event_Default_Event_Class_Type_Name( FindDockWidget )
 #define FindEventDefaultEventCallFunction Event_Default_Receive_Call_Function(FindDockWidget)
 #define FindEventDefineClass Event_Define_Event_Class_type( FindDockWidget, ContentWindow )
 class Event_Default_Event_Info_Type_Name( FindDockWidget );
 
-#define PlayerEventClassName Event_Default_ClassName( PlayerDockWidget )
+#define PlayerEventClassName Event_Default_Event_Class_Type_Name( PlayerDockWidget )
 #define PlayerEventDefaultEventCallFunction Event_Default_Receive_Call_Function(PlayerDockWidget )
 #define PlayerEventDefineClass Event_Define_Event_Class_type( PlayerDockWidget, ContentWindow)
 class Event_Default_Event_Info_Type_Name( PlayerDockWidget );
 
-#define CoreWindowEventClassName Event_Default_ClassName( CoreWindow )
+#define CoreWindowEventClassName Event_Default_Event_Class_Type_Name( CoreWindow )
 #define CoreWindowDefaultEventCallFunction Event_Default_Receive_Call_Function(CoreWindow)
 #define CoreWindowEventDefineClass Event_Define_Event_Class_type( CoreWindow, ContentWindow )
 class Event_Default_Event_Info_Type_Name( CoreWindow );

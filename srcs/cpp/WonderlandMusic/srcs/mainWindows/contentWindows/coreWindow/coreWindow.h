@@ -7,7 +7,7 @@ class CoreStackedWidget;
 class CoreStackedWidgeEventInfo;
 class ContentWindow;
 
-#define CoreStackedWidgetEventClassName Event_Default_ClassName( CoreStackedWidget )
+#define CoreStackedWidgetEventClassName Event_Default_Event_Class_Type_Name( CoreStackedWidget )
 #define CoreStackedWidgetDefaultEventCallFunction Event_Default_Receive_Call_Function( CoreStackedWidget )
 #define CoreStackedWidgetEventDefineClass Event_Define_Event_Class_type( CoreStackedWidget, CoreWindow )
 class Event_Default_Event_Info_Type_Name( CoreStackedWidget );

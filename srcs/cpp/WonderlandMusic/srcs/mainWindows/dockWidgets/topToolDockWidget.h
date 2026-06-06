@@ -7,7 +7,7 @@
 class TopToolWidget;
 class MainWindow;
 
-#define TopToolWidgetEventClassName Event_Default_ClassName( TopToolWidget )
+#define TopToolWidgetEventClassName Event_Default_Event_Class_Type_Name( TopToolWidget )
 #define TopToolWidgetEventDefaultEventCallFunction Event_Default_Receive_Call_Function(TopToolWidget)
 #define TopToolWidgetEventDefineClass Event_Define_Event_Class_type( TopToolWidget, TopToolDockWidget )
 

@@ -4,26 +4,23 @@
 
 #include "dockWidgets/functionDockWidget.h"
 #include "dockWidgets/topToolDockWidget.h"
-#include <QMenuBar>
-#include <qboxlayout.h>
-
 #include "../applications/application.h"
 #include "../applications/applicationInstance.h"
 
 #include "dockWidgets/topToolWidget/topToolTitleBarWidget.h"
 #include "dockWidgets/topToolWidget/topToolWidget.h"
 
+#include <QMouseEvent>
+
 MainWindow::Translate::Translate( ) {
 	appWindowObjectName = tr( "仙村音乐播放器" );
 	windowTitleName = tr( "仙村音乐播放器主窗口" );
 }
 MainWindow::MainWindow( ) {
-	scaleStatus = ScaleStatus::None;
-	scalePermission = false;
-	checkScaleMargin = 5;
 	setObjectName( translate.appWindowObjectName );
 	setWindowTitle( translate.windowTitleName );
-	setWindowFlags( Qt::WindowType::ToolTip );
+	QFlags< Qt::WindowType > flags = Qt::WindowType::Window | Qt::WindowType::CustomizeWindowHint;
+	setWindowFlags( flags );
 
 	contentWindow = new ContentWindow( this );
 	contentWindow->setWindowFlags( Qt::WindowType::Widget );
@@ -48,41 +45,6 @@ MainWindow::MainWindow( ) {
 }
 MainWindow::~MainWindow( ) {
 
-}
-void MainWindow::resizeEvent( QResizeEvent *event ) {
-	QMainWindow::resizeEvent( event );
-	auto rect = contentsRect( );
-	currenWidth = rect.width( ) - rect.x( );
-	currentHeight = rect.height( ) - rect.y( );
-}
-void MainWindow::enterEvent( QEnterEvent *event ) {
-	QMainWindow::enterEvent( event );
-	scalePermission = true;
-}
-void MainWindow::leaveEvent( QEvent *event ) {
-	QMainWindow::leaveEvent( event );
-	scalePermission = false;
-}
-void MainWindow::mouseMoveEvent( QMouseEvent *event ) {
-	QMainWindow::mouseMoveEvent( event );
-	if( scalePermission ) {
-		// todo : 开始缩放
-		auto rect = contentsRect( );
-		auto newWidth = rect.width( ) - rect.x( );
-		auto newHeight = rect.height( ) - rect.y( );
-	}
-
-}
-void MainWindow::mousePressEvent( QMouseEvent *event ) {
-	QMainWindow::mousePressEvent( event );
-	if( scalePermission ) {
-		// todo : 检测缩放位置
-	}
-}
-void MainWindow::mouseReleaseEvent( QMouseEvent *event ) {
-	QMainWindow::mouseReleaseEvent( event );
-	scalePermission = false;
-	scaleStatus = ScaleStatus::None;
 }
 size_t MainWindow::triggerTopToolDockEvent( TopToolDockWidget *event_dock_widget, const TopToolDockEventInfo &top_tool_event_info ) {
 

@@ -2,6 +2,7 @@
 #define CONTENTWINDOW_H_H_HEAD__FILE__
 
 #include <QMainWindow>
+#include <event/eventMacroDefine.h>
 class CoreInfo;
 class CoreWindow;
 class PlayerInfo;
@@ -9,10 +10,23 @@ class FindInfo;
 class MainWindow;
 class FindDockWidget;
 class PlayerDockWidget;
+
+#define FindEventClassName Event_Default_ClassName( Find )
+#define FindEventTrigger Event_Default_Event_Call_Function_Name(  Find )
+#define FindEventDefineClass Event_Define_Event_Class_type( Find, ContentWindow, FindDockWidget, FindInfo )
+
+#define PlayerEventClassName Event_Default_ClassName( Player )
+#define PlayerEventTrigger Event_Default_Event_Call_Function_Name(  Player )
+#define PlayerEventDefineClass Event_Define_Event_Class_type( Player, ContentWindow, PlayerDockWidget, PlayerInfo )
+
+#define CoreWindowEventClassName Event_Default_ClassName( CoreWindow )
+#define CoreWindowEventTrigger Event_Default_Event_Call_Function_Name(  CoreWindow )
+#define CoreWindowEventDefineClass Event_Define_Event_Class_type( CoreWindow, ContentWindow, CoreWindow, CoreInfo )
+
 /// @brief 内容窗口
 class ContentWindow : public QMainWindow {
-	friend class FindEvent;
-	friend class PlayerEvent;
+	friend class FindEventClassName;
+	friend class PlayerEventClassName;
 	friend class CoreWindowEvent;
 	Q_OBJECT;
 protected:
@@ -27,36 +41,18 @@ protected:
 public:
 	ContentWindow( MainWindow *parent );
 private:
-	virtual size_t triggerFindEvent( FindDockWidget *sender_find_dock_widget, const FindInfo &find_info ) {
+	virtual size_t FindEventTrigger( FindDockWidget *sender_find_dock_widget, const FindInfo &find_info ) {
 		return 0;
 	}
-	virtual size_t triggerPlayerEvent( PlayerDockWidget *sender_player_dock_widget, const PlayerInfo &player_info ) {
+	virtual size_t PlayerEventTrigger( PlayerDockWidget *sender_player_dock_widget, const PlayerInfo &player_info ) {
 		return 0;
 	}
-	virtual size_t triggerCoreWindowEvent( CoreWindow *sender_player_dock_widget, const CoreInfo &player_info ) {
+	virtual size_t CoreWindowEventTrigger( CoreWindow *sender_player_dock_widget, const CoreInfo &player_info ) {
 		return 0;
 	}
 };
-
-class FindEvent {
-	friend class FindDockWidget;
-	static size_t triggerFindEvent( ContentWindow *receive_content_window, FindDockWidget *sender_find_dock_widget, const FindInfo &find_info ) {
-		return receive_content_window->triggerFindEvent( sender_find_dock_widget, find_info );
-	}
-};
-
-class PlayerEvent {
-	friend class PlayerDockWidget;
-	static size_t triggerPlayerEvent( ContentWindow *receive_content_window, PlayerDockWidget *sender_player_dock_widget, const PlayerInfo &player_info ) {
-		return receive_content_window->triggerPlayerEvent( sender_player_dock_widget, player_info );
-	}
-};
-
-class CoreWindowEvent {
-	friend class PlayerDockWidget;
-	static size_t triggerCoreWindowEvent( ContentWindow *receive_content_window, CoreWindow *sender_core_window, const CoreInfo &core_info ) {
-		return receive_content_window->triggerCoreWindowEvent( sender_core_window, core_info );
-	}
-};
+FindEventDefineClass;
+PlayerEventDefineClass;
+CoreWindowEventDefineClass;
 
 #endif // CONTENTWINDOW_H_H_HEAD__FILE__

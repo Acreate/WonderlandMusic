@@ -12,7 +12,7 @@ MessageErrorOut::Translate::Translate( ) {
 	createDirError = QObject::tr( "创建目录失败" );
 	openFileError = QObject::tr( "打开文件失败" );
 }
-MessageErrorOut::MessageErrorOut( const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ) {
+MessageErrorOut::MessageErrorOut( bool is_write_file, const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ), isWriteFile( is_write_file ) {
 
 }
 MessageErrorOut & MessageErrorOut::operator<<( const QString &msg ) {
@@ -31,8 +31,11 @@ MessageErrorOut::~MessageErrorOut( ) {
 			jion += data[ index ];
 	}
 	outMsgVector.clear( );
-	formatMessageOut( outString, location, jion );
+	DateTimeFormat dateTimeFormat;
+	formatMessageOut( dateTimeFormat, outString, location, jion );
 	qDebug( ) << outString.toStdString( ).c_str( );
+	if( isWriteFile )
+		return;
 	Application *applicationInstance = Application::getApplicationInstance( );
 	if( applicationInstance == nullptr )
 		return;
@@ -48,7 +51,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 	if( dir.exists( ) == false ) {
 		if( dir.mkdir( logHomePtah ) == false ) {
 			outString.clear( );
-			formatMessageOut( outString, std::source_location::current( ), translate.createDirError + " : " + logHomePtah );
+			formatMessageOut( dateTimeFormat, outString, std::source_location::current( ), translate.createDirError + " : " + logHomePtah );
 			qDebug( ) << outString.toStdString( ).c_str( );
 			return;
 		}
@@ -57,14 +60,14 @@ MessageErrorOut::~MessageErrorOut( ) {
 	QFlags< QIODevice::OpenMode::enum_type > flags = QIODeviceBase::ReadWrite | QIODeviceBase::Append;
 	if( openFile.open( flags ) == false ) {
 		outString.clear( );
-		formatMessageOut( outString, std::source_location::current( ), translate.openFileError + " : " + writeFilePath );
+		formatMessageOut( dateTimeFormat, outString, std::source_location::current( ), translate.openFileError + " : " + writeFilePath );
 		qDebug( ) << outString.toStdString( ).c_str( );
 		return;
 	}
 	openFile.write( outString.toUtf8( ) );
 	openFile.close( );
 }
-QString & MessageErrorOut::formatMessageOut( QString &result_msg, const std::source_location &source_location, const QString &msg ) const {
+QString & MessageErrorOut::formatMessageOut( const DateTimeFormat &date_time_format, QString &result_msg, const std::source_location &source_location, const QString &msg ) const {
 	uint_least32_t msgCodeLine = location.line( );
 	auto msgCodeFileName = location.file_name( );
 	auto msgCodeFunctionName = location.function_name( );
@@ -72,6 +75,7 @@ QString & MessageErrorOut::formatMessageOut( QString &result_msg, const std::sou
 	auto relativeFilePath = cmakeRootPath.relativeFilePath( msgCodeFileName );
 
 	QString currentDataTimeToString;
+	DateTimeFormat dateTimeFormat;
 	dateTimeFormat.formatData( currentDataTimeToString ).append( dateTimeFormat.formatTime( ) );
 
 	result_msg.append( "\n-----\n :: \n : " ).append( translate.sourceFile ).append( " = " ).append( relativeFilePath ).append( "\n : " ).append( translate.sourceFunction ).append( " = " ).append( msgCodeFunctionName ).append( "\n : " ).append( translate.sourceLine ).append( " = " ).append( QString::number( msgCodeLine ) ).append( "\n : " ).append( currentDataTimeToString ).append( " ->\n ::\n" ).append( msg ).append( "\n-----\n" );

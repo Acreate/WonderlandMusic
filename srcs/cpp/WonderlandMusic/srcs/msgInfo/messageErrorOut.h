@@ -3,8 +3,7 @@
 #include <qstring.h>
 #include <source_location>
 
-#include "../tools/dateTimeFormat.h"
-
+class DateTimeFormat;
 class QDate;
 class MessageErrorOut {
 	std::vector< QString > outMsgVector;
@@ -25,14 +24,13 @@ class MessageErrorOut {
 	public:
 		Translate( );
 	} translate;
-	/// @brief 日期格式化对象
-	DateTimeFormat dateTimeFormat;
+	bool isWriteFile;
 public:
-	MessageErrorOut( const QString &log_home_path = "log", const std::source_location &source_location = std::source_location::current( ) );
+	MessageErrorOut( bool is_write_file = true, const QString &log_home_path = "log", const std::source_location &source_location = std::source_location::current( ) );
 	MessageErrorOut & operator<<( const QString &msg );
 	virtual ~MessageErrorOut( );
 private:
-	virtual QString & formatMessageOut( QString &result_msg, const std::source_location &source_location, const QString &msg ) const;
+	virtual QString & formatMessageOut( const DateTimeFormat &date_time_format, QString &result_msg, const std::source_location &source_location, const QString &msg ) const;
 };
 
 #endif // MESSAGEERROROUT_H_H_HEAD__FILE__

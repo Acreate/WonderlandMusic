@@ -204,13 +204,13 @@ Application * Application::getApplicationInstance( ) {
 		return current;
 	QCoreApplication *instance = QCoreApplication::instance( );
 	if( instance == nullptr ) {
-		MessageErrorOut( ) << tr( "无法从 QCoreApplication::instance( ) 获取实例指针" );
+		MessageErrorOut( false ) << tr( "无法从 QCoreApplication::instance( ) 获取实例指针" );
 		return nullptr;
 	}
 	current = qobject_cast< Application * >( instance );
 	if( current )
 		return current;
-	MessageErrorOut( ) << tr( "无法从 QCoreApplication::instance( ) 转换到 Application * 类型" );
+	MessageErrorOut( false ) << tr( "无法从 QCoreApplication::instance( ) 转换到 Application * 类型" );
 	return nullptr;
 }
 Application::Application( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {

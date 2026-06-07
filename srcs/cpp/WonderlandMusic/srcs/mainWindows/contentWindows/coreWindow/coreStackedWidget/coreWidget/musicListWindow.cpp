@@ -8,5 +8,5 @@
 MusicListWindow::MusicListWindow( CoreStackedWidget *parent ) : QMainWindow( parent ), coreStackedWidget( parent ) {
 	setMouseTracking( true );
 	setCentralWidget( new MusicListMainWidget( this ) );
-	setContextMenuPolicy( Qt::NoContextMenu );
+	//setContextMenuPolicy( Qt::NoContextMenu );
 }

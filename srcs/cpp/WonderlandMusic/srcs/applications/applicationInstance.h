@@ -3,6 +3,9 @@
 
 #include <QApplication>
 #include <macro/eventMacroDefine.h>
+class ControlMusicListMenu;
+class ControlCollectionMenu;
+class QMenu;
 class Render;
 class ApplicationEvenTrigger;
 class QFileInfo;
@@ -83,6 +86,10 @@ private:
 	QDateTime *appStartRunTime;
 	Render *render;
 	ApplicationEvenTrigger *applicationEvenTrigger;
+	/// @brief 收藏夹菜单
+	ControlCollectionMenu *controlCollectionMenu;
+	/// @brief 音乐菜单
+	ControlMusicListMenu *controlMusicListMenu;
 public:
 	/// @brief 获取配置的主要窗口
 	/// @return 主要窗口

@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QJsonObject>
+#include <QMenu>
 #include <QPainter>
 #include <QTranslator>
 
@@ -13,6 +14,9 @@
 #include "../mainWindows/mainWindow.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMainWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
+
+#include "../menus/controlCollectionMenu.h"
+#include "../menus/controlMusicListMenu.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -120,7 +124,12 @@ void ApplicationInstance::initApplicationEvenTrigger( ) {
 	applicationEvenTrigger = new ApplicationEvenTrigger( this );
 }
 void ApplicationInstance::initMainWindow( ) {
-	setMainWindowPtr( new MainWindow );
+	auto main = new MainWindow;
+	setMainWindowPtr( main );
+	controlCollectionMenu = new ControlCollectionMenu( );
+	controlCollectionMenu->addAction( "测试" );
+	controlMusicListMenu = new ControlMusicListMenu( );
+	controlMusicListMenu->addAction( "测试" );
 }
 void ApplicationInstance::initTriggerEvent( ) {
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerPathSettingWidgetEvent, [this] ( PathSettingWidget *sender_ptr, const PathSettingWidgetEventInfo &info ) {
@@ -143,6 +152,59 @@ void ApplicationInstance::initTriggerEvent( ) {
 		switch( eventType ) {
 			case MusicListMainWidgetEventInfo::EventType::Resize_Music_Widget_Width :
 				appSetting->insert( jsonKey.app_music_collection_main_widget_width, info.getNewMusicWidgetWidth( ) );
+				break;
+		}
+	} );
+
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMainWindowEvent, [this] ( MainWindow *sender, const MainWindowEventInfo &info ) {
+
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+
+			case MainWindowEventInfo::EventType::None :
+				break;
+			case MainWindowEventInfo::EventType::Close :
+				if( sender == mainWindowPtr ) {
+					mainWindowPtr = nullptr;
+					if( controlCollectionMenu ) {
+						delete controlCollectionMenu;
+						while( controlCollectionMenu )
+							this->processEvents( );
+					}
+					if( controlMusicListMenu ) {
+						delete controlMusicListMenu;
+						while( controlMusicListMenu )
+							this->processEvents( );
+					}
+				}
+				break;
+		}
+	} );
+
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerControlCollectionMenuEvent, [this] ( ControlCollectionMenu *sender, const ControlCollectionMenuEventInfo &info ) {
+
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+
+			case ControlCollectionMenuEventInfo::EventType::None :
+				break;
+			case ControlCollectionMenuEventInfo::EventType::Delete_This_Menu_Ptr :
+				if( sender == controlCollectionMenu )
+					controlCollectionMenu = nullptr;
+				break;
+		}
+	} );
+
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerControlMusicListMenuEvent, [this] ( ControlMusicListMenu *sender, const ControlMusicListMenuEventInfo &info ) {
+
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+
+			case ControlMusicListMenuEventInfo::EventType::None :
+				break;
+			case ControlMusicListMenuEventInfo::EventType::Delete_This_Menu_Ptr :
+				if( sender == controlMusicListMenu )
+					controlMusicListMenu = nullptr;
 				break;
 		}
 	} );
@@ -195,7 +257,10 @@ void ApplicationInstance::saveJsonDataToAppSettingFile( ) const {
 	}
 }
 ApplicationInstance::~ApplicationInstance( ) {
+
 	saveJsonDataToAppSettingFile( );
+	if( mainWindowPtr )
+		delete mainWindowPtr;
 	delete render;
 	delete applicationEvenTrigger;
 	delete appSetting;
@@ -207,7 +272,6 @@ ApplicationInstance::~ApplicationInstance( ) {
 	current = nullptr;
 }
 bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
-	bool notify = QApplication::notify( object, event );
 	switch( event->type( ) ) {
 		case QEvent::Show :
 			if( mainWindowPtr == object && firstShow == false ) {
@@ -226,24 +290,21 @@ bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 				appSetting->insert( jsonKey.main_window_y_key, valueY );
 				appSetting->insert( jsonKey.main_window_w_key, valueW );
 				appSetting->insert( jsonKey.main_window_h_key, valueH );
-				// 删除所有窗口
-				QWidgetList levelWidgets = topLevelWidgets( );
-				qsizetype count = levelWidgets.size( );
-				auto data = levelWidgets.data( );
-				qsizetype index = 0;
-				for( ; index < count; ++index )
-					if( data[ index ] != mainWindowPtr )
-						delete data[ index ];
+				// 删除所有窗口- error : 重复删除
+				//QWidgetList levelWidgets = topLevelWidgets( );
+				//qsizetype count = levelWidgets.size( );
+				//auto data = levelWidgets.data( );
+				//qsizetype index = 0;
+				//for( ; index < count; ++index )
+				//	if( data[ index ] != mainWindowPtr )
+				//		delete data[ index ];
 				quit( );
 			}
 			break;
 		case QEvent::Quit :
-			mainWindowPtr->setParent( nullptr );
-			delete mainWindowPtr;
-			mainWindowPtr = nullptr;
 			break;
 	}
-	return notify;
+	return QApplication::notify( object, event );
 }
 bool ApplicationInstance::event( QEvent *event ) {
 	return QApplication::event( event );

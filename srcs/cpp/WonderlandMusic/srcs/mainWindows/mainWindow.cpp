@@ -22,8 +22,7 @@ MainWindow::Translate::Translate( ) {
 	windowTitleName = tr( "仙村音乐播放器主窗口" );
 }
 MainWindow::MainWindow( ) {
-	
-	
+
 	setObjectName( translate.appWindowObjectName );
 	setWindowTitle( translate.windowTitleName );
 	QFlags< Qt::WindowType > flags = Qt::WindowType::Window | Qt::WindowType::CustomizeWindowHint;
@@ -47,9 +46,9 @@ MainWindow::MainWindow( ) {
 	topToolDockWidget->setTitleBarWidget( new TopToolTitleBarWidget( topToolDockWidget ) );
 	addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, topToolDockWidget );
 
-	this->setDockOptions( QMainWindow::AllowNestedDocks );
-	setDocumentMode( true );
-	setContextMenuPolicy( Qt::NoContextMenu );
+	//this->setDockOptions( QMainWindow::AllowNestedDocks );
+	//setDocumentMode( true );
+	//setContextMenuPolicy( Qt::NoContextMenu );
 
 	application = ApplicationInstance::getApplicationInstance( );
 	applicationEvenTrigger = application->getApplicationEvenTrigger( );
@@ -74,5 +73,6 @@ MainWindow::MainWindow( ) {
 	} );
 }
 MainWindow::~MainWindow( ) {
-
+	auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
+	MainWindowEvent::triggerMainWindowEvent( applicationEvenTrigger, this, MainWindowEventInfo( MainWindowEventInfo::EventType::Close ) );
 }

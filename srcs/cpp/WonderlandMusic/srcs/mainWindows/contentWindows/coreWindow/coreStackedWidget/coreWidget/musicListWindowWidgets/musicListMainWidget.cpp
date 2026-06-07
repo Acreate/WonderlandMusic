@@ -1,6 +1,7 @@
 ﻿#include "musicListMainWidget.h"
 
 #include <QMouseEvent>
+#include <QMenu>
 
 #include "musicCollectionScrollArea.h"
 #include "musicListScrollArea.h"
@@ -29,6 +30,9 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : QWidget( parent ) 
 			break;
 		}
 	} );
+
+}
+MusicListMainWidget::~MusicListMainWidget( ) {
 
 }
 void MusicListMainWidget::updateSubWidgetSize( ) {
@@ -78,5 +82,7 @@ void MusicListMainWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
 		MusicListMainWidgetEvent::triggerMusicListMainWidgetEvent( applicationEvenTrigger, this, MusicListMainWidgetEventInfo( musicCollectionScrollArea->width( ) ) );
 		readyDragWidgetWidth = dragWidgetWidth = false;
+	} else if( event->button( ) == Qt::MouseButton::RightButton ) {
+		// todo : 发送弹出菜单信号
 	}
 }

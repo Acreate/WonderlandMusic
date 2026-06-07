@@ -15,6 +15,7 @@ protected:
 	bool readyDragWidgetWidth;
 public:
 	MusicListMainWidget( QWidget *parent );
+	~MusicListMainWidget( ) override;
 protected:
 	virtual void updateSubWidgetSize( );
 	void resizeEvent( QResizeEvent *event ) override;

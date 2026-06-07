@@ -36,5 +36,19 @@ public:
 	MainWindow( );
 	~MainWindow( ) override;
 };
-
+#include <macro/eventMacroDefine.h>
+class Event_Default_Event_Info_Type_Name( MainWindow ) {
+public:
+	enum class EventType {
+		None,
+		Close
+	};
+protected:
+	EventType eventType;
+public:
+	virtual ~MainWindowEventInfo( ) = default;
+	MainWindowEventInfo( const EventType event_type )
+		: eventType( event_type ) { }
+	virtual EventType getEventType( ) const { return eventType; }
+};
 #endif // MAINWINDOW_H_H_HEAD__FILE__

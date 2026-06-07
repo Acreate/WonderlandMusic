@@ -1,5 +1,6 @@
 ﻿#include "pathSettingWidget.h"
 
+#include <QDir>
 #include <QLabel>
 
 #include "../optionStackWidget.h"
@@ -10,6 +11,8 @@
 
 #include "../../../../../../../applications/applicationEvenTrigger.h"
 #include "../../../../../../../applications/applicationInstance.h"
+
+#include "../../../../../../../msgInfo/messageErrorOut.h"
 PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : QWidget( parent ), optionStackWidget( parent ) {
 	loadFileInfoPathEditInputLine = new QLineEdit( this );
 	loadFileInfoPathSelectBtn = new QPushButton( tr( "路径选择..." ), this );
@@ -26,14 +29,49 @@ PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : QWidget( par
 	subLayout->addWidget( loadFileInfoPathSelectBtn, 2 );
 
 	connect( loadFileInfoPathEditInputLine, &QLineEdit::editingFinished, [this]( ) {
+		auto checkPath = loadFileInfoPathEditInputLine->text( );
+		if( musiInfoPath == checkPath )
+			return;
+		QFileInfo fileInfoTool( checkPath );
+		auto absoluteFilePath = fileInfoTool.absoluteFilePath( );
+		if( musiInfoPath == absoluteFilePath )
+			return;
+		if( fileInfoTool.exists( ) == false ) {
+			QDir dir( absoluteFilePath );
+			if( dir.mkdir( absoluteFilePath ) == false ) {
+				MessageErrorOut( ) << tr( "文件夹路径构建失败，请检查权限是否足够" ) << " : " << absoluteFilePath;
+				return;
+			}
+		} else if( fileInfoTool.isFile( ) ) {
+			MessageErrorOut( ) << tr( "该路径是一个文件，请选择一个有效的文件夹路径" ) << " : " << absoluteFilePath;
+			return;
+		}
+		musiInfoPath = absoluteFilePath;
 		auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
 		PathSettingWidgetEvent::triggerPathSettingWidgetEvent(
 			applicationEvenTrigger, this, PathSettingWidgetEventInfo( PathSettingWidgetEventInfo::EventType::Update_Music_info_File_Path_Info ) );
 	} );
 
+	// 接受软件加载的目录路径
+	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+	auto evenTrigger = applicationInstance->getApplicationEvenTrigger( );
+	connect( evenTrigger, &ApplicationEvenTrigger::triggerApplicationInstanceEvent, [this] ( auto, const ApplicationInstanceEventInfo &info ) {
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+			case ApplicationInstanceEventInfo::EventType::None :
+				break;
+			case ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text : {
+				auto loadMusicInofPath = info.getLoadMusicInofPath( );
+				musiInfoPath = loadMusicInofPath;
+				loadFileInfoPathEditInputLine->setText( loadMusicInofPath );
+			}
+			break;
+		}
+	} );
+
 }
 QString PathSettingWidget::getLoadFileInfoPath( ) const {
-	return loadFileInfoPathEditInputLine->text( );
+	return musiInfoPath;
 }
 void PathSettingWidget::resizeEvent( QResizeEvent *event ) {
 	QWidget::resizeEvent( event );

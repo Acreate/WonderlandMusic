@@ -44,7 +44,7 @@ void ApplicationInstance::initVar( ) {
 	*appStartRunTime = QDateTime::currentDateTime( );
 }
 void ApplicationInstance::initJson( ) {
-	appSettingPath = qDirTool->currentPath( ) + "/program/setting/app.json";
+	appSettingPath = qDirTool->currentPath( ) + "/program/setting/" + applicationName( ) + ".app.json";
 	fileInfoTool->setFile( appSettingPath );
 	if( fileInfoTool->exists( ) ) {
 		QFile file( appSettingPath );
@@ -127,10 +127,21 @@ void ApplicationInstance::initTriggerEvent( ) {
 				auto loadFileInfoPath = sender_ptr->getLoadFileInfoPath( );
 				appSetting->insert( jsonKey.app_music_info_file_path, loadFileInfoPath );
 				saveJsonDataToAppSettingFile( );
+				// todo : 然后移动文件
 			}
 			break;
 		}
 	} );
+
+}
+void ApplicationInstance::sendAppEvent( ) {
+	auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
+	auto jsonEnd = this->appSetting->end( );
+	// 找到存储的路径
+	if( findResult != jsonEnd ) {
+		auto string = findResult.value( ).toString( );
+		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( string ) );
+	}
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
 	initVar( );
@@ -140,15 +151,19 @@ ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const in
 	initApplicationEvenTrigger( );
 	initTriggerEvent( );
 	initMainWindow( );
+	sendAppEvent( );
 }
 void ApplicationInstance::saveJsonDataToAppSettingFile( ) const {
-	auto absoluteFilePath = fileInfoTool->absoluteFilePath( );
 	fileInfoTool->setFile( appSettingPath );
 	if( fileInfoTool->exists( ) == false ) {
 		QDir dir = fileInfoTool->dir( );
-		auto absolutePath = dir.absolutePath( );
-		if( dir.mkdir( absolutePath ) == false )
-			MessageErrorOut( ) << translate->createDirError << " : " << absolutePath;
+		if( dir.exists( ) == false ) {
+			auto absolutePath = dir.absolutePath( );
+			if( dir.mkdir( absolutePath ) == false ) {
+				MessageErrorOut( ) << translate->createDirError << " : " << absolutePath;
+				return;
+			}
+		}
 	}
 	QFile file( appSettingPath );
 	if( file.open( QIODeviceBase::ReadWrite | QIODeviceBase::Text | QIODeviceBase::Truncate ) ) {
@@ -158,7 +173,6 @@ void ApplicationInstance::saveJsonDataToAppSettingFile( ) const {
 		file.write( byteArray );
 		file.close( );
 	}
-	fileInfoTool->setFile( absoluteFilePath );
 }
 ApplicationInstance::~ApplicationInstance( ) {
 	saveJsonDataToAppSettingFile( );

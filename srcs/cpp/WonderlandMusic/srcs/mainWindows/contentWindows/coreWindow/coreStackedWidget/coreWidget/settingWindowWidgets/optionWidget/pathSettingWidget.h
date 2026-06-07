@@ -14,9 +14,11 @@ protected:
 	QLabel *loadFileInfoPathText;
 	QLineEdit *loadFileInfoPathEditInputLine;
 	QPushButton *loadFileInfoPathSelectBtn;
+	/// @brief 保存音乐信息的路径
+	QString musiInfoPath;
 public:
 	PathSettingWidget( OptionStackWidget *parent );
-	
+
 	virtual QString getLoadFileInfoPath( ) const;
 protected:
 	void resizeEvent( QResizeEvent *event ) override;

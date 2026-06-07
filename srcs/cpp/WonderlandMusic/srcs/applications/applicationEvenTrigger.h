@@ -5,6 +5,8 @@
 #include "../macro/eventMacroDefine.h"
 
 class ApplicationInstance;
+class Event_Default_Event_Info_Type_Name( ApplicationInstance );
+
 class OptionNavigationWidget;
 class Event_Default_Event_Info_Type_Name( OptionNavigationWidget );
 
@@ -50,6 +52,7 @@ class Event_Default_Event_Info_Type_Name( PathSettingWidget );
 class ApplicationEvenTrigger : public QObject {
 	/// @brief 事件友元
 private:
+	friend class Event_Default_Event_Info_Type_Name( ApplicationInstance );
 	friend class Event_Default_Event_Info_Type_Name( OptionNavigationWidget );
 	friend class Event_Default_Event_Info_Type_Name( OptionNavigationDockWidget );
 	friend class Event_Default_Event_Info_Type_Name( SettingWindow );
@@ -71,6 +74,7 @@ protected:
 public:
 	ApplicationEvenTrigger( ApplicationInstance *application );
 Q_SIGNALS:
+	Event_Default_Receive_Call_Function( ApplicationInstance );
 	Event_Default_Receive_Call_Function( OptionNavigationWidget );
 	Event_Default_Receive_Call_Function( OptionNavigationDockWidget );
 	Event_Default_Receive_Call_Function( SettingWindow );
@@ -87,6 +91,7 @@ Q_SIGNALS:
 	Event_Default_Receive_Call_Function( PathSettingWidget );
 };
 
+Event_Define_Event_Class_type( ApplicationInstance, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( OptionNavigationWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( OptionNavigationDockWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( SettingWindow, ApplicationEvenTrigger );

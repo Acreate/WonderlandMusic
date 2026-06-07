@@ -2,6 +2,7 @@
 #define APPLICATIONINSTANCE_H_H_HEAD__FILE__
 
 #include <QApplication>
+#include <macro/eventMacroDefine.h>
 class Render;
 class ApplicationEvenTrigger;
 class QFileInfo;
@@ -22,6 +23,7 @@ private:
 	void initApplicationEvenTrigger( );
 	void initMainWindow( );
 	void initTriggerEvent( );
+	void sendAppEvent( );
 	void saveJsonDataToAppSettingFile( ) const;
 public:
 	ApplicationInstance( int &argc, char **const argv, const int i = ApplicationFlags );
@@ -97,4 +99,24 @@ private:
 	void firstMainWindowShow( MainWindow *first_show_main_window );
 };
 
+class Event_Default_Event_Info_Type_Name( ApplicationInstance ) {
+public:
+	enum class EventType {
+		None,
+		Load_Music_Info_Path_Text
+	};
+protected:
+	EventType eventType;
+	QString loadMusicInfoPath;
+public:
+	virtual ~ApplicationInstanceEventInfo( ) = default;
+	ApplicationInstanceEventInfo( )
+		: eventType( EventType::None ) { }
+	ApplicationInstanceEventInfo( const QString &load_music_info_path )
+		: loadMusicInfoPath( load_music_info_path ), eventType( EventType::Load_Music_Info_Path_Text ) { }
+	virtual EventType getEventType( ) const { return eventType; }
+	virtual const QString & getLoadMusicInofPath( ) const {
+		return loadMusicInfoPath;
+	}
+};
 #endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

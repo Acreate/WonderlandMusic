@@ -13,6 +13,9 @@ protected:
 	MusicCollectionScrollArea *musicCollectionScrollArea;
 	bool dragWidgetWidth;
 	bool readyDragWidgetWidth;
+	QRect currentContentsRect;
+	int currentWidgetWidth;
+	int currentWidgetHeight;
 public:
 	MusicListMainWidget( QWidget *parent );
 	~MusicListMainWidget( ) override;

@@ -158,55 +158,14 @@ void ApplicationInstance::initTriggerEvent( ) {
 
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMainWindowEvent, [this] ( MainWindow *sender, const MainWindowEventInfo &info ) {
 
-		auto eventType = info.getEventType( );
-		switch( eventType ) {
-
-			case MainWindowEventInfo::EventType::None :
-				break;
-			case MainWindowEventInfo::EventType::Close :
-				if( sender == mainWindowPtr ) {
-					mainWindowPtr = nullptr;
-					if( controlCollectionMenu ) {
-						delete controlCollectionMenu;
-						while( controlCollectionMenu )
-							this->processEvents( );
-					}
-					if( controlMusicListMenu ) {
-						delete controlMusicListMenu;
-						while( controlMusicListMenu )
-							this->processEvents( );
-					}
-				}
-				break;
-		}
 	} );
 
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerControlCollectionMenuEvent, [this] ( ControlCollectionMenu *sender, const ControlCollectionMenuEventInfo &info ) {
 
-		auto eventType = info.getEventType( );
-		switch( eventType ) {
-
-			case ControlCollectionMenuEventInfo::EventType::None :
-				break;
-			case ControlCollectionMenuEventInfo::EventType::Delete_This_Menu_Ptr :
-				if( sender == controlCollectionMenu )
-					controlCollectionMenu = nullptr;
-				break;
-		}
 	} );
 
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerControlMusicListMenuEvent, [this] ( ControlMusicListMenu *sender, const ControlMusicListMenuEventInfo &info ) {
 
-		auto eventType = info.getEventType( );
-		switch( eventType ) {
-
-			case ControlMusicListMenuEventInfo::EventType::None :
-				break;
-			case ControlMusicListMenuEventInfo::EventType::Delete_This_Menu_Ptr :
-				if( sender == controlMusicListMenu )
-					controlMusicListMenu = nullptr;
-				break;
-		}
 	} );
 
 }
@@ -261,6 +220,10 @@ ApplicationInstance::~ApplicationInstance( ) {
 	saveJsonDataToAppSettingFile( );
 	if( mainWindowPtr )
 		delete mainWindowPtr;
+	if( controlCollectionMenu )
+		delete controlCollectionMenu;
+	if( controlMusicListMenu )
+		delete controlMusicListMenu;
 	delete render;
 	delete applicationEvenTrigger;
 	delete appSetting;

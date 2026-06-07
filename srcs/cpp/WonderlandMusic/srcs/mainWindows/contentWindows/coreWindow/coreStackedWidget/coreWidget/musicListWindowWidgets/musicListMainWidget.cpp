@@ -36,16 +36,16 @@ MusicListMainWidget::~MusicListMainWidget( ) {
 
 }
 void MusicListMainWidget::updateSubWidgetSize( ) {
-	auto contentsRect = this->contentsRect( );
-	int contentWidth = contentsRect.width( ) - contentsRect.x( );
-	int contentHeight = contentsRect.height( ) - contentsRect.y( );
 
 	int collWidth = musicCollectionScrollArea->width( );
-	musicCollectionScrollArea->setGeometry( 0, 0, collWidth, contentHeight );
-	musicListScrollArea->setGeometry( collWidth, 0, contentWidth - collWidth, contentHeight );
+	musicCollectionScrollArea->setGeometry( 0, 0, collWidth, currentWidgetHeight );
+	musicListScrollArea->setGeometry( collWidth, 0, currentWidgetWidth - collWidth, currentWidgetHeight );
 }
 void MusicListMainWidget::resizeEvent( QResizeEvent *event ) {
 	QWidget::resizeEvent( event );
+	currentContentsRect = this->contentsRect( );
+	currentWidgetWidth = currentContentsRect.width( ) - currentContentsRect.x( );
+	currentWidgetHeight = currentContentsRect.height( ) - currentContentsRect.y( );
 	updateSubWidgetSize( );
 }
 void MusicListMainWidget::mouseMoveEvent( QMouseEvent *event ) {
@@ -53,7 +53,7 @@ void MusicListMainWidget::mouseMoveEvent( QMouseEvent *event ) {
 	auto pos = event->pos( );
 	int x = pos.x( );
 	if( dragWidgetWidth ) {
-		if( x > 10 && x < contentsRect( ).width( ) - 10 ) {
+		if( x > 10 && x < ( currentWidgetWidth - 10 ) ) {
 			musicCollectionScrollArea->setFixedWidth( x );
 			updateSubWidgetSize( );
 		}
@@ -72,8 +72,12 @@ void MusicListMainWidget::mouseMoveEvent( QMouseEvent *event ) {
 }
 void MusicListMainWidget::mousePressEvent( QMouseEvent *event ) {
 	QWidget::mousePressEvent( event );
-	if( readyDragWidgetWidth )
+	if( readyDragWidgetWidth ) {
 		dragWidgetWidth = true;
+		currentContentsRect = this->contentsRect( );
+		currentWidgetWidth = currentContentsRect.width( ) - currentContentsRect.x( );
+		currentWidgetHeight = currentContentsRect.height( ) - currentContentsRect.y( );
+	}
 }
 void MusicListMainWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	QWidget::mouseReleaseEvent( event );

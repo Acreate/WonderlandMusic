@@ -4,7 +4,6 @@
 
 #include "dockWidgets/functionDockWidget.h"
 #include "dockWidgets/topToolDockWidget.h"
-#include "../applications/application.h"
 
 #include "dockWidgets/topToolWidget/topToolTitleBarWidget.h"
 #include "dockWidgets/topToolWidget/topToolWidget.h"
@@ -12,6 +11,7 @@
 #include <QMouseEvent>
 
 #include "../applications/applicationEvenTrigger.h"
+#include "../applications/applicationInstance.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -49,7 +49,7 @@ MainWindow::MainWindow( ) {
 	setDocumentMode( true );
 	setContextMenuPolicy( Qt::NoContextMenu );
 
-	application = Application::getApplicationInstance( );
+	application = ApplicationInstance::getApplicationInstance( );
 	applicationEvenTrigger = application->getApplicationEvenTrigger( );
 
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerTopToolWidgetEvent, [this] ( auto, const TopToolWidgetEventInfo &info ) {

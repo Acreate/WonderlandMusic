@@ -1,4 +1,4 @@
-﻿#include "application.h"
+﻿#include "applicationInstance.h"
 #include <QScreen>
 #include <QCursor>
 #include <QDir>
@@ -15,22 +15,22 @@
 
 #include "private/appRenderObj.h"
 
-Application *Application::current = nullptr;
-Application * Application::getApplicationInstance( ) {
+ApplicationInstance *ApplicationInstance::current = nullptr;
+ApplicationInstance * ApplicationInstance::getApplicationInstance( ) {
 	if( current )
 		return current;
-	QCoreApplication *instance = QCoreApplication::instance( );
+	QCoreApplication *instance = QApplication::instance( );
 	if( instance == nullptr ) {
-		MessageErrorOut( false ) << tr( "无法从 QCoreApplication::instance( ) 获取实例指针" );
+		MessageErrorOut( false ) << tr( "无法从 QCoreApplicationInstance::instance( ) 获取实例指针" );
 		return nullptr;
 	}
-	current = qobject_cast< Application * >( instance );
+	current = qobject_cast< ApplicationInstance * >( instance );
 	if( current )
 		return current;
-	MessageErrorOut( false ) << tr( "无法从 QCoreApplication::instance( ) 转换到 Application * 类型" );
+	MessageErrorOut( false ) << tr( "无法从 QCoreApplicationInstance::instance( ) 转换到 Application * 类型" );
 	return nullptr;
 }
-Application::Application( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
+ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
 	current = this;
 	mainWindowPtr = nullptr;
 	firstShow = false;
@@ -114,7 +114,7 @@ Application::Application( int &argc, char **const argv, const int i ) : QApplica
 
 	setMainWindowPtr( new MainWindow );
 }
-Application::~Application( ) {
+ApplicationInstance::~ApplicationInstance( ) {
 	fileInfoTool->setFile( appSettingPath );
 	if( fileInfoTool->exists( ) == false ) {
 		QDir dir = fileInfoTool->dir( );
@@ -140,7 +140,7 @@ Application::~Application( ) {
 	delete qTranslator;
 	current = nullptr;
 }
-bool Application::notify( QObject *object, QEvent *event ) {
+bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 	bool notify = QApplication::notify( object, event );
 	switch( event->type( ) ) {
 		case QEvent::Show :
@@ -179,10 +179,10 @@ bool Application::notify( QObject *object, QEvent *event ) {
 	}
 	return notify;
 }
-bool Application::event( QEvent *event ) {
+bool ApplicationInstance::event( QEvent *event ) {
 	return QApplication::event( event );
 }
-Application::Translate::Translate( ) {
+ApplicationInstance::Translate::Translate( ) {
 	createDirError = QObject::tr( "创建目录失败" );
 	openFileError = QObject::tr( "打开文件失败" );
 
@@ -190,7 +190,7 @@ Application::Translate::Translate( ) {
 	loadQTranslatorApp = QObject::tr( "加载语言到软件失败" );
 
 }
-Application::JSonKey::JSonKey( ) {
+ApplicationInstance::JSonKey::JSonKey( ) {
 	/* 配置文件 */
 	app_QTranslator_path_key = "app.QTranslator.path";
 	main_window_x_key = "app.MainWindow.x";
@@ -198,7 +198,7 @@ Application::JSonKey::JSonKey( ) {
 	main_window_w_key = "app.MainWindow.w";
 	main_window_h_key = "app.MainWindow.h";
 }
-void Application::setMainWindowPtr( MainWindow *main_window_ptr ) {
+void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )
 		return;
 	MainWindow *oldMainWindow = mainWindowPtr;
@@ -210,7 +210,7 @@ void Application::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	firstShow = false;
 	mainWindowPtr->show( );
 }
-void Application::firstMainWindowShow( MainWindow *first_show_main_window ) {
+void ApplicationInstance::firstMainWindowShow( MainWindow *first_show_main_window ) {
 
 	int screenX, screenY, screenRightX, screenBottmY, screenWidth, screenHeight;
 	QString objectName = first_show_main_window->objectName( );

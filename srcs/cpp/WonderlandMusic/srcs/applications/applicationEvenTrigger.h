@@ -4,6 +4,7 @@
 
 #include "../macro/eventMacroDefine.h"
 
+class ApplicationInstance;
 class OptionNavigationWidget;
 class Event_Default_Event_Info_Type_Name( OptionNavigationWidget );
 
@@ -43,7 +44,6 @@ class Event_Default_Event_Info_Type_Name( ContentWindow );
 class PlayerWidget;
 class Event_Default_Event_Info_Type_Name( PlayerWidget );
 
-class Application;
 class ApplicationEvenTrigger : public QObject {
 	/// @brief 事件友元
 private:
@@ -63,9 +63,9 @@ private:
 private:
 	Q_OBJECT;
 protected:
-	Application *application;
+	ApplicationInstance *application;
 public:
-	ApplicationEvenTrigger( Application *application );
+	ApplicationEvenTrigger( ApplicationInstance *application );
 Q_SIGNALS:
 	Event_Default_Receive_Call_Function( OptionNavigationWidget );
 	Event_Default_Receive_Call_Function( OptionNavigationDockWidget );

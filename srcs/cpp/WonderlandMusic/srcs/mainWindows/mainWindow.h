@@ -2,7 +2,7 @@
 #define MAINWINDOW_H_H_HEAD__FILE__
 #include <QMainWindow>
 
-class Application;
+class ApplicationInstance;
 class ApplicationEvenTrigger;
 class ContentWindow;
 class FunctionDockWidget;
@@ -21,7 +21,7 @@ public:
 	};
 protected:
 	/// @brief app 本身
-	Application *application;
+	ApplicationInstance *application;
 	/// @brief app 事件
 	ApplicationEvenTrigger *applicationEvenTrigger;
 	/// @brief 翻译

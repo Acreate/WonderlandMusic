@@ -2,8 +2,7 @@
 
 #include "../coreStackedWidget.h"
 
-
-#include "../../../../../applications/application.h"
+#include "../../../../../applications/applicationInstance.h"
 
 #include "settingWindowWidgets/optionNavigationDockWidget.h"
 #include "settingWindowWidgets/optionStackWidget.h"

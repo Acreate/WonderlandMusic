@@ -8,7 +8,7 @@ class QImage;
 class QString;
 /// @brief 图像渲染
 class Render {
-	friend class Application;
+	friend class ApplicationInstance;
 protected:
 	virtual ~Render( ) = default;
 public:

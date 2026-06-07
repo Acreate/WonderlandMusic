@@ -8,18 +8,18 @@
 
 #include <applications/applicationEvenTrigger.h>
 
-#include <applications/application.h>
+#include <applications/applicationInstance.h>
 TopToolWidget::TopToolWidget( TopToolDockWidget *parent ) : QWidget( parent ), topToolDockWidget( parent ) {
 	closeBtn = new QPushButton( tr( "关闭" ), this );
 	minMainWindowBtn = new QPushButton( tr( "最小化" ), this );
 
 	connect( closeBtn, &QPushButton::clicked, [this]( ) {
 		TopToolWidgetEventInfo topToolEventInfo( TopToolWidgetEventInfo::Type::Close );
-		TopToolWidgetEvent::triggerTopToolWidgetEvent( Application::getApplicationInstance( )->getApplicationEvenTrigger( ), this, topToolEventInfo );
+		TopToolWidgetEvent::triggerTopToolWidgetEvent( ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( ), this, topToolEventInfo );
 	} );
 	connect( minMainWindowBtn, &QPushButton::clicked, [this]( ) {
 		TopToolWidgetEventInfo topToolEventInfo( TopToolWidgetEventInfo::Type::Min );
-		TopToolWidgetEvent::triggerTopToolWidgetEvent( Application::getApplicationInstance( )->getApplicationEvenTrigger( ), this, topToolEventInfo );
+		TopToolWidgetEvent::triggerTopToolWidgetEvent( ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( ), this, topToolEventInfo );
 	} );
 	drawWindow = false;
 }
@@ -44,7 +44,7 @@ void TopToolWidget::leaveEvent( QEvent *event ) {
 void TopToolWidget::mouseMoveEvent( QMouseEvent *event ) {
 	QWidget::mouseMoveEvent( event );
 	if( drawWindow )
-		TopToolWidgetEvent::triggerTopToolWidgetEvent( Application::getApplicationInstance( )->getApplicationEvenTrigger( ), this, TopToolWidgetEventInfo( oldMousePos, ( newMousePos = event->pos( ), newMousePos ) ) );
+		TopToolWidgetEvent::triggerTopToolWidgetEvent( ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( ), this, TopToolWidgetEventInfo( oldMousePos, ( newMousePos = event->pos( ), newMousePos ) ) );
 }
 void TopToolWidget::mousePressEvent( QMouseEvent *event ) {
 	QWidget::mousePressEvent( event );

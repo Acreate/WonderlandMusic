@@ -1,5 +1,6 @@
-﻿#ifndef APPLICATION_H_H_HEAD__FILE__
-#define APPLICATION_H_H_HEAD__FILE__
+﻿#ifndef APPLICATIONINSTANCE_H_H_HEAD__FILE__
+#define APPLICATIONINSTANCE_H_H_HEAD__FILE__
+
 
 #include <QApplication>
 class Render;
@@ -8,21 +9,21 @@ class QFileInfo;
 class QDir;
 class MainWindow;
 class QJsonObject;
-class Application : public QApplication {
+class ApplicationInstance : public QApplication {
 	Q_OBJECT;
 private:
-	static Application *current;
+	static ApplicationInstance *current;
 public:
-	static Application * getApplicationInstance( );
+	static ApplicationInstance * getApplicationInstance( );
 public:
-	Application( int &argc, char **const argv, const int i = ApplicationFlags );
-	~Application( ) override;
+	ApplicationInstance( int &argc, char **const argv, const int i = ApplicationFlags );
+	~ApplicationInstance( ) override;
 	bool notify( QObject *object, QEvent *event ) override;
 protected:
 	bool event( QEvent * ) override;
 private:
 	class Translate {
-		friend class Application;
+		friend class ApplicationInstance;
 		/// @brief 创建目录错误
 		QString createDirError;
 		/// @brief 打开文件错误
@@ -35,7 +36,7 @@ private:
 		Translate( );
 	} *translate;
 	class JSonKey {
-		friend class Application;
+		friend class ApplicationInstance;
 		/// @brief 语言文件关键字
 		QString app_QTranslator_path_key;
 		/// @brief 主窗口横向关键字
@@ -86,4 +87,4 @@ private:
 	void firstMainWindowShow( MainWindow *first_show_main_window );
 };
 
-#endif // APPLICATION_H_H_HEAD__FILE__
+#endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

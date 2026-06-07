@@ -6,13 +6,14 @@
 
 #include <applications/applicationEvenTrigger.h>
 
-#include "../../../../applications/application.h"
+#include "../../../../applications/applicationInstance.h"
+
 PlayerWidget::PlayerWidget( PlayerDockWidget *parent ) : QWidget( parent ), playerDockWidget( parent ) {
 	controlStatus = ControlStatus::None;
 	previousTrackBtn = new QPushButton( tr( "上一曲" ), this );
 	nextTrackBtn = new QPushButton( tr( "下一曲" ), this );
 	controlCurrentBtn = new QPushButton( tr( "播放" ), this );
-	applicationInstance = Application::getApplicationInstance( );
+	applicationInstance = ApplicationInstance::getApplicationInstance( );
 	applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 	connect( controlCurrentBtn, &QPushButton::clicked, [this]( ) {
 		switch( controlStatus ) {

@@ -7,7 +7,7 @@ class QString;
 class QPoint;
 class QImage;
 class AppRenderObj : public Render {
-	friend class Application;
+	friend class ApplicationInstance;
 private:
 	QFont *font;
 	QColor *color;

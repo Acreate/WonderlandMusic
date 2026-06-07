@@ -2,7 +2,7 @@
 #include <cmake_include_to_c_cpp_header_env.h>
 #include <qdir.h>
 
-#include "../applications/application.h"
+#include "../applications/applicationInstance.h"
 
 #include "../tools/dateTimeFormat.h"
 MessageErrorOut::Translate::Translate( ) {
@@ -36,7 +36,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 	qDebug( ) << outString.toStdString( ).c_str( );
 	if( isWriteFile )
 		return;
-	Application *applicationInstance = Application::getApplicationInstance( );
+	auto *applicationInstance = ApplicationInstance::getApplicationInstance( );
 	if( applicationInstance == nullptr )
 		return;
 	auto &appStartRunDataTime = applicationInstance->getAppStartRunDataTime( );

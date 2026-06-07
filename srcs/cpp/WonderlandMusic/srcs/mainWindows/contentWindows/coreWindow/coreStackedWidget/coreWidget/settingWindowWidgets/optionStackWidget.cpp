@@ -2,7 +2,7 @@
 
 #include "../settingWindow.h"
 
-#include "../../../../../../applications/application.h"
+#include "../../../../../../applications/applicationInstance.h"
 #include "../../../../../../applications/applicationEvenTrigger.h"
 
 #include "../../../../../../msgInfo/messageErrorOut.h"
@@ -17,7 +17,7 @@ OptionStackWidget::OptionStackWidget( SettingWindow *parent ) : QStackedWidget( 
 	addWidget( pathSettingWidget );
 	aboutApplicationWidget = new AboutApplicationWidget( this );
 	addWidget( aboutApplicationWidget );
-	auto applicationEvenTrigger = Application::getApplicationInstance( )->getApplicationEvenTrigger( );
+	auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerOptionNavigationWidgetEvent, [this] ( auto, const OptionNavigationWidgetEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {

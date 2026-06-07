@@ -2,7 +2,7 @@
 
 #include "../coreWindow.h"
 
-#include "../../../../applications/application.h"
+#include "../../../../applications/applicationInstance.h"
 #include "../../../../applications/applicationEvenTrigger.h"
 
 #include "../../../dockWidgets/functionWidget/functionWidget.h"
@@ -19,7 +19,7 @@ CoreStackedWidget::CoreStackedWidget( CoreWindow *parent ) : QStackedWidget( par
 	settingWindow->setWindowFlags( Qt::WindowType::Widget );
 	addWidget( settingWindow );
 
-	auto applicationEvenTrigger = Application::getApplicationInstance( )->getApplicationEvenTrigger( );
+	auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerFunctionWidgetEvent, [this] ( auto, const FunctionWidgetEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {

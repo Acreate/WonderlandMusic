@@ -1,10 +1,7 @@
 ﻿#ifndef APPRENDEROBJ_H_H_HEAD__FILE__
 #define APPRENDEROBJ_H_H_HEAD__FILE__
 
-#include <QFont>
-#include <qcolor.h>
-
-#include "../../render/render.h"
+#include <render/render.h>
 
 class QString;
 class QPoint;
@@ -12,14 +9,12 @@ class QImage;
 class AppRenderObj : public Render {
 	friend class Application;
 private:
-	QFont font;
-	QColor color;
+	QFont *font;
+	QColor *color;
 private:
-	AppRenderObj( const QFont &font, const QColor &color )
-		: font( font ),
-		color( color ) { }
+	AppRenderObj( const QFont &font, const QColor &color );
 protected:
-	~AppRenderObj( ) override { }
+	~AppRenderObj( ) override;
 public:
 	bool renderTextImage( QImage &result_image, const QString &text ) override;
 	bool renderTextImage( QImage &result_image, const QString &text, const QColor &draw_color ) override;

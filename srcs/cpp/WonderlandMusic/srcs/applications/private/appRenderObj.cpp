@@ -4,14 +4,21 @@
 #include <qfontmetrics.h>
 #include <qtypes.h>
 
+AppRenderObj::AppRenderObj( const QFont &font, const QColor &color ) : font( new QFont( font ) ), color( new QColor( color ) ) {
+
+}
+AppRenderObj::~AppRenderObj( ) {
+	delete font;
+	delete color;
+}
 bool AppRenderObj::renderTextImage( QImage &result_image, const QString &text ) {
-	return renderTextImage( result_image, text, font, color );
+	return renderTextImage( result_image, text, *font, *color );
 }
 bool AppRenderObj::renderTextImage( QImage &result_image, const QString &text, const QColor &draw_color ) {
-	return renderTextImage( result_image, text, font, draw_color );
+	return renderTextImage( result_image, text, *font, draw_color );
 }
 bool AppRenderObj::renderTextImage( QImage &result_image, const QString &text, const QFont &draw_font ) {
-	return renderTextImage( result_image, text, draw_font, color );
+	return renderTextImage( result_image, text, draw_font, *color );
 }
 bool AppRenderObj::renderTextImage( QImage &result_image, const QString &text, const QFont &draw_font, const QColor &draw_color ) {
 	qsizetype length = text.length( );

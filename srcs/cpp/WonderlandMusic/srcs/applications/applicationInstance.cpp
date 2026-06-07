@@ -11,6 +11,8 @@
 #include "applicationEvenTrigger.h"
 
 #include "../mainWindows/mainWindow.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
+
 #include "../msgInfo/messageErrorOut.h"
 
 #include "private/appRenderObj.h"
@@ -115,15 +117,32 @@ void ApplicationInstance::initRender( ) {
 }
 void ApplicationInstance::initApplicationEvenTrigger( ) { applicationEvenTrigger = new ApplicationEvenTrigger( this ); }
 void ApplicationInstance::initMainWindow( ) { setMainWindowPtr( new MainWindow ); }
+void ApplicationInstance::initTriggerEvent( ) {
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerPathSettingWidgetEvent, [this] ( PathSettingWidget *sender_ptr, const PathSettingWidgetEventInfo &info ) {
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+			case PathSettingWidgetEventInfo::EventType::None :
+				break;
+			case PathSettingWidgetEventInfo::EventType::Update_Music_info_File_Path_Info : {
+				auto loadFileInfoPath = sender_ptr->getLoadFileInfoPath( );
+				appSetting->insert( jsonKey.app_music_info_file_path, loadFileInfoPath );
+				saveJsonDataToAppSettingFile( );
+			}
+			break;
+		}
+	} );
+}
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
 	initVar( );
 	initJson( );
 	initTranslation( );
 	initRender( );
 	initApplicationEvenTrigger( );
+	initTriggerEvent( );
 	initMainWindow( );
 }
-ApplicationInstance::~ApplicationInstance( ) {
+void ApplicationInstance::saveJsonDataToAppSettingFile( ) const {
+	auto absoluteFilePath = fileInfoTool->absoluteFilePath( );
 	fileInfoTool->setFile( appSettingPath );
 	if( fileInfoTool->exists( ) == false ) {
 		QDir dir = fileInfoTool->dir( );
@@ -139,6 +158,10 @@ ApplicationInstance::~ApplicationInstance( ) {
 		file.write( byteArray );
 		file.close( );
 	}
+	fileInfoTool->setFile( absoluteFilePath );
+}
+ApplicationInstance::~ApplicationInstance( ) {
+	saveJsonDataToAppSettingFile( );
 	delete render;
 	delete applicationEvenTrigger;
 	delete appSetting;
@@ -206,6 +229,7 @@ ApplicationInstance::JSonKey::JSonKey( ) {
 	main_window_y_key = "app.MainWindow.y";
 	main_window_w_key = "app.MainWindow.w";
 	main_window_h_key = "app.MainWindow.h";
+	app_music_info_file_path = "app.setting.music.info.file.path";
 }
 void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )

@@ -21,6 +21,8 @@ private:
 	void initRender( );
 	void initApplicationEvenTrigger( );
 	void initMainWindow( );
+	void initTriggerEvent( );
+	void saveJsonDataToAppSettingFile( ) const;
 public:
 	ApplicationInstance( int &argc, char **const argv, const int i = ApplicationFlags );
 	~ApplicationInstance( ) override;
@@ -53,6 +55,8 @@ private:
 		QString main_window_h_key;
 		/// @brief 主窗口高度关键字
 		QString main_window_w_key;
+		/// @brief 软件音乐信息保存路径
+		QString app_music_info_file_path;
 	public:
 		JSonKey( );
 	} jsonKey;

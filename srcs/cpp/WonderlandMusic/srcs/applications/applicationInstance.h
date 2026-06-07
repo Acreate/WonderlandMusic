@@ -1,7 +1,6 @@
 ﻿#ifndef APPLICATIONINSTANCE_H_H_HEAD__FILE__
 #define APPLICATIONINSTANCE_H_H_HEAD__FILE__
 
-
 #include <QApplication>
 class Render;
 class ApplicationEvenTrigger;
@@ -15,6 +14,13 @@ private:
 	static ApplicationInstance *current;
 public:
 	static ApplicationInstance * getApplicationInstance( );
+private:
+	void initVar( );
+	void initJson( );
+	void initTranslation( );
+	void initRender( );
+	void initApplicationEvenTrigger( );
+	void initMainWindow( );
 public:
 	ApplicationInstance( int &argc, char **const argv, const int i = ApplicationFlags );
 	~ApplicationInstance( ) override;

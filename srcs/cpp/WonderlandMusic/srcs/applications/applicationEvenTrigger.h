@@ -44,6 +44,9 @@ class Event_Default_Event_Info_Type_Name( ContentWindow );
 class PlayerWidget;
 class Event_Default_Event_Info_Type_Name( PlayerWidget );
 
+class PathSettingWidget;
+class Event_Default_Event_Info_Type_Name( PathSettingWidget );
+
 class ApplicationEvenTrigger : public QObject {
 	/// @brief 事件友元
 private:
@@ -60,6 +63,7 @@ private:
 	friend class Event_Default_Event_Info_Type_Name( TopToolDockWidget );
 	friend class Event_Default_Event_Info_Type_Name( ContentWindow );
 	friend class Event_Default_Event_Info_Type_Name( PlayerWidget );
+	friend class Event_Default_Event_Info_Type_Name( PathSettingWidget );
 private:
 	Q_OBJECT;
 protected:
@@ -80,6 +84,7 @@ Q_SIGNALS:
 	Event_Default_Receive_Call_Function( TopToolDockWidget );
 	Event_Default_Receive_Call_Function( ContentWindow );
 	Event_Default_Receive_Call_Function( PlayerWidget );
+	Event_Default_Receive_Call_Function( PathSettingWidget );
 };
 
 Event_Define_Event_Class_type( OptionNavigationWidget, ApplicationEvenTrigger );
@@ -95,5 +100,6 @@ Event_Define_Event_Class_type( FunctionDockWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( TopToolDockWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( ContentWindow, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( PlayerWidget, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( PathSettingWidget, ApplicationEvenTrigger );
 
 #endif // APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__

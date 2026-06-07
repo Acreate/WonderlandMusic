@@ -25,7 +25,7 @@ class Event_Default_Event_Info_Type_Name( PathSettingWidget ) {
 public:
 	enum class EventType {
 		None,
-		Update_Path_Info
+		Update_Music_info_File_Path_Info
 	};
 protected:
 	EventType eventType;

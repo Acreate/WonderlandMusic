@@ -117,6 +117,12 @@ set( app_resouce_path "${app_run_bin}/program/" )
 get_filename_component( app_resouce_path "${app_resouce_path}" ABSOLUTE ) # 全路径
 set( app_resouce_path "${app_resouce_path}/" )
 
+set( generate_translation_file TRUE )
+
+if( EXISTS "${app_resouce_path}/translations/${prject_name}.qm" )
+	set( generate_translation_file FALSE )
+endif( )
+
 if( generate_translation_file )
 	# # 需要生成的 *.ts 文件保存到 translation_file_list 变量当中
 	set( translation_file_list
@@ -136,7 +142,7 @@ if( generate_translation_file )
 		SOURCES ${project_src_file}
 		LUPDATE_OPTIONS -no-obsolete
 	)
-endif()
+endif( )
 
 set( copy_file_src_dir "${CMAKE_CURRENT_SOURCE_DIR}/resources" )
 copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/font" "${app_resouce_path}" )

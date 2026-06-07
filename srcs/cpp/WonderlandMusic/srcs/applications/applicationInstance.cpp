@@ -30,7 +30,7 @@ ApplicationInstance * ApplicationInstance::getApplicationInstance( ) {
 	MessageErrorOut( false ) << tr( "无法从 QCoreApplicationInstance::instance( ) 转换到 Application * 类型" );
 	return nullptr;
 }
-ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
+void ApplicationInstance::initVar( ) {
 	current = this;
 	mainWindowPtr = nullptr;
 	firstShow = false;
@@ -38,14 +38,11 @@ ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const in
 	qDirTool = new QDir;
 	fileInfoTool = new QFileInfo;
 	translate = new Translate;
-	QString currentPath = qDirTool->currentPath( );
-
 	appStartRunTime = new QDateTime( );
 	*appStartRunTime = QDateTime::currentDateTime( );
-
-	QString prefix;
-
-	appSettingPath = currentPath + "/program/setting/app.json";
+}
+void ApplicationInstance::initJson( ) {
+	appSettingPath = qDirTool->currentPath( ) + "/program/setting/app.json";
 	fileInfoTool->setFile( appSettingPath );
 	if( fileInfoTool->exists( ) ) {
 		QFile file( appSettingPath );
@@ -55,12 +52,8 @@ ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const in
 			QJsonDocument doc = QJsonDocument::fromJson( byteArray, &err );
 			if( err.error != QJsonParseError::NoError ) {
 				MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath << " : " << err.errorString( );
-			} else {
+			} else
 				*appSetting = doc.object( );
-				auto jsonValue = appSetting->find( jsonKey.app_QTranslator_path_key );
-				if( jsonValue != appSetting->end( ) )
-					prefix = jsonValue->toString( );
-			}
 		} else
 			MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath;
 
@@ -71,34 +64,43 @@ ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const in
 			if( dir.mkdir( absolutePath ) == false )
 				MessageErrorOut( ) << translate->createDirError << " : " << absolutePath;
 	}
+}
+void ApplicationInstance::initTranslation( ) {
+	QString translationFilePath;
+	auto jsonValue = appSetting->find( jsonKey.app_QTranslator_path_key );
+	if( jsonValue != appSetting->end( ) )
+		translationFilePath = jsonValue->toString( );
 	// 加载语言文件
-	fileInfoTool->setFile( prefix );
+	fileInfoTool->setFile( translationFilePath );
 	// 语言文件不存在，则使用自定义路径
 	if( fileInfoTool->exists( ) == false ) {
 		QLocale locale = QLocale::system( );
 		auto localeName = locale.name( );
-		prefix = currentPath + "/program/translations/" + applicationName( ) + "_" + localeName + ".qm";
-		if( fileInfoTool->exists( prefix ) == false )
-			prefix = currentPath + "/program/translations/" + applicationName( ) + ".qm";
+		QString currentPath = qDirTool->currentPath( );
+		translationFilePath = currentPath + "/program/translations/" + applicationName( ) + "_" + localeName + ".qm";
+		if( fileInfoTool->exists( translationFilePath ) == false )
+			translationFilePath = currentPath + "/program/translations/" + applicationName( ) + ".qm";
 	}
 	qTranslator = new QTranslator;
-	if( qTranslator->load( prefix ) == false ) {
-		MessageErrorOut( ) << translate->loadQTranslatorFile << " : " << prefix;
+	if( qTranslator->load( translationFilePath ) == false ) {
+		MessageErrorOut( ) << translate->loadQTranslatorFile << " : " << translationFilePath;
 		// 失败则删除语言文件路径
 		appSetting->remove( jsonKey.app_QTranslator_path_key );
 	} else if( installTranslator( qTranslator ) == false ) {
-		MessageErrorOut( ) << translate->loadQTranslatorApp << " : " << prefix;
+		MessageErrorOut( ) << translate->loadQTranslatorApp << " : " << translationFilePath;
 		// 失败则删除语言文件路径
 		appSetting->remove( jsonKey.app_QTranslator_path_key );
 	} else {
 		// 刷新翻译
 		*translate = Translate( );
 		// 插入语言文件路径
-		appSetting->insert( jsonKey.app_QTranslator_path_key, prefix );
+		appSetting->insert( jsonKey.app_QTranslator_path_key, translationFilePath );
 	}
-
-	QFont customFont = QFont( "Microsoft YaHei", 14 ); // 使用外部字体
-	// 加载字体
+}
+void ApplicationInstance::initRender( ) {
+	// 配置默认字体
+	QFont customFont = QFont( "Microsoft YaHei", 14 );
+	// 使用外部字体，加载字体
 	int fontId = QFontDatabase::addApplicationFont( "./program/font/Alibaba/Alibaba-PuHuiTi-Medium.ttf" );
 
 	QStringList familyList;
@@ -110,9 +112,16 @@ ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const in
 		}
 	}
 	render = new AppRenderObj( customFont, Qt::GlobalColor::black );
-	applicationEvenTrigger = new ApplicationEvenTrigger( this );
-
-	setMainWindowPtr( new MainWindow );
+}
+void ApplicationInstance::initApplicationEvenTrigger( ) { applicationEvenTrigger = new ApplicationEvenTrigger( this ); }
+void ApplicationInstance::initMainWindow( ) { setMainWindowPtr( new MainWindow ); }
+ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
+	initVar( );
+	initJson( );
+	initTranslation( );
+	initRender( );
+	initApplicationEvenTrigger( );
+	initMainWindow( );
 }
 ApplicationInstance::~ApplicationInstance( ) {
 	fileInfoTool->setFile( appSettingPath );

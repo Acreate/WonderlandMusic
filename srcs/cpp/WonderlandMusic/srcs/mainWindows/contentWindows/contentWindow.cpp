@@ -11,6 +11,7 @@
 
 ContentWindow::ContentWindow( MainWindow *parent ) : QMainWindow( parent ), mainWindow( parent ) {
 
+	
 	Qt::DockWidgetArea dockWidgetArea;
 
 	findDockWidget = new FindDockWidget( this );

@@ -49,6 +49,9 @@ class Event_Default_Event_Info_Type_Name( PlayerWidget );
 class PathSettingWidget;
 class Event_Default_Event_Info_Type_Name( PathSettingWidget );
 
+class MusicListMainWidget;
+class Event_Default_Event_Info_Type_Name( MusicListMainWidget );
+
 class ApplicationEvenTrigger : public QObject {
 	/// @brief 事件友元
 private:
@@ -67,6 +70,7 @@ private:
 	friend class Event_Default_Event_Info_Type_Name( ContentWindow );
 	friend class Event_Default_Event_Info_Type_Name( PlayerWidget );
 	friend class Event_Default_Event_Info_Type_Name( PathSettingWidget );
+	friend class Event_Default_Event_Info_Type_Name( MusicListMainWidget );
 private:
 	Q_OBJECT;
 protected:
@@ -89,6 +93,7 @@ Q_SIGNALS:
 	Event_Default_Receive_Call_Function( ContentWindow );
 	Event_Default_Receive_Call_Function( PlayerWidget );
 	Event_Default_Receive_Call_Function( PathSettingWidget );
+	Event_Default_Receive_Call_Function( MusicListMainWidget );
 };
 
 Event_Define_Event_Class_type( ApplicationInstance, ApplicationEvenTrigger );
@@ -106,5 +111,6 @@ Event_Define_Event_Class_type( TopToolDockWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( ContentWindow, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( PlayerWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( PathSettingWidget, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( MusicListMainWidget, ApplicationEvenTrigger );
 
 #endif // APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__

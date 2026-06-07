@@ -11,6 +11,7 @@
 #include "applicationEvenTrigger.h"
 
 #include "../mainWindows/mainWindow.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMainWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
 
 #include "../msgInfo/messageErrorOut.h"
@@ -115,8 +116,12 @@ void ApplicationInstance::initRender( ) {
 	}
 	render = new AppRenderObj( customFont, Qt::GlobalColor::black );
 }
-void ApplicationInstance::initApplicationEvenTrigger( ) { applicationEvenTrigger = new ApplicationEvenTrigger( this ); }
-void ApplicationInstance::initMainWindow( ) { setMainWindowPtr( new MainWindow ); }
+void ApplicationInstance::initApplicationEvenTrigger( ) {
+	applicationEvenTrigger = new ApplicationEvenTrigger( this );
+}
+void ApplicationInstance::initMainWindow( ) {
+	setMainWindowPtr( new MainWindow );
+}
 void ApplicationInstance::initTriggerEvent( ) {
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerPathSettingWidgetEvent, [this] ( PathSettingWidget *sender_ptr, const PathSettingWidgetEventInfo &info ) {
 		auto eventType = info.getEventType( );
@@ -133,14 +138,29 @@ void ApplicationInstance::initTriggerEvent( ) {
 		}
 	} );
 
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMusicListMainWidgetEvent, [this] ( auto, const MusicListMainWidgetEventInfo &info ) {
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+			case MusicListMainWidgetEventInfo::EventType::Resize_Music_Widget_Width :
+				appSetting->insert( jsonKey.app_music_collection_main_widget_width, info.getNewMusicWidgetWidth( ) );
+				break;
+		}
+	} );
+
 }
 void ApplicationInstance::sendAppEvent( ) {
-	auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
 	auto jsonEnd = this->appSetting->end( );
+	auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
 	// 找到存储的路径
 	if( findResult != jsonEnd ) {
 		auto string = findResult.value( ).toString( );
 		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( string ) );
+	}
+	findResult = this->appSetting->find( jsonKey.app_music_collection_main_widget_width );
+	// 找到收藏列表的宽度
+	if( findResult != jsonEnd ) {
+		auto widgetWidth = findResult.value( ).toInt( );
+		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( widgetWidth ) );
 	}
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
@@ -244,6 +264,7 @@ ApplicationInstance::JSonKey::JSonKey( ) {
 	main_window_w_key = "app.MainWindow.w";
 	main_window_h_key = "app.MainWindow.h";
 	app_music_info_file_path = "app.setting.music.info.file.path";
+	app_music_collection_main_widget_width = "app.setting.music.widget.collection.width";
 }
 void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )

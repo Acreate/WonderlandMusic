@@ -6,6 +6,7 @@
 
 #include "coreStackedWidget/coreStackedWidget.h"
 CoreWindow::CoreWindow( ContentWindow *parent ) : QMainWindow( parent ), contentWindow( parent ) {
+	
 	coreStackedWidget = new CoreStackedWidget( this );
 	setCentralWidget( coreStackedWidget );
 }

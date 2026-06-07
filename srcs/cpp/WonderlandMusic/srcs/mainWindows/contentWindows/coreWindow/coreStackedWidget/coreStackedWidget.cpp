@@ -11,6 +11,7 @@
 #include "coreWidget/settingWindow.h"
 
 CoreStackedWidget::CoreStackedWidget( CoreWindow *parent ) : QStackedWidget( parent ), coreWindow( parent ) {
+	
 	musicListWindow = new MusicListWindow( this );
 	musicListWindow->setWindowFlags( Qt::WindowType::Widget );
 	addWidget( musicListWindow );

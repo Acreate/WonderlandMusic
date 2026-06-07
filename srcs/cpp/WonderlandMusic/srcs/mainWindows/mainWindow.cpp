@@ -22,6 +22,8 @@ MainWindow::Translate::Translate( ) {
 	windowTitleName = tr( "仙村音乐播放器主窗口" );
 }
 MainWindow::MainWindow( ) {
+	
+	
 	setObjectName( translate.appWindowObjectName );
 	setWindowTitle( translate.windowTitleName );
 	QFlags< Qt::WindowType > flags = Qt::WindowType::Window | Qt::WindowType::CustomizeWindowHint;

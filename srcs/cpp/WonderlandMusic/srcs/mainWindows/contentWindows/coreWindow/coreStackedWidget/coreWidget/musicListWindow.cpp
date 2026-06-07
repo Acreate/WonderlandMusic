@@ -3,12 +3,10 @@
 #include <QPainter>
 
 #include "../coreStackedWidget.h"
+
+#include "musicListWindowWidgets/musicListMainWidget.h"
 MusicListWindow::MusicListWindow( CoreStackedWidget *parent ) : QMainWindow( parent ), coreStackedWidget( parent ) {
-
-}
-void MusicListWindow::paintEvent( QPaintEvent *event ) {
-	QMainWindow::paintEvent( event );
-
-	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::black );
+	setMouseTracking( true );
+	setCentralWidget( new MusicListMainWidget( this ) );
+	setContextMenuPolicy( Qt::NoContextMenu );
 }

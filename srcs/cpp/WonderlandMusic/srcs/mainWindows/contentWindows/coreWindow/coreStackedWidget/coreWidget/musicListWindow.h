@@ -10,7 +10,5 @@ protected:
 	CoreStackedWidget *coreStackedWidget;
 public:
 	MusicListWindow( CoreStackedWidget *parent );
-protected:
-	void paintEvent( QPaintEvent *event ) override;
 };
 #endif // MUSICLISTWINDOW_H_H_HEAD__FILE__

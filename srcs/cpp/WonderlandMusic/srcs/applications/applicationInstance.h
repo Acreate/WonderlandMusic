@@ -59,6 +59,8 @@ private:
 		QString main_window_w_key;
 		/// @brief 软件音乐信息保存路径
 		QString app_music_info_file_path;
+		/// @brief 播放列表的收藏宽度
+		QString app_music_collection_main_widget_width;
 	public:
 		JSonKey( );
 	} jsonKey;
@@ -103,20 +105,25 @@ class Event_Default_Event_Info_Type_Name( ApplicationInstance ) {
 public:
 	enum class EventType {
 		None,
-		Load_Music_Info_Path_Text
+		Load_Music_Info_Path_Text,
+		Resize_Music_Widget_Width
 	};
 protected:
 	EventType eventType;
 	QString loadMusicInfoPath;
+	int newMusicWidgetWidth;
 public:
 	virtual ~ApplicationInstanceEventInfo( ) = default;
 	ApplicationInstanceEventInfo( )
 		: eventType( EventType::None ) { }
 	ApplicationInstanceEventInfo( const QString &load_music_info_path )
 		: loadMusicInfoPath( load_music_info_path ), eventType( EventType::Load_Music_Info_Path_Text ) { }
+	ApplicationInstanceEventInfo( int new_music_collection_width )
+		: newMusicWidgetWidth( new_music_collection_width ), eventType( EventType::Resize_Music_Widget_Width ) { }
 	virtual EventType getEventType( ) const { return eventType; }
 	virtual const QString & getLoadMusicInofPath( ) const {
 		return loadMusicInfoPath;
 	}
+	virtual int getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
 };
 #endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

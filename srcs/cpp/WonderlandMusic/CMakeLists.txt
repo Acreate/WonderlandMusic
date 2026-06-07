@@ -113,30 +113,30 @@ endif( )
 
 target_include_directories( "${prject_name}" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/srcs" )
 
-# # 需要生成的 *.ts 文件保存到 translation_file_list 变量当中
-set( translation_file_list
-	# # 美语
-	"${PROJECT_SOURCE_DIR}/cmake_generate/translations/${prject_name}_en.ts"
-	# # 汉语
-	"${PROJECT_SOURCE_DIR}/cmake_generate/translations/${prject_name}_zh_CN.ts"
-	# # 默认加载的文件
-	"${PROJECT_SOURCE_DIR}/cmake_generate/translations/${prject_name}.ts"
-)
-
 set( app_resouce_path "${app_run_bin}/program/" )
 get_filename_component( app_resouce_path "${app_resouce_path}" ABSOLUTE ) # 全路径
 set( app_resouce_path "${app_resouce_path}/" )
 
-# # 设置 *.pm 的输出位置
-set_source_files_properties( ${translation_file_list} PROPERTIES OUTPUT_LOCATION "${app_resouce_path}/translations" )
-
-# # 生成 *.ts 和 *.pm 的脚本任务
-qt_add_translations(
-	"${prject_name}"
-	TS_FILES ${translation_file_list}
-	SOURCES ${project_src_file}
-	LUPDATE_OPTIONS -no-obsolete
-)
+if( generate_translation_file )
+	# # 需要生成的 *.ts 文件保存到 translation_file_list 变量当中
+	set( translation_file_list
+		# # 美语
+		"${PROJECT_SOURCE_DIR}/cmake_generate/translations/${prject_name}_en.ts"
+		# # 汉语
+		"${PROJECT_SOURCE_DIR}/cmake_generate/translations/${prject_name}_zh_CN.ts"
+		# # 默认加载的文件
+		"${PROJECT_SOURCE_DIR}/cmake_generate/translations/${prject_name}.ts"
+	)
+	# # 设置 *.pm 的输出位置
+	set_source_files_properties( ${translation_file_list} PROPERTIES OUTPUT_LOCATION "${app_resouce_path}/translations" )
+	# # 生成 *.ts 和 *.pm 的脚本任务
+	qt_add_translations(
+		"${prject_name}"
+		TS_FILES ${translation_file_list}
+		SOURCES ${project_src_file}
+		LUPDATE_OPTIONS -no-obsolete
+	)
+endif()
 
 set( copy_file_src_dir "${CMAKE_CURRENT_SOURCE_DIR}/resources" )
 copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/font" "${app_resouce_path}" )

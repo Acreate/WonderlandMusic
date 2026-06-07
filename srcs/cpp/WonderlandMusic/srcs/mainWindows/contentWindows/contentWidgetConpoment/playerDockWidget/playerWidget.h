@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <macro/eventMacroDefine.h>
 
+class ApplicationEvenTrigger;
+class Application;
 class QPushButton;
 class PlayerDockWidget;
 class PlayerWidget : public QWidget {
@@ -16,6 +18,8 @@ public:
 		Pause,
 	};
 protected:
+	Application *applicationInstance;
+	ApplicationEvenTrigger *applicationEvenTrigger;
 	PlayerDockWidget *playerDockWidget;
 	/// @brief 上一曲
 	QPushButton *previousTrackBtn;

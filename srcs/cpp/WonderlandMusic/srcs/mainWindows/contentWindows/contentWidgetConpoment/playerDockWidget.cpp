@@ -13,6 +13,3 @@ PlayerDockWidget::PlayerDockWidget( ContentWindow *parent ) : QDockWidget( paren
 	setContextMenuPolicy( Qt::NoContextMenu );
 	setTitleBarWidget( new PlayerBarWidget( this ) );
 }
-size_t PlayerDockWidget::triggerPlayerWidgetEvent( PlayerWidget *sender, const PlayerWidgetEventInfo &info ) {
-	return 0;
-}

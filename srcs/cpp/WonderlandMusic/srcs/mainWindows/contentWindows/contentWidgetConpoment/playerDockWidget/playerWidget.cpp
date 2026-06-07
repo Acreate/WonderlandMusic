@@ -3,22 +3,28 @@
 #include <QPushButton>
 
 #include "../playerDockWidget.h"
+
+#include <applications/applicationEvenTrigger.h>
+
+#include "../../../../applications/application.h"
 PlayerWidget::PlayerWidget( PlayerDockWidget *parent ) : QWidget( parent ), playerDockWidget( parent ) {
 	controlStatus = ControlStatus::None;
 	previousTrackBtn = new QPushButton( tr( "上一曲" ), this );
 	nextTrackBtn = new QPushButton( tr( "下一曲" ), this );
 	controlCurrentBtn = new QPushButton( tr( "播放" ), this );
+	applicationInstance = Application::getApplicationInstance( );
+	applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 	connect( controlCurrentBtn, &QPushButton::clicked, [this]( ) {
 		switch( controlStatus ) {
 			case ControlStatus::None :
 			case ControlStatus::Player :
 				controlCurrentBtn->setText( tr( "播放" ) );
-				PlayerWidgetEvent::triggerPlayerWidgetEvent( playerDockWidget, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Player ) );
+				PlayerWidgetEvent::triggerPlayerWidgetEvent( applicationEvenTrigger, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Player ) );
 				controlStatus = ControlStatus::Pause;
 				break;
 			case ControlStatus::Pause :
 				controlCurrentBtn->setText( tr( "暂停" ) );
-				PlayerWidgetEvent::triggerPlayerWidgetEvent( playerDockWidget, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Pause ) );
+				PlayerWidgetEvent::triggerPlayerWidgetEvent( applicationEvenTrigger, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Pause ) );
 				controlStatus = ControlStatus::Player;
 				break;
 		}
@@ -26,12 +32,12 @@ PlayerWidget::PlayerWidget( PlayerDockWidget *parent ) : QWidget( parent ), play
 	connect( nextTrackBtn, &QPushButton::clicked, [this]( ) {
 		controlStatus = ControlStatus::Player;
 		controlCurrentBtn->setText( tr( "暂停" ) );
-		PlayerWidgetEvent::triggerPlayerWidgetEvent( playerDockWidget, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Next_Track ) );
+		PlayerWidgetEvent::triggerPlayerWidgetEvent( applicationEvenTrigger, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Next_Track ) );
 	} );
 	connect( previousTrackBtn, &QPushButton::clicked, [this]( ) {
 		controlStatus = ControlStatus::Player;
 		controlCurrentBtn->setText( tr( "暂停" ) );
-		PlayerWidgetEvent::triggerPlayerWidgetEvent( playerDockWidget, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Previous_Track ) );
+		PlayerWidgetEvent::triggerPlayerWidgetEvent( applicationEvenTrigger, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Previous_Track ) );
 	} );
 
 	previousTrackBtn->move( 0, 0 );

@@ -15,8 +15,6 @@ protected:
 	AboutApplicationWidget *aboutApplicationWidget;
 public:
 	OptionStackWidget( SettingWindow *parent );
-	virtual bool showAboutInfoWidget( );
-	virtual bool showPathSettingWidget();
 };
 
 class Event_Default_Event_Info_Type_Name( OptionStackWidget ) {

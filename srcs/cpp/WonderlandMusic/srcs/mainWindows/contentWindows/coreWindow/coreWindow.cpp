@@ -9,10 +9,3 @@ CoreWindow::CoreWindow( ContentWindow *parent ) : QMainWindow( parent ), content
 	coreStackedWidget = new CoreStackedWidget( this );
 	setCentralWidget( coreStackedWidget );
 }
-bool CoreWindow::showMusicWidget( ) {
-	return coreStackedWidget->showMusicWidget( );
-}
-bool CoreWindow::showSettingWidget( ) {
-	return coreStackedWidget->showSettingWidget( );
-}
-

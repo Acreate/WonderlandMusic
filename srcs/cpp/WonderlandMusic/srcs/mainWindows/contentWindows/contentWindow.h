@@ -25,12 +25,6 @@ protected:
 	CoreWindow *coreWindow;
 public:
 	ContentWindow( MainWindow *parent );
-	/// @brief 显示音乐面板
-	/// @return 失败返回 false
-	virtual bool showMusicWidget( );
-	/// @brief 显示设置面板
-	/// @return 失败返回 false
-	virtual bool showSettingWidget( );
 private:
 };
 

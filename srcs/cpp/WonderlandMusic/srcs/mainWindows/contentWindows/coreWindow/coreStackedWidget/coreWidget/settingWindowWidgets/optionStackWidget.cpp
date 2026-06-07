@@ -2,9 +2,12 @@
 
 #include "../settingWindow.h"
 
-#include <macro/widgetMarcoDefine.h>
+#include "../../../../../../applications/application.h"
+#include "../../../../../../applications/applicationEvenTrigger.h"
 
 #include "../../../../../../msgInfo/messageErrorOut.h"
+
+#include "optionNavigationDockWidget/optionNavigationWidget.h"
 
 #include "optionWidget/aboutApplicationWidget.h"
 #include "optionWidget/pathSettingWidget.h"
@@ -14,10 +17,19 @@ OptionStackWidget::OptionStackWidget( SettingWindow *parent ) : QStackedWidget( 
 	addWidget( pathSettingWidget );
 	aboutApplicationWidget = new AboutApplicationWidget( this );
 	addWidget( aboutApplicationWidget );
-}
-bool OptionStackWidget::showAboutInfoWidget( ) {
-	Stack_Widget_Show_Widget( this, aboutApplicationWidget );
-}
-bool OptionStackWidget::showPathSettingWidget( ) {
-	Stack_Widget_Show_Widget( this, pathSettingWidget );
+	auto applicationEvenTrigger = Application::getApplicationInstance( )->getApplicationEvenTrigger( );
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerOptionNavigationWidgetEvent, [this] ( auto, const OptionNavigationWidgetEventInfo &info ) {
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+
+			case OptionNavigationWidgetEventInfo::EventType::None :
+				break;
+			case OptionNavigationWidgetEventInfo::EventType::Show_Path_Widget :
+				setCurrentWidget( pathSettingWidget );
+				break;
+			case OptionNavigationWidgetEventInfo::EventType::Show_About_Widget :
+				setCurrentWidget( aboutApplicationWidget );
+				break;
+		}
+	} );
 }

@@ -172,6 +172,7 @@ bool Application::notify( QObject *object, QEvent *event ) {
 			}
 			break;
 		case QEvent::Quit :
+			mainWindowPtr->setParent( nullptr );
 			delete mainWindowPtr;
 			mainWindowPtr = nullptr;
 			break;

@@ -29,9 +29,3 @@ ContentWindow::ContentWindow( MainWindow *parent ) : QMainWindow( parent ), main
 	coreWindow->setWindowFlags( Qt::WindowType::Widget );
 	setCentralWidget( coreWindow );
 }
-bool ContentWindow::showMusicWidget( ) {
-	return coreWindow->showMusicWidget( );
-}
-bool ContentWindow::showSettingWidget( ) {
-	return coreWindow->showSettingWidget( );
-}

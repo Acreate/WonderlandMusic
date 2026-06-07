@@ -197,20 +197,24 @@ bool AppRenderObj::renderColorReplaceColorImage( QImage &result_image, const QCo
 	result_image = buff;
 	return true;
 }
+
+Application *Application::current = nullptr;
 Application * Application::getApplicationInstance( ) {
+	if( current )
+		return current;
 	QCoreApplication *instance = QCoreApplication::instance( );
 	if( instance == nullptr ) {
 		MessageErrorOut( ) << tr( "无法从 QCoreApplication::instance( ) 获取实例指针" );
 		return nullptr;
 	}
-	Application *application = qobject_cast< Application * >( instance );
-	if( application )
-		return application;
+	current = qobject_cast< Application * >( instance );
+	if( current )
+		return current;
 	MessageErrorOut( ) << tr( "无法从 QCoreApplication::instance( ) 转换到 Application * 类型" );
 	return nullptr;
 }
 Application::Application( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
-
+	current = this;
 	mainWindowPtr = nullptr;
 	firstShow = false;
 	appSetting = new QJsonObject;
@@ -317,6 +321,7 @@ Application::~Application( ) {
 	delete appStartRunTime;
 	delete translate;
 	delete qTranslator;
+	current = nullptr;
 }
 bool Application::notify( QObject *object, QEvent *event ) {
 	bool notify = QApplication::notify( object, event );

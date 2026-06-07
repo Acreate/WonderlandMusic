@@ -10,8 +10,11 @@ class MainWindow;
 class QJsonObject;
 class Application : public QApplication {
 	Q_OBJECT;
+private:
+	static Application *current;
 public:
 	static Application * getApplicationInstance( );
+public:
 	Application( int &argc, char **const argv, const int i = ApplicationFlags );
 	~Application( ) override;
 	bool notify( QObject *object, QEvent *event ) override;

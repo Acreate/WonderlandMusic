@@ -2,7 +2,8 @@
 #define APPLICATION_H_H_HEAD__FILE__
 
 #include <QApplication>
-class ApplicationInstance;
+class Render;
+class ApplicationEvenTrigger;
 class QFileInfo;
 class QDir;
 class MainWindow;
@@ -10,6 +11,7 @@ class QJsonObject;
 class Application : public QApplication {
 	Q_OBJECT;
 public:
+	static Application * getApplicationInstance( );
 	Application( int &argc, char **const argv, const int i = ApplicationFlags );
 	~Application( ) override;
 	bool notify( QObject *object, QEvent *event ) override;
@@ -51,8 +53,6 @@ private:
 	MainWindow *mainWindowPtr;
 	/// @brief 是否第一次显示
 	bool firstShow;
-	/// @brief 软件实例
-	ApplicationInstance *applicationInstance;
 	/// @brief 软件配置
 	QJsonObject *appSetting;
 	/// @brief 软件配置路径
@@ -63,6 +63,8 @@ private:
 	QFileInfo *fileInfoTool;
 	/// @brief 软件启动时间
 	QDateTime *appStartRunTime;
+	Render *render;
+	ApplicationEvenTrigger *applicationEvenTrigger;
 public:
 	/// @brief 获取配置的主要窗口
 	/// @return 主要窗口
@@ -73,6 +75,8 @@ public:
 	virtual const QDateTime & getAppStartRunDataTime( ) const {
 		return *appStartRunTime;
 	}
+	virtual Render * getRender( ) const { return render; }
+	virtual ApplicationEvenTrigger * getApplicationEvenTrigger( ) const { return applicationEvenTrigger; }
 private:
 	/// @brief 第一次显示主要窗口时调用该函数
 	/// @param first_show_main_window 调用的主要窗口

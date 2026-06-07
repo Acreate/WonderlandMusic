@@ -2,33 +2,13 @@
 #define MAINWINDOW_H_H_HEAD__FILE__
 #include <QMainWindow>
 
-#include <macro/eventMacroDefine.h>
-
-#define FunctionDockEventClassName Event_Default_Event_Class_Type_Name( FunctionDockWidget )
-#define FunctionDockEventDefaultEventCallFunction Event_Default_Receive_Call_Function( FunctionDockWidget )
-#define FunctionDockEventDefineClass Event_Define_Event_Class_type( FunctionDockWidget, MainWindow )
-class Event_Default_Event_Info_Type_Name( FunctionDockWidget );
-
-#define TopToolDockEventClassName Event_Default_Event_Class_Type_Name( TopToolDockWidget )
-#define TopToolDockEventDefaultEventCallFunction Event_Default_Receive_Call_Function( TopToolDockWidget )
-#define TopToolDockEventDefineClass Event_Define_Event_Class_type( TopToolDockWidget, MainWindow)
-class Event_Default_Event_Info_Type_Name( TopToolDockWidget );
-
-
-
-#define ContentWindowEventClassName Event_Default_Event_Class_Type_Name( ContentWindow )
-#define ContentWindowEventDefaultEventCallFunction Event_Default_Receive_Call_Function( ContentWindow )
-#define ContentWindowEventDefineClass Event_Define_Event_Class_type( ContentWindow, MainWindow)
-class Event_Default_Event_Info_Type_Name( ContentWindow );
-
+class Application;
+class ApplicationEvenTrigger;
 class ContentWindow;
 class FunctionDockWidget;
 class TopToolDockWidget;
 class MainWindow : public QMainWindow {
 	Q_OBJECT;
-	friend class FunctionDockEventClassName;
-	friend class TopToolDockEventClassName;
-	friend class ContentWindowEventClassName;
 public:
 	class Translate {
 		friend class MainWindow;
@@ -40,6 +20,11 @@ public:
 		Translate( );
 	};
 protected:
+	/// @brief app 本身
+	Application *application;
+	/// @brief app 事件
+	ApplicationEvenTrigger *applicationEvenTrigger;
+	/// @brief 翻译
 	Translate translate;
 	/// @brief 顶部工具
 	TopToolDockWidget *topToolDockWidget;
@@ -50,15 +35,6 @@ protected:
 public:
 	MainWindow( );
 	~MainWindow( ) override;
-private:
-	virtual FunctionDockEventDefaultEventCallFunction;
-	virtual TopToolDockEventDefaultEventCallFunction;
-	virtual ContentWindowEventDefaultEventCallFunction;
 };
-
-FunctionDockEventDefineClass;
-TopToolDockEventDefineClass;
-ContentWindowEventDefineClass;
-
 
 #endif // MAINWINDOW_H_H_HEAD__FILE__

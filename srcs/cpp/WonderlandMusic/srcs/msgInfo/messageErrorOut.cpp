@@ -3,7 +3,6 @@
 #include <qdir.h>
 
 #include "../applications/application.h"
-#include "../applications/applicationInstance.h"
 
 #include "../tools/dateTimeFormat.h"
 MessageErrorOut::Translate::Translate( ) {
@@ -34,7 +33,10 @@ MessageErrorOut::~MessageErrorOut( ) {
 	outMsgVector.clear( );
 	formatMessageOut( outString, location, jion );
 	qDebug( ) << outString.toStdString( ).c_str( );
-	auto &appStartRunDataTime = ApplicationInstance::getInstance( )->getApplication( )->getAppStartRunDataTime( );
+	Application *applicationInstance = Application::getApplicationInstance( );
+	if( applicationInstance == nullptr )
+		return;
+	auto &appStartRunDataTime = applicationInstance->getAppStartRunDataTime( );
 	auto date = appStartRunDataTime.date( );
 	QString dateTimeFormatString;
 	dateTimeFormat.formatData( dateTimeFormatString, date );

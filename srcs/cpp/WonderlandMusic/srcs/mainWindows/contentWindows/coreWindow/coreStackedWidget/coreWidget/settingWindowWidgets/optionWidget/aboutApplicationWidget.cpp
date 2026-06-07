@@ -7,12 +7,11 @@
 #include <QLibraryInfo>
 
 #include <applications/application.h>
-#include <applications/applicationInstance.h>
 
 #include "../optionStackWidget.h"
 
 AboutApplicationWidget::AboutApplicationWidget( OptionStackWidget *parent_window ) : QWidget( parent_window ), optionStackWidget( parent_window ) {
-	Application *application = ApplicationInstance::getInstance( )->getApplication( );
+	Application *application = Application::getApplicationInstance( );
 	setWindowTitle( tr( "%1 关于" ).arg( application->applicationName( ) ) );
 	auto mainLayout = new QHBoxLayout( this );
 	mainLayout->setContentsMargins( 0, 0, 0, 0 );

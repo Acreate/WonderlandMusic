@@ -3,15 +3,19 @@
 #include "../functionDockWidget.h"
 #include <QVBoxLayout>
 #include <QPushButton>
+
+#include <applications/applicationEvenTrigger.h>
+
+#include <applications/application.h>
 FunctionWidget::FunctionWidget( FunctionDockWidget *parent ) : QWidget( parent ), functionDockWidget( parent ) {
 
 	showMusicBtn = new QPushButton( tr( "音乐" ), this );
 	connect( showMusicBtn, &QPushButton::clicked, [this]( ) {
-		FunctionWidgetEvent::triggerFunctionWidgetEvent( functionDockWidget, this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Music ) );
+		FunctionWidgetEvent::triggerFunctionWidgetEvent( Application::getApplicationInstance( )->getApplicationEvenTrigger( ), this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Music ) );
 	} );
 	showSettingBtn = new QPushButton( tr( "设置" ), this );
 	connect( showSettingBtn, &QPushButton::clicked, [this]( ) {
-		FunctionWidgetEvent::triggerFunctionWidgetEvent( functionDockWidget, this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Setting ) );
+		FunctionWidgetEvent::triggerFunctionWidgetEvent( Application::getApplicationInstance( )->getApplicationEvenTrigger( ), this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Setting ) );
 	} );
 }
 void FunctionWidget::resizeEvent( QResizeEvent *event ) {

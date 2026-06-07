@@ -5,12 +5,13 @@
 #include "dockWidgets/functionDockWidget.h"
 #include "dockWidgets/topToolDockWidget.h"
 #include "../applications/application.h"
-#include "../applications/applicationInstance.h"
 
 #include "dockWidgets/topToolWidget/topToolTitleBarWidget.h"
 #include "dockWidgets/topToolWidget/topToolWidget.h"
 
 #include <QMouseEvent>
+
+#include "../applications/applicationEvenTrigger.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -47,80 +48,29 @@ MainWindow::MainWindow( ) {
 	this->setDockOptions( QMainWindow::AllowNestedDocks );
 	setDocumentMode( true );
 	setContextMenuPolicy( Qt::NoContextMenu );
+
+	application = Application::getApplicationInstance( );
+	applicationEvenTrigger = application->getApplicationEvenTrigger( );
+
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerTopToolWidgetEvent, [this] ( auto, const TopToolWidgetEventInfo &info ) {
+		auto type = info.getType( );
+		switch( type ) {
+			case TopToolWidgetEventInfo::Type::Close :
+				close( );
+				break;
+			case TopToolWidgetEventInfo::Type::Min :
+				showMinimized( );
+				break;
+			case TopToolWidgetEventInfo::Type::MoveTargetOffsetWindow : {
+				const QPoint *oldMousePos = info.getOldMousePos( );
+				const QPoint *newMousePos = info.getNewMousePos( );
+				QPoint thisPos = pos( );
+				move( *newMousePos - *oldMousePos + thisPos );
+			}
+			break;
+		}
+	} );
 }
 MainWindow::~MainWindow( ) {
 
-}
-
-size_t MainWindow::triggerFunctionDockWidgetEvent( FunctionDockWidget *sender, const FunctionDockWidgetEventInfo &info ) {
-	FunctionDockWidgetEventInfo::EventType type = info.getType( );
-	switch( type ) {
-		case FunctionDockWidgetEventInfo::EventType::Show_Music :
-			if( contentWindow->showMusicWidget( ) == false )
-				MessageErrorOut( ) << tr( "音乐面板显示失败" );
-			break;
-		case FunctionDockWidgetEventInfo::EventType::Show_Setting :
-			if( contentWindow->showSettingWidget( ) == false )
-				MessageErrorOut( ) << tr( "配置面板显示失败" );
-			break;
-		default :
-			MessageErrorOut( ) << tr( "未配置" );
-			break;
-	}
-	return 0;
-}
-size_t MainWindow::triggerTopToolDockWidgetEvent( TopToolDockWidget *sender, const TopToolDockWidgetEventInfo &info ) {
-
-	TopToolDockWidgetEventInfo::EventType eventType = info.getEventType( );
-
-	const TopToolDockWidgetEventInfo::TopToolEventData *topToolEventData;
-	TopToolWidgetEventInfo::Type type;
-	const TopToolWidgetEventInfo *topToolEventInfo;
-	const QPoint *oldMousePos, *newMousePos;
-
-	switch( eventType ) {
-		case TopToolDockWidgetEventInfo::EventType::None :
-			break;
-		case TopToolDockWidgetEventInfo::EventType::TopToolEvent :
-			topToolEventData = info.getTopToolEventData( );
-			topToolEventInfo = topToolEventData->getTopToolEventInfo( );
-			type = topToolEventInfo->getType( );
-			switch( type ) {
-				case TopToolWidgetEventInfo::Type::Close :
-					ApplicationInstance::getInstance( )->getApplication( )->quit( );
-					break;
-				case TopToolWidgetEventInfo::Type::Min :
-					showMinimized( );
-					break;
-				case TopToolWidgetEventInfo::Type::MoveTargetOffsetWindow :
-					oldMousePos = topToolEventInfo->getOldMousePos( );
-					newMousePos = topToolEventInfo->getNewMousePos( );
-					move( *newMousePos - *oldMousePos + pos( ) );
-					break;
-			}
-			break;
-	}
-
-	return false;
-}
-size_t MainWindow::triggerContentWindowEvent( ContentWindow *sender, const ContentWindowEventInfo &info ) {
-	switch( info.getEventType( ) ) {
-
-		case ContentWindowEventInfo::EventType::None :
-			MessageErrorOut( ) << "EventType::None";
-			break;
-		case ContentWindowEventInfo::EventType::Player :
-			MessageErrorOut( ) << "EventType::Player";
-			break;
-		case ContentWindowEventInfo::EventType::Pause :
-			MessageErrorOut( ) << "EventType::Pause";
-			break;
-		case ContentWindowEventInfo::EventType::Next_Track :
-			MessageErrorOut( ) << "EventType::Next_Track";
-			break;
-		case ContentWindowEventInfo::EventType::Previous_Track :
-			MessageErrorOut( ) << "EventType::Previous_Track";
-			break;
-	}
-	return 0;
 }

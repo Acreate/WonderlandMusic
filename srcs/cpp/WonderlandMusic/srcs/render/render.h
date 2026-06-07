@@ -6,11 +6,9 @@ class QColor;
 class QPoint;
 class QImage;
 class QString;
-class ApplicationInstance;
-
 /// @brief 图像渲染
 class Render {
-	friend class ApplicationInstance;
+	friend class Application;
 protected:
 	virtual ~Render( ) = default;
 public:

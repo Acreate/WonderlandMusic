@@ -16,6 +16,3 @@ bool CoreWindow::showSettingWidget( ) {
 	return coreStackedWidget->showSettingWidget( );
 }
 
-size_t CoreWindow::triggerCoreStackedWidgetEvent( CoreStackedWidget *sender, const CoreStackedWidgetEventInfo &info ) {
-	return 0;
-}

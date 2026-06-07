@@ -7,7 +7,6 @@
 #include <QFileInfo>
 
 #include "../applications/application.h"
-#include "../applications/applicationInstance.h"
 
 #include "../msgInfo/messageErrorOut.h"
 Music::~Music( ) {
@@ -39,7 +38,7 @@ bool Music::loadFile( const QString &music_path ) {
 
 	mediaPlayer = new QMediaPlayer;
 	mediaPlayer->setSource( *musicUrl );
-	auto application = ApplicationInstance::getInstance( )->getApplication( );
+	auto application = Application::getApplicationInstance( );
 	while( QMediaPlayer::LoadedMedia != mediaPlayer->mediaStatus( ) )
 		application->processEvents( );
 

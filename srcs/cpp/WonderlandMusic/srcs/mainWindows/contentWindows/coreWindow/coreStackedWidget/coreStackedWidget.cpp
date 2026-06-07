@@ -23,6 +23,3 @@ bool CoreStackedWidget::showMusicWidget( ) {
 bool CoreStackedWidget::showSettingWidget( ) {
 	Stack_Widget_Show_Widget( this, settingWindow );
 }
-size_t CoreStackedWidget::triggerSettingWindowEvent( SettingWindow *sender, const SettingWindowEventInfo &info ) {
-	return 0;
-}

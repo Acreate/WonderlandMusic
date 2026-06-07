@@ -35,27 +35,3 @@ bool ContentWindow::showMusicWidget( ) {
 bool ContentWindow::showSettingWidget( ) {
 	return coreWindow->showSettingWidget( );
 }
-size_t ContentWindow::triggerFindDockWidgetEvent( FindDockWidget *sender, const FindDockWidgetEventInfo &info ) {
-
-	return 0;
-}
-size_t ContentWindow::triggerPlayerDockWidgetEvent( PlayerDockWidget *sender, const PlayerDockWidgetEventInfo &info ) {
-	auto eventType = info.getEventType( );
-	switch( eventType ) {
-
-		case PlayerDockWidgetEventInfo::EventType::None :
-			return ContentWindowEvent::triggerContentWindowEvent( mainWindow, this, ContentWindowEventInfo( ContentWindowEventInfo::EventType::None ) );
-		case PlayerDockWidgetEventInfo::EventType::Player :
-			return ContentWindowEvent::triggerContentWindowEvent( mainWindow, this, ContentWindowEventInfo( ContentWindowEventInfo::EventType::Player ) );
-		case PlayerDockWidgetEventInfo::EventType::Pause :
-			return ContentWindowEvent::triggerContentWindowEvent( mainWindow, this, ContentWindowEventInfo( ContentWindowEventInfo::EventType::Pause ) );
-		case PlayerDockWidgetEventInfo::EventType::Next_Track :
-			return ContentWindowEvent::triggerContentWindowEvent( mainWindow, this, ContentWindowEventInfo( ContentWindowEventInfo::EventType::Next_Track ) );
-		case PlayerDockWidgetEventInfo::EventType::Previous_Track :
-			return ContentWindowEvent::triggerContentWindowEvent( mainWindow, this, ContentWindowEventInfo( ContentWindowEventInfo::EventType::Previous_Track ) );
-	}
-	return 0;
-}
-size_t ContentWindow::triggerCoreWindowEvent( CoreWindow *sender, const CoreWindowEventInfo &info ) {
-	return 0;
-}

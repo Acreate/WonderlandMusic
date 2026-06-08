@@ -11,8 +11,8 @@
 #include "../optionStackWidget.h"
 
 AboutApplicationWidget::AboutApplicationWidget( OptionStackWidget *parent_window ) : BaseWidget( parent_window ), optionStackWidget( parent_window ) {
-	ApplicationInstance *application = ApplicationInstance::getApplicationInstance( );
-	setWindowTitle( tr( "%1 关于" ).arg( application->applicationName( ) ) );
+	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+	setWindowTitle( tr( "%1 关于" ).arg( applicationInstance->applicationName( ) ) );
 	auto mainLayout = new QHBoxLayout( this );
 	mainLayout->setContentsMargins( 0, 0, 0, 0 );
 	mainLayout->setSpacing( 0 );

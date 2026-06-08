@@ -46,9 +46,8 @@ MainWindow::MainWindow( ) : BaseMainWindow( nullptr ) {
 	topToolDockWidget->setTitleBarWidget( new TopToolTitleBarWidget( topToolDockWidget ) );
 	addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, topToolDockWidget );
 
-	application = ApplicationInstance::getApplicationInstance( );
-	applicationEvenTrigger = application->getApplicationEvenTrigger( );
-
+	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerTopToolWidgetEvent, [this] ( auto, const TopToolWidgetEventInfo &info ) {
 		auto type = info.getType( );
 		switch( type ) {
@@ -69,6 +68,7 @@ MainWindow::MainWindow( ) : BaseMainWindow( nullptr ) {
 	} );
 }
 MainWindow::~MainWindow( ) {
-	auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
+	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 	MainWindowEvent::triggerMainWindowEvent( applicationEvenTrigger, this, MainWindowEventInfo( MainWindowEventInfo::EventType::Close ) );
 }

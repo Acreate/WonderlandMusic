@@ -87,6 +87,7 @@ private:
 	/// @brief 软件启动时间
 	QDateTime *appStartRunTime;
 	Render *render;
+	/// @brief app 事件
 	ApplicationEvenTrigger *applicationEvenTrigger;
 	/// @brief 收藏夹菜单
 	ControlCollectionMenu *controlCollectionMenu;

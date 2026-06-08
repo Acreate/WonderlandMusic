@@ -5,9 +5,7 @@
 class QPushButton;
 class TopToolDockWidget;
 
-// 事件头文件
 #include <macro/eventMacroDefine.h>
-
 
 class TopToolWidget : public BaseWidget {
 	Q_OBJECT;

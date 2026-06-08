@@ -37,7 +37,6 @@ ApplicationInstance * ApplicationInstance::getApplicationInstance( ) {
 	return nullptr;
 }
 void ApplicationInstance::initVar( ) {
-	current = this;
 	mainWindowPtr = nullptr;
 	firstShow = false;
 	appSetting = new QJsonObject;
@@ -203,12 +202,12 @@ void ApplicationInstance::sendAppEvent( ) {
 		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Init_Music_Widget_Width, widgetWidth ) );
 	}
 }
-ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : BseeApplication( argc, argv, i ) {
+ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : applicationEvenTrigger( nullptr ), BseeApplication( argc, argv, i ) {
 	initVar( );
+	initApplicationEvenTrigger( );
 	initJson( );
 	initTranslation( );
 	initRender( );
-	initApplicationEvenTrigger( );
 	initTriggerEvent( );
 	initMainWindow( );
 	sendAppEvent( );

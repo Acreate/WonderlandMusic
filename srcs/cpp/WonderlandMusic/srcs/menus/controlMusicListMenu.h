@@ -1,15 +1,14 @@
 ﻿#ifndef CONTROLMUSICLISTMENU_H_H_HEAD__FILE__
 #define CONTROLMUSICLISTMENU_H_H_HEAD__FILE__
 
-class {
-
-};
-
-#include <QMenu>
-class ControlMusicListMenu : public QMenu {
+#include <base/baseMenu/baseMenu.h>
+class ControlMusicListMenu : public BaseMenu {
 	Q_OBJECT;
 public:
-	ControlMusicListMenu( ) { }
+	ControlMusicListMenu( QWidget *const parent );
+	ControlMusicListMenu( const QString &titile, QWidget *const parent );
+	ControlMusicListMenu( const QString &titile );
+	ControlMusicListMenu( );
 	~ControlMusicListMenu( ) override;
 };
 #include <macro/eventMacroDefine.h>

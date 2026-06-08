@@ -18,8 +18,6 @@ public:
 		Pause,
 	};
 protected:
-	ApplicationInstance *applicationInstance;
-	ApplicationEvenTrigger *applicationEvenTrigger;
 	PlayerDockWidget *playerDockWidget;
 	/// @brief 上一曲
 	QPushButton *previousTrackBtn;

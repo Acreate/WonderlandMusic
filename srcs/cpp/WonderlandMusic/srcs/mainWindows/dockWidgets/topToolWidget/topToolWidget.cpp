@@ -14,12 +14,16 @@ TopToolWidget::TopToolWidget( TopToolDockWidget *parent ) : BaseWidget( parent )
 	minMainWindowBtn = new QPushButton( tr( "最小化" ), this );
 
 	connect( closeBtn, &QPushButton::clicked, [this]( ) {
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 		TopToolWidgetEventInfo topToolEventInfo( TopToolWidgetEventInfo::Type::Close );
-		TopToolWidgetEvent::triggerTopToolWidgetEvent( ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( ), this, topToolEventInfo );
+		TopToolWidgetEvent::triggerTopToolWidgetEvent( applicationEvenTrigger, this, topToolEventInfo );
 	} );
 	connect( minMainWindowBtn, &QPushButton::clicked, [this]( ) {
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 		TopToolWidgetEventInfo topToolEventInfo( TopToolWidgetEventInfo::Type::Min );
-		TopToolWidgetEvent::triggerTopToolWidgetEvent( ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( ), this, topToolEventInfo );
+		TopToolWidgetEvent::triggerTopToolWidgetEvent( applicationEvenTrigger, this, topToolEventInfo );
 	} );
 	drawWindow = false;
 }
@@ -43,8 +47,12 @@ void TopToolWidget::leaveEvent( QEvent *event ) {
 }
 void TopToolWidget::mouseMoveEvent( QMouseEvent *event ) {
 	QWidget::mouseMoveEvent( event );
-	if( drawWindow )
-		TopToolWidgetEvent::triggerTopToolWidgetEvent( ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( ), this, TopToolWidgetEventInfo( oldMousePos, ( newMousePos = event->pos( ), newMousePos ) ) );
+	if( drawWindow ) {
+
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
+		TopToolWidgetEvent::triggerTopToolWidgetEvent( applicationEvenTrigger, this, TopToolWidgetEventInfo( oldMousePos, ( newMousePos = event->pos( ), newMousePos ) ) );
+	}
 }
 void TopToolWidget::mousePressEvent( QMouseEvent *event ) {
 	QWidget::mousePressEvent( event );

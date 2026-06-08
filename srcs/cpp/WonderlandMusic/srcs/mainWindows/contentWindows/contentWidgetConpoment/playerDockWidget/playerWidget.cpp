@@ -13,9 +13,10 @@ PlayerWidget::PlayerWidget( PlayerDockWidget *parent ) : QWidget( parent ), play
 	previousTrackBtn = new QPushButton( tr( "上一曲" ), this );
 	nextTrackBtn = new QPushButton( tr( "下一曲" ), this );
 	controlCurrentBtn = new QPushButton( tr( "播放" ), this );
-	applicationInstance = ApplicationInstance::getApplicationInstance( );
-	applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
+
 	connect( controlCurrentBtn, &QPushButton::clicked, [this]( ) {
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 		switch( controlStatus ) {
 			case ControlStatus::None :
 			case ControlStatus::Player :
@@ -31,11 +32,15 @@ PlayerWidget::PlayerWidget( PlayerDockWidget *parent ) : QWidget( parent ), play
 		}
 	} );
 	connect( nextTrackBtn, &QPushButton::clicked, [this]( ) {
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 		controlStatus = ControlStatus::Player;
 		controlCurrentBtn->setText( tr( "暂停" ) );
 		PlayerWidgetEvent::triggerPlayerWidgetEvent( applicationEvenTrigger, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Next_Track ) );
 	} );
 	connect( previousTrackBtn, &QPushButton::clicked, [this]( ) {
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 		controlStatus = ControlStatus::Player;
 		controlCurrentBtn->setText( tr( "暂停" ) );
 		PlayerWidgetEvent::triggerPlayerWidgetEvent( applicationEvenTrigger, this, PlayerWidgetEventInfo( PlayerWidgetEventInfo::EventType::Previous_Track ) );

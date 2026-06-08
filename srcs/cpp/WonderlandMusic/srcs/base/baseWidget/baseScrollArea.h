@@ -2,10 +2,13 @@
 #define BASESCROLLAREA_H_H_HEAD__FILE__
 
 #include <QScrollArea>
-class BaseScrollArea : public QScrollArea {
+
+#include "../baseClass.h"
+class BaseScrollArea : public QScrollArea, public BaseClass {
 	Q_OBJECT;
 public:
 	BaseScrollArea( QWidget *parent );
+	BaseScrollArea( );
 };
 
 #endif // BASESCROLLAREA_H_H_HEAD__FILE__

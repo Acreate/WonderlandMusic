@@ -16,8 +16,8 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 	musicCollectionScrollArea = new MusicCollectionScrollArea( this );
 	musicListScrollArea = new MusicListScrollArea( this );
 
-	ApplicationInstance *instance = ApplicationInstance::getApplicationInstance( );
-	auto applicationEvenTrigger = instance->getApplicationEvenTrigger( );
+	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerApplicationInstanceEvent, [this] ( auto, const ApplicationInstanceEventInfo &info ) {
 		switch( info.getEventType( ) ) {
 			case ApplicationInstanceEventInfo::EventType::Init_Music_Widget_Width :
@@ -37,15 +37,15 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 						return;
 					setMusicCollectionWidth( x );
 				} else {
+					auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+					auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 					int abs = std::abs( x - width );
 					if( abs < 5 ) {
 						// 拉伸
 						readyDragWidgetWidth = true;
-						auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
 						MusicListMainWidgetEvent::triggerMusicListMainWidgetEvent( applicationEvenTrigger, this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Show_Draw_Mouse_ICO, musicCollectionScrollArea->width( ) ) );
 					} else if( readyDragWidgetWidth == true ) {
 						readyDragWidgetWidth = false;
-						auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
 						MusicListMainWidgetEvent::triggerMusicListMainWidgetEvent( applicationEvenTrigger, this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::HIDE_Draw_Mouse_ICO, musicCollectionScrollArea->width( ) ) );
 					}
 				}
@@ -55,12 +55,14 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 			case ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos :
 				if( readyDragWidgetWidth ) {
 					isragWidgetWidth = true;
-					auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
+					auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+					auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 					MusicListMainWidgetEvent::triggerMusicListMainWidgetEvent( applicationEvenTrigger, this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Start_Draw_Music_Widget_Width, musicCollectionScrollArea->width( ) ) );
 				}
 				break;
 			case ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos : {
-				ApplicationInstance *applicationInstance = ApplicationInstance::getApplicationInstance( );
+
+				auto applicationInstance = ApplicationInstance::getApplicationInstance( );
 				if( readyDragWidgetWidth ) {
 					isragWidgetWidth = readyDragWidgetWidth = false;
 					auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );

@@ -17,7 +17,10 @@ OptionStackWidget::OptionStackWidget( SettingWindow *parent ) : BaseStackedWidge
 	addWidget( pathSettingWidget );
 	aboutApplicationWidget = new AboutApplicationWidget( this );
 	addWidget( aboutApplicationWidget );
-	auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
+
+	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
+
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerOptionNavigationWidgetEvent, [this] ( auto, const OptionNavigationWidgetEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {

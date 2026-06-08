@@ -1,5 +1,9 @@
 ﻿#include "baseScrollArea.h"
-BaseScrollArea::BaseScrollArea( QWidget *parent ) : QScrollArea( parent ) {
+
+#include <source_location>
+BaseScrollArea::BaseScrollArea( QWidget *parent ) : QScrollArea( parent ), BaseClass( ) {
 	//setMouseTracking( true );
 	setContextMenuPolicy( Qt::NoContextMenu );
+}
+BaseScrollArea::BaseScrollArea( ) : QScrollArea( ), BaseClass( ) {
 }

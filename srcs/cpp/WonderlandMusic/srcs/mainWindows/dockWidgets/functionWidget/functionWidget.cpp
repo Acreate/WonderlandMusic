@@ -11,11 +11,15 @@ FunctionWidget::FunctionWidget( FunctionDockWidget *parent ) : BaseWidget( paren
 
 	showMusicBtn = new QPushButton( tr( "音乐" ), this );
 	connect( showMusicBtn, &QPushButton::clicked, [this]( ) {
-		FunctionWidgetEvent::triggerFunctionWidgetEvent( ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( ), this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Music ) );
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
+		FunctionWidgetEvent::triggerFunctionWidgetEvent( applicationEvenTrigger, this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Music ) );
 	} );
 	showSettingBtn = new QPushButton( tr( "设置" ), this );
 	connect( showSettingBtn, &QPushButton::clicked, [this]( ) {
-		FunctionWidgetEvent::triggerFunctionWidgetEvent( ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( ), this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Setting ) );
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
+		FunctionWidgetEvent::triggerFunctionWidgetEvent( applicationEvenTrigger, this, FunctionWidgetEventInfo( FunctionWidgetEventInfo::EventType::Show_Setting ) );
 	} );
 }
 void FunctionWidget::resizeEvent( QResizeEvent *event ) {

@@ -1,5 +1,9 @@
 ﻿#include "baseStackedWidget.h"
-BaseStackedWidget::BaseStackedWidget( QWidget *parent ) : QStackedWidget( parent ) {
+
+#include <source_location>
+BaseStackedWidget::BaseStackedWidget( QWidget *parent ) : QStackedWidget( parent ), BaseClass( ) {
 	//setMouseTracking( true );
 	setContextMenuPolicy( Qt::NoContextMenu );
+}
+BaseStackedWidget::BaseStackedWidget( ) : QStackedWidget( ), BaseClass( ) {
 }

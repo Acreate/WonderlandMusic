@@ -5,8 +5,13 @@
 
 #include <base/baseWidget/baseWidget.h>
 
+class CollectionItemWidget;
+class CollectionTopToolWidget;
 class MusicCollectionWidget : public BaseWidget {
 	Q_OBJECT;
+protected:
+	CollectionTopToolWidget *collectionTopToolWidget;
+	CollectionItemWidget *collectionItemWidget;
 public:
 	MusicCollectionWidget( QWidget *parent );
 protected:

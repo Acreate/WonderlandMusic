@@ -5,8 +5,7 @@
 class BseeApplication : public QApplication {
 	Q_OBJECT;
 public:
-	BseeApplication( int &argc, char **const argv, const int i = ApplicationFlags )
-		: QApplication( argc, argv, i ) { }
+	BseeApplication( int &argc, char **const argv, const int i = ApplicationFlags );
 };
 
 #endif // BSEEAPPLICATION_H_H_HEAD__FILE__

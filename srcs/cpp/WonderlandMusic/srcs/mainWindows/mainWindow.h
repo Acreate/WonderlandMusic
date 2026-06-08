@@ -21,10 +21,6 @@ public:
 		Translate( );
 	};
 protected:
-	/// @brief app 本身
-	ApplicationInstance *application;
-	/// @brief app 事件
-	ApplicationEvenTrigger *applicationEvenTrigger;
 	/// @brief 翻译
 	Translate translate;
 	/// @brief 顶部工具

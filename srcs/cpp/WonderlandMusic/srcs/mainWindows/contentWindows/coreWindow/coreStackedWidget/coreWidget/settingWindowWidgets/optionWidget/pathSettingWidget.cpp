@@ -47,15 +47,17 @@ PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : BaseWidget( 
 			return;
 		}
 		musiInfoPath = absoluteFilePath;
-		auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
+
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 		PathSettingWidgetEvent::triggerPathSettingWidgetEvent(
 			applicationEvenTrigger, this, PathSettingWidgetEventInfo( PathSettingWidgetEventInfo::EventType::Update_Music_info_File_Path_Info ) );
 	} );
 
-	// 接受软件加载的目录路径
 	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
-	auto evenTrigger = applicationInstance->getApplicationEvenTrigger( );
-	connect( evenTrigger, &ApplicationEvenTrigger::triggerApplicationInstanceEvent, [this] ( auto, const ApplicationInstanceEventInfo &info ) {
+	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
+	// 接受软件加载的目录路径
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerApplicationInstanceEvent, [this] ( auto, const ApplicationInstanceEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
 			case ApplicationInstanceEventInfo::EventType::None :

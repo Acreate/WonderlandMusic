@@ -1,69 +1,34 @@
 ﻿#ifndef APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__
 #define APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__
 
-#include "../base/baseObject/baseObject.h"
+#include <base/baseObject/baseObject.h>
+#include <macro/eventMacroDefine.h>
 
-#include "../macro/eventMacroDefine.h"
-
-class ApplicationInstance;
-class Event_Default_Event_Info_Type_Name( ApplicationInstance );
-
-class MainWindow;
-class Event_Default_Event_Info_Type_Name( MainWindow );
-
-class ControlCollectionMenu;
-class Event_Default_Event_Info_Type_Name( ControlCollectionMenu );
-
-class ControlMusicListMenu;
-class Event_Default_Event_Info_Type_Name( ControlMusicListMenu );
-
-class OptionNavigationWidget;
-class Event_Default_Event_Info_Type_Name( OptionNavigationWidget );
-
-class OptionNavigationDockWidget;
-class Event_Default_Event_Info_Type_Name( OptionNavigationDockWidget );
-
-class SettingWindow;
-class Event_Default_Event_Info_Type_Name( SettingWindow );
-
-class CoreStackedWidget;
-class Event_Default_Event_Info_Type_Name( CoreStackedWidget );
-
-class FindDockWidget;
-class Event_Default_Event_Info_Type_Name( FindDockWidget );
-
-class PlayerDockWidget;
-class Event_Default_Event_Info_Type_Name( PlayerDockWidget );
-
-class CoreWindow;
-class Event_Default_Event_Info_Type_Name( CoreWindow );
-
-class FunctionWidget;
-class Event_Default_Event_Info_Type_Name( FunctionWidget );
-
-class TopToolWidget;
-class Event_Default_Event_Info_Type_Name( TopToolWidget );
-
-class FunctionDockWidget;
-class Event_Default_Event_Info_Type_Name( FunctionDockWidget );
-
-class TopToolDockWidget;
-class Event_Default_Event_Info_Type_Name( TopToolDockWidget );
-
-class ContentWindow;
-class Event_Default_Event_Info_Type_Name( ContentWindow );
-
-class PlayerWidget;
-class Event_Default_Event_Info_Type_Name( PlayerWidget );
-
-class PathSettingWidget;
-class Event_Default_Event_Info_Type_Name( PathSettingWidget );
-
-class MusicListMainWidget;
-class Event_Default_Event_Info_Type_Name( MusicListMainWidget );
+Event_Declare_Event_Info_Type_Name( ApplicationInstance );
+Event_Declare_Event_Info_Type_Name( MainWindow );
+Event_Declare_Event_Info_Type_Name( ControlCollectionMenu );
+Event_Declare_Event_Info_Type_Name( ControlMusicListMenu );
+Event_Declare_Event_Info_Type_Name( OptionNavigationWidget );
+Event_Declare_Event_Info_Type_Name( OptionNavigationDockWidget );
+Event_Declare_Event_Info_Type_Name( SettingWindow );
+Event_Declare_Event_Info_Type_Name( CoreStackedWidget );
+Event_Declare_Event_Info_Type_Name( FindDockWidget );
+Event_Declare_Event_Info_Type_Name( PlayerDockWidget );
+Event_Declare_Event_Info_Type_Name( CoreWindow );
+Event_Declare_Event_Info_Type_Name( FunctionWidget );
+Event_Declare_Event_Info_Type_Name( TopToolWidget );
+Event_Declare_Event_Info_Type_Name( FunctionDockWidget );
+Event_Declare_Event_Info_Type_Name( TopToolDockWidget );
+Event_Declare_Event_Info_Type_Name( ContentWindow );
+Event_Declare_Event_Info_Type_Name( PlayerWidget );
+Event_Declare_Event_Info_Type_Name( PathSettingWidget );
+Event_Declare_Event_Info_Type_Name( MusicListMainWidget );
+Event_Declare_Event_Info_Type_Name( CollectionTopToolWidget );
+Event_Declare_Event_Info_Type_Name( CollectionItemWidget );
 
 class ApplicationEvenTrigger : public BaseObject {
-	/// @brief 事件友元
+	/// @brief 事件友元，用于初始化
+	friend class InitApplicationInstance;
 private:
 	friend class Event_Default_Event_Info_Type_Name( ApplicationInstance );
 	friend class Event_Default_Event_Info_Type_Name( MainWindow );
@@ -84,6 +49,8 @@ private:
 	friend class Event_Default_Event_Info_Type_Name( PlayerWidget );
 	friend class Event_Default_Event_Info_Type_Name( PathSettingWidget );
 	friend class Event_Default_Event_Info_Type_Name( MusicListMainWidget );
+	friend class Event_Default_Event_Info_Type_Name( CollectionTopToolWidget );
+	friend class Event_Default_Event_Info_Type_Name( CollectionItemWidget );
 private:
 	Q_OBJECT;
 protected:
@@ -110,6 +77,8 @@ Q_SIGNALS:
 	Event_Default_Receive_Call_Function( PlayerWidget );
 	Event_Default_Receive_Call_Function( PathSettingWidget );
 	Event_Default_Receive_Call_Function( MusicListMainWidget );
+	Event_Default_Receive_Call_Function( CollectionTopToolWidget );
+	Event_Default_Receive_Call_Function( CollectionItemWidget );
 };
 
 Event_Define_Event_Class_type( ApplicationInstance, ApplicationEvenTrigger );
@@ -131,5 +100,7 @@ Event_Define_Event_Class_type( ContentWindow, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( PlayerWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( PathSettingWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListMainWidget, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( CollectionTopToolWidget, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( CollectionItemWidget, ApplicationEvenTrigger );
 
 #endif // APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__

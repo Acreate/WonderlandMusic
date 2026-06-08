@@ -15,6 +15,12 @@
 #define Event_Default_Event_Info_Type_Name( event_name ) \
 		event_name##EventInfo
 
+/// @brief 声明一个类型
+/// @param event_name 声明的类
+#define Event_Declare_Event_Info_Type_Name( event_name ) \
+	class event_name; \
+	class Event_Default_Event_Info_Type_Name( event_name )
+
 /// @brief 生成事件触发函数类名
 /// @param event_name 事件函数类名，并且作为 消息类型名称（使用 Event_Default_Event_Info_Type_Name 宏）
 /// @param receive_class_type 接受信号的类型

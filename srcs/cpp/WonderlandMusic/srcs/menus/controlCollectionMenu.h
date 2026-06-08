@@ -1,11 +1,14 @@
 ﻿#ifndef CONTROLCOLLECTIONMENU_H_H_HEAD__FILE__
 #define CONTROLCOLLECTIONMENU_H_H_HEAD__FILE__
 
-#include <QMenu>
-class ControlCollectionMenu : public QMenu {
+#include <base/baseMenu/baseMenu.h>
+class ControlCollectionMenu : public BaseMenu {
 	Q_OBJECT;
 public:
-	ControlCollectionMenu( ) : QMenu( ) { }
+	ControlCollectionMenu( QWidget *parent );
+	ControlCollectionMenu( const QString &titile, QWidget *parent );
+	ControlCollectionMenu( const QString &titile );
+	ControlCollectionMenu( );
 	~ControlCollectionMenu( ) override;
 };
 #include <macro/eventMacroDefine.h>

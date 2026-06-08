@@ -19,8 +19,9 @@ CoreStackedWidget::CoreStackedWidget( CoreWindow *parent ) : BaseStackedWidget( 
 	settingWindow = new SettingWindow( this );
 	settingWindow->setWindowFlags( Qt::WindowType::Widget );
 	addWidget( settingWindow );
-
-	auto applicationEvenTrigger = ApplicationInstance::getApplicationInstance( )->getApplicationEvenTrigger( );
+	
+	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerFunctionWidgetEvent, [this] ( auto, const FunctionWidgetEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {

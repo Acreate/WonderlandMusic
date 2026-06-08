@@ -80,7 +80,8 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 
 }
 MusicListMainWidget::~MusicListMainWidget( ) {
-
+	delete musicCollectionScrollArea;
+	delete musicListScrollArea;
 }
 int MusicListMainWidget::getMusicCollectionWidth( ) const {
 	return musicCollectionScrollArea->width( );

@@ -9,6 +9,7 @@ protected:
 	QLabel* title;
 public:
 	CollectionTopToolWidget( QWidget *parent );
+	~CollectionTopToolWidget( ) override;
 protected:
 	void resizeEvent(QResizeEvent *event) override;
 	void mousePressEvent( QMouseEvent *event ) override;

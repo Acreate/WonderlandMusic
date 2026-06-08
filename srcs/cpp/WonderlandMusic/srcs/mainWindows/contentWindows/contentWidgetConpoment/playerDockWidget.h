@@ -1,13 +1,14 @@
 ﻿#ifndef PLAYERDOCKWIDGET_H_H_HEAD__FILE__
 #define PLAYERDOCKWIDGET_H_H_HEAD__FILE__
 
-#include <QDockWidget>
 #include <macro/eventMacroDefine.h>
+
+#include <base/baseWidget/baseDockWidget.h>
 class PlayerWidget;
 class QPushButton;
 class ContentWindow;
 
-class PlayerDockWidget : public QDockWidget {
+class PlayerDockWidget : public BaseDockWidget {
 	Q_OBJECT;
 protected:
 	ContentWindow *contentWindow;

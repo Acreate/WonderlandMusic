@@ -11,11 +11,12 @@ class MusicCollectionWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
 	CollectionTopToolWidget *collectionTopToolWidget;
-	CollectionItemWidget *collectionItemWidget;
+	std::vector< CollectionItemWidget * > collectionItemWidgets;
 public:
 	MusicCollectionWidget( QWidget *parent );
+	~MusicCollectionWidget( ) override;
 protected:
-	void paintEvent( QPaintEvent *event ) override;
+	void resizeEvent( QResizeEvent *event ) override;
 };
 
 #endif // MUSICCOLLECTIONWIDGET_H_H_HEAD__FILE__

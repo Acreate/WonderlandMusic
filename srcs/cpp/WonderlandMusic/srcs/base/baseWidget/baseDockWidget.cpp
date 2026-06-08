@@ -2,8 +2,9 @@
 
 #include <source_location>
 BaseDockWidget::BaseDockWidget( QWidget *parent ) : QDockWidget( parent ), BaseClass( ) {
-	//setMouseTracking( true );
+	setFeatures( QDockWidget::NoDockWidgetFeatures );
 	setContextMenuPolicy( Qt::NoContextMenu );
+	setTitleBarWidget( new QWidget( this ) );
 }
 BaseDockWidget::BaseDockWidget( ) : QDockWidget( ), BaseClass( ) {
 }

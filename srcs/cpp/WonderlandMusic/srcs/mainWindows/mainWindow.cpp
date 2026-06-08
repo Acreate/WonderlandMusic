@@ -5,7 +5,6 @@
 #include "dockWidgets/functionDockWidget.h"
 #include "dockWidgets/topToolDockWidget.h"
 
-#include "dockWidgets/topToolWidget/topToolTitleBarWidget.h"
 #include "dockWidgets/topToolWidget/topToolWidget.h"
 
 #include <QMouseEvent>
@@ -14,8 +13,6 @@
 #include "../applications/applicationInstance.h"
 
 #include "../msgInfo/messageErrorOut.h"
-
-#include "dockWidgets/functionWidget/functionWidgetBarWidget.h"
 
 MainWindow::Translate::Translate( ) {
 	appWindowObjectName = tr( "仙村音乐播放器" );
@@ -33,17 +30,11 @@ MainWindow::MainWindow( ) : BaseMainWindow( nullptr ) {
 	this->setCentralWidget( contentWindow );
 
 	functionDockWidget = new FunctionDockWidget( this );
-	functionDockWidget->setFeatures( QDockWidget::NoDockWidgetFeatures );
 	functionDockWidget->setAllowedAreas( Qt::DockWidgetArea::LeftDockWidgetArea );
-	functionDockWidget->setContextMenuPolicy( Qt::NoContextMenu );
-	functionDockWidget->setTitleBarWidget( new FunctionWidgetBarWidget( functionDockWidget ) );
 	addDockWidget( Qt::DockWidgetArea::LeftDockWidgetArea, functionDockWidget );
 
 	topToolDockWidget = new TopToolDockWidget( this );
-	topToolDockWidget->setFeatures( QDockWidget::NoDockWidgetFeatures );
 	topToolDockWidget->setAllowedAreas( Qt::DockWidgetArea::TopDockWidgetArea );
-	topToolDockWidget->setContextMenuPolicy( Qt::NoContextMenu );
-	topToolDockWidget->setTitleBarWidget( new TopToolTitleBarWidget( topToolDockWidget ) );
 	addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, topToolDockWidget );
 
 	auto applicationInstance = ApplicationInstance::getApplicationInstance( );

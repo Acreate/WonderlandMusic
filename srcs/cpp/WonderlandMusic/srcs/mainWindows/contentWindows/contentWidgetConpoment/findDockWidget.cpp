@@ -3,7 +3,7 @@
 #include <QPainter>
 
 #include "../contentWindow.h"
-FindDockWidget::FindDockWidget( ContentWindow *parent ) : QDockWidget( parent ), contentWindow( parent ) {
+FindDockWidget::FindDockWidget( ContentWindow *parent ) : BaseDockWidget( parent ), contentWindow( parent ) {
 
 }
 void FindDockWidget::paintEvent( QPaintEvent *event ) {

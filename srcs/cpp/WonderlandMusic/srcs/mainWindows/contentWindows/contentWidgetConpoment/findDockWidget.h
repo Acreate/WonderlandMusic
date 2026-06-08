@@ -1,10 +1,11 @@
 ﻿#ifndef FINDDOCKWIDGET_H_H_HEAD__FILE__
 #define FINDDOCKWIDGET_H_H_HEAD__FILE__
 
-#include <QDockWidget>
 #include <macro/eventMacroDefine.h>
+
+#include <base/baseWidget/baseDockWidget.h>
 class ContentWindow;
-class FindDockWidget : public QDockWidget {
+class FindDockWidget : public BaseDockWidget {
 	Q_OBJECT;
 protected:
 	ContentWindow *contentWindow;

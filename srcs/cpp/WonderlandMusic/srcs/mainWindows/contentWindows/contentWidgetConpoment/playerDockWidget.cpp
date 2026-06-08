@@ -7,7 +7,7 @@
 
 #include "playerDockWidget/playerBarWidget.h"
 #include "playerDockWidget/playerWidget.h"
-PlayerDockWidget::PlayerDockWidget( ContentWindow *parent ) : QDockWidget( parent ), contentWindow( parent ) {
+PlayerDockWidget::PlayerDockWidget( ContentWindow *parent ) : BaseDockWidget( parent ), contentWindow( parent ) {
 	playerWidget = new PlayerWidget( this );
 	setWidget( playerWidget );
 	setTitleBarWidget( new PlayerBarWidget( this ) );

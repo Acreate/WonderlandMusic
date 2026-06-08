@@ -10,6 +10,9 @@ CollectionTopToolWidget::CollectionTopToolWidget( QWidget *parent ) : BaseWidget
 	setMinimumHeight( 50 );
 	title = new QLabel( tr( "收藏栏" ), this );
 }
+CollectionTopToolWidget::~CollectionTopToolWidget( ) {
+	delete title;
+}
 void CollectionTopToolWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
 	title->setGeometry( contentsRect( ) );

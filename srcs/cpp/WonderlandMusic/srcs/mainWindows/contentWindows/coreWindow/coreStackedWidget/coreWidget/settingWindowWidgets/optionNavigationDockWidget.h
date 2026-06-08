@@ -4,11 +4,13 @@
 #include <QDockWidget>
 #include <macro/eventMacroDefine.h>
 
+#include "../../../../../../baseWidget/baseDockWidget.h"
+
 class OptionNavigationWidget;
 class QPushButton;
 class SettingWindow;
 /// @brief 导航选项窗口
-class OptionNavigationDockWidget : public QDockWidget {
+class OptionNavigationDockWidget : public BaseDockWidget {
 	Q_OBJECT;
 protected:
 	SettingWindow *settingWindow;

@@ -2,7 +2,9 @@
 #define MUSICLISTSCROLLAREA_H_H_HEAD__FILE__
 
 #include <QScrollArea>
-class MusicListScrollArea : public QScrollArea {
+
+#include "../../../../../../baseWidget/baseScrollArea.h"
+class MusicListScrollArea : public BaseScrollArea {
 	Q_OBJECT;
 public:
 	MusicListScrollArea( QWidget *parent );

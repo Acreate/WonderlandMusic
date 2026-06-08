@@ -10,7 +10,7 @@
 
 #include "../optionStackWidget.h"
 
-AboutApplicationWidget::AboutApplicationWidget( OptionStackWidget *parent_window ) : QWidget( parent_window ), optionStackWidget( parent_window ) {
+AboutApplicationWidget::AboutApplicationWidget( OptionStackWidget *parent_window ) : BaseWidget( parent_window ), optionStackWidget( parent_window ) {
 	ApplicationInstance *application = ApplicationInstance::getApplicationInstance( );
 	setWindowTitle( tr( "%1 关于" ).arg( application->applicationName( ) ) );
 	auto mainLayout = new QHBoxLayout( this );

@@ -4,10 +4,12 @@
 #include <QDockWidget>
 #include <macro/eventMacroDefine.h>
 
+#include "../../baseWidget/baseDockWidget.h"
+
 class TopToolWidgetEventInfo;
 class TopToolWidget;
 class MainWindow;
-class TopToolDockWidget : public QDockWidget {
+class TopToolDockWidget : public BaseDockWidget {
 	Q_OBJECT;
 protected:
 	MainWindow *mainWindow;

@@ -9,9 +9,8 @@
 
 #include "coreWindow/coreWindow.h"
 
-ContentWindow::ContentWindow( MainWindow *parent ) : QMainWindow( parent ), mainWindow( parent ) {
+ContentWindow::ContentWindow( MainWindow *parent ) : BaseMainWindow( parent ), mainWindow( parent ) {
 
-	
 	Qt::DockWidgetArea dockWidgetArea;
 
 	findDockWidget = new FindDockWidget( this );
@@ -29,4 +28,5 @@ ContentWindow::ContentWindow( MainWindow *parent ) : QMainWindow( parent ), main
 	coreWindow = new CoreWindow( this );
 	coreWindow->setWindowFlags( Qt::WindowType::Widget );
 	setCentralWidget( coreWindow );
+
 }

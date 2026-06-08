@@ -2,8 +2,10 @@
 #define ABOUTAPPLICATIONWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
+#include "../../../../../../../baseWidget/baseWidget.h"
+
 class OptionStackWidget;
-class AboutApplicationWidget : public QWidget {
+class AboutApplicationWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
 	OptionStackWidget *optionStackWidget;

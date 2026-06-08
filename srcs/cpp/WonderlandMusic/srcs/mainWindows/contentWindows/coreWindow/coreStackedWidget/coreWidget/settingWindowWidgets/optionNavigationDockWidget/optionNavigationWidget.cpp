@@ -8,7 +8,7 @@
 
 #include <applications/applicationInstance.h>
 
-OptionNavigationWidget::OptionNavigationWidget( OptionNavigationDockWidget *parent ) : QWidget( parent ), optionNavigationDockWidget( parent ) {
+OptionNavigationWidget::OptionNavigationWidget( OptionNavigationDockWidget *parent ) : BaseWidget( parent ), optionNavigationDockWidget( parent ) {
 
 	pathBtn = new QPushButton( tr( "路径" ), this );
 	aboutBtn = new QPushButton( tr( "关于" ), this );

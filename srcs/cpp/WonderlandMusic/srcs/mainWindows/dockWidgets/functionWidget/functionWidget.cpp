@@ -7,7 +7,7 @@
 #include <applications/applicationEvenTrigger.h>
 
 #include <applications/applicationInstance.h>
-FunctionWidget::FunctionWidget( FunctionDockWidget *parent ) : QWidget( parent ), functionDockWidget( parent ) {
+FunctionWidget::FunctionWidget( FunctionDockWidget *parent ) : BaseWidget( parent ), functionDockWidget( parent ) {
 
 	showMusicBtn = new QPushButton( tr( "音乐" ), this );
 	connect( showMusicBtn, &QPushButton::clicked, [this]( ) {

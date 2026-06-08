@@ -3,11 +3,13 @@
 
 #include <QStackedWidget>
 #include <macro/eventMacroDefine.h>
+
+#include "../../../../../../baseWidget/baseStackedWidget.h"
 class PathSettingWidget;
 class AboutApplicationWidget;
 class SettingWindow;
 /// @brief 堆叠配置窗口
-class OptionStackWidget : public QStackedWidget {
+class OptionStackWidget : public BaseStackedWidget {
 	Q_OBJECT;
 protected:
 	SettingWindow *settingWindow;

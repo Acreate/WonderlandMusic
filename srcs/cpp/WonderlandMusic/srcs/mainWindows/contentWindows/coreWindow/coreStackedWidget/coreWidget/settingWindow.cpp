@@ -7,7 +7,7 @@
 #include "settingWindowWidgets/optionNavigationDockWidget.h"
 #include "settingWindowWidgets/optionStackWidget.h"
 #include "settingWindowWidgets/optionNavigationDockWidget/optionNavigationBarWidget.h"
-SettingWindow::SettingWindow( CoreStackedWidget *parent ) : QMainWindow( parent ), coreStackedWidget( parent ) {
+SettingWindow::SettingWindow( CoreStackedWidget *parent ) : BaseMainWindow( parent ), coreStackedWidget( parent ) {
 	optionStackWidget = new OptionStackWidget( this );
 	setCentralWidget( optionStackWidget );
 

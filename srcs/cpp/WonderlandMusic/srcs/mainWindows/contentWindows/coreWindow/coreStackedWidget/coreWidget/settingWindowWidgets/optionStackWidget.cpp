@@ -12,7 +12,7 @@
 #include "optionWidget/aboutApplicationWidget.h"
 #include "optionWidget/pathSettingWidget.h"
 
-OptionStackWidget::OptionStackWidget( SettingWindow *parent ) : QStackedWidget( parent ), settingWindow( parent ) {
+OptionStackWidget::OptionStackWidget( SettingWindow *parent ) : BaseStackedWidget( parent ), settingWindow( parent ) {
 	pathSettingWidget = new PathSettingWidget( this );
 	addWidget( pathSettingWidget );
 	aboutApplicationWidget = new AboutApplicationWidget( this );

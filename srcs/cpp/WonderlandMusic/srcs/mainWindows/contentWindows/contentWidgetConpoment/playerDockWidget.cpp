@@ -10,6 +10,5 @@
 PlayerDockWidget::PlayerDockWidget( ContentWindow *parent ) : QDockWidget( parent ), contentWindow( parent ) {
 	playerWidget = new PlayerWidget( this );
 	setWidget( playerWidget );
-	setContextMenuPolicy( Qt::NoContextMenu );
 	setTitleBarWidget( new PlayerBarWidget( this ) );
 }

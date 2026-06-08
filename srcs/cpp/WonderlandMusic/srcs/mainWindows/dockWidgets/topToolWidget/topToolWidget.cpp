@@ -9,7 +9,7 @@
 #include <applications/applicationEvenTrigger.h>
 
 #include <applications/applicationInstance.h>
-TopToolWidget::TopToolWidget( TopToolDockWidget *parent ) : QWidget( parent ), topToolDockWidget( parent ) {
+TopToolWidget::TopToolWidget( TopToolDockWidget *parent ) : BaseWidget( parent ), topToolDockWidget( parent ) {
 	closeBtn = new QPushButton( tr( "关闭" ), this );
 	minMainWindowBtn = new QPushButton( tr( "最小化" ), this );
 

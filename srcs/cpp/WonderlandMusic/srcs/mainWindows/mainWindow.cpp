@@ -21,7 +21,7 @@ MainWindow::Translate::Translate( ) {
 	appWindowObjectName = tr( "仙村音乐播放器" );
 	windowTitleName = tr( "仙村音乐播放器主窗口" );
 }
-MainWindow::MainWindow( ) {
+MainWindow::MainWindow( ) : BaseMainWindow( nullptr ) {
 
 	setObjectName( translate.appWindowObjectName );
 	setWindowTitle( translate.windowTitleName );
@@ -45,10 +45,6 @@ MainWindow::MainWindow( ) {
 	topToolDockWidget->setContextMenuPolicy( Qt::NoContextMenu );
 	topToolDockWidget->setTitleBarWidget( new TopToolTitleBarWidget( topToolDockWidget ) );
 	addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, topToolDockWidget );
-
-	//this->setDockOptions( QMainWindow::AllowNestedDocks );
-	//setDocumentMode( true );
-	//setContextMenuPolicy( Qt::NoContextMenu );
 
 	application = ApplicationInstance::getApplicationInstance( );
 	applicationEvenTrigger = application->getApplicationEvenTrigger( );

@@ -2,8 +2,10 @@
 #define TOPTOOLTITLEBARWIDGET_H_H_HEAD__FILE__
 
 #include <QWidget>
+
+#include "../../../baseWidget/baseWidget.h"
 class TopToolDockWidget;
-class TopToolTitleBarWidget : public QWidget {
+class TopToolTitleBarWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
 	TopToolDockWidget *topToolDockWidget;

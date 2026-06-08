@@ -3,9 +3,11 @@
 
 #include <QWidget>
 #include <macro/eventMacroDefine.h>
+
+#include "../../../baseWidget/baseWidget.h"
 class QPushButton;
 class FunctionDockWidget;
-class FunctionWidget : public QWidget {
+class FunctionWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
 	FunctionDockWidget *functionDockWidget;

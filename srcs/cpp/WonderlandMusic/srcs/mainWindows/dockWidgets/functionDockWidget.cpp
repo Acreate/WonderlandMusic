@@ -5,7 +5,7 @@
 #include "../mainWindow.h"
 
 #include "functionWidget/functionWidget.h"
-FunctionDockWidget::FunctionDockWidget( MainWindow *parent ) : QDockWidget( parent ), mainWindow( parent ) {
+FunctionDockWidget::FunctionDockWidget( MainWindow *parent ) : BaseDockWidget( parent ), mainWindow( parent ) {
 	functionWidget = new FunctionWidget( this );
 	setWidget( functionWidget );
 	setContentsMargins( 0, 0, 0, 0 );

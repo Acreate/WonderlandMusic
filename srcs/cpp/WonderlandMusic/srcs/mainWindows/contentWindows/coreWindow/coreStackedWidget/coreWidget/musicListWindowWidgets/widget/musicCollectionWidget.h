@@ -2,7 +2,9 @@
 #define MUSICCOLLECTIONWIDGET_H_H_HEAD__FILE__
 
 #include <QWidget>
-class MusicCollectionWidget : public QWidget {
+
+#include "../../../../../../../baseWidget/baseWidget.h"
+class MusicCollectionWidget : public BaseWidget {
 	Q_OBJECT;
 public:
 	MusicCollectionWidget( QWidget *parent );

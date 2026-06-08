@@ -5,7 +5,6 @@
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QJsonObject>
-#include <QMenu>
 #include <QPainter>
 #include <QTranslator>
 
@@ -150,7 +149,7 @@ void ApplicationInstance::initTriggerEvent( ) {
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMusicListMainWidgetEvent, [this] ( auto, const MusicListMainWidgetEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
-			case MusicListMainWidgetEventInfo::EventType::Resize_Music_Widget_Width :
+			case MusicListMainWidgetEventInfo::EventType::Over_Draw_Music_Widget_Width :
 				appSetting->insert( jsonKey.app_music_collection_main_widget_width, info.getNewMusicWidgetWidth( ) );
 				break;
 		}
@@ -168,6 +167,26 @@ void ApplicationInstance::initTriggerEvent( ) {
 
 	} );
 
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMusicListMainWidgetEvent, [this] ( MusicListMainWidget *sender, const MusicListMainWidgetEventInfo &info ) {
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+
+			case MusicListMainWidgetEventInfo::EventType::None :
+				break;
+			case MusicListMainWidgetEventInfo::EventType::Show_Draw_Mouse_ICO :
+				sender->setCursor( Qt::CursorShape::SizeHorCursor );
+				break;
+			case MusicListMainWidgetEventInfo::EventType::HIDE_Draw_Mouse_ICO :
+				sender->setCursor( Qt::CursorShape::ArrowCursor );
+				break;
+			case MusicListMainWidgetEventInfo::EventType::Start_Draw_Music_Widget_Width :
+				break;
+			case MusicListMainWidgetEventInfo::EventType::Over_Draw_Music_Widget_Width :
+				break;
+		}
+
+	} );
+
 }
 void ApplicationInstance::sendAppEvent( ) {
 	auto jsonEnd = this->appSetting->end( );
@@ -175,13 +194,13 @@ void ApplicationInstance::sendAppEvent( ) {
 	// 找到存储的路径
 	if( findResult != jsonEnd ) {
 		auto string = findResult.value( ).toString( );
-		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( string ) );
+		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text, string ) );
 	}
 	findResult = this->appSetting->find( jsonKey.app_music_collection_main_widget_width );
 	// 找到收藏列表的宽度
 	if( findResult != jsonEnd ) {
 		auto widgetWidth = findResult.value( ).toInt( );
-		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( widgetWidth ) );
+		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Init_Music_Widget_Width, widgetWidth ) );
 	}
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
@@ -253,18 +272,19 @@ bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 				appSetting->insert( jsonKey.main_window_y_key, valueY );
 				appSetting->insert( jsonKey.main_window_w_key, valueW );
 				appSetting->insert( jsonKey.main_window_h_key, valueH );
-				// 删除所有窗口- error : 重复删除
-				//QWidgetList levelWidgets = topLevelWidgets( );
-				//qsizetype count = levelWidgets.size( );
-				//auto data = levelWidgets.data( );
-				//qsizetype index = 0;
-				//for( ; index < count; ++index )
-				//	if( data[ index ] != mainWindowPtr )
-				//		delete data[ index ];
 				quit( );
 			}
 			break;
 		case QEvent::Quit :
+			break;
+		case QEvent::Type::MouseMove :
+			ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos ) );
+			break;
+		case QEvent::Type::MouseButtonPress :
+			ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos ) );
+			break;
+		case QEvent::Type::MouseButtonRelease :
+			ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos ) );
 			break;
 	}
 	return QApplication::notify( object, event );

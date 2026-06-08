@@ -1,14 +1,14 @@
 ﻿#ifndef COREWINDOW_H_H_HEAD__FILE__
 #define COREWINDOW_H_H_HEAD__FILE__
 
-#include <QMainWindow>
 #include <macro/eventMacroDefine.h>
+
+#include "../../../baseWindow/baseMainWindow.h"
 class CoreStackedWidget;
 class CoreStackedWidgeEventInfo;
 class ContentWindow;
 
-
-class CoreWindow : public QMainWindow {
+class CoreWindow : public BaseMainWindow {
 	Q_OBJECT;
 protected:
 	/// @brief 父窗口

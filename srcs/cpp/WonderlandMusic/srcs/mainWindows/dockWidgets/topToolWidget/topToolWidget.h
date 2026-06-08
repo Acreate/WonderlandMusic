@@ -2,6 +2,8 @@
 #define TOPTOOLWIDGET_H_H_HEAD__FILE__
 
 #include <QWidget>
+
+#include "../../../baseWidget/baseWidget.h"
 class QPushButton;
 class TopToolDockWidget;
 
@@ -9,7 +11,7 @@ class TopToolDockWidget;
 #include <macro/eventMacroDefine.h>
 
 
-class TopToolWidget : public QWidget {
+class TopToolWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
 	TopToolDockWidget *topToolDockWidget;

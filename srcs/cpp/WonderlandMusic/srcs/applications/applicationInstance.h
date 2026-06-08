@@ -113,7 +113,11 @@ public:
 	enum class EventType {
 		None,
 		Load_Music_Info_Path_Text,
-		Resize_Music_Widget_Width
+		Move_Global_Mouse_Pos,
+		Press_Global_Mouse_Pos,
+		Release_Global_Mouse_Pos,
+		Update_Music_Widget_Width,
+		Init_Music_Widget_Width
 	};
 protected:
 	EventType eventType;
@@ -121,12 +125,16 @@ protected:
 	int newMusicWidgetWidth;
 public:
 	virtual ~ApplicationInstanceEventInfo( ) = default;
+	ApplicationInstanceEventInfo( const EventType event_type )
+		: eventType( event_type ) { }
 	ApplicationInstanceEventInfo( )
 		: eventType( EventType::None ) { }
-	ApplicationInstanceEventInfo( const QString &load_music_info_path )
-		: loadMusicInfoPath( load_music_info_path ), eventType( EventType::Load_Music_Info_Path_Text ) { }
-	ApplicationInstanceEventInfo( int new_music_collection_width )
-		: newMusicWidgetWidth( new_music_collection_width ), eventType( EventType::Resize_Music_Widget_Width ) { }
+	ApplicationInstanceEventInfo( const EventType event_type, const QString &load_music_info_path )
+		: eventType( event_type ),
+		loadMusicInfoPath( load_music_info_path ) { }
+	ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width )
+		: eventType( event_type ),
+		newMusicWidgetWidth( new_music_widget_width ) { }
 	virtual EventType getEventType( ) const { return eventType; }
 	virtual const QString & getLoadMusicInofPath( ) const {
 		return loadMusicInfoPath;

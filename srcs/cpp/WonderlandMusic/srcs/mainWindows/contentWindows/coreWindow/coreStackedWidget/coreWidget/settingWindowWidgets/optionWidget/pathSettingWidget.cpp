@@ -13,7 +13,7 @@
 #include "../../../../../../../applications/applicationInstance.h"
 
 #include "../../../../../../../msgInfo/messageErrorOut.h"
-PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : QWidget( parent ), optionStackWidget( parent ) {
+PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : BaseWidget( parent ), optionStackWidget( parent ) {
 	loadFileInfoPathEditInputLine = new QLineEdit( this );
 	loadFileInfoPathSelectBtn = new QPushButton( tr( "路径选择..." ), this );
 	loadFileInfoPathText = new QLabel( tr( "音乐列表保存路径" ) + ":", this );

@@ -4,10 +4,12 @@
 #include <QStackedWidget>
 #include <macro/eventMacroDefine.h>
 
+#include "../../../../baseWidget/baseStackedWidget.h"
+
 class SettingWindow;
 class MusicListWindow;
 class CoreWindow;
-class CoreStackedWidget : public QStackedWidget {
+class CoreStackedWidget : public BaseStackedWidget {
 	Q_OBJECT;
 protected:
 	CoreWindow *coreWindow;

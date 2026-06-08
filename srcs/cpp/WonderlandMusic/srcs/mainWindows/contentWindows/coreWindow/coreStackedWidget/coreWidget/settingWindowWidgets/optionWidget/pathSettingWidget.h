@@ -3,10 +3,12 @@
 
 #include <QWidget>
 #include <macro/eventMacroDefine.h>
+
+#include "../../../../../../../baseWidget/baseWidget.h"
 class QLineEdit;
 class QPushButton;
 class OptionStackWidget;
-class PathSettingWidget : public QWidget {
+class PathSettingWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
 	OptionStackWidget *optionStackWidget;

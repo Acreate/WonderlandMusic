@@ -2,7 +2,9 @@
 #define MUSICLISTWIDGET_H_H_HEAD__FILE__
 
 #include <QWidget>
-class MusicListWidget : public QWidget {
+
+#include "../../../../../../../baseWidget/baseWidget.h"
+class MusicListWidget : public BaseWidget {
 	Q_OBJECT;
 public:
 	MusicListWidget( QWidget *parent );

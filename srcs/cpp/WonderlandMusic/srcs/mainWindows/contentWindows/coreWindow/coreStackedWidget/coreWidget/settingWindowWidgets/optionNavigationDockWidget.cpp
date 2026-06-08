@@ -5,7 +5,7 @@
 #include "../settingWindow.h"
 
 #include "optionNavigationDockWidget/optionNavigationWidget.h"
-OptionNavigationDockWidget::OptionNavigationDockWidget( SettingWindow *parent ) : QDockWidget( parent ), settingWindow( parent ) {
+OptionNavigationDockWidget::OptionNavigationDockWidget( SettingWindow *parent ) : BaseDockWidget( parent ), settingWindow( parent ) {
 	optionNavigationWidget = new OptionNavigationWidget( this );
 	setWidget( optionNavigationWidget );
 }

@@ -3,6 +3,8 @@
 
 #include <QDockWidget>
 
+#include "../../baseWidget/baseDockWidget.h"
+
 class FunctionWidget;
 class MainWindow;
 
@@ -10,7 +12,7 @@ class MainWindow;
 #include <macro/eventMacroDefine.h>
 
 /// @brief 功能面板
-class FunctionDockWidget : public QDockWidget {
+class FunctionDockWidget : public BaseDockWidget {
 	Q_OBJECT;
 protected:
 	MainWindow *mainWindow;

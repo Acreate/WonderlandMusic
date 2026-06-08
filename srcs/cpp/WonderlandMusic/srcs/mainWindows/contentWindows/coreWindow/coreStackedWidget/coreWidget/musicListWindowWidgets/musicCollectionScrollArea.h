@@ -2,10 +2,12 @@
 #define MUSICCOLLECTIONSCROLLAREA_H_H_HEAD__FILE__
 
 #include <QScrollArea>
-class MusicCollectionScrollArea : public QScrollArea{
-Q_OBJECT;
+
+#include "../../../../../../baseWidget/baseScrollArea.h"
+class MusicCollectionScrollArea : public BaseScrollArea {
+	Q_OBJECT;
 public:
-	MusicCollectionScrollArea(QWidget * parent);
+	MusicCollectionScrollArea( QWidget *parent );
 };
 
 #endif // MUSICCOLLECTIONSCROLLAREA_H_H_HEAD__FILE__

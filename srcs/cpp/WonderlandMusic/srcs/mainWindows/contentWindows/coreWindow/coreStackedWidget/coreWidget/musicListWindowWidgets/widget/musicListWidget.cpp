@@ -1,8 +1,8 @@
 ﻿#include "musicListWidget.h"
 
 #include <QPainter>
-MusicListWidget::MusicListWidget( QWidget *parent ) : QWidget( parent ) {
-	setMouseTracking( true );
+MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
+
 }
 void MusicListWidget::paintEvent( QPaintEvent *event ) {
 	QWidget::paintEvent( event );

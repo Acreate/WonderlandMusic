@@ -4,34 +4,39 @@
 #include <QWidget>
 
 #include <macro/eventMacroDefine.h>
+
+#include "../../../../../../baseWidget/baseWidget.h"
 class MusicCollectionScrollArea;
 class MusicListScrollArea;
-class MusicListMainWidget : public QWidget {
+class MusicListMainWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
 	MusicListScrollArea *musicListScrollArea;
 	MusicCollectionScrollArea *musicCollectionScrollArea;
-	bool dragWidgetWidth;
 	bool readyDragWidgetWidth;
+	bool isragWidgetWidth;
 	QRect currentContentsRect;
 	int currentWidgetWidth;
 	int currentWidgetHeight;
+	int minCollectionWidth;
 public:
 	MusicListMainWidget( QWidget *parent );
 	~MusicListMainWidget( ) override;
+	virtual int getMusicCollectionWidth( ) const;
+	virtual void setMusicCollectionWidth( int new_width );
 protected:
 	virtual void updateSubWidgetSize( );
 	void resizeEvent( QResizeEvent *event ) override;
-	void mouseMoveEvent( QMouseEvent *event ) override;
-	void mousePressEvent( QMouseEvent *event ) override;
-	void mouseReleaseEvent( QMouseEvent *event ) override;
 };
 
 class Event_Default_Event_Info_Type_Name( MusicListMainWidget ) {
 public:
 	enum class EventType {
 		None,
-		Resize_Music_Widget_Width
+		Show_Draw_Mouse_ICO,
+		HIDE_Draw_Mouse_ICO,
+		Start_Draw_Music_Widget_Width,
+		Over_Draw_Music_Widget_Width
 	};
 protected:
 	EventType enventType;
@@ -40,7 +45,7 @@ public:
 	virtual ~MusicListMainWidgetEventInfo( ) = default;
 	MusicListMainWidgetEventInfo( const EventType envent_type )
 		: enventType( envent_type ) { }
-	MusicListMainWidgetEventInfo( int new_music_width_widtth ) : newMusicWidgetWidth( new_music_width_widtth ), enventType( EventType::Resize_Music_Widget_Width ) { }
+	MusicListMainWidgetEventInfo( const EventType envent_type, const int new_music_widget_width ) : enventType( envent_type ), newMusicWidgetWidth( new_music_widget_width ) { }
 	virtual int getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
 	virtual EventType getEventType( ) const { return enventType; }
 };

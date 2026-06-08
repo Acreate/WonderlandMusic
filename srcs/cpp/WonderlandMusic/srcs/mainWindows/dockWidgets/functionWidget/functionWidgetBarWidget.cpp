@@ -1,6 +1,6 @@
 ﻿#include "functionWidgetBarWidget.h"
 
 #include "../functionDockWidget.h"
-FunctionWidgetBarWidget::FunctionWidgetBarWidget( FunctionDockWidget *parent ) : QWidget( parent ), functionDockWidget( parent ) {
+FunctionWidgetBarWidget::FunctionWidgetBarWidget( FunctionDockWidget *parent ) : BaseWidget( parent ), functionDockWidget( parent ) {
 
 }

@@ -1,13 +1,14 @@
 ﻿#ifndef MAINWINDOW_H_H_HEAD__FILE__
 #define MAINWINDOW_H_H_HEAD__FILE__
-#include <QMainWindow>
+
+#include "../baseWindow/baseMainWindow.h"
 
 class ApplicationInstance;
 class ApplicationEvenTrigger;
 class ContentWindow;
 class FunctionDockWidget;
 class TopToolDockWidget;
-class MainWindow : public QMainWindow {
+class MainWindow : public BaseMainWindow {
 	Q_OBJECT;
 public:
 	class Translate {

@@ -1,8 +1,9 @@
 ﻿#ifndef APPLICATIONINSTANCE_H_H_HEAD__FILE__
 #define APPLICATIONINSTANCE_H_H_HEAD__FILE__
 
-#include <QApplication>
 #include <macro/eventMacroDefine.h>
+
+#include "bseeApplication/bseeApplication.h"
 class ControlMusicListMenu;
 class ControlCollectionMenu;
 class QMenu;
@@ -12,7 +13,7 @@ class QFileInfo;
 class QDir;
 class MainWindow;
 class QJsonObject;
-class ApplicationInstance : public QApplication {
+class ApplicationInstance : public BseeApplication {
 	Q_OBJECT;
 private:
 	static ApplicationInstance *current;

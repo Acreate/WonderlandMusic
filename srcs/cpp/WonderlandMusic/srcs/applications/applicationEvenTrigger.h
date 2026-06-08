@@ -1,8 +1,9 @@
 ﻿#ifndef APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__
 #define APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__
-#include <QObject>
+
 
 #include "../macro/eventMacroDefine.h"
+#include "baseObject/baseObject.h"
 
 class ApplicationInstance;
 class Event_Default_Event_Info_Type_Name( ApplicationInstance );
@@ -61,7 +62,7 @@ class Event_Default_Event_Info_Type_Name( PathSettingWidget );
 class MusicListMainWidget;
 class Event_Default_Event_Info_Type_Name( MusicListMainWidget );
 
-class ApplicationEvenTrigger : public QObject {
+class ApplicationEvenTrigger : public BaseObject {
 	/// @brief 事件友元
 private:
 	friend class Event_Default_Event_Info_Type_Name( ApplicationInstance );

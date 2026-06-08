@@ -1,0 +1,9 @@
+﻿#ifndef COLLECTIONITEMWIDGET_H_H_HEAD__FILE__
+#define COLLECTIONITEMWIDGET_H_H_HEAD__FILE__
+
+
+class CollectionItemWidget {
+
+};
+
+#endif // COLLECTIONITEMWIDGET_H_H_HEAD__FILE__

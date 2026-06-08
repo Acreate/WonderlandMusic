@@ -203,7 +203,7 @@ void ApplicationInstance::sendAppEvent( ) {
 		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Init_Music_Widget_Width, widgetWidth ) );
 	}
 }
-ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : QApplication( argc, argv, i ) {
+ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : BseeApplication( argc, argv, i ) {
 	initVar( );
 	initJson( );
 	initTranslation( );

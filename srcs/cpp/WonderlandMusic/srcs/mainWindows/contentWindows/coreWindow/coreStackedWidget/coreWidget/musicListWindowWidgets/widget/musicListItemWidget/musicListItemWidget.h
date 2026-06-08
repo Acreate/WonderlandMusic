@@ -1,0 +1,9 @@
+﻿#ifndef MUSICLISTITEMWIDGET_H_H_HEAD__FILE__
+#define MUSICLISTITEMWIDGET_H_H_HEAD__FILE__
+
+
+class MusicListItemWidget {
+
+};
+
+#endif // MUSICLISTITEMWIDGET_H_H_HEAD__FILE__

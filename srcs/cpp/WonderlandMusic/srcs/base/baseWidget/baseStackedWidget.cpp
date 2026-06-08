@@ -5,4 +5,5 @@ BaseStackedWidget::BaseStackedWidget( QWidget *parent ) : QStackedWidget( parent
 	setContextMenuPolicy( Qt::NoContextMenu );
 }
 BaseStackedWidget::BaseStackedWidget( ) : QStackedWidget( ), BaseClass( ) {
+	setContextMenuPolicy( Qt::NoContextMenu );
 }

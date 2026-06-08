@@ -7,4 +7,7 @@ BaseDockWidget::BaseDockWidget( QWidget *parent ) : QDockWidget( parent ), BaseC
 	setTitleBarWidget( new QWidget( this ) );
 }
 BaseDockWidget::BaseDockWidget( ) : QDockWidget( ), BaseClass( ) {
+	setFeatures( QDockWidget::NoDockWidgetFeatures );
+	setContextMenuPolicy( Qt::NoContextMenu );
+	setTitleBarWidget( new QWidget( this ) );
 }

@@ -5,8 +5,12 @@
 
 #include "../base/bseeApplication/bseeApplication.h"
 
-class ControlMusicListMenu;
-class ControlCollectionMenu;
+class MusicListWidget;
+class MusicCollectionWidget;
+class MusicListSubMenu;
+class MusicListTopMenu;
+class MusicCollectionSubMenu;
+class MusicCollectionTopMenu;
 class QMenu;
 class Render;
 class ApplicationEvenTrigger;
@@ -89,10 +93,14 @@ private:
 	Render *render;
 	/// @brief app 事件
 	ApplicationEvenTrigger *applicationEvenTrigger;
-	/// @brief 收藏夹菜单
-	ControlCollectionMenu *controlCollectionMenu;
-	/// @brief 音乐菜单
-	ControlMusicListMenu *controlMusicListMenu;
+	/// @brief 总收藏夹菜单
+	MusicCollectionTopMenu *musicCollectionTopMenu;
+	/// @brief 子收藏夹菜单
+	MusicCollectionSubMenu *musicCollectionSubMenu;
+	/// @brief 总音乐列表菜单
+	MusicListTopMenu *musicListTopMenu;
+	/// @brief 子音乐列表菜单
+	MusicListSubMenu *musicListSubMenu;
 public:
 	/// @brief 获取配置的主要窗口
 	/// @return 主要窗口
@@ -114,34 +122,40 @@ private:
 class Event_Default_Event_Info_Type_Name( ApplicationInstance ) {
 public:
 	enum class EventType {
-		None,
 		Load_Music_Info_Path_Text,
 		Move_Global_Mouse_Pos,
 		Press_Global_Mouse_Pos,
 		Release_Global_Mouse_Pos,
 		Update_Music_Widget_Width,
-		Init_Music_Widget_Width
+		Init_Music_Widget_Width,
+		Pop_Music_Collection_Top_Menu,
+		Pop_Music_Collection_Sub_Menu,
+		Pop_Music_List_Top_Menu,
+		Pop_Music_List_Sub_Menu,
 	};
 protected:
 	EventType eventType;
 	QString loadMusicInfoPath;
 	int newMusicWidgetWidth;
+	MusicCollectionWidget *popMusicCollectionWidget;
+	MusicListWidget *popMusicListWidget;
 public:
 	virtual ~ApplicationInstanceEventInfo( ) = default;
-	ApplicationInstanceEventInfo( const EventType event_type )
-		: eventType( event_type ) { }
-	ApplicationInstanceEventInfo( )
-		: eventType( EventType::None ) { }
-	ApplicationInstanceEventInfo( const EventType event_type, const QString &load_music_info_path )
-		: eventType( event_type ),
-		loadMusicInfoPath( load_music_info_path ) { }
+	ApplicationInstanceEventInfo( const EventType event_type ) : eventType( event_type ) { }
+	ApplicationInstanceEventInfo( const EventType event_type, const QString &load_music_info_path ) : eventType( event_type ), loadMusicInfoPath( load_music_info_path ) { }
 	ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width )
+		: eventType( event_type ), newMusicWidgetWidth( new_music_widget_width ) { }
+	ApplicationInstanceEventInfo( EventType event_type, MusicCollectionWidget *pop_music_collection_widget )
 		: eventType( event_type ),
-		newMusicWidgetWidth( new_music_widget_width ) { }
+		popMusicCollectionWidget( pop_music_collection_widget ) { }
+	ApplicationInstanceEventInfo( MusicListWidget *pop_music_list_widget )
+		: popMusicListWidget( pop_music_list_widget ) { }
 	virtual EventType getEventType( ) const { return eventType; }
 	virtual const QString & getLoadMusicInofPath( ) const {
 		return loadMusicInfoPath;
 	}
 	virtual int getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
+	virtual MusicCollectionWidget * getPopMusicCollectionWidget( ) const { return popMusicCollectionWidget; }
+	virtual MusicListWidget * getPopMusicListWidget( ) const { return popMusicListWidget; }
 };
 #endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

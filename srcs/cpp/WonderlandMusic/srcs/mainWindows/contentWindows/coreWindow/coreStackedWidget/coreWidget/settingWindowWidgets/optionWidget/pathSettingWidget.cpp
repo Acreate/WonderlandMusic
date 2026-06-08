@@ -60,8 +60,6 @@ PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : BaseWidget( 
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerApplicationInstanceEvent, [this] ( auto, const ApplicationInstanceEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
-			case ApplicationInstanceEventInfo::EventType::None :
-				break;
 			case ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text : {
 				auto loadMusicInofPath = info.getLoadMusicInofPath( );
 				musiInfoPath = loadMusicInofPath;

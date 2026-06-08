@@ -6,16 +6,21 @@
 #include <QFontDatabase>
 #include <QJsonObject>
 #include <QPainter>
+#include <QFileDialog>
 #include <QTranslator>
 
 #include "applicationEvenTrigger.h"
 
 #include "../mainWindows/mainWindow.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMainWidget.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/widget/musicCollectionWidget.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/widget/collectionItemWidget/collectionTopToolWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
 
-#include "../menus/controlCollectionMenu.h"
-#include "../menus/controlMusicListMenu.h"
+#include "../menus/musicCollectionSubMenu.h"
+#include "../menus/musicCollectionTopMenu.h"
+#include "../menus/musicListSubMenu.h"
+#include "../menus/musicListTopMenu.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -124,10 +129,10 @@ void ApplicationInstance::initApplicationEvenTrigger( ) {
 void ApplicationInstance::initMainWindow( ) {
 	auto main = new MainWindow;
 	setMainWindowPtr( main );
-	controlCollectionMenu = new ControlCollectionMenu( );
-	controlCollectionMenu->addAction( "测试" );
-	controlMusicListMenu = new ControlMusicListMenu( );
-	controlMusicListMenu->addAction( "测试" );
+	musicCollectionTopMenu = new MusicCollectionTopMenu;
+	musicCollectionSubMenu = new MusicCollectionSubMenu;
+	musicListTopMenu = new MusicListTopMenu;
+	musicListSubMenu = new MusicListSubMenu;
 }
 void ApplicationInstance::initTriggerEvent( ) {
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerPathSettingWidgetEvent, [this] ( PathSettingWidget *sender_ptr, const PathSettingWidgetEventInfo &info ) {
@@ -154,15 +159,34 @@ void ApplicationInstance::initTriggerEvent( ) {
 		}
 	} );
 
-	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMainWindowEvent, [this] ( MainWindow *sender, const MainWindowEventInfo &info ) {
-
-	} );
-
-	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerControlCollectionMenuEvent, [this] ( ControlCollectionMenu *sender, const ControlCollectionMenuEventInfo &info ) {
-
-	} );
-
-	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerControlMusicListMenuEvent, [this] ( ControlMusicListMenu *sender, const ControlMusicListMenuEventInfo &info ) {
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMusicCollectionTopMenuEvent, [this] ( MusicCollectionTopMenu *sender, const MusicCollectionTopMenuEventInfo &info ) {
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+			case MusicCollectionTopMenuEventInfo::EventType::Append_Collection_Item :
+				info.getMusicCollectionWidget( )->appendItemWidget( "新的" );
+				break;
+			case MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_File_Path : {
+				QFileDialog dlg;
+				dlg.setWindowTitle( "选择音频文件" );
+				dlg.setDirectory( "." );
+				dlg.setNameFilter( "音频文件 (*.mp3 *.wma *.m4a *.ogg *.aac *.flac)" );
+				dlg.exec( );
+				QStringList filePaths = dlg.selectedFiles( );
+				MessageErrorOut( ) << tr( "选中文件" ) << ":\n\t" << filePaths.join( "\n\t" );
+			}
+			break;
+			case MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_Dir_Path : {
+				QFileDialog dlg;
+				dlg.setWindowTitle( "选择音频目录" );
+				dlg.setDirectory( "." );
+				dlg.setFileMode( QFileDialog::Directory );
+				dlg.setOption( QFileDialog::ShowDirsOnly );
+				dlg.exec( );
+				QStringList filePaths = dlg.selectedFiles( );
+				MessageErrorOut( ) << tr( "选中目录" ) << ":\n\t" << filePaths.join( "\n\t" );
+			}
+			break;
+		}
 
 	} );
 
@@ -181,6 +205,20 @@ void ApplicationInstance::initTriggerEvent( ) {
 			case MusicListMainWidgetEventInfo::EventType::Start_Draw_Music_Widget_Width :
 				break;
 			case MusicListMainWidgetEventInfo::EventType::Over_Draw_Music_Widget_Width :
+				break;
+
+		}
+
+	} );
+
+	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMusicCollectionWidgetEvent, [this] ( MusicCollectionWidget *sender, const MusicCollectionWidgetEventInfo &info ) {
+		auto eventType = info.getEventType( );
+		switch( eventType ) {
+			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Top_Item :
+				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Top_Menu, sender ) );
+				break;
+
+			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Sub_Item : ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Sub_Menu, sender ) );
 				break;
 		}
 
@@ -238,10 +276,10 @@ ApplicationInstance::~ApplicationInstance( ) {
 	saveJsonDataToAppSettingFile( );
 	if( mainWindowPtr )
 		delete mainWindowPtr;
-	if( controlCollectionMenu )
-		delete controlCollectionMenu;
-	if( controlMusicListMenu )
-		delete controlMusicListMenu;
+	delete musicCollectionTopMenu;
+	delete musicCollectionSubMenu;
+	delete musicListTopMenu;
+	delete musicListSubMenu;
 	delete render;
 	delete applicationEvenTrigger;
 	delete appSetting;

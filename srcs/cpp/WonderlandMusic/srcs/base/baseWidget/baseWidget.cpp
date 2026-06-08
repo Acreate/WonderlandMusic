@@ -6,6 +6,5 @@
 BaseWidget::BaseWidget( QWidget *parent ) : QWidget( parent ), BaseClass( ) {
 	setContextMenuPolicy( Qt::NoContextMenu );
 }
-BaseWidget::BaseWidget( ) : QWidget( ), BaseClass( ) {
-	setContextMenuPolicy( Qt::NoContextMenu );
+BaseWidget::BaseWidget( ) : BaseWidget( nullptr ) {
 }

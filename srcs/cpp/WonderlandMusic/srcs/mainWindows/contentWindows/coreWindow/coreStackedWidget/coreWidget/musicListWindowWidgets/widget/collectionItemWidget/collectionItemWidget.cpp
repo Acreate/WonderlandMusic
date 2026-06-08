@@ -6,6 +6,7 @@
 #include "../../../../../../../../applications/applicationInstance.h"
 CollectionItemWidget::CollectionItemWidget( QWidget *parent ) : BaseWidget( parent ) {
 	itemTitleLable = new QLabel( tr( "默认" ), this );
+	itemTitleLable->move( 0, 0 );
 }
 QString CollectionItemWidget::getTitleName( ) const {
 	return itemTitleLable->text( );
@@ -17,16 +18,4 @@ void CollectionItemWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
 	auto rect = contentsRect( );
 	itemTitleLable->setGeometry( rect );
-}
-void CollectionItemWidget::mousePressEvent( QMouseEvent *event ) {
-	BaseWidget::mousePressEvent( event );
-	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
-	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
-	CollectionItemWidgetEvent::triggerCollectionItemWidgetEvent( applicationEvenTrigger, this, CollectionItemWidgetEventInfo( CollectionItemWidgetEventInfo::EventType::Mouse_Press_Event ) );
-}
-void CollectionItemWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	BaseWidget::mouseReleaseEvent( event );
-	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
-	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
-	CollectionItemWidgetEvent::triggerCollectionItemWidgetEvent( applicationEvenTrigger, this, CollectionItemWidgetEventInfo( CollectionItemWidgetEventInfo::EventType::Mouse_Release_Event ) );
 }

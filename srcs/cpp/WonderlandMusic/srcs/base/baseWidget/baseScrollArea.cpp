@@ -10,11 +10,5 @@ BaseScrollArea::BaseScrollArea( QWidget *parent ) : QScrollArea( parent ), BaseC
 	horizontalScrollBar( )->setContextMenuPolicy( Qt::NoContextMenu );
 	setWidgetResizable( true );
 }
-BaseScrollArea::BaseScrollArea( ) : QScrollArea( ), BaseClass( ) {
-	setContextMenuPolicy( Qt::NoContextMenu );
-	setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	verticalScrollBar( )->setContextMenuPolicy( Qt::NoContextMenu );
-	horizontalScrollBar( )->setContextMenuPolicy( Qt::NoContextMenu );
-	setWidgetResizable( true );
+BaseScrollArea::BaseScrollArea( ) : BaseScrollArea( nullptr ) {
 }

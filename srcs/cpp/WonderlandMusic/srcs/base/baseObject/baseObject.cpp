@@ -4,5 +4,5 @@
 #include <QDebug>
 BaseObject::BaseObject( QObject *parent ) : QObject( parent ), BaseClass( ) {
 }
-BaseObject::BaseObject( ) : QObject( ), BaseClass( ) {
+BaseObject::BaseObject( ) : BaseObject( nullptr ) {
 }

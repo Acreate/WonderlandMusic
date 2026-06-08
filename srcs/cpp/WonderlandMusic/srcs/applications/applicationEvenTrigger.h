@@ -6,8 +6,6 @@
 
 Event_Declare_Event_Info_Type_Name( ApplicationInstance );
 Event_Declare_Event_Info_Type_Name( MainWindow );
-Event_Declare_Event_Info_Type_Name( ControlCollectionMenu );
-Event_Declare_Event_Info_Type_Name( ControlMusicListMenu );
 Event_Declare_Event_Info_Type_Name( OptionNavigationWidget );
 Event_Declare_Event_Info_Type_Name( OptionNavigationDockWidget );
 Event_Declare_Event_Info_Type_Name( SettingWindow );
@@ -23,8 +21,11 @@ Event_Declare_Event_Info_Type_Name( ContentWindow );
 Event_Declare_Event_Info_Type_Name( PlayerWidget );
 Event_Declare_Event_Info_Type_Name( PathSettingWidget );
 Event_Declare_Event_Info_Type_Name( MusicListMainWidget );
-Event_Declare_Event_Info_Type_Name( CollectionTopToolWidget );
-Event_Declare_Event_Info_Type_Name( CollectionItemWidget );
+Event_Declare_Event_Info_Type_Name( MusicCollectionWidget );
+Event_Declare_Event_Info_Type_Name( MusicCollectionTopMenu );
+Event_Declare_Event_Info_Type_Name( MusicCollectionSubMenu );
+Event_Declare_Event_Info_Type_Name( MusicListTopMenu );
+Event_Declare_Event_Info_Type_Name( MusicListSubMenu );
 
 class ApplicationEvenTrigger : public BaseObject {
 	/// @brief 事件友元，用于初始化
@@ -32,8 +33,6 @@ class ApplicationEvenTrigger : public BaseObject {
 private:
 	friend class Event_Default_Event_Info_Type_Name( ApplicationInstance );
 	friend class Event_Default_Event_Info_Type_Name( MainWindow );
-	friend class Event_Default_Event_Info_Type_Name( ControlCollectionMenu );
-	friend class Event_Default_Event_Info_Type_Name( ControlMusicListMenu );
 	friend class Event_Default_Event_Info_Type_Name( OptionNavigationWidget );
 	friend class Event_Default_Event_Info_Type_Name( OptionNavigationDockWidget );
 	friend class Event_Default_Event_Info_Type_Name( SettingWindow );
@@ -49,8 +48,11 @@ private:
 	friend class Event_Default_Event_Info_Type_Name( PlayerWidget );
 	friend class Event_Default_Event_Info_Type_Name( PathSettingWidget );
 	friend class Event_Default_Event_Info_Type_Name( MusicListMainWidget );
-	friend class Event_Default_Event_Info_Type_Name( CollectionTopToolWidget );
-	friend class Event_Default_Event_Info_Type_Name( CollectionItemWidget );
+	friend class Event_Default_Event_Info_Type_Name( MusicCollectionWidget );
+	friend class Event_Default_Event_Info_Type_Name( MusicCollectionTopMenu );
+	friend class Event_Default_Event_Info_Type_Name( MusicCollectionSubMenu );
+	friend class Event_Default_Event_Info_Type_Name( MusicListTopMenu );
+	friend class Event_Default_Event_Info_Type_Name( MusicListSubMenu );
 private:
 	Q_OBJECT;
 protected:
@@ -60,8 +62,6 @@ public:
 Q_SIGNALS:
 	Event_Default_Receive_Call_Function( ApplicationInstance );
 	Event_Default_Receive_Call_Function( MainWindow );
-	Event_Default_Receive_Call_Function( ControlCollectionMenu );
-	Event_Default_Receive_Call_Function( ControlMusicListMenu );
 	Event_Default_Receive_Call_Function( OptionNavigationWidget );
 	Event_Default_Receive_Call_Function( OptionNavigationDockWidget );
 	Event_Default_Receive_Call_Function( SettingWindow );
@@ -77,14 +77,15 @@ Q_SIGNALS:
 	Event_Default_Receive_Call_Function( PlayerWidget );
 	Event_Default_Receive_Call_Function( PathSettingWidget );
 	Event_Default_Receive_Call_Function( MusicListMainWidget );
-	Event_Default_Receive_Call_Function( CollectionTopToolWidget );
-	Event_Default_Receive_Call_Function( CollectionItemWidget );
+	Event_Default_Receive_Call_Function( MusicCollectionWidget );
+	Event_Default_Receive_Call_Function( MusicCollectionTopMenu );
+	Event_Default_Receive_Call_Function( MusicCollectionSubMenu );
+	Event_Default_Receive_Call_Function( MusicListTopMenu );
+	Event_Default_Receive_Call_Function( MusicListSubMenu );
 };
 
 Event_Define_Event_Class_type( ApplicationInstance, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MainWindow, ApplicationEvenTrigger );
-Event_Define_Event_Class_type( ControlCollectionMenu, ApplicationEvenTrigger );
-Event_Define_Event_Class_type( ControlMusicListMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( OptionNavigationWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( OptionNavigationDockWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( SettingWindow, ApplicationEvenTrigger );
@@ -100,7 +101,10 @@ Event_Define_Event_Class_type( ContentWindow, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( PlayerWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( PathSettingWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListMainWidget, ApplicationEvenTrigger );
-Event_Define_Event_Class_type( CollectionTopToolWidget, ApplicationEvenTrigger );
-Event_Define_Event_Class_type( CollectionItemWidget, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( MusicCollectionWidget, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( MusicCollectionTopMenu, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( MusicCollectionSubMenu, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( MusicListTopMenu, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( MusicListSubMenu, ApplicationEvenTrigger );
 
 #endif // APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__

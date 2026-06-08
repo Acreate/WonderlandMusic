@@ -8,6 +8,7 @@ class BaseMainWindow : public QMainWindow, public BaseClass {
 	Q_OBJECT;
 public:
 	BaseMainWindow( QWidget *parent );
+	BaseMainWindow(  );
 
 };
 

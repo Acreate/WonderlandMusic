@@ -1,9 +1,7 @@
 ﻿#ifndef TOPTOOLWIDGET_H_H_HEAD__FILE__
 #define TOPTOOLWIDGET_H_H_HEAD__FILE__
 
-#include <QWidget>
-
-#include "../../../baseWidget/baseWidget.h"
+#include <base/baseWidget/baseWidget.h>
 class QPushButton;
 class TopToolDockWidget;
 

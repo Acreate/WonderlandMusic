@@ -4,7 +4,7 @@
 #include <QDockWidget>
 #include <macro/eventMacroDefine.h>
 
-#include "../../../../../../baseWidget/baseDockWidget.h"
+#include <base/baseWidget/baseDockWidget.h>
 
 class OptionNavigationWidget;
 class QPushButton;

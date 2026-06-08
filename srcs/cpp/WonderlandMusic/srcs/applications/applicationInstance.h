@@ -3,7 +3,8 @@
 
 #include <macro/eventMacroDefine.h>
 
-#include "bseeApplication/bseeApplication.h"
+#include "../base/bseeApplication/bseeApplication.h"
+
 class ControlMusicListMenu;
 class ControlCollectionMenu;
 class QMenu;

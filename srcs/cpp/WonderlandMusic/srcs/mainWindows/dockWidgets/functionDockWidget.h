@@ -1,9 +1,9 @@
 ﻿#ifndef FUNCTIONDOCKWIDGET_H_H_HEAD__FILE__
 #define FUNCTIONDOCKWIDGET_H_H_HEAD__FILE__
 
-#include <QDockWidget>
 
-#include "../../baseWidget/baseDockWidget.h"
+#include <base/baseWidget/baseDockWidget.h>
+
 
 class FunctionWidget;
 class MainWindow;

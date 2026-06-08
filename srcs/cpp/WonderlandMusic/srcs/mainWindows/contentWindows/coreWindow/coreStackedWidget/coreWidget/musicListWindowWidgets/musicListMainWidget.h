@@ -5,7 +5,8 @@
 
 #include <macro/eventMacroDefine.h>
 
-#include "../../../../../../baseWidget/baseWidget.h"
+#include <base/baseWidget/baseWidget.h>
+
 class MusicCollectionScrollArea;
 class MusicListScrollArea;
 class MusicListMainWidget : public BaseWidget {

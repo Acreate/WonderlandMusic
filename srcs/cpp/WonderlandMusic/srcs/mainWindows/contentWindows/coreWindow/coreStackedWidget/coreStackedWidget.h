@@ -4,7 +4,8 @@
 #include <QStackedWidget>
 #include <macro/eventMacroDefine.h>
 
-#include "../../../../baseWidget/baseStackedWidget.h"
+#include <base/baseWidget/baseStackedWidget.h>
+
 
 class SettingWindow;
 class MusicListWindow;

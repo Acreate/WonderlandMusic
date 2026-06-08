@@ -1,9 +1,9 @@
 ﻿#ifndef APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__
 #define APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__
 
+#include "../base/baseObject/baseObject.h"
 
 #include "../macro/eventMacroDefine.h"
-#include "baseObject/baseObject.h"
 
 class ApplicationInstance;
 class Event_Default_Event_Info_Type_Name( ApplicationInstance );

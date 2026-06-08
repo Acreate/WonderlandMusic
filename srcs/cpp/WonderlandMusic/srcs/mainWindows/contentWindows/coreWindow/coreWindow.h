@@ -3,7 +3,8 @@
 
 #include <macro/eventMacroDefine.h>
 
-#include "../../../baseWindow/baseMainWindow.h"
+#include <base/baseWindow/baseMainWindow.h>
+
 class CoreStackedWidget;
 class CoreStackedWidgeEventInfo;
 class ContentWindow;

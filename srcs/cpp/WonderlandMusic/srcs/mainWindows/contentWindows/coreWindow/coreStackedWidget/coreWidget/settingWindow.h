@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <macro/eventMacroDefine.h>
 
-#include "../../../../../baseWindow/baseMainWindow.h"
+#include <base/baseWindow/baseMainWindow.h>
 
 class OptionNavigationDockWidget;
 class CoreStackedWidget;
@@ -14,8 +14,8 @@ class SettingWindow : public BaseMainWindow {
 	Q_OBJECT;
 protected:
 	CoreStackedWidget *coreStackedWidget;
-	OptionNavigationDockWidget* optionNavigationDockWidget;
-	OptionStackWidget* optionStackWidget;
+	OptionNavigationDockWidget *optionNavigationDockWidget;
+	OptionStackWidget *optionStackWidget;
 public:
 	SettingWindow( CoreStackedWidget *parent );
 private:

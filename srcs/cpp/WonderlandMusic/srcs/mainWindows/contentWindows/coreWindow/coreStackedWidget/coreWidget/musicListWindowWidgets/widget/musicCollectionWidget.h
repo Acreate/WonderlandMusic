@@ -3,7 +3,8 @@
 
 #include <QWidget>
 
-#include "../../../../../../../baseWidget/baseWidget.h"
+#include <base/baseWidget/baseWidget.h>
+
 class MusicCollectionWidget : public BaseWidget {
 	Q_OBJECT;
 public:

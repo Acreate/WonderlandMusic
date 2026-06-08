@@ -1,9 +1,8 @@
 ﻿#ifndef TOPTOOLTITLEBARWIDGET_H_H_HEAD__FILE__
 #define TOPTOOLTITLEBARWIDGET_H_H_HEAD__FILE__
 
-#include <QWidget>
+#include <base/baseWidget/baseWidget.h>
 
-#include "../../../baseWidget/baseWidget.h"
 class TopToolDockWidget;
 class TopToolTitleBarWidget : public BaseWidget {
 	Q_OBJECT;

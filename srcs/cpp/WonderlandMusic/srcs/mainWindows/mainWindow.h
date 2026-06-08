@@ -1,7 +1,7 @@
 ﻿#ifndef MAINWINDOW_H_H_HEAD__FILE__
 #define MAINWINDOW_H_H_HEAD__FILE__
 
-#include "../baseWindow/baseMainWindow.h"
+#include "../base/baseWindow/baseMainWindow.h"
 
 class ApplicationInstance;
 class ApplicationEvenTrigger;

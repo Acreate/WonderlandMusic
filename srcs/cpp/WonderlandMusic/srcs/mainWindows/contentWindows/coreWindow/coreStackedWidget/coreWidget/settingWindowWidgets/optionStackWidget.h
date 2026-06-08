@@ -1,10 +1,10 @@
 ﻿#ifndef OPTIONSTACKWIDGET_H_H_HEAD__FILE__
 #define OPTIONSTACKWIDGET_H_H_HEAD__FILE__
 
-#include <QStackedWidget>
 #include <macro/eventMacroDefine.h>
 
-#include "../../../../../../baseWidget/baseStackedWidget.h"
+#include <base/baseWidget/baseStackedWidget.h>
+
 class PathSettingWidget;
 class AboutApplicationWidget;
 class SettingWindow;

@@ -1,10 +1,11 @@
 ﻿#ifndef FUNCTIONWIDGET_H_H_HEAD__FILE__
 #define FUNCTIONWIDGET_H_H_HEAD__FILE__
 
-#include <QWidget>
+
 #include <macro/eventMacroDefine.h>
 
-#include "../../../baseWidget/baseWidget.h"
+#include <base/baseWidget/baseWidget.h>
+
 class QPushButton;
 class FunctionDockWidget;
 class FunctionWidget : public BaseWidget {

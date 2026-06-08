@@ -1,9 +1,8 @@
 ﻿#ifndef FUNCTIONWIDGETBARWIDGET_H_H_HEAD__FILE__
 #define FUNCTIONWIDGETBARWIDGET_H_H_HEAD__FILE__
 
-#include <QWidget>
+#include <base/baseWidget/baseWidget.h>
 
-#include "../../../baseWidget/baseWidget.h"
 class FunctionDockWidget;
 class FunctionWidgetBarWidget : public BaseWidget {
 	Q_OBJECT;

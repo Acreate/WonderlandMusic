@@ -1,10 +1,8 @@
 ﻿#ifndef TOPTOOLDOCKWIDGET_H_H_HEAD__FILE__
 #define TOPTOOLDOCKWIDGET_H_H_HEAD__FILE__
 
-#include <QDockWidget>
 #include <macro/eventMacroDefine.h>
-
-#include "../../baseWidget/baseDockWidget.h"
+#include <base/baseWidget/baseDockWidget.h>
 
 class TopToolWidgetEventInfo;
 class TopToolWidget;

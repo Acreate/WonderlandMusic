@@ -3,7 +3,8 @@
 
 #include <QScrollArea>
 
-#include "../../../../../../baseWidget/baseScrollArea.h"
+#include <base/baseWidget/baseScrollArea.h>
+
 class MusicCollectionScrollArea : public BaseScrollArea {
 	Q_OBJECT;
 public:

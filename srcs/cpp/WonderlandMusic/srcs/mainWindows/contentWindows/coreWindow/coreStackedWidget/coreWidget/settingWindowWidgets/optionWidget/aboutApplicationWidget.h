@@ -1,8 +1,8 @@
 ﻿#ifndef ABOUTAPPLICATIONWIDGET_H_H_HEAD__FILE__
 #define ABOUTAPPLICATIONWIDGET_H_H_HEAD__FILE__
-#include <QWidget>
 
-#include "../../../../../../../baseWidget/baseWidget.h"
+#include <base/baseWidget/baseWidget.h>
+
 
 class OptionStackWidget;
 class AboutApplicationWidget : public BaseWidget {

@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include <macro/eventMacroDefine.h>
 
-#include "../../baseWindow/baseMainWindow.h"
+#include "../../base/baseWindow/baseMainWindow.h"
+
 class CoreInfo;
 class CoreWindow;
 class PlayerInfo;

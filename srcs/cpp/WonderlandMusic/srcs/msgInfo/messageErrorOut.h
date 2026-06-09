@@ -3,6 +3,9 @@
 #include <qstring.h>
 #include <source_location>
 
+/// @brief 临时创建一个 MessageErrorOut 对象
+#define Message_Error_Out MessageErrorOut()
+
 class DateTimeFormat;
 class QDate;
 class MessageErrorOut {

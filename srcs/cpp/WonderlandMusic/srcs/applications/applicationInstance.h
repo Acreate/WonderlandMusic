@@ -132,30 +132,29 @@ public:
 		Pop_Music_Collection_Sub_Menu,
 		Pop_Music_List_Top_Menu,
 		Pop_Music_List_Sub_Menu,
+		Create_Music_Collection_Item,
+		Select_Over_Music_File_Path,
+		Select_Over_Music_Dir_Path,
 	};
 protected:
 	EventType eventType;
-	QString loadMusicInfoPath;
 	int newMusicWidgetWidth;
 	MusicCollectionWidget *popMusicCollectionWidget;
 	MusicListWidget *popMusicListWidget;
+	QStringList inputStringList;
+	QString inputString;
 public:
 	virtual ~ApplicationInstanceEventInfo( ) = default;
-	ApplicationInstanceEventInfo( const EventType event_type ) : eventType( event_type ) { }
-	ApplicationInstanceEventInfo( const EventType event_type, const QString &load_music_info_path ) : eventType( event_type ), loadMusicInfoPath( load_music_info_path ) { }
-	ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width )
-		: eventType( event_type ), newMusicWidgetWidth( new_music_widget_width ) { }
-	ApplicationInstanceEventInfo( EventType event_type, MusicCollectionWidget *pop_music_collection_widget )
-		: eventType( event_type ),
-		popMusicCollectionWidget( pop_music_collection_widget ) { }
-	ApplicationInstanceEventInfo( MusicListWidget *pop_music_list_widget )
-		: popMusicListWidget( pop_music_list_widget ) { }
-	virtual EventType getEventType( ) const { return eventType; }
-	virtual const QString & getLoadMusicInofPath( ) const {
-		return loadMusicInfoPath;
-	}
-	virtual int getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
-	virtual MusicCollectionWidget * getPopMusicCollectionWidget( ) const { return popMusicCollectionWidget; }
-	virtual MusicListWidget * getPopMusicListWidget( ) const { return popMusicListWidget; }
+	ApplicationInstanceEventInfo( EventType event_type, const QStringList &input_string_list );
+	ApplicationInstanceEventInfo( EventType event_type, const QString &input_string );
+	ApplicationInstanceEventInfo( const EventType event_type );
+	ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width );
+	ApplicationInstanceEventInfo( EventType event_type, MusicCollectionWidget *pop_music_collection_widget );
+	ApplicationInstanceEventInfo( MusicListWidget *pop_music_list_widget );
+	virtual EventType getEventType( ) const;
+	virtual int getNewMusicWidgetWidth( ) const;
+	virtual MusicCollectionWidget * getPopMusicCollectionWidget( ) const;
+	virtual MusicListWidget * getPopMusicListWidget( ) const;
+	virtual const QString & getInputString( ) const;
 };
 #endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

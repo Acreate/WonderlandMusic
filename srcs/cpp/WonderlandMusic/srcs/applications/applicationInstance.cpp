@@ -1,7 +1,7 @@
 ﻿#include "applicationInstance.h"
 #include <QScreen>
 #include <QCursor>
-#include <QDir>
+#include <QInputDialog>
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QJsonObject>
@@ -14,7 +14,6 @@
 #include "../mainWindows/mainWindow.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMainWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/widget/musicCollectionWidget.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/widget/collectionItemWidget/collectionTopToolWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
 
 #include "../menus/musicCollectionSubMenu.h"
@@ -162,28 +161,53 @@ void ApplicationInstance::initTriggerEvent( ) {
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMusicCollectionTopMenuEvent, [this] ( MusicCollectionTopMenu *sender, const MusicCollectionTopMenuEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
-			case MusicCollectionTopMenuEventInfo::EventType::Append_Collection_Item :
-				info.getMusicCollectionWidget( )->appendItemWidget( "新的" );
-				break;
+			case MusicCollectionTopMenuEventInfo::EventType::Append_Collection_Item : {
+
+				QInputDialog dlg;
+				dlg.setCancelButtonText( tr( "取消" ) );
+				dlg.setOkButtonText( tr( "生成" ) );
+				dlg.setInputMode( QInputDialog::TextInput );
+				dlg.setWindowTitle( tr( "生成收藏夹" ) );
+				dlg.setLabelText( tr( "收藏夹名称" ) + ":" );
+				dlg.setInputMode( QInputDialog::TextInput );
+				int mainWindowWidth = mainWindowPtr->width( );
+				int mainWindowHeight = mainWindowPtr->height( );
+				int dlgWidth = mainWindowWidth / 2;
+				int dlgHeight = dlg.height( );
+				int offsetX = ( mainWindowWidth - dlgWidth + mainWindowWidth ) / 2;
+				int offsetY = ( mainWindowHeight - dlgHeight + mainWindowHeight ) / 2;
+				int mainWindowX = mainWindowPtr->x( );
+				int mainWindowY = mainWindowPtr->y( );
+				int x = mainWindowX + mainWindowWidth - offsetX;
+				int y = mainWindowY + mainWindowHeight - offsetY;
+				dlg.setGeometry( x, y, dlgWidth, dlgHeight );
+				int ret = dlg.exec( );
+				if( ret == false )
+					return;
+				auto itemName = dlg.textValue( );
+				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item, itemName ) );
+			}
+			break;
 			case MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_File_Path : {
 				QFileDialog dlg;
-				dlg.setWindowTitle( "选择音频文件" );
+				dlg.setWindowTitle( tr( "选择音频文件" ) );
 				dlg.setDirectory( "." );
-				dlg.setNameFilter( "音频文件 (*.mp3 *.wma *.m4a *.ogg *.aac *.flac)" );
+				dlg.setNameFilter( tr( "音频文件" ) + "(*.mp3 *.wma *.m4a *.ogg *.aac *.flac)" );
 				dlg.exec( );
 				QStringList filePaths = dlg.selectedFiles( );
-				MessageErrorOut( ) << tr( "选中文件" ) << ":\n\t" << filePaths.join( "\n\t" );
+				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Select_Over_Music_File_Path, filePaths ) );
 			}
 			break;
 			case MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_Dir_Path : {
 				QFileDialog dlg;
-				dlg.setWindowTitle( "选择音频目录" );
+				dlg.setWindowTitle( tr( "选择音频目录" ) );
 				dlg.setDirectory( "." );
 				dlg.setFileMode( QFileDialog::Directory );
 				dlg.setOption( QFileDialog::ShowDirsOnly );
 				dlg.exec( );
 				QStringList filePaths = dlg.selectedFiles( );
 				MessageErrorOut( ) << tr( "选中目录" ) << ":\n\t" << filePaths.join( "\n\t" );
+				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Select_Over_Music_Dir_Path, filePaths ) );
 			}
 			break;
 		}
@@ -428,3 +452,17 @@ void ApplicationInstance::firstMainWindowShow( MainWindow *first_show_main_windo
 
 	}
 }
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, const QStringList &input_string_list ) : eventType( event_type ),
+	inputStringList( input_string_list ) { }
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, const QString &input_string ) : eventType( event_type ),
+	inputString( input_string ) { }
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( const EventType event_type ) : eventType( event_type ) { }
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width ) : eventType( event_type ), newMusicWidgetWidth( new_music_widget_width ) { }
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, MusicCollectionWidget *pop_music_collection_widget ) : eventType( event_type ),
+	popMusicCollectionWidget( pop_music_collection_widget ) { }
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( MusicListWidget *pop_music_list_widget ) : popMusicListWidget( pop_music_list_widget ) { }
+ApplicationInstanceEventInfo::EventType ApplicationInstanceEventInfo::getEventType( ) const { return eventType; }
+int ApplicationInstanceEventInfo::getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
+MusicCollectionWidget * ApplicationInstanceEventInfo::getPopMusicCollectionWidget( ) const { return popMusicCollectionWidget; }
+MusicListWidget * ApplicationInstanceEventInfo::getPopMusicListWidget( ) const { return popMusicListWidget; }
+const QString & ApplicationInstanceEventInfo::getInputString( ) const { return inputString; }

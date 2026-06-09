@@ -61,7 +61,7 @@ PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : BaseWidget( 
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
 			case ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text : {
-				auto loadMusicInofPath = info.getLoadMusicInofPath( );
+				auto loadMusicInofPath = info.getInputString( );
 				musiInfoPath = loadMusicInofPath;
 				loadFileInfoPathEditInputLine->setText( loadMusicInofPath );
 			}

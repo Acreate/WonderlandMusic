@@ -9,6 +9,10 @@
 
 #include "../../../../../../applications/applicationEvenTrigger.h"
 #include "../../../../../../applications/applicationInstance.h"
+
+#include "../../../../../../msgInfo/messageErrorOut.h"
+
+#include "widget/musicCollectionWidget.h"
 MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent ) {
 
 	minCollectionWidth = 10;
@@ -73,6 +77,19 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 					if( mouseButtons.testFlag( Qt::RightButton ) ) {
 						// todo : 发送弹出菜单信号
 					}
+				}
+			}
+			break;
+			case ApplicationInstanceEventInfo::EventType::Select_Over_Music_Dir_Path :
+				break;
+			case ApplicationInstanceEventInfo::EventType::Select_Over_Music_File_Path :
+				break;
+			case ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item : {
+				auto newItemName = info.getInputString( );
+				auto musicCollectionWidget = musicCollectionScrollArea->getMusicCollectionWidget( );
+				if( musicCollectionWidget->appendItemWidget( newItemName ) == false ) {
+					Message_Error_Out << tr( "创建" ) << "\"" << newItemName << "\"" << tr( "收藏夹失败" );
+					return;
 				}
 			}
 			break;

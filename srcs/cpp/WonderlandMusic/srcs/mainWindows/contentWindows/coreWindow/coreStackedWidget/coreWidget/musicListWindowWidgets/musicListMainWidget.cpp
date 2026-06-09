@@ -13,6 +13,7 @@
 #include "../../../../../../msgInfo/messageErrorOut.h"
 
 #include "widget/musicCollectionWidget.h"
+#include "widget/musicListWidget.h"
 MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent ) {
 
 	minCollectionWidth = 10;
@@ -80,10 +81,17 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 				}
 			}
 			break;
-			case ApplicationInstanceEventInfo::EventType::Select_Over_Music_Dir_Path :
+			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_Dir_Path :
+			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_File_Path :
+				musicListScrollArea->getMusicListWidget( )->appendMusicFile( info.getInputStringList( ) );
 				break;
-			case ApplicationInstanceEventInfo::EventType::Select_Over_Music_File_Path :
-				break;
+			case ApplicationInstanceEventInfo::EventType::Collection_Sub_Menu_Select_Over_Music_Dir_Path
+			:
+			case ApplicationInstanceEventInfo::EventType::Collection_Sub_Menu_Select_Over_Music_File_Path : {
+				auto musicListItemWidgets = musicListScrollArea->getMusicListWidget( )->appendMusicFile( info.getInputStringList( ) );
+				// todo : 追加到收藏夹
+			}
+			break;
 			case ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item : {
 				auto newItemName = info.getInputString( );
 				auto musicCollectionWidget = musicCollectionScrollArea->getMusicCollectionWidget( );

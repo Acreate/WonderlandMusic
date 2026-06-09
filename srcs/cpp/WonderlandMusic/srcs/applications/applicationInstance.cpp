@@ -2,9 +2,11 @@
 #include <QScreen>
 #include <QCursor>
 #include <QInputDialog>
-#include <QFileInfo>
 #include <QFontDatabase>
+#include <QLoggingCategory>
 #include <QJsonObject>
+#include <QMediaFormat>
+#include <QMetaEnum>
 #include <QPainter>
 #include <QFileDialog>
 #include <QTranslator>
@@ -27,22 +29,26 @@
 
 #include "private/appRenderObj.h"
 
+// 全局注册日志分类
+Q_DECLARE_LOGGING_CATEGORY( qt_multimedia )
+
 ApplicationInstance *ApplicationInstance::current = nullptr;
 ApplicationInstance * ApplicationInstance::getApplicationInstance( ) {
 	if( current )
 		return current;
 	QCoreApplication *instance = QApplication::instance( );
 	if( instance == nullptr ) {
-		MessageErrorOut( false ) << tr( "无法从 QCoreApplicationInstance::instance( ) 获取实例指针" );
+		MessageErrorOut( false ) << tr( "无法从" ) << " QCoreApplicationInstance::instance( ) " << tr( "获取实例指针" );
 		return nullptr;
 	}
 	current = qobject_cast< ApplicationInstance * >( instance );
 	if( current )
 		return current;
-	MessageErrorOut( false ) << tr( "无法从 QCoreApplicationInstance::instance( ) 转换到 Application * 类型" );
+	MessageErrorOut( false ) << tr( "无法从" ) << " QCoreApplicationInstance::instance( ) " << tr( "转换到" ) << tr( " Application * " ) << tr( "类型" );
 	return nullptr;
 }
 void ApplicationInstance::initVar( ) {
+	isQuit = false;
 	mainWindowPtr = nullptr;
 	firstShow = false;
 	appSetting = new QJsonObject;
@@ -51,6 +57,26 @@ void ApplicationInstance::initVar( ) {
 	translate = new Translate;
 	appStartRunTime = new QDateTime( );
 	*appStartRunTime = QDateTime::currentDateTime( );
+}
+void ApplicationInstance::initSupportAudioDecoderFileNameSuffix( ) {
+
+	QLoggingCategory::setFilterRules(
+		"qt.multimedia.*=false\n"
+		"qt.multimedia.ffmpeg.*=false\n"
+		"qt.multimedia.audio=false\n"
+		"qt.multimedia.video=false"
+		);
+	qunsetenv( "QT_FFMPEG_DEBUG" );
+	qunsetenv( "QT_LOGGING_RULES" );
+	qunsetenv( "AV_LOG" );
+	qputenv( "AV_LOG", "quiet" );
+
+	// 遍历所有支持的媒体格式
+	QMediaFormat mediaFormat;
+	const auto &formats = mediaFormat.supportedAudioCodecs( QMediaFormat::Decode );
+	QMetaEnum metaEnum = QMetaEnum::fromType< QMediaFormat::AudioCodec >( );
+	for( const auto &fmt : formats )
+		supportAudioDecoderFileNameSuffix.append( QString( metaEnum.valueToKey( ( quint64 ) fmt ) ).toUpper( ) );
 }
 void ApplicationInstance::initJson( ) {
 	appSettingPath = qDirTool->currentPath( ) + "/program/setting/" + applicationName( ) + ".app.json";
@@ -179,7 +205,9 @@ void ApplicationInstance::initTriggerEvent( ) {
 				auto itemName = dlg.textValue( );
 				if( itemName.isEmpty( ) )
 					return;
-				ApplicationInstanceEventInfo instanceEventInfo( ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item, itemName );
+				ApplicationInstanceEventInfo instanceEventInfo;
+				instanceEventInfo.eventType = ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item;
+				instanceEventInfo.inputString = itemName;
 				instanceEventInfo.supervisorObject = sender;
 				ApplicationInstanceEvent( applicationEvenTrigger, this, instanceEventInfo );
 			}
@@ -204,8 +232,10 @@ void ApplicationInstance::initTriggerEvent( ) {
 				fileInfoTool->setFile( data[ 0 ] );
 				startPath = fileInfoTool->dir( ).absolutePath( );
 				appSetting->insert( jsonKey.music_select_file_path_start_path, startPath );
-
-				ApplicationInstanceEventInfo info( ApplicationInstanceEventInfo::EventType::Select_Over_Music_File_Path, filePaths );
+				saveJsonDataToAppSettingFile( );
+				ApplicationInstanceEventInfo info;
+				info.eventType = ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_File_Path;
+				info.inputStringList = filePaths;
 				info.supervisorObject = sender;
 				ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 			}
@@ -228,11 +258,12 @@ void ApplicationInstance::initTriggerEvent( ) {
 					return;
 				QStringList filePaths = dlg.selectedFiles( );
 				auto data = filePaths.data( );
-				fileInfoTool->setFile( data[ 0 ] );
-				startPath = fileInfoTool->dir( ).absolutePath( );
+				startPath = data[ 0 ];
 				appSetting->insert( jsonKey.music_select_dir_path_start_path, startPath );
-
-				ApplicationInstanceEventInfo info( ApplicationInstanceEventInfo::EventType::Select_Over_Music_Dir_Path, filePaths );
+				saveJsonDataToAppSettingFile( );
+				ApplicationInstanceEventInfo info;
+				info.eventType = ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_Dir_Path;
+				info.inputStringList = filePaths;
 				info.supervisorObject = sender;
 				ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 			}
@@ -265,12 +296,22 @@ void ApplicationInstance::initTriggerEvent( ) {
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerMusicCollectionWidgetEvent, [this] ( MusicCollectionWidget *sender, const MusicCollectionWidgetEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
-			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Top_Item :
-				ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Top_Menu, sender ) );
-				break;
+			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Top_Item : {
+				ApplicationInstanceEventInfo info;
+				info.eventType = ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Top_Menu;
+				info.supervisorObject = sender;
+				ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+			}
+			break;
 
-			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Sub_Item : ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Sub_Menu, sender ) );
-				break;
+			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Sub_Item : {
+
+				ApplicationInstanceEventInfo info;
+				info.eventType = ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Sub_Menu;
+				info.supervisorObject = sender;
+				ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+			}
+			break;
 		}
 
 	} );
@@ -282,13 +323,19 @@ void ApplicationInstance::sendAppEvent( ) {
 	// 找到存储的路径
 	if( findResult != jsonEnd ) {
 		auto string = findResult.value( ).toString( );
-		ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text, string ) );
+		auto info = ApplicationInstanceEventInfo( );
+		info.eventType = ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text;
+		info.inputString = string;
+		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 	}
 	findResult = this->appSetting->find( jsonKey.app_music_collection_main_widget_width );
 	// 找到收藏列表的宽度
 	if( findResult != jsonEnd ) {
 		auto widgetWidth = findResult.value( ).toInt( );
-		ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Init_Music_Widget_Width, widgetWidth ) );
+		auto info = ApplicationInstanceEventInfo( );
+		info.eventType = ApplicationInstanceEventInfo::EventType::Init_Music_Widget_Width;
+		info.newMusicWidgetWidth = widgetWidth;
+		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 	}
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : applicationEvenTrigger( nullptr ), BseeApplication( argc, argv, i ) {
@@ -298,6 +345,7 @@ ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const in
 	initTranslation( );
 	initRender( );
 	initTriggerEvent( );
+	initSupportAudioDecoderFileNameSuffix( );
 	initMainWindow( );
 	sendAppEvent( );
 }
@@ -361,19 +409,29 @@ bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 				appSetting->insert( jsonKey.main_window_w_key, valueW );
 				appSetting->insert( jsonKey.main_window_h_key, valueH );
 				quit( );
+				isQuit = true;
 			}
 			break;
 		case QEvent::Quit :
 			break;
-		case QEvent::Type::MouseMove :
-			ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos ) );
-			break;
-		case QEvent::Type::MouseButtonPress :
-			ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos ) );
-			break;
-		case QEvent::Type::MouseButtonRelease :
-			ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos ) );
-			break;
+		case QEvent::Type::MouseMove : {
+			auto info = ApplicationInstanceEventInfo( );
+			info.eventType = ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos;
+			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+		}
+		break;
+		case QEvent::Type::MouseButtonPress : {
+			auto info = ApplicationInstanceEventInfo( );
+			info.eventType = ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos;
+			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+		}
+		break;
+		case QEvent::Type::MouseButtonRelease : {
+			auto info = ApplicationInstanceEventInfo( );
+			info.eventType = ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos;
+			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+		}
+		break;
 	}
 	return QApplication::notify( object, event );
 }
@@ -390,11 +448,11 @@ ApplicationInstance::Translate::Translate( ) {
 }
 ApplicationInstance::JSonKey::JSonKey( ) {
 	/* 配置文件 */
-	app_QTranslator_path_key = "app.QTranslator.path";
-	main_window_x_key = "app.MainWindow.x";
-	main_window_y_key = "app.MainWindow.y";
-	main_window_w_key = "app.MainWindow.w";
-	main_window_h_key = "app.MainWindow.h";
+	app_QTranslator_path_key = "app.translator.path";
+	main_window_x_key = "app.main.Window.x";
+	main_window_y_key = "app.main.Window.y";
+	main_window_w_key = "app.main.Window.w";
+	main_window_h_key = "app.main.Window.h";
 	app_music_info_file_path = "app.setting.music.info.file.path";
 	app_music_collection_main_widget_width = "app.setting.music.widget.collection.width";
 
@@ -412,6 +470,20 @@ void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	}
 	firstShow = false;
 	mainWindowPtr->show( );
+}
+bool ApplicationInstance::musicFileNmaeSupperDecoder( const QString &music_file_path ) const {
+	qsizetype count = supportAudioDecoderFileNameSuffix.size( );
+	if( count == 0 || music_file_path.isEmpty( ) )
+		return false;
+	qsizetype index = music_file_path.lastIndexOf( "." );
+	if( index == 0 )
+		return false;
+	auto suffix = music_file_path.mid( index + 1 ).toUpper( );
+	auto data = supportAudioDecoderFileNameSuffix.data( );
+	for( index = 0; index < count; ++index )
+		if( data[ index ] == suffix )
+			return true;
+	return false;
 }
 void ApplicationInstance::firstMainWindowShow( MainWindow *first_show_main_window ) {
 
@@ -482,16 +554,3 @@ void ApplicationInstance::firstMainWindowShow( MainWindow *first_show_main_windo
 
 	}
 }
-ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( ) { }
-ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, const QStringList &input_string_list ) : eventType( event_type ),
-	inputStringList( input_string_list ) { }
-ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, const QString &input_string ) : eventType( event_type ),
-	inputString( input_string ) { }
-ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( const EventType event_type ) : eventType( event_type ) { }
-ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width ) : eventType( event_type ), newMusicWidgetWidth( new_music_widget_width ) { }
-ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, QObject *sender ) : eventType( event_type ),
-	supervisorObject( sender ) { }
-QObject * ApplicationInstanceEventInfo::getSupervisorObject( ) const { return supervisorObject; }
-ApplicationInstanceEventInfo::EventType ApplicationInstanceEventInfo::getEventType( ) const { return eventType; }
-int ApplicationInstanceEventInfo::getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
-const QString & ApplicationInstanceEventInfo::getInputString( ) const { return inputString; }

@@ -17,15 +17,15 @@ MusicCollectionTopMenu::MusicCollectionTopMenu( ) {
 		if( trigged_action == appendMusicFileAction ) {
 			auto applicationInstance = ApplicationInstance::getApplicationInstance( );
 			auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
-			MusicCollectionTopMenuEvent::triggerMusicCollectionTopMenuEvent( applicationEvenTrigger, this, MusicCollectionTopMenuEventInfo( MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_File_Path ) );
+			MusicCollectionTopMenuEvent( applicationEvenTrigger, this, MusicCollectionTopMenuEventInfo( MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_File_Path ) );
 		} else if( trigged_action == loadMusicDirPathAction ) {
 			auto applicationInstance = ApplicationInstance::getApplicationInstance( );
 			auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
-			MusicCollectionTopMenuEvent::triggerMusicCollectionTopMenuEvent( applicationEvenTrigger, this, MusicCollectionTopMenuEventInfo( MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_Dir_Path ) );
+			MusicCollectionTopMenuEvent( applicationEvenTrigger, this, MusicCollectionTopMenuEventInfo( MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_Dir_Path ) );
 		} else if( trigged_action == appendMusicCollectionItemActionAction ) {
 			auto applicationInstance = ApplicationInstance::getApplicationInstance( );
 			auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
-			MusicCollectionTopMenuEvent::triggerMusicCollectionTopMenuEvent( applicationEvenTrigger, this, MusicCollectionTopMenuEventInfo( MusicCollectionTopMenuEventInfo::EventType::Append_Collection_Item, this->musicCollectionWidget ) );
+			MusicCollectionTopMenuEvent( applicationEvenTrigger, this, MusicCollectionTopMenuEventInfo( MusicCollectionTopMenuEventInfo::EventType::Append_Collection_Item, this->musicCollectionWidget ) );
 		}
 	} );
 	auto instance = ApplicationInstance::getApplicationInstance( );
@@ -38,7 +38,6 @@ MusicCollectionTopMenu::MusicCollectionTopMenu( ) {
 				auto collectionWidget = qobject_cast< decltype(musicCollectionWidget) >( supervisorObject );
 				if( collectionWidget == nullptr )
 					return;
-				
 				this->musicCollectionWidget = collectionWidget;
 				popup( QCursor::pos( ) );
 			}

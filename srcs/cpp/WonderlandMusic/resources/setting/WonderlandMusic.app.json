@@ -1,6 +1,7 @@
 ﻿{
-    "app.MainWindow.h": 256,
-    "app.MainWindow.w": 447,
-    "app.MainWindow.x": 574,
-    "app.MainWindow.y": 286
+	"app.main.Window.h": 551,
+	"app.main.Window.w": 622,
+	"app.main.Window.x": 1014,
+	"app.main.Window.y": 314,
+	"app.setting.music.widget.collection.width": 78
 }

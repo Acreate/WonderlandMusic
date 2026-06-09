@@ -26,6 +26,7 @@ public:
 	static ApplicationInstance * getApplicationInstance( );
 private:
 	void initVar( );
+	void initSupportAudioDecoderFileNameSuffix( );
 	void initJson( );
 	void initTranslation( );
 	void initRender( );
@@ -77,7 +78,7 @@ private:
 	public:
 		JSonKey( );
 	} jsonKey;
-private:
+protected:
 	/// @brief 语言
 	QTranslator *qTranslator;
 	/// @brief 主要先显示的窗口
@@ -105,10 +106,15 @@ private:
 	MusicListTopMenu *musicListTopMenu;
 	/// @brief 子音乐列表菜单
 	MusicListSubMenu *musicListSubMenu;
+	/// @brief 支持音频文件的后缀名称
+	QStringList supportAudioDecoderFileNameSuffix;
+	/// @brief 是否退出状态
+	bool isQuit;
 public:
 	/// @brief 获取配置的主要窗口
 	/// @return 主要窗口
 	virtual MainWindow * getMainWindowPtr( ) const { return mainWindowPtr; }
+	virtual bool getQuitStatus( ) const { return isQuit; }
 	/// @brief 设置主要窗口，未配置该项时，窗口已经显示，则不会调用 firstMainWindowShow
 	/// @param main_window_ptr 配置的主要窗口
 	virtual void setMainWindowPtr( MainWindow *main_window_ptr );
@@ -117,6 +123,10 @@ public:
 	}
 	virtual Render * getRender( ) const { return render; }
 	virtual ApplicationEvenTrigger * getApplicationEvenTrigger( ) const { return applicationEvenTrigger; }
+	/// @brief 检查文件后缀是否支持解码
+	/// @param music_file_path 文件路径
+	/// @return false 表示不支持
+	virtual bool musicFileNmaeSupperDecoder( const QString &music_file_path ) const;
 private:
 	/// @brief 第一次显示主要窗口时调用该函数
 	/// @param first_show_main_window 调用的主要窗口
@@ -138,8 +148,14 @@ public:
 		Pop_Music_List_Top_Menu,
 		Pop_Music_List_Sub_Menu,
 		Create_Music_Collection_Item,
-		Select_Over_Music_File_Path,
-		Select_Over_Music_Dir_Path,
+		Collection_Top_Menu_Select_Over_Music_File_Path,
+		Collection_Top_Menu_Select_Over_Music_Dir_Path,
+		Collection_Sub_Menu_Select_Over_Music_File_Path,
+		Collection_Sub_Menu_Select_Over_Music_Dir_Path,
+		List_Top_Menu_Select_Over_Music_File_Path,
+		List_Top_Menu_Select_Over_Music_Dir_Path,
+		List_Sub_Menu_Select_Over_Music_File_Path,
+		List_Sub_Menu_Select_Over_Music_Dir_Path,
 	};
 protected:
 	EventType eventType;
@@ -148,20 +164,16 @@ protected:
 	QString inputString;
 	QObject *supervisorObject = nullptr;
 private:
-	ApplicationInstanceEventInfo( );
-	ApplicationInstanceEventInfo( EventType event_type, const QStringList &input_string_list );
-	ApplicationInstanceEventInfo( EventType event_type, const QString &input_string );
-	ApplicationInstanceEventInfo( const EventType event_type );
-	ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width );
-	ApplicationInstanceEventInfo( EventType event_type, QObject *sender );
+	ApplicationInstanceEventInfo( ) { }
 public:
 	virtual ~ApplicationInstanceEventInfo( ) = default;
 
 	/// @brief 上层对象，经过 ApplicationInstanceEventInfo 对象处理前的消息对象指针
 	/// @return 对象处理前的消息对象指针
-	virtual QObject * getSupervisorObject( ) const;
-	virtual EventType getEventType( ) const;
-	virtual int getNewMusicWidgetWidth( ) const;
-	virtual const QString & getInputString( ) const;
+	virtual QObject * getSupervisorObject( ) const { return supervisorObject; }
+	virtual EventType getEventType( ) const { return eventType; }
+	virtual int getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
+	virtual const QStringList & getInputStringList( ) const { return inputStringList; }
+	virtual const QString & getInputString( ) const { return inputString; }
 };
 #endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

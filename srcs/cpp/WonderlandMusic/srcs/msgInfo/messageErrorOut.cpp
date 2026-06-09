@@ -19,6 +19,9 @@ MessageErrorOut & MessageErrorOut::operator<<( const QString &msg ) {
 	outMsgVector.emplace_back( msg );
 	return *this;
 }
+MessageErrorOut & MessageErrorOut::operator<<( const QStringList &msg ) {
+	return MessageErrorOut::operator<<( "{ " + msg.join( ", " ) + " }" );
+}
 MessageErrorOut::~MessageErrorOut( ) {
 
 	QString outString;

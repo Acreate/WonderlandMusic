@@ -31,6 +31,7 @@ class MessageErrorOut {
 public:
 	MessageErrorOut( bool is_write_file = true, const QString &log_home_path = "log", const std::source_location &source_location = std::source_location::current( ) );
 	MessageErrorOut & operator<<( const QString &msg );
+	MessageErrorOut & operator<<( const QStringList &msg );
 	virtual ~MessageErrorOut( );
 private:
 	virtual QString & formatMessageOut( const DateTimeFormat &date_time_format, QString &result_msg, const std::source_location &source_location, const QString &msg ) const;

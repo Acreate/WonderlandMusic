@@ -2,6 +2,8 @@
 
 #include "../applications/applicationEvenTrigger.h"
 #include "../applications/applicationInstance.h"
+
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/widget/musicCollectionWidget.h"
 MusicCollectionTopMenu::MenuKey::MenuKey( ) {
 	loadMusicDirPath = QObject::tr( "加载音频目录..." );
 	appendMusicFilePath = QObject::tr( "加载音频文件..." );
@@ -31,10 +33,16 @@ MusicCollectionTopMenu::MusicCollectionTopMenu( ) {
 	connect( evenTrigger, &ApplicationEvenTrigger::triggerApplicationInstanceEvent, [this] ( ApplicationInstance *sender, const ApplicationInstanceEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
-			case ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Top_Menu :
-				this->musicCollectionWidget = info.getPopMusicCollectionWidget( );
+			case ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Top_Menu : {
+				QObject *supervisorObject = info.getSupervisorObject( );
+				auto collectionWidget = qobject_cast< decltype(musicCollectionWidget) >( supervisorObject );
+				if( collectionWidget == nullptr )
+					return;
+				
+				this->musicCollectionWidget = collectionWidget;
 				popup( QCursor::pos( ) );
-				break;
+			}
+			break;
 		}
 	} );
 }

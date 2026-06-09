@@ -124,6 +124,7 @@ private:
 };
 
 class Event_Default_Event_Info_Type_Name( ApplicationInstance ) {
+	friend class ApplicationInstance;
 public:
 	enum class EventType {
 		Load_Music_Info_Path_Text,
@@ -143,22 +144,24 @@ public:
 protected:
 	EventType eventType;
 	int newMusicWidgetWidth;
-	MusicCollectionWidget *popMusicCollectionWidget;
-	MusicListWidget *popMusicListWidget;
 	QStringList inputStringList;
 	QString inputString;
-public:
-	virtual ~ApplicationInstanceEventInfo( ) = default;
+	QObject *supervisorObject = nullptr;
+private:
+	ApplicationInstanceEventInfo( );
 	ApplicationInstanceEventInfo( EventType event_type, const QStringList &input_string_list );
 	ApplicationInstanceEventInfo( EventType event_type, const QString &input_string );
 	ApplicationInstanceEventInfo( const EventType event_type );
 	ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width );
-	ApplicationInstanceEventInfo( EventType event_type, MusicCollectionWidget *pop_music_collection_widget );
-	ApplicationInstanceEventInfo( MusicListWidget *pop_music_list_widget );
+	ApplicationInstanceEventInfo( EventType event_type, QObject *sender );
+public:
+	virtual ~ApplicationInstanceEventInfo( ) = default;
+
+	/// @brief 上层对象，经过 ApplicationInstanceEventInfo 对象处理前的消息对象指针
+	/// @return 对象处理前的消息对象指针
+	virtual QObject * getSupervisorObject( ) const;
 	virtual EventType getEventType( ) const;
 	virtual int getNewMusicWidgetWidth( ) const;
-	virtual MusicCollectionWidget * getPopMusicCollectionWidget( ) const;
-	virtual MusicListWidget * getPopMusicListWidget( ) const;
 	virtual const QString & getInputString( ) const;
 };
 #endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

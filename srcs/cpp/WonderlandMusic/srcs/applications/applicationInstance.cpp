@@ -179,7 +179,9 @@ void ApplicationInstance::initTriggerEvent( ) {
 				auto itemName = dlg.textValue( );
 				if( itemName.isEmpty( ) )
 					return;
-				ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item, itemName ) );
+				ApplicationInstanceEventInfo instanceEventInfo( ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item, itemName );
+				instanceEventInfo.supervisorObject = sender;
+				ApplicationInstanceEvent( applicationEvenTrigger, this, instanceEventInfo );
 			}
 			break;
 			case MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_File_Path : {
@@ -204,6 +206,7 @@ void ApplicationInstance::initTriggerEvent( ) {
 				appSetting->insert( jsonKey.music_select_file_path_start_path, startPath );
 
 				ApplicationInstanceEventInfo info( ApplicationInstanceEventInfo::EventType::Select_Over_Music_File_Path, filePaths );
+				info.supervisorObject = sender;
 				ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 			}
 			break;
@@ -229,7 +232,9 @@ void ApplicationInstance::initTriggerEvent( ) {
 				startPath = fileInfoTool->dir( ).absolutePath( );
 				appSetting->insert( jsonKey.music_select_dir_path_start_path, startPath );
 
-				ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Select_Over_Music_Dir_Path, filePaths ) );
+				ApplicationInstanceEventInfo info( ApplicationInstanceEventInfo::EventType::Select_Over_Music_Dir_Path, filePaths );
+				info.supervisorObject = sender;
+				ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 			}
 			break;
 		}
@@ -477,17 +482,16 @@ void ApplicationInstance::firstMainWindowShow( MainWindow *first_show_main_windo
 
 	}
 }
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( ) { }
 ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, const QStringList &input_string_list ) : eventType( event_type ),
 	inputStringList( input_string_list ) { }
 ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, const QString &input_string ) : eventType( event_type ),
 	inputString( input_string ) { }
 ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( const EventType event_type ) : eventType( event_type ) { }
 ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( const EventType event_type, const int new_music_widget_width ) : eventType( event_type ), newMusicWidgetWidth( new_music_widget_width ) { }
-ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, MusicCollectionWidget *pop_music_collection_widget ) : eventType( event_type ),
-	popMusicCollectionWidget( pop_music_collection_widget ) { }
-ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( MusicListWidget *pop_music_list_widget ) : popMusicListWidget( pop_music_list_widget ) { }
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( EventType event_type, QObject *sender ) : eventType( event_type ),
+	supervisorObject( sender ) { }
+QObject * ApplicationInstanceEventInfo::getSupervisorObject( ) const { return supervisorObject; }
 ApplicationInstanceEventInfo::EventType ApplicationInstanceEventInfo::getEventType( ) const { return eventType; }
 int ApplicationInstanceEventInfo::getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
-MusicCollectionWidget * ApplicationInstanceEventInfo::getPopMusicCollectionWidget( ) const { return popMusicCollectionWidget; }
-MusicListWidget * ApplicationInstanceEventInfo::getPopMusicListWidget( ) const { return popMusicListWidget; }
 const QString & ApplicationInstanceEventInfo::getInputString( ) const { return inputString; }

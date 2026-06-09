@@ -22,6 +22,8 @@ public:
 		return removeTargetItemWidget( selectCurrentCollectionItemWidget );
 	}
 	virtual bool appendItemWidget( const QString &item_name );
+	virtual CollectionTopToolWidget * getCollectionTopToolWidget1( ) const { return collectionTopToolWidget; }
+	virtual const std::vector< CollectionItemWidget * > & getCollectionItemWidgets( ) const { return collectionItemWidgets; }
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
@@ -43,6 +45,11 @@ public:
 		Mouse_Right_Press_Select_Sub_Item,
 		Mouse_Right_Release_Select_Sub_Item,
 
+		Append_Sub_Item_Widget,
+		Remove_Sub_Item_Widget,
+
+		Append_Muis_File_Path,
+		Append_Muis_Dir_Path
 	};
 protected:
 	EventType eventType;

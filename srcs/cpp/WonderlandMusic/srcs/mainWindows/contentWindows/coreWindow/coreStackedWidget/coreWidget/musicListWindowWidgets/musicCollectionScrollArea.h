@@ -11,6 +11,7 @@ protected:
 public:
 	MusicCollectionScrollArea( QWidget *parent );
 	~MusicCollectionScrollArea( ) override;
+	virtual MusicCollectionWidget * getMusicCollectionWidget( ) const { return musicCollectionWidget; }
 };
 
 #endif // MUSICCOLLECTIONSCROLLAREA_H_H_HEAD__FILE__

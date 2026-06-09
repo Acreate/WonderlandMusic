@@ -57,8 +57,14 @@ bool MusicCollectionWidget::appendItemWidget( const QString &item_name ) {
 	CollectionItemWidget **data;
 	int targetY;
 	CollectionItemWidget *collectionItemWidget;
+	size_t index = 0;
 	if( count ) {
 		data = collectionItemWidgets.data( );
+		// 查找是否重复名称
+		for( ; index < count; ++index )
+			if( data[ index ]->getTitleName( ) == item_name )
+				return false; // 重复名称
+
 		count -= 1;
 		collectionItemWidget = data[ count ];
 

@@ -20,11 +20,13 @@ protected:
 	int currentWidgetWidth;
 	int currentWidgetHeight;
 	int minCollectionWidth;
+	QJsonObject *json;
 public:
 	MusicListMainWidget( QWidget *parent );
 	~MusicListMainWidget( ) override;
 	virtual int getMusicCollectionWidth( ) const;
 	virtual void setMusicCollectionWidth( int new_width );
+	virtual const QJsonObject & serializeToJsonObject( ) const;
 protected:
 	virtual void updateSubWidgetSize( );
 	void resizeEvent( QResizeEvent *event ) override;

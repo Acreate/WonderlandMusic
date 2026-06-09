@@ -1,8 +1,8 @@
 ﻿#include "musicListMainWidget.h"
 
+#include <QJsonObject>
 #include <QMouseEvent>
 #include <QMenu>
-#include <QScrollBar>
 
 #include "musicCollectionScrollArea.h"
 #include "musicListScrollArea.h"
@@ -13,6 +13,7 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 
 	minCollectionWidth = 10;
 	isragWidgetWidth = readyDragWidgetWidth = false;
+	json = new QJsonObject;
 	musicCollectionScrollArea = new MusicCollectionScrollArea( this );
 	musicListScrollArea = new MusicListScrollArea( this );
 
@@ -91,6 +92,10 @@ void MusicListMainWidget::setMusicCollectionWidth( int new_width ) {
 		return;
 	musicCollectionScrollArea->setGeometry( 0, 0, new_width, currentWidgetHeight );
 	musicListScrollArea->setGeometry( new_width, 0, currentWidgetWidth - new_width, currentWidgetHeight );
+}
+const QJsonObject & MusicListMainWidget::serializeToJsonObject( ) const {
+
+	return *json;
 }
 void MusicListMainWidget::updateSubWidgetSize( ) {
 	setMusicCollectionWidth( musicCollectionScrollArea->width( ) );

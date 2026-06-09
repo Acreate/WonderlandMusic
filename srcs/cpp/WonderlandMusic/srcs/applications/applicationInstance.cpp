@@ -23,6 +23,8 @@
 
 #include "../msgInfo/messageErrorOut.h"
 
+#include "../tools/widgetTools.h"
+
 #include "private/appRenderObj.h"
 
 ApplicationInstance *ApplicationInstance::current = nullptr;
@@ -170,17 +172,7 @@ void ApplicationInstance::initTriggerEvent( ) {
 				dlg.setWindowTitle( tr( "生成收藏夹" ) );
 				dlg.setLabelText( tr( "收藏夹名称" ) + ":" );
 				dlg.setInputMode( QInputDialog::TextInput );
-				int mainWindowWidth = mainWindowPtr->width( );
-				int mainWindowHeight = mainWindowPtr->height( );
-				int dlgWidth = mainWindowWidth / 2;
-				int dlgHeight = dlg.height( );
-				int offsetX = ( mainWindowWidth - dlgWidth + mainWindowWidth ) / 2;
-				int offsetY = ( mainWindowHeight - dlgHeight + mainWindowHeight ) / 2;
-				int mainWindowX = mainWindowPtr->x( );
-				int mainWindowY = mainWindowPtr->y( );
-				int x = mainWindowX + mainWindowWidth - offsetX;
-				int y = mainWindowY + mainWindowHeight - offsetY;
-				dlg.setGeometry( x, y, dlgWidth, dlgHeight );
+				WidgetTools::moveWidgetToCenterPos( mainWindowPtr, &dlg );
 				int ret = dlg.exec( );
 				if( ret == false )
 					return;
@@ -193,6 +185,7 @@ void ApplicationInstance::initTriggerEvent( ) {
 				dlg.setWindowTitle( tr( "选择音频文件" ) );
 				dlg.setDirectory( "." );
 				dlg.setNameFilter( tr( "音频文件" ) + "(*.mp3 *.wma *.m4a *.ogg *.aac *.flac)" );
+				WidgetTools::moveWidgetToCenterPos( mainWindowPtr, &dlg );
 				dlg.exec( );
 				QStringList filePaths = dlg.selectedFiles( );
 				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Select_Over_Music_File_Path, filePaths ) );
@@ -204,6 +197,7 @@ void ApplicationInstance::initTriggerEvent( ) {
 				dlg.setDirectory( "." );
 				dlg.setFileMode( QFileDialog::Directory );
 				dlg.setOption( QFileDialog::ShowDirsOnly );
+				WidgetTools::moveWidgetToCenterPos( mainWindowPtr, &dlg );
 				dlg.exec( );
 				QStringList filePaths = dlg.selectedFiles( );
 				MessageErrorOut( ) << tr( "选中目录" ) << ":\n\t" << filePaths.join( "\n\t" );

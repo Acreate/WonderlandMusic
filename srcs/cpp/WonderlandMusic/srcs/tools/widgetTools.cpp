@@ -7,7 +7,7 @@ void WidgetTools::moveWidgetToCenterPos( const QPoint &target_pos, QWidget *move
 	int height = move_source_widget->height( );
 	auto x = target_pos.x( ) - width / 2;
 	auto y = target_pos.y( ) - height / 2;
-	move_source_widget->setGeometry( x, y, width, height );
+	move_source_widget->move( x, y );
 }
 void WidgetTools::moveWidgetToCenterPos( const QWidget *target_widget_pos, QWidget *move_source_widget ) {
 	auto targetPos = target_widget_pos->geometry( ).center( );

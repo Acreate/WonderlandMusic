@@ -70,6 +70,10 @@ private:
 		QString app_music_info_file_path;
 		/// @brief 播放列表的收藏宽度
 		QString app_music_collection_main_widget_width;
+		/// @brief 音频文件选择路径的起始地址
+		QString music_select_file_path_start_path;
+		/// @brief 音频目录选择路径的起始地址
+		QString music_select_dir_path_start_path;
 	public:
 		JSonKey( );
 	} jsonKey;

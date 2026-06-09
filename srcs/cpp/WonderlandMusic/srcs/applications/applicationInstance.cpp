@@ -177,31 +177,59 @@ void ApplicationInstance::initTriggerEvent( ) {
 				if( ret == false )
 					return;
 				auto itemName = dlg.textValue( );
-				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item, itemName ) );
+				if( itemName.isEmpty( ) )
+					return;
+				ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item, itemName ) );
 			}
 			break;
 			case MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_File_Path : {
 				QFileDialog dlg;
-				dlg.setWindowTitle( tr( "选择音频文件" ) );
-				dlg.setDirectory( "." );
+				dlg.setWindowTitle( tr( "选择音频文件" ) + "..." );
+				QString startPath;
+				auto jsonValueRef = this->appSetting->find( jsonKey.music_select_file_path_start_path );
+				if( jsonValueRef != appSetting->end( ) )
+					startPath = jsonValueRef->toString( );
+				else
+					startPath = QDir::currentPath( );
+				dlg.setDirectory( startPath );
 				dlg.setNameFilter( tr( "音频文件" ) + "(*.mp3 *.wma *.m4a *.ogg *.aac *.flac)" );
 				WidgetTools::moveWidgetToCenterPos( mainWindowPtr, &dlg );
 				dlg.exec( );
+				if( dlg.result( ) == 0 )
+					return;
 				QStringList filePaths = dlg.selectedFiles( );
-				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Select_Over_Music_File_Path, filePaths ) );
+				auto data = filePaths.data( );
+				fileInfoTool->setFile( data[ 0 ] );
+				startPath = fileInfoTool->dir( ).absolutePath( );
+				appSetting->insert( jsonKey.music_select_file_path_start_path, startPath );
+
+				ApplicationInstanceEventInfo info( ApplicationInstanceEventInfo::EventType::Select_Over_Music_File_Path, filePaths );
+				ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 			}
 			break;
 			case MusicCollectionTopMenuEventInfo::EventType::Append_Muisc_Dir_Path : {
 				QFileDialog dlg;
-				dlg.setWindowTitle( tr( "选择音频目录" ) );
-				dlg.setDirectory( "." );
+				dlg.setWindowTitle( tr( "选择音频目录" ) + "..." );
+				QString startPath;
+				auto jsonValueRef = this->appSetting->find( jsonKey.music_select_dir_path_start_path );
+				if( jsonValueRef != appSetting->end( ) )
+					startPath = jsonValueRef->toString( );
+				else
+					startPath = QDir::currentPath( );
+				dlg.setDirectory( startPath );
 				dlg.setFileMode( QFileDialog::Directory );
 				dlg.setOption( QFileDialog::ShowDirsOnly );
 				WidgetTools::moveWidgetToCenterPos( mainWindowPtr, &dlg );
 				dlg.exec( );
+				if( dlg.result( ) == 0 )
+					return;
 				QStringList filePaths = dlg.selectedFiles( );
-				MessageErrorOut( ) << tr( "选中目录" ) << ":\n\t" << filePaths.join( "\n\t" );
-				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Select_Over_Music_Dir_Path, filePaths ) );
+				auto data = filePaths.data( );
+				fileInfoTool->setFile( data[ 0 ] );
+				startPath = fileInfoTool->dir( ).absolutePath( );
+				appSetting->insert( jsonKey.music_select_dir_path_start_path, startPath );
+
+				ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Select_Over_Music_Dir_Path, filePaths ) );
 			}
 			break;
 		}
@@ -233,10 +261,10 @@ void ApplicationInstance::initTriggerEvent( ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
 			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Top_Item :
-				ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Top_Menu, sender ) );
+				ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Top_Menu, sender ) );
 				break;
 
-			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Sub_Item : ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Sub_Menu, sender ) );
+			case MusicCollectionWidgetEventInfo::EventType::Mouse_Right_Release_Select_Sub_Item : ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Sub_Menu, sender ) );
 				break;
 		}
 
@@ -249,13 +277,13 @@ void ApplicationInstance::sendAppEvent( ) {
 	// 找到存储的路径
 	if( findResult != jsonEnd ) {
 		auto string = findResult.value( ).toString( );
-		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text, string ) );
+		ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text, string ) );
 	}
 	findResult = this->appSetting->find( jsonKey.app_music_collection_main_widget_width );
 	// 找到收藏列表的宽度
 	if( findResult != jsonEnd ) {
 		auto widgetWidth = findResult.value( ).toInt( );
-		ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Init_Music_Widget_Width, widgetWidth ) );
+		ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Init_Music_Widget_Width, widgetWidth ) );
 	}
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : applicationEvenTrigger( nullptr ), BseeApplication( argc, argv, i ) {
@@ -333,13 +361,13 @@ bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 		case QEvent::Quit :
 			break;
 		case QEvent::Type::MouseMove :
-			ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos ) );
+			ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos ) );
 			break;
 		case QEvent::Type::MouseButtonPress :
-			ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos ) );
+			ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos ) );
 			break;
 		case QEvent::Type::MouseButtonRelease :
-			ApplicationInstanceEvent::triggerApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos ) );
+			ApplicationInstanceEvent( applicationEvenTrigger, this, ApplicationInstanceEventInfo( ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos ) );
 			break;
 	}
 	return QApplication::notify( object, event );
@@ -364,6 +392,9 @@ ApplicationInstance::JSonKey::JSonKey( ) {
 	main_window_h_key = "app.MainWindow.h";
 	app_music_info_file_path = "app.setting.music.info.file.path";
 	app_music_collection_main_widget_width = "app.setting.music.widget.collection.width";
+
+	music_select_dir_path_start_path = "app.select.music.dir.path.start.path";
+	music_select_file_path_start_path = "app.select.music.file.path.start.path";
 }
 void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )

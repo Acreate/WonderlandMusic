@@ -38,6 +38,9 @@
 #define Event_Define_Event_Class_type( event_name, receive_class_type)  \
 class Event_Default_Event_Class_Type_Name(event_name) { \
 	friend class event_name;  \
+	Event_Default_Event_Class_Type_Name(event_name)(receive_class_type *receive, event_name *sender, const Event_Default_Event_Info_Type_Name(event_name) &info ){ \
+	Event_Default_Event_Class_Type_Name(event_name)::Event_Default_Event_Call_Function_Name(event_name)(receive, sender, info ); \
+	}\
 	static Event_Default_Event_Call_Function(event_name,receive_class_type){ \
 		receive->Event_Default_Event_Call_Function_Name(event_name)( sender, info ); \
 	}\

@@ -59,6 +59,8 @@ protected:
 	ApplicationInstance *application;
 public:
 	ApplicationEvenTrigger( ApplicationInstance *application );
+	static ApplicationInstance * getApplication( );
+	static ApplicationEvenTrigger * getApplicationEvenTrigger( ApplicationInstance *application );
 Q_SIGNALS:
 	Event_Default_Receive_Call_Function( ApplicationInstance );
 	Event_Default_Receive_Call_Function( MainWindow );

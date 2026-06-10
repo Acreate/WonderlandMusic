@@ -44,6 +44,19 @@ class Event_Default_Event_Class_Type_Name(event_name) { \
 	static Event_Default_Event_Call_Function(event_name,receive_class_type){ \
 		receive->Event_Default_Event_Call_Function_Name(event_name)( sender, info ); \
 	}\
+	Event_Default_Event_Class_Type_Name(event_name)(  event_name *sender, const Event_Default_Event_Info_Type_Name(event_name) &info ) \
+	{\
+		auto appInstance = ApplicationEvenTrigger::getApplication( ); \
+		auto trigger = ApplicationEvenTrigger::getApplicationEvenTrigger( appInstance ); \
+		Event_Default_Event_Class_Type_Name(event_name)::Event_Default_Event_Call_Function_Name(event_name)( \
+			trigger, sender, info ); \
+	}\
+	static void Event_Default_Event_Call_Function_Name(event_name)( event_name *sender, const Event_Default_Event_Info_Type_Name(event_name) &info ) {\
+		auto appInstance = ApplicationEvenTrigger::getApplication( ); \
+		auto trigger = ApplicationEvenTrigger::getApplicationEvenTrigger( appInstance ); \
+		Event_Default_Event_Class_Type_Name(event_name)::Event_Default_Event_Call_Function_Name(event_name)( \
+			trigger, sender, info ); \
+	}\
 }
 
 #endif // EVENTMACRODEFINE_H_H_HEAD__FILE__

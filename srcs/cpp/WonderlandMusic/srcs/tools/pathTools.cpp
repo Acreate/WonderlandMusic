@@ -1,4 +1,6 @@
 ﻿#include "pathTools.h"
+
+#include "../applications/applicationInstance.h"
 namespace entryList {
 	namespace sort {
 		inline bool entryList( QStringList &result_get_path, const QString &entry_path, QDir::Filters filters, QDir::SortFlags sort ) {
@@ -136,4 +138,20 @@ qsizetype PathTools::filterDir( QStringList &result_get_path, const QStringList 
 			resultData[ resultDataIndex++ ];
 	result_get_path.resize( resultDataIndex );
 	return resultDataIndex;
+}
+qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStringList &entry_path ) {
+	qsizetype count = entry_path.size( );
+	qsizetype index;
+	qsizetype resultCount = 0;
+	if( count == 0 )
+		return resultCount;
+	result_get_path.resize( count );
+	auto resultData = result_get_path.data( );
+	auto foreachData = entry_path.data( );
+	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+	for( index = 0; index < count; ++index )
+		if( applicationInstance->musicFileNmaeSupperDecoder( foreachData[ index ] ) )
+			resultData[ resultCount++ ] = foreachData[ index ];
+	result_get_path.resize( resultCount );
+	return resultCount;
 }

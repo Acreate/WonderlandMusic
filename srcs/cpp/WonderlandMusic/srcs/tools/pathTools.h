@@ -19,6 +19,8 @@ public:
 
 	static qsizetype filterFile( QStringList &result_get_path, const QStringList &entry_path );
 	static qsizetype filterDir( QStringList &result_get_path, const QStringList &entry_path );
+
+	static qsizetype filterMusicFile( QStringList &result_get_path, const QStringList &entry_path );
 };
 
 #endif // PATHTOOLS_H_H_HEAD__FILE__

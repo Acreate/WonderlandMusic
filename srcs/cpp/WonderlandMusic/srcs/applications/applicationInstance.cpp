@@ -30,7 +30,7 @@
 #include "private/appRenderObj.h"
 
 // 全局注册日志分类
-Q_DECLARE_LOGGING_CATEGORY( qt_multimedia )
+//Q_DECLARE_LOGGING_CATEGORY( qt_multimedia )
 
 ApplicationInstance *ApplicationInstance::current = nullptr;
 ApplicationInstance * ApplicationInstance::getApplicationInstance( ) {
@@ -58,18 +58,9 @@ void ApplicationInstance::initVar( ) {
 	appStartRunTime = new QDateTime( );
 	*appStartRunTime = QDateTime::currentDateTime( );
 }
+
 void ApplicationInstance::initSupportAudioDecoderFileNameSuffix( ) {
 
-	QLoggingCategory::setFilterRules(
-		"qt.multimedia.*=false\n"
-		"qt.multimedia.ffmpeg.*=false\n"
-		"qt.multimedia.audio=false\n"
-		"qt.multimedia.video=false"
-		);
-	qunsetenv( "QT_FFMPEG_DEBUG" );
-	qunsetenv( "QT_LOGGING_RULES" );
-	qunsetenv( "AV_LOG" );
-	qputenv( "AV_LOG", "quiet" );
 
 	// 遍历所有支持的媒体格式
 	QMediaFormat mediaFormat;

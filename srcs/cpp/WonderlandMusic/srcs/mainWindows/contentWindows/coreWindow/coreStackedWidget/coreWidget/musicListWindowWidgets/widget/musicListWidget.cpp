@@ -2,7 +2,10 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QMediaMetaData>
 #include <QPainter>
+
+#include "../../../../../../../msgInfo/messageErrorOut.h"
 
 #include "../../../../../../../musics/musicInfo.h"
 
@@ -10,10 +13,13 @@
 MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 
 }
-bool MusicListWidget::appendItem( MusicInfo *music_info_ptr ) {
-	if( music_info_ptr->isOpenOver( ) == false )
-		return false;
-	return true;
+bool MusicListWidget::appendItem( const QMediaMetaData &media_meta_data ) {
+
+	auto musicName = media_meta_data.value( QMediaMetaData::Title ).toString( );
+	auto singer = media_meta_data.value( QMediaMetaData::ContributingArtist ).toString( );
+	auto duration_ms = media_meta_data.value( QMediaMetaData::Duration ).toLongLong( );
+	//Message_Error_Out << musicName << ", " << singer << ", " << duration_ms;
+	return false;
 }
 bool MusicListWidget::sort( ) {
 	return false;

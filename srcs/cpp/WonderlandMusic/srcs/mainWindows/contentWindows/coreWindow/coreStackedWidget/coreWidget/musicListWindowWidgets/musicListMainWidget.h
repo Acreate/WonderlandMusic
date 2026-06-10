@@ -1,12 +1,11 @@
 ﻿#ifndef MUSICLISTMAINWIDGET_H_H_HEAD__FILE__
 #define MUSICLISTMAINWIDGET_H_H_HEAD__FILE__
 
-#include <QWidget>
-
 #include <macro/eventMacroDefine.h>
-
 #include <base/baseWidget/baseWidget.h>
 
+class MusicInfo;
+class QMutex;
 class MusicCollectionScrollArea;
 class MusicListScrollArea;
 class MusicListMainWidget : public BaseWidget {
@@ -20,6 +19,7 @@ protected:
 	int currentWidgetWidth;
 	int currentWidgetHeight;
 	int minCollectionWidth;
+	size_t loadFileOverCount;
 	QJsonObject *json;
 public:
 	MusicListMainWidget( QWidget *parent );
@@ -39,7 +39,8 @@ public:
 		Show_Draw_Mouse_ICO,
 		HIDE_Draw_Mouse_ICO,
 		Start_Draw_Music_Widget_Width,
-		Over_Draw_Music_Widget_Width
+		Over_Draw_Music_Widget_Width,
+		Music_Load_Over,
 	};
 protected:
 	EventType enventType;

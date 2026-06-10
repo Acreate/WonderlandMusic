@@ -1,6 +1,8 @@
 ﻿#include "musicListMainWidget.h"
 
 #include <QJsonObject>
+#include <QMediaMetaData>
+#include <QMediaPlayer>
 #include <QMouseEvent>
 #include <QMenu>
 
@@ -12,12 +14,15 @@
 
 #include "../../../../../../msgInfo/messageErrorOut.h"
 
+#include "../../../../../../musics/musicInfo.h"
+
 #include "../../../../../../tools/pathTools.h"
 
 #include "widget/musicCollectionWidget.h"
 #include "widget/musicListWidget.h"
+#include <QMutex>
 MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent ) {
-
+	loadFileOverCount = 0;
 	minCollectionWidth = 10;
 	isragWidgetWidth = readyDragWidgetWidth = false;
 	json = new QJsonObject;
@@ -88,7 +93,32 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 				QStringList allFilePath;
 				if( PathTools::entryList( allFilePath, info.getInputStringList( ), true ) == false )
 					return;// 没有正确的文件
-				Message_Error_Out << allFilePath;
+				QStringList filterMusicFilePath;
+				qsizetype fileCount = PathTools::filterMusicFile( filterMusicFilePath, allFilePath );
+				if( fileCount == 0 )
+					return; // 无法匹配支持后缀名
+				allFilePath.clear( );
+				qsizetype index = 0;
+				auto data = filterMusicFilePath.data( );
+				loadFileOverCount += fileCount;
+				for( ; index < fileCount; ++index ) {
+					QMediaPlayer *mediaPlayer = new QMediaPlayer;
+					connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, [this,mediaPlayer, fileCount] ( QMediaPlayer::MediaStatus media_status ) {
+						if( media_status != QMediaPlayer::LoadedMedia )
+							return; // 必须标识为加载完成
+
+						auto mediaMetaData = mediaPlayer->metaData( );
+						if( mediaMetaData.isEmpty( ) ) {
+							MessageErrorOut( ) << QObject::tr( "没有匹配音频文件信息" ) << " : " << mediaPlayer->source( ).toLocalFile( );
+							return; // 加载失败
+						}
+						mediaPlayer->deleteLater( );
+						loadFileOverCount -= 1;
+						if( loadFileOverCount == 0 )
+							MusicListMainWidgetEvent( this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Music_Load_Over ) );
+					} );
+					mediaPlayer->setSource( QUrl::fromLocalFile( data[ index ] ) );
+				}
 			}
 			break;
 			case ApplicationInstanceEventInfo::EventType::Collection_Sub_Menu_Select_Over_Music_Dir_Path

@@ -1,10 +1,9 @@
 ﻿#ifndef MUSICLISTWIDGET_H_H_HEAD__FILE__
 #define MUSICLISTWIDGET_H_H_HEAD__FILE__
 
-#include <QWidget>
-
 #include <base/baseWidget/baseWidget.h>
 
+class QMediaMetaData;
 class MusicInfo;
 class MusicListItemWidget;
 class MusicListWidget : public BaseWidget {
@@ -13,7 +12,7 @@ protected:
 	std::vector< MusicListItemWidget * > musicListItemWidgets;
 public:
 	MusicListWidget( QWidget *parent );
-	virtual bool appendItem( MusicInfo *music_info_ptr );
+	virtual bool appendItem( const QMediaMetaData &media_meta_data );
 	virtual bool sort( );
 protected:
 	void paintEvent( QPaintEvent *event ) override;

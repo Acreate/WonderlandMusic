@@ -34,7 +34,7 @@ public:
 	~MainWindow( ) override;
 };
 #include <macro/eventMacroDefine.h>
-class Event_Default_Event_Info_Type_Name( MainWindow ) {
+class Event_Define_Event_Info_Type_Name( MainWindow ) {
 public:
 	enum class EventType {
 		None,

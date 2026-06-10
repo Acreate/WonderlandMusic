@@ -31,7 +31,7 @@ public:
 private:
 };
 
-#define ContentWindowEventTypeName Event_Default_Event_Info_Type_Name( ContentWindow )
+#define ContentWindowEventTypeName Event_Define_Event_Info_Type_Name( ContentWindow )
 class ContentWindowEventTypeName {
 public:
 	enum class EventType {

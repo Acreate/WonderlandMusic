@@ -21,7 +21,7 @@ public:
 private:
 };
 
-#define SettingWindowEventTypeName Event_Default_Event_Info_Type_Name( SettingWindow )
+#define SettingWindowEventTypeName Event_Define_Event_Info_Type_Name( SettingWindow )
 class SettingWindowEventTypeName {
 
 };

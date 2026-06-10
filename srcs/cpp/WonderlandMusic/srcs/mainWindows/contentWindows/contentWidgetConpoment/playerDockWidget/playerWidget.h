@@ -31,7 +31,7 @@ public:
 	PlayerWidget( PlayerDockWidget *parent );
 };
 
-class Event_Default_Event_Info_Type_Name( PlayerWidget ) {
+class Event_Define_Event_Info_Type_Name( PlayerWidget ) {
 public:
 	enum class EventType {
 		None,

@@ -23,7 +23,7 @@ protected:
 	void paintEvent( QPaintEvent *event ) override;
 };
 
-#define FunctionDockWidgetEventTypeName Event_Default_Event_Info_Type_Name( FunctionDockWidget )
+#define FunctionDockWidgetEventTypeName Event_Define_Event_Info_Type_Name( FunctionDockWidget )
 class FunctionDockWidgetEventTypeName {
 public:
 	enum class EventType {

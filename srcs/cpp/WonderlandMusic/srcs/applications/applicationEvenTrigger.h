@@ -3,6 +3,7 @@
 
 #include <base/baseObject/baseObject.h>
 #include <macro/eventMacroDefine.h>
+#include <functional>
 
 Event_Declare_Event_Info_Type_Name( ApplicationInstance );
 Event_Declare_Event_Info_Type_Name( MainWindow );
@@ -31,28 +32,28 @@ class ApplicationEvenTrigger : public BaseObject {
 	/// @brief 事件友元，用于初始化
 	friend class InitApplicationInstance;
 private:
-	friend class Event_Default_Event_Info_Type_Name( ApplicationInstance );
-	friend class Event_Default_Event_Info_Type_Name( MainWindow );
-	friend class Event_Default_Event_Info_Type_Name( OptionNavigationWidget );
-	friend class Event_Default_Event_Info_Type_Name( OptionNavigationDockWidget );
-	friend class Event_Default_Event_Info_Type_Name( SettingWindow );
-	friend class Event_Default_Event_Info_Type_Name( CoreStackedWidget );
-	friend class Event_Default_Event_Info_Type_Name( FindDockWidget );
-	friend class Event_Default_Event_Info_Type_Name( PlayerDockWidget );
-	friend class Event_Default_Event_Info_Type_Name( CoreWindow );
-	friend class Event_Default_Event_Info_Type_Name( FunctionWidget );
-	friend class Event_Default_Event_Info_Type_Name( TopToolWidget );
-	friend class Event_Default_Event_Info_Type_Name( FunctionDockWidget );
-	friend class Event_Default_Event_Info_Type_Name( TopToolDockWidget );
-	friend class Event_Default_Event_Info_Type_Name( ContentWindow );
-	friend class Event_Default_Event_Info_Type_Name( PlayerWidget );
-	friend class Event_Default_Event_Info_Type_Name( PathSettingWidget );
-	friend class Event_Default_Event_Info_Type_Name( MusicListMainWidget );
-	friend class Event_Default_Event_Info_Type_Name( MusicCollectionWidget );
-	friend class Event_Default_Event_Info_Type_Name( MusicCollectionTopMenu );
-	friend class Event_Default_Event_Info_Type_Name( MusicCollectionSubMenu );
-	friend class Event_Default_Event_Info_Type_Name( MusicListTopMenu );
-	friend class Event_Default_Event_Info_Type_Name( MusicListSubMenu );
+	friend class Event_Define_Event_Info_Type_Name( ApplicationInstance );
+	friend class Event_Define_Event_Info_Type_Name( MainWindow );
+	friend class Event_Define_Event_Info_Type_Name( OptionNavigationWidget );
+	friend class Event_Define_Event_Info_Type_Name( OptionNavigationDockWidget );
+	friend class Event_Define_Event_Info_Type_Name( SettingWindow );
+	friend class Event_Define_Event_Info_Type_Name( CoreStackedWidget );
+	friend class Event_Define_Event_Info_Type_Name( FindDockWidget );
+	friend class Event_Define_Event_Info_Type_Name( PlayerDockWidget );
+	friend class Event_Define_Event_Info_Type_Name( CoreWindow );
+	friend class Event_Define_Event_Info_Type_Name( FunctionWidget );
+	friend class Event_Define_Event_Info_Type_Name( TopToolWidget );
+	friend class Event_Define_Event_Info_Type_Name( FunctionDockWidget );
+	friend class Event_Define_Event_Info_Type_Name( TopToolDockWidget );
+	friend class Event_Define_Event_Info_Type_Name( ContentWindow );
+	friend class Event_Define_Event_Info_Type_Name( PlayerWidget );
+	friend class Event_Define_Event_Info_Type_Name( PathSettingWidget );
+	friend class Event_Define_Event_Info_Type_Name( MusicListMainWidget );
+	friend class Event_Define_Event_Info_Type_Name( MusicCollectionWidget );
+	friend class Event_Define_Event_Info_Type_Name( MusicCollectionTopMenu );
+	friend class Event_Define_Event_Info_Type_Name( MusicCollectionSubMenu );
+	friend class Event_Define_Event_Info_Type_Name( MusicListTopMenu );
+	friend class Event_Define_Event_Info_Type_Name( MusicListSubMenu );
 private:
 	Q_OBJECT;
 protected:
@@ -61,29 +62,53 @@ public:
 	ApplicationEvenTrigger( ApplicationInstance *application );
 	static ApplicationInstance * getApplication( );
 	static ApplicationEvenTrigger * getApplicationEvenTrigger( ApplicationInstance *application );
+public:
+	Event_Define_Quick_Connect_Signed( ApplicationInstance );
+	Event_Define_Quick_Connect_Signed( MainWindow );
+	Event_Define_Quick_Connect_Signed( OptionNavigationWidget );
+	Event_Define_Quick_Connect_Signed( OptionNavigationDockWidget );
+	Event_Define_Quick_Connect_Signed( SettingWindow );
+	Event_Define_Quick_Connect_Signed( CoreStackedWidget );
+	Event_Define_Quick_Connect_Signed( FindDockWidget );
+	Event_Define_Quick_Connect_Signed( PlayerDockWidget );
+	Event_Define_Quick_Connect_Signed( CoreWindow );
+	Event_Define_Quick_Connect_Signed( FunctionWidget );
+	Event_Define_Quick_Connect_Signed( TopToolWidget );
+	Event_Define_Quick_Connect_Signed( FunctionDockWidget );
+	Event_Define_Quick_Connect_Signed( TopToolDockWidget );
+	Event_Define_Quick_Connect_Signed( ContentWindow );
+	Event_Define_Quick_Connect_Signed( PlayerWidget );
+	Event_Define_Quick_Connect_Signed( PathSettingWidget );
+	Event_Define_Quick_Connect_Signed( MusicListMainWidget );
+	Event_Define_Quick_Connect_Signed( MusicCollectionWidget );
+	Event_Define_Quick_Connect_Signed( MusicCollectionTopMenu );
+	Event_Define_Quick_Connect_Signed( MusicCollectionSubMenu );
+	Event_Define_Quick_Connect_Signed( MusicListTopMenu );
+	Event_Define_Quick_Connect_Signed( MusicListSubMenu );
+
 Q_SIGNALS:
-	Event_Default_Receive_Call_Function( ApplicationInstance );
-	Event_Default_Receive_Call_Function( MainWindow );
-	Event_Default_Receive_Call_Function( OptionNavigationWidget );
-	Event_Default_Receive_Call_Function( OptionNavigationDockWidget );
-	Event_Default_Receive_Call_Function( SettingWindow );
-	Event_Default_Receive_Call_Function( CoreStackedWidget );
-	Event_Default_Receive_Call_Function( FindDockWidget );
-	Event_Default_Receive_Call_Function( PlayerDockWidget );
-	Event_Default_Receive_Call_Function( CoreWindow );
-	Event_Default_Receive_Call_Function( FunctionWidget );
-	Event_Default_Receive_Call_Function( TopToolWidget );
-	Event_Default_Receive_Call_Function( FunctionDockWidget );
-	Event_Default_Receive_Call_Function( TopToolDockWidget );
-	Event_Default_Receive_Call_Function( ContentWindow );
-	Event_Default_Receive_Call_Function( PlayerWidget );
-	Event_Default_Receive_Call_Function( PathSettingWidget );
-	Event_Default_Receive_Call_Function( MusicListMainWidget );
-	Event_Default_Receive_Call_Function( MusicCollectionWidget );
-	Event_Default_Receive_Call_Function( MusicCollectionTopMenu );
-	Event_Default_Receive_Call_Function( MusicCollectionSubMenu );
-	Event_Default_Receive_Call_Function( MusicListTopMenu );
-	Event_Default_Receive_Call_Function( MusicListSubMenu );
+	Event_Define_Receive_Call_Function( ApplicationInstance );
+	Event_Define_Receive_Call_Function( MainWindow );
+	Event_Define_Receive_Call_Function( OptionNavigationWidget );
+	Event_Define_Receive_Call_Function( OptionNavigationDockWidget );
+	Event_Define_Receive_Call_Function( SettingWindow );
+	Event_Define_Receive_Call_Function( CoreStackedWidget );
+	Event_Define_Receive_Call_Function( FindDockWidget );
+	Event_Define_Receive_Call_Function( PlayerDockWidget );
+	Event_Define_Receive_Call_Function( CoreWindow );
+	Event_Define_Receive_Call_Function( FunctionWidget );
+	Event_Define_Receive_Call_Function( TopToolWidget );
+	Event_Define_Receive_Call_Function( FunctionDockWidget );
+	Event_Define_Receive_Call_Function( TopToolDockWidget );
+	Event_Define_Receive_Call_Function( ContentWindow );
+	Event_Define_Receive_Call_Function( PlayerWidget );
+	Event_Define_Receive_Call_Function( PathSettingWidget );
+	Event_Define_Receive_Call_Function( MusicListMainWidget );
+	Event_Define_Receive_Call_Function( MusicCollectionWidget );
+	Event_Define_Receive_Call_Function( MusicCollectionTopMenu );
+	Event_Define_Receive_Call_Function( MusicCollectionSubMenu );
+	Event_Define_Receive_Call_Function( MusicListTopMenu );
+	Event_Define_Receive_Call_Function( MusicListSubMenu );
 };
 
 Event_Define_Event_Class_type( ApplicationInstance, ApplicationEvenTrigger );
@@ -108,5 +133,4 @@ Event_Define_Event_Class_type( MusicCollectionTopMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicCollectionSubMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListTopMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListSubMenu, ApplicationEvenTrigger );
-
 #endif // APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__

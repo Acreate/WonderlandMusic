@@ -16,8 +16,8 @@ public:
 	TopToolDockWidget( MainWindow *parent );
 };
 
-#define TopToolDockWidgetEventTypeName Event_Default_Event_Info_Type_Name( TopToolDockWidget )
-#define TopToolWidgetEventTypeName Event_Default_Event_Info_Type_Name( TopToolWidget )
+#define TopToolDockWidgetEventTypeName Event_Define_Event_Info_Type_Name( TopToolDockWidget )
+#define TopToolWidgetEventTypeName Event_Define_Event_Info_Type_Name( TopToolWidget )
 class TopToolDockWidgetEventTypeName {
 	friend class TopToolDockWidget;
 public:

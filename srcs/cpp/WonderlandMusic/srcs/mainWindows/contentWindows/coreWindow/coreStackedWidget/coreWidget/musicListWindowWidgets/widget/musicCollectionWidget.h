@@ -32,7 +32,7 @@ protected:
 
 #include <macro/eventMacroDefine.h>
 
-class Event_Default_Event_Info_Type_Name( MusicCollectionWidget ) {
+class Event_Define_Event_Info_Type_Name( MusicCollectionWidget ) {
 public:
 	enum class EventType {
 		Mouse_Left_Press_Select_Top_Item,

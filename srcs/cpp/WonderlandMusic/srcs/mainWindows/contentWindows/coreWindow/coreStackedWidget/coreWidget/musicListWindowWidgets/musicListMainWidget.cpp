@@ -21,11 +21,14 @@
 #include "widget/musicCollectionWidget.h"
 #include "widget/musicListWidget.h"
 #include <QMutex>
+
+#include "../../../../../../tools/vectorTools.h"
 MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent ) {
 	loadFileOverCount = 0;
 	minCollectionWidth = 10;
 	isragWidgetWidth = readyDragWidgetWidth = false;
 	json = new QJsonObject;
+	musicInfoVectorWRMutex = new QMutex;
 	musicCollectionScrollArea = new MusicCollectionScrollArea( this );
 	musicListScrollArea = new MusicListScrollArea( this );
 
@@ -101,23 +104,43 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 				qsizetype index = 0;
 				auto data = filterMusicFilePath.data( );
 				loadFileOverCount += fileCount;
+
+				std::vector< QString > over;
+
 				for( ; index < fileCount; ++index ) {
 					QMediaPlayer *mediaPlayer = new QMediaPlayer;
 					connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, [this,mediaPlayer, fileCount] ( QMediaPlayer::MediaStatus media_status ) {
 						if( media_status != QMediaPlayer::LoadedMedia )
 							return; // 必须标识为加载完成
 
-						auto mediaMetaData = mediaPlayer->metaData( );
+						QMediaMetaData mediaMetaData = mediaPlayer->metaData( );
+						auto localFile = mediaPlayer->source( ).toLocalFile( );
 						if( mediaMetaData.isEmpty( ) ) {
 							MessageErrorOut( ) << QObject::tr( "没有匹配音频文件信息" ) << " : " << mediaPlayer->source( ).toLocalFile( );
 							return; // 加载失败
 						}
 						mediaPlayer->deleteLater( );
 						loadFileOverCount -= 1;
+						QString musicName = mediaMetaData.stringValue( QMediaMetaData::Title );
+						QString albumArtistName = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
+						if( albumArtistName.isEmpty( ) )
+							albumArtistName = mediaMetaData.stringValue( QMediaMetaData::AlbumArtist );
+						if( albumArtistName.isEmpty( ) )
+							albumArtistName = mediaMetaData.stringValue( QMediaMetaData::Author );
+						qint64 duration = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
+						MusicInfo *musicInfo = new MusicInfo( localFile, musicName, albumArtistName, duration );
+						musicInfoVectorWRMutex->lock( );
+						musicInfos.emplace_back( musicInfo );
+						musicInfoVectorWRMutex->unlock( );
 						if( loadFileOverCount == 0 )
 							MusicListMainWidgetEvent( this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Music_Load_Over ) );
 					} );
 					mediaPlayer->setSource( QUrl::fromLocalFile( data[ index ] ) );
+					size_t findRsultIndex;
+					if( VectorTools::findIndex( over, data[ index ], findRsultIndex ) == true ) {
+						Message_Error_Out << "找到重复: " << data[ index ] << " ,下标=" << QString::number( findRsultIndex );
+					}
+					over.emplace_back( data[ index ] );
 				}
 			}
 			break;
@@ -145,6 +168,9 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 
 }
 MusicListMainWidget::~MusicListMainWidget( ) {
+
+	clearMusicInfoVector( );
+	delete musicInfoVectorWRMutex;
 	delete musicCollectionScrollArea;
 	delete musicListScrollArea;
 }
@@ -160,6 +186,20 @@ void MusicListMainWidget::setMusicCollectionWidth( int new_width ) {
 const QJsonObject & MusicListMainWidget::serializeToJsonObject( ) const {
 
 	return *json;
+}
+void MusicListMainWidget::clearMusicInfoVector( ) {
+	musicInfoVectorWRMutex->lock( );
+	size_t count = musicInfos.size( );
+	if( count == 0 ) {
+		musicInfoVectorWRMutex->unlock( );
+		return;
+	}
+	auto data = musicInfos.data( );
+	size_t index = 0;
+	for( ; index < count; ++index )
+		delete data[ index ];
+	musicInfos.clear( );
+	musicInfoVectorWRMutex->unlock( );
 }
 void MusicListMainWidget::updateSubWidgetSize( ) {
 	setMusicCollectionWidth( musicCollectionScrollArea->width( ) );

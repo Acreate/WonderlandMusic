@@ -20,7 +20,7 @@ protected:
 	void resizeEvent( QResizeEvent *event ) override;
 };
 
-#define FunctionWidgetEventTypeName Event_Default_Event_Info_Type_Name( FunctionWidget )
+#define FunctionWidgetEventTypeName Event_Define_Event_Info_Type_Name( FunctionWidget )
 class FunctionWidgetEventTypeName {
 public:
 	enum class EventType {

@@ -21,18 +21,22 @@ protected:
 	int minCollectionWidth;
 	size_t loadFileOverCount;
 	QJsonObject *json;
+	QMutex *musicInfoVectorWRMutex;
+	std::vector< MusicInfo * > musicInfos;
 public:
 	MusicListMainWidget( QWidget *parent );
 	~MusicListMainWidget( ) override;
 	virtual int getMusicCollectionWidth( ) const;
 	virtual void setMusicCollectionWidth( int new_width );
 	virtual const QJsonObject & serializeToJsonObject( ) const;
+	virtual const std::vector< MusicInfo * > & getMusicInfos( ) const { return musicInfos; }
 protected:
+	virtual void clearMusicInfoVector( );
 	virtual void updateSubWidgetSize( );
 	void resizeEvent( QResizeEvent *event ) override;
 };
 
-class Event_Default_Event_Info_Type_Name( MusicListMainWidget ) {
+class Event_Define_Event_Info_Type_Name( MusicListMainWidget ) {
 public:
 	enum class EventType {
 		None,

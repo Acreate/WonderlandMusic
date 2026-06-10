@@ -133,7 +133,7 @@ private:
 	void firstMainWindowShow( MainWindow *first_show_main_window );
 };
 
-class Event_Default_Event_Info_Type_Name( ApplicationInstance ) {
+class Event_Define_Event_Info_Type_Name( ApplicationInstance ) {
 	friend class ApplicationInstance;
 public:
 	enum class EventType {

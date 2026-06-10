@@ -19,7 +19,7 @@ public:
 	OptionNavigationWidget( OptionNavigationDockWidget *parent );
 };
 
-class Event_Default_Event_Info_Type_Name( OptionNavigationWidget ) {
+class Event_Define_Event_Info_Type_Name( OptionNavigationWidget ) {
 public:
 	enum class EventType {
 		None,

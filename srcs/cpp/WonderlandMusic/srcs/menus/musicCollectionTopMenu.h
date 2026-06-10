@@ -29,7 +29,7 @@ public:
 };
 
 #include <macro/eventMacroDefine.h>
-class Event_Default_Event_Info_Type_Name( MusicCollectionTopMenu ) {
+class Event_Define_Event_Info_Type_Name( MusicCollectionTopMenu ) {
 public:
 	enum class EventType {
 		Append_Collection_Item,

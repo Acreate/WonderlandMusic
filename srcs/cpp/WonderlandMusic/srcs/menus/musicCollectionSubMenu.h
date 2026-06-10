@@ -30,7 +30,7 @@ public:
 	virtual MusicCollectionWidget * getMusicCollectionWidget( ) const { return musicCollectionWidget; }
 };
 #include <macro/eventMacroDefine.h>
-class Event_Default_Event_Info_Type_Name( MusicCollectionSubMenu ) {
+class Event_Define_Event_Info_Type_Name( MusicCollectionSubMenu ) {
 public:
 	enum class EventType {
 		Load_Music_File_Path,

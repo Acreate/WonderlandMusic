@@ -25,7 +25,7 @@ public:
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
 };
-class Event_Default_Event_Info_Type_Name( PathSettingWidget ) {
+class Event_Define_Event_Info_Type_Name( PathSettingWidget ) {
 public:
 	enum class EventType {
 		None,

@@ -17,7 +17,7 @@ public:
 	PlayerDockWidget( ContentWindow *parent );
 };
 
-#define PlayerDockWidgetEventTypeName Event_Default_Event_Info_Type_Name( PlayerDockWidget )
+#define PlayerDockWidgetEventTypeName Event_Define_Event_Info_Type_Name( PlayerDockWidget )
 class PlayerDockWidgetEventTypeName {
 public:
 	enum class EventType {

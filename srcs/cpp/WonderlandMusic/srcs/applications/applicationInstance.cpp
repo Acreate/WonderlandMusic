@@ -60,8 +60,6 @@ void ApplicationInstance::initVar( ) {
 }
 
 void ApplicationInstance::initSupportAudioDecoderFileNameSuffix( ) {
-
-
 	// 遍历所有支持的媒体格式
 	QMediaFormat mediaFormat;
 	const auto &formats = mediaFormat.supportedAudioCodecs( QMediaFormat::Decode );

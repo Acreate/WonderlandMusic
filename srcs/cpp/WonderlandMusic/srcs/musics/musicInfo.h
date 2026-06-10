@@ -1,22 +1,13 @@
 ﻿#ifndef MUSICINFO_H_H_HEAD__FILE__
 #define MUSICINFO_H_H_HEAD__FILE__
-#include <QUrl>
-
-#include <base/baseObject/baseObject.h>
+#include <qstring.h>
 
 class QMediaMetaData;
 class QMediaPlayer;
-class MusicInfo : public BaseObject {
-	Q_OBJECT;
+class MusicInfo {
 protected:
-	/// @brief 媒体
-	QMediaPlayer *mediaPlayer;
-	/// @brief 是否已经读取完毕
-	bool isReadMusicFileOver = false;
-	/// @brief 调用
-	std::function< void( MusicInfo *, const QMediaMetaData & ) > loadOverCallFunction;
 	/// @brief 音乐文件路径
-	QUrl musicUrl;
+	QString filePath;
 	/// @brief 音乐名称
 	QString musicName;
 	/// @brief 歌手
@@ -24,11 +15,13 @@ protected:
 	/// @brief 时长（毫秒）
 	qint64 duration_ms;
 public:
-	~MusicInfo( ) override;
-	MusicInfo( );
-	virtual bool isOpenOver( ) const { return isReadMusicFileOver; }
-	virtual bool open( const QString &file_path, const std::function< void( MusicInfo *, const QMediaMetaData & ) > &load_over_call_function );
-	virtual const QUrl & getMusicUrl( ) const { return musicUrl; }
+	virtual ~MusicInfo( ) { }
+	MusicInfo( const QString &file_path, const QString &music_name, const QString &singer, qint64 duration_ms )
+		: filePath( file_path ),
+		musicName( music_name ),
+		singer( singer ),
+		duration_ms( duration_ms ) { }
+	virtual const QString & getFilePath( ) const { return filePath; }
 	virtual const QString & getMusicName( ) const { return musicName; }
 	virtual const QString & getSinger( ) const { return singer; }
 	virtual qint64 getDurationMs( ) const { return duration_ms; }

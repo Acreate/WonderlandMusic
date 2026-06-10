@@ -19,7 +19,7 @@ public:
 	OptionNavigationDockWidget( SettingWindow *parent );
 };
 
-class Event_Default_Event_Info_Type_Name( OptionNavigationDockWidget ) {
+class Event_Define_Event_Info_Type_Name( OptionNavigationDockWidget ) {
 public:
 	enum class EventType {
 		None,
@@ -29,8 +29,8 @@ public:
 protected:
 	EventType eventType;
 public:
-	virtual ~Event_Default_Event_Info_Type_Name( OptionNavigationDockWidget )( ) = default;
-	Event_Default_Event_Info_Type_Name( OptionNavigationDockWidget )( const EventType event_type )
+	virtual ~Event_Define_Event_Info_Type_Name( OptionNavigationDockWidget )( ) = default;
+	Event_Define_Event_Info_Type_Name( OptionNavigationDockWidget )( const EventType event_type )
 		: eventType( event_type ) { }
 	virtual EventType getEventType( ) const { return eventType; }
 };

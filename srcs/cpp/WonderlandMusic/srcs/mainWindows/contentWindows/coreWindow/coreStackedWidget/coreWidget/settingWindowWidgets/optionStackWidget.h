@@ -19,7 +19,7 @@ public:
 	OptionStackWidget( SettingWindow *parent );
 };
 
-class Event_Default_Event_Info_Type_Name( OptionStackWidget ) {
+class Event_Define_Event_Info_Type_Name( OptionStackWidget ) {
 public:
 	enum class EnventType {
 		None,

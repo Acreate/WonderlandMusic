@@ -20,7 +20,7 @@ public:
 	CoreStackedWidget( CoreWindow *parent );
 };
 
-class Event_Default_Event_Info_Type_Name( CoreStackedWidget ) {
+class Event_Define_Event_Info_Type_Name( CoreStackedWidget ) {
 
 };
 #endif // CORESTACKEDWIDGET_H_H_HEAD__FILE__

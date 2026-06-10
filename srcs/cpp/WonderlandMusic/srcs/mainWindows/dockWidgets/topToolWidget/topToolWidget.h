@@ -25,7 +25,7 @@ protected:
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 };
-#define TopToolWidgetEventTypeName Event_Default_Event_Info_Type_Name( TopToolWidget )
+#define TopToolWidgetEventTypeName Event_Define_Event_Info_Type_Name( TopToolWidget )
 class TopToolWidgetEventTypeName {
 	friend class TopToolWidget;
 public:

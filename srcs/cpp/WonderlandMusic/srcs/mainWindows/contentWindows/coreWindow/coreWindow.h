@@ -20,7 +20,7 @@ public:
 	CoreWindow( ContentWindow *parent );
 };
 
-#define CoreWindowEventTypeName Event_Default_Event_Info_Type_Name( CoreWindow )
+#define CoreWindowEventTypeName Event_Define_Event_Info_Type_Name( CoreWindow )
 class CoreWindowEventTypeName {
 
 };

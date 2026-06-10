@@ -2,6 +2,7 @@
 #define MUSICINFO_H_H_HEAD__FILE__
 #include <qstring.h>
 
+class QLabel;
 class QMediaMetaData;
 class QMediaPlayer;
 class MusicInfo {

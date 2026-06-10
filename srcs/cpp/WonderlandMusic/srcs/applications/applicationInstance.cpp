@@ -108,15 +108,13 @@ void ApplicationInstance::initTranslation( ) {
 			translationFilePath = currentPath + "/program/translations/" + applicationName( ) + ".qm";
 	}
 	qTranslator = new QTranslator;
-	if( qTranslator->load( translationFilePath ) == false ) {
-		MessageErrorOut( ) << translate->loadQTranslatorFile << " : " << translationFilePath;
+	if( qTranslator->load( translationFilePath ) == false )
 		// 失败则删除语言文件路径
 		appSetting->remove( jsonKey.app_QTranslator_path_key );
-	} else if( installTranslator( qTranslator ) == false ) {
-		MessageErrorOut( ) << translate->loadQTranslatorApp << " : " << translationFilePath;
-		// 失败则删除语言文件路径
+	else if( installTranslator( qTranslator ) == false )
+	// 失败则删除语言文件路径
 		appSetting->remove( jsonKey.app_QTranslator_path_key );
-	} else {
+	else {
 		// 刷新翻译
 		*translate = Translate( );
 		// 插入语言文件路径

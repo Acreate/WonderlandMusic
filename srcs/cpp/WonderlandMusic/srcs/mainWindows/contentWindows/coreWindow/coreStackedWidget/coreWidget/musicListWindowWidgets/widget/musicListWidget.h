@@ -12,10 +12,10 @@ protected:
 	std::vector< MusicListItemWidget * > musicListItemWidgets;
 public:
 	MusicListWidget( QWidget *parent );
+protected:
 	virtual bool appendItem( const MusicInfo &media_meta_data );
 	virtual bool sort( );
-protected:
-	void paintEvent( QPaintEvent *event ) override;
+
 };
 
 #endif // MUSICLISTWIDGET_H_H_HEAD__FILE__

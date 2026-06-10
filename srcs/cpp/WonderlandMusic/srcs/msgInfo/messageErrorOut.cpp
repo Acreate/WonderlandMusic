@@ -10,12 +10,13 @@
 
 // 核心：直接输出 UTF-16，不走 qDebug、不走本地编码
 void normalConsoleOut( const QString &text ) {
-	HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE );
-	if( h == INVALID_HANDLE_VALUE ) return;
+	HANDLE h = GetStdHandle( STD_ERROR_HANDLE );
+	if( h == INVALID_HANDLE_VALUE )
+		return;
 	// QString → UTF-16（直接给控制台）
-	const ushort *utf16 = text.utf16( );
-	const wchar_t *w = reinterpret_cast< const wchar_t * >( utf16 );
-	WriteConsoleW( h, w, text.length( ), nullptr, nullptr );
+	auto stdU16String = text.toStdU16String( );
+	auto data = stdU16String.data( );
+	WriteConsoleW( h, data, stdU16String.length( ), nullptr, nullptr );
 	WriteConsoleW( h, L"\r\n", 2, nullptr, nullptr );
 }
 

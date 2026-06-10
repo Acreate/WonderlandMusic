@@ -9,7 +9,7 @@
 #include <windows.h>
 
 // 核心：直接输出 UTF-16，不走 qDebug、不走本地编码
-void normalConsoleOut( const QString &text ) {
+void StdErrorConsoleOut( const QString &text ) {
 	HANDLE h = GetStdHandle( STD_ERROR_HANDLE );
 	if( h == INVALID_HANDLE_VALUE )
 		return;
@@ -21,9 +21,7 @@ void normalConsoleOut( const QString &text ) {
 }
 
 #else
-inline void winConsolePrint( const QString &text ) {
-	qDebug( ) << outString.toUtf8( ).constData( );
-}
+	#define StdErrorConsoleOut( text ) qDebug( ) << text.toUtf8( ).constData( )
 #endif
 
 MessageErrorOut::Translate::Translate( ) {
@@ -57,7 +55,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 	outMsgVector.clear( );
 	DateTimeFormat dateTimeFormat;
 	formatMessageOut( dateTimeFormat, outString, location, jion );
-	normalConsoleOut( outString );
+	StdErrorConsoleOut( outString );
 	if( isWriteFile == false )
 		return;
 	auto *applicationInstance = ApplicationInstance::getApplicationInstance( );
@@ -76,7 +74,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 		if( dir.mkdir( logHomePtah ) == false ) {
 			outString.clear( );
 			formatMessageOut( dateTimeFormat, outString, std::source_location::current( ), translate.createDirError + " : " + logHomePtah );
-			normalConsoleOut( outString );
+			StdErrorConsoleOut( outString );
 			return;
 		}
 	}
@@ -85,7 +83,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 	if( openFile.open( flags ) == false ) {
 		outString.clear( );
 		formatMessageOut( dateTimeFormat, outString, std::source_location::current( ), translate.openFileError + " : " + writeFilePath );
-		normalConsoleOut( outString );
+		StdErrorConsoleOut( outString );
 		return;
 	}
 	openFile.write( outString.toUtf8( ) );

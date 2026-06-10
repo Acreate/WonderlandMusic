@@ -5,6 +5,7 @@
 
 #include <base/baseWidget/baseWidget.h>
 
+class MusicInfo;
 class MusicListItemWidget;
 class MusicListWidget : public BaseWidget {
 	Q_OBJECT;
@@ -12,8 +13,7 @@ protected:
 	std::vector< MusicListItemWidget * > musicListItemWidgets;
 public:
 	MusicListWidget( QWidget *parent );
-	virtual std::vector< MusicListItemWidget * > appendMusicFile( const QString &file_path );
-	virtual std::vector< MusicListItemWidget * > appendMusicFile( const QStringList &file_path_list );
+	virtual bool appendItem( MusicInfo *music_info_ptr );
 	virtual bool sort( );
 protected:
 	void paintEvent( QPaintEvent *event ) override;

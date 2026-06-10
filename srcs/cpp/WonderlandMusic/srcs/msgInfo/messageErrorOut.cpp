@@ -5,6 +5,26 @@
 #include "../applications/applicationInstance.h"
 
 #include "../tools/dateTimeFormat.h"
+#ifdef Q_OS_WIN
+#include <windows.h>
+
+// 核心：直接输出 UTF-16，不走 qDebug、不走本地编码
+void normalConsoleOut( const QString &text ) {
+	HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE );
+	if( h == INVALID_HANDLE_VALUE ) return;
+	// QString → UTF-16（直接给控制台）
+	const ushort *utf16 = text.utf16( );
+	const wchar_t *w = reinterpret_cast< const wchar_t * >( utf16 );
+	WriteConsoleW( h, w, text.length( ), nullptr, nullptr );
+	WriteConsoleW( h, L"\r\n", 2, nullptr, nullptr );
+}
+
+#else
+inline void winConsolePrint( const QString &text ) {
+	qDebug( ) << outString.toUtf8( ).constData( );
+}
+#endif
+
 MessageErrorOut::Translate::Translate( ) {
 	sourceFile = QObject::tr( "源文件" );
 	sourceFunction = QObject::tr( "源函数" );
@@ -20,7 +40,7 @@ MessageErrorOut & MessageErrorOut::operator<<( const QString &msg ) {
 	return *this;
 }
 MessageErrorOut & MessageErrorOut::operator<<( const QStringList &msg ) {
-	return MessageErrorOut::operator<<( "{ " + msg.join( ", " ) + " }" );
+	return MessageErrorOut::operator<<( "QStringList[" + QString::number( msg.count( ) ) + "]{\n\t\t" + msg.join( ",\n\t\t" ) + "\n\t};" );
 }
 MessageErrorOut::~MessageErrorOut( ) {
 
@@ -36,8 +56,8 @@ MessageErrorOut::~MessageErrorOut( ) {
 	outMsgVector.clear( );
 	DateTimeFormat dateTimeFormat;
 	formatMessageOut( dateTimeFormat, outString, location, jion );
-	qDebug( ) << outString.toStdString( ).c_str( );
-	if( isWriteFile )
+	normalConsoleOut( outString );
+	if( isWriteFile == false )
 		return;
 	auto *applicationInstance = ApplicationInstance::getApplicationInstance( );
 	if( applicationInstance == nullptr )
@@ -55,7 +75,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 		if( dir.mkdir( logHomePtah ) == false ) {
 			outString.clear( );
 			formatMessageOut( dateTimeFormat, outString, std::source_location::current( ), translate.createDirError + " : " + logHomePtah );
-			qDebug( ) << outString.toStdString( ).c_str( );
+			normalConsoleOut( outString );
 			return;
 		}
 	}
@@ -64,7 +84,7 @@ MessageErrorOut::~MessageErrorOut( ) {
 	if( openFile.open( flags ) == false ) {
 		outString.clear( );
 		formatMessageOut( dateTimeFormat, outString, std::source_location::current( ), translate.openFileError + " : " + writeFilePath );
-		qDebug( ) << outString.toStdString( ).c_str( );
+		normalConsoleOut( outString );
 		return;
 	}
 	openFile.write( outString.toUtf8( ) );

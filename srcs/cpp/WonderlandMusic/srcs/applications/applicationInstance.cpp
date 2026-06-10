@@ -449,10 +449,10 @@ ApplicationInstance::Translate::Translate( ) {
 ApplicationInstance::JSonKey::JSonKey( ) {
 	/* 配置文件 */
 	app_QTranslator_path_key = "app.translator.path";
-	main_window_x_key = "app.main.Window.x";
-	main_window_y_key = "app.main.Window.y";
-	main_window_w_key = "app.main.Window.w";
-	main_window_h_key = "app.main.Window.h";
+	main_window_x_key = "app.main.window.x";
+	main_window_y_key = "app.main.window.y";
+	main_window_w_key = "app.main.window.w";
+	main_window_h_key = "app.main.window.h";
 	app_music_info_file_path = "app.setting.music.info.file.path";
 	app_music_collection_main_widget_width = "app.setting.music.widget.collection.width";
 

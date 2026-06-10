@@ -12,6 +12,8 @@
 
 #include "../../../../../../msgInfo/messageErrorOut.h"
 
+#include "../../../../../../tools/pathTools.h"
+
 #include "widget/musicCollectionWidget.h"
 #include "widget/musicListWidget.h"
 MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent ) {
@@ -82,13 +84,20 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 			}
 			break;
 			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_Dir_Path :
-			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_File_Path :
-				musicListScrollArea->getMusicListWidget( )->appendMusicFile( info.getInputStringList( ) );
-				break;
+			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_File_Path : {
+				QStringList allFilePath;
+				if( PathTools::entryList( allFilePath, info.getInputStringList( ), true ) == false )
+					return;// 没有正确的文件
+				Message_Error_Out << allFilePath;
+			}
+			break;
 			case ApplicationInstanceEventInfo::EventType::Collection_Sub_Menu_Select_Over_Music_Dir_Path
 			:
 			case ApplicationInstanceEventInfo::EventType::Collection_Sub_Menu_Select_Over_Music_File_Path : {
-				auto musicListItemWidgets = musicListScrollArea->getMusicListWidget( )->appendMusicFile( info.getInputStringList( ) );
+				QStringList allFilePath;
+				if( PathTools::entryList( allFilePath, info.getInputStringList( ), true ) == false )
+					return;// 没有正确的文件
+				Message_Error_Out << allFilePath;
 				// todo : 追加到收藏夹
 			}
 			break;

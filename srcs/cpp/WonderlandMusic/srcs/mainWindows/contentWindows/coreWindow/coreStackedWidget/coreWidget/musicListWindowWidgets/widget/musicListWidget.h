@@ -12,6 +12,7 @@ protected:
 	std::vector< MusicListItemWidget * > musicListItemWidgets;
 public:
 	MusicListWidget( QWidget *parent );
+	virtual bool existMusicFilePath(const QString& file_path) const;
 protected:
 	virtual bool appendItem( const MusicInfo &media_meta_data );
 	virtual bool sort( );

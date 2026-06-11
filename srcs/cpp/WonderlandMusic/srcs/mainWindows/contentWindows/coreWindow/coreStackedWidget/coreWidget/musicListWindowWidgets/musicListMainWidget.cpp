@@ -185,7 +185,7 @@ void MusicListMainWidget::loadAppSelctMusicFilePathEvent( const ApplicationInsta
 			QMediaMetaData mediaMetaData = mediaPlayer->metaData( );
 			auto localFile = mediaPlayer->source( ).toLocalFile( );
 			if( mediaMetaData.isEmpty( ) ) {
-				MessageErrorOut( ) << QObject::tr( "没有匹配音频文件信息" ) << " : " << mediaPlayer->source( ).toLocalFile( );
+				MessageErrorOut( ) << QObject::tr( "没有匹配音频文件信息" ) << " : " << localFile;
 				return; // 加载失败
 			}
 			mediaPlayer->deleteLater( );

@@ -9,7 +9,7 @@
 
 #include "coreWindow/coreWindow.h"
 
-ContentWindow::ContentWindow( MainWindow *parent ) : BaseMainWindow( parent ), mainWindow( parent ) {
+ContentWindow::ContentWindow( MainWindow *parent ) : BaseWidgetTypeMainWindow( parent ), mainWindow( parent ) {
 
 	Qt::DockWidgetArea dockWidgetArea;
 

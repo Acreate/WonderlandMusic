@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <macro/eventMacroDefine.h>
 
-#include "../../base/baseWindow/baseMainWindow.h"
+#include "../../base/baseWindow/baseWidgetTypeMainWindow.h"
 
 class CoreInfo;
 class CoreWindow;
@@ -15,7 +15,7 @@ class FindDockWidget;
 class PlayerDockWidget;
 
 /// @brief 内容窗口
-class ContentWindow : public BaseMainWindow {
+class ContentWindow : public BaseWidgetTypeMainWindow {
 	Q_OBJECT;
 protected:
 	/// @brief 父节点

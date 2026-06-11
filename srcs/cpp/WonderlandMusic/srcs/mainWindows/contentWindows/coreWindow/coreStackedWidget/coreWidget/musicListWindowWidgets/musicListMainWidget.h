@@ -6,6 +6,7 @@
 
 #include "../../../../../../applications/applicationInstance.h"
 
+class MusicListMianWindow;
 class CollectionItemWidget;
 class MusicInfo;
 class QMutex;
@@ -14,8 +15,9 @@ class MusicListScrollArea;
 class MusicListMainWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
-	MusicListScrollArea *musicListScrollArea;
+	//MusicListScrollArea *musicListScrollArea;
 	MusicCollectionScrollArea *musicCollectionScrollArea;
+	MusicListMianWindow *musicListMianWindow;
 	bool readyDragWidgetWidth;
 	bool isragWidgetWidth;
 	QRect currentContentsRect;

@@ -5,13 +5,11 @@
 #include <QMediaMetaData>
 #include <QPainter>
 
-#include "../musicListMainWidget.h"
+#include "../../musicListMainWidget.h"
 
-#include "../../../../../../../applications/applicationEvenTrigger.h"
+#include <applications/applicationEvenTrigger.h>
 
-#include "../../../../../../../msgInfo/messageErrorOut.h"
-
-#include "../../../../../../../musics/musicInfo.h"
+#include <musics/musicInfo.h>
 
 #include "musicListItemWidget/musicListItemWidget.h"
 MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {

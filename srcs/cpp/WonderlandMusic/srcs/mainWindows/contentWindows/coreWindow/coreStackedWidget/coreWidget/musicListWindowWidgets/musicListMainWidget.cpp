@@ -7,22 +7,23 @@
 #include <QMenu>
 
 #include "musicCollectionScrollArea.h"
-#include "musicListScrollArea.h"
 
-#include "../../../../../../applications/applicationEvenTrigger.h"
-#include "../../../../../../applications/applicationInstance.h"
+#include <applications/applicationEvenTrigger.h>
+#include <applications/applicationInstance.h>
 
-#include "../../../../../../msgInfo/messageErrorOut.h"
+#include <msgInfo/messageErrorOut.h>
 
-#include "../../../../../../musics/musicInfo.h"
+#include <musics/musicInfo.h>
 
-#include "../../../../../../tools/pathTools.h"
+#include <tools/pathTools.h>
 
 #include "widget/musicCollectionWidget.h"
-#include "widget/musicListWidget.h"
+#include "musicListMianWindow/widget/musicListWidget.h"
 #include <QMutex>
 
-#include "../../../../../../tools/vectorTools.h"
+#include <tools/vectorTools.h>
+
+#include "musicListMianWindow/musicListMianWindow.h"
 MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent ) {
 	loadFileOverCount = 0;
 	minCollectionWidth = 10;
@@ -30,7 +31,8 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 	json = new QJsonObject;
 	musicInfoVectorWRMutex = new QMutex;
 	musicCollectionScrollArea = new MusicCollectionScrollArea( this );
-	musicListScrollArea = new MusicListScrollArea( this );
+	musicListMianWindow = new MusicListMianWindow( this );
+	musicListMianWindow->show( );
 
 	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
 	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
@@ -128,7 +130,7 @@ MusicListMainWidget::~MusicListMainWidget( ) {
 	clearMusicInfoVector( );
 	delete musicInfoVectorWRMutex;
 	delete musicCollectionScrollArea;
-	delete musicListScrollArea;
+	delete musicListMianWindow;
 }
 int MusicListMainWidget::getMusicCollectionWidth( ) const {
 	return musicCollectionScrollArea->width( );
@@ -137,7 +139,7 @@ void MusicListMainWidget::setMusicCollectionWidth( int new_width ) {
 	if( minCollectionWidth > new_width || minCollectionWidth > ( currentWidgetWidth - new_width ) )
 		return;
 	musicCollectionScrollArea->setGeometry( 0, 0, new_width, currentWidgetHeight );
-	musicListScrollArea->setGeometry( new_width, 0, currentWidgetWidth - new_width, currentWidgetHeight );
+	musicListMianWindow->setGeometry( new_width, 0, currentWidgetWidth - new_width, currentWidgetHeight );
 }
 const QJsonObject & MusicListMainWidget::serializeToJsonObject( ) const {
 
@@ -172,7 +174,7 @@ void MusicListMainWidget::loadAppSelctMusicFilePathEvent( const ApplicationInsta
 	qsizetype index = 0;
 	auto data = filterMusicFilePath.data( );
 	loadFileOverCount += fileCount;
-	auto musicListWidget = musicListScrollArea->getMusicListWidget( );
+	auto musicListWidget = musicListMianWindow->getMusicListWidget( );
 	QMediaPlayer *mediaPlayer;
 	for( ; index < fileCount; ++index ) {
 		if( musicListWidget->existMusicFilePath( data[ index ] ) )

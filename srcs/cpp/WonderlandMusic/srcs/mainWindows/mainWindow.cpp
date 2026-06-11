@@ -26,7 +26,6 @@ MainWindow::MainWindow( ) : BaseMainWindow( nullptr ) {
 	setWindowFlags( flags );
 
 	contentWindow = new ContentWindow( this );
-	contentWindow->setWindowFlags( Qt::WindowType::Widget );
 	this->setCentralWidget( contentWindow );
 
 	functionDockWidget = new FunctionDockWidget( this );

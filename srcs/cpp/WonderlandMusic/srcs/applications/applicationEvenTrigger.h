@@ -32,36 +32,36 @@ class ApplicationEvenTrigger : public BaseObject {
 	/// @brief 事件友元，用于初始化
 	friend class InitApplicationInstance;
 private:
-	friend class Event_Define_Event_Info_Type_Name( ApplicationInstance );
-	friend class Event_Define_Event_Info_Type_Name( MainWindow );
-	friend class Event_Define_Event_Info_Type_Name( OptionNavigationWidget );
-	friend class Event_Define_Event_Info_Type_Name( OptionNavigationDockWidget );
-	friend class Event_Define_Event_Info_Type_Name( SettingWindow );
-	friend class Event_Define_Event_Info_Type_Name( CoreStackedWidget );
-	friend class Event_Define_Event_Info_Type_Name( FindDockWidget );
-	friend class Event_Define_Event_Info_Type_Name( PlayerDockWidget );
-	friend class Event_Define_Event_Info_Type_Name( CoreWindow );
-	friend class Event_Define_Event_Info_Type_Name( FunctionWidget );
-	friend class Event_Define_Event_Info_Type_Name( TopToolWidget );
-	friend class Event_Define_Event_Info_Type_Name( FunctionDockWidget );
-	friend class Event_Define_Event_Info_Type_Name( TopToolDockWidget );
-	friend class Event_Define_Event_Info_Type_Name( ContentWindow );
-	friend class Event_Define_Event_Info_Type_Name( PlayerWidget );
-	friend class Event_Define_Event_Info_Type_Name( PathSettingWidget );
-	friend class Event_Define_Event_Info_Type_Name( MusicListMainWidget );
-	friend class Event_Define_Event_Info_Type_Name( MusicCollectionWidget );
-	friend class Event_Define_Event_Info_Type_Name( MusicCollectionTopMenu );
-	friend class Event_Define_Event_Info_Type_Name( MusicCollectionSubMenu );
-	friend class Event_Define_Event_Info_Type_Name( MusicListTopMenu );
-	friend class Event_Define_Event_Info_Type_Name( MusicListSubMenu );
+	Event_Define_Event_Friend_Type_Name( ApplicationInstance );
+	Event_Define_Event_Friend_Type_Name( MainWindow );
+	Event_Define_Event_Friend_Type_Name( OptionNavigationWidget );
+	Event_Define_Event_Friend_Type_Name( OptionNavigationDockWidget );
+	Event_Define_Event_Friend_Type_Name( SettingWindow );
+	Event_Define_Event_Friend_Type_Name( CoreStackedWidget );
+	Event_Define_Event_Friend_Type_Name( FindDockWidget );
+	Event_Define_Event_Friend_Type_Name( PlayerDockWidget );
+	Event_Define_Event_Friend_Type_Name( CoreWindow );
+	Event_Define_Event_Friend_Type_Name( FunctionWidget );
+	Event_Define_Event_Friend_Type_Name( TopToolWidget );
+	Event_Define_Event_Friend_Type_Name( FunctionDockWidget );
+	Event_Define_Event_Friend_Type_Name( TopToolDockWidget );
+	Event_Define_Event_Friend_Type_Name( ContentWindow );
+	Event_Define_Event_Friend_Type_Name( PlayerWidget );
+	Event_Define_Event_Friend_Type_Name( PathSettingWidget );
+	Event_Define_Event_Friend_Type_Name( MusicListMainWidget );
+	Event_Define_Event_Friend_Type_Name( MusicCollectionWidget );
+	Event_Define_Event_Friend_Type_Name( MusicCollectionTopMenu );
+	Event_Define_Event_Friend_Type_Name( MusicCollectionSubMenu );
+	Event_Define_Event_Friend_Type_Name( MusicListTopMenu );
+	Event_Define_Event_Friend_Type_Name( MusicListSubMenu );
 private:
 	Q_OBJECT;
 protected:
 	ApplicationInstance *application;
-public:
-	ApplicationEvenTrigger( ApplicationInstance *application );
 	static ApplicationInstance * getApplication( );
 	static ApplicationEvenTrigger * getApplicationEvenTrigger( ApplicationInstance *application );
+public:
+	ApplicationEvenTrigger( ApplicationInstance *application );
 public:
 	Event_Define_Quick_Connect_Signed( ApplicationInstance );
 	Event_Define_Quick_Connect_Signed( MainWindow );
@@ -133,4 +133,5 @@ Event_Define_Event_Class_type( MusicCollectionTopMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicCollectionSubMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListTopMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListSubMenu, ApplicationEvenTrigger );
+
 #endif // APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__

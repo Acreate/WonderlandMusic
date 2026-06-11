@@ -15,6 +15,11 @@
 #define Event_Define_Event_Info_Type_Name( event_name ) \
 		event_name##EventInfo
 
+/// @brief 声明友元
+/// @param event_name 友元事件类原始匹配名称
+#define Event_Define_Event_Friend_Type_Name( event_name ) \
+	friend class event_name##EventInfo;\
+	friend class event_name##Event
 /// @brief 声明一个类型
 /// @param event_name 声明的类
 #define Event_Declare_Event_Info_Type_Name( event_name ) \

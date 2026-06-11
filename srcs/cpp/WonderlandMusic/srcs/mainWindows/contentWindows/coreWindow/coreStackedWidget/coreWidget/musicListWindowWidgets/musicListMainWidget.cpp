@@ -172,8 +172,12 @@ void MusicListMainWidget::loadAppSelctMusicFilePathEvent( const ApplicationInsta
 	qsizetype index = 0;
 	auto data = filterMusicFilePath.data( );
 	loadFileOverCount += fileCount;
+	auto musicListWidget = musicListScrollArea->getMusicListWidget( );
+	QMediaPlayer *mediaPlayer;
 	for( ; index < fileCount; ++index ) {
-		QMediaPlayer *mediaPlayer = new QMediaPlayer;
+		if( musicListWidget->existMusicFilePath( data[ index ] ) )
+			continue; // 存在则跳过
+		mediaPlayer = new QMediaPlayer;
 		connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, [this,mediaPlayer,collection_item_widget] ( QMediaPlayer::MediaStatus media_status ) {
 			if( media_status != QMediaPlayer::LoadedMedia )
 				return; // 必须标识为加载完成

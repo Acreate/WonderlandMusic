@@ -6,6 +6,9 @@
 #include "mainWindows/mainWindow.h"
 #include <QTextCodec>
 
+#include "msgInfo/messageErrorOut.h"
+
+static MessageErrorOut *messageErrorOut = nullptr;
 static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
 
 void myCategoryFilter( QLoggingCategory *category ) {
@@ -21,6 +24,7 @@ void myCategoryFilter( QLoggingCategory *category ) {
 		category->setEnabled( QtInfoMsg, false );
 		category->setEnabled( QtSystemMsg, false );
 		category->setEnabled( QtWarningMsg, false );
+		*messageErrorOut << QObject::tr( "屏蔽" ) + "\"" + name + "\"" + QObject::tr( "日志" );
 	} else if( name.indexOf( "usb" ) != -1 ||
 		name.indexOf( "driver" ) != -1 )
 		category->setEnabled( QtDebugMsg, true );
@@ -30,15 +34,17 @@ void myCategoryFilter( QLoggingCategory *category ) {
 }
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {
-
+	messageErrorOut = new MessageErrorOut;
+	messageErrorOut->setJoinString( "\n" );
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
+
 	ApplicationInstance *application = new ApplicationInstance( argc, argv );
 
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
 	QTextCodec::setCodecForLocale( utf8 );
 
 	int exec = application->exec( );
-
+	delete messageErrorOut;
 	delete application;
 	return exec;
 }

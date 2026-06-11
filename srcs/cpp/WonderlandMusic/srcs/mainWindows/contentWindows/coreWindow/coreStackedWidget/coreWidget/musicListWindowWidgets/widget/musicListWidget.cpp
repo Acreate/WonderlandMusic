@@ -32,6 +32,20 @@ MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 		sort( );
 	} );
 }
+bool MusicListWidget::existMusicFilePath( const QString &file_path ) const {
+	size_t count = musicListItemWidgets.size( );
+	if( count == 0 )
+		return false;
+	auto data = musicListItemWidgets.data( );
+	size_t index;
+	QFileInfo *info = new QFileInfo( file_path );
+	auto absoluteFilePath = info->absoluteFilePath( );
+	delete info;
+	for( index = 0; index < count; ++index )
+		if( data[ index ]->getFilePath( ) == absoluteFilePath )
+			return true;
+	return false;
+}
 bool MusicListWidget::appendItem( const MusicInfo &media_meta_data ) {
 	QString filePath = media_meta_data.getFilePath( );
 	size_t count = musicListItemWidgets.size( );

@@ -17,16 +17,18 @@
 MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 	ApplicationEvenTrigger::connectMusicListMainWidgetEvent( [this] ( MusicListMainWidget *music_list_main_widget, const MusicListMainWidgetEventInfo &music_list_main_widget_event_info ) {
 		auto eventType = music_list_main_widget_event_info.getEventType( );
-		if( eventType != MusicListMainWidgetEventInfo::EventType::Music_Load_Over )
+		if( eventType != MusicListMainWidgetEventInfo::EventType::Load_Music_File_Over )
 			return;
 		auto musicInfos = music_list_main_widget->getMusicInfos( );
 		size_t count = musicInfos.size( );
+		if( count == 0 )
+			return;
 		auto data = musicInfos.data( );
-		size_t index = 0;
-
-		for( ; index < count; ++index )
-			if( appendItem( *data[ index ] ) == false )
-				Message_Error_Out << tr( "加载异常" ) << " : " << data[ index ]->getFilePath( );
+		if( count == 1 )
+			appendItem( *data[ 0 ] );
+		else
+			for( size_t index = 0; index < count; ++index )
+				appendItem( *data[ index ] );
 		sort( );
 	} );
 }
@@ -65,6 +67,7 @@ bool MusicListWidget::sort( ) {
 			maxWidth = compWidth;
 		data[ index ]->move( 0, maxHeight );
 		maxHeight += data[ index ]->height( );
+		data[ index ]->show( );
 	}
 	if( maxHeight > compHeight )
 		setFixedHeight( maxHeight );

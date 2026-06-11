@@ -32,7 +32,6 @@ void myCategoryFilter( QLoggingCategory *category ) {
 int main( int argc, char *argv[ ], char *envp[ ] ) {
 
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
-
 	ApplicationInstance *application = new ApplicationInstance( argc, argv );
 
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );

@@ -4,6 +4,9 @@
 #include <macro/eventMacroDefine.h>
 #include <base/baseWidget/baseWidget.h>
 
+#include "../../../../../../applications/applicationInstance.h"
+
+class CollectionItemWidget;
 class MusicInfo;
 class QMutex;
 class MusicCollectionScrollArea;
@@ -33,6 +36,7 @@ public:
 protected:
 	virtual void clearMusicInfoVector( );
 	virtual void updateSubWidgetSize( );
+	virtual void loadAppSelctMusicFilePathEvent( const ApplicationInstanceEventInfo &info, CollectionItemWidget *collection_item_widget );
 	void resizeEvent( QResizeEvent *event ) override;
 };
 
@@ -44,7 +48,7 @@ public:
 		HIDE_Draw_Mouse_ICO,
 		Start_Draw_Music_Widget_Width,
 		Over_Draw_Music_Widget_Width,
-		Music_Load_Over,
+		Load_Music_File_Over,
 	};
 protected:
 	EventType enventType;

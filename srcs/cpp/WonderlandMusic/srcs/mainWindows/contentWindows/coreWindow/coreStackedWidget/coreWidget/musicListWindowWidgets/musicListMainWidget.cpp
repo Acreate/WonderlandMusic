@@ -93,65 +93,21 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 			break;
 			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_Dir_Path :
 			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_File_Path : {
-				QStringList allFilePath;
-				if( PathTools::entryList( allFilePath, info.getInputStringList( ), true ) == false )
-					return;// 没有正确的文件
-				QStringList filterMusicFilePath;
-				qsizetype fileCount = PathTools::filterMusicFile( filterMusicFilePath, allFilePath );
-				if( fileCount == 0 )
-					return; // 无法匹配支持后缀名
-				allFilePath.clear( );
-				qsizetype index = 0;
-				auto data = filterMusicFilePath.data( );
-				loadFileOverCount += fileCount;
-
-				std::vector< QString > over;
-
-				for( ; index < fileCount; ++index ) {
-					QMediaPlayer *mediaPlayer = new QMediaPlayer;
-					connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, [this,mediaPlayer, fileCount] ( QMediaPlayer::MediaStatus media_status ) {
-						if( media_status != QMediaPlayer::LoadedMedia )
-							return; // 必须标识为加载完成
-
-						QMediaMetaData mediaMetaData = mediaPlayer->metaData( );
-						auto localFile = mediaPlayer->source( ).toLocalFile( );
-						if( mediaMetaData.isEmpty( ) ) {
-							MessageErrorOut( ) << QObject::tr( "没有匹配音频文件信息" ) << " : " << mediaPlayer->source( ).toLocalFile( );
-							return; // 加载失败
-						}
-						mediaPlayer->deleteLater( );
-						loadFileOverCount -= 1;
-						QString musicName = mediaMetaData.stringValue( QMediaMetaData::Title );
-						QString albumArtistName = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
-						if( albumArtistName.isEmpty( ) )
-							albumArtistName = mediaMetaData.stringValue( QMediaMetaData::AlbumArtist );
-						if( albumArtistName.isEmpty( ) )
-							albumArtistName = mediaMetaData.stringValue( QMediaMetaData::Author );
-						qint64 duration = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
-						MusicInfo *musicInfo = new MusicInfo( localFile, musicName, albumArtistName, duration );
-						musicInfoVectorWRMutex->lock( );
-						musicInfos.emplace_back( musicInfo );
-						musicInfoVectorWRMutex->unlock( );
-						if( loadFileOverCount == 0 )
-							MusicListMainWidgetEvent( this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Music_Load_Over ) );
-					} );
-					mediaPlayer->setSource( QUrl::fromLocalFile( data[ index ] ) );
-					size_t findRsultIndex;
-					if( VectorTools::findIndex( over, data[ index ], findRsultIndex ) == true ) {
-						Message_Error_Out << "找到重复: " << data[ index ] << " ,下标=" << QString::number( findRsultIndex );
-					}
-					over.emplace_back( data[ index ] );
+				if( loadFileOverCount != 0 ) {
+					Message_Error_Out << tr( "因列表未加载完成，跳过这次加载，请等候完成再加载..." );
+					break;
 				}
+				loadAppSelctMusicFilePathEvent( info, nullptr );
 			}
 			break;
 			case ApplicationInstanceEventInfo::EventType::Collection_Sub_Menu_Select_Over_Music_Dir_Path
 			:
 			case ApplicationInstanceEventInfo::EventType::Collection_Sub_Menu_Select_Over_Music_File_Path : {
-				QStringList allFilePath;
-				if( PathTools::entryList( allFilePath, info.getInputStringList( ), true ) == false )
-					return;// 没有正确的文件
-				Message_Error_Out << allFilePath;
-				// todo : 追加到收藏夹
+				if( loadFileOverCount != 0 ) {
+					Message_Error_Out << tr( "因列表未加载完成，跳过这次加载，请等候完成再加载..." );
+					break;
+				}
+				loadAppSelctMusicFilePathEvent( info, musicCollectionScrollArea->getMusicCollectionWidget( )->getSelectCurrentCollectionItemWidget( ) );
 			}
 			break;
 			case ApplicationInstanceEventInfo::EventType::Create_Music_Collection_Item : {
@@ -203,6 +159,54 @@ void MusicListMainWidget::clearMusicInfoVector( ) {
 }
 void MusicListMainWidget::updateSubWidgetSize( ) {
 	setMusicCollectionWidth( musicCollectionScrollArea->width( ) );
+}
+void MusicListMainWidget::loadAppSelctMusicFilePathEvent( const ApplicationInstanceEventInfo &info, CollectionItemWidget *collection_item_widget ) {
+	QStringList allFilePath;
+	if( PathTools::entryList( allFilePath, info.getInputStringList( ), true ) == false )
+		return;// 没有正确的文件
+	QStringList filterMusicFilePath;
+	qsizetype fileCount = PathTools::filterMusicFile( filterMusicFilePath, allFilePath );
+	if( fileCount == 0 )
+		return; // 无法匹配支持后缀名
+	allFilePath.clear( );
+	qsizetype index = 0;
+	auto data = filterMusicFilePath.data( );
+	loadFileOverCount += fileCount;
+	for( ; index < fileCount; ++index ) {
+		QMediaPlayer *mediaPlayer = new QMediaPlayer;
+		connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, [this,mediaPlayer,collection_item_widget] ( QMediaPlayer::MediaStatus media_status ) {
+			if( media_status != QMediaPlayer::LoadedMedia )
+				return; // 必须标识为加载完成
+
+			QMediaMetaData mediaMetaData = mediaPlayer->metaData( );
+			auto localFile = mediaPlayer->source( ).toLocalFile( );
+			if( mediaMetaData.isEmpty( ) ) {
+				MessageErrorOut( ) << QObject::tr( "没有匹配音频文件信息" ) << " : " << mediaPlayer->source( ).toLocalFile( );
+				return; // 加载失败
+			}
+			mediaPlayer->deleteLater( );
+			loadFileOverCount -= 1;
+			QString musicName = mediaMetaData.stringValue( QMediaMetaData::Title );
+			QString albumArtistName = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
+			if( albumArtistName.isEmpty( ) )
+				albumArtistName = mediaMetaData.stringValue( QMediaMetaData::AlbumArtist );
+			if( albumArtistName.isEmpty( ) )
+				albumArtistName = mediaMetaData.stringValue( QMediaMetaData::Author );
+			qint64 duration = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
+			MusicInfo *musicInfo = new MusicInfo( localFile, musicName, albumArtistName, duration );
+			musicInfoVectorWRMutex->lock( );
+			musicInfos.emplace_back( musicInfo );
+			musicInfoVectorWRMutex->unlock( );
+			if( loadFileOverCount == 0 ) {
+				MusicListMainWidgetEvent( this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Load_Music_File_Over ) );
+				if( collection_item_widget == nullptr )
+					musicCollectionScrollArea->getMusicCollectionWidget( )->appendItemMusicInfoList( collection_item_widget, musicInfos );
+				clearMusicInfoVector( );
+			}
+
+		} );
+		mediaPlayer->setSource( QUrl::fromLocalFile( data[ index ] ) );
+	}
 }
 void MusicListMainWidget::resizeEvent( QResizeEvent *event ) {
 	QWidget::resizeEvent( event );

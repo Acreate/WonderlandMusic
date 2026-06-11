@@ -89,6 +89,9 @@ bool MusicCollectionWidget::appendItemWidget( const QString &item_name ) {
 	newItem->show( );
 	return true;
 }
+bool MusicCollectionWidget::appendItemMusicInfoList( const CollectionItemWidget *append_target, const std::vector<MusicInfo *> &music_infos ) {
+	return false;
+}
 void MusicCollectionWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
 }

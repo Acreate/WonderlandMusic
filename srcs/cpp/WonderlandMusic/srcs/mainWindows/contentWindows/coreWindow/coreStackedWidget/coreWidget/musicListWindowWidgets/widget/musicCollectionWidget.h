@@ -3,6 +3,7 @@
 
 #include <base/baseWidget/baseWidget.h>
 
+class MusicInfo;
 class CollectionItemWidget;
 class CollectionTopToolWidget;
 class MusicCollectionWidget : public BaseWidget {
@@ -24,6 +25,7 @@ public:
 	virtual bool appendItemWidget( const QString &item_name );
 	virtual CollectionTopToolWidget * getCollectionTopToolWidget1( ) const { return collectionTopToolWidget; }
 	virtual const std::vector< CollectionItemWidget * > & getCollectionItemWidgets( ) const { return collectionItemWidgets; }
+	virtual bool appendItemMusicInfoList( const CollectionItemWidget *append_target, const std::vector< MusicInfo * > &music_infos );
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;

@@ -1,6 +1,8 @@
 ﻿#include "musicListTopWidget.h"
 
 #include <QLabel>
+#include <QPainter>
+
 MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent ) {
 	musicNameItem = new QLabel( tr( "歌名" ), this );
 	musicSingerItem = new QLabel( tr( "歌手" ), this );
@@ -36,4 +38,7 @@ void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 	musicSingerItem->move( offsetX, 0 );
 	offsetX += musicSingerItem->width( ) + sides;
 	musicPlayerTimeItem->move( offsetX, 0 );
+}
+void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
+	BaseWidget::paintEvent( event );
 }

@@ -2,6 +2,7 @@
 #define MUSICLISTTOPWIDGET_H_H_HEAD__FILE__
 
 #include <base/baseWidget/baseWidget.h>
+class FontSize;
 class MusicListTopWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
@@ -18,6 +19,7 @@ public:
 	virtual int getMusicPlayerTimeItemWidth( ) const;
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
+	void paintEvent( QPaintEvent *event ) override;
 };
 
 #endif // MUSICLISTTOPWIDGET_H_H_HEAD__FILE__

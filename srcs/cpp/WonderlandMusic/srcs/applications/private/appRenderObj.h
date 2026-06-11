@@ -24,6 +24,10 @@ public:
 	bool renderExpandImage( QImage &result_image, const QImage &expand_image, const QPoint &pos ) override;
 	bool renderColorImage( QImage &result_image, const QColor &color ) override;
 	bool renderColorReplaceColorImage( QImage &result_image, const QColor &old_color, const QColor &new_color ) override;
+	const QFont & getFont( ) const override;
+	const FontSize getTxtSize( const QString &txt ) override;
+	const FontSize getTxtSize( const QFont &font, const QString &txt ) override;
+	const FontSize getTxtSize( const QFontMetrics &font_metrics, const QString &txt ) override;
 };
 
 #endif // APPRENDEROBJ_H_H_HEAD__FILE__

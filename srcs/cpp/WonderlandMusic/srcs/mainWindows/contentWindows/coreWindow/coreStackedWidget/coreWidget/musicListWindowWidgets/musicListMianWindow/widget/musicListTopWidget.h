@@ -21,6 +21,18 @@ protected:
 	int musicPlayerTimeItemWidth;
 	/// @brief 辅助计算偏移 x
 	int drawOffsetX;
+	/// @brief 分割符宽度
+	int decollatorWidth;
+	/// @brief 分隔符占用空间，decollatorInterspace = decollatorWidth + space
+	int decollatorInterspace;
+	/// @brief 当前组件高度
+	int currentWidgetHeight;
+	/// @brief 当前组件宽度
+	int currentWidgetWidget;
+	/// @brief 绘制坐标
+	QPoint drawPoint;
+	/// @brief 绘制图像
+	const QImage *drawRenderBuff;
 private:
 	void initItemSize( const FontRender &font_render, int &result_width, int &result_height ) const;
 public:

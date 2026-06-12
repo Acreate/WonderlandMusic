@@ -5,6 +5,19 @@
 
 #include <render/render.h>
 
+#include "musicListItemWidget/playerListItem.h"
+
+MusicListTopWidget::ItemInfo::ItemInfo( const QString &txt ) : fontRender( new FontRender( txt ) ),
+	offsetX( 0 ) { }
+MusicListTopWidget::ItemInfo::~ItemInfo( ) {
+	delete fontRender;
+}
+FontRender * MusicListTopWidget::ItemInfo::getFontRender( ) const { return fontRender; }
+int MusicListTopWidget::ItemInfo::getWidth( ) const { return fontRender->getTxtFontSize( )->getHorizontalAdvance( ); }
+int MusicListTopWidget::ItemInfo::getHeight( ) const {
+	return fontRender->getTxtFontSize( )->getHeight( );
+}
+int MusicListTopWidget::ItemInfo::getOffsetX( ) const { return offsetX; }
 void MusicListTopWidget::initItemSize( const FontRender &font_render, int &result_width, int &result_height ) const {
 	const StringFontSize *stringFontSize;
 	stringFontSize = font_render.getTxtFontSize( );
@@ -12,70 +25,27 @@ void MusicListTopWidget::initItemSize( const FontRender &font_render, int &resul
 	result_height = stringFontSize->getHeight( );
 }
 MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent ) {
-	musicNameItem = new FontRender( tr( "歌名" ) );
-	musicSingerItem = new FontRender( tr( "歌手" ) );
-	musicPlayerTimeItem = new FontRender( tr( "时长" ) );
-	decollatorWidth = 2;
-	decollatorInterspace = 10;
-	int compHeight;
-	initItemSize( *musicNameItem, musicNameItemWidth, currentWidgetHeight );
-	currentWidgetWidget = musicNameItemWidth + decollatorInterspace; // 增加前方空间
-	initItemSize( *musicSingerItem, musicSingerItemWidth, compHeight );
-	currentWidgetWidget += musicSingerItemWidth + decollatorInterspace; // 增加前方空间
-	if( compHeight > currentWidgetHeight )
-		currentWidgetHeight = compHeight;
-	initItemSize( *musicPlayerTimeItem, musicPlayerTimeItemWidth, compHeight );
-	currentWidgetWidget += musicPlayerTimeItemWidth + decollatorInterspace; // 增加前方空间
-	if( compHeight > currentWidgetHeight )
-		currentWidgetHeight = compHeight;
-	currentWidgetWidget += decollatorInterspace; // 增加末尾空间
-	setFixedSize( currentWidgetWidget, currentWidgetHeight );
+
+	playerListItem = new PlayerListItem;
+	playerListItem->appendItem( tr( "歌名" ) );
+	playerListItem->appendItem( tr( "歌手" ) );
+	playerListItem->appendItem( tr( "时长" ) );
+	drawBuff = new QImage( 1, 1, QImage::Format_RGBA8888 );
+	playerListItem->renderBuff( drawBuff );
+	setFixedSize( drawBuff->size( ) );
 }
-int MusicListTopWidget::getMusicNameItemWidth( ) const {
-	return musicNameItemWidth;
-}
-int MusicListTopWidget::getMusicSingerItemWidth( ) const {
-	return musicSingerItemWidth;
-}
-int MusicListTopWidget::getMusicPlayerTimeItemWidth( ) const {
-	return musicPlayerTimeItemWidth;
+MusicListTopWidget::~MusicListTopWidget( ) {
+	delete playerListItem;
+	delete drawBuff;
 }
 void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
+
 }
 void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
 	BaseWidget::paintEvent( event );
 	QPainter painter;
 	painter.begin( this );
-	int decollatorHalf = ( decollatorInterspace - decollatorWidth ) / 2;
-	drawOffsetX = decollatorHalf;
-
-	auto pen = painter.pen( );
-	pen.setWidth( decollatorWidth );
-
-	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentWidgetHeight );
-
-	drawOffsetX += decollatorHalf;
-	drawPoint.setX( drawOffsetX );
-
-	drawRenderBuff = musicNameItem->getRenderBuff( );
-	painter.drawImage( drawPoint, *drawRenderBuff );
-	drawOffsetX += musicNameItemWidth + decollatorHalf;
-	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentWidgetHeight );
-
-	drawOffsetX += decollatorHalf;
-	drawPoint.setX( drawOffsetX );
-	drawRenderBuff = musicSingerItem->getRenderBuff( );
-	painter.drawImage( drawPoint, *drawRenderBuff );
-	drawOffsetX += musicNameItemWidth + decollatorHalf;
-	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentWidgetHeight );
-
-	drawOffsetX += decollatorHalf;
-	drawPoint.setX( drawOffsetX );
-	drawRenderBuff = musicPlayerTimeItem->getRenderBuff( );
-	painter.drawImage( drawPoint, *drawRenderBuff );
-	drawOffsetX += musicSingerItemWidth + decollatorHalf;
-	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentWidgetHeight );
-
+	painter.drawImage( 0, 0, *drawBuff );
 	painter.end( );
 }

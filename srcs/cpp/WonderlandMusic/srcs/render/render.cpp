@@ -7,7 +7,10 @@
 
 #include "../applications/applicationInstance.h"
 FontRender::FontRender( ) : FontRender( "" ) { }
-FontRender::FontRender( const QString &txt ) : txt( new QString( ) ), fontSize( new StringFontSize( ) ), renderBuff( new QImage( 1, 1, QImage::Format_RGBA8888 ) ) {
+FontRender::FontRender( const QString &txt ) : FontRender( txt, true ) {
+}
+FontRender::FontRender( const QString &txt, bool is_render ) :
+	isRender( is_render ), txt( new QString( ) ), fontSize( new StringFontSize( ) ), renderBuff( nullptr ) {
 	setTxt( txt );
 }
 void FontRender::setTxt( const QString &txt ) {
@@ -19,8 +22,13 @@ void FontRender::setTxt( const QString &txt ) {
 	auto &&font = render->getFont( );
 	QFontMetrics metrics( font );
 	*fontSize = render->getTxtSize( metrics, txt );
+	if( isRender == false )
+		return;
+	if( renderBuff == nullptr )
+		renderBuff = new QImage( fontSize->getHorizontalAdvance( ), fontSize->getHeight( ), QImage::Format_RGBA8888 );
+	else
+		*renderBuff = QImage( fontSize->getHorizontalAdvance( ), fontSize->getHeight( ), QImage::Format_RGBA8888 );
 	renderBuff->fill( 0 );
-	*renderBuff = renderBuff->scaled( fontSize->getHorizontalAdvance( ), fontSize->getHeight( ) );
 	QPainter painter;
 	painter.begin( renderBuff );
 	painter.setFont( font );
@@ -28,7 +36,7 @@ void FontRender::setTxt( const QString &txt ) {
 	painter.end( );
 }
 const QImage * const FontRender::getRenderBuff( ) const {
-	if( stringLength == 0 )
+	if( stringLength == 0 || isRender )
 		return nullptr;
 	return renderBuff;
 }
@@ -42,7 +50,11 @@ const StringFontSize * const FontRender::getTxtFontSize( ) const {
 }
 FontRender::~FontRender( ) {
 	delete fontSize;
-	delete renderBuff;
+	if( renderBuff )
+		delete renderBuff;
 	delete txt;
-
+}
+bool FontRender::drawTarget( QPainter *painter_ptr, const int &x, const int &y ) {
+	painter_ptr->drawText( x, fontSize->getAscent( ) + y, *txt );
+	return true;
 }

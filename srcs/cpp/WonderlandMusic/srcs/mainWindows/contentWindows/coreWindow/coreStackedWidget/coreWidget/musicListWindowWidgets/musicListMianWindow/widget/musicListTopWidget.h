@@ -2,44 +2,39 @@
 #define MUSICLISTTOPWIDGET_H_H_HEAD__FILE__
 
 #include <base/baseWidget/baseWidget.h>
+class PlayerListItem;
 class FontRender;
 class StringFontSize;
 class MusicListTopWidget : public BaseWidget {
 	Q_OBJECT;
+public:
+	class ItemInfo {
+		friend class MusicListTopWidget;
+	private:
+		FontRender *fontRender;
+		int offsetX;
+	protected:
+		ItemInfo( const QString &txt );
+	public:
+		ItemInfo( const ItemInfo &other ) = delete;
+		ItemInfo( ItemInfo &&other ) = delete;
+		ItemInfo & operator=( const ItemInfo &other ) = delete;
+		ItemInfo & operator=( ItemInfo &&other ) = delete;
+		virtual ~ItemInfo( );
+		virtual FontRender * getFontRender( ) const;
+		virtual int getWidth( ) const;
+		virtual int getHeight( ) const;
+		virtual int getOffsetX( ) const;
+	};
 protected:
-	/// @brief 音乐名称项
-	FontRender *musicNameItem;
-	/// @brief 名称长度
-	int musicNameItemWidth;
-	/// @brief 音乐主唱项
-	FontRender *musicSingerItem;
-	/// @brief 主唱长度
-	int musicSingerItemWidth;
-	/// @brief 音乐播放时长项
-	FontRender *musicPlayerTimeItem;
-	/// @brief 播放时长宽度
-	int musicPlayerTimeItemWidth;
-	/// @brief 辅助计算偏移 x
-	int drawOffsetX;
-	/// @brief 分割符宽度
-	int decollatorWidth;
-	/// @brief 分隔符占用空间，decollatorInterspace = decollatorWidth + space
-	int decollatorInterspace;
-	/// @brief 当前组件高度
-	int currentWidgetHeight;
-	/// @brief 当前组件宽度
-	int currentWidgetWidget;
-	/// @brief 绘制坐标
-	QPoint drawPoint;
-	/// @brief 绘制图像
-	const QImage *drawRenderBuff;
+	PlayerListItem *playerListItem;
+	/// @brief 整体绘制
+	QImage *drawBuff;
 private:
 	void initItemSize( const FontRender &font_render, int &result_width, int &result_height ) const;
 public:
 	MusicListTopWidget( QWidget *parent );
-	virtual int getMusicNameItemWidth( ) const;
-	virtual int getMusicSingerItemWidth( ) const;
-	virtual int getMusicPlayerTimeItemWidth( ) const;
+	~MusicListTopWidget() override;
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
 	void paintEvent( QPaintEvent *event ) override;

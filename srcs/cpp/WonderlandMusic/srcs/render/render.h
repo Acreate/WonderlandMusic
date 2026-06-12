@@ -1,7 +1,9 @@
 ﻿#ifndef RENDER_H_H_HEAD__FILE__
 #define RENDER_H_H_HEAD__FILE__
+#include <qpoint.h>
 #include <qtypes.h>
 
+class QPainter;
 class QFontMetrics;
 class QFont;
 class QColor;
@@ -36,6 +38,7 @@ public:
 	virtual int getAscent( ) const { return ascent; }
 	virtual int getHeight( ) const { return height; }
 	virtual int getHorizontalAdvance( ) const { return horizontalAdvance; }
+	virtual int getWidth( ) const { return horizontalAdvance; }
 };
 
 class FontRender {
@@ -44,14 +47,23 @@ private:
 	QString *txt;
 	QImage *renderBuff;
 	qint64 stringLength;
+	bool isRender;
 public:
 	FontRender( );
 	FontRender( const QString &txt );
+	FontRender( const QString &txt, bool is_render );
 	virtual void setTxt( const QString &txt );
 	virtual const QImage * const getRenderBuff( ) const;
 	virtual const QString & getTxt( ) const;
 	virtual const StringFontSize * const getTxtFontSize( ) const;
 	virtual ~FontRender( );
+	virtual bool drawTarget( QPainter *painter_ptr, const int &x, const int &y );
+	virtual bool drawTarget( QPainter *painter_ptr, const QPoint &offset ) {
+		return drawTarget( painter_ptr, offset.x( ), offset.y( ) );
+	}
+	virtual bool drawTarget( QPainter *painter_ptr ) {
+		return drawTarget( painter_ptr, 0, 0 );
+	}
 };
 
 /// @brief 图像渲染

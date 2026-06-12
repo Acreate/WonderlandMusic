@@ -87,6 +87,12 @@ MessageErrorOut & MessageErrorOut::operator<<( const void_ptr &msg ) {
 	return *this;
 }
 MessageErrorOut::~MessageErrorOut( ) {
+	writeLog( );
+}
+QString MessageErrorOut::toQString( ) const {
+	return toQString( DateTimeFormat( ) );
+}
+QString MessageErrorOut::toQString( const DateTimeFormat &date_time_format ) const {
 
 	QString outString;
 	size_t count = outMsgVector.size( );
@@ -99,42 +105,56 @@ MessageErrorOut::~MessageErrorOut( ) {
 			complete += data[ index ] + jointString;
 		complete += data[ index ] + endString;
 	}
-	outMsgVector.clear( );
-	DateTimeFormat dateTimeFormat;
-	formatMessageOut( dateTimeFormat, outString, location, complete );
+	formatMessageOut( date_time_format, outString, location, complete );
+	return outString;
+}
+QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTimeFormat &date_time_format ) const {
+	QString outString = toQString( date_time_format );
 	StdErrorConsoleOut( outString );
 	if( isWriteFile == false )
-		return;
+		return outString;
 	auto *applicationInstance = ApplicationInstance::getApplicationInstance( );
 	if( applicationInstance == nullptr )
-		return;
+		return outString;
 	auto &appStartRunDataTime = applicationInstance->getAppStartRunDataTime( );
 	auto date = appStartRunDataTime.date( );
 	QString dateTimeFormatString;
-	dateTimeFormat.formatData( dateTimeFormatString, date );
-	QString writeFilePath = logHomePtah + "/" + dateTimeFormatString + ".log";
+	date_time_format.formatData( dateTimeFormatString, date );
+	QString writeFilePath = wirte_log_path;
+	if( wirte_log_path.isEmpty( ) )
+		writeFilePath = logHomePtah + "/" + dateTimeFormatString + ".log";
 	QFileInfo fileInfo( writeFilePath );
 	auto dir = fileInfo.dir( );
 	writeFilePath = fileInfo.absoluteFilePath( );
-	logHomePtah = dir.absolutePath( );
+	auto logHomePtah = dir.absolutePath( );
 	if( dir.exists( ) == false ) {
 		if( dir.mkdir( logHomePtah ) == false ) {
 			outString.clear( );
-			formatMessageOut( dateTimeFormat, outString, std::source_location::current( ), translate.createDirError + " : " + logHomePtah );
+			formatMessageOut( date_time_format, outString, std::source_location::current( ), translate.createDirError + " : " + logHomePtah );
 			StdErrorConsoleOut( outString );
-			return;
+			return outString;
 		}
 	}
 	QFile openFile( writeFilePath );
 	QFlags< QIODevice::OpenMode::enum_type > flags = QIODeviceBase::ReadWrite | QIODeviceBase::Append;
 	if( openFile.open( flags ) == false ) {
 		outString.clear( );
-		formatMessageOut( dateTimeFormat, outString, std::source_location::current( ), translate.openFileError + " : " + writeFilePath );
+		formatMessageOut( date_time_format, outString, std::source_location::current( ), translate.openFileError + " : " + writeFilePath );
 		StdErrorConsoleOut( outString );
-		return;
+		return outString;
 	}
 	openFile.write( outString.toUtf8( ) );
 	openFile.close( );
+	return outString;
+}
+QString MessageErrorOut::writeLog( const DateTimeFormat &date_time_format ) const {
+	return writeLog( "", date_time_format );
+}
+QString MessageErrorOut::writeLog( const QString &wirte_log_path ) const {
+	return writeLog( wirte_log_path, DateTimeFormat( ) );
+}
+QString MessageErrorOut::writeLog( ) const {
+	return writeLog( "", DateTimeFormat( ) );
 }
 QString & MessageErrorOut::formatMessageOut( const DateTimeFormat &date_time_format, QString &result_msg, const std::source_location &source_location, const QString &msg ) const {
 	uint_least32_t msgCodeLine = location.line( );

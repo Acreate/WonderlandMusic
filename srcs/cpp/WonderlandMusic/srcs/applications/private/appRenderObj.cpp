@@ -174,16 +174,16 @@ bool AppRenderObj::renderColorReplaceColorImage( QImage &result_image, const QCo
 const QFont & AppRenderObj::getFont( ) const {
 	return *font;
 }
-const FontSize AppRenderObj::getTxtSize( const QString &txt ) {
+const StringFontSize AppRenderObj::getTxtSize( const QString &txt ) {
 	return getTxtSize( *font, txt );
 }
-const FontSize AppRenderObj::getTxtSize( const QFont &font, const QString &txt ) {
+const StringFontSize AppRenderObj::getTxtSize( const QFont &font, const QString &txt ) {
 	QFontMetrics fontMetrics( font );
 	return getTxtSize( fontMetrics, txt );
 }
-const FontSize AppRenderObj::getTxtSize( const QFontMetrics &font_metrics, const QString &txt ) {
+const StringFontSize AppRenderObj::getTxtSize( const QFontMetrics &font_metrics, const QString &txt ) {
 	int ascent = font_metrics.ascent( );
 	int height = font_metrics.height( );
 	int horizontalAdvance = font_metrics.horizontalAdvance( txt );
-	return FontSize( ascent, height, horizontalAdvance );
+	return StringFontSize( ascent, height, horizontalAdvance );
 }

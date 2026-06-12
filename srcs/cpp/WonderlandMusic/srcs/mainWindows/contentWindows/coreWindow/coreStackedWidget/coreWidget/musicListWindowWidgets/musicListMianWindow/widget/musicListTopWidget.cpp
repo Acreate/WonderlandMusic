@@ -3,42 +3,58 @@
 #include <QLabel>
 #include <QPainter>
 
+#include <render/render.h>
+
+void MusicListTopWidget::initItemSize( const FontRender &font_render, int &result_width, int &result_height ) const {
+	const StringFontSize *stringFontSize;
+	stringFontSize = font_render.getTxtFontSize( );
+	result_width = stringFontSize->getHorizontalAdvance( );
+	result_height = stringFontSize->getHorizontalAdvance( );
+}
 MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent ) {
-	musicNameItem = new QLabel( tr( "歌名" ), this );
-	musicSingerItem = new QLabel( tr( "歌手" ), this );
-	musicPlayerTimeItem = new QLabel( tr( "时长" ), this );
-	musicNameItem->adjustSize( );
-	int height = musicNameItem->height( );
-	musicSingerItem->adjustSize( );
-	int compHeight = musicSingerItem->height( );
+	musicNameItem = new FontRender( tr( "歌名" ) );
+	musicSingerItem = new FontRender( tr( "歌手" ) );
+	musicPlayerTimeItem = new FontRender( tr( "时长" ) );
+
+	int height;
+	int compHeight;
+	initItemSize( *musicNameItem, musicNameItemWidth, height );
+	drawOffsetX = musicNameItemWidth;
+	initItemSize( *musicSingerItem, musicSingerItemWidth, compHeight );
+	drawOffsetX += musicSingerItemWidth;
 	if( compHeight > height )
 		height = compHeight;
-	musicPlayerTimeItem->adjustSize( );
-	compHeight = musicPlayerTimeItem->height( );
+	initItemSize( *musicPlayerTimeItem, musicPlayerTimeItemWidth, compHeight );
+	drawOffsetX += musicPlayerTimeItemWidth;
 	if( compHeight > height )
 		height = compHeight;
-	setFixedHeight( height );
+	setFixedSize( drawOffsetX, height );
 }
 int MusicListTopWidget::getMusicNameItemWidth( ) const {
-	return musicNameItem->width( );
+	return musicNameItemWidth;
 }
 int MusicListTopWidget::getMusicSingerItemWidth( ) const {
-	return musicSingerItem->width( );
+	return musicSingerItemWidth;
 }
 int MusicListTopWidget::getMusicPlayerTimeItemWidth( ) const {
-	return musicPlayerTimeItem->width( );
+	return musicPlayerTimeItemWidth;
 }
 void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
-	int offsetX;
-	int sides = 5 * 2;
-	offsetX = sides;
-	musicNameItem->move( offsetX, 0 );
-	offsetX += musicNameItem->width( ) + sides * 2;
-	musicSingerItem->move( offsetX, 0 );
-	offsetX += musicSingerItem->width( ) + sides;
-	musicPlayerTimeItem->move( offsetX, 0 );
 }
 void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
 	BaseWidget::paintEvent( event );
+	QPainter painter;
+	painter.begin( this );
+	drawOffsetX = 0;
+	auto renderBuff = musicNameItem->getRenderBuff( );
+	painter.drawImage( QPoint( drawOffsetX, 0 ), *renderBuff );
+	drawOffsetX += musicNameItemWidth;
+	renderBuff = musicSingerItem->getRenderBuff( );
+	painter.drawImage( QPoint( drawOffsetX, 0 ), *renderBuff );
+	drawOffsetX += musicSingerItemWidth;
+	renderBuff = musicPlayerTimeItem->getRenderBuff( );
+	painter.drawImage( QPoint( drawOffsetX, 0 ), *renderBuff );
+
+	painter.end( );
 }

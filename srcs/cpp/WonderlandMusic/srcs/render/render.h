@@ -1,5 +1,6 @@
 ﻿#ifndef RENDER_H_H_HEAD__FILE__
 #define RENDER_H_H_HEAD__FILE__
+#include <qtypes.h>
 
 class QFontMetrics;
 class QFont;
@@ -8,22 +9,23 @@ class QPoint;
 class QImage;
 class QString;
 
-class FontSize {
+class StringFontSize {
 protected:
 	int ascent;
 	int height;
 	int horizontalAdvance;
 public:
-	virtual ~FontSize( ) { }
-	FontSize( int ascent, int height, int horizontal_advance )
+	virtual ~StringFontSize( ) { }
+	StringFontSize( int ascent, int height, int horizontal_advance )
 		: ascent( ascent ),
 		height( height ),
 		horizontalAdvance( horizontal_advance ) { }
-	FontSize( const FontSize &other )
+	StringFontSize( const StringFontSize &other )
 		: ascent { other.ascent },
 		height { other.height },
 		horizontalAdvance { other.horizontalAdvance } { }
-	FontSize & operator=( const FontSize &other ) {
+	StringFontSize( ) : ascent( 0 ), horizontalAdvance( 0 ), height( 0 ) { }
+	StringFontSize & operator=( const StringFontSize &other ) {
 		if( this == &other )
 			return *this;
 		ascent = other.ascent;
@@ -35,6 +37,23 @@ public:
 	virtual int getHeight( ) const { return height; }
 	virtual int getHorizontalAdvance( ) const { return horizontalAdvance; }
 };
+
+class FontRender {
+private:
+	StringFontSize *fontSize;
+	QString *txt;
+	QImage *renderBuff;
+	qint64 stringLength;
+public:
+	FontRender( );
+	FontRender( const QString &txt );
+	virtual void setTxt( const QString &txt );
+	virtual const QImage * const getRenderBuff( ) const;
+	virtual const QString & getTxt( ) const;
+	virtual const StringFontSize * const getTxtFontSize( ) const;
+	virtual ~FontRender( );
+};
+
 /// @brief 图像渲染
 class Render {
 	friend class ApplicationInstance;
@@ -47,17 +66,17 @@ public:
 	/// @brief 检测字符串的渲染字体宽高
 	/// @param txt 检测字体
 	/// @return 宽高
-	virtual const FontSize getTxtSize( const QString &txt ) = 0;
+	virtual const StringFontSize getTxtSize( const QString &txt ) = 0;
 	/// @brief 检测字符串的渲染字体宽高
 	/// @param font 使用字体
 	/// @param txt 检测字体
 	/// @return 宽高
-	virtual const FontSize getTxtSize( const QFont &font, const QString &txt ) = 0;
+	virtual const StringFontSize getTxtSize( const QFont &font, const QString &txt ) = 0;
 	/// @brief 检测字符串的渲染字体宽高
 	/// @param font_metrics 使用字体信息
 	/// @param txt 检测字体
 	/// @return 宽高
-	virtual const FontSize getTxtSize( const QFontMetrics &font_metrics, const QString &txt ) = 0;
+	virtual const StringFontSize getTxtSize( const QFontMetrics &font_metrics, const QString &txt ) = 0;
 	/// @brief 渲染字符串到页面
 	/// @param result_image 目标页面，同时用于返回
 	/// @param text 字符串

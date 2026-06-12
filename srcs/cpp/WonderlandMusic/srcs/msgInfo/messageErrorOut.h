@@ -58,6 +58,13 @@ public:
 	virtual void setStartString( const QString &start_string ) { startString = start_string; }
 	virtual const QString & getEndString( ) const { return endString; }
 	virtual void setEndString( const QString &end_string ) { endString = end_string; }
+	virtual const std::vector< QString > & getOutMsgVector( ) const { return outMsgVector; }
+	virtual QString toQString( ) const;
+	virtual QString toQString( const DateTimeFormat &date_time_format ) const;
+	virtual QString writeLog( const QString &wirte_log_path, const DateTimeFormat &date_time_format ) const;
+	virtual QString writeLog( const DateTimeFormat &date_time_format ) const;
+	virtual QString writeLog( const QString &wirte_log_path ) const;
+	virtual QString writeLog( ) const;
 private:
 	virtual QString & formatMessageOut( const DateTimeFormat &date_time_format, QString &result_msg, const std::source_location &source_location, const QString &msg ) const;
 };

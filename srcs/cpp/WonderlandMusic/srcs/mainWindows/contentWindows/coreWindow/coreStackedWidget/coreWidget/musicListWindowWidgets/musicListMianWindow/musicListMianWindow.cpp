@@ -9,8 +9,6 @@ MusicListMianWindow::MusicListMianWindow( QWidget *parent ) : BaseWidgetTypeMain
 	mainWidget = new QWidget( this );
 	setCentralWidget( mainWidget );
 
-	musicListTopWidget = new MusicListTopWidget( mainWidget );
-
 	musicScrollArea = new QScrollArea( mainWidget );
 	musicScrollArea->setWidgetResizable( true );
 	musicScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
@@ -23,7 +21,9 @@ MusicListMianWindow::MusicListMianWindow( QWidget *parent ) : BaseWidgetTypeMain
 	mainLayout->setContentsMargins( 0, 0, 0, 0 );
 	mainLayout->setSpacing( 0 );
 
-	mainLayout->addWidget( musicListTopWidget );
+	musicListTopWidget = new MusicListTopWidget( musicScrollArea );
+	musicListTopWidget->move( 0, 0 );
+	musicListTopWidget->show( );
 	mainLayout->addWidget( musicScrollArea );
 }
 void MusicListMianWindow::resizeEvent( QResizeEvent *event ) {

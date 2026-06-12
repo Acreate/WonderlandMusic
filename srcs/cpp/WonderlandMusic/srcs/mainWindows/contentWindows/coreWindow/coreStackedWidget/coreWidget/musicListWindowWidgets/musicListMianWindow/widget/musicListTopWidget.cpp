@@ -7,17 +7,6 @@
 
 #include "musicListItemWidget/playerListItem.h"
 
-MusicListTopWidget::ItemInfo::ItemInfo( const QString &txt ) : fontRender( new FontRender( txt ) ),
-	offsetX( 0 ) { }
-MusicListTopWidget::ItemInfo::~ItemInfo( ) {
-	delete fontRender;
-}
-FontRender * MusicListTopWidget::ItemInfo::getFontRender( ) const { return fontRender; }
-int MusicListTopWidget::ItemInfo::getWidth( ) const { return fontRender->getTxtFontSize( )->getHorizontalAdvance( ); }
-int MusicListTopWidget::ItemInfo::getHeight( ) const {
-	return fontRender->getTxtFontSize( )->getHeight( );
-}
-int MusicListTopWidget::ItemInfo::getOffsetX( ) const { return offsetX; }
 void MusicListTopWidget::initItemSize( const FontRender &font_render, int &result_width, int &result_height ) const {
 	const StringFontSize *stringFontSize;
 	stringFontSize = font_render.getTxtFontSize( );

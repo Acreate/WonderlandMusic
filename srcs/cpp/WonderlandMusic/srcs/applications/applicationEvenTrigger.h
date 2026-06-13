@@ -27,6 +27,7 @@ Event_Declare_Event_Info_Type_Name( MusicCollectionTopMenu );
 Event_Declare_Event_Info_Type_Name( MusicCollectionSubMenu );
 Event_Declare_Event_Info_Type_Name( MusicListTopMenu );
 Event_Declare_Event_Info_Type_Name( MusicListSubMenu );
+Event_Declare_Event_Info_Type_Name( MusicListWidget );
 Event_Declare_Event_Info_Type_Name( MusicListTopWidget );
 
 class ApplicationEvenTrigger : public BaseObject {
@@ -55,6 +56,7 @@ private:
 	Event_Define_Event_Friend_Type_Name( MusicCollectionSubMenu );
 	Event_Define_Event_Friend_Type_Name( MusicListTopMenu );
 	Event_Define_Event_Friend_Type_Name( MusicListSubMenu );
+	Event_Define_Event_Friend_Type_Name( MusicListWidget );
 	Event_Define_Event_Friend_Type_Name( MusicListTopWidget );
 private:
 	Q_OBJECT;
@@ -87,6 +89,7 @@ public:
 	Event_Define_Quick_Connect_Signed( MusicCollectionSubMenu );
 	Event_Define_Quick_Connect_Signed( MusicListTopMenu );
 	Event_Define_Quick_Connect_Signed( MusicListSubMenu );
+	Event_Define_Quick_Connect_Signed( MusicListWidget );
 	Event_Define_Quick_Connect_Signed( MusicListTopWidget );
 
 Q_SIGNALS:
@@ -112,6 +115,7 @@ Q_SIGNALS:
 	Event_Define_Receive_Call_Function( MusicCollectionSubMenu );
 	Event_Define_Receive_Call_Function( MusicListTopMenu );
 	Event_Define_Receive_Call_Function( MusicListSubMenu );
+	Event_Define_Receive_Call_Function( MusicListWidget );
 	Event_Define_Receive_Call_Function( MusicListTopWidget );
 };
 
@@ -137,6 +141,7 @@ Event_Define_Event_Class_type( MusicCollectionTopMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicCollectionSubMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListTopMenu, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListSubMenu, ApplicationEvenTrigger );
+Event_Define_Event_Class_type( MusicListWidget, ApplicationEvenTrigger );
 Event_Define_Event_Class_type( MusicListTopWidget, ApplicationEvenTrigger );
 
 #endif // APPLICATIONEVENTRIGGER_H_H_HEAD__FILE__

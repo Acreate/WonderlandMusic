@@ -5,21 +5,22 @@
 class LabelItem : public BaseWidget {
 	Q_OBJECT;
 protected:
-	QLabel *titleName;
 	/// @brief 绘制的分隔符宽度
 	int drawDecollatorWidth;
 	/// @brief 绘制的分隔符占用空间
 	int drawDecollatorInterspace;
+	/// @brief 渲染字符串的缓存
+	QImage *renderTxtBuff;
+	/// @brief 标签显示内容
+	QString titleName;
 public:
+	~LabelItem( ) override;
 	LabelItem( const QString &title_name, QWidget *parent );
 	virtual QString getTitleName( ) const;
-	virtual bool isContainsDecollator( const QPoint &parent_point ) const;
-	virtual const QLabel * const getTitleNameQLabel( ) const { return titleName; }
 	virtual int getDrawDecollatorWidth( ) const { return drawDecollatorWidth; }
 	virtual int getDrawDecollatorInterspace( ) const { return drawDecollatorInterspace; }
 protected:
 	void paintEvent( QPaintEvent *event ) override;
-	void resizeEvent( QResizeEvent *event ) override;
 };
 
 #endif // LABELITEM_H_H_HEAD__FILE__

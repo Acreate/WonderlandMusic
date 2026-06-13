@@ -3,9 +3,11 @@
 
 #include <base/baseWidget/baseWidget.h>
 
+class LabelItem;
 class MusicListItemWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
+	std::vector< LabelItem * > labelItemVector;
 	/// @brief 音乐文件路径
 	QString filePath;
 	/// @brief 音乐名称
@@ -14,13 +16,6 @@ protected:
 	QString singerName;
 	/// @brief 时长（毫秒）
 	qint64 duration_ms;
-
-	/// @brief 音乐名称项
-	QLabel *musicNameItem;
-	/// @brief 音乐主唱项
-	QLabel *musicSingerItem;
-	/// @brief 音乐播放时长项
-	QLabel *musicPlayerTimeItem;
 public:
 	MusicListItemWidget( QWidget *parent, const QString &file_path, const QString &music_name, const QString &singer_name, qint64 duration_ms );
 	virtual const QString & getFilePath( ) const { return filePath; }

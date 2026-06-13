@@ -11,6 +11,8 @@
 
 #include <musics/musicInfo.h>
 
+#include "musicListTopWidget.h"
+
 #include "musicListItemWidget/musicListItemWidget.h"
 MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 	ApplicationEvenTrigger::connectMusicListMainWidgetEvent( [this] ( MusicListMainWidget *music_list_main_widget, const MusicListMainWidgetEventInfo &music_list_main_widget_event_info ) {
@@ -28,6 +30,28 @@ MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 			for( size_t index = 0; index < count; ++index )
 				appendItem( *data[ index ] );
 		sort( );
+		MusicListWidgetEvent( this, MusicListWidgetEventInfo( MusicListWidgetEventInfo::EventType::Load_Over ) );
+	} );
+	ApplicationEvenTrigger::connectMusicListTopWidgetEvent( [this] ( MusicListTopWidget *music_list_top_widget, const MusicListTopWidgetEventInfo &music_list_top_widget_event_info ) {
+		auto eventType = music_list_top_widget_event_info.getEventType( );
+		switch( eventType ) {
+			case MusicListTopWidgetEventInfo::EventType::Drag_Start_Item_Width :
+				break;
+			case MusicListTopWidgetEventInfo::EventType::Drag_End_Item_Width :
+			case MusicListTopWidgetEventInfo::EventType::Update_Item_Width : {
+				// 获取顶部高度
+				int height = music_list_top_widget->height( );
+				size_t count = musicListItemWidgets.size( );
+				auto data = musicListItemWidgets.data( );
+				size_t index = 0;
+				for( ; index < count; ++index ) {
+					data[ index ]->move( 0, height );
+					height += data[ index ]->height( );
+				}
+				
+			}
+			break;
+		}
 	} );
 }
 bool MusicListWidget::existMusicFilePath( const QString &file_path ) const {

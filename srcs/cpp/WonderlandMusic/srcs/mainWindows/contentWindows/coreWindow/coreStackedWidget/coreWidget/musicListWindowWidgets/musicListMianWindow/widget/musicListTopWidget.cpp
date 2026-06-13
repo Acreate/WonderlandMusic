@@ -7,6 +7,8 @@
 #include <applications/applicationEvenTrigger.h>
 #include <applications/applicationInstance.h>
 
+#include "musicListWidget.h"
+
 #include "../../../../../../../../msgInfo/messageErrorOut.h"
 
 #include "musicListItemWidget/labelItem.h"
@@ -18,6 +20,8 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 	titleVector.emplace_back( new LabelItem( tr( "" ), this ) );
 	currentDragItem = nullptr;
 	permissonDrag = readyDrag = false;
+	minHeight = 0;
+	int compHieght;
 	// 起始
 	int stertX = 20;
 	size_t count = titleVector.size( );
@@ -26,11 +30,17 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 	for( ; index < count; ++index ) {
 		data[ index ]->move( stertX, 0 );
 		stertX += data[ index ]->width( );
+		compHieght = data[ index ]->height( );
+		if( minHeight < compHieght )
+			minHeight = compHieght;
 	}
 	minWidth = data[ 0 ]->x( ) + data[ 0 ]->width( );
 	index -= 1;
 	maxWidth = data[ index ]->x( ) + data[ index ]->width( );
+	setFixedHeight( minHeight );
 
+	for( index = 0; index < count; ++index )
+		data[ index ]->setFixedHeight( minHeight );
 	ApplicationEvenTrigger::connectApplicationInstanceEvent( [this] ( ApplicationInstance *application_instance, const ApplicationInstanceEventInfo &application_instance_event_info ) {
 		auto eventType = application_instance_event_info.getEventType( );
 
@@ -53,17 +63,24 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 					for( ; index < count; ++index )
 						if( data[ index ] == currentDragItem ) {
 
-							size_t nextIndex = index + 1; // 跳过当前控制
+							size_t restIndex;
+							// 调整上一个组件的宽度
+							restIndex = index - 1;
+							int newWidth = desX - data[ restIndex ]->x( );
+							data[ restIndex ]->setFixedWidth( newWidth );
+
+							// 跳过当前控制
+							restIndex = index + 1;
 							// 如果是末尾，则跳出
-							if( nextIndex == count )
+							if( restIndex == count )
 								break;
 
 							// 获取当前组件的原始坐标
-							int stertX = data[ index ]->x( ) + data[ index ]->width( );
+							newWidth = desX + data[ index ]->width( );
 
-							for( ; nextIndex < count; ++nextIndex ) {
-								data[ nextIndex ]->move( stertX, 0 );
-								stertX += data[ nextIndex ]->width( );
+							for( ; restIndex < count; ++restIndex ) {
+								data[ restIndex ]->move( newWidth, 0 );
+								newWidth += data[ restIndex ]->width( );
 							}
 							break;
 						}
@@ -124,6 +141,16 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 				break;
 		}
 	} );
+
+	// 每当加载完毕列表，都触发一次信号
+	ApplicationEvenTrigger::connectMusicListWidgetEvent( [this] ( MusicListWidget *music_list_widget, const MusicListWidgetEventInfo &music_list_widget_event_info ) {
+		auto eventType = music_list_widget_event_info.getEventType( );
+		switch( eventType ) {
+			case MusicListWidgetEventInfo::EventType::Load_Over :
+				MusicListTopWidgetEvent( this, MusicListTopWidgetEventInfo( MusicListTopWidgetEventInfo::EventType::Update_Item_Width ) );
+				break;
+		}
+	} );
 }
 MusicListTopWidget::~MusicListTopWidget( ) {
 
@@ -135,6 +162,10 @@ const LabelItem * MusicListTopWidget::getTopItem( const size_t &item_index ) con
 	auto data = titleVector.data( );
 	return data[ item_index ];
 }
+std::vector< const LabelItem * > MusicListTopWidget::getTitleVector( ) const {
+	return std::vector< const LabelItem * >( titleVector.begin( ), titleVector.end( ) );
+}
+
 void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
 

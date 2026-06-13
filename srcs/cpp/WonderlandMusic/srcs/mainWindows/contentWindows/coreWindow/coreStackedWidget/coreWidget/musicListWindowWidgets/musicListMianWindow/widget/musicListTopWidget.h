@@ -11,6 +11,8 @@ class MusicListTopWidget : public BaseWidget {
 protected:
 	/// @brief 标题列表
 	std::vector< LabelItem * > titleVector;
+	/// @brief 最小高度
+	int minHeight;
 	/// @brief 检测的大宽度
 	int maxWidth;
 	/// @brief 检测的最小宽度
@@ -26,12 +28,13 @@ protected:
 public:
 	MusicListTopWidget( QWidget *parent );
 	~MusicListTopWidget( ) override;
-	virtual const LabelItem * getTopItem( const size_t& item_index ) const;
+	virtual const LabelItem * getTopItem( const size_t &item_index ) const;
 	virtual int getMaxWidth( ) const { return maxWidth; }
 	virtual int getMinWidth( ) const { return minWidth; }
 	virtual bool isReadyDrag( ) const { return readyDrag; }
 	virtual bool isPermissonDrag( ) const { return permissonDrag; }
 	virtual const LabelItem * getCurrentDragItem( ) const { return currentDragItem; }
+	virtual std::vector< const LabelItem * > getTitleVector( ) const;
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
 	void paintEvent( QPaintEvent *event ) override;
@@ -42,8 +45,7 @@ public:
 	enum class EventType {
 		Drag_Start_Item_Width,
 		Drag_End_Item_Width,
-		Horizontal_Stretching_Start_Item_Width,
-		Horizontal_Stretching_End_Item_Width,
+		Update_Item_Width,
 	};
 protected:
 	EventType eventType;

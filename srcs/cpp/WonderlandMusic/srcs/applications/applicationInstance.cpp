@@ -15,7 +15,7 @@
 
 #include "../mainWindows/mainWindow.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMainWidget.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/widget/musicCollectionWidget.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/MusicCollectionWidget/musicCollectionWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
 
 #include "../menus/musicCollectionSubMenu.h"

@@ -17,11 +17,12 @@
 
 #include <tools/pathTools.h>
 
-#include "widget/musicCollectionWidget.h"
 #include "musicListMianWindow/widget/musicListWidget.h"
 #include <QMutex>
 
 #include <tools/vectorTools.h>
+
+#include "MusicCollectionWidget/musicCollectionWidget.h"
 
 #include "musicListMianWindow/musicListMianWindow.h"
 MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent ) {

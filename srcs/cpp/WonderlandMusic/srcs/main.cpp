@@ -3,7 +3,6 @@
 
 #include "applications/applicationInstance.h"
 
-#include "mainWindows/mainWindow.h"
 #include <QTextCodec>
 
 #include "msgInfo/messageErrorOut.h"
@@ -37,13 +36,14 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	messageErrorOut = new MessageErrorOut;
 	messageErrorOut->setJoinString( "\n" );
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
-
+	*messageErrorOut << QObject::tr( "程序开始" );
 	ApplicationInstance *application = new ApplicationInstance( argc, argv );
 
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
 	QTextCodec::setCodecForLocale( utf8 );
 
 	int exec = application->exec( );
+	*messageErrorOut << QObject::tr( "程序结束" ) << " : " << QString::number( exec );
 	delete messageErrorOut;
 	delete application;
 	return exec;

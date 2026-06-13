@@ -3,7 +3,8 @@
 #include "../applications/applicationEvenTrigger.h"
 #include "../applications/applicationInstance.h"
 
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/widget/musicCollectionWidget.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/MusicCollectionWidget/musicCollectionWidget.h"
+
 MusicCollectionTopMenu::MenuKey::MenuKey( ) {
 	loadMusicDirPath = QObject::tr( "加载音频目录..." );
 	appendMusicFilePath = QObject::tr( "加载音频文件..." );

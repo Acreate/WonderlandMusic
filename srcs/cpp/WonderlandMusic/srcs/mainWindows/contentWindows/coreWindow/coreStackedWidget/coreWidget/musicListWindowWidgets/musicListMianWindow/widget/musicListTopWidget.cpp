@@ -2,30 +2,59 @@
 
 #include <QLabel>
 #include <QPainter>
+#include <qevent.h>
 
-#include <render/render.h>
+#include <applications/applicationEvenTrigger.h>
+#include <applications/applicationInstance.h>
 
-#include "musicListItemWidget/playerListItem.h"
+#include "../../../../../../../../msgInfo/messageErrorOut.h"
 
-void MusicListTopWidget::initItemSize( const FontRender &font_render, int &result_width, int &result_height ) const {
-	const StringFontSize *stringFontSize;
-	stringFontSize = font_render.getTxtFontSize( );
-	result_width = stringFontSize->getHorizontalAdvance( );
-	result_height = stringFontSize->getHeight( );
-}
+#include "musicListItemWidget/labelItem.h"
+
 MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent ) {
+	musicNameItem = new LabelItem( tr( "歌名" ), this );
+	musicSingerItem = new LabelItem( tr( "主唱" ), this );
+	musicPlayerTimeItem = new LabelItem( tr( "时长" ), this );
+	musicNameItem->move( 0, 0 );
+	int width = musicNameItem->width( );
+	musicSingerItem->move( width, 0 );
+	width += musicSingerItem->width( );
+	musicPlayerTimeItem->move( width, 0 );
 
-	playerListItem = new PlayerListItem;
-	playerListItem->appendItem( tr( "歌名" ) );
-	playerListItem->appendItem( tr( "歌手" ) );
-	playerListItem->appendItem( tr( "时长" ) );
-	drawBuff = new QImage( 1, 1, QImage::Format_RGBA8888 );
-	playerListItem->renderBuff( drawBuff );
-	setFixedSize( drawBuff->size( ) );
+	ApplicationEvenTrigger::connectApplicationInstanceEvent( [this] ( ApplicationInstance *application_instance, const ApplicationInstanceEventInfo &application_instance_event_info ) {
+		auto eventType = application_instance_event_info.getEventType( );
+
+		switch( eventType ) {
+			case ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos : {
+				// 检测是否在拖拽区间，并且设置准备符号
+				// 在激活拖拽功能的情况下发送信号
+				auto point = QCursor::pos( );
+				point = mapFromGlobal( point );
+				if( geometry( ).contains( point ) == false )
+					break;
+				if( musicNameItem->isContainsDecollator( point ) ) {
+					break;
+				} else if( musicSingerItem->isContainsDecollator( point ) ) {
+					break;
+				} else if( musicPlayerTimeItem->isContainsDecollator( point ) ) {
+					break;
+				}
+			}
+
+			break;
+			case ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos :
+				// 在准备符号为确定的情况下激活拖拽功能
+
+				break;
+			case ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos :
+				// 取消拖拽功能
+
+				break;
+		}
+	} );
 }
 MusicListTopWidget::~MusicListTopWidget( ) {
-	delete playerListItem;
-	delete drawBuff;
+
 }
 void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
@@ -33,8 +62,4 @@ void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 }
 void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
 	BaseWidget::paintEvent( event );
-	QPainter painter;
-	painter.begin( this );
-	painter.drawImage( 0, 0, *drawBuff );
-	painter.end( );
 }

@@ -3,7 +3,8 @@
 #include "../applications/applicationEvenTrigger.h"
 #include "../applications/applicationInstance.h"
 
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/widget/musicCollectionWidget.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/MusicCollectionWidget/musicCollectionWidget.h"
+
 MusicCollectionSubMenu::MenuKey::MenuKey( ) {
 	this->appendMusicFilePath = QObject::tr( "加载音频音乐文件" );
 	this->loadMusicDirPath = QObject::tr( "加载音乐文件夹" );
@@ -43,7 +44,7 @@ MusicCollectionSubMenu::MusicCollectionSubMenu( ) {
 			case ApplicationInstanceEventInfo::EventType::Pop_Music_Collection_Sub_Menu : {
 				auto supervisorObject = info.getSupervisorObject( );
 				auto collectionWidget = qobject_cast< decltype(musicCollectionWidget) >( supervisorObject );
-				
+
 				if( collectionWidget == nullptr )
 					return;
 				this->musicCollectionWidget = collectionWidget;

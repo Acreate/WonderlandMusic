@@ -1,6 +1,6 @@
 ﻿#include "musicCollectionScrollArea.h"
 
-#include "widget/musicCollectionWidget.h"
+#include "MusicCollectionWidget/musicCollectionWidget.h"
 MusicCollectionScrollArea::MusicCollectionScrollArea( QWidget *parent ) : BaseScrollArea( parent ) {
 
 	musicCollectionWidget = new MusicCollectionWidget( this );

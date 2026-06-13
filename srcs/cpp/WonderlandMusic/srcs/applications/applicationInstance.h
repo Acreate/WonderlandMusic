@@ -138,6 +138,8 @@ class Event_Define_Event_Info_Type_Name( ApplicationInstance ) {
 public:
 	enum class EventType {
 		Load_Music_Info_Path_Text,
+		Mouse_Leave_Pos,
+		Mouse_Enter_Pos,
 		Move_Global_Mouse_Pos,
 		Press_Global_Mouse_Pos,
 		Release_Global_Mouse_Pos,

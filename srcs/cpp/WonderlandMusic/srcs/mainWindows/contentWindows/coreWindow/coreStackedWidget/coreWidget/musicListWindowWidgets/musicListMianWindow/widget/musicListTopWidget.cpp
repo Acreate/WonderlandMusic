@@ -56,6 +56,8 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 					int desX = currentX - dragOffsetX;
 					if( desX <= minWidth )
 						break;
+					if( desX >= maxWidth )
+						break;
 					currentDragItem->move( desX, 0 );
 					size_t count = titleVector.size( );
 					auto data = titleVector.data( );
@@ -139,6 +141,10 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 				currentDragItem = nullptr;
 				permissonDrag = readyDrag = false; // 重置状态
 				break;
+			case ApplicationInstanceEventInfo::EventType::Mouse_Leave_Pos : {
+
+			}
+			break;
 		}
 	} );
 
@@ -172,4 +178,6 @@ void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 }
 void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
 	BaseWidget::paintEvent( event );
+	QPainter painter( this );
+	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkYellow );
 }

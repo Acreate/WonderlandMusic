@@ -419,6 +419,18 @@ bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 		}
 		break;
+		case QEvent::Type::Enter : {
+			auto info = ApplicationInstanceEventInfo( );
+			info.eventType = ApplicationInstanceEventInfo::EventType::Mouse_Enter_Pos;
+			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+		}
+		break;
+		case QEvent::Type::Leave : {
+			auto info = ApplicationInstanceEventInfo( );
+			info.eventType = ApplicationInstanceEventInfo::EventType::Mouse_Leave_Pos;
+			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+		}
+		break;
 	}
 	return QApplication::notify( object, event );
 }

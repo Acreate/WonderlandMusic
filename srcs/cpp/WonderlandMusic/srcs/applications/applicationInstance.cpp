@@ -379,10 +379,10 @@ ApplicationInstance::~ApplicationInstance( ) {
 bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 	switch( event->type( ) ) {
 		case QEvent::Show :
-			if( mainWindowPtr == object && firstShow == false ) {
-				firstMainWindowShow( mainWindowPtr );
-				firstShow = true;
-			}
+			if( mainWindowPtr != object || firstShow == true )
+				break;
+			firstMainWindowShow( mainWindowPtr );
+			firstShow = true;
 			break;
 		case QEvent::Close :
 			// 主窗口关闭，则退出软件

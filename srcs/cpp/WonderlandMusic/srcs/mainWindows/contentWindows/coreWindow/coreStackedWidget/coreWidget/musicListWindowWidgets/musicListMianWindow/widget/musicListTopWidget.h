@@ -9,15 +9,29 @@ class StringFontSize;
 class MusicListTopWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
-	/// @brief 音乐名称项
-	LabelItem *musicNameItem;
-	/// @brief 音乐主唱项
-	LabelItem *musicSingerItem;
-	/// @brief 音乐播放时长项
-	LabelItem *musicPlayerTimeItem;
+	/// @brief 标题列表
+	std::vector< LabelItem * > titleVector;
+	/// @brief 检测的大宽度
+	int maxWidth;
+	/// @brief 检测的最小宽度
+	int minWidth;
+	/// @brief 是否准备好拖拽
+	bool readyDrag;
+	/// @brief 允许拖拽
+	bool permissonDrag;
+	/// @brief 当前拖拽项
+	LabelItem *currentDragItem;
+	/// @brief 拖拽偏移 x
+	int dragOffsetX;
 public:
 	MusicListTopWidget( QWidget *parent );
 	~MusicListTopWidget( ) override;
+	virtual const LabelItem * getTopItem( const size_t& item_index ) const;
+	virtual int getMaxWidth( ) const { return maxWidth; }
+	virtual int getMinWidth( ) const { return minWidth; }
+	virtual bool isReadyDrag( ) const { return readyDrag; }
+	virtual bool isPermissonDrag( ) const { return permissonDrag; }
+	virtual const LabelItem * getCurrentDragItem( ) const { return currentDragItem; }
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
 	void paintEvent( QPaintEvent *event ) override;
@@ -28,6 +42,8 @@ public:
 	enum class EventType {
 		Drag_Start_Item_Width,
 		Drag_End_Item_Width,
+		Horizontal_Stretching_Start_Item_Width,
+		Horizontal_Stretching_End_Item_Width,
 	};
 protected:
 	EventType eventType;

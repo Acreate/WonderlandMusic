@@ -58,7 +58,4 @@ MainWindow::MainWindow( ) : BaseMainWindow( nullptr ) {
 	} );
 }
 MainWindow::~MainWindow( ) {
-	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
-	auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
-	MainWindowEvent::triggerMainWindowEvent( applicationEvenTrigger, this, MainWindowEventInfo( MainWindowEventInfo::EventType::Close ) );
 }

@@ -7,15 +7,18 @@
 #include <applications/applicationInstance.h>
 #include <render/render.h>
 LabelItem::LabelItem( const QString &title_name, QWidget *parent ) : BaseWidget( parent ) {
-	drawDecollatorWidth = 2;
-	drawDecollatorInterspace = 10;
+	drawDecollatorWidth = 4;
+	drawDecollatorInterspace = 50;
 	titleName = new QLabel( title_name, this );
 	titleName->move( drawDecollatorInterspace, 0 );
 	auto render = ApplicationInstance::getApplicationInstance( )->getRender( );
 	auto font = render->getFont( );
 	titleName->setFont( font );
 	titleName->adjustSize( );
-	setFixedSize( drawDecollatorInterspace + titleName->width( ), titleName->height( ) );
+	int width = titleName->width( );
+	int w = drawDecollatorInterspace + width;
+	int h = titleName->height( );
+	setFixedSize( w, h );
 }
 QString LabelItem::getTitleName( ) const {
 	return titleName->text( );

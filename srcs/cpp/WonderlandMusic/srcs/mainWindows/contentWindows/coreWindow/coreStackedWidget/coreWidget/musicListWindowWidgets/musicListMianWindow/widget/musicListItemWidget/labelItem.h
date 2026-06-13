@@ -14,6 +14,9 @@ public:
 	LabelItem( const QString &title_name, QWidget *parent );
 	virtual QString getTitleName( ) const;
 	virtual bool isContainsDecollator( const QPoint &parent_point ) const;
+	virtual const QLabel * const getTitleNameQLabel( ) const { return titleName; }
+	virtual int getDrawDecollatorWidth( ) const { return drawDecollatorWidth; }
+	virtual int getDrawDecollatorInterspace( ) const { return drawDecollatorInterspace; }
 protected:
 	void paintEvent( QPaintEvent *event ) override;
 	void resizeEvent( QResizeEvent *event ) override;

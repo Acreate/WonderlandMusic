@@ -1,4 +1,5 @@
-﻿#include <QLoggingCategory>
+﻿#include <QDateTime>
+#include <QLoggingCategory>
 #include <QProcessEnvironment>
 
 #include "applications/applicationInstance.h"
@@ -34,16 +35,21 @@ void myCategoryFilter( QLoggingCategory *category ) {
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {
 	messageErrorOut = new MessageErrorOut;
+	*messageErrorOut << QObject::tr( "\t: <<<< == 程序日志 == >>>>" );
 	messageErrorOut->setJoinString( "\n" );
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
-	*messageErrorOut << QObject::tr( "程序开始" );
+	*messageErrorOut << QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序开始" ) << "----------------------";
 	ApplicationInstance *application = new ApplicationInstance( argc, argv );
 
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
 	QTextCodec::setCodecForLocale( utf8 );
 
 	int exec = application->exec( );
-	*messageErrorOut << QObject::tr( "程序结束" ) << " : " << QString::number( exec );
+	QString resultString = QObject::tr( "返回值" );
+	*messageErrorOut << "----------------------"
+		<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
+		<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
+		+ QString::number( exec ).toUpper( ) + " }";
 	delete messageErrorOut;
 	delete application;
 	return exec;

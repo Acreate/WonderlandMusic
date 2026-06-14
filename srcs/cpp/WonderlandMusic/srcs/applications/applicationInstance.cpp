@@ -100,10 +100,10 @@ void ApplicationInstance::initJson( ) {
 
 }
 size_t ApplicationInstance::readFileToJson( QJsonObject &result_json_obj, QJsonParseError &result_json_error, const QString &json_file_path ) {
-	fileInfoTool->setFile( appSettingPath );
+	fileInfoTool->setFile( json_file_path );
 	if( fileInfoTool->exists( ) == false )
 		return 1;
-	QFile file( appSettingPath );
+	QFile file( json_file_path );
 	if( file.open( QIODeviceBase::Text | QIODeviceBase::ReadOnly ) == false )
 		return 2;
 	auto byteArray = file.readAll( );
@@ -405,6 +405,7 @@ void ApplicationInstance::sendAppEvent( ) {
 	findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
 	if( findResult != jsonEnd ) {
 		auto string = findResult.value( ).toString( );
+		string = formatMusicInfoPath( string, PathType::Music_Info );
 		QJsonObject jsonObject;
 		QJsonParseError err;
 		// 读取正确，发送消息

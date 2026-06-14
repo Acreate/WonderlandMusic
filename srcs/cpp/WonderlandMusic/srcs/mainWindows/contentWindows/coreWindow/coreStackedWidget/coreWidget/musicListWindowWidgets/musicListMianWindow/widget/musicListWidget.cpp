@@ -22,6 +22,7 @@
 MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 	ApplicationEvenTrigger::connectMusicListMainWidgetEvent( [this] ( MusicListMainWidget *music_list_main_widget, const MusicListMainWidgetEventInfo &music_list_main_widget_event_info ) {
 		auto eventType = music_list_main_widget_event_info.getEventType( );
+		
 		if( eventType != MusicListMainWidgetEventInfo::EventType::Load_Music_File_Over )
 			return;
 		auto musicInfos = music_list_main_widget->getMusicInfos( );
@@ -54,67 +55,6 @@ MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 					height += data[ index ]->height( );
 				}
 
-			}
-			break;
-		}
-	} );
-	ApplicationEvenTrigger::connectApplicationInstanceEvent( [this] ( ApplicationInstance *application_instance, const ApplicationInstanceEventInfo &application_instance_event_info ) {
-		auto eventType = application_instance_event_info.getEventType( );
-		switch( eventType ) {
-			case ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path : {
-				auto inputString = application_instance_event_info.getInputString( );
-				inputString = ApplicationInstance::formatMusicInfoPath( inputString, ApplicationInstance::PathType::Music_Info );
-				QFileInfo fileInfoTool( inputString );
-				if( fileInfoTool.exists( ) == false )
-					break;
-				QFile file( inputString );
-				if( file.open( QIODeviceBase::Text | QIODeviceBase::ReadOnly ) == false ) {
-					MessageErrorOut( ) << tr( "文件打开异常" ) << " : " << inputString;
-					break;
-				}
-
-				auto byteArray = file.readAll( );
-				QJsonParseError err;
-				QJsonDocument doc = QJsonDocument::fromJson( byteArray, &err );
-				if( err.error != QJsonParseError::NoError ) {
-					MessageErrorOut( ) << tr( "文件读取异常" ) << " : " << inputString << " : " << err.errorString( );
-					break;
-				}
-				QJsonObject jsonObject = doc.object( );
-				for( auto item : jsonObject ) {
-					/*
-					"durationMs": 223085,
-			        "file": "D:/downLoads/Music/audio/时间都去哪儿了 - 王铮亮.mp3",
-			        "musicName": "时间都去哪儿了",
-			        "singer": "王铮亮"
-					 */
-					QString file;
-					QString musicName;
-					QString singer;
-					qulonglong durationMs = 0;
-
-					QJsonObject subJsonObject = item.toObject( );
-					auto iterator = subJsonObject.begin( );
-					auto end = subJsonObject.end( );
-
-					for( ; iterator != end; ++iterator ) {
-						auto key = iterator.key( );
-						if( key == "durationMs" ) {
-							durationMs = iterator.value( ).toInteger( );
-						} else if( key == "file" )
-							file = iterator->toString( );
-						else if( key == "musicName" )
-							musicName = iterator->toString( );
-						else if( key == "singer" )
-							singer = iterator->toString( );
-					}
-					if( durationMs == 0 || file.isEmpty( ) || musicName.isEmpty( ) || singer.isEmpty( ) )
-						continue; // 任意一空，则跳过
-
-					appendItem( MusicInfo( file, musicName, singer, durationMs ) );
-				}
-				sort( );
-				MusicListWidgetEvent( this, MusicListWidgetEventInfo( MusicListWidgetEventInfo::EventType::Load_Over ) );
 			}
 			break;
 		}

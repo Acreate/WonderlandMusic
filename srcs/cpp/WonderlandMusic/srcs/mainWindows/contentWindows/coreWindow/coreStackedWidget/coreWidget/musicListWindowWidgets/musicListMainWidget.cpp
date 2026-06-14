@@ -95,6 +95,7 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 			}
 			break;
 			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_Dir_Path :
+			case ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path :
 			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_File_Path : {
 				if( loadFileOverCount != 0 ) {
 					Message_Error_Out << tr( "因列表未加载完成，跳过这次加载，请等候完成再加载..." );

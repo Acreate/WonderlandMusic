@@ -1,6 +1,8 @@
 ﻿#ifndef APPLICATIONINSTANCE_H_H_HEAD__FILE__
 #define APPLICATIONINSTANCE_H_H_HEAD__FILE__
 
+#include <qjsonparseerror.h>
+
 #include <macro/eventMacroDefine.h>
 
 #include "../base/bseeApplication/bseeApplication.h"
@@ -43,6 +45,7 @@ private:
 	void sendAppEvent( );
 	void saveJsonDataToAppSettingFile( ) const;
 	void saveJsonDataToAppSettingFile( const QJsonObject &write_json, const QString &wirte_file_path ) const;
+	size_t readFileToJson( QJsonObject &result_json_obj, QJsonParseError &result_json_error, const QString &json_file_path );
 public:
 	ApplicationInstance( int &argc, char **const argv, const int i = ApplicationFlags );
 	~ApplicationInstance( ) override;
@@ -87,6 +90,8 @@ private:
 		QString music_play_top_size_info;
 		/// @brief 播放列表的音乐信息
 		QString music_play_list_music_info;
+		/// @brief 播放列表
+		QString app_file_list_music_info;
 	public:
 		JSonKey( );
 	} jsonKey;

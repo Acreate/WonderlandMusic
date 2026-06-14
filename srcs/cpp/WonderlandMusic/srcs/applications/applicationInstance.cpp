@@ -9,6 +9,7 @@
 #include <QMetaEnum>
 #include <QPainter>
 #include <QFileDialog>
+#include <QJsonArray>
 #include <QTranslator>
 
 #include "applicationEvenTrigger.h"
@@ -88,27 +89,29 @@ void ApplicationInstance::initSupportAudioDecoderFileNameSuffix( ) {
 }
 void ApplicationInstance::initJson( ) {
 	appSettingPath = formatAppInfoPath( qDirTool->currentPath( ) );
-	fileInfoTool->setFile( appSettingPath );
-	if( fileInfoTool->exists( ) ) {
-		QFile file( appSettingPath );
-		if( file.open( QIODeviceBase::Text | QIODeviceBase::ReadOnly ) ) {
-			auto byteArray = file.readAll( );
-			QJsonParseError err;
-			QJsonDocument doc = QJsonDocument::fromJson( byteArray, &err );
-			if( err.error != QJsonParseError::NoError ) {
-				MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath << " : " << err.errorString( );
-			} else
-				*appSetting = doc.object( );
-		} else
-			MessageErrorOut( ) << translate->openFileError << " : " << appSettingPath;
-
-	} else {
+	QJsonParseError err;
+	if( readFileToJson( *appSetting, err, appSettingPath ) == 1 ) {
 		QDir dir = fileInfoTool->dir( );
 		auto absolutePath = dir.absolutePath( );
 		if( fileInfoTool->exists( absolutePath ) == false )
 			if( dir.mkdir( absolutePath ) == false )
 				MessageErrorOut( ) << translate->createDirError << " : " << absolutePath;
 	}
+
+}
+size_t ApplicationInstance::readFileToJson( QJsonObject &result_json_obj, QJsonParseError &result_json_error, const QString &json_file_path ) {
+	fileInfoTool->setFile( appSettingPath );
+	if( fileInfoTool->exists( ) == false )
+		return 1;
+	QFile file( appSettingPath );
+	if( file.open( QIODeviceBase::Text | QIODeviceBase::ReadOnly ) == false )
+		return 2;
+	auto byteArray = file.readAll( );
+	QJsonDocument doc = QJsonDocument::fromJson( byteArray, &result_json_error );
+	if( result_json_error.error != QJsonParseError::NoError )
+		return 3;
+	result_json_obj = doc.object( );
+	return 0;
 }
 void ApplicationInstance::initTranslation( ) {
 	QString translationFilePath;
@@ -362,22 +365,14 @@ void ApplicationInstance::initTriggerEvent( ) {
 					auto data = resultVector.data( );
 					size_t index = 0;
 
-					QJsonObject jsonArray;
-					for( ; index < count; ++index ) {
-						QJsonObject json;
-						auto filePath = data[ index ]->getFilePath( );
-						auto singer = data[ index ]->getSinger( );
-						qint64 durationMs = data[ index ]->getDurationMs( );
-						auto musicName = data[ index ]->getMusicName( );
-						json.insert( "file", filePath );
-						json.insert( "musicName", musicName );
-						json.insert( "singer", singer );
-						json.insert( "durationMs", durationMs );
-						jsonArray.insert( QString::number( index ), json );
-					}
+					QJsonArray jsonArray;
+					for( ; index < count; ++index )
+						jsonArray.append( data[ index ]->getFilePath( ) );
 
 					auto string = formatMusicInfoPath( findResult.value( ).toString( ), PathType::Music_Info );
-					saveJsonDataToAppSettingFile( jsonArray, string );
+					QJsonObject jsonObject;
+					jsonObject.insert( jsonKey.app_file_list_music_info, jsonArray );
+					saveJsonDataToAppSettingFile( jsonObject, string );
 				}
 			}
 			break;
@@ -410,10 +405,22 @@ void ApplicationInstance::sendAppEvent( ) {
 	findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
 	if( findResult != jsonEnd ) {
 		auto string = findResult.value( ).toString( );
-		auto info = ApplicationInstanceEventInfo( );
-		info.eventType = ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path;
-		info.inputString = string;
-		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+		QJsonObject jsonObject;
+		QJsonParseError err;
+		// 读取正确，发送消息
+		if( readFileToJson( jsonObject, err, string ) == 0 ) {
+			auto iterator = jsonObject.find( jsonKey.app_file_list_music_info );
+			if( iterator != jsonObject.end( ) ) {
+				auto applicationInstanceEventInfo = ApplicationInstanceEventInfo( );
+				applicationInstanceEventInfo.eventType = ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path;
+				auto jsonValues = iterator.value( ).toArray( );
+				auto begin = jsonValues.begin( );
+				auto end = jsonValues.end( );
+				for( ; begin != end; ++begin )
+					applicationInstanceEventInfo.inputStringList.append( begin->toString( ) );
+				ApplicationInstanceEvent( this, applicationInstanceEventInfo );
+			}
+		}
 	}
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : applicationEvenTrigger( nullptr ), BseeApplication( argc, argv, i ) {
@@ -451,22 +458,33 @@ void ApplicationInstance::saveJsonDataToAppSettingFile( const QJsonObject &write
 		file.close( );
 	}
 }
+
 ApplicationInstance::~ApplicationInstance( ) {
 
 	saveJsonDataToAppSettingFile( );
-	if( mainWindowPtr )
+
+	if( mainWindowPtr ) {
+		mainWindowPtr->setParent( nullptr );
 		delete mainWindowPtr;
+	}
+	musicCollectionTopMenu->setParent( nullptr );
 	delete musicCollectionTopMenu;
+	musicCollectionSubMenu->setParent( nullptr );
 	delete musicCollectionSubMenu;
+	musicListTopMenu->setParent( nullptr );
 	delete musicListTopMenu;
+	musicListSubMenu->setParent( nullptr );
 	delete musicListSubMenu;
 	delete render;
+	applicationEvenTrigger->setParent( nullptr );
 	delete applicationEvenTrigger;
 	delete appSetting;
 	delete qDirTool;
 	delete fileInfoTool;
 	delete appStartRunTime;
 	delete translate;
+	removeTranslator( qTranslator );
+	qTranslator->setParent( nullptr );
 	delete qTranslator;
 	current = nullptr;
 }
@@ -553,6 +571,7 @@ ApplicationInstance::JSonKey::JSonKey( ) {
 	music_select_file_path_start_path = "app.select.music.file.path.start.path";
 	music_play_top_size_info = "app.player.music.top.size.info";
 	music_play_list_music_info = "app.player.music.list.info";
+	app_file_list_music_info = "app.file.music.player.list";
 }
 void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )

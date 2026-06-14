@@ -39,18 +39,17 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	messageErrorOut->setJoinString( "\n" );
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
 	*messageErrorOut << QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序开始" ) << "----------------------";
-	ApplicationInstance *application = new ApplicationInstance( argc, argv );
+	ApplicationInstance application =  ApplicationInstance( argc, argv );
 
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
 	QTextCodec::setCodecForLocale( utf8 );
 
-	int exec = application->exec( );
+	int exec = application.exec( );
 	QString resultString = QObject::tr( "返回值" );
 	*messageErrorOut << "----------------------"
 		<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
 		<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
 		+ QString::number( exec ).toUpper( ) + " }";
 	delete messageErrorOut;
-	delete application;
 	return exec;
 }

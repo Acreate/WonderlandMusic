@@ -24,6 +24,8 @@ set( CMAKE_AUTOMOC ON )
 set( CMAKE_AUTOUIC ON )
 set( CMAKE_AUTORCC ON )
 
+set( CMAKE_SUPPRESS_REGENERATION  ON )
+
 get_cmake_separator( _cmake_sep )
 init_std_builder_path( )
 

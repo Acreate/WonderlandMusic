@@ -55,9 +55,9 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 				// 未进入拖拽状态
 				if( permissonDrag == true && currentDragItem ) {
 					int desX = currentX - dragOffsetX;
-					if( desX <= minWidth )
+					if( desX <= dragMinWidth )
 						break;
-					if( desX >= maxWidth )
+					if( desX >= dragMaxWidth )
 						break;
 					currentDragItem->move( desX, 0 );
 					size_t count = titleVector.size( );
@@ -124,8 +124,8 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 					int currentX = point.x( );
 					int itemX = currentDragItem->x( );
 					dragOffsetX = currentX - itemX;
-					minWidth = currentDragPrevItem->x( ) + currentDragPrevItem->getDrawDecollatorInterspace( );
-					maxWidth = this->width( );
+					dragMinWidth = currentDragPrevItem->x( ) + currentDragPrevItem->getDrawDecollatorInterspace( );
+					dragMaxWidth = this->width( );
 
 					permissonDrag = true;
 					MusicListTopWidgetEvent( this, MusicListTopWidgetEventInfo( MusicListTopWidgetEventInfo::EventType::Drag_Start_Item_Width ) );

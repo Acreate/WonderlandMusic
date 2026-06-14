@@ -12,11 +12,20 @@
 
 #include <applications/applicationEvenTrigger.h>
 
+QString MusicListItemWidget::msToHMS( qint64 totalMs ) {
+	qint64 totalSec = totalMs / 1000;
+	qint64 h = totalSec / 3600;
+	qint64 m = ( totalSec % 3600 ) / 60;
+	qint64 s = totalSec % 60;
+	return QString( "%1:%2:%3" )
+			.arg( h, 2, 10, QChar( '0' ) )
+			.arg( m, 2, 10, QChar( '0' ) )
+			.arg( s, 2, 10, QChar( '0' ) );
+}
 MusicListItemWidget::MusicListItemWidget( QWidget *parent, const QString &file_path, const QString &music_name, const QString &singer_name, qint64 duration_ms ) : BaseWidget( parent ),
 	filePath( file_path ), musicName( music_name ), singerName( singer_name ), duration_ms( duration_ms ) {
 
-	QDateTime dt = QDateTime::fromMSecsSinceEpoch( duration_ms );
-	QString formatTime = dt.toString( "hh:mm:ss" );
+	QString formatTime = msToHMS( duration_ms );
 	labelItemVector.emplace_back( new LabelItem( music_name, this ) );
 	labelItemVector.emplace_back( new LabelItem( singer_name, this ) );
 	labelItemVector.emplace_back( new LabelItem( formatTime, this ) );

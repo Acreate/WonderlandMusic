@@ -16,6 +16,8 @@ protected:
 	QString singerName;
 	/// @brief 时长（毫秒）
 	qint64 duration_ms;
+private:
+	QString msToHMS( qint64 totalMs );
 public:
 	MusicListItemWidget( QWidget *parent, const QString &file_path, const QString &music_name, const QString &singer_name, qint64 duration_ms );
 	virtual const QString & getFilePath( ) const { return filePath; }

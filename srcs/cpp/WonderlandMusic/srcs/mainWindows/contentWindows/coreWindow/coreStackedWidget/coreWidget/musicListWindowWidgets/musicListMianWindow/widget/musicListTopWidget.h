@@ -17,6 +17,10 @@ protected:
 	int maxWidth;
 	/// @brief 检测的最小宽度
 	int minWidth;
+	/// @brief 检测拖拽的大宽度
+	int dragMaxWidth;
+	/// @brief 检测拖拽的最小宽度
+	int dragMinWidth;
 	/// @brief 是否准备好拖拽
 	bool readyDrag;
 	/// @brief 允许拖拽

@@ -16,6 +16,8 @@
 #include "../mainWindows/mainWindow.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMainWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/MusicCollectionWidget/musicCollectionWidget.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListTopWidget.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListItemWidget/labelItem.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
 
 #include "../menus/musicCollectionSubMenu.h"
@@ -302,12 +304,38 @@ void ApplicationInstance::initTriggerEvent( ) {
 		}
 
 	} );
+	ApplicationEvenTrigger::connectMusicListTopWidgetEvent( [this] ( MusicListTopWidget *music_list_top_widget, const MusicListTopWidgetEventInfo &music_list_top_widget_event_info ) {
+		auto eventType = music_list_top_widget_event_info.getEventType( );
+		switch( eventType ) {
+			case MusicListTopWidgetEventInfo::EventType::Drag_End_Item_Width : {
+				// 保存项的宽度
+				auto labelItems = music_list_top_widget->getTitleVector( );
+				size_t count = labelItems.size( );
+				if( count == 0 )
+					break;
+				auto data = labelItems.data( );
+				size_t index = 0;
+				QJsonObject labelItemJson;
+				for( ; index < count; ++index ) {
+					QJsonObject sizeInfoJson;
+					int x = data[ index ]->x( );
+					int width = data[ index ]->width( );
+					sizeInfoJson.insert( "x", x );
+					sizeInfoJson.insert( "width", width );
+					labelItemJson.insert( QString::number( index ), sizeInfoJson );
+				}
+				appSetting->insert( jsonKey.music_play_top_size_info, labelItemJson );
+				saveJsonDataToAppSettingFile( );
+			}
 
+			break;
+		}
+	} );
 }
 void ApplicationInstance::sendAppEvent( ) {
 	auto jsonEnd = this->appSetting->end( );
-	auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
 	// 找到存储的路径
+	auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
 	if( findResult != jsonEnd ) {
 		auto string = findResult.value( ).toString( );
 		auto info = ApplicationInstanceEventInfo( );
@@ -315,8 +343,8 @@ void ApplicationInstance::sendAppEvent( ) {
 		info.inputString = string;
 		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 	}
-	findResult = this->appSetting->find( jsonKey.app_music_collection_main_widget_width );
 	// 找到收藏列表的宽度
+	findResult = this->appSetting->find( jsonKey.app_music_collection_main_widget_width );
 	if( findResult != jsonEnd ) {
 		auto widgetWidth = findResult.value( ).toInt( );
 		auto info = ApplicationInstanceEventInfo( );
@@ -324,6 +352,16 @@ void ApplicationInstance::sendAppEvent( ) {
 		info.newMusicWidgetWidth = widgetWidth;
 		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 	}
+	// 查找标题宽度
+	findResult = this->appSetting->find( jsonKey.music_play_top_size_info );
+	if( findResult != jsonEnd ) {
+		auto jsonObject = findResult->toObject( );
+		auto info = ApplicationInstanceEventInfo( );
+		info.eventType = ApplicationInstanceEventInfo::EventType::Init_Music_Player_Top_Width;
+		*info.json = jsonObject;
+		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+	}
+
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : applicationEvenTrigger( nullptr ), BseeApplication( argc, argv, i ) {
 	initVar( );
@@ -457,6 +495,7 @@ ApplicationInstance::JSonKey::JSonKey( ) {
 
 	music_select_dir_path_start_path = "app.select.music.dir.path.start.path";
 	music_select_file_path_start_path = "app.select.music.file.path.start.path";
+	music_play_top_size_info = "app.player.music.top.size.info";
 }
 void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )
@@ -552,4 +591,13 @@ void ApplicationInstance::firstMainWindowShow( MainWindow *first_show_main_windo
 		}
 
 	}
+}
+ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( ) {
+	json = new QJsonObject;
+}
+ApplicationInstanceEventInfo::~ApplicationInstanceEventInfo( ) {
+	delete json;
+}
+const QJsonObject & ApplicationInstanceEventInfo::getJsonObject( ) const {
+	return *json;
 }

@@ -75,6 +75,8 @@ private:
 		QString music_select_file_path_start_path;
 		/// @brief 音频目录选择路径的起始地址
 		QString music_select_dir_path_start_path;
+		/// @brief 播放列表顶部标题大小信息
+		QString music_play_top_size_info;
 	public:
 		JSonKey( );
 	} jsonKey;
@@ -145,6 +147,7 @@ public:
 		Release_Global_Mouse_Pos,
 		Update_Music_Widget_Width,
 		Init_Music_Widget_Width,
+		Init_Music_Player_Top_Width,
 		Pop_Music_Collection_Top_Menu,
 		Pop_Music_Collection_Sub_Menu,
 		Pop_Music_List_Top_Menu,
@@ -165,10 +168,11 @@ protected:
 	QStringList inputStringList;
 	QString inputString;
 	QObject *supervisorObject = nullptr;
+	QJsonObject* json;
 private:
-	ApplicationInstanceEventInfo( ) { }
+	ApplicationInstanceEventInfo( );
 public:
-	virtual ~ApplicationInstanceEventInfo( ) = default;
+	virtual ~ApplicationInstanceEventInfo( );
 
 	/// @brief 上层对象，经过 ApplicationInstanceEventInfo 对象处理前的消息对象指针
 	/// @return 对象处理前的消息对象指针
@@ -177,5 +181,6 @@ public:
 	virtual int getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
 	virtual const QStringList & getInputStringList( ) const { return inputStringList; }
 	virtual const QString & getInputString( ) const { return inputString; }
+	virtual const QJsonObject & getJsonObject( ) const;
 };
 #endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

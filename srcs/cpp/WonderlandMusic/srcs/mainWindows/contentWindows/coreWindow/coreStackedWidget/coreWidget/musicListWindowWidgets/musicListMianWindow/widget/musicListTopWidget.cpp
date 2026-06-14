@@ -1,5 +1,6 @@
 ﻿#include "musicListTopWidget.h"
 
+#include <QJsonObject>
 #include <QLabel>
 #include <QPainter>
 #include <QScrollArea>
@@ -46,6 +47,43 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 		auto eventType = application_instance_event_info.getEventType( );
 
 		switch( eventType ) {
+			case ApplicationInstanceEventInfo::EventType::Init_Music_Player_Top_Width : {
+				size_t titleVectorCount = titleVector.size( );
+				if( titleVectorCount == 0 )
+					break;
+				titleVectorCount -= 1;
+				auto titleVectorData = titleVector.data( );
+				auto jsonObject = application_instance_event_info.getJsonObject( );
+				auto iterator = jsonObject.begin( );
+				auto end = jsonObject.end( );
+				bool toResult;
+				for( ; iterator != end; ++iterator ) {
+					auto key = iterator.key( );
+					auto titleIndex = key.toULongLong( &toResult );
+					if( toResult == false )
+						continue; // 转换异常
+					if( titleIndex > titleVectorCount )
+						continue; // 数组下标过渡
+					if( titleIndex == 0 )
+						continue; // 第一个组件不配置
+					auto object = iterator->toObject( );
+					auto end = object.end( );
+					auto begin = object.begin( );
+					for( ; begin != end; ++begin ) {
+						QString string = begin.key( );
+						if( string == "x" ) {
+							int converInt = begin->toInteger( titleVectorData[ titleIndex ]->x( ) );
+							titleVectorData[ titleIndex ]->move( converInt, 0 );
+						} else if( string == "width" ) {
+							int converInt = begin->toInteger( titleVectorData[ titleIndex ]->width( ) );
+							titleVectorData[ titleIndex ]->setFixedWidth( converInt );
+						}
+
+					}
+				}
+
+			}
+			break;
 			case ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos : {
 				// 检测是否在拖拽区间，并且设置准备符号
 				// 在激活拖拽功能的情况下发送信号
@@ -87,6 +125,7 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 							}
 							break;
 						}
+					MusicListTopWidgetEvent( this, MusicListTopWidgetEventInfo( MusicListTopWidgetEventInfo::EventType::Drag_Start_Item_Width ) );
 				} else {
 					if( currentX > maxWidth || currentX < minWidth )
 						break; // 超出检测限制

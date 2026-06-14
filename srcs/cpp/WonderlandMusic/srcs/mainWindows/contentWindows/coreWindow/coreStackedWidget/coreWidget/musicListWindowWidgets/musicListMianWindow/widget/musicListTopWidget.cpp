@@ -2,6 +2,7 @@
 
 #include <QLabel>
 #include <QPainter>
+#include <QScrollArea>
 #include <qevent.h>
 
 #include <applications/applicationEvenTrigger.h>
@@ -104,6 +105,7 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 							if( data[ index ]->x( ) > currentX )
 								break; // 没有
 							currentDragItem = data[ index ];
+							currentDragPrevItem = data[ index - 1 ];
 							break;
 						}
 					}
@@ -122,10 +124,14 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 					int currentX = point.x( );
 					int itemX = currentDragItem->x( );
 					dragOffsetX = currentX - itemX;
+					minWidth = currentDragPrevItem->x( ) + currentDragPrevItem->getDrawDecollatorInterspace( );
+					maxWidth = this->width( );
+
 					permissonDrag = true;
 					MusicListTopWidgetEvent( this, MusicListTopWidgetEventInfo( MusicListTopWidgetEventInfo::EventType::Drag_Start_Item_Width ) );
 				}
 				break;
+			case ApplicationInstanceEventInfo::EventType::Mouse_Leave_Pos :
 			case ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos :
 				// 取消拖拽功能
 				if( readyDrag && currentDragItem ) {
@@ -134,6 +140,23 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 					auto data = titleVector.data( );
 					maxWidth = data[ count ]->x( ) + data[ count ]->width( );
 					int currentWidth = this->width( );
+					auto parentObj = this->parent( );
+					if( parentObj ) {
+						auto scrollCast = qobject_cast< QScrollArea * >( parentObj );
+						if( scrollCast ) {
+							int currentX = scrollCast->viewport( )->width( );
+							if( currentX > maxWidth )
+								maxWidth = currentX;
+						} else {
+							auto qobjectCast = qobject_cast< QWidget * >( parentObj );
+							if( qobjectCast ) {
+								int currentX = qobjectCast->width( );
+								if( currentX > maxWidth )
+									maxWidth = currentX;
+							}
+						}
+					}
+
 					if( currentWidth != maxWidth )
 						setFixedWidth( maxWidth );
 					MusicListTopWidgetEvent( this, MusicListTopWidgetEventInfo( MusicListTopWidgetEventInfo::EventType::Drag_End_Item_Width ) );
@@ -141,10 +164,6 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 				currentDragItem = nullptr;
 				permissonDrag = readyDrag = false; // 重置状态
 				break;
-			case ApplicationInstanceEventInfo::EventType::Mouse_Leave_Pos : {
-
-			}
-			break;
 		}
 	} );
 
@@ -178,6 +197,6 @@ void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 }
 void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
 	BaseWidget::paintEvent( event );
-	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkYellow );
+	/*QPainter painter( this );
+	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkYellow );*/
 }

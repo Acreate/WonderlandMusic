@@ -23,6 +23,8 @@ protected:
 	bool permissonDrag;
 	/// @brief 当前拖拽项
 	LabelItem *currentDragItem;
+	/// @brief 当前拖拽项的前一项
+	LabelItem *currentDragPrevItem;
 	/// @brief 拖拽偏移 x
 	int dragOffsetX;
 public:

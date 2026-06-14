@@ -43,7 +43,10 @@ MusicListMianWindow::MusicListMianWindow( QWidget *parent ) : BaseWidgetTypeMain
 			break;
 		}
 	} );
-
+	auto scrollBar = musicScrollArea->horizontalScrollBar( );
+	connect( scrollBar, &QScrollBar::valueChanged, [this] ( int new_var ) {
+		musicListTopWidget->move( -new_var, 0 );
+	} );
 }
 void MusicListMianWindow::resizeEvent( QResizeEvent *event ) {
 	BaseMainWindow::resizeEvent( event );

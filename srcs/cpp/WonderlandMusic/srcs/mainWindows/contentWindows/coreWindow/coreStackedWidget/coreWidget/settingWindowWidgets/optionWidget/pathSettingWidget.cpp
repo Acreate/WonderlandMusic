@@ -1,6 +1,7 @@
 ﻿#include "pathSettingWidget.h"
 
 #include <QDir>
+#include <QFileDialog>
 #include <QLabel>
 
 #include "../optionStackWidget.h"
@@ -9,10 +10,14 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+#include "../../../../../../mainWindow.h"
+
 #include "../../../../../../../applications/applicationEvenTrigger.h"
 #include "../../../../../../../applications/applicationInstance.h"
 
 #include "../../../../../../../msgInfo/messageErrorOut.h"
+
+#include "../../../../../../../tools/widgetTools.h"
 PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : BaseWidget( parent ), optionStackWidget( parent ) {
 	loadFileInfoPathEditInputLine = new QLineEdit( this );
 	loadFileInfoPathSelectBtn = new QPushButton( tr( "路径选择..." ), this );
@@ -27,6 +32,30 @@ PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : BaseWidget( 
 	subLayout->addWidget( loadFileInfoPathText, 2 );
 	subLayout->addWidget( loadFileInfoPathEditInputLine, 26 );
 	subLayout->addWidget( loadFileInfoPathSelectBtn, 2 );
+
+	connect( loadFileInfoPathSelectBtn, &QPushButton::clicked, [this]( ) {
+
+		auto applicationInstance = ApplicationInstance::getApplicationInstance( );
+		QFileDialog dlg;
+		dlg.setWindowTitle( tr( "选择音频信息存放目录" ) + "..." );
+
+		if( musiInfoPath.isEmpty( ) )
+			musiInfoPath = QDir::currentPath( );
+		dlg.setDirectory( musiInfoPath );
+		dlg.setFileMode( QFileDialog::Directory );
+		dlg.setOption( QFileDialog::ShowDirsOnly );
+		MainWindow *targetWidgetPos = applicationInstance->getMainWindowPtr( );
+		WidgetTools::moveWidgetToCenterPos( targetWidgetPos, &dlg );
+		dlg.exec( );
+		if( dlg.result( ) == 0 )
+			return;
+		QStringList filePaths = dlg.selectedFiles( );
+		auto data = filePaths.data( );
+		musiInfoPath = data[ 0 ];
+		auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
+		PathSettingWidgetEvent::triggerPathSettingWidgetEvent(
+			applicationEvenTrigger, this, PathSettingWidgetEventInfo( PathSettingWidgetEventInfo::EventType::Update_Music_info_File_Path_Info ) );
+	} );
 
 	connect( loadFileInfoPathEditInputLine, &QLineEdit::editingFinished, [this]( ) {
 		auto checkPath = loadFileInfoPathEditInputLine->text( );
@@ -60,7 +89,7 @@ PathSettingWidget::PathSettingWidget( OptionStackWidget *parent ) : BaseWidget( 
 	connect( applicationEvenTrigger, &ApplicationEvenTrigger::triggerApplicationInstanceEvent, [this] ( auto, const ApplicationInstanceEventInfo &info ) {
 		auto eventType = info.getEventType( );
 		switch( eventType ) {
-			case ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text : {
+			case ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path : {
 				auto loadMusicInofPath = info.getInputString( );
 				musiInfoPath = loadMusicInofPath;
 				loadFileInfoPathEditInputLine->setText( loadMusicInofPath );

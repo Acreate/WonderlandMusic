@@ -13,10 +13,10 @@ protected:
 public:
 	MusicListWidget( QWidget *parent );
 	virtual bool existMusicFilePath( const QString &file_path ) const;
+	virtual size_t getMusicListItemWidgets( std::vector< const MusicListItemWidget * > &result_vector ) const;
 protected:
 	virtual bool appendItem( const MusicInfo &media_meta_data );
 	virtual bool sort( );
-
 };
 #include <macro/eventMacroDefine.h>
 

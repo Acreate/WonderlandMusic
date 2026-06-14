@@ -24,6 +24,13 @@ private:
 	static ApplicationInstance *current;
 public:
 	static ApplicationInstance * getApplicationInstance( );
+public:
+	enum class PathType {
+		Music_Info
+	};
+	static QString formatMusicInfoPath( const QString &root_path, PathType path_type );
+	static QString formatAppInfoPath( const QString &root_path );
+	static QString formatTranslationPath( const QString &root_path, const QString &language = "" );
 private:
 	void initVar( );
 	void initSupportAudioDecoderFileNameSuffix( );
@@ -35,6 +42,7 @@ private:
 	void initTriggerEvent( );
 	void sendAppEvent( );
 	void saveJsonDataToAppSettingFile( ) const;
+	void saveJsonDataToAppSettingFile( const QJsonObject &write_json, const QString &wirte_file_path ) const;
 public:
 	ApplicationInstance( int &argc, char **const argv, const int i = ApplicationFlags );
 	~ApplicationInstance( ) override;
@@ -77,6 +85,8 @@ private:
 		QString music_select_dir_path_start_path;
 		/// @brief 播放列表顶部标题大小信息
 		QString music_play_top_size_info;
+		/// @brief 播放列表的音乐信息
+		QString music_play_list_music_info;
 	public:
 		JSonKey( );
 	} jsonKey;
@@ -139,7 +149,7 @@ class Event_Define_Event_Info_Type_Name( ApplicationInstance ) {
 	friend class ApplicationInstance;
 public:
 	enum class EventType {
-		Load_Music_Info_Path_Text,
+		Init_Music_Info_Path,
 		Mouse_Leave_Pos,
 		Mouse_Enter_Pos,
 		Move_Global_Mouse_Pos,
@@ -168,7 +178,7 @@ protected:
 	QStringList inputStringList;
 	QString inputString;
 	QObject *supervisorObject = nullptr;
-	QJsonObject* json;
+	QJsonObject *json;
 private:
 	ApplicationInstanceEventInfo( );
 public:

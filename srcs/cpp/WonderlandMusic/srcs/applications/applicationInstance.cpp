@@ -17,7 +17,9 @@
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMainWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/MusicCollectionWidget/musicCollectionWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListTopWidget.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListItemWidget/labelItem.h"
+#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListItemWidget/musicListItemWidget.h"
 #include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
 
 #include "../menus/musicCollectionSubMenu.h"
@@ -30,9 +32,6 @@
 #include "../tools/widgetTools.h"
 
 #include "private/appRenderObj.h"
-
-// 全局注册日志分类
-//Q_DECLARE_LOGGING_CATEGORY( qt_multimedia )
 
 ApplicationInstance *ApplicationInstance::current = nullptr;
 ApplicationInstance * ApplicationInstance::getApplicationInstance( ) {
@@ -48,6 +47,24 @@ ApplicationInstance * ApplicationInstance::getApplicationInstance( ) {
 		return current;
 	MessageErrorOut( false ) << tr( "无法从" ) << " QCoreApplicationInstance::instance( ) " << tr( "转换到" ) << tr( " Application * " ) << tr( "类型" );
 	return nullptr;
+}
+QString ApplicationInstance::formatMusicInfoPath( const QString &root_path, PathType path_type ) {
+	switch( path_type ) {
+		case PathType::Music_Info :
+			return root_path + "/" + applicationName( ) + ".app.music.list.json";
+			break;
+	}
+	return { };
+}
+QString ApplicationInstance::formatAppInfoPath( const QString &root_path ) {
+	return root_path + "/program/setting/" + applicationName( ) + ".app.json";
+}
+QString ApplicationInstance::formatTranslationPath( const QString &root_path, const QString &language ) {
+	if( language.isEmpty( ) )
+		return root_path + "/program/translations/" + applicationName( ) + ".qm";
+	else
+		return root_path + "/program/translations/" + applicationName( ) + "_" + language + ".qm";
+
 }
 void ApplicationInstance::initVar( ) {
 	isQuit = false;
@@ -70,7 +87,7 @@ void ApplicationInstance::initSupportAudioDecoderFileNameSuffix( ) {
 		supportAudioDecoderFileNameSuffix.append( QString( metaEnum.valueToKey( ( quint64 ) fmt ) ).toUpper( ) );
 }
 void ApplicationInstance::initJson( ) {
-	appSettingPath = qDirTool->currentPath( ) + "/program/setting/" + applicationName( ) + ".app.json";
+	appSettingPath = formatAppInfoPath( qDirTool->currentPath( ) );
 	fileInfoTool->setFile( appSettingPath );
 	if( fileInfoTool->exists( ) ) {
 		QFile file( appSettingPath );
@@ -105,9 +122,9 @@ void ApplicationInstance::initTranslation( ) {
 		QLocale locale = QLocale::system( );
 		auto localeName = locale.name( );
 		QString currentPath = qDirTool->currentPath( );
-		translationFilePath = currentPath + "/program/translations/" + applicationName( ) + "_" + localeName + ".qm";
+		translationFilePath = formatTranslationPath( currentPath, localeName );
 		if( fileInfoTool->exists( translationFilePath ) == false )
-			translationFilePath = currentPath + "/program/translations/" + applicationName( ) + ".qm";
+			translationFilePath = formatTranslationPath( currentPath );
 	}
 	qTranslator = new QTranslator;
 	if( qTranslator->load( translationFilePath ) == false )
@@ -331,18 +348,46 @@ void ApplicationInstance::initTriggerEvent( ) {
 			break;
 		}
 	} );
+
+	ApplicationEvenTrigger::connectMusicListWidgetEvent( [this] ( MusicListWidget *music_list_widget, const MusicListWidgetEventInfo &music_list_widget_event_info ) {
+		auto eventType = music_list_widget_event_info.getEventType( );
+		switch( eventType ) {
+			case MusicListWidgetEventInfo::EventType::Load_Over : {
+				auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
+				if( findResult != this->appSetting->end( ) ) {
+					std::vector< const MusicListItemWidget * > resultVector;
+					size_t count = music_list_widget->getMusicListItemWidgets( resultVector );
+					if( count == 0 )
+						break;
+					auto data = resultVector.data( );
+					size_t index = 0;
+
+					QJsonObject jsonArray;
+					for( ; index < count; ++index ) {
+						QJsonObject json;
+						auto filePath = data[ index ]->getFilePath( );
+						auto singer = data[ index ]->getSinger( );
+						qint64 durationMs = data[ index ]->getDurationMs( );
+						auto musicName = data[ index ]->getMusicName( );
+						json.insert( "file", filePath );
+						json.insert( "musicName", musicName );
+						json.insert( "singer", singer );
+						json.insert( "durationMs", durationMs );
+						jsonArray.insert( QString::number( index ), json );
+					}
+
+					auto string = formatMusicInfoPath( findResult.value( ).toString( ), PathType::Music_Info );
+					saveJsonDataToAppSettingFile( jsonArray, string );
+				}
+			}
+			break;
+		}
+	} );
 }
 void ApplicationInstance::sendAppEvent( ) {
 	auto jsonEnd = this->appSetting->end( );
-	// 找到存储的路径
-	auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
-	if( findResult != jsonEnd ) {
-		auto string = findResult.value( ).toString( );
-		auto info = ApplicationInstanceEventInfo( );
-		info.eventType = ApplicationInstanceEventInfo::EventType::Load_Music_Info_Path_Text;
-		info.inputString = string;
-		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
-	}
+	QJsonObject::iterator findResult;
+
 	// 找到收藏列表的宽度
 	findResult = this->appSetting->find( jsonKey.app_music_collection_main_widget_width );
 	if( findResult != jsonEnd ) {
@@ -361,7 +406,15 @@ void ApplicationInstance::sendAppEvent( ) {
 		*info.json = jsonObject;
 		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 	}
-
+	// 查找音频配置存储路径
+	findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
+	if( findResult != jsonEnd ) {
+		auto string = findResult.value( ).toString( );
+		auto info = ApplicationInstanceEventInfo( );
+		info.eventType = ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path;
+		info.inputString = string;
+		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+	}
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : applicationEvenTrigger( nullptr ), BseeApplication( argc, argv, i ) {
 	initVar( );
@@ -375,7 +428,10 @@ ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const in
 	sendAppEvent( );
 }
 void ApplicationInstance::saveJsonDataToAppSettingFile( ) const {
-	fileInfoTool->setFile( appSettingPath );
+	saveJsonDataToAppSettingFile( *appSetting, appSettingPath );
+}
+void ApplicationInstance::saveJsonDataToAppSettingFile( const QJsonObject &write_json, const QString &wirte_file_path ) const {
+	fileInfoTool->setFile( wirte_file_path );
 	if( fileInfoTool->exists( ) == false ) {
 		QDir dir = fileInfoTool->dir( );
 		if( dir.exists( ) == false ) {
@@ -386,9 +442,9 @@ void ApplicationInstance::saveJsonDataToAppSettingFile( ) const {
 			}
 		}
 	}
-	QFile file( appSettingPath );
+	QFile file( wirte_file_path );
 	if( file.open( QIODeviceBase::ReadWrite | QIODeviceBase::Text | QIODeviceBase::Truncate ) ) {
-		QJsonDocument doc( *appSetting );
+		QJsonDocument doc( write_json );
 		QString jsonStr = doc.toJson( QJsonDocument::Indented ); //格式化字符串
 		auto byteArray = jsonStr.toUtf8( );
 		file.write( byteArray );
@@ -496,6 +552,7 @@ ApplicationInstance::JSonKey::JSonKey( ) {
 	music_select_dir_path_start_path = "app.select.music.dir.path.start.path";
 	music_select_file_path_start_path = "app.select.music.file.path.start.path";
 	music_play_top_size_info = "app.player.music.top.size.info";
+	music_play_list_music_info = "app.player.music.list.info";
 }
 void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )

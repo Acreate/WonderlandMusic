@@ -1,12 +1,14 @@
 ﻿#ifndef APPLICATIONINSTANCE_H_H_HEAD__FILE__
 #define APPLICATIONINSTANCE_H_H_HEAD__FILE__
 
+#include <qjsonobject.h>
 #include <qjsonparseerror.h>
 
 #include <macro/eventMacroDefine.h>
 
 #include "../base/bseeApplication/bseeApplication.h"
 
+class MusicInfo;
 class MusicListWidget;
 class MusicCollectionWidget;
 class MusicListSubMenu;
@@ -90,8 +92,6 @@ private:
 		QString music_play_top_size_info;
 		/// @brief 播放列表的音乐信息
 		QString music_play_list_music_info;
-		/// @brief 播放列表
-		QString app_file_list_music_info;
 	public:
 		JSonKey( );
 	} jsonKey;
@@ -181,9 +181,9 @@ protected:
 	EventType eventType;
 	int newMusicWidgetWidth;
 	QStringList inputStringList;
+	QJsonObject *jsonObject;
 	QString inputString;
 	QObject *supervisorObject = nullptr;
-	QJsonObject *json;
 private:
 	ApplicationInstanceEventInfo( );
 public:
@@ -195,7 +195,7 @@ public:
 	virtual EventType getEventType( ) const { return eventType; }
 	virtual int getNewMusicWidgetWidth( ) const { return newMusicWidgetWidth; }
 	virtual const QStringList & getInputStringList( ) const { return inputStringList; }
-	virtual const QString & getInputString( ) const { return inputString; }
 	virtual const QJsonObject & getJsonObject( ) const;
+	virtual const QString & getInputString( ) const { return inputString; }
 };
 #endif // APPLICATIONINSTANCE_H_H_HEAD__FILE__

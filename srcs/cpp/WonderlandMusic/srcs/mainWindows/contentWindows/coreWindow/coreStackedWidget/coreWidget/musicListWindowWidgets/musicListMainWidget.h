@@ -15,7 +15,6 @@ class MusicListScrollArea;
 class MusicListMainWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
-	//MusicListScrollArea *musicListScrollArea;
 	MusicCollectionScrollArea *musicCollectionScrollArea;
 	MusicListMianWindow *musicListMianWindow;
 	bool readyDragWidgetWidth;
@@ -25,7 +24,6 @@ protected:
 	int currentWidgetHeight;
 	int minCollectionWidth;
 	size_t loadFileOverCount;
-	QJsonObject *json;
 	QMutex *musicInfoVectorWRMutex;
 	std::vector< MusicInfo * > musicInfos;
 public:
@@ -33,8 +31,10 @@ public:
 	~MusicListMainWidget( ) override;
 	virtual int getMusicCollectionWidth( ) const;
 	virtual void setMusicCollectionWidth( int new_width );
-	virtual const QJsonObject & serializeToJsonObject( ) const;
+	virtual bool serializeToJsonObject( QJsonObject &out_json_object ) const;
+	virtual bool serializeForJsonObject( QJsonObject &in_json_object );
 	virtual const std::vector< MusicInfo * > & getMusicInfos( ) const { return musicInfos; }
+	virtual bool hasMusicFileInfo(const QString& music_file_path)const;
 protected:
 	virtual void clearMusicInfoVector( );
 	virtual void updateSubWidgetSize( );

@@ -30,6 +30,8 @@
 
 #include "../msgInfo/messageErrorOut.h"
 
+#include "../musics/musicInfo.h"
+
 #include "../tools/widgetTools.h"
 
 #include "private/appRenderObj.h"
@@ -297,6 +299,18 @@ void ApplicationInstance::initTriggerEvent( ) {
 				break;
 			case MusicListMainWidgetEventInfo::EventType::Over_Draw_Music_Widget_Width :
 				break;
+			case MusicListMainWidgetEventInfo::EventType::Load_Music_File_Over : {
+
+				auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
+				if( findResult != this->appSetting->end( ) ) {
+					QJsonObject jsonObject;
+					if( sender->serializeToJsonObject( jsonObject ) == false )
+						break;
+					auto string = formatMusicInfoPath( findResult.value( ).toString( ), PathType::Music_Info );
+					saveJsonDataToAppSettingFile( jsonObject, string );
+				}
+			}
+			break;
 
 		}
 
@@ -351,34 +365,8 @@ void ApplicationInstance::initTriggerEvent( ) {
 			break;
 		}
 	} );
-
-	ApplicationEvenTrigger::connectMusicListWidgetEvent( [this] ( MusicListWidget *music_list_widget, const MusicListWidgetEventInfo &music_list_widget_event_info ) {
-		auto eventType = music_list_widget_event_info.getEventType( );
-		switch( eventType ) {
-			case MusicListWidgetEventInfo::EventType::Load_Over : {
-				auto findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
-				if( findResult != this->appSetting->end( ) ) {
-					std::vector< const MusicListItemWidget * > resultVector;
-					size_t count = music_list_widget->getMusicListItemWidgets( resultVector );
-					if( count == 0 )
-						break;
-					auto data = resultVector.data( );
-					size_t index = 0;
-
-					QJsonArray jsonArray;
-					for( ; index < count; ++index )
-						jsonArray.append( data[ index ]->getFilePath( ) );
-
-					auto string = formatMusicInfoPath( findResult.value( ).toString( ), PathType::Music_Info );
-					QJsonObject jsonObject;
-					jsonObject.insert( jsonKey.app_file_list_music_info, jsonArray );
-					saveJsonDataToAppSettingFile( jsonObject, string );
-				}
-			}
-			break;
-		}
-	} );
 }
+
 void ApplicationInstance::sendAppEvent( ) {
 	auto jsonEnd = this->appSetting->end( );
 	QJsonObject::iterator findResult;
@@ -398,30 +386,22 @@ void ApplicationInstance::sendAppEvent( ) {
 		auto jsonObject = findResult->toObject( );
 		auto info = ApplicationInstanceEventInfo( );
 		info.eventType = ApplicationInstanceEventInfo::EventType::Init_Music_Player_Top_Width;
-		*info.json = jsonObject;
+		*info.jsonObject = jsonObject;
 		ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 	}
 	// 查找音频配置存储路径
 	findResult = this->appSetting->find( jsonKey.app_music_info_file_path );
 	if( findResult != jsonEnd ) {
+		ApplicationInstanceEventInfo info;
 		auto string = findResult.value( ).toString( );
-		string = formatMusicInfoPath( string, PathType::Music_Info );
+		info.inputString = formatMusicInfoPath( string, PathType::Music_Info );
 		QJsonObject jsonObject;
 		QJsonParseError err;
+		info.eventType = ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path;
 		// 读取正确，发送消息
-		if( readFileToJson( jsonObject, err, string ) == 0 ) {
-			auto iterator = jsonObject.find( jsonKey.app_file_list_music_info );
-			if( iterator != jsonObject.end( ) ) {
-				auto applicationInstanceEventInfo = ApplicationInstanceEventInfo( );
-				applicationInstanceEventInfo.eventType = ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path;
-				auto jsonValues = iterator.value( ).toArray( );
-				auto begin = jsonValues.begin( );
-				auto end = jsonValues.end( );
-				for( ; begin != end; ++begin )
-					applicationInstanceEventInfo.inputStringList.append( begin->toString( ) );
-				ApplicationInstanceEvent( this, applicationInstanceEventInfo );
-			}
-		}
+		if( readFileToJson( *info.jsonObject, err, info.inputString ) == 0 )
+			ApplicationInstanceEvent( this, info );
+
 	}
 }
 ApplicationInstance::ApplicationInstance( int &argc, char **const argv, const int i ) : applicationEvenTrigger( nullptr ), BseeApplication( argc, argv, i ) {
@@ -572,7 +552,6 @@ ApplicationInstance::JSonKey::JSonKey( ) {
 	music_select_file_path_start_path = "app.select.music.file.path.start.path";
 	music_play_top_size_info = "app.player.music.top.size.info";
 	music_play_list_music_info = "app.player.music.list.info";
-	app_file_list_music_info = "app.file.music.player.list";
 }
 void ApplicationInstance::setMainWindowPtr( MainWindow *main_window_ptr ) {
 	if( main_window_ptr == nullptr )
@@ -670,11 +649,11 @@ void ApplicationInstance::firstMainWindowShow( MainWindow *first_show_main_windo
 	}
 }
 ApplicationInstanceEventInfo::ApplicationInstanceEventInfo( ) {
-	json = new QJsonObject;
+	jsonObject = new QJsonObject;
 }
 ApplicationInstanceEventInfo::~ApplicationInstanceEventInfo( ) {
-	delete json;
+	delete jsonObject;
 }
 const QJsonObject & ApplicationInstanceEventInfo::getJsonObject( ) const {
-	return *json;
+	return *jsonObject;
 }

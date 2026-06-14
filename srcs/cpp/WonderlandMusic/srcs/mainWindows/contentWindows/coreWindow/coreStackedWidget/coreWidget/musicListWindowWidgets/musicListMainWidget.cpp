@@ -29,7 +29,6 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 	loadFileOverCount = 0;
 	minCollectionWidth = 10;
 	isragWidgetWidth = readyDragWidgetWidth = false;
-	json = new QJsonObject;
 	musicInfoVectorWRMutex = new QMutex;
 	musicCollectionScrollArea = new MusicCollectionScrollArea( this );
 	musicListMianWindow = new MusicListMianWindow( this );
@@ -94,8 +93,17 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 				}
 			}
 			break;
+			case ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path : {
+				auto object = info.getJsonObject( );
+				if( serializeForJsonObject( object ) == false ) {
+					Message_Error_Out << tr( "反序列化加载失败..." );
+					break;
+				}
+				MusicListMainWidgetEvent( this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Load_Music_File_Over ) );
+				//clearMusicInfoVector( );
+			}
+			break;
 			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_Dir_Path :
-			case ApplicationInstanceEventInfo::EventType::Init_Music_Info_Path :
 			case ApplicationInstanceEventInfo::EventType::Collection_Top_Menu_Select_Over_Music_File_Path : {
 				if( loadFileOverCount != 0 ) {
 					Message_Error_Out << tr( "因列表未加载完成，跳过这次加载，请等候完成再加载..." );
@@ -143,9 +151,123 @@ void MusicListMainWidget::setMusicCollectionWidth( int new_width ) {
 	musicCollectionScrollArea->setGeometry( 0, 0, new_width, currentWidgetHeight );
 	musicListMianWindow->setGeometry( new_width, 0, currentWidgetWidth - new_width, currentWidgetHeight );
 }
-const QJsonObject & MusicListMainWidget::serializeToJsonObject( ) const {
+bool MusicListMainWidget::serializeToJsonObject( QJsonObject &out_json_object ) const {
 
-	return *json;
+	size_t count = musicInfos.size( );
+	if( count == 0 )
+		return false;
+	auto data = musicInfos.data( );
+	size_t index = 0;
+	QString collectionCode = "0";
+	QJsonObject collectionCodeJsonValue;
+	for( ; index < count; ++index ) {
+		QJsonObject jsonValue;
+		auto filePath = data[ index ]->getFilePath( );
+		auto singer = data[ index ]->getSinger( );
+		auto musicName = data[ index ]->getMusicName( );
+		qint64 durationMs = data[ index ]->getDurationMs( );
+		jsonValue.insert( "filePath", filePath );
+		jsonValue.insert( "singer", singer );
+		jsonValue.insert( "musicName", musicName );
+		jsonValue.insert( "durationMs", durationMs );
+		// 序列
+		collectionCodeJsonValue.insert( QString::number( index ), jsonValue );
+	}
+	// 收藏夹
+
+	QJsonObject jsonValue;
+	jsonValue.insert( "size", QString::number( count ) );
+	jsonValue.insert( "data", collectionCodeJsonValue );
+	out_json_object.insert( collectionCode, jsonValue );
+	return true;
+}
+bool MusicListMainWidget::serializeForJsonObject( QJsonObject &in_json_object ) {
+	QString collectionCode = "0";
+	auto find = in_json_object.find( collectionCode ); // 找到收藏夹
+	auto end = in_json_object.end( );
+	if( find == end )
+		return false;
+	auto jsonObject = find.value( ).toObject( );
+	find = jsonObject.find( "size" ); // 找到收藏夹个数
+	end = jsonObject.end( );
+	if( find == end )
+		return false;
+
+	auto key = find.value( ).toString( );
+	bool conver;
+	qulonglong count = key.toULongLong( &conver );
+	if( count == 0 || conver == false )
+		return false;
+	find = jsonObject.find( "data" ); // 找到收藏数据
+	if( find == end )
+		return false;
+	std::vector< MusicInfo * > buff( count, nullptr );
+	auto data = musicInfos.data( );
+	qulonglong index;
+
+	musicInfos.resize( count, nullptr );
+	data = musicInfos.data( );
+	jsonObject = find.value( ).toObject( );
+	auto musicIterator = jsonObject.begin( );
+	auto musicEnd = jsonObject.end( );
+	QString filePath;
+	QString musicName;
+	QString singer;
+	qint64 durationMs;
+	QJsonObject musicJsonInfo;
+	for( ; musicIterator != musicEnd; ++musicIterator ) {
+		key = musicIterator.key( );
+		index = key.toULongLong( &conver );
+		if( conver == false || index > count )
+			continue;
+		filePath.clear( );
+		musicName.clear( );
+		singer.clear( );
+		durationMs = 0;
+
+		musicJsonInfo = musicIterator.value( ).toObject( );
+		auto musicInfoIterator = musicJsonInfo.begin( );
+		auto musicInfoEnd = musicJsonInfo.end( );
+		for( ; musicInfoIterator != musicInfoEnd; ++musicInfoIterator ) {
+			collectionCode = musicInfoIterator.key( );
+			if( collectionCode == "filePath" ) {
+				filePath = musicInfoIterator.value( ).toString( );
+				if( hasMusicFileInfo( filePath ) == false )
+					continue;
+				durationMs = 0;
+				break;
+			} else if( collectionCode == "singer" )
+				singer = musicInfoIterator.value( ).toString( );
+			else if( collectionCode == "musicName" )
+				musicName = musicInfoIterator.value( ).toString( );
+			else if( collectionCode == "durationMs" )
+				durationMs = musicInfoIterator.value( ).toInteger( );
+		}
+
+		if( durationMs == 0 || filePath.isEmpty( ) || musicName.isEmpty( ) || singer.isEmpty( ) )
+			continue;
+		data[ index ] = new MusicInfo( filePath, musicName, singer, durationMs );
+	}
+	// nullptr 移动到末尾，并且重置大小
+	return true;
+}
+
+bool MusicListMainWidget::hasMusicFileInfo( const QString &music_file_path ) const {
+
+	musicInfoVectorWRMutex->lock( );
+	size_t count = musicInfos.size( );
+	bool cond = false;
+	if( count != 0 ) {
+		auto data = musicInfos.data( );
+		size_t index = 0;
+		for( ; index < count; ++index )
+			if( data[ index ] && data[ index ]->getFilePath( ) == music_file_path ) {
+				cond = true;
+				break;
+			}
+	}
+	musicInfoVectorWRMutex->unlock( );
+	return cond;
 }
 void MusicListMainWidget::clearMusicInfoVector( ) {
 	musicInfoVectorWRMutex->lock( );
@@ -157,7 +279,8 @@ void MusicListMainWidget::clearMusicInfoVector( ) {
 	auto data = musicInfos.data( );
 	size_t index = 0;
 	for( ; index < count; ++index )
-		delete data[ index ];
+		if( data[ index ] )
+			delete data[ index ];
 	musicInfos.clear( );
 	musicInfoVectorWRMutex->unlock( );
 }
@@ -179,6 +302,8 @@ void MusicListMainWidget::loadAppSelctMusicFilePathEvent( const ApplicationInsta
 	auto musicListWidget = musicListMianWindow->getMusicListWidget( );
 	QMediaPlayer *mediaPlayer;
 	for( ; index < fileCount; ++index ) {
+		if( hasMusicFileInfo( data[ index ] ) )
+			continue; // 存在则跳过
 		if( musicListWidget->existMusicFilePath( data[ index ] ) )
 			continue; // 存在则跳过
 		mediaPlayer = new QMediaPlayer;
@@ -201,15 +326,24 @@ void MusicListMainWidget::loadAppSelctMusicFilePathEvent( const ApplicationInsta
 			if( albumArtistName.isEmpty( ) )
 				albumArtistName = mediaMetaData.stringValue( QMediaMetaData::Author );
 			qint64 duration = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
-			MusicInfo *musicInfo = new MusicInfo( localFile, musicName, albumArtistName, duration );
+
 			musicInfoVectorWRMutex->lock( );
-			musicInfos.emplace_back( musicInfo );
+			size_t count = musicInfos.size( );
+			auto data = musicInfos.data( );
+			size_t index = 0;
+			for( ; index < count; ++index )
+				if( data[ index ] && data[ index ]->getFilePath( ) == localFile )
+					break;
+			if( index == count ) {
+				MusicInfo *musicInfo = new MusicInfo( localFile, musicName, albumArtistName, duration );
+				musicInfos.emplace_back( musicInfo );
+			}
 			musicInfoVectorWRMutex->unlock( );
 			if( loadFileOverCount == 0 ) {
 				MusicListMainWidgetEvent( this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Load_Music_File_Over ) );
 				if( collection_item_widget == nullptr )
 					musicCollectionScrollArea->getMusicCollectionWidget( )->appendItemMusicInfoList( collection_item_widget, musicInfos );
-				clearMusicInfoVector( );
+				//clearMusicInfoVector( );
 			}
 
 		} );

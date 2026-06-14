@@ -81,7 +81,9 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 
 					}
 				}
-
+				titleVectorCount -= 1;
+				maxWidth = titleVectorData[ titleVectorCount ]->x( ) + titleVectorData[ titleVectorCount ]->width( );
+				normalTitleSize( );
 			}
 			break;
 			case ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos : {
@@ -173,7 +175,7 @@ MusicListTopWidget::MusicListTopWidget( QWidget *parent ) : BaseWidget( parent )
 			case ApplicationInstanceEventInfo::EventType::Mouse_Leave_Pos :
 			case ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos :
 				// 取消拖拽功能
-				if( readyDrag && currentDragItem ) {
+				if( readyDrag ) {
 					// 更新最大宽度
 					size_t count = titleVector.size( ) - 1;
 					auto data = titleVector.data( );
@@ -229,6 +231,26 @@ const LabelItem * MusicListTopWidget::getTopItem( const size_t &item_index ) con
 std::vector< const LabelItem * > MusicListTopWidget::getTitleVector( ) const {
 	return std::vector< const LabelItem * >( titleVector.begin( ), titleVector.end( ) );
 }
+void MusicListTopWidget::normalTitleSize( ) {
+	size_t count = titleVector.size( );
+	if( count == 0 )
+		return;
+	auto data = titleVector.data( );
+	size_t index = count;
+	size_t pre;
+	do {
+		index = index - 1; // 最后
+		pre = index - 1; // 当前
+		auto nextItem = data[ index ];
+		int nextItemX = nextItem->x( );
+
+		auto currentItem = data[ pre ];
+		int currentItemX = currentItem->x( );
+		int width = nextItemX - currentItemX;
+
+		currentItem->setFixedWidth( width );
+	} while( pre != 0 );
+}
 
 void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
@@ -236,6 +258,6 @@ void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 }
 void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
 	BaseWidget::paintEvent( event );
-	/*QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkYellow );*/
+	QPainter painter( this );
+	painter.fillRect( contentsRect( ), QColor( 0, 0, 0, 1 ) );
 }

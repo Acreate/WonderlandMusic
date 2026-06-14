@@ -21,6 +21,7 @@ public:
 	virtual int getDrawDecollatorInterspace( ) const { return drawDecollatorInterspace; }
 protected:
 	void paintEvent( QPaintEvent *event ) override;
+	void resizeEvent( QResizeEvent *event ) override;
 };
 
 #endif // LABELITEM_H_H_HEAD__FILE__

@@ -34,5 +34,7 @@ void LabelItem::paintEvent( QPaintEvent *event ) {
 	drawX = drawX / 2;
 	painter.drawLine( drawX, 0, drawX, height( ) );
 	painter.drawImage( drawDecollatorInterspace, 0, *renderTxtBuff );
-	event->accept( );
+}
+void LabelItem::resizeEvent( QResizeEvent *event ) {
+	BaseWidget::resizeEvent( event );
 }

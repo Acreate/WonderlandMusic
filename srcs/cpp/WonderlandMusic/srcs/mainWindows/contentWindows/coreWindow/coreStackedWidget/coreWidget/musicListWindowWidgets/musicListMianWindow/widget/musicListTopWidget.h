@@ -41,6 +41,7 @@ public:
 	virtual bool isPermissonDrag( ) const { return permissonDrag; }
 	virtual const LabelItem * getCurrentDragItem( ) const { return currentDragItem; }
 	virtual std::vector< const LabelItem * > getTitleVector( ) const;
+	virtual void normalTitleSize( );
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
 	void paintEvent( QPaintEvent *event ) override;

@@ -49,7 +49,8 @@ MusicListItemWidget::MusicListItemWidget( QWidget *parent, const QString &file_p
 				titleCount = 0;
 				for( ; titleCount < currentItemCount; ++titleCount ) {
 					currentItemData[ titleCount ]->move( titleItemData[ titleCount ]->x( ), 0 );
-					currentItemData[ titleCount ]->setFixedWidth( titleItemData[ titleCount ]->width( ) );
+					int width = titleItemData[ titleCount ]->width( );
+					currentItemData[ titleCount ]->setFixedWidth( width );
 				}
 				setFixedSize( music_list_top_widget->size( ) );
 			}

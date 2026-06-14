@@ -22,7 +22,8 @@ AboutApplicationWidget::AboutApplicationWidget( OptionStackWidget *parent_window
 	icon = icon.scaled( 64, 64 );
 	qtIco->setPixmap( icon );
 
-	auto pixmap = QPixmap::fromImage( QImage( tr( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" ) ) );
+	QImage qImage( tr( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" ) );
+	auto pixmap = QPixmap::fromImage( qImage );
 	qtIco->setPixmap( pixmap );
 
 	mainLayout->addWidget( qtIco, 0, Qt::AlignTop );

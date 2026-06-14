@@ -9,22 +9,7 @@ message( "name = " ${prject_name} ) # # 当前文件名配置为项目名称
 project( ${prject_name} VERSION 0.1 )
 message( "============ ${CURRENT_FOLDER}" )
 
-
-set( CMAKE_C_STANDARD 17 )
-set( CMAKE_C_STANDARD_REQUIRED ON )
-set( CMAKE_C_VISIBILITY_PRESET hidden )
-set( CMAKE_C_EXTENSIONS ON )
-set( CMAKE_CXX_STANDARD 23 )
-set( CMAKE_CXX_STANDARD_REQUIRED ON )
-set( CMAKE_CXX_VISIBILITY_PRESET hidden )
-set( CMAKE_CXX_EXTENSIONS ON )
-
-# qt 资源自动编译
-set( CMAKE_AUTOMOC ON )
-set( CMAKE_AUTOUIC ON )
-set( CMAKE_AUTORCC ON )
-
-set( CMAKE_SUPPRESS_REGENERATION  ON )
+init_cmake_func( )
 
 get_cmake_separator( _cmake_sep )
 init_std_builder_path( )
@@ -49,7 +34,7 @@ printf_qt_cmake_out( )
 
 qt_standard_project_setup( )
 
-append_source_file_extensions( LANGUAGES C CXX SUFFIXS h hpp hc H HPP HC )
+append_source_file_extensions( LANGUAGES C CXX SUFFIXS hc HC )
 
 get_path_sources( project_src_file PATHS "${CMAKE_CURRENT_LIST_DIR}/srcs" LANGUAGES CXX C )
 

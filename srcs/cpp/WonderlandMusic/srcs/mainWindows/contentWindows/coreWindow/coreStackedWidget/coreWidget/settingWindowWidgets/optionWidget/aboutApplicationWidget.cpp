@@ -1,5 +1,6 @@
 ﻿#include "aboutApplicationWidget.h"
 
+#include <QDir>
 #include <QLabel>
 #include <qstyle.h>
 #include <QTextEdit>
@@ -9,6 +10,8 @@
 #include <applications/applicationInstance.h>
 
 #include "../optionStackWidget.h"
+
+#include "../../../../../../../msgInfo/messageErrorOut.h"
 
 AboutApplicationWidget::AboutApplicationWidget( OptionStackWidget *parent_window ) : BaseWidget( parent_window ), optionStackWidget( parent_window ) {
 	auto applicationInstance = ApplicationInstance::getApplicationInstance( );
@@ -22,7 +25,18 @@ AboutApplicationWidget::AboutApplicationWidget( OptionStackWidget *parent_window
 	icon = icon.scaled( 64, 64 );
 	qtIco->setPixmap( icon );
 
-	QImage qImage( tr( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" ) );
+	QFileInfo fileInfo( applicationInstance->applicationFilePath( ) );
+	QString qtLogIcoFilePath = fileInfo.dir( ).absolutePath( );
+	qtLogIcoFilePath = qtLogIcoFilePath + "/program/png/qtlogo-64.png";
+	QImage qImage;
+	if( fileInfo.exists( qtLogIcoFilePath ) == false ) {
+		Message_Error_Out << tr( "Qt 标识图像不存在" ) + " : " + qtLogIcoFilePath;
+		qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
+	} else if( qImage.load( qtLogIcoFilePath ) == false ) {
+		Message_Error_Out << tr( "Qt 标识图像加载失败，重新使用 .rc 资源" ) + " : " + qtLogIcoFilePath;
+		qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
+	}
+
 	auto pixmap = QPixmap::fromImage( qImage );
 	qtIco->setPixmap( pixmap );
 

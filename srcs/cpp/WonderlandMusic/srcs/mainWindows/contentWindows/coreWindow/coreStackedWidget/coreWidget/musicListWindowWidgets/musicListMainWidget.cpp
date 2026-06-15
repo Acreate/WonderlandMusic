@@ -19,6 +19,7 @@
 
 #include "musicListMianWindow/widget/musicListWidget.h"
 #include <QMutex>
+#include <mutex>
 
 #include <tools/vectorTools.h>
 
@@ -153,37 +154,81 @@ void MusicListMainWidget::setMusicCollectionWidth( int new_width ) {
 }
 bool MusicListMainWidget::serializeToJsonObject( QJsonObject &out_json_object ) const {
 
-	size_t count = musicInfos.size( );
-	if( count == 0 )
-		return false;
-	auto data = musicInfos.data( );
-	size_t index = 0;
 	QString collectionCode = "0";
-	QJsonObject collectionCodeJsonValue;
-	for( ; index < count; ++index ) {
-		QJsonObject jsonValue;
-		auto filePath = data[ index ]->getFilePath( );
-		auto singer = data[ index ]->getSinger( );
-		auto musicName = data[ index ]->getMusicName( );
-		qint64 durationMs = data[ index ]->getDurationMs( );
-		jsonValue.insert( "filePath", filePath );
-		jsonValue.insert( "singer", singer );
-		jsonValue.insert( "musicName", musicName );
-		jsonValue.insert( "durationMs", durationMs );
-		// 序列
-		collectionCodeJsonValue.insert( QString::number( index ), jsonValue );
-	}
-	// 收藏夹
-
 	QJsonObject jsonValue;
-	jsonValue.insert( "size", QString::number( count ) );
-	jsonValue.insert( "data", collectionCodeJsonValue );
+	if( serializeToJsonObject( collectionCode, jsonValue ) == false )
+		return false;
+	// 收藏夹
 	out_json_object.insert( collectionCode, jsonValue );
 	return true;
 }
 bool MusicListMainWidget::serializeForJsonObject( QJsonObject &in_json_object ) {
 	QString collectionCode = "0";
-	auto find = in_json_object.find( collectionCode ); // 找到收藏夹
+	std::vector< MusicInfo * > resultMusicInfoVector;
+	size_t forJsonObjectCount = serializeForJsonObject( collectionCode, in_json_object, resultMusicInfoVector );
+	if( forJsonObjectCount == 0 )
+		return false;
+
+	auto insterSourceData = resultMusicInfoVector.data( );
+	size_t index;
+	size_t findIndex;
+	QString currentFindFilePath;
+	size_t insterIndex;
+	MusicInfo **insterDesData;
+
+	musicInfoVectorWRMutex->lock( ); // 数组上锁
+	insterIndex = musicInfos.size( );
+	musicInfos.resize( insterIndex + forJsonObjectCount );
+	insterDesData = musicInfos.data( );
+	for( index = 0; index < forJsonObjectCount; ++index ) {
+		currentFindFilePath = insterSourceData[ index ]->getFilePath( );
+		for( findIndex = 0; findIndex < insterIndex; ++findIndex )
+			if( insterDesData[ findIndex ]->getFilePath( ) == currentFindFilePath )
+				break;
+		if( findIndex == insterIndex ) {
+			delete insterSourceData[ index ];
+			insterSourceData[ index ] = nullptr;
+			continue;
+		}
+		insterDesData[ insterIndex ] = insterSourceData[ index ];
+		insterIndex += 1;
+		insterSourceData[ index ] = nullptr;
+	}
+	musicInfos.resize( insterIndex );
+	musicInfoVectorWRMutex->unlock( ); // 数组解锁
+	return true;
+}
+bool MusicListMainWidget::serializeToJsonObject( const QString &collection_key, QJsonObject &out_json_object ) const {
+	// 目前只有 0 可序列化到 json
+	if( collection_key == "0" ) {
+		QMutexLocker lock( musicInfoVectorWRMutex );
+		size_t count = musicInfos.size( );
+		if( count == 0 )
+			return false;
+		auto data = musicInfos.data( );
+		size_t index = 0;
+		QJsonObject collectionCodeJsonValue;
+		for( ; index < count; ++index ) {
+			QJsonObject jsonValue;
+			auto filePath = data[ index ]->getFilePath( );
+			auto singer = data[ index ]->getSinger( );
+			auto musicName = data[ index ]->getMusicName( );
+			qint64 durationMs = data[ index ]->getDurationMs( );
+			jsonValue.insert( "filePath", filePath );
+			jsonValue.insert( "singer", singer );
+			jsonValue.insert( "musicName", musicName );
+			jsonValue.insert( "durationMs", durationMs );
+			// 序列
+			collectionCodeJsonValue.insert( QString::number( index ), jsonValue );
+		}
+		out_json_object.insert( "size", QString::number( count ) );
+		out_json_object.insert( "data", collectionCodeJsonValue );
+	}
+	return true;
+}
+size_t MusicListMainWidget::serializeForJsonObject( const QString &collection_key, QJsonObject &in_json_object, std::vector< MusicInfo * > result_music_info_vector ) {
+
+	auto find = in_json_object.find( collection_key ); // 找到收藏夹
 	auto end = in_json_object.end( );
 	if( find == end )
 		return false;
@@ -201,12 +246,13 @@ bool MusicListMainWidget::serializeForJsonObject( QJsonObject &in_json_object ) 
 	find = jsonObject.find( "data" ); // 找到收藏数据
 	if( find == end )
 		return false;
-	std::vector< MusicInfo * > buff( count, nullptr );
+	auto oldSize = result_music_info_vector.size( );
+	auto newSize = oldSize + count;
+	result_music_info_vector.resize( newSize, nullptr );
 	auto data = musicInfos.data( );
+	data += oldSize; // 偏移到新建内存
 	qulonglong index;
 
-	musicInfos.resize( count, nullptr );
-	data = musicInfos.data( );
 	jsonObject = find.value( ).toObject( );
 	auto musicIterator = jsonObject.begin( );
 	auto musicEnd = jsonObject.end( );
@@ -215,6 +261,10 @@ bool MusicListMainWidget::serializeForJsonObject( QJsonObject &in_json_object ) 
 	QString singer;
 	qint64 durationMs;
 	QJsonObject musicJsonInfo;
+	QString keyString;
+	QJsonObject::iterator musicInfoIterator;
+	QJsonObject::iterator musicInfoEnd;
+	newSize = 0;
 	for( ; musicIterator != musicEnd; ++musicIterator ) {
 		key = musicIterator.key( );
 		index = key.toULongLong( &conver );
@@ -226,32 +276,28 @@ bool MusicListMainWidget::serializeForJsonObject( QJsonObject &in_json_object ) 
 		durationMs = 0;
 
 		musicJsonInfo = musicIterator.value( ).toObject( );
-		auto musicInfoIterator = musicJsonInfo.begin( );
-		auto musicInfoEnd = musicJsonInfo.end( );
+		musicInfoIterator = musicJsonInfo.begin( );
+		musicInfoEnd = musicJsonInfo.end( );
+
 		for( ; musicInfoIterator != musicInfoEnd; ++musicInfoIterator ) {
-			collectionCode = musicInfoIterator.key( );
-			if( collectionCode == "filePath" ) {
+			keyString = musicInfoIterator.key( );
+			if( keyString == "filePath" )
 				filePath = musicInfoIterator.value( ).toString( );
-				if( hasMusicFileInfo( filePath ) == false )
-					continue;
-				durationMs = 0;
-				break;
-			} else if( collectionCode == "singer" )
+			else if( keyString == "singer" )
 				singer = musicInfoIterator.value( ).toString( );
-			else if( collectionCode == "musicName" )
+			else if( keyString == "musicName" )
 				musicName = musicInfoIterator.value( ).toString( );
-			else if( collectionCode == "durationMs" )
+			else if( keyString == "durationMs" )
 				durationMs = musicInfoIterator.value( ).toInteger( );
 		}
 
 		if( durationMs == 0 || filePath.isEmpty( ) || musicName.isEmpty( ) || singer.isEmpty( ) )
 			continue;
+		newSize += 1;
 		data[ index ] = new MusicInfo( filePath, musicName, singer, durationMs );
 	}
-	// nullptr 移动到末尾，并且重置大小
-	return true;
+	return newSize;
 }
-
 bool MusicListMainWidget::hasMusicFileInfo( const QString &music_file_path ) const {
 
 	musicInfoVectorWRMutex->lock( );
@@ -269,6 +315,7 @@ bool MusicListMainWidget::hasMusicFileInfo( const QString &music_file_path ) con
 	musicInfoVectorWRMutex->unlock( );
 	return cond;
 }
+
 void MusicListMainWidget::clearMusicInfoVector( ) {
 	musicInfoVectorWRMutex->lock( );
 	size_t count = musicInfos.size( );

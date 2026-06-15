@@ -250,6 +250,9 @@ void MusicListTopWidget::normalTitleSize( ) {
 
 		currentItem->setFixedWidth( width );
 	} while( pre != 0 );
+	index = count - 1;
+	int newWidth = data[ index ]->x( ) + data[ index ]->width( );
+	setFixedWidth( newWidth );
 }
 
 void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
@@ -259,5 +262,5 @@ void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
 void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
 	BaseWidget::paintEvent( event );
 	QPainter painter( this );
-	painter.fillRect( contentsRect( ), QColor( 0, 0, 0, 1 ) );
+	painter.fillRect( contentsRect( ), Qt::GlobalColor::white );
 }

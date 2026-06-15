@@ -19,6 +19,10 @@ public:
 	virtual MusicListWidget * getMusicListWidget( ) const { return musicListWidget; }
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
+	void showEvent( QShowEvent *event ) override;
+	void paintEvent( QPaintEvent *event ) override;
+public:
+	bool eventFilter( QObject *watched, QEvent *event ) override;
 };
 
 #endif // MUSICLISTMIANWINDOW_H_H_HEAD__FILE__

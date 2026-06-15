@@ -22,7 +22,7 @@
 MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 	ApplicationEvenTrigger::connectMusicListMainWidgetEvent( [this] ( MusicListMainWidget *music_list_main_widget, const MusicListMainWidgetEventInfo &music_list_main_widget_event_info ) {
 		auto eventType = music_list_main_widget_event_info.getEventType( );
-		
+
 		if( eventType != MusicListMainWidgetEventInfo::EventType::Load_Music_File_Over )
 			return;
 		auto musicInfos = music_list_main_widget->getMusicInfos( );
@@ -128,4 +128,9 @@ bool MusicListWidget::sort( ) {
 	if( maxWidth > oldWidth )
 		setFixedWidth( maxWidth );
 	return true;
+}
+void MusicListWidget::paintEvent( QPaintEvent *event ) {
+	BaseWidget::paintEvent( event );
+	QPainter painter( this );
+	painter.fillRect( contentsRect( ), Qt::GlobalColor::white );
 }

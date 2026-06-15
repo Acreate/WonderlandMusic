@@ -1,8 +1,10 @@
 ﻿#include "musicListMianWindow.h"
 
+#include <QPainter>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QVBoxLayout>
+#include <qcoreevent.h>
 
 #include <applications/applicationEvenTrigger.h>
 
@@ -50,14 +52,39 @@ MusicListMianWindow::MusicListMianWindow( QWidget *parent ) : BaseWidgetTypeMain
 }
 void MusicListMianWindow::resizeEvent( QResizeEvent *event ) {
 	BaseMainWindow::resizeEvent( event );
-	int musicWidth = musicListWidget->width( );
-	int newWidth = musicScrollArea->width( );
-	if( musicWidth < newWidth )
-		musicWidth = newWidth;
-	int musicVBarWidth = musicScrollArea->verticalScrollBar( )->width( );
-	newWidth = musicWidth + musicVBarWidth;
-	int oldWidth = musicListTopWidget->width( );
-	if( oldWidth < newWidth )
-		musicListTopWidget->setFixedWidth( newWidth );
+	int topWidth = musicListTopWidget->width( );
+	int thisWidth = height( );
+	if( thisWidth > topWidth )
+		musicListTopWidget->setFixedWidth( thisWidth );
+}
+void MusicListMianWindow::showEvent( QShowEvent *event ) {
+	BaseWidgetTypeMainWindow::showEvent( event );
+}
+void MusicListMianWindow::paintEvent( QPaintEvent *event ) {
+	BaseWidgetTypeMainWindow::paintEvent( event );
+	QPainter painter( this );
+	painter.fillRect( contentsRect( ), Qt::GlobalColor::white );
+}
+bool MusicListMianWindow::eventFilter( QObject *watched, QEvent *event ) {
 
+	bool eventFilter = BaseWidgetTypeMainWindow::eventFilter( watched, event );
+
+	if( watched == musicListWidget ) {
+		auto type = event->type( );
+		switch( type ) {
+			case QEvent::Resize : {
+				int musicListWidth = musicListWidget->width( );
+				QScrollBar *scrollBar = musicScrollArea->verticalScrollBar( );
+				int scrollBarWidth = scrollBar->width( );
+				int newWidth = musicListWidth + scrollBarWidth;
+				int oldWidth = musicListTopWidget->width( );
+				if( oldWidth < newWidth )
+					musicListTopWidget->setFixedWidth( newWidth );
+			}
+			break;
+
+		}
+	}
+
+	return eventFilter;
 }

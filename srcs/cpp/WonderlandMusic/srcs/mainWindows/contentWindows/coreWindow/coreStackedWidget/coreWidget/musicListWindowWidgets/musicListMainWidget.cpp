@@ -86,11 +86,6 @@ MusicListMainWidget::MusicListMainWidget( QWidget *parent ) : BaseWidget( parent
 					isragWidgetWidth = readyDragWidgetWidth = false;
 					auto applicationEvenTrigger = applicationInstance->getApplicationEvenTrigger( );
 					MusicListMainWidgetEvent::triggerMusicListMainWidgetEvent( applicationEvenTrigger, this, MusicListMainWidgetEventInfo( MusicListMainWidgetEventInfo::EventType::Over_Draw_Music_Widget_Width, musicCollectionScrollArea->width( ) ) );
-				} else {
-					auto mouseButtons = applicationInstance->mouseButtons( );
-					if( mouseButtons.testFlag( Qt::RightButton ) ) {
-						// todo : 发送弹出菜单信号
-					}
 				}
 			}
 			break;

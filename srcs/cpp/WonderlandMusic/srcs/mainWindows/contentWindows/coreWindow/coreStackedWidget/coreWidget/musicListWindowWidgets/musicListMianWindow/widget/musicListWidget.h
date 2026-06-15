@@ -17,6 +17,7 @@ public:
 protected:
 	virtual bool appendItem( const MusicInfo &media_meta_data );
 	virtual bool sort( );
+	void paintEvent( QPaintEvent *event ) override;
 };
 #include <macro/eventMacroDefine.h>
 

@@ -255,12 +255,3 @@ void MusicListTopWidget::normalTitleSize( ) {
 	setFixedWidth( newWidth );
 }
 
-void MusicListTopWidget::resizeEvent( QResizeEvent *event ) {
-	BaseWidget::resizeEvent( event );
-
-}
-void MusicListTopWidget::paintEvent( QPaintEvent *event ) {
-	BaseWidget::paintEvent( event );
-	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::white );
-}

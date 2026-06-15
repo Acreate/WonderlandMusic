@@ -42,9 +42,6 @@ public:
 	virtual const LabelItem * getCurrentDragItem( ) const { return currentDragItem; }
 	virtual std::vector< const LabelItem * > getTitleVector( ) const;
 	virtual void normalTitleSize( );
-protected:
-	void resizeEvent( QResizeEvent *event ) override;
-	void paintEvent( QPaintEvent *event ) override;
 };
 #include <macro/eventMacroDefine.h>
 class Event_Define_Event_Info_Type_Name( MusicListTopWidget ) {

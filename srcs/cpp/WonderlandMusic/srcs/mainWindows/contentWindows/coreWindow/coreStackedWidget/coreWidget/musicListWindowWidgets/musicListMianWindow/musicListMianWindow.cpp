@@ -67,12 +67,12 @@ void MusicListMianWindow::paintEvent( QPaintEvent *event ) {
 }
 bool MusicListMianWindow::eventFilter( QObject *watched, QEvent *event ) {
 
-	bool eventFilter = BaseWidgetTypeMainWindow::eventFilter( watched, event );
-
+	bool eventFilter;
 	if( watched == musicListWidget ) {
 		auto type = event->type( );
 		switch( type ) {
 			case QEvent::Resize : {
+				eventFilter = BaseWidgetTypeMainWindow::eventFilter( watched, event );
 				int musicListWidth = musicListWidget->width( );
 				QScrollBar *scrollBar = musicScrollArea->verticalScrollBar( );
 				int scrollBarWidth = scrollBar->width( );
@@ -82,9 +82,26 @@ bool MusicListMianWindow::eventFilter( QObject *watched, QEvent *event ) {
 					musicListTopWidget->setFixedWidth( newWidth );
 			}
 			break;
+			case QEvent::Paint : {
 
+				QPainter painter( musicListWidget );
+				painter.fillRect( contentsRect( ), Qt::GlobalColor::white );
+				event->accept( );
+				return true;
+			}
+			break;
+		}
+	} else if( watched == musicListWidget ) {
+		auto type = event->type( );
+		switch( type ) {
+			case QEvent::Paint : {
+				QPainter painter( musicListTopWidget );
+				painter.fillRect( contentsRect( ), Qt::GlobalColor::white );
+				event->accept( );
+				return true;
+			}
+			break;
 		}
 	}
-
 	return eventFilter;
 }

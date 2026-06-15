@@ -129,8 +129,3 @@ bool MusicListWidget::sort( ) {
 		setFixedWidth( maxWidth );
 	return true;
 }
-void MusicListWidget::paintEvent( QPaintEvent *event ) {
-	BaseWidget::paintEvent( event );
-	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::white );
-}

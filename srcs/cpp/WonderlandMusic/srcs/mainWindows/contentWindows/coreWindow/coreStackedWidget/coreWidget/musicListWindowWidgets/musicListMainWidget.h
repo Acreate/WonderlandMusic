@@ -33,7 +33,7 @@ public:
 	virtual void setMusicCollectionWidth( int new_width );
 	virtual bool serializeToJsonObject( QJsonObject &out_json_object ) const;
 	virtual bool serializeForJsonObject( QJsonObject &in_json_object );
-	virtual std::vector< MusicInfo * > getMusicInfos( ) const { return musicInfos; }
+	virtual std::vector< MusicInfo * > getMusicInfos( ) const;
 	virtual bool hasMusicFileInfo( const QString &music_file_path ) const;
 protected:
 	virtual bool serializeToJsonObject( const QString &collection_key, QJsonObject &out_json_object ) const;

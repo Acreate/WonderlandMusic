@@ -9,6 +9,10 @@ class MusicListItemWidget;
 class MusicListWidget : public BaseWidget {
 	Q_OBJECT;
 protected:
+	/// @brief 鼠标下的选项
+	MusicListItemWidget *activityItem;
+	/// @brief 鼠标按下的选项
+	MusicListItemWidget *selectItem;
 	std::vector< MusicListItemWidget * > musicListItemWidgets;
 public:
 	MusicListWidget( QWidget *parent );

@@ -20,6 +20,7 @@
 
 #include "musicListItemWidget/musicListItemWidget.h"
 MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
+	activityItem = selectItem = nullptr;
 	ApplicationEvenTrigger::connectMusicListMainWidgetEvent( [this] ( MusicListMainWidget *music_list_main_widget, const MusicListMainWidgetEventInfo &music_list_main_widget_event_info ) {
 		auto eventType = music_list_main_widget_event_info.getEventType( );
 
@@ -57,6 +58,37 @@ MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 
 			}
 			break;
+		}
+	} );
+	ApplicationEvenTrigger::connectApplicationInstanceEvent( [this] ( ApplicationInstance *application_instance, const ApplicationInstanceEventInfo &application_instance_event_info ) {
+		auto eventType = application_instance_event_info.getEventType( );
+		switch( eventType ) {
+			case ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos : {
+				size_t size = musicListItemWidgets.size( );
+				if( size == 0 )
+					break;
+				auto fromGlobal = mapFromGlobal( QCursor::pos( ) );
+				if( contentsRect( ).contains( fromGlobal ) == false )
+					break;
+				if( activityItem && activityItem->geometry( ).contains( fromGlobal ) == true )
+					break;
+				auto data = musicListItemWidgets.data( );
+				size_t index = 0;
+				for( ; index < size; ++index )
+					if( data[ index ]->geometry( ).contains( fromGlobal ) == true )
+						break;
+				if( index == size )
+					break;
+				if( activityItem )
+					activityItem->setActivity( false );
+				activityItem = data[ index ];
+				activityItem->setActivity( true );
+			}
+			break;
+			case ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos :
+				break;
+			case ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos :
+				break;
 		}
 	} );
 }

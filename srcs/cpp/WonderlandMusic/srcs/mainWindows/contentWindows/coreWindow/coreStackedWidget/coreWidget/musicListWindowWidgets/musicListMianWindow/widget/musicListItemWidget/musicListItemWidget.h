@@ -16,6 +16,13 @@ protected:
 	QString singerName;
 	/// @brief 时长（毫秒）
 	qint64 duration_ms;
+	bool activity;
+	int penWdith;
+	int drawX;
+	int drawY;
+	int drawWidth;
+	int drawHeight;
+	QPen *pen;
 private:
 	QString msToHMS( qint64 totalMs );
 public:
@@ -24,6 +31,11 @@ public:
 	virtual const QString & getMusicName( ) const { return musicName; }
 	virtual const QString & getSinger( ) const { return singerName; }
 	virtual qint64 getDurationMs( ) const { return duration_ms; }
+	virtual bool isActivity( ) const { return activity; }
+	virtual void setActivity( const bool activity );
+protected:
+	void paintEvent( QPaintEvent *event ) override;
+	void resizeEvent( QResizeEvent *event ) override;
 };
 
 #endif // MUSICLISTITEMWIDGET_H_H_HEAD__FILE__

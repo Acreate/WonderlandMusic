@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QPainter>
 
 #include <musics/musicInfo.h>
 
@@ -24,6 +25,16 @@ QString MusicListItemWidget::msToHMS( qint64 totalMs ) {
 }
 MusicListItemWidget::MusicListItemWidget( QWidget *parent, const QString &file_path, const QString &music_name, const QString &singer_name, qint64 duration_ms ) : BaseWidget( parent ),
 	filePath( file_path ), musicName( music_name ), singerName( singer_name ), duration_ms( duration_ms ) {
+	auto rect = contentsRect( );
+	penWdith = 5;
+	drawWidth = rect.width( );
+	drawHeight = rect.height( );
+	drawY = drawX = penWdith / 2;
+	drawWidth -= drawY * 2;
+	drawHeight -= drawY * 2;
+	pen = new QPen( );
+	pen->setWidth( penWdith );
+	pen->setColor( Qt::GlobalColor::darkBlue );
 
 	QString formatTime = msToHMS( duration_ms );
 	labelItemVector.emplace_back( new LabelItem( music_name, this ) );
@@ -57,4 +68,27 @@ MusicListItemWidget::MusicListItemWidget( QWidget *parent, const QString &file_p
 			break;
 		}
 	} );
+}
+
+void MusicListItemWidget::setActivity( const bool activity ) {
+	this->activity = activity;
+	update( );
+}
+void MusicListItemWidget::paintEvent( QPaintEvent *event ) {
+	BaseWidget::paintEvent( event );
+	if( activity == true ) {
+		QPainter painter( this );
+		painter.setPen( *pen );
+		painter.drawRect( drawX, drawY, drawWidth, drawHeight );
+	}
+}
+void MusicListItemWidget::resizeEvent( QResizeEvent *event ) {
+	BaseWidget::resizeEvent( event );
+	auto rect = contentsRect( );
+	penWdith = 5;
+	drawWidth = rect.width( );
+	drawHeight = rect.height( );
+	drawY = drawX = penWdith / 2;
+	drawWidth -= drawY * 2;
+	drawHeight -= drawY * 2;
 }

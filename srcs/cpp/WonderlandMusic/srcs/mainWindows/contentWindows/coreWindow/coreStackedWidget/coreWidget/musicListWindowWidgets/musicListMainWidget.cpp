@@ -185,7 +185,7 @@ bool MusicListMainWidget::serializeForJsonObject( QJsonObject &in_json_object ) 
 		for( findIndex = 0; findIndex < insterIndex; ++findIndex )
 			if( insterDesData[ findIndex ]->getFilePath( ) == currentFindFilePath )
 				break;
-		if( findIndex == insterIndex ) {
+		if( findIndex != insterIndex ) {
 			delete insterSourceData[ index ];
 			insterSourceData[ index ] = nullptr;
 			continue;
@@ -226,7 +226,7 @@ bool MusicListMainWidget::serializeToJsonObject( const QString &collection_key, 
 	}
 	return true;
 }
-size_t MusicListMainWidget::serializeForJsonObject( const QString &collection_key, QJsonObject &in_json_object, std::vector< MusicInfo * > result_music_info_vector ) {
+size_t MusicListMainWidget::serializeForJsonObject( const QString &collection_key, QJsonObject &in_json_object, std::vector< MusicInfo * > &result_music_info_vector ) {
 
 	auto find = in_json_object.find( collection_key ); // 找到收藏夹
 	auto end = in_json_object.end( );
@@ -249,7 +249,7 @@ size_t MusicListMainWidget::serializeForJsonObject( const QString &collection_ke
 	auto oldSize = result_music_info_vector.size( );
 	auto newSize = oldSize + count;
 	result_music_info_vector.resize( newSize, nullptr );
-	auto data = musicInfos.data( );
+	auto data = result_music_info_vector.data( );
 	data += oldSize; // 偏移到新建内存
 	qulonglong index;
 

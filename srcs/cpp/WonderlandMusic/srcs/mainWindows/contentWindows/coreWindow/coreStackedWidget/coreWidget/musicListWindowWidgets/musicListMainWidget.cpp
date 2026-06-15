@@ -198,9 +198,17 @@ bool MusicListMainWidget::serializeForJsonObject( QJsonObject &in_json_object ) 
 	musicInfoVectorWRMutex->unlock( ); // 数组解锁
 	return true;
 }
-std::vector< MusicInfo * > MusicListMainWidget::getMusicInfos( ) const {
-	QMutexLocker< QMutex > locker( musicInfoVectorWRMutex );
-	std::vector< MusicInfo * > result = musicInfos;
+std::vector< const MusicInfo * > MusicListMainWidget::getMusicInfos( ) const {
+	musicInfoVectorWRMutex->lock( );
+	auto data = musicInfos.data( );
+	size_t size = musicInfos.size( );
+	size_t index = 0;
+
+	std::vector< const MusicInfo * > result( size );
+	auto des = result.data( );
+	for( ; index < size; ++index )
+		des[ index ] = data[ index ];
+	musicInfoVectorWRMutex->unlock( );
 	return result;
 }
 bool MusicListMainWidget::serializeToJsonObject( const QString &collection_key, QJsonObject &out_json_object ) const {

@@ -6,6 +6,7 @@
 #include <QFileInfo>
 #include <QPushButton>
 #include <QJsonObject>
+#include <QScrollArea>
 #include <qboxlayout.h>
 
 #include "../application/appInstance.h"
@@ -20,6 +21,27 @@
 MainWindow::MainWindow( QWidget *parent ) : MainWindow( parent, Qt::WindowFlags( ) ) { }
 MainWindow::MainWindow( Qt::WindowFlags flags ) : MainWindow( nullptr, flags ) { }
 MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) { }
+
+void MainWindow::writeWidgetSettingToFile( ) {
+	saveMainWindowSetting( );
+	// 写入播放列表
+	playListWidget->writeJsonPathInfo( );
+	// 写入配置信息
+	settingWidget->writeJsonPathInfo( );
+}
+MainWindow::~MainWindow( ) {
+	writeWidgetSettingToFile( );
+}
+MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
+
+}
+bool MainWindow::loadSettingWidgetInfoAtFile( ) {
+	// 加载播放列表
+	playListWidget->loadJsonPathInfo( );
+	// 记载配置列表
+	settingWidget->loadJsonPathInfo( );
+	return true;
+}
 bool MainWindow::init( ) {
 	if( initApp( ) == false )
 		return false;
@@ -29,14 +51,14 @@ bool MainWindow::init( ) {
 		return false;
 	if( initMainWindowSetting( ) == false )
 		return false;
+
+	if( loadSettingWidgetInfoAtFile( ) == false )
+		return false;
 	if( initConnect( ) == false )
 		return false;
 	return true;
 }
 
-MainWindow::~MainWindow( ) {
-	saveMainWindowSetting( );
-}
 bool MainWindow::initApp( ) {
 	appInstance = AppInstance::getAppInstance( );
 	appTranslate = appInstance->getTranslate( );
@@ -49,14 +71,25 @@ bool MainWindow::initStackedWidget( ) {
 	mainStackedWidget = new QStackedWidget( this );
 	setCentralWidget( mainStackedWidget );
 
-	playListWidget = new PlayListWidget( mainStackedWidget );
-	mainStackedWidget->addWidget( playListWidget );
+	playListWidgetScrollArea = new QScrollArea( mainStackedWidget );
+	playListWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+	playListWidgetScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+	playListWidgetScrollArea->setWidgetResizable( true );
+	playListWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
+
+	mainStackedWidget->addWidget( playListWidgetScrollArea );
+
+	playListWidget = new PlayListWidget( playListWidgetScrollArea );
+	playListWidget->adjustSize( );
+	playListWidgetScrollArea->setWidget( playListWidget );
 
 	settingWidget = new SettingWidget( mainStackedWidget );
 	mainStackedWidget->addWidget( settingWidget );
+	settingWidget->adjustSize( );
 
 	aboutWidget = new AboutWidget( mainStackedWidget );
 	mainStackedWidget->addWidget( aboutWidget );
+	aboutWidget->adjustSize( );
 	return true;
 }
 bool MainWindow::initDockWidget( ) {
@@ -142,17 +175,18 @@ bool MainWindow::initMainWindowSetting( ) {
 		height = find.value( ).toInt( );
 	// 设置坐标与宽高
 	setGeometry( x, y, width, height );
+
 	return true;
 }
 bool MainWindow::initConnect( ) {
-	connect( showSettingWidgetBtn, &QPushButton::clicked, [this]( ) {
-		mainStackedWidget->setCurrentWidget( playListWidget );
-	} );
-	connect( showAboutWidgetBtn, &QPushButton::clicked, [this]( ) {
-		mainStackedWidget->setCurrentWidget( aboutWidget );
+	connect( showPlayListWidgetBtn, &QPushButton::clicked, [this]( ) {
+		mainStackedWidget->setCurrentWidget( playListWidgetScrollArea );
 	} );
 	connect( showSettingWidgetBtn, &QPushButton::clicked, [this]( ) {
 		mainStackedWidget->setCurrentWidget( settingWidget );
+	} );
+	connect( showAboutWidgetBtn, &QPushButton::clicked, [this]( ) {
+		mainStackedWidget->setCurrentWidget( aboutWidget );
 	} );
 	return true;
 }
@@ -189,7 +223,4 @@ bool MainWindow::saveMainWindowSetting( ) {
 	auto jsonData = writeJsonDoc.toJson( );
 	openFile.write( jsonData );
 	return true;
-}
-MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
-
 }

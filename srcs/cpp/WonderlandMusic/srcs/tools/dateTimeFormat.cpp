@@ -2,15 +2,10 @@
 
 #include <QObject>
 #include <qdatetime.h>
-DateTimeFormat::Translate::Translate( ) {
-	year = QObject::tr( "年" );
-	month = QObject::tr( "月" );
-	day = QObject::tr( "日" );
-	hour = QObject::tr( "时" );
-	minute = QObject::tr( "分" );
-	second = QObject::tr( "秒" );
-	millsecond = QObject::tr( "毫秒" );
-}
+
+#include "../application/appInstance.h"
+#include "../application/appTranslate.h"
+
 void DateTimeFormat::fillData( const QChar *source_data, const qsizetype &source_count, QChar *dest_data ) const {
 	qsizetype index = 0;
 	for( ; index < source_count; ++index )
@@ -30,12 +25,17 @@ DateTimeFormat::DateTimeFormat( ) {
 	currentTime = current.time( );
 }
 QString & DateTimeFormat::formatData( QString &result_format, const QDate &format_data ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appTranslate = appInstance->getTranslate( );
+	auto year = appTranslate->getYear( );
+	auto month = appTranslate->getMonth( );
+	auto day = appTranslate->getDay( );
 	// 测量年翻译的长度
-	qsizetype translateYearLenght = translate.year.length( );
+	qsizetype translateYearLenght = year.length( );
 	// 测量月翻译的长度
-	qsizetype translateMonthLenght = translate.month.length( );
+	qsizetype translateMonthLenght = month.length( );
 	// 测量日翻译的长度
-	qsizetype translateDayLenght = translate.day.length( );
+	qsizetype translateDayLenght = day.length( );
 	// 年份转字符串
 	auto yearDataToString = QString( "%1" ).arg( QString::number( format_data.year( ) ), 4, '0' );
 	// 月份转字符串
@@ -61,33 +61,39 @@ QString & DateTimeFormat::formatData( QString &result_format, const QDate &forma
 	fillData( yearDataToString.data( ), yearDataToStringLenght, destData );
 	// 填充年翻译
 	fillIndex = yearDataToStringLenght;
-	fillData( translate.year.data( ), translateYearLenght, destData + fillIndex );
+	fillData( year.data( ), translateYearLenght, destData + fillIndex );
 
 	// 填充月份数字
 	fillIndex = fillIndex + translateYearLenght;
 	fillData( monthDataToString.data( ), monthDataToStringLenght, destData + fillIndex );
 	// 填充月翻译
 	fillIndex = fillIndex + monthDataToStringLenght;
-	fillData( translate.month.data( ), translateMonthLenght, destData + fillIndex );
+	fillData( month.data( ), translateMonthLenght, destData + fillIndex );
 
 	// 填充日期数字
 	fillIndex = fillIndex + translateMonthLenght;
 	fillData( dayDataToString.data( ), dayDataToStringLenght, destData + fillIndex );
 	// 填充日期翻译
 	fillIndex = fillIndex + dayDataToStringLenght;
-	fillData( translate.day.data( ), translateDayLenght, destData + fillIndex );
+	fillData( day.data( ), translateDayLenght, destData + fillIndex );
 
 	return result_format;
 }
 QString & DateTimeFormat::formatTime( QString &result_format, const QTime &format_time ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appTranslate = appInstance->getTranslate( );
+	auto hour = appTranslate->getHour( );
+	auto minute = appTranslate->getMinute( );
+	auto second = appTranslate->getSecond( );
+	auto millsecond = appTranslate->getMillsecond( );
 	// 测量时翻译的长度
-	qsizetype translateHourLenght = translate.hour.length( );
+	qsizetype translateHourLenght = hour.length( );
 	// 测量分翻译的长度
-	qsizetype translateMinuteLenght = translate.minute.length( );
+	qsizetype translateMinuteLenght = minute.length( );
 	// 测量秒翻译的长度
-	qsizetype translateSecondLenght = translate.second.length( );
+	qsizetype translateSecondLenght = second.length( );
 	// 测量毫秒翻译的长度
-	qsizetype translateMillsecondLenght = translate.millsecond.length( );
+	qsizetype translateMillsecondLenght = millsecond.length( );
 
 	// 小时转字符串
 	auto hourTimeToString = QString( "%1" ).arg( QString::number( format_time.hour( ) ), 2, '0' );
@@ -122,28 +128,38 @@ QString & DateTimeFormat::formatTime( QString &result_format, const QTime &forma
 	fillData( hourTimeToString.data( ), hourTimeToStringLenght, destData );
 	// 填充小时翻译
 	fillIndex = hourTimeToStringLenght;
-	fillData( translate.hour.data( ), translateHourLenght, destData + fillIndex );
+	fillData( hour.data( ), translateHourLenght, destData + fillIndex );
 
 	// 填充分钟数字
 	fillIndex = fillIndex + translateHourLenght;
 	fillData( minuteTimeToString.data( ), minuteTimeToStringLenght, destData + fillIndex );
 	// 填充分钟翻译
 	fillIndex = fillIndex + minuteTimeToStringLenght;
-	fillData( translate.minute.data( ), translateMinuteLenght, destData + fillIndex );
+	fillData( minute.data( ), translateMinuteLenght, destData + fillIndex );
 
 	// 填充秒数数字
 	fillIndex = fillIndex + translateMinuteLenght;
 	fillData( secondTimeToString.data( ), secondTimeToStringLenght, destData + fillIndex );
 	// 填充秒数翻译
 	fillIndex = fillIndex + secondTimeToStringLenght;
-	fillData( translate.second.data( ), translateSecondLenght, destData + fillIndex );
+	fillData( second.data( ), translateSecondLenght, destData + fillIndex );
 
 	// 填充秒数数字
 	fillIndex = fillIndex + translateSecondLenght;
 	fillData( millsecondTimeToString.data( ), millsecondTimeToStringLenght, destData + fillIndex );
 	// 填充秒数翻译
 	fillIndex = fillIndex + millsecondTimeToStringLenght;
-	fillData( translate.millsecond.data( ), translateMillsecondLenght, destData + fillIndex );
+	fillData( millsecond.data( ), translateMillsecondLenght, destData + fillIndex );
 
 	return result_format;
+}
+QString DateTimeFormat::millsecondToHourMinSecFrom( qint64 totalMs ) {
+	qint64 totalSec = totalMs / 1000;
+	qint64 h = totalSec / 3600;
+	qint64 m = ( totalSec % 3600 ) / 60;
+	qint64 s = totalSec % 60;
+	return QString( "%1:%2:%3" )
+			.arg( h, 2, 10, QChar( '0' ) )
+			.arg( m, 2, 10, QChar( '0' ) )
+			.arg( s, 2, 10, QChar( '0' ) );
 }

@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QLoggingCategory>
 
+class MainWindow;
 class JsonFileKey;
 class MusicDecoder;
 class AppTranslate;
@@ -21,6 +22,9 @@ protected:
 	JsonFileKey *jsonFileKey;
 	/// @brief 音频解码实例
 	MusicDecoder *musicDecoder;
+	/// @brief 主要执行窗口
+	MainWindow *mainWindow;
+	/// @brief 退出代码
 	int exitCode;
 public:
 	static AppInstance * getAppInstance( );

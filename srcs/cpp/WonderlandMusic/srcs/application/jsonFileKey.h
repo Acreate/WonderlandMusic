@@ -9,6 +9,12 @@ protected:
 	QString mainWindowPointYPos;
 	QString mainWindowSizeWidth;
 	QString mainWindowSizeHeight;
+
+	QString musicPlayerListInfoFileJsonPath;
+	QString musicInfoFile;
+	QString musicInfoName;
+	QString musicInfoSinger;
+	QString musicInfoDuration;
 public:
 	virtual ~JsonFileKey( ) = default;
 	JsonFileKey( );

@@ -11,5 +11,12 @@ bool JsonFileKey::init( ) {
 	mainWindowPointYPos = "app.main.window.point.y";
 	mainWindowSizeWidth = "app.main.window.size.w";
 	mainWindowSizeHeight = "app.main.window.size.h";
+
+	musicPlayerListInfoFileJsonPath = applicationDirPath + "/program/json/app.player.list.widget.music.list.info.json";
+	musicInfoFile = "file.name";
+	musicInfoName = "music.name";
+	musicInfoSinger = "music.singer";
+	musicInfoDuration = "music.duartion";
+
 	return true;
 }

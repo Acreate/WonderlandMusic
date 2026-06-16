@@ -12,13 +12,15 @@ AppInstance * AppInstance::getAppInstance( ) {
 	return instance;
 }
 AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplication( argc, argv, app_flag_s ) {
+	instance = this;
 	startDateTime = new QDateTime( QDateTime::currentDateTime( ) );
 	translate = new AppTranslate;
 	jsonFileKey = new JsonFileKey;
 	musicDecoder = new MusicDecoder;
-	instance = this;
+	mainWindow = new MainWindow;
 }
 AppInstance::~AppInstance( ) {
+	delete mainWindow;
 	delete musicDecoder;
 	delete jsonFileKey;
 	delete translate;
@@ -31,22 +33,15 @@ bool AppInstance::init( ) {
 		return false;
 	if( jsonFileKey->init( ) == false )
 		return false;
+	if( mainWindow->init( ) == false )
+		return false;
 	return true;
 }
 int AppInstance::run( ) {
-
-	MainWindow *mainWindow = new MainWindow;
-
-	if( mainWindow->init( ) == false ) {
-		delete mainWindow;
-		exitCode = 1;
-		return 1;
-	}
 
 	mainWindow->show( );
 
 	exitCode = exec( );
 
-	delete mainWindow;
 	return exitCode;
 }

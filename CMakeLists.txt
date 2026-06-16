@@ -1,5 +1,7 @@
 ﻿cmake_minimum_required( VERSION 3.19 )
-
+if( MSVC )
+	set( CMAKE_GENERATOR_TOOLSET "v143" CACHE STRING "VS2022 Toolset" )
+endif( )
 # # 加载模块
 find_package( CmakeFuncs REQUIRED PATHS "${CMAKE_CURRENT_SOURCE_DIR}/srcs/cmake/cmakeFuncs/CmakeFuncs" )
 

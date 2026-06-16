@@ -15,13 +15,6 @@
 #include "applicationEvenTrigger.h"
 
 #include "../mainWindows/mainWindow.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMainWidget.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/MusicCollectionWidget/musicCollectionWidget.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListTopWidget.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListWidget.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListItemWidget/labelItem.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/musicListWindowWidgets/musicListMianWindow/widget/musicListItemWidget/musicListItemWidget.h"
-#include "../mainWindows/contentWindows/coreWindow/coreStackedWidget/coreWidget/settingWindowWidgets/optionWidget/pathSettingWidget.h"
 
 #include "../menus/musicCollectionSubMenu.h"
 #include "../menus/musicCollectionTopMenu.h"
@@ -33,6 +26,12 @@
 #include "../musics/musicInfo.h"
 
 #include "../tools/widgetTools.h"
+
+#include "../widgets/labelItem.h"
+#include "../widgets/musicCollectionWidget.h"
+#include "../widgets/musicListMainWidget.h"
+#include "../widgets/musicListTopWidget.h"
+#include "../widgets/pathSettingWidget.h"
 
 #include "private/appRenderObj.h"
 

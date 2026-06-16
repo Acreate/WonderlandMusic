@@ -1,18 +1,18 @@
 ﻿#include "mainWindow.h"
 
-#include "contentWindows/contentWindow.h"
-
 #include "dockWidgets/functionDockWidget.h"
 #include "dockWidgets/topToolDockWidget.h"
 
-#include "dockWidgets/topToolWidget/topToolWidget.h"
-
 #include <QMouseEvent>
+
+#include "contentWindow.h"
 
 #include "../applications/applicationEvenTrigger.h"
 #include "../applications/applicationInstance.h"
 
 #include "../msgInfo/messageErrorOut.h"
+
+#include "../widgets/topToolWidget.h"
 
 MainWindow::Translate::Translate( ) {
 	appWindowObjectName = tr( "仙村音乐播放器" );

@@ -11,6 +11,9 @@ protected:
 	QString mainWindowSizeHeight;
 
 	QString musicPlayerListInfoFileJsonPath;
+	QString musicInfoListCount;
+	QString musicInfoListName;
+	QString musicInfoListIndex;
 	QString musicInfoFile;
 	QString musicInfoName;
 	QString musicInfoSinger;
@@ -24,6 +27,14 @@ public:
 	virtual const QString & getMainWindowPointYPos( ) const { return mainWindowPointYPos; }
 	virtual const QString & getMainWindowSizeWidth( ) const { return mainWindowSizeWidth; }
 	virtual const QString & getMainWindowSizeHeight( ) const { return mainWindowSizeHeight; }
+	virtual const QString & getMusicPlayerListInfoFileJsonPath( ) const { return musicPlayerListInfoFileJsonPath; }
+	virtual const QString & getMusicInfoFile( ) const { return musicInfoFile; }
+	virtual const QString & getMusicInfoName( ) const { return musicInfoName; }
+	virtual const QString & getMusicInfoSinger( ) const { return musicInfoSinger; }
+	virtual const QString & getMusicInfoDuration( ) const { return musicInfoDuration; }
+	virtual const QString & getMusicInfoListCount( ) const { return musicInfoListCount; }
+	virtual const QString & getMusicInfoListName( ) const { return musicInfoListName; }
+	virtual const QString & getMusicInfoListIndex( ) const { return musicInfoListIndex; }
 };
 
 #endif // JSONFILEKEY_H_H_HEAD__FILE__

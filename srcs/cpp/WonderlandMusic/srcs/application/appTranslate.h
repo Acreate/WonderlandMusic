@@ -3,6 +3,7 @@
 #include <qstring.h>
 
 class AppTranslate {
+	
 protected:
 	QString sourceFile;
 	QString sourceFunction;
@@ -36,6 +37,9 @@ protected:
 	QString second;
 	/// @brief 毫秒
 	QString millsecond;
+	
+	QString fileConverJsonDocError;
+	QString notFindJsonKey;
 protected:
 	void setCodecForLocale( );
 	void translateString( );
@@ -65,6 +69,8 @@ public:
 	virtual const QString & getMillsecond( ) const { return millsecond; }
 	virtual const QString & getWriteFileError( ) const { return writeFileError; }
 	virtual const QString & getReadFileError( ) const { return readFileError; }
+	virtual const QString & getFileConverJsonDocError( ) const { return fileConverJsonDocError; }
+	virtual const QString & getNotFindJsonKey( ) const { return notFindJsonKey; }
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

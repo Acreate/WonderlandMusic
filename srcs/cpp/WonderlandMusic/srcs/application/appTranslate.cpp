@@ -36,6 +36,9 @@ void AppTranslate::translateString( ) {
 	minute = QObject::tr( "分" );
 	second = QObject::tr( "秒" );
 	millsecond = QObject::tr( "毫秒" );
+
+	fileConverJsonDocError = QObject::tr( "文件转 QJsonDocument 对象错误" );
+	notFindJsonKey = QObject::tr( "找不到匹配的关键字" );
 }
 bool AppTranslate::init( ) {
 	setCodecForLocale( );

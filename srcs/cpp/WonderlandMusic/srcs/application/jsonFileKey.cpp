@@ -13,6 +13,9 @@ bool JsonFileKey::init( ) {
 	mainWindowSizeHeight = "app.main.window.size.h";
 
 	musicPlayerListInfoFileJsonPath = applicationDirPath + "/program/json/app.player.list.widget.music.list.info.json";
+	musicInfoListCount = "list.size";
+	musicInfoListName = "list.name";
+	musicInfoListIndex = "list.index";
 	musicInfoFile = "file.name";
 	musicInfoName = "music.name";
 	musicInfoSinger = "music.singer";

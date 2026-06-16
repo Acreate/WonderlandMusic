@@ -12,12 +12,14 @@ protected:
 	/// @brief 鼠标下的选项
 	MusicListItemWidget *activityItem;
 	/// @brief 鼠标按下的选项
-	MusicListItemWidget *selectItem;
+	std::vector< MusicListItemWidget * > selectItemVector;
 	std::vector< MusicListItemWidget * > musicListItemWidgets;
 public:
 	MusicListWidget( QWidget *parent );
 	virtual bool existMusicFilePath( const QString &file_path ) const;
 	virtual size_t getMusicListItemWidgets( std::vector< const MusicListItemWidget * > &result_vector ) const;
+	virtual MusicListItemWidget * getActivityItem( ) const { return activityItem; }
+	virtual std::vector< const MusicListItemWidget * > getSelectItemVector( ) const;
 protected:
 	virtual bool appendItem( const MusicInfo &media_meta_data );
 	virtual bool sort( );

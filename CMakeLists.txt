@@ -3,6 +3,9 @@
 # # 加载模块
 find_package( CmakeFuncs REQUIRED PATHS "${CMAKE_CURRENT_SOURCE_DIR}/srcs/cmake/cmakeFuncs/CmakeFuncs" )
 
+init_cmake_func( )
+close_global_compile_batching( )
+
 # # 获取当前文件夹名称
 get_current_dir_name( prject_name ${CMAKE_CURRENT_SOURCE_DIR} )
 message( "============ ${prject_name}" )

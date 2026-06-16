@@ -9,8 +9,6 @@ message( "name = " ${prject_name} ) # # 当前文件名配置为项目名称
 project( ${prject_name} VERSION 0.1 )
 message( "============ ${CURRENT_FOLDER}" )
 
-init_cmake_func( )
-# close_global_compile_batching( )
 
 get_cmake_separator( _cmake_sep )
 init_std_builder_path( )

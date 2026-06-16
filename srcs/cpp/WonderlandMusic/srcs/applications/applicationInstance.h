@@ -160,6 +160,8 @@ public:
 		Move_Global_Mouse_Pos,
 		Press_Global_Mouse_Pos,
 		Release_Global_Mouse_Pos,
+		Press_Global_Key,
+		Release_Global_Key,
 		Update_Music_Widget_Width,
 		Init_Music_Widget_Width,
 		Init_Music_Player_Top_Width,

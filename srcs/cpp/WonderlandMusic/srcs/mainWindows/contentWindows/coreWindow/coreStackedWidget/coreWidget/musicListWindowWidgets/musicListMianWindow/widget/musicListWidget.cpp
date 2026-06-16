@@ -16,11 +16,11 @@
 
 #include "musicListTopWidget.h"
 
-#include "../../../../../../../../msgInfo/messageErrorOut.h"
+#include <msgInfo/messageErrorOut.h>
 
 #include "musicListItemWidget/musicListItemWidget.h"
 MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
-	activityItem = selectItem = nullptr;
+	activityItem = nullptr;
 	ApplicationEvenTrigger::connectMusicListMainWidgetEvent( [this] ( MusicListMainWidget *music_list_main_widget, const MusicListMainWidgetEventInfo &music_list_main_widget_event_info ) {
 		auto eventType = music_list_main_widget_event_info.getEventType( );
 
@@ -61,36 +61,70 @@ MusicListWidget::MusicListWidget( QWidget *parent ) : BaseWidget( parent ) {
 		}
 	} );
 	ApplicationEvenTrigger::connectApplicationInstanceEvent( [this] ( ApplicationInstance *application_instance, const ApplicationInstanceEventInfo &application_instance_event_info ) {
-		auto eventType = application_instance_event_info.getEventType( );
-		switch( eventType ) {
-			case ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos : {
-				size_t size = musicListItemWidgets.size( );
-				if( size == 0 )
-					break;
-				auto fromGlobal = mapFromGlobal( QCursor::pos( ) );
-				if( contentsRect( ).contains( fromGlobal ) == false )
-					break;
-				if( activityItem && activityItem->geometry( ).contains( fromGlobal ) == true )
-					break;
-				auto data = musicListItemWidgets.data( );
-				size_t index = 0;
-				for( ; index < size; ++index )
-					if( data[ index ]->geometry( ).contains( fromGlobal ) == true )
+			auto eventType = application_instance_event_info.getEventType( );
+			switch( eventType ) {
+				case ApplicationInstanceEventInfo::EventType::Move_Global_Mouse_Pos : {
+					size_t size = musicListItemWidgets.size( );
+					if( size == 0 )
 						break;
-				if( index == size )
+					auto fromGlobal = mapFromGlobal( QCursor::pos( ) );
+					if( contentsRect( ).contains( fromGlobal ) == false )
+						break;
+					if( activityItem && activityItem->geometry( ).contains( fromGlobal ) == true )
+						break;
+					auto data = musicListItemWidgets.data( );
+					size_t index = 0;
+					for( ; index < size; ++index )
+						if( data[ index ]->geometry( ).contains( fromGlobal ) == true )
+							break;
+					if( index == size )
+						break;
+					if( activityItem )
+						activityItem->setActivity( false );
+					activityItem = data[ index ];
+					activityItem->setActivity( true );
+				}
+				break;
+				case ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos :
 					break;
-				if( activityItem )
-					activityItem->setActivity( false );
-				activityItem = data[ index ];
-				activityItem->setActivity( true );
+				case ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos : {
+					if( activityItem == nullptr )
+						break;
+					Qt::KeyboardModifiers mods = QGuiApplication::keyboardModifiers( );
+					bool ctrl = mods & Qt::ControlModifier;
+					size_t count = selectItemVector.size( );
+					// 多选
+					if( ctrl == true ) {
+						auto data = selectItemVector.data( );
+						size_t index = 0;
+						for( ; index < count; ++index )
+							if( data[ index ] == activityItem )
+								break;
+						if( index < count ) {
+							count -= 1;
+							for( ; index < count; ++index )
+								data[ index ] = data[ index + 1 ];
+							data[ index ] = activityItem;
+							break;
+						}
+						activityItem->setSelect( true );
+						selectItemVector.emplace_back( activityItem );
+						break;
+					}
+					if( count != 0 ) {
+						auto data = selectItemVector.data( );
+						size_t index = 0;
+						for( ; index < count; ++index )
+							data[ index ]->setSelect( false );
+					}
+					selectItemVector.resize( 1 );
+					activityItem->setSelect( true );
+					selectItemVector.data( )[ 0 ] = activityItem;
+				}
+				break;
 			}
-			break;
-			case ApplicationInstanceEventInfo::EventType::Press_Global_Mouse_Pos :
-				break;
-			case ApplicationInstanceEventInfo::EventType::Release_Global_Mouse_Pos :
-				break;
 		}
-	} );
+		);
 }
 bool MusicListWidget::existMusicFilePath( const QString &file_path ) const {
 	size_t count = musicListItemWidgets.size( );
@@ -117,6 +151,19 @@ size_t MusicListWidget::getMusicListItemWidgets( std::vector< const MusicListIte
 	for( ; index < count; ++index )
 		des[ index ] = data[ index ];
 	return count;
+}
+std::vector< const MusicListItemWidget * > MusicListWidget::getSelectItemVector( ) const {
+	size_t count = selectItemVector.size( );
+	std::vector< const MusicListItemWidget * > result;
+	if( count == 0 )
+		return result;
+	result.resize( count );
+	auto sourceData = selectItemVector.data( );
+	auto desData = result.data( );
+	size_t index;
+	for( index = 0; index < count; ++index )
+		desData[ index ] = sourceData[ index ];
+	return result;
 }
 bool MusicListWidget::appendItem( const MusicInfo &media_meta_data ) {
 	QString filePath = media_meta_data.getFilePath( );

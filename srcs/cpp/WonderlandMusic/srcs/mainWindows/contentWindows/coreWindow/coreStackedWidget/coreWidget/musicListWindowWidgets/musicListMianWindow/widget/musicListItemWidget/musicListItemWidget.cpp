@@ -13,6 +13,10 @@
 
 #include <applications/applicationEvenTrigger.h>
 
+#include <widgetEffects/widgetEffect.h>
+#include <widgetEffects/highlight/highlightBackground.h>
+#include <widgetEffects/highlight/highlightBorder.h>
+
 QString MusicListItemWidget::msToHMS( qint64 totalMs ) {
 	qint64 totalSec = totalMs / 1000;
 	qint64 h = totalSec / 3600;
@@ -25,16 +29,10 @@ QString MusicListItemWidget::msToHMS( qint64 totalMs ) {
 }
 MusicListItemWidget::MusicListItemWidget( QWidget *parent, const QString &file_path, const QString &music_name, const QString &singer_name, qint64 duration_ms ) : BaseWidget( parent ),
 	filePath( file_path ), musicName( music_name ), singerName( singer_name ), duration_ms( duration_ms ) {
-	auto rect = contentsRect( );
-	penWdith = 5;
-	drawWidth = rect.width( );
-	drawHeight = rect.height( );
-	drawY = drawX = penWdith / 2;
-	drawWidth -= drawY * 2;
-	drawHeight -= drawY * 2;
-	pen = new QPen( );
-	pen->setWidth( penWdith );
-	pen->setColor( Qt::GlobalColor::darkBlue );
+	select = false;
+	activity = false;
+	selectEffect = new HighlightBackground( this );
+	activityEffect = new HighlightBorder( this );
 
 	QString formatTime = msToHMS( duration_ms );
 	labelItemVector.emplace_back( new LabelItem( music_name, this ) );
@@ -69,26 +67,29 @@ MusicListItemWidget::MusicListItemWidget( QWidget *parent, const QString &file_p
 		}
 	} );
 }
+MusicListItemWidget::~MusicListItemWidget( ) {
+	delete activityEffect;
+	activityEffect = nullptr;
+	delete selectEffect;
+	selectEffect = nullptr;
+}
 
 void MusicListItemWidget::setActivity( const bool activity ) {
 	this->activity = activity;
 	update( );
 }
+void MusicListItemWidget::setSelect( const bool select ) {
+	this->select = select;
+	update( );
+}
 void MusicListItemWidget::paintEvent( QPaintEvent *event ) {
 	BaseWidget::paintEvent( event );
-	if( activity == true ) {
-		QPainter painter( this );
-		painter.setPen( *pen );
-		painter.drawRect( drawX, drawY, drawWidth, drawHeight );
-	}
+	if( select && selectEffect )
+		selectEffect->renderEffect( );
+	if( activity && activityEffect )
+		activityEffect->renderEffect( );
 }
 void MusicListItemWidget::resizeEvent( QResizeEvent *event ) {
 	BaseWidget::resizeEvent( event );
-	auto rect = contentsRect( );
-	penWdith = 5;
-	drawWidth = rect.width( );
-	drawHeight = rect.height( );
-	drawY = drawX = penWdith / 2;
-	drawWidth -= drawY * 2;
-	drawHeight -= drawY * 2;
+
 }

@@ -490,6 +490,8 @@ bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 				appSetting->insert( jsonKey.main_window_h_key, valueH );
 				quit( );
 				isQuit = true;
+				event->accept( );
+				return true;
 			}
 			break;
 		case QEvent::Quit :
@@ -521,6 +523,18 @@ bool ApplicationInstance::notify( QObject *object, QEvent *event ) {
 		case QEvent::Type::Leave : {
 			auto info = ApplicationInstanceEventInfo( );
 			info.eventType = ApplicationInstanceEventInfo::EventType::Mouse_Leave_Pos;
+			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+		}
+		break;
+		case QEvent::Type::KeyPress : {
+			auto info = ApplicationInstanceEventInfo( );
+			info.eventType = ApplicationInstanceEventInfo::EventType::Press_Global_Key;
+			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
+		}
+		break;
+		case QEvent::Type::KeyRelease : {
+			auto info = ApplicationInstanceEventInfo( );
+			info.eventType = ApplicationInstanceEventInfo::EventType::Release_Global_Key;
 			ApplicationInstanceEvent( applicationEvenTrigger, this, info );
 		}
 		break;

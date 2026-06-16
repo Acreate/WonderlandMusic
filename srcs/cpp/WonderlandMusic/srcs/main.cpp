@@ -2,11 +2,16 @@
 #include <QLoggingCategory>
 #include <QProcessEnvironment>
 
-#include "applications/applicationInstance.h"
-
 #include <QTextCodec>
 
+#include "application/appInstance.h"
+#include "application/eventFilter.h"
+
 #include "msgInfo/messageErrorOut.h"
+
+#include "tools/widgetTools.h"
+
+#include "window/mainWindow.h"
 
 static MessageErrorOut *messageErrorOut = nullptr;
 static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
@@ -39,13 +44,24 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	messageErrorOut->setJoinString( "\n" );
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
 	*messageErrorOut << QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序开始" ) << "----------------------";
-	ApplicationInstance application =  ApplicationInstance( argc, argv );
-
-	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
-	QTextCodec::setCodecForLocale( utf8 );
-
-	int exec = application.exec( );
+	EventFilter *eventFilter = new EventFilter;
+	AppInstance application( argc, argv );
 	QString resultString = QObject::tr( "返回值" );
+	if( application.init( ) == false ) {
+		*messageErrorOut << "----------------------"
+			<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
+			<< "\t:\t" + resultString + "{ 0x" + QString::number( -1, 16 ).toUpper( ) + ", "
+			+ QString::number( -1 ).toUpper( ) + " }";
+		delete messageErrorOut;
+		return -1;
+	}
+	application.installEventFilter( eventFilter );
+
+	int exec = application.run( );
+
+	eventFilter->removeEventFilter( eventFilter );
+	delete eventFilter;
+
 	*messageErrorOut << "----------------------"
 		<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
 		<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "

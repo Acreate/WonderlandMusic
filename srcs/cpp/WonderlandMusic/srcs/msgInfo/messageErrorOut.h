@@ -6,33 +6,31 @@
 /// @brief 临时创建一个 MessageErrorOut 对象
 #define Message_Error_Out MessageErrorOut()
 
+class QDateTime;
 class DateTimeFormat;
 class QDate;
 class MessageErrorOut {
 protected:
-	class Translate {
-		friend class MessageErrorOut;
-		/// @brief 源文件
-		QString sourceFile;
-		/// @brief 源文件函数
-		QString sourceFunction;
-		/// @brief 源文件行号
-		QString sourceLine;
-		/// @brief 创建目录错误
-		QString createDirError;
-		/// @brief 打开文件错误
-		QString openFileError;
-	public:
-		Translate( );
-	};
+	static std::shared_ptr< QDateTime > logStartDateTime;;
 protected:
-	Translate translate;
+	/// @brief 源文件
+	QString sourceFile;
+	/// @brief 源文件函数
+	QString sourceFunction;
+	/// @brief 源文件行号
+	QString sourceLine;
+	/// @brief 创建目录错误
+	QString createDirError;
+	/// @brief 打开文件错误
+	QString openFileError;
+protected:
 	std::vector< QString > outMsgVector;
 	std::source_location location;
 	QString logHomePtah;
 	QString jointString;
 	QString startString;
 	QString endString;
+
 	bool isWriteFile;
 public:
 	using void_ptr = void *;

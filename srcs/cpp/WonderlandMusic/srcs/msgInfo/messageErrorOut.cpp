@@ -80,6 +80,13 @@ MessageErrorOut & MessageErrorOut::operator<<( const void_ptr &msg ) {
 	outMsgVector.emplace_back( QString( "0x%1" ).arg( ( qulonglong ) msg, 16, base, '0' ).toUpper( ) );
 	return *this;
 }
+const QString & MessageErrorOut::getJoinString( ) const { return jointString; }
+void MessageErrorOut::setJoinString( const QString &join ) { this->jointString = join; }
+const QString & MessageErrorOut::getStartString( ) const { return startString; }
+void MessageErrorOut::setStartString( const QString &start_string ) { startString = start_string; }
+const QString & MessageErrorOut::getEndString( ) const { return endString; }
+void MessageErrorOut::setEndString( const QString &end_string ) { endString = end_string; }
+const std::vector<QString> & MessageErrorOut::getOutMsgVector( ) const { return outMsgVector; }
 MessageErrorOut::~MessageErrorOut( ) {
 	writeLog( );
 }

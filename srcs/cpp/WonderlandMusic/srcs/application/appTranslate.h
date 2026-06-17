@@ -55,35 +55,35 @@ public:
 	virtual ~AppTranslate( ) = default;
 	AppTranslate( );
 	virtual bool init( );
-	virtual const QString & getSourceFile( ) const { return sourceFile; }
-	virtual const QString & getSourceFunction( ) const { return sourceFunction; }
-	virtual const QString & getSourceLine( ) const { return sourceLine; }
-	virtual const QString & getCreateDirError( ) const { return createDirError; }
-	virtual const QString & getCreateFileError( ) const { return createFileError; }
-	virtual const QString & getOpenFileError( ) const { return openFileError; }
-	virtual const QString & getAppWindowTitleName( ) const { return appWindowTitleName; }
-	virtual const QString & getPlay( ) const { return playMusic; }
-	virtual const QString & getStop( ) const { return stopMusic; }
-	virtual const QString & getPause( ) const { return pauseMusic; }
-	virtual const QString & getPlayListWidget( ) const { return playListWidget; }
-	virtual const QString & getSettingWidget( ) const { return settingWidget; }
-	virtual const QString & getAboutWidget( ) const { return aboutWidget; }
-	virtual const QString & getYear( ) const { return year; }
-	virtual const QString & getMonth( ) const { return month; }
-	virtual const QString & getDay( ) const { return day; }
-	virtual const QString & getHour( ) const { return hour; }
-	virtual const QString & getMinute( ) const { return minute; }
-	virtual const QString & getSecond( ) const { return second; }
-	virtual const QString & getMillsecond( ) const { return millsecond; }
-	virtual const QString & getWriteFileError( ) const { return writeFileError; }
-	virtual const QString & getReadFileError( ) const { return readFileError; }
-	virtual const QString & getFileConverJsonDocError( ) const { return fileConverJsonDocError; }
-	virtual const QString & getNotFindJsonKey( ) const { return notFindJsonKey; }
-	virtual const QString & getActionAddMultiMusicFileToCollection( ) const { return actionAddMultiMusicFileToCollection; }
-	virtual const QString & getActionAddMultiMusicDirToCollection( ) const { return actionAddMultiMusicDirToCollection; }
-	virtual const QString & getActionRemoveMultiMusicAtCollection( ) const { return actionRemoveMultiMusicAtCollection; }
-	virtual const QString & getMenuFileTitle( ) const { return menuFileTitle; }
-	virtual const QString & getMusicTypeName( ) const { return musicTypeName; }
+	virtual const QString & getSourceFile( ) const;
+	virtual const QString & getSourceFunction( ) const;
+	virtual const QString & getSourceLine( ) const;
+	virtual const QString & getCreateDirError( ) const;
+	virtual const QString & getCreateFileError( ) const;
+	virtual const QString & getOpenFileError( ) const;
+	virtual const QString & getAppWindowTitleName( ) const;
+	virtual const QString & getPlay( ) const;
+	virtual const QString & getStop( ) const;
+	virtual const QString & getPause( ) const;
+	virtual const QString & getPlayListWidget( ) const;
+	virtual const QString & getSettingWidget( ) const;
+	virtual const QString & getAboutWidget( ) const;
+	virtual const QString & getYear( ) const;
+	virtual const QString & getMonth( ) const;
+	virtual const QString & getDay( ) const;
+	virtual const QString & getHour( ) const;
+	virtual const QString & getMinute( ) const;
+	virtual const QString & getSecond( ) const;
+	virtual const QString & getMillsecond( ) const;
+	virtual const QString & getWriteFileError( ) const;
+	virtual const QString & getReadFileError( ) const;
+	virtual const QString & getFileConverJsonDocError( ) const;
+	virtual const QString & getNotFindJsonKey( ) const;
+	virtual const QString & getActionAddMultiMusicFileToCollection( ) const;
+	virtual const QString & getActionAddMultiMusicDirToCollection( ) const;
+	virtual const QString & getActionRemoveMultiMusicAtCollection( ) const;
+	virtual const QString & getMenuFileTitle( ) const;
+	virtual const QString & getMusicTypeName( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

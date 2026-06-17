@@ -39,6 +39,8 @@ bool RenderImage::init( ) {
 	fontMetricsAscent = fontMetrics->ascent( );;
 	return true;
 }
+const QFont * RenderImage::getFont( ) const { return font; }
+const QFontMetrics * RenderImage::getFontMetrics( ) const { return fontMetrics; }
 bool RenderImage::renderTxt( QImage &result_render_image, const QString &render_txt ) const {
 	int renderWidth = fontMetrics->horizontalAdvance( render_txt );
 	auto buffImage = QImage( renderWidth, fontMetricsHeight, QImage::Format_RGBA8888 );

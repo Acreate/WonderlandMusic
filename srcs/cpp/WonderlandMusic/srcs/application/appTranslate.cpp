@@ -53,3 +53,32 @@ bool AppTranslate::init( ) {
 	translateString( );
 	return true;
 }
+const QString & AppTranslate::getSourceFile( ) const { return sourceFile; }
+const QString & AppTranslate::getSourceFunction( ) const { return sourceFunction; }
+const QString & AppTranslate::getSourceLine( ) const { return sourceLine; }
+const QString & AppTranslate::getCreateDirError( ) const { return createDirError; }
+const QString & AppTranslate::getCreateFileError( ) const { return createFileError; }
+const QString & AppTranslate::getOpenFileError( ) const { return openFileError; }
+const QString & AppTranslate::getAppWindowTitleName( ) const { return appWindowTitleName; }
+const QString & AppTranslate::getPlay( ) const { return playMusic; }
+const QString & AppTranslate::getStop( ) const { return stopMusic; }
+const QString & AppTranslate::getPause( ) const { return pauseMusic; }
+const QString & AppTranslate::getPlayListWidget( ) const { return playListWidget; }
+const QString & AppTranslate::getSettingWidget( ) const { return settingWidget; }
+const QString & AppTranslate::getAboutWidget( ) const { return aboutWidget; }
+const QString & AppTranslate::getYear( ) const { return year; }
+const QString & AppTranslate::getMonth( ) const { return month; }
+const QString & AppTranslate::getDay( ) const { return day; }
+const QString & AppTranslate::getHour( ) const { return hour; }
+const QString & AppTranslate::getMinute( ) const { return minute; }
+const QString & AppTranslate::getSecond( ) const { return second; }
+const QString & AppTranslate::getMillsecond( ) const { return millsecond; }
+const QString & AppTranslate::getWriteFileError( ) const { return writeFileError; }
+const QString & AppTranslate::getReadFileError( ) const { return readFileError; }
+const QString & AppTranslate::getFileConverJsonDocError( ) const { return fileConverJsonDocError; }
+const QString & AppTranslate::getNotFindJsonKey( ) const { return notFindJsonKey; }
+const QString & AppTranslate::getActionAddMultiMusicFileToCollection( ) const { return actionAddMultiMusicFileToCollection; }
+const QString & AppTranslate::getActionAddMultiMusicDirToCollection( ) const { return actionAddMultiMusicDirToCollection; }
+const QString & AppTranslate::getActionRemoveMultiMusicAtCollection( ) const { return actionRemoveMultiMusicAtCollection; }
+const QString & AppTranslate::getMenuFileTitle( ) const { return menuFileTitle; }
+const QString & AppTranslate::getMusicTypeName( ) const { return musicTypeName; }

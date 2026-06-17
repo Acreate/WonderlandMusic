@@ -20,28 +20,12 @@ public:
 
 	virtual QString & formatData( QString &result_format, const QDate &format_data ) const;
 	virtual QString & formatTime( QString &result_format, const QTime &format_time ) const;
-	virtual QString formatData( const QDate &format_data ) const {
-		QString result;
-		return formatData( result, format_data );
-	}
-	virtual QString formatTime( const QTime &format_time ) const {
-		QString result;
-		return formatTime( result, format_time );
-	}
-	virtual QString & formatData( QString &result_format ) const {
-		return formatData( result_format, this->currentDate );
-	}
-	virtual QString & formatTime( QString &result_format ) const {
-		return formatTime( result_format, this->currentTime );
-	}
-	virtual QString formatData( ) const {
-		QString result;
-		return formatData( result );
-	}
-	virtual QString formatTime( ) const {
-		QString result;
-		return formatTime( result );
-	}
+	virtual QString formatData( const QDate &format_data ) const;
+	virtual QString formatTime( const QTime &format_time ) const;
+	virtual QString & formatData( QString &result_format ) const;
+	virtual QString & formatTime( QString &result_format ) const;
+	virtual QString formatData( ) const;
+	virtual QString formatTime( ) const;
 public:
 	static QString millsecondToHourMinSecFrom( qint64 totalMs );
 };

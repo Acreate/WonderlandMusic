@@ -50,13 +50,13 @@ public:
 	MessageErrorOut & operator<<( const uint16_t &msg );
 	MessageErrorOut & operator<<( const uint8_t &msg );
 	MessageErrorOut & operator<<( const void_ptr &msg );
-	virtual const QString & getJoinString( ) const { return jointString; }
-	virtual void setJoinString( const QString &join ) { this->jointString = join; }
-	virtual const QString & getStartString( ) const { return startString; }
-	virtual void setStartString( const QString &start_string ) { startString = start_string; }
-	virtual const QString & getEndString( ) const { return endString; }
-	virtual void setEndString( const QString &end_string ) { endString = end_string; }
-	virtual const std::vector< QString > & getOutMsgVector( ) const { return outMsgVector; }
+	virtual const QString & getJoinString( ) const;
+	virtual void setJoinString( const QString &join );
+	virtual const QString & getStartString( ) const;
+	virtual void setStartString( const QString &start_string );
+	virtual const QString & getEndString( ) const;
+	virtual void setEndString( const QString &end_string );
+	virtual const std::vector< QString > & getOutMsgVector( ) const;
 	virtual QString toQString( ) const;
 	virtual QString toQString( const DateTimeFormat &date_time_format ) const;
 	virtual QString writeLog( const QString &wirte_log_path, const DateTimeFormat &date_time_format ) const;

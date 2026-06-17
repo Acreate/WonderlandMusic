@@ -1,18 +1,20 @@
 ﻿#include "playListWidget.h"
 
-#include <QFileInfo>
+#include <QPaintEvent>
 #include <QJsonObject>
 #include <QMediaPlayer>
 #include <QMediaMetaData>
 #include <QUrl>
 #include <qjsondocument.h>
 #include <QMutex>
+#include <QPainter>
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
+#include "../application/renderImage.h"
 
-#include "../itemWidget/musicInfoItemWidget.h"
+#include "../item/musicInfoItem.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -36,8 +38,10 @@ PlayListWidget::~PlayListWidget( ) {
 }
 PlayListWidget::PlayListWidget( QWidget *parent ) : QWidget( parent ) {
 	loadMusicFileMutex = new QMutex;
+	splitWidth = 4;
 }
 bool PlayListWidget::loadJsonPathInfo( ) {
+
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 	auto fileJsonPath = jsonFileKey->getMusicPlayerListInfoFileJsonPath( );
@@ -63,7 +67,7 @@ bool PlayListWidget::loadJsonPathInfo( ) {
 	auto foreachIterator = subJsonObject.begin( );
 	auto foreachEnd = subJsonObject.end( );
 
-	QVector< MusicInfoItemWidget * > buff( count, nullptr );
+	QVector< MusicInfoItem * > buff( count, nullptr );
 	auto maxIndex = count - 1;
 	auto data = buff.data( );
 	for( ; foreachIterator != foreachEnd; ++foreachIterator ) {
@@ -75,18 +79,18 @@ bool PlayListWidget::loadJsonPathInfo( ) {
 		if( converResultIndex > maxIndex )
 			continue;
 		auto musicInfoJsonObject = foreachIterator.value( ).toObject( );
-		auto ctreaItem = new MusicInfoItemWidget( );
-		if( MusicInfoItemWidget::forJsonObject( *ctreaItem, musicInfoJsonObject ) == false ) {
+		auto ctreaItem = new MusicInfoItem( );
+		if( MusicInfoItem::forJsonObject( *ctreaItem, musicInfoJsonObject ) == false ) {
 			delete ctreaItem;
 			continue;
 		}
-		ctreaItem->setParent( this );
+		ctreaItem->parentPlayListWidget = this;
 		data[ converResultIndex ] = ctreaItem;
 	}
 
 	loadMusicFileMutex->lock( );
 	auto oldCount = musicInfoVector.size( );
-	QVector< MusicInfoItemWidget * > releaseVector( oldCount, nullptr );
+	QVector< MusicInfoItem * > releaseVector( oldCount, nullptr );
 	auto buffToData = releaseVector.data( );
 	auto copyToData = musicInfoVector.data( );
 	for( maxIndex = 0; maxIndex < oldCount; maxIndex += 1 )
@@ -112,7 +116,7 @@ bool PlayListWidget::writeJsonPathInfo( ) {
 		return true;
 	}
 	auto sourceData = musicInfoVector.data( );
-	QVector< MusicInfoItemWidget * > buff( count );
+	QVector< MusicInfoItem * > buff( count );
 	auto destData = buff.data( );
 	qsizetype index = 0;
 	for( ; index < count; index += 1 )
@@ -126,7 +130,7 @@ bool PlayListWidget::writeJsonPathInfo( ) {
 
 	for( index = 0; index < count; index += 1 ) {
 		QJsonObject subJsonObject;
-		if( MusicInfoItemWidget::toJsonObect( subJsonObject, *destData[ index ] ) == false )
+		if( MusicInfoItem::toJsonObect( subJsonObject, *destData[ index ] ) == false )
 			continue;
 		arrayJsonObject.insert( QString::number( index ), subJsonObject );
 	}
@@ -169,12 +173,12 @@ bool PlayListWidget::appendItem( const QString &music_file_path, const QString &
 	}
 
 	loadMusicFileMutex->unlock( );
-	auto musicInfoItemWidget = new MusicInfoItemWidget( );;
+	auto musicInfoItemWidget = new MusicInfoItem( );
 	if( musicInfoItemWidget->init( music_file_path, music_name, music_singer, duration ) == false ) {
 		delete musicInfoItemWidget;
 		return false;
 	}
-	musicInfoItemWidget->setParent( this );
+	musicInfoItemWidget->parentPlayListWidget = this;
 	loadMusicFileMutex->lock( );
 	musicInfoVector.emplace_back( musicInfoItemWidget );
 	loadMusicFileMutex->unlock( );
@@ -238,21 +242,21 @@ bool PlayListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 				}
 			count = loadMusicFileHistory.size( );
 		}
-		MusicInfoItemWidget *itemWidget = new MusicInfoItemWidget( );
+		MusicInfoItem *itemWidget = new MusicInfoItem( );
 		musicInfoVector.emplace_back( itemWidget );
 		loadMusicFileMutex->unlock( );
 		QMediaMetaData mediaMetaData = mediaPlayer->metaData( );
 		itemWidget->init( absFilePath, mediaMetaData );
-		itemWidget->setParent( this );
+		itemWidget->parentPlayListWidget = this;
 		mediaPlayer->deleteLater( );
 		if( count == 0 )
-			sortMusicItem( );
+			repaint( );
 	} );
 	return true;
 }
-QVector< MusicInfoItemWidget * > PlayListWidget::getMusicInfoVector( ) const {
+QVector< MusicInfoItem * > PlayListWidget::getMusicInfoVector( ) const {
 	loadMusicFileMutex->lock( );
-	QVector< MusicInfoItemWidget * > result = musicInfoVector;
+	QVector< MusicInfoItem * > result = musicInfoVector;
 	loadMusicFileMutex->unlock( );
 	return result;
 }
@@ -277,20 +281,91 @@ QVector< QString > PlayListWidget::getListMusicFile( ) const {
 	loadMusicFileMutex->unlock( );
 	return result;
 }
-void PlayListWidget::sortMusicItem( ) {
+bool PlayListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {
 
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	auto data = musicInfoVector.data( );
 	qsizetype index;
-	int offsetX = 5;
-	int offsetY = 0;
-	for( index = 0; index < count; index += 1 ) {
-		data[ index ]->move( offsetX, offsetY );
-		offsetY += data[ index ]->height( );
-	}
-	index -= 1;
-	int height = data[ index ]->x( ) + data[ index ]->height( );
+	for( index = 0; index < count; index += 1 )
+		if( render_target == data[ index ] ) {
+			loadMusicFileMutex->unlock( );
+			return false;
+		}
+	auto renderTarget = data[ index ];
 	loadMusicFileMutex->unlock( );
-	setFixedHeight( height );
+	return renderAtMusicInfoItem( result_render_image, renderTarget );
+}
+
+bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target ) const {
+	return renderAtMusicInfoItem( result_render_image, render_target, splitWidth );
+}
+bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int split_width ) const {
+
+	auto appInstance = AppInstance::getAppInstance( );
+	auto renderImage = appInstance->getRenderImage( );
+	auto font = renderImage->getFont( );
+	auto fontMetrics = renderImage->getFontMetrics( );
+	int itemHeight = fontMetrics->height( );
+	auto musicName = render_target->getMusicName( );
+	auto musicSinger = render_target->getMusicSinger( );
+	auto formatStringDuration = render_target->getFormatStringDuration( );
+	int musicNameWidth = fontMetrics->horizontalAdvance( musicName );
+	int musicSingerWidth = fontMetrics->horizontalAdvance( musicSinger );
+	int formatStringDurationeWidth = fontMetrics->horizontalAdvance( formatStringDuration );
+	return renderAtMusicInfoItem( result_render_image, render_target, itemHeight, split_width, musicNameWidth, musicSingerWidth, formatStringDurationeWidth, font );
+}
+bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const {
+	if( item_font == nullptr )
+		return false;
+	int imageWidth = split_width * 4 + name_item_width + singer_item_width + duration_item_width;
+	QImage buff = QImage( imageWidth, item_height, QImage::Format_RGBA8888 );
+	if( buff.isNull( ) )
+		return false;
+	buff.fill( 0 );
+	int offsetSplitX = split_width / 2;
+	QPainter painter;
+	painter.begin( &buff );
+	auto pen = painter.pen( );
+	pen.setWidth( split_width );
+	painter.setPen( pen );
+	painter.setFont( *item_font );
+
+	int drawOffsetX = offsetSplitX;
+	QRect drawRect;
+
+	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
+	drawOffsetX += offsetSplitX;
+	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( name_item_width, item_height ) );
+	painter.drawText( drawRect, render_target->getMusicName( ) );
+	drawOffsetX += name_item_width + offsetSplitX;
+
+	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
+	drawOffsetX += offsetSplitX;
+	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( name_item_width, item_height ) );
+	painter.drawText( drawRect, render_target->getMusicSinger( ) );
+	drawOffsetX += singer_item_width + offsetSplitX;
+
+	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
+	drawOffsetX += offsetSplitX;
+	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( name_item_width, item_height ) );
+	painter.drawText( drawRect, render_target->getFormatStringDuration( ) );
+	drawOffsetX += duration_item_width + offsetSplitX;
+
+	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
+
+	painter.end( );
+	result_render_image = buff;
+	return true;
+}
+void PlayListWidget::paintEvent( QPaintEvent *event ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto renderImage = appInstance->getRenderImage( );
+	auto fontMetrics = renderImage->getFontMetrics( );
+
+	int itemHeight = fontMetrics->height( );
+	QRect contentsRect = this->contentsRect( );
+	int itemWidth = contentsRect.width( );
+
+	event->accept( );
 }

@@ -153,6 +153,28 @@ QString & DateTimeFormat::formatTime( QString &result_format, const QTime &forma
 
 	return result_format;
 }
+QString DateTimeFormat::formatData( const QDate &format_data ) const {
+	QString result;
+	return formatData( result, format_data );
+}
+QString DateTimeFormat::formatTime( const QTime &format_time ) const {
+	QString result;
+	return formatTime( result, format_time );
+}
+QString & DateTimeFormat::formatData( QString &result_format ) const {
+	return formatData( result_format, this->currentDate );
+}
+QString & DateTimeFormat::formatTime( QString &result_format ) const {
+	return formatTime( result_format, this->currentTime );
+}
+QString DateTimeFormat::formatData( ) const {
+	QString result;
+	return formatData( result );
+}
+QString DateTimeFormat::formatTime( ) const {
+	QString result;
+	return formatTime( result );
+}
 QString DateTimeFormat::millsecondToHourMinSecFrom( qint64 totalMs ) {
 	qint64 totalSec = totalMs / 1000;
 	qint64 h = totalSec / 3600;

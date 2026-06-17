@@ -50,3 +50,9 @@ int AppInstance::run( ) {
 
 	return exitCode;
 }
+const QDateTime * AppInstance::getStartDateTime( ) const { return startDateTime; }
+const JsonFileKey * AppInstance::getJsonFileKey( ) const { return jsonFileKey; }
+const AppTranslate * AppInstance::getTranslate( ) const { return translate; }
+MusicDecoder * AppInstance::getMusicDecoder( ) const { return musicDecoder; }
+int AppInstance::getExitCode( ) const { return exitCode; }
+const RenderImage * AppInstance::getRenderImage( ) const { return renderImage; }

@@ -37,11 +37,11 @@ public:
 	virtual bool init( );
 	virtual int run( );
 public:
-	virtual const QDateTime * getStartDateTime( ) const { return startDateTime; }
-	virtual const JsonFileKey * getJsonFileKey( ) const { return jsonFileKey; }
-	virtual const AppTranslate * getTranslate( ) const { return translate; }
-	virtual MusicDecoder * getMusicDecoder( ) const { return musicDecoder; }
-	virtual int getExitCode( ) const { return exitCode; }
-	virtual const RenderImage * getRenderImage( ) const { return renderImage; }
+	virtual const QDateTime * getStartDateTime( ) const;
+	virtual const JsonFileKey * getJsonFileKey( ) const;
+	virtual const AppTranslate * getTranslate( ) const;
+	virtual MusicDecoder * getMusicDecoder( ) const;
+	virtual int getExitCode( ) const;
+	virtual const RenderImage * getRenderImage( ) const;
 };
 #endif // APPINSTANCE_H_H_HEAD__FILE__

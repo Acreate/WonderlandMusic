@@ -5,7 +5,7 @@
 class MainStackedWidget : public QStackedWidget {
 	Q_OBJECT;
 public:
-	MainStackedWidget( QWidget *parent ) : QStackedWidget( parent ) { }
+	MainStackedWidget( QWidget *parent );
 };
 
 #endif // MAINSTACKEDWIDGET_H_H_HEAD__FILE__

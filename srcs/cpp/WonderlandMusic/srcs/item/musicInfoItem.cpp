@@ -1,4 +1,4 @@
-﻿#include "musicInfoItemWidget.h"
+﻿#include "musicInfoItem.h"
 
 #include <QJsonObject>
 #include <QMediaMetaData>
@@ -8,12 +8,14 @@
 
 #include "../tools/dateTimeFormat.h"
 
-MusicInfoItemWidget::MusicInfoItemWidget( ) : MusicInfoItemWidget( nullptr ) {
+#include "../widget/playListWidget.h"
+
+MusicInfoItem::MusicInfoItem( ) : MusicInfoItem( nullptr ) {
 }
-MusicInfoItemWidget::MusicInfoItemWidget( QWidget *parent ) : QWidget( parent ) {
-	
+MusicInfoItem::MusicInfoItem( PlayListWidget *parent ) : parentPlayListWidget( parent ) {
+
 }
-bool MusicInfoItemWidget::init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms ) {
+bool MusicInfoItem::init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms ) {
 	musicFilePath = music_file_path;
 	musicName = music_name;
 	musicSinger = music_singer;
@@ -21,7 +23,7 @@ bool MusicInfoItemWidget::init( const QString &music_file_path, const QString &m
 	this->formatStringDuration = DateTimeFormat::millsecondToHourMinSecFrom( duration_ms );
 	return true;
 }
-bool MusicInfoItemWidget::init( const QString &file_path, const QMediaMetaData &mediaMetaData ) {
+bool MusicInfoItem::init( const QString &file_path, const QMediaMetaData &mediaMetaData ) {
 	if( mediaMetaData.isEmpty( ) )
 		return false;
 	musicName = mediaMetaData.stringValue( QMediaMetaData::Title );
@@ -34,7 +36,17 @@ bool MusicInfoItemWidget::init( const QString &file_path, const QMediaMetaData &
 	formatStringDuration = DateTimeFormat::millsecondToHourMinSecFrom( duration );
 	return true;
 }
-bool MusicInfoItemWidget::toJsonObect( QJsonObject &result_json_object, const MusicInfoItemWidget &music_info ) {
+const QString & MusicInfoItem::getMusicFilePath( ) const { return musicFilePath; }
+const QString & MusicInfoItem::getMusicName( ) const { return musicName; }
+const QString & MusicInfoItem::getMusicSinger( ) const { return musicSinger; }
+qint64 MusicInfoItem::getDuration( ) const { return duration; }
+const QString & MusicInfoItem::getFormatStringDuration( ) const { return formatStringDuration; }
+bool MusicInfoItem::renderImage( QImage &result_render_image ) const {
+	if( parentPlayListWidget == nullptr )
+		return false;
+	return parentPlayListWidget->renderMusicInfoItem( result_render_image, this );
+}
+bool MusicInfoItem::toJsonObect( QJsonObject &result_json_object, const MusicInfoItem &music_info ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 	result_json_object.insert( jsonFileKey->getMusicInfoFile( ), music_info.musicFilePath );
@@ -43,7 +55,7 @@ bool MusicInfoItemWidget::toJsonObect( QJsonObject &result_json_object, const Mu
 	result_json_object.insert( jsonFileKey->getMusicInfoDuration( ), music_info.duration );
 	return true;
 }
-bool MusicInfoItemWidget::forJsonObject( MusicInfoItemWidget &result_music_info, const QJsonObject &for_json_object ) {
+bool MusicInfoItem::forJsonObject( MusicInfoItem &result_music_info, const QJsonObject &for_json_object ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 

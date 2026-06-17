@@ -21,8 +21,8 @@ public:
 	RenderImage( );
 	virtual ~RenderImage( );
 	virtual bool init( );
-	virtual const QFont * getFont( ) const { return font; }
-	virtual const QFontMetrics * getFontMetrics( ) const { return fontMetrics; }
+	virtual const QFont * getFont( ) const;
+	virtual const QFontMetrics * getFontMetrics( ) const;
 	virtual bool renderTxt( QImage &result_render_image, const QString &render_txt ) const;
 	virtual bool renderWidget( QImage &result_render_image, QWidget *render_widget ) const;
 };

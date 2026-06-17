@@ -11,7 +11,8 @@ protected:
 	qint64 duration;
 	QString formatStringDuration;
 public:
-	MusicInfoItemWidget( ) { }
+	MusicInfoItemWidget(  );
+	MusicInfoItemWidget( QWidget *parent );
 	virtual bool init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms );
 	virtual bool init( const QString &file_path, const QMediaMetaData &mediaMetaData );
 	virtual const QString & getMusicFilePath( ) const { return musicFilePath; }

@@ -22,6 +22,7 @@ public:
 	virtual bool fromFileLoadItemInfo( const QString &music_file_path );
 	virtual QVector< MusicInfoItemWidget * > getMusicInfoVector( ) const;
 	virtual QVector< QString > getListMusicFile( ) const;
+	virtual void sortMusicItem( );
 };
 
 #endif // PLAYLISTWIDGET_H_H_HEAD__FILE__

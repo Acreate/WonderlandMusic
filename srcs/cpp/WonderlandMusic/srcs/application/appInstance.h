@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QLoggingCategory>
 
+class RenderImage;
 class MainWindow;
 class JsonFileKey;
 class MusicDecoder;
@@ -22,6 +23,8 @@ protected:
 	JsonFileKey *jsonFileKey;
 	/// @brief 音频解码实例
 	MusicDecoder *musicDecoder;
+	/// @brief 渲染对象
+	RenderImage *renderImage;
 	/// @brief 主要执行窗口
 	MainWindow *mainWindow;
 	/// @brief 退出代码
@@ -39,5 +42,6 @@ public:
 	virtual const AppTranslate * getTranslate( ) const { return translate; }
 	virtual MusicDecoder * getMusicDecoder( ) const { return musicDecoder; }
 	virtual int getExitCode( ) const { return exitCode; }
+	virtual const RenderImage * getRenderImage( ) const { return renderImage; }
 };
 #endif // APPINSTANCE_H_H_HEAD__FILE__

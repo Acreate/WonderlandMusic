@@ -71,9 +71,13 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 		if( dialog.exec( ) != QDialog::Accepted )
 			return;
 		QStringList files = dialog.selectedFiles( );
-		QFileInfo fileInfo( files[ 0 ] );
+		count = files.size( );
+		auto selectFileData = files.data( );
+		QFileInfo fileInfo( selectFileData[ 0 ] );
 		auto dir = fileInfo.dir( );
 		fileSelectWorkPath = dir.absolutePath( );
+		for( index = 0; index < count; index += 1 )
+			playListWidget->fromFileLoadItemInfo( data[ index ] );
 	} );
 
 	connect( addMultiMusicDirToCollection, &QAction::triggered, [this]( ) {

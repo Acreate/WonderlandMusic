@@ -8,6 +8,11 @@
 
 #include "../tools/dateTimeFormat.h"
 
+MusicInfoItemWidget::MusicInfoItemWidget( ) : MusicInfoItemWidget( nullptr ) {
+}
+MusicInfoItemWidget::MusicInfoItemWidget( QWidget *parent ) : QWidget( parent ) {
+	
+}
 bool MusicInfoItemWidget::init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms ) {
 	musicFilePath = music_file_path;
 	musicName = music_name;

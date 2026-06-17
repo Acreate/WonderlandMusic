@@ -236,7 +236,7 @@ bool PlayListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 					loadMusicFileHistory.erase( loadMusicFileHistory.begin( ) + index );
 					break; // 存在
 				}
-
+			count = loadMusicFileHistory.size( );
 		}
 		MusicInfoItemWidget *itemWidget = new MusicInfoItemWidget( );
 		musicInfoVector.emplace_back( itemWidget );
@@ -245,6 +245,8 @@ bool PlayListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 		itemWidget->init( absFilePath, mediaMetaData );
 		itemWidget->setParent( this );
 		mediaPlayer->deleteLater( );
+		if( count == 0 )
+			sortMusicItem( );
 	} );
 	return true;
 }
@@ -274,4 +276,21 @@ QVector< QString > PlayListWidget::getListMusicFile( ) const {
 		copyToData[ index ] = loadMusciFileHistoryData[ index ];
 	loadMusicFileMutex->unlock( );
 	return result;
+}
+void PlayListWidget::sortMusicItem( ) {
+
+	loadMusicFileMutex->lock( );
+	qsizetype count = musicInfoVector.size( );
+	auto data = musicInfoVector.data( );
+	qsizetype index;
+	int offsetX = 5;
+	int offsetY = 0;
+	for( index = 0; index < count; index += 1 ) {
+		data[ index ]->move( offsetX, offsetY );
+		offsetY += data[ index ]->height( );
+	}
+	index -= 1;
+	int height = data[ index ]->x( ) + data[ index ]->height( );
+	loadMusicFileMutex->unlock( );
+	setFixedHeight( height );
 }

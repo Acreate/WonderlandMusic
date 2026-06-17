@@ -44,3 +44,14 @@ bool MusicDecoder::init( ) {
 	}
 	return true;
 }
+std::vector< QString > MusicDecoder::getSupperDecodeFileSuffix( ) const {
+	size_t count = supperDecodeFileSuffix.size( );
+	std::vector< QString > result( count );
+	auto data = supperDecodeFileSuffix.data( );
+	auto resultData = result.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		resultData[ index ] = *data[ index ];
+
+	return result;
+}

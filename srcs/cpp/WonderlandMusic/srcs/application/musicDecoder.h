@@ -11,6 +11,7 @@ public:
 	MusicDecoder( );
 	virtual bool musicFileNmaeSupperDecoder( const QString &music_file_path ) const;
 	virtual bool init( );
+	virtual std::vector< QString > getSupperDecodeFileSuffix( ) const;
 };
 
 #endif // MUSICDECODER_H_H_HEAD__FILE__

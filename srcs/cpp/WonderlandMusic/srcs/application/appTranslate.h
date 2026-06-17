@@ -3,19 +3,19 @@
 #include <qstring.h>
 
 class AppTranslate {
-	
+
 protected:
 	QString sourceFile;
 	QString sourceFunction;
 	QString sourceLine;
-	
+
 	QString createDirError;
-	QString createFileError;	
-	
+	QString createFileError;
+
 	QString openFileError;
 	QString writeFileError;
 	QString readFileError;
-	
+
 	QString appWindowTitleName;
 	QString playMusic;
 	QString stopMusic;
@@ -37,9 +37,16 @@ protected:
 	QString second;
 	/// @brief 毫秒
 	QString millsecond;
-	
+
 	QString fileConverJsonDocError;
 	QString notFindJsonKey;
+
+	QString menuFileTitle;
+
+	QString ationAddMusicCollection;
+	QString actionRemoveMusicCollection;
+	
+	QString musicTypeName;
 protected:
 	void setCodecForLocale( );
 	void translateString( );
@@ -71,6 +78,10 @@ public:
 	virtual const QString & getReadFileError( ) const { return readFileError; }
 	virtual const QString & getFileConverJsonDocError( ) const { return fileConverJsonDocError; }
 	virtual const QString & getNotFindJsonKey( ) const { return notFindJsonKey; }
+	virtual const QString & getAtionAddMusicCollection( ) const { return ationAddMusicCollection; }
+	virtual const QString & getActionRemoveMusicCollection( ) const { return actionRemoveMusicCollection; }
+	virtual const QString & getMenuFileTitle( ) const { return menuFileTitle; }
+	virtual const QString & getMusicTypeName( ) const { return musicTypeName; }
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

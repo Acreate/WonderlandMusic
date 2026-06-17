@@ -6,8 +6,9 @@
 #include <QFileInfo>
 #include <QPushButton>
 #include <QJsonObject>
-#include <QScrollArea>
 #include <qboxlayout.h>
+
+#include "playerWindow.h"
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
@@ -15,8 +16,9 @@
 
 #include "../msgInfo/messageErrorOut.h"
 
+#include "../tools/pathTools.h"
+
 #include "../widget/aboutWidget.h"
-#include "../widget/playListWidget.h"
 #include "../widget/settingWidget.h"
 MainWindow::MainWindow( QWidget *parent ) : MainWindow( parent, Qt::WindowFlags( ) ) { }
 MainWindow::MainWindow( Qt::WindowFlags flags ) : MainWindow( nullptr, flags ) { }
@@ -25,7 +27,7 @@ MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) { }
 void MainWindow::writeWidgetSettingToFile( ) {
 	saveMainWindowSetting( );
 	// 写入播放列表
-	playListWidget->writeJsonPathInfo( );
+	playerWindow->writeJsonPathInfo( );
 	// 写入配置信息
 	settingWidget->writeJsonPathInfo( );
 }
@@ -37,7 +39,7 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 }
 bool MainWindow::loadSettingWidgetInfoAtFile( ) {
 	// 加载播放列表
-	playListWidget->loadJsonPathInfo( );
+	playerWindow->loadJsonPathInfo( );
 	// 记载配置列表
 	settingWidget->loadJsonPathInfo( );
 	return true;
@@ -71,17 +73,8 @@ bool MainWindow::initStackedWidget( ) {
 	mainStackedWidget = new QStackedWidget( this );
 	setCentralWidget( mainStackedWidget );
 
-	playListWidgetScrollArea = new QScrollArea( mainStackedWidget );
-	playListWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	playListWidgetScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	playListWidgetScrollArea->setWidgetResizable( true );
-	playListWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
-
-	mainStackedWidget->addWidget( playListWidgetScrollArea );
-
-	playListWidget = new PlayListWidget( playListWidgetScrollArea );
-	playListWidget->adjustSize( );
-	playListWidgetScrollArea->setWidget( playListWidget );
+	playerWindow = new PlayerWindow( mainStackedWidget );
+	mainStackedWidget->addWidget( playerWindow );
 
 	settingWidget = new SettingWidget( mainStackedWidget );
 	mainStackedWidget->addWidget( settingWidget );
@@ -127,24 +120,9 @@ bool MainWindow::initDockWidget( ) {
 bool MainWindow::initMainWindowSetting( ) {
 	// 获取 json 路径
 	auto mainWindowJsonFile = jsonFileKey->getMainWindowSettingJsonPath( );
-	// 查看是否存在
-	QFileInfo info( mainWindowJsonFile );
-	if( info.exists( ) == false )
-		return true;
-	// 读取文件
-	QFile readJson( mainWindowJsonFile );
-	if( readJson.open( QIODeviceBase::ReadOnly ) == false )
-		return true;
-	auto jsonFileAllData = readJson.readAll( );
-
-	QJsonParseError jsonParseError;
 	QJsonObject mainWindowSettingJsonObject;
-	// 转化文件
-	auto fromFileDataToDoc = QJsonDocument::fromJson( jsonFileAllData, &jsonParseError );
-	if( jsonParseError.error != QJsonParseError::ParseError::NoError )
+	if( PathTools::readJsonObject( mainWindowSettingJsonObject, mainWindowJsonFile ) == false )
 		return true;
-	// 转换对象
-	mainWindowSettingJsonObject = fromFileDataToDoc.object( );
 	// 匹配 x
 	int x = this->x( );
 	// 匹配 y
@@ -180,7 +158,7 @@ bool MainWindow::initMainWindowSetting( ) {
 }
 bool MainWindow::initConnect( ) {
 	connect( showPlayListWidgetBtn, &QPushButton::clicked, [this]( ) {
-		mainStackedWidget->setCurrentWidget( playListWidgetScrollArea );
+		mainStackedWidget->setCurrentWidget( playerWindow );
 	} );
 	connect( showSettingWidgetBtn, &QPushButton::clicked, [this]( ) {
 		mainStackedWidget->setCurrentWidget( settingWidget );
@@ -192,35 +170,14 @@ bool MainWindow::initConnect( ) {
 }
 bool MainWindow::saveMainWindowSetting( ) {
 
-	// 获取 json 路径
-	auto mainWindowJsonFile = jsonFileKey->getMainWindowSettingJsonPath( );
-	// 查看是否存在
-	QFileInfo info( mainWindowJsonFile );
-	if( info.exists( ) == false ) {
-		// 创建
-		auto dir = info.dir( );
-		auto absolutePath = dir.absolutePath( );
-		bool mkdir = dir.mkdir( absolutePath );
-		if( mkdir == false ) {
-			Message_Error_Out << appTranslate->getCreateDirError( ) + " : " << absolutePath;
-			return false;
-		}
-	}
-	QFile openFile( mainWindowJsonFile );
-	bool open = openFile.open( QIODeviceBase::ReadWrite | QIODeviceBase::Truncate );
-	if( open == false ) {
-		Message_Error_Out << appTranslate->getOpenFileError( ) + " : " << mainWindowJsonFile;
-		return false;
-	}
-
 	QJsonObject wirteJsonObject;
 	wirteJsonObject.insert( jsonFileKey->getMainWindowPointXPos( ), x( ) );
 	wirteJsonObject.insert( jsonFileKey->getMainWindowPointYPos( ), y( ) );
 	wirteJsonObject.insert( jsonFileKey->getMainWindowSizeWidth( ), width( ) );
 	wirteJsonObject.insert( jsonFileKey->getMainWindowSizeHeight( ), height( ) );
 
-	QJsonDocument writeJsonDoc( wirteJsonObject );
-	auto jsonData = writeJsonDoc.toJson( );
-	openFile.write( jsonData );
+	// 获取 json 路径
+	auto mainWindowJsonFile = jsonFileKey->getMainWindowSettingJsonPath( );
+	PathTools::writeJsonObject( wirteJsonObject, mainWindowJsonFile );
 	return true;
 }

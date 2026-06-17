@@ -1,7 +1,13 @@
 ﻿#include "pathTools.h"
 
+#include <QJsonObject>
+#include <qjsondocument.h>
+#include <qjsonparseerror.h>
+
 #include "../application/appInstance.h"
 #include "../application/musicDecoder.h"
+
+#include "../msgInfo/messageErrorOut.h"
 
 namespace entryList {
 	namespace sort {
@@ -155,7 +161,7 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStrin
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
 	auto applicationInstance = AppInstance::getAppInstance( );
-	auto musicDecoder = applicationInstance->getMusicDecoder(  );
+	auto musicDecoder = applicationInstance->getMusicDecoder( );
 	for( index = 0; index < count; ++index )
 		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];
@@ -163,4 +169,43 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStrin
 		}
 	result_get_path.resize( resultCount );
 	return resultCount;
+}
+bool PathTools::readJsonObject( QJsonObject &result_json_object, const QString &json_file_path ) {
+	// 查看是否存在
+	QFileInfo info( json_file_path );
+	if( info.exists( ) == false )
+		return false;
+	// 读取文件
+	QFile readJson( json_file_path );
+	if( readJson.open( QIODeviceBase::ReadOnly ) == false )
+		return false;
+	auto jsonFileAllData = readJson.readAll( );
+
+	QJsonParseError jsonParseError;
+	// 转化文件
+	auto fromFileDataToDoc = QJsonDocument::fromJson( jsonFileAllData, &jsonParseError );
+	if( jsonParseError.error != QJsonParseError::ParseError::NoError )
+		return false;
+	// 转换对象
+	result_json_object = fromFileDataToDoc.object( );
+
+	return true;
+}
+bool PathTools::writeJsonObject( const QJsonObject &result_json_object, const QString &json_file_path ) {
+
+	QFileInfo info( json_file_path );
+	if( info.exists( ) == false ) {
+		QDir dir = info.dir( );
+		auto absolutePathDir = dir.absolutePath( );
+		if( dir.exists( absolutePathDir ) == false )
+			if( dir.mkdir( absolutePathDir ) == false )
+				return false;
+	}
+	QFile file( json_file_path );
+	if( file.open( QIODeviceBase::WriteOnly ) == false )
+		return false;
+	QJsonDocument writeJsonDocument( result_json_object );
+	auto byteArray = writeJsonDocument.toJson( );
+	file.write( byteArray );
+	return true;
 }

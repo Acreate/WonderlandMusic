@@ -21,5 +21,9 @@ bool JsonFileKey::init( ) {
 	musicInfoSinger = "music.singer";
 	musicInfoDuration = "music.duartion";
 
+	playerWindowSettingJsonPath = applicationDirPath + "/program/json/app.window.player.work.select.info.json";
+	playerWindowFileSelectWorkPath = "window.player.path.file.select";
+	playerWindowDirSelectWorkPath = "window.player.path.dir.select";
+
 	return true;
 }

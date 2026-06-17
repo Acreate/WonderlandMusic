@@ -2,6 +2,7 @@
 #define MAINWINDOW_H_H_HEAD__FILE__
 
 #include <QMainWindow>
+class PlayerWindow;
 class QScrollArea;
 class QPushButton;
 class JsonFileKey;
@@ -22,10 +23,8 @@ protected:
 	const JsonFileKey *jsonFileKey;
 	/// @brief 配置主显示组件-层叠
 	QStackedWidget *mainStackedWidget;
-	/// @brief 播放列表的滚动容器
-	QScrollArea *playListWidgetScrollArea;
-	/// @brief 在层叠组件配置播放组件
-	PlayListWidget *playListWidget;
+	/// @brief 播放窗口
+	PlayerWindow *playerWindow;
 	/// @brief 在层叠组件配置设置组件
 	SettingWidget *settingWidget;
 	/// @brief 在层叠组件配置关于组件

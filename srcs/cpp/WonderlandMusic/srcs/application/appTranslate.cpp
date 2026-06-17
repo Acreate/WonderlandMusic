@@ -39,6 +39,13 @@ void AppTranslate::translateString( ) {
 
 	fileConverJsonDocError = QObject::tr( "文件转 QJsonDocument 对象错误" );
 	notFindJsonKey = QObject::tr( "找不到匹配的关键字" );
+
+	menuFileTitle = QObject::tr( "文件" );
+
+	ationAddMusicCollection = QObject::tr( "添加到集" );
+	actionRemoveMusicCollection = QObject::tr( "从集中删除" );
+	
+	musicTypeName = QObject::tr( "音频" );
 }
 bool AppTranslate::init( ) {
 	setCodecForLocale( );

@@ -18,6 +18,10 @@ protected:
 	QString musicInfoName;
 	QString musicInfoSinger;
 	QString musicInfoDuration;
+
+	QString playerWindowSettingJsonPath;
+	QString playerWindowFileSelectWorkPath;
+	QString playerWindowDirSelectWorkPath;
 public:
 	virtual ~JsonFileKey( ) = default;
 	JsonFileKey( );
@@ -35,6 +39,9 @@ public:
 	virtual const QString & getMusicInfoListCount( ) const { return musicInfoListCount; }
 	virtual const QString & getMusicInfoListName( ) const { return musicInfoListName; }
 	virtual const QString & getMusicInfoListIndex( ) const { return musicInfoListIndex; }
+	virtual const QString & getPlayerWindowSettingJsonPath( ) const { return playerWindowSettingJsonPath; }
+	virtual const QString & getPlayerWindowFileSelectWorkPath( ) const { return playerWindowFileSelectWorkPath; }
+	virtual const QString & getPlayerWindowDirSelectWorkPath( ) const { return playerWindowDirSelectWorkPath; }
 };
 
 #endif // JSONFILEKEY_H_H_HEAD__FILE__

@@ -21,6 +21,9 @@ public:
 	static qsizetype filterDir( QStringList &result_get_path, const QStringList &entry_path );
 
 	static qsizetype filterMusicFile( QStringList &result_get_path, const QStringList &entry_path );
+
+	static bool readJsonObject( QJsonObject &result_json_object, const QString &json_file_path );
+	static bool writeJsonObject( const QJsonObject &result_json_object, const QString &json_file_path );
 };
 
 #endif // PATHTOOLS_H_H_HEAD__FILE__

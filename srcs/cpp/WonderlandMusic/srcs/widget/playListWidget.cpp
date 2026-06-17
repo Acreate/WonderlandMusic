@@ -5,7 +5,6 @@
 #include <QMediaPlayer>
 #include <QMediaMetaData>
 #include <QUrl>
-#include <qjsondocument.h>
 #include <QMutex>
 #include <QPainter>
 
@@ -38,7 +37,35 @@ PlayListWidget::~PlayListWidget( ) {
 }
 PlayListWidget::PlayListWidget( QWidget *parent ) : QWidget( parent ) {
 	loadMusicFileMutex = new QMutex;
-	splitWidth = 4;
+	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
+	updateSize( );
+}
+void PlayListWidget::setItemWidth( int splite_width, int music_name_width, int music_singer_width, int music_duration_width ) {
+	splitWidth = splite_width;
+	musicNameWidth = music_name_width;
+	musicSingerWidth = music_singer_width;
+	musicDurationWidth = music_duration_width;
+	updateSize( );
+}
+int PlayListWidget::getSplitWidth( ) const { return splitWidth; }
+void PlayListWidget::setSplitWidth( const int split_width ) {
+	splitWidth = split_width;
+	updateSize( );
+}
+int PlayListWidget::getMusicNameWidth( ) const { return musicNameWidth; }
+void PlayListWidget::setMusicNameWidth( const int music_name_width ) {
+	musicNameWidth = music_name_width;
+	updateSize( );
+}
+int PlayListWidget::getMusicSingerWidth( ) const { return musicSingerWidth; }
+void PlayListWidget::setMusicSingerWidth( const int music_singer_width ) {
+	musicSingerWidth = music_singer_width;
+	updateSize( );
+}
+int PlayListWidget::getMusicDurationWidth( ) const { return musicDurationWidth; }
+void PlayListWidget::setMusicDurationWidth( const int format_string_duration_width ) {
+	musicDurationWidth = format_string_duration_width;
+	updateSize( );
 }
 bool PlayListWidget::loadJsonPathInfo( ) {
 
@@ -315,6 +342,11 @@ bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicIn
 	int formatStringDurationeWidth = fontMetrics->horizontalAdvance( formatStringDuration );
 	return renderAtMusicInfoItem( result_render_image, render_target, itemHeight, split_width, musicNameWidth, musicSingerWidth, formatStringDurationeWidth, font );
 }
+void PlayListWidget::updateSize( ) {
+
+	int imageWidth = splitWidth * 4 + musicNameWidth + musicSingerWidth + musicDurationWidth;
+	setFixedWidth( imageWidth );
+}
 bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const {
 	if( item_font == nullptr )
 		return false;
@@ -368,4 +400,11 @@ void PlayListWidget::paintEvent( QPaintEvent *event ) {
 	int itemWidth = contentsRect.width( );
 
 	event->accept( );
+}
+void PlayListWidget::resizeEvent( QResizeEvent *event ) {
+
+	auto size = event->size( );
+	currentWidgetHeight = size.height( );
+	currentWidgetWidth = size.width( );
+
 }

@@ -38,14 +38,15 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getTranslate( );
 	auto fileMenu = windowMenuBar->addMenu( appTranslate->getMenuFileTitle( ) );
-	auto addMultiFileMusicToCollectionAction = fileMenu->addAction( appTranslate->getAtionAddMusicCollection( ) );
-	auto removeMultiMusicItemAtCollectionAction = fileMenu->addAction( appTranslate->getActionRemoveMusicCollection( ) );
+	auto addMultiFileMusicToCollectionAction = fileMenu->addAction( appTranslate->getActionAddMultiMusicFileToCollection( ) );
+	auto addMultiMusicDirToCollection = fileMenu->addAction( appTranslate->getActionAddMultiMusicDirToCollection( ) );
+	auto removeMultiMusicItemAtCollectionAction = fileMenu->addAction( appTranslate->getActionRemoveMultiMusicAtCollection( ) );
 
 	connect( addMultiFileMusicToCollectionAction, &QAction::triggered, [this]( ) {
 		QFileDialog dialog( this );
 		dialog.setWindowTitle( tr( "多选文件" ) );
 		dialog.setDirectory( fileSelectWorkPath );
-		dialog.setFileMode( QFileDialog::ExistingFiles ); // 关键：允许多选多个已有文件
+		dialog.setFileMode( QFileDialog::ExistingFiles );
 
 		auto appInstance = AppInstance::getAppInstance( );
 		auto musicDecoder = appInstance->getMusicDecoder( );
@@ -70,6 +71,27 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 		if( dialog.exec( ) != QDialog::Accepted )
 			return;
 		QStringList files = dialog.selectedFiles( );
+		QFileInfo fileInfo( files[ 0 ] );
+		auto dir = fileInfo.dir( );
+		fileSelectWorkPath = dir.absolutePath( );
+	} );
+
+	connect( addMultiMusicDirToCollection, &QAction::triggered, [this]( ) {
+		QFileDialog dialog( this );
+		dialog.setWindowTitle( tr( "选择目录" ) );
+		dialog.setDirectory( dirSelectWorkPath );
+		dialog.setFileMode( QFileDialog::Directory );
+
+		QRect geometry = this->geometry( );
+		auto curentWindowSize = geometry.size( );
+		dialog.resize( curentWindowSize );
+		auto center = geometry.center( );
+		center = mapToGlobal( center );
+		WidgetTools::moveWidgetToCenterPos( center, &dialog );
+		if( dialog.exec( ) != QDialog::Accepted )
+			return;
+		QStringList files = dialog.selectedFiles( );
+		dirSelectWorkPath = files[ 0 ];
 	} );
 }
 bool PlayerWindow::loadJsonPathInfo( ) {

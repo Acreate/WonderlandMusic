@@ -43,9 +43,10 @@ protected:
 
 	QString menuFileTitle;
 
-	QString ationAddMusicCollection;
-	QString actionRemoveMusicCollection;
-	
+	QString actionAddMultiMusicFileToCollection;
+	QString actionAddMultiMusicDirToCollection;
+	QString actionRemoveMultiMusicAtCollection;
+
 	QString musicTypeName;
 protected:
 	void setCodecForLocale( );
@@ -78,8 +79,9 @@ public:
 	virtual const QString & getReadFileError( ) const { return readFileError; }
 	virtual const QString & getFileConverJsonDocError( ) const { return fileConverJsonDocError; }
 	virtual const QString & getNotFindJsonKey( ) const { return notFindJsonKey; }
-	virtual const QString & getAtionAddMusicCollection( ) const { return ationAddMusicCollection; }
-	virtual const QString & getActionRemoveMusicCollection( ) const { return actionRemoveMusicCollection; }
+	virtual const QString & getActionAddMultiMusicFileToCollection( ) const { return actionAddMultiMusicFileToCollection; }
+	virtual const QString & getActionAddMultiMusicDirToCollection( ) const { return actionAddMultiMusicDirToCollection; }
+	virtual const QString & getActionRemoveMultiMusicAtCollection( ) const { return actionRemoveMultiMusicAtCollection; }
 	virtual const QString & getMenuFileTitle( ) const { return menuFileTitle; }
 	virtual const QString & getMusicTypeName( ) const { return musicTypeName; }
 };

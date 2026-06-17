@@ -42,9 +42,10 @@ void AppTranslate::translateString( ) {
 
 	menuFileTitle = QObject::tr( "文件" );
 
-	ationAddMusicCollection = QObject::tr( "添加到集" );
-	actionRemoveMusicCollection = QObject::tr( "从集中删除" );
-	
+	actionAddMultiMusicFileToCollection = QObject::tr( "添加文件列表到集" );
+	actionAddMultiMusicDirToCollection = QObject::tr( "添加目录列表到集" );
+	actionRemoveMultiMusicAtCollection = QObject::tr( "把文件列表从集中删除" );
+
 	musicTypeName = QObject::tr( "音频" );
 }
 bool AppTranslate::init( ) {

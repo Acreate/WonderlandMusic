@@ -1,5 +1,6 @@
 ﻿#include "playerWindow.h"
 
+#include <QDockWidget>
 #include <QScrollArea>
 #include <QMenuBar>
 #include <QFileDialog>
@@ -14,9 +15,17 @@
 #include "../tools/widgetTools.h"
 
 #include "../widget/playListWidget.h"
-PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
+#include "../widget/playerListTopWidget.h"
 
+PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	setWindowFlags( Qt::WindowType::Widget );
+	topDocWidget = new QDockWidget( this );
+	topDocWidget->setAllowedAreas( Qt::TopDockWidgetArea );
+	addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, topDocWidget );
+	topDocWidget->setTitleBarWidget( new QWidget( topDocWidget ) );
+	topDocWidget->setContentsMargins( 0, 0, 0, 0 );
+	playerListTopWidget = new PlayerListTopWidget( topDocWidget );
+	topDocWidget->setWidget( playerListTopWidget );
 
 	playListWidgetScrollArea = new QScrollArea( this );
 	playListWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
@@ -77,7 +86,7 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 		auto dir = fileInfo.dir( );
 		fileSelectWorkPath = dir.absolutePath( );
 		for( index = 0; index < count; index += 1 )
-			playListWidget->fromFileLoadItemInfo( data[ index ] );
+			playListWidget->fromFileLoadItemInfo( selectFileData[ index ] );
 	} );
 
 	connect( addMultiMusicDirToCollection, &QAction::triggered, [this]( ) {
@@ -98,8 +107,8 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 		dirSelectWorkPath = files[ 0 ];
 	} );
 }
-bool PlayerWindow::loadJsonPathInfo( ) {
 
+bool PlayerWindow::loadJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 	QJsonObject jsonObject;
@@ -119,9 +128,12 @@ bool PlayerWindow::loadJsonPathInfo( ) {
 		else
 			dirSelectWorkPath = QDir::currentPath( );
 	}
-
-	return playListWidget->loadJsonPathInfo( );
+	playerListTopWidget->loadJsonPathInfo( );
+	playListWidget->setItemWidth( playerListTopWidget );
+	playListWidget->loadJsonPathInfo( );
+	return true;
 }
+
 bool PlayerWindow::writeJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );

@@ -7,6 +7,9 @@
 #include <QUrl>
 #include <QMutex>
 #include <QPainter>
+#include <QThread>
+
+#include "playerListTopWidget.h"
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
@@ -15,7 +18,11 @@
 
 #include "../item/musicInfoItem.h"
 
+#include "../itemWidget/musicInfoItemWidget.h"
+
 #include "../msgInfo/messageErrorOut.h"
+
+#include "../thread/widgetThread.h"
 
 #include "../tools/pathTools.h"
 
@@ -31,44 +38,71 @@ void PlayListWidget::clearMusicInfoVector( ) {
 	}
 	loadMusicFileMutex->unlock( );
 }
+
 PlayListWidget::~PlayListWidget( ) {
 	clearMusicInfoVector( );
 	delete loadMusicFileMutex;
 }
+
 PlayListWidget::PlayListWidget( QWidget *parent ) : QWidget( parent ) {
 	loadMusicFileMutex = new QMutex;
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
-	updateSize( );
+	updateItemWidget( );
 }
+
+void PlayListWidget::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {
+	int splitWidth = player_list_top_widget->getSplitWidth( );
+	int musicNameWidth = player_list_top_widget->getMusicNameWidth( );
+	int musicSingerWidth = player_list_top_widget->getMusicSingerWidth( );
+	int musicDurationWidth = player_list_top_widget->getMusicDurationWidth( );
+	setItemWidth( splitWidth, musicNameWidth, musicSingerWidth, musicDurationWidth );
+}
+
 void PlayListWidget::setItemWidth( int splite_width, int music_name_width, int music_singer_width, int music_duration_width ) {
 	splitWidth = splite_width;
 	musicNameWidth = music_name_width;
 	musicSingerWidth = music_singer_width;
 	musicDurationWidth = music_duration_width;
-	updateSize( );
+	updateItemWidget( );
 }
-int PlayListWidget::getSplitWidth( ) const { return splitWidth; }
+
+int PlayListWidget::getSplitWidth( ) const {
+	return splitWidth;
+}
+
 void PlayListWidget::setSplitWidth( const int split_width ) {
 	splitWidth = split_width;
-	updateSize( );
+	updateItemWidget( );
 }
-int PlayListWidget::getMusicNameWidth( ) const { return musicNameWidth; }
+
+int PlayListWidget::getMusicNameWidth( ) const {
+	return musicNameWidth;
+}
+
 void PlayListWidget::setMusicNameWidth( const int music_name_width ) {
 	musicNameWidth = music_name_width;
-	updateSize( );
+	updateItemWidget( );
 }
-int PlayListWidget::getMusicSingerWidth( ) const { return musicSingerWidth; }
+
+int PlayListWidget::getMusicSingerWidth( ) const {
+	return musicSingerWidth;
+}
+
 void PlayListWidget::setMusicSingerWidth( const int music_singer_width ) {
 	musicSingerWidth = music_singer_width;
-	updateSize( );
+	updateItemWidget( );
 }
-int PlayListWidget::getMusicDurationWidth( ) const { return musicDurationWidth; }
+
+int PlayListWidget::getMusicDurationWidth( ) const {
+	return musicDurationWidth;
+}
+
 void PlayListWidget::setMusicDurationWidth( const int format_string_duration_width ) {
 	musicDurationWidth = format_string_duration_width;
-	updateSize( );
+	updateItemWidget( );
 }
-bool PlayListWidget::loadJsonPathInfo( ) {
 
+bool PlayListWidget::loadJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 	auto fileJsonPath = jsonFileKey->getMusicPlayerListInfoFileJsonPath( );
@@ -76,25 +110,24 @@ bool PlayListWidget::loadJsonPathInfo( ) {
 	if( PathTools::readJsonObject( fileJsonObject, fileJsonPath ) == false )
 		return true;
 	auto end = fileJsonObject.end( );
-	auto find = fileJsonObject.find( jsonFileKey->getMusicInfoListCount( ) );
-	if( end == find ) {
-		Message_Error_Out << appInstance->getTranslate( )->getNotFindJsonKey( ) + " : " + jsonFileKey->getMusicInfoListCount( );
-		return true;
-	}
+	QJsonObject::iterator find;
 
+	find = fileJsonObject.find( jsonFileKey->getMusicInfoListCount( ) );
+	if( end == find )
+		return true;
 	qint64 count = find.value( ).toInteger( );
+	if( count == 0 )
+		return true;
+	find = fileJsonObject.find( jsonFileKey->getMusicInfoListName( ) );
+	if( end == find )
+		return true;
 
 	QJsonObject subJsonObject;
-	find = fileJsonObject.find( jsonFileKey->getMusicInfoListName( ) );
-	if( end == find ) {
-		Message_Error_Out << appInstance->getTranslate( )->getNotFindJsonKey( ) + " : " + jsonFileKey->getMusicInfoListCount( );
-		return true;
-	}
 	subJsonObject = find.value( ).toObject( );
 	auto foreachIterator = subJsonObject.begin( );
 	auto foreachEnd = subJsonObject.end( );
 
-	QVector< MusicInfoItem * > buff( count, nullptr );
+	decltype(musicInfoVector) buff( count, nullptr );
 	auto maxIndex = count - 1;
 	auto data = buff.data( );
 	for( ; foreachIterator != foreachEnd; ++foreachIterator ) {
@@ -106,7 +139,7 @@ bool PlayListWidget::loadJsonPathInfo( ) {
 		if( converResultIndex > maxIndex )
 			continue;
 		auto musicInfoJsonObject = foreachIterator.value( ).toObject( );
-		auto ctreaItem = new MusicInfoItem( );
+		auto ctreaItem = new MusicInfoItemWidget( this );
 		if( MusicInfoItem::forJsonObject( *ctreaItem, musicInfoJsonObject ) == false ) {
 			delete ctreaItem;
 			continue;
@@ -117,7 +150,7 @@ bool PlayListWidget::loadJsonPathInfo( ) {
 
 	loadMusicFileMutex->lock( );
 	auto oldCount = musicInfoVector.size( );
-	QVector< MusicInfoItem * > releaseVector( oldCount, nullptr );
+	decltype(musicInfoVector) releaseVector( oldCount, nullptr );
 	auto buffToData = releaseVector.data( );
 	auto copyToData = musicInfoVector.data( );
 	for( maxIndex = 0; maxIndex < oldCount; maxIndex += 1 )
@@ -132,10 +165,13 @@ bool PlayListWidget::loadJsonPathInfo( ) {
 		delete buffToData[ maxIndex ];
 	return true;
 }
-bool PlayListWidget::writeJsonPathInfo( ) {
 
+bool PlayListWidget::writeJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
+
+	QJsonObject fileJsonObject;
+
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	if( count == 0 ) {
@@ -143,14 +179,12 @@ bool PlayListWidget::writeJsonPathInfo( ) {
 		return true;
 	}
 	auto sourceData = musicInfoVector.data( );
-	QVector< MusicInfoItem * > buff( count );
+	decltype(musicInfoVector) buff( count );
 	auto destData = buff.data( );
 	qsizetype index = 0;
 	for( ; index < count; index += 1 )
 		destData[ index ] = sourceData[ index ];
 	loadMusicFileMutex->unlock( );
-
-	QJsonObject fileJsonObject;
 	fileJsonObject.insert( jsonFileKey->getMusicInfoListCount( ), count );
 
 	QJsonObject arrayJsonObject;
@@ -168,8 +202,8 @@ bool PlayListWidget::writeJsonPathInfo( ) {
 	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
 	return true;
 }
-bool PlayListWidget::appendItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, const qint64 &duration ) {
 
+bool PlayListWidget::appendItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, const qint64 &duration ) {
 	QFileInfo fileInfo( music_file_path );
 	bool resultBool = true;
 	auto absFilePath = fileInfo.absoluteFilePath( );
@@ -192,15 +226,13 @@ bool PlayListWidget::appendItem( const QString &music_file_path, const QString &
 		qsizetype index = 0;
 		for( ; index < count; index += 1 )
 			if( data[ index ]->getMusicFilePath( ) == absFilePath ) {
-
 				loadMusicFileMutex->unlock( );
 				return false; // 已经在完成列表
 			}
-
 	}
 
 	loadMusicFileMutex->unlock( );
-	auto musicInfoItemWidget = new MusicInfoItem( );
+	auto musicInfoItemWidget = new MusicInfoItemWidget( this );
 	if( musicInfoItemWidget->init( music_file_path, music_name, music_singer, duration ) == false ) {
 		delete musicInfoItemWidget;
 		return false;
@@ -211,6 +243,7 @@ bool PlayListWidget::appendItem( const QString &music_file_path, const QString &
 	loadMusicFileMutex->unlock( );
 	return true;
 }
+
 bool PlayListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 	QFileInfo fileInfo( music_file_path );
 	bool resultBool = fileInfo.exists( );
@@ -228,19 +261,19 @@ bool PlayListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 				resultBool = false;
 				break; // 存在
 			}
-
 	}
 	// 在等待完成列表没找到，则在完成列表匹配
 	if( resultBool ) {
 		count = musicInfoVector.size( );
-		auto data = musicInfoVector.data( );
-		qsizetype index = 0;
-		for( ; index < count; index += 1 )
-			if( data[ index ]->getMusicFilePath( ) == absFilePath ) {
-				resultBool = false;
-				break; // 存在
-			}
-
+		if( count ) {
+			auto data = musicInfoVector.data( );
+			qsizetype index = 0;
+			for( ; index < count; index += 1 )
+				if( data[ index ]->getMusicFilePath( ) == absFilePath ) {
+					resultBool = false;
+					break; // 存在
+				}
+		}
 	}
 	// 都找不到，则加入等待列表
 	if( resultBool )
@@ -269,7 +302,7 @@ bool PlayListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 				}
 			count = loadMusicFileHistory.size( );
 		}
-		MusicInfoItem *itemWidget = new MusicInfoItem( );
+		MusicInfoItemWidget *itemWidget = new MusicInfoItemWidget( this );
 		musicInfoVector.emplace_back( itemWidget );
 		loadMusicFileMutex->unlock( );
 		QMediaMetaData mediaMetaData = mediaPlayer->metaData( );
@@ -277,16 +310,18 @@ bool PlayListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 		itemWidget->parentPlayListWidget = this;
 		mediaPlayer->deleteLater( );
 		if( count == 0 )
-			repaint( );
+			updateItemWidget( );
 	} );
 	return true;
 }
-QVector< MusicInfoItem * > PlayListWidget::getMusicInfoVector( ) const {
+
+QVector< MusicInfoItemWidget * > PlayListWidget::getMusicInfoVector( ) const {
 	loadMusicFileMutex->lock( );
-	QVector< MusicInfoItem * > result = musicInfoVector;
+	decltype(musicInfoVector) result = musicInfoVector;
 	loadMusicFileMutex->unlock( );
 	return result;
 }
+
 QVector< QString > PlayListWidget::getListMusicFile( ) const {
 	QVector< QString > result;
 	loadMusicFileMutex->lock( );
@@ -308,8 +343,8 @@ QVector< QString > PlayListWidget::getListMusicFile( ) const {
 	loadMusicFileMutex->unlock( );
 	return result;
 }
-bool PlayListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {
 
+bool PlayListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	auto data = musicInfoVector.data( );
@@ -327,8 +362,8 @@ bool PlayListWidget::renderMusicInfoItem( QImage &result_render_image, const Mus
 bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target ) const {
 	return renderAtMusicInfoItem( result_render_image, render_target, splitWidth );
 }
-bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int split_width ) const {
 
+bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int split_width ) const {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto renderImage = appInstance->getRenderImage( );
 	auto font = renderImage->getFont( );
@@ -342,11 +377,32 @@ bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicIn
 	int formatStringDurationeWidth = fontMetrics->horizontalAdvance( formatStringDuration );
 	return renderAtMusicInfoItem( result_render_image, render_target, itemHeight, split_width, musicNameWidth, musicSingerWidth, formatStringDurationeWidth, font );
 }
-void PlayListWidget::updateSize( ) {
 
-	int imageWidth = splitWidth * 4 + musicNameWidth + musicSingerWidth + musicDurationWidth;
-	setFixedWidth( imageWidth );
+void PlayListWidget::updateItemWidget( ) {
+	int offsetY = 0;
+	auto appInstance = AppInstance::getAppInstance( );
+	auto renderImage = appInstance->getRenderImage( );
+	auto fontMetrics = renderImage->getFontMetrics( );
+	int height = fontMetrics->height( );
+	int width = this->width( );
+	loadMusicFileMutex->lock( );
+	qsizetype count = musicInfoVector.size( );
+	auto data = musicInfoVector.data( );
+	qsizetype index;
+	for( index = 0; index < count; index += 1 ) {
+		auto itemWidget = data[ index ];
+		itemWidget->splitWidth = this->splitWidth;
+		itemWidget->musicNameWidth = this->musicNameWidth;
+		itemWidget->musicSingerWidth = this->musicSingerWidth;
+		itemWidget->musicDurationWidth = this->musicDurationWidth;
+		itemWidget->setGeometry( 0, offsetY, width, height );
+		itemWidget->update( );
+		offsetY += height;
+	}
+
+	loadMusicFileMutex->unlock( );
 }
+
 bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const {
 	if( item_font == nullptr )
 		return false;
@@ -369,19 +425,19 @@ bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicIn
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
 	drawOffsetX += offsetSplitX;
 	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( name_item_width, item_height ) );
-	painter.drawText( drawRect, render_target->getMusicName( ) );
+	painter.drawText( drawRect, render_target->musicName );
 	drawOffsetX += name_item_width + offsetSplitX;
 
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
 	drawOffsetX += offsetSplitX;
-	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( name_item_width, item_height ) );
-	painter.drawText( drawRect, render_target->getMusicSinger( ) );
+	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( musicSingerWidth, item_height ) );
+	painter.drawText( drawRect, render_target->musicSinger );
 	drawOffsetX += singer_item_width + offsetSplitX;
 
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
 	drawOffsetX += offsetSplitX;
-	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( name_item_width, item_height ) );
-	painter.drawText( drawRect, render_target->getFormatStringDuration( ) );
+	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( duration_item_width, item_height ) );
+	painter.drawText( drawRect, render_target->formatStringDuration );
 	drawOffsetX += duration_item_width + offsetSplitX;
 
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
@@ -390,21 +446,13 @@ bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicIn
 	result_render_image = buff;
 	return true;
 }
+
 void PlayListWidget::paintEvent( QPaintEvent *event ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto renderImage = appInstance->getRenderImage( );
-	auto fontMetrics = renderImage->getFontMetrics( );
-
-	int itemHeight = fontMetrics->height( );
-	QRect contentsRect = this->contentsRect( );
-	int itemWidth = contentsRect.width( );
-
-	event->accept( );
 }
-void PlayListWidget::resizeEvent( QResizeEvent *event ) {
 
+void PlayListWidget::resizeEvent( QResizeEvent *event ) {
 	auto size = event->size( );
 	currentWidgetHeight = size.height( );
 	currentWidgetWidth = size.width( );
-
+	//repaint( );
 }

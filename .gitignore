@@ -12,7 +12,5 @@ _deps
 /builder
 /.vs
 /out
-/CMakePresets.json
-/CMakeUserPresets.json
 cmake_generate
 auto_generate_files

@@ -11,7 +11,7 @@
         "CMAKE_CXX_FLAGS": "-DQT_QML_DEBUG"
       },
       "environment": {
-        "QML_DEBUG_ARGS": "-qmljsdebugger=file:{41a4e6cd-b676-4514-bb58-6737f8b4d123},block"
+        "QML_DEBUG_ARGS": "-qmljsdebugger=file:{6a65d31e-cb1c-411f-989e-3e2e7228f6b0},block"
       }
     },
     {
@@ -41,7 +41,7 @@
         "QTDIR": "C:/Qt/6.11.1/msvc2022_64"
       },
       "architecture": {
-        "strategy": "external",
+        "strategy": "set",
         "value": "x64"
       },
       "generator": "Visual Studio 17 2022",
@@ -54,7 +54,7 @@
   ],
   "vendor": {
     "qt-project.org/Presets": {
-      "checksum": "KRftc6l1nXw4PcQXmFBxbhL5kCE="
+      "checksum": "FRTfVuh4VSXGgwghkzSwByC4NQc="
     }
   }
 }

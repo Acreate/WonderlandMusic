@@ -11,7 +11,7 @@ protected:
 	int musicDurationWidth;
 	bool isDrag;
 	Qt::CursorShape cursorShape;
-
+	
 public:
 	PlayerListTopWidget( QWidget *parent );
 

@@ -21,6 +21,9 @@ protected:
 	int dragWidth;
 	int dragBeforeX;
 
+protected:
+	virtual void updateCurrentWingetWidth( );
+
 public:
 	PlayerListTopWidget( QWidget *parent );
 

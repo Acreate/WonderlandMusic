@@ -1,10 +1,11 @@
 ﻿#include "playerWindow.h"
 
 #include <QDockWidget>
-#include <QScrollArea>
+#include <QScrollBar>
 #include <QMenuBar>
 #include <QFileDialog>
 #include <QJsonObject>
+#include <QScrollArea>
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
@@ -19,13 +20,23 @@
 
 PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	setWindowFlags( Qt::WindowType::Widget );
+
 	topDocWidget = new QDockWidget( this );
 	topDocWidget->setAllowedAreas( Qt::TopDockWidgetArea );
 	addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, topDocWidget );
 	topDocWidget->setTitleBarWidget( new QWidget( topDocWidget ) );
 	topDocWidget->setContentsMargins( 0, 0, 0, 0 );
-	playerListTopWidget = new PlayerListTopWidget( topDocWidget );
-	topDocWidget->setWidget( playerListTopWidget );
+
+	playerListTopWidgetScrollArea = new QScrollArea( this );
+	playerListTopWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	playerListTopWidgetScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+	playerListTopWidgetScrollArea->setWidgetResizable( true );
+	playerListTopWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
+	playerListTopWidgetScrollArea->verticalScrollBar( )->setEnabled( false );
+	topDocWidget->setWidget( playerListTopWidgetScrollArea );
+
+	playerListTopWidget = new PlayerListTopWidget( playerListTopWidgetScrollArea );
+	playerListTopWidgetScrollArea->setWidget( playerListTopWidget );
 
 	playListWidgetScrollArea = new QScrollArea( this );
 	playListWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
@@ -107,8 +118,13 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 		dirSelectWorkPath = files[ 0 ];
 	} );
 	connect( playerListTopWidget, &PlayerListTopWidget::changedWidth, [this]( ) {
+		//playerListTopWidgetScrollArea->setFixedHeight( playerListTopWidget->height( ) );
+		int width = playerListTopWidget->width( );
 		playListWidget->setItemWidth( playerListTopWidget );
 	} );
+	auto playListHBar = playListWidgetScrollArea->horizontalScrollBar( );
+	auto topWidgetHBar = playerListTopWidgetScrollArea->horizontalScrollBar( );
+	connect( playListHBar, &QScrollBar::sliderMoved, topWidgetHBar, &QScrollBar::setValue );
 }
 
 bool PlayerWindow::loadJsonPathInfo( ) {
@@ -131,8 +147,9 @@ bool PlayerWindow::loadJsonPathInfo( ) {
 		else
 			dirSelectWorkPath = QDir::currentPath( );
 	}
-	playerListTopWidget->autoSetItemSize( );
+	playerListTopWidget->setFixedWidth( topDocWidget->width( ) );
 	playerListTopWidget->loadJsonPathInfo( );
+	playerListTopWidgetScrollArea->setFixedHeight( playerListTopWidget->height( ) );
 	playListWidget->setItemWidth( playerListTopWidget );
 	playListWidget->loadJsonPathInfo( );
 	return true;
@@ -148,7 +165,9 @@ bool PlayerWindow::writeJsonPathInfo( ) {
 	jsonObject.insert( key, dirSelectWorkPath );
 	auto path = jsonFileKey->getPlayerWindowSettingJsonPath( );
 	PathTools::writeJsonObject( jsonObject, path );
-	return playListWidget->writeJsonPathInfo( );
+	playListWidget->writeJsonPathInfo( );
+	playerListTopWidget->writeJsonPathInfo( );
+	return true;
 }
 
 void PlayerWindow::showEvent( QShowEvent *event ) {

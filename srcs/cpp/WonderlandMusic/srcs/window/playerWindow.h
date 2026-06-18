@@ -20,6 +20,8 @@ protected:
 	QString dirSelectWorkPath;
 	/// @brief 顶部容器
 	QDockWidget *topDocWidget;
+	/// @brief 播放的顶部组件的滚动容器
+	QScrollArea *playerListTopWidgetScrollArea;
 	/// @brief 播放的顶部组件
 	PlayerListTopWidget *playerListTopWidget;
 

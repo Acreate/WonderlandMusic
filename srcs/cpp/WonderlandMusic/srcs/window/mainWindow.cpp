@@ -39,7 +39,6 @@ void MainWindow::writeWidgetSettingToFile( ) {
 }
 
 MainWindow::~MainWindow( ) {
-	writeWidgetSettingToFile( );
 }
 
 MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ), isLoadJsonFile( false ) {
@@ -201,4 +200,10 @@ bool MainWindow::saveMainWindowSetting( ) {
 	auto mainWindowJsonFile = jsonFileKey->getMainWindowSettingJsonPath( );
 	PathTools::writeJsonObject( wirteJsonObject, mainWindowJsonFile );
 	return true;
+}
+
+void MainWindow::hideEvent( QHideEvent *event ) {
+	QMainWindow::hideEvent( event );
+
+	writeWidgetSettingToFile( );
 }

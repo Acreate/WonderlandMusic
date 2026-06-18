@@ -11,12 +11,16 @@
 
 #include "../tools/pathTools.h"
 
-PlayerListTopWidget::PlayerListTopWidget( QWidget *parent ) : QWidget( parent ), isDrag( false ), isReadyDrag( false ) {
-	widgetBeforeWidth = widgetAfterWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
+void PlayerListTopWidget::updateCurrentWingetWidth( ) {
+	int newWidth = widgetBeforeWidth + widgetAfterWidth + splitWidth * 4 + musicNameWidth + musicSingerWidth + musicDurationWidth;
 	AppInstance *appInstance = AppInstance::getAppInstance( );
 	auto fontMetrics = appInstance->getRenderImage( )->getFontMetrics( );
 	int currentHeight = fontMetrics->height( );
-	setFixedHeight( currentHeight );
+	setFixedSize( newWidth, currentHeight );
+}
+
+PlayerListTopWidget::PlayerListTopWidget( QWidget *parent ) : QWidget( parent ), isDrag( false ), isReadyDrag( false ) {
+	widgetBeforeWidth = widgetAfterWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	setMouseTracking( true );
 	cursorShape = Qt::ArrowCursor;
 }
@@ -52,6 +56,7 @@ bool PlayerListTopWidget::loadJsonPathInfo( ) {
 	if( find != end )
 		widgetAfterWidth = find.value( ).toInt( musicDurationWidth );
 
+	autoSetItemSize( );
 	return true;
 }
 
@@ -114,6 +119,7 @@ void PlayerListTopWidget::autoSetItemSize( ) {
 	this->musicDurationWidth = part * durationWidth;
 	this->musicSingerWidth = part * singerWidth;
 	this->musicNameWidth = residue - this->musicDurationWidth - this->musicSingerWidth;
+	updateCurrentWingetWidth( );
 	update( );
 	emit changedWidth( splitWidth, widgetBeforeWidth, musicNameWidth, musicSingerWidth, musicDurationWidth, widgetAfterWidth );
 }
@@ -181,6 +187,7 @@ void PlayerListTopWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		cursorShape = Qt::ArrowCursor;
 		setCursor( cursorShape );
 		isReadyDrag = isDrag = false;
+		updateCurrentWingetWidth( );
 		emit changedWidth( splitWidth, widgetBeforeWidth, musicNameWidth, musicSingerWidth, musicDurationWidth, widgetAfterWidth );
 	}
 }
@@ -229,6 +236,7 @@ void PlayerListTopWidget::leaveEvent( QEvent *event ) {
 		cursorShape = Qt::ArrowCursor;
 		setCursor( cursorShape );
 		isReadyDrag = isDrag = false;
+		updateCurrentWingetWidth( );
 		emit changedWidth( splitWidth, widgetBeforeWidth, musicNameWidth, musicSingerWidth, musicDurationWidth, widgetAfterWidth );
 	}
 }

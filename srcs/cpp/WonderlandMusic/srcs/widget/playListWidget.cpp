@@ -389,9 +389,15 @@ void PlayListWidget::updateItemWidget( ) {
 	auto renderImage = appInstance->getRenderImage( );
 	auto fontMetrics = renderImage->getFontMetrics( );
 	int height = fontMetrics->height( );
-	int width = this->width( ) + this->widgetBeforeWidth + this->widgetAfterWidth;
+	auto newWidth = this->widgetBeforeWidth + this->widgetAfterWidth + this->splitWidth * 4 + this->musicNameWidth + this->musicSingerWidth + this->musicDurationWidth;
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
+	if( count == 0 ) {
+		loadMusicFileMutex->unlock( );
+		if( newWidth > 0 )
+			setFixedWidth( newWidth );
+		return;
+	}
 	auto data = musicInfoVector.data( );
 	qsizetype index;
 	for( index = 0; index < count; index += 1 ) {
@@ -402,13 +408,19 @@ void PlayListWidget::updateItemWidget( ) {
 		itemWidget->musicNameWidth = this->musicNameWidth;
 		itemWidget->musicSingerWidth = this->musicSingerWidth;
 		itemWidget->musicDurationWidth = this->musicDurationWidth;
-		itemWidget->setGeometry( 0, offsetY, width, height );
+		itemWidget->setGeometry( 0, offsetY, newWidth, height );
 		itemWidget->update( );
 		itemWidget->show( );
 		offsetY += height;
 	}
 
 	loadMusicFileMutex->unlock( );
+	if( offsetY > 0 && newWidth > 0 )
+		this->setFixedSize( newWidth, offsetY );
+	else if( offsetY == 0 && newWidth > 0 )
+		setFixedWidth( newWidth );
+	else if( offsetY > 0 && newWidth == 0 )
+		setFixedHeight( offsetY );
 }
 
 bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const {

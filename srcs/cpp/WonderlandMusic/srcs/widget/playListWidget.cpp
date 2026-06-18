@@ -163,6 +163,7 @@ bool PlayListWidget::loadJsonPathInfo( ) {
 
 	for( maxIndex = 0; maxIndex < oldCount; maxIndex += 1 )
 		delete buffToData[ maxIndex ];
+	updateItemWidget( );
 	return true;
 }
 
@@ -397,6 +398,7 @@ void PlayListWidget::updateItemWidget( ) {
 		itemWidget->musicDurationWidth = this->musicDurationWidth;
 		itemWidget->setGeometry( 0, offsetY, width, height );
 		itemWidget->update( );
+		itemWidget->show( );
 		offsetY += height;
 	}
 

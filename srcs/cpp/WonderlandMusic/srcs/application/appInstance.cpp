@@ -36,8 +36,7 @@ AppInstance::~AppInstance( ) {
 bool AppInstance::init( ) {
 	// 自身数据初始化先，再到子对象初始化
 	appSettingPath = applicationDirPath( );
-	
-	
+
 	if( translate->init( ) == false )
 		return false;
 	if( musicDecoder->init( ) == false )

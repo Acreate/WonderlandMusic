@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QLoggingCategory>
 
+class MusicPlayerInstance;
 class RenderImage;
 class MainWindow;
 class JsonFileKey;
@@ -26,6 +27,8 @@ protected:
 	JsonFileKey *jsonFileKey;
 	/// @brief 音频解码实例
 	MusicDecoder *musicDecoder;
+	/// @brief 音频播放实例
+	MusicPlayerInstance *musicPlayerInstance;
 	/// @brief 渲染对象
 	RenderImage *renderImage;
 	/// @brief 主要执行窗口

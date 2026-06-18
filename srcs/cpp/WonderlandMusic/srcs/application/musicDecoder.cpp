@@ -1,8 +1,12 @@
 ﻿#include "musicDecoder.h"
 
+#include <QFileInfo>
 #include <QMetaEnum>
 #include <QString>
 #include <QMediaFormat>
+#include <QMediaPlayer>
+
+#include "appInstance.h"
 
 MusicDecoder::~MusicDecoder( ) {
 	size_t count = supperDecodeFileSuffix.size( );
@@ -13,9 +17,13 @@ MusicDecoder::~MusicDecoder( ) {
 			delete data[ index ];
 		supperDecodeFileSuffix.clear( );
 	}
-
+	delete mediaPlayer;
 }
-MusicDecoder::MusicDecoder( ) { }
+
+MusicDecoder::MusicDecoder( ) {
+	mediaPlayer = new QMediaPlayer;
+}
+
 bool MusicDecoder::musicFileNmaeSupperDecoder( const QString &music_file_path ) const {
 	size_t count = supperDecodeFileSuffix.size( );
 	if( count == 0 )
@@ -32,6 +40,7 @@ bool MusicDecoder::musicFileNmaeSupperDecoder( const QString &music_file_path ) 
 			return true;
 	return false;
 }
+
 bool MusicDecoder::init( ) {
 	// 遍历所有支持的媒体格式
 	QMediaFormat mediaFormat;
@@ -44,6 +53,7 @@ bool MusicDecoder::init( ) {
 	}
 	return true;
 }
+
 std::vector< QString > MusicDecoder::getSupperDecodeFileSuffix( ) const {
 	size_t count = supperDecodeFileSuffix.size( );
 	std::vector< QString > result( count );
@@ -54,4 +64,48 @@ std::vector< QString > MusicDecoder::getSupperDecodeFileSuffix( ) const {
 		resultData[ index ] = *data[ index ];
 
 	return result;
+}
+
+bool MusicDecoder::setMusicPlayerSourceFile( const QString &file_path ) {
+	QFileInfo info( file_path );
+	if( info.exists( ) == false )
+		return false;
+	if( mediaPlayer->isPlaying( ) )
+		mediaPlayer->stop( );
+	auto source = QUrl::fromLocalFile( file_path );
+	mediaPlayer->setSource( source );
+	return true;
+}
+
+bool MusicDecoder::playerMusic( ) {
+	bool hasAudio = mediaPlayer->hasAudio( );
+	if( hasAudio == false )
+		return false;
+	auto appInstance = AppInstance::getAppInstance( );
+	while( mediaPlayer->mediaStatus( ) != QMediaPlayer::LoadedMedia )
+		appInstance->processEvents( );
+	mediaPlayer->play( );
+	return true;
+}
+
+bool MusicDecoder::stopMusic( ) {
+	bool hasAudio = mediaPlayer->hasAudio( );
+	if( hasAudio == false )
+		return true;
+	mediaPlayer->stop( );
+	return true;
+}
+
+bool MusicDecoder::pauseMusic( ) {
+	bool hasAudio = mediaPlayer->hasAudio( );
+	if( hasAudio == false )
+		return true;
+	mediaPlayer->pause( );
+	return true;
+}
+
+QString MusicDecoder::getMusicPlayerSourceFile( ) const {
+	auto source = mediaPlayer->source( );
+	auto localFile = source.toLocalFile( );
+	return localFile;
 }

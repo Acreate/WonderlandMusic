@@ -45,6 +45,7 @@ PlayListWidget::~PlayListWidget( ) {
 }
 
 PlayListWidget::PlayListWidget( QWidget *parent ) : QWidget( parent ) {
+	selectItemWidget = nullptr;
 	loadMusicFileMutex = new QMutex;
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	updateItemWidget( );
@@ -331,6 +332,10 @@ QVector< QString > PlayListWidget::getListMusicFile( ) const {
 	QVector< QString > result;
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
+	if( count == 0 ) {
+		loadMusicFileMutex->unlock( );
+		return result;
+	}
 	result.resize( count );
 	auto copyToData = result.data( );
 	auto musicInfoData = musicInfoVector.data( );
@@ -352,6 +357,10 @@ QVector< QString > PlayListWidget::getListMusicFile( ) const {
 bool PlayListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
+	if( count == 0 ) {
+		loadMusicFileMutex->unlock( );
+		return false;
+	}
 	auto data = musicInfoVector.data( );
 	qsizetype index;
 	for( index = 0; index < count; index += 1 )
@@ -475,4 +484,32 @@ void PlayListWidget::resizeEvent( QResizeEvent *event ) {
 	currentWidgetHeight = size.height( );
 	currentWidgetWidth = size.width( );
 	//repaint( );
+}
+
+void PlayListWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
+	if( event->button( ) != Qt::MouseButton::LeftButton )
+		return;
+	loadMusicFileMutex->lock( );
+	qsizetype count = musicInfoVector.size( );
+	if( count == 0 ) {
+		loadMusicFileMutex->unlock( );
+		return;
+	}
+	auto point = event->pos( );
+	auto data = musicInfoVector.data( );
+	qsizetype index;
+	selectItemWidget = nullptr;
+	for( index = 0; index < count; index += 1 )
+		if( data[ index ]->geometry( ).contains( point ) ) {
+			selectItemWidget = data[ index ];
+			break;
+		}
+	loadMusicFileMutex->unlock( );
+	
+}
+
+void PlayListWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	if( event->button( ) != Qt::MouseButton::RightButton )
+		return;
+	// todo : 弹出菜单
 }

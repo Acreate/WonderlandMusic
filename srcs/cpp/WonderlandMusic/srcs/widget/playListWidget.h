@@ -24,7 +24,7 @@ protected:
 	int musicNameWidth;
 	int musicSingerWidth;
 	int musicDurationWidth;
-
+	MusicInfoItemWidget * selectItemWidget;
 protected:
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const;
 
@@ -84,6 +84,10 @@ protected:
 	void paintEvent( QPaintEvent *event ) override;
 
 	void resizeEvent( QResizeEvent *event ) override;
+
+	void mouseDoubleClickEvent( QMouseEvent *event ) override;
+
+	void mouseReleaseEvent( QMouseEvent *event ) override;
 };
 
 #endif // PLAYLISTWIDGET_H_H_HEAD__FILE__

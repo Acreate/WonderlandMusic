@@ -106,6 +106,9 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 		QStringList files = dialog.selectedFiles( );
 		dirSelectWorkPath = files[ 0 ];
 	} );
+	connect( playerListTopWidget, &PlayerListTopWidget::changedWidth, [this]( ) {
+		playListWidget->setItemWidth( playerListTopWidget );
+	} );
 }
 
 bool PlayerWindow::loadJsonPathInfo( ) {
@@ -128,7 +131,7 @@ bool PlayerWindow::loadJsonPathInfo( ) {
 		else
 			dirSelectWorkPath = QDir::currentPath( );
 	}
-	playerListTopWidget->autoSetItemSize(  );
+	playerListTopWidget->autoSetItemSize( );
 	playerListTopWidget->loadJsonPathInfo( );
 	playListWidget->setItemWidth( playerListTopWidget );
 	playListWidget->loadJsonPathInfo( );
@@ -150,5 +153,4 @@ bool PlayerWindow::writeJsonPathInfo( ) {
 
 void PlayerWindow::showEvent( QShowEvent *event ) {
 	QMainWindow::showEvent( event );
-
 }

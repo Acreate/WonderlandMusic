@@ -4,14 +4,23 @@
 #include <QWidget>
 
 class PlayerListTopWidget : public QWidget {
+	Q_OBJECT;
+
 protected:
+	int widgetBeforeWidth;
+	int widgetAfterWidth;
 	int splitWidth;
 	int musicNameWidth;
 	int musicSingerWidth;
 	int musicDurationWidth;
+	bool isReadyDrag;
 	bool isDrag;
 	Qt::CursorShape cursorShape;
-	
+	size_t dragIndex;
+	int *dragBeforeWidthOrgPtr;
+	int dragWidth;
+	int dragBeforeX;
+
 public:
 	PlayerListTopWidget( QWidget *parent );
 
@@ -21,19 +30,15 @@ public:
 
 	virtual int getSplitWidth( ) const;
 
-	virtual void setSplitWidth( const int split_width );
-
 	virtual int getMusicNameWidth( ) const;
-
-	virtual void setMusicNameWidth( const int music_name_width );
 
 	virtual int getMusicSingerWidth( ) const;
 
-	virtual void setMusicSingerWidth( const int music_singer_width );
-
 	virtual int getMusicDurationWidth( ) const;
 
-	virtual void setMusicDurationWidth( const int music_duration_width );
+	virtual int getWidgetBeforeWidth( ) const;
+
+	virtual int getWidgetAfterWidth( ) const;
 
 	virtual void autoSetItemSize( );
 
@@ -48,15 +53,8 @@ protected:
 
 	void leaveEvent( QEvent *event ) override;
 
-public:
 Q_SIGNALS:
-	void changedSpliteWidth( int new_size );
-
-	void changedMusicNameWidth( int new_size );
-
-	void changedMusicSingerWidth( int new_size );
-
-	void changedMusicDurationWidth( int new_size );
+	void changedWidth( int split_width, int widget_before_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
 };
 
 #endif // PLAYERLISTTOPWIDGET_H_H_HEAD__FILE__

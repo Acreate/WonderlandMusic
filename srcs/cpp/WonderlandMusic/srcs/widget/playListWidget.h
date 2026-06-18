@@ -18,6 +18,8 @@ protected:
 	QVector< MusicInfoItemWidget * > musicInfoVector;
 	int currentWidgetWidth;
 	int currentWidgetHeight;
+	int widgetBeforeWidth;
+	int widgetAfterWidth;
 	int splitWidth;
 	int musicNameWidth;
 	int musicSingerWidth;
@@ -39,7 +41,7 @@ public:
 public:
 	virtual void setItemWidth( const PlayerListTopWidget *player_list_top_widget );
 
-	virtual void setItemWidth( int splite_width, int music_name_width, int music_singer_width, int music_duration_width );
+	virtual void setItemWidth( int widget_before_width, int splite_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
 
 	virtual int getSplitWidth( ) const;
 

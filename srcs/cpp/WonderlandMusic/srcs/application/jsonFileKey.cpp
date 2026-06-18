@@ -33,7 +33,8 @@ bool JsonFileKey::init( ) {
 	playerListWidgetItemMusicNameWidth = "window.player.list.item.width.name";
 	playerListWidgetItemMusicSingerWidth = "window.player.list.item.width.singer";
 	playerListWidgetItemMusicDurationWidth = "window.player.list.item.width.duration";
-
+	playerListWidgetItemWidgetBeforeWidth = "window.player.list.item.width.before";
+	playerListWidgetItemWidgetAfterWidth = "window.player.list.item.width.after";
 	return true;
 }
 
@@ -119,4 +120,12 @@ const QString & JsonFileKey::getPlayerListWidgetItemMusicDurationWidth( ) const 
 
 const QString & JsonFileKey::getPlayerListWidgetTopJsonPath( ) const {
 	return playerListWidgetTopJsonPath;
+}
+
+const QString & JsonFileKey::getPlayerListWidgetItemWidgetBeforeWidth( ) const {
+	return playerListWidgetItemWidgetBeforeWidth;
+}
+
+const QString & JsonFileKey::getPlayerListWidgetItemWidgetAfterWidth( ) const {
+	return playerListWidgetItemWidgetAfterWidth;
 }

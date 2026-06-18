@@ -22,7 +22,7 @@ void MusicInfoItemWidget::paintEvent( QPaintEvent *event ) {
 	painter.setPen( pen );
 	painter.setFont( *font );
 
-	int drawOffsetX = offsetSplitX;
+	int drawOffsetX = offsetSplitX + widgetBeforeWidth;
 	QRect drawRect;
 	auto currentHeight = height( );
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );

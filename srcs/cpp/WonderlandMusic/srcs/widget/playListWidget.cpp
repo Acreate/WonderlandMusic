@@ -51,18 +51,22 @@ PlayListWidget::PlayListWidget( QWidget *parent ) : QWidget( parent ) {
 }
 
 void PlayListWidget::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {
+	int widgetBeforeWidth = player_list_top_widget->getWidgetBeforeWidth( );
 	int splitWidth = player_list_top_widget->getSplitWidth( );
 	int musicNameWidth = player_list_top_widget->getMusicNameWidth( );
 	int musicSingerWidth = player_list_top_widget->getMusicSingerWidth( );
 	int musicDurationWidth = player_list_top_widget->getMusicDurationWidth( );
-	setItemWidth( splitWidth, musicNameWidth, musicSingerWidth, musicDurationWidth );
+	int widgetAfterWidth = player_list_top_widget->getWidgetAfterWidth( );
+	setItemWidth( widgetBeforeWidth, splitWidth, musicNameWidth, musicSingerWidth, musicDurationWidth, widgetAfterWidth );
 }
 
-void PlayListWidget::setItemWidth( int splite_width, int music_name_width, int music_singer_width, int music_duration_width ) {
+void PlayListWidget::setItemWidth( int widget_before_width, int splite_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width ) {
+	widgetBeforeWidth = widget_before_width;
 	splitWidth = splite_width;
 	musicNameWidth = music_name_width;
 	musicSingerWidth = music_singer_width;
 	musicDurationWidth = music_duration_width;
+	widgetAfterWidth = widget_after_width;
 	updateItemWidget( );
 }
 
@@ -385,13 +389,15 @@ void PlayListWidget::updateItemWidget( ) {
 	auto renderImage = appInstance->getRenderImage( );
 	auto fontMetrics = renderImage->getFontMetrics( );
 	int height = fontMetrics->height( );
-	int width = this->width( );
+	int width = this->width( ) + this->widgetBeforeWidth + this->widgetAfterWidth;
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	auto data = musicInfoVector.data( );
 	qsizetype index;
 	for( index = 0; index < count; index += 1 ) {
 		auto itemWidget = data[ index ];
+		itemWidget->widgetBeforeWidth = this->widgetBeforeWidth;
+		itemWidget->widgetAfterWidth = this->widgetAfterWidth;
 		itemWidget->splitWidth = this->splitWidth;
 		itemWidget->musicNameWidth = this->musicNameWidth;
 		itemWidget->musicSingerWidth = this->musicSingerWidth;

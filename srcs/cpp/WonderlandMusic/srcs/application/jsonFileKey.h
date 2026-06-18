@@ -28,6 +28,8 @@ protected:
 	QString playerListWidgetItemMusicNameWidth;
 	QString playerListWidgetItemMusicSingerWidth;
 	QString playerListWidgetItemMusicDurationWidth;
+	QString playerListWidgetItemWidgetBeforeWidth;
+	QString playerListWidgetItemWidgetAfterWidth;
 
 public:
 	virtual ~JsonFileKey( ) = default;
@@ -77,6 +79,10 @@ public:
 	virtual const QString & getPlayerListWidgetItemMusicDurationWidth( ) const;
 
 	virtual const QString & getPlayerListWidgetTopJsonPath( ) const;
+
+	virtual const QString & getPlayerListWidgetItemWidgetBeforeWidth( ) const;
+
+	virtual const QString & getPlayerListWidgetItemWidgetAfterWidth( ) const;
 };
 
 #endif // JSONFILEKEY_H_H_HEAD__FILE__

@@ -11,8 +11,8 @@
 
 #include "../tools/pathTools.h"
 
-PlayerListTopWidget::PlayerListTopWidget( QWidget *parent ) : QWidget( parent ), isDrag( false ) {
-	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
+PlayerListTopWidget::PlayerListTopWidget( QWidget *parent ) : QWidget( parent ), isDrag( false ), isReadyDrag( false ) {
+	widgetBeforeWidth = widgetAfterWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	AppInstance *appInstance = AppInstance::getAppInstance( );
 	auto fontMetrics = appInstance->getRenderImage( )->getFontMetrics( );
 	int currentHeight = fontMetrics->height( );
@@ -44,6 +44,14 @@ bool PlayerListTopWidget::loadJsonPathInfo( ) {
 	if( find != end )
 		musicDurationWidth = find.value( ).toInt( musicDurationWidth );
 
+	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemWidgetBeforeWidth( ) );
+	if( find != end )
+		widgetBeforeWidth = find.value( ).toInt( musicDurationWidth );
+
+	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemWidgetAfterWidth( ) );
+	if( find != end )
+		widgetAfterWidth = find.value( ).toInt( musicDurationWidth );
+
 	return true;
 }
 
@@ -56,6 +64,8 @@ bool PlayerListTopWidget::writeJsonPathInfo( ) {
 	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemMusicNameWidth( ), musicNameWidth );
 	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemMusicSingerWidth( ), musicSingerWidth );
 	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemMusicDurationWidth( ), musicDurationWidth );
+	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemWidgetBeforeWidth( ), widgetBeforeWidth );
+	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemWidgetAfterWidth( ), widgetAfterWidth );
 	auto fileJsonPath = jsonFileKey->getPlayerListWidgetTopJsonPath( );
 	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
 	return true;
@@ -65,32 +75,24 @@ int PlayerListTopWidget::getSplitWidth( ) const {
 	return splitWidth;
 }
 
-void PlayerListTopWidget::setSplitWidth( const int split_width ) {
-	splitWidth = split_width;
-}
-
 int PlayerListTopWidget::getMusicNameWidth( ) const {
 	return musicNameWidth;
-}
-
-void PlayerListTopWidget::setMusicNameWidth( const int music_name_width ) {
-	musicNameWidth = music_name_width;
 }
 
 int PlayerListTopWidget::getMusicSingerWidth( ) const {
 	return musicSingerWidth;
 }
 
-void PlayerListTopWidget::setMusicSingerWidth( const int music_singer_width ) {
-	musicSingerWidth = music_singer_width;
-}
-
 int PlayerListTopWidget::getMusicDurationWidth( ) const {
 	return musicDurationWidth;
 }
 
-void PlayerListTopWidget::setMusicDurationWidth( const int music_duration_width ) {
-	musicDurationWidth = music_duration_width;
+int PlayerListTopWidget::getWidgetBeforeWidth( ) const {
+	return widgetBeforeWidth;
+}
+
+int PlayerListTopWidget::getWidgetAfterWidth( ) const {
+	return widgetAfterWidth;
 }
 
 void PlayerListTopWidget::autoSetItemSize( ) {
@@ -105,48 +107,71 @@ void PlayerListTopWidget::autoSetItemSize( ) {
 
 	double widthPercentage = nameWidth + singerWidth + durationWidth;
 	auto spliteWidthUserSpace = splitWidth * 4;
+	int borderWidth = widgetBeforeWidth + widgetAfterWidth;
 	int width = this->width( );
-	double residue = width - spliteWidthUserSpace;
+	double residue = width - spliteWidthUserSpace - borderWidth;
 	double part = residue / widthPercentage;
 	this->musicDurationWidth = part * durationWidth;
 	this->musicSingerWidth = part * singerWidth;
 	this->musicNameWidth = residue - this->musicDurationWidth - this->musicSingerWidth;
 	update( );
+	emit changedWidth( splitWidth, widgetBeforeWidth, musicNameWidth, musicSingerWidth, musicDurationWidth, widgetAfterWidth );
 }
 
 void PlayerListTopWidget::mouseMoveEvent( QMouseEvent *event ) {
 	int x = event->x( );
+	if( isDrag ) {
+		*dragBeforeWidthOrgPtr = dragWidth + x - dragBeforeX;
+		repaint( );
+		return;
+	}
+
 	Qt::CursorShape buffCursorShape = Qt::ArrowCursor;
-	if( x < splitWidth )
+	if( x > widgetBeforeWidth && x < splitWidth + widgetBeforeWidth ) {
 		buffCursorShape = Qt::CursorShape::SizeHorCursor;
-	else {
-		int leftX = splitWidth + musicNameWidth;
+		dragIndex = 0;
+		dragWidth = widgetBeforeWidth;
+		dragBeforeWidthOrgPtr = &widgetBeforeWidth;
+	} else {
+		int leftX = splitWidth + musicNameWidth + widgetBeforeWidth;
 		int rightX = splitWidth + leftX;
-		if( x > leftX && x < rightX )
+		if( x > leftX && x < rightX ) {
 			buffCursorShape = Qt::CursorShape::SizeHorCursor;
-		else {
+			dragIndex = 1;
+			dragWidth = musicNameWidth;
+			dragBeforeWidthOrgPtr = &musicNameWidth;
+		} else {
 			leftX = rightX + musicSingerWidth;
 			rightX = splitWidth + leftX;
-			if( x > leftX && x < rightX )
+			if( x > leftX && x < rightX ) {
 				buffCursorShape = Qt::CursorShape::SizeHorCursor;
-			else {
+
+				dragIndex = 2;
+				dragWidth = musicSingerWidth;
+				dragBeforeWidthOrgPtr = &musicSingerWidth;
+			} else {
 				leftX = rightX + musicDurationWidth;
 				rightX = splitWidth + leftX;
-				if( x > leftX && x < rightX )
+				if( x > leftX && x < rightX ) {
 					buffCursorShape = Qt::CursorShape::SizeHorCursor;
+					dragIndex = 3;
+					dragWidth = musicDurationWidth;
+					dragBeforeWidthOrgPtr = &musicDurationWidth;
+				}
 			}
 		}
 	}
 	if( cursorShape != buffCursorShape ) {
+		dragBeforeX = x;
 		cursorShape = buffCursorShape;
 		setCursor( cursorShape );
 		if( cursorShape == Qt::SizeHorCursor )
-			isDrag = true;
+			isReadyDrag = true;
 	}
 }
 
 void PlayerListTopWidget::mousePressEvent( QMouseEvent *event ) {
-	if( cursorShape != Qt::ArrowCursor ) {
+	if( cursorShape != Qt::ArrowCursor && isReadyDrag ) {
 		isDrag = true;
 	}
 }
@@ -155,7 +180,8 @@ void PlayerListTopWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	if( isDrag ) {
 		cursorShape = Qt::ArrowCursor;
 		setCursor( cursorShape );
-		isDrag = false;
+		isReadyDrag = isDrag = false;
+		emit changedWidth( splitWidth, widgetBeforeWidth, musicNameWidth, musicSingerWidth, musicDurationWidth, widgetAfterWidth );
 	}
 }
 
@@ -172,7 +198,7 @@ void PlayerListTopWidget::paintEvent( QPaintEvent *event ) {
 	painter.setPen( pen );
 	painter.setFont( *font );
 
-	int drawOffsetX = offsetSplitX;
+	int drawOffsetX = offsetSplitX + widgetBeforeWidth;
 	QRect drawRect;
 	auto currentHeight = height( );
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );
@@ -202,6 +228,7 @@ void PlayerListTopWidget::leaveEvent( QEvent *event ) {
 	if( isDrag ) {
 		cursorShape = Qt::ArrowCursor;
 		setCursor( cursorShape );
-		isDrag = false;
+		isReadyDrag = isDrag = false;
+		emit changedWidth( splitWidth, widgetBeforeWidth, musicNameWidth, musicSingerWidth, musicDurationWidth, widgetAfterWidth );
 	}
 }

@@ -9,6 +9,8 @@ class MusicInfoItemWidget : public QWidget, public MusicInfoItem {
 	friend class PlayListWidget;
 
 protected:
+	int widgetBeforeWidth;
+	int widgetAfterWidth;
 	int splitWidth;
 	int musicNameWidth;
 	int musicSingerWidth;

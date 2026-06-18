@@ -22,7 +22,7 @@ protected:
 	int dragBeforeX;
 
 protected:
-	virtual void updateCurrentWingetWidth( );
+	virtual void updateCurrentWidgetSize( );
 
 public:
 	PlayerListTopWidget( QWidget *parent );

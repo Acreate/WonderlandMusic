@@ -10,10 +10,13 @@ class JsonFileKey;
 class MusicDecoder;
 class AppTranslate;
 class MessageErrorOut;
+
 class AppInstance : public QApplication {
 	Q_OBJECT;
+
 private:
 	static AppInstance *instance;
+
 protected:
 	/// @brief 起始时间
 	QDateTime *startDateTime;
@@ -29,19 +32,34 @@ protected:
 	MainWindow *mainWindow;
 	/// @brief 退出代码
 	int exitCode;
+	/// @brief 应用配置路径
+	QString appSettingPath;
+
 public:
 	static AppInstance * getAppInstance( );
+
 	AppInstance( int &argc, char **argv, int app_flag_s = ApplicationFlags );
+
 	~AppInstance( ) override;
+
 public:
 	virtual bool init( );
+
 	virtual int run( );
+
 public:
 	virtual const QDateTime * getStartDateTime( ) const;
+
 	virtual const JsonFileKey * getJsonFileKey( ) const;
+
 	virtual const AppTranslate * getTranslate( ) const;
+
 	virtual MusicDecoder * getMusicDecoder( ) const;
+
 	virtual int getExitCode( ) const;
+
 	virtual const RenderImage * getRenderImage( ) const;
+
+	virtual QString getAppSettingPath( ) const;
 };
 #endif // APPINSTANCE_H_H_HEAD__FILE__

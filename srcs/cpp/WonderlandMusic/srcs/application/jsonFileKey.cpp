@@ -7,7 +7,7 @@ JsonFileKey::JsonFileKey( ) {
 
 bool JsonFileKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->applicationDirPath( );
+	auto applicationDirPath = appInstance->getAppSettingPath( );
 
 	mainWindowSettingJsonPath = applicationDirPath + "/program/json/app.main.window.stting.json";
 	mainWindowPointXPos = "app.main.window.point.x";

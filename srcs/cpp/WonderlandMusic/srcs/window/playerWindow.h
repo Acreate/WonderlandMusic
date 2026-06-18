@@ -23,12 +23,16 @@ protected:
 	/// @brief 播放的顶部组件
 	PlayerListTopWidget *playerListTopWidget;
 
+
 public:
 	PlayerWindow( QWidget *parent );
 
 	virtual bool loadJsonPathInfo( );
 
 	virtual bool writeJsonPathInfo( );
+
+protected:
+	void showEvent( QShowEvent *event ) override;
 };
 
 #endif // PLAYERWINDOW_H_H_HEAD__FILE__

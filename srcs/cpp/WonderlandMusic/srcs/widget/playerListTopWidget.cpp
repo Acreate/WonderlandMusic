@@ -93,6 +93,27 @@ void PlayerListTopWidget::setMusicDurationWidth( const int music_duration_width 
 	musicDurationWidth = music_duration_width;
 }
 
+void PlayerListTopWidget::autoSetItemSize( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appTranslate = appInstance->getTranslate( );
+	auto renderImage = appInstance->getRenderImage( );
+	auto fontMetrics = renderImage->getFontMetrics( );
+
+	auto nameWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicName( ) );
+	auto singerWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicSinger( ) );
+	auto durationWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicDuration( ) );
+
+	double widthPercentage = nameWidth + singerWidth + durationWidth;
+	auto spliteWidthUserSpace = splitWidth * 4;
+	int width = this->width( );
+	double residue = width - spliteWidthUserSpace;
+	double part = residue / widthPercentage;
+	this->musicDurationWidth = part * durationWidth;
+	this->musicSingerWidth = part * singerWidth;
+	this->musicNameWidth = residue - this->musicDurationWidth - this->musicSingerWidth;
+	update( );
+}
+
 void PlayerListTopWidget::mouseMoveEvent( QMouseEvent *event ) {
 	int x = event->x( );
 	Qt::CursorShape buffCursorShape = Qt::ArrowCursor;

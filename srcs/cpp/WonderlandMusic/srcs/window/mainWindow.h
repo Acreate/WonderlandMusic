@@ -12,8 +12,10 @@ class SettingWidget;
 class AboutWidget;
 class AppTranslate;
 class AppInstance;
+
 class MainWindow : public QMainWindow {
 	Q_OBJECT;
+
 protected:
 	/// @brief 获取 app 实例
 	AppInstance *appInstance;
@@ -37,34 +39,53 @@ protected:
 	QPushButton *showSettingWidgetBtn;
 	/// @brief 显示关于面板按钮
 	QPushButton *showAboutWidgetBtn;
+	/// @brief 是否初始化
+	bool isLoadJsonFile;
+
 protected:
 	/// @brief 初始化 AppInstance 实例相关对象
 	/// @return 失败返回 false
 	bool initApp( );
+
 	/// @brief 初始化层叠组件
 	/// @return 失败返回 false
 	bool initStackedWidget( );
+
 	/// @brief 初始化停靠容器组件
 	/// @return 失败返回 false
 	bool initDockWidget( );
+
 	/// @brief 初始化主窗口配置
 	/// @return 失败返回 false
 	bool initMainWindowSetting( );
+
 	/// @brief 初始化信息
 	/// @return 失败返回 false
 	bool initConnect( );
+
 	/// @brief 保存主窗口配置
 	/// @return 失败返回 false
 	bool saveMainWindowSetting( );
+
 public:
 	~MainWindow( ) override;
+
 	MainWindow( QWidget *parent, Qt::WindowFlags flags );
+
 	bool loadSettingWidgetInfoAtFile( );
+
 	MainWindow( QWidget *parent );
+
 	MainWindow( Qt::WindowFlags flags );
+
 	MainWindow( );
+
 	void writeWidgetSettingToFile( );
+
 	virtual bool init( );
+
+protected:
+	void showEvent( QShowEvent *event ) override;
 };
 
 #endif // MAINWINDOW_H_H_HEAD__FILE__

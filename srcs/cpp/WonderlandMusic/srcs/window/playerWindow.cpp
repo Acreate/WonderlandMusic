@@ -128,6 +128,7 @@ bool PlayerWindow::loadJsonPathInfo( ) {
 		else
 			dirSelectWorkPath = QDir::currentPath( );
 	}
+	playerListTopWidget->autoSetItemSize(  );
 	playerListTopWidget->loadJsonPathInfo( );
 	playListWidget->setItemWidth( playerListTopWidget );
 	playListWidget->loadJsonPathInfo( );
@@ -145,4 +146,9 @@ bool PlayerWindow::writeJsonPathInfo( ) {
 	auto path = jsonFileKey->getPlayerWindowSettingJsonPath( );
 	PathTools::writeJsonObject( jsonObject, path );
 	return playListWidget->writeJsonPathInfo( );
+}
+
+void PlayerWindow::showEvent( QShowEvent *event ) {
+	QMainWindow::showEvent( event );
+
 }

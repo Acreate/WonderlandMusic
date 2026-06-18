@@ -35,6 +35,8 @@ public:
 
 	virtual void setMusicDurationWidth( const int music_duration_width );
 
+	virtual void autoSetItemSize( );
+
 protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 

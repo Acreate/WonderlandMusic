@@ -20,9 +20,15 @@
 
 #include "../widget/aboutWidget.h"
 #include "../widget/settingWidget.h"
-MainWindow::MainWindow( QWidget *parent ) : MainWindow( parent, Qt::WindowFlags( ) ) { }
-MainWindow::MainWindow( Qt::WindowFlags flags ) : MainWindow( nullptr, flags ) { }
-MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) { }
+
+MainWindow::MainWindow( QWidget *parent ) : MainWindow( parent, Qt::WindowFlags( ) ) {
+}
+
+MainWindow::MainWindow( Qt::WindowFlags flags ) : MainWindow( nullptr, flags ) {
+}
+
+MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) {
+}
 
 void MainWindow::writeWidgetSettingToFile( ) {
 	saveMainWindowSetting( );
@@ -31,12 +37,14 @@ void MainWindow::writeWidgetSettingToFile( ) {
 	// 写入配置信息
 	settingWidget->writeJsonPathInfo( );
 }
+
 MainWindow::~MainWindow( ) {
 	writeWidgetSettingToFile( );
 }
-MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
 
+MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ), isLoadJsonFile( false ) {
 }
+
 bool MainWindow::loadSettingWidgetInfoAtFile( ) {
 	// 加载播放列表
 	playerWindow->loadJsonPathInfo( );
@@ -44,6 +52,7 @@ bool MainWindow::loadSettingWidgetInfoAtFile( ) {
 	settingWidget->loadJsonPathInfo( );
 	return true;
 }
+
 bool MainWindow::init( ) {
 	if( initApp( ) == false )
 		return false;
@@ -54,11 +63,19 @@ bool MainWindow::init( ) {
 	if( initMainWindowSetting( ) == false )
 		return false;
 
-	if( loadSettingWidgetInfoAtFile( ) == false )
-		return false;
+	//if( loadSettingWidgetInfoAtFile( ) == false )
+	//	return false;
 	if( initConnect( ) == false )
 		return false;
 	return true;
+}
+
+void MainWindow::showEvent( QShowEvent *event ) {
+	QMainWindow::showEvent( event );
+	if( isLoadJsonFile == false ) {
+		isLoadJsonFile = true;
+		loadSettingWidgetInfoAtFile( );
+	}
 }
 
 bool MainWindow::initApp( ) {
@@ -69,6 +86,7 @@ bool MainWindow::initApp( ) {
 	setWindowTitle( appTranslate->getAppWindowTitleName( ) );
 	return true;
 }
+
 bool MainWindow::initStackedWidget( ) {
 	mainStackedWidget = new QStackedWidget( this );
 	setCentralWidget( mainStackedWidget );
@@ -85,6 +103,7 @@ bool MainWindow::initStackedWidget( ) {
 	aboutWidget->adjustSize( );
 	return true;
 }
+
 bool MainWindow::initDockWidget( ) {
 	leftOptionDockWidget = new QDockWidget( this );
 	leftOptionDockWidget->setAllowedAreas( Qt::LeftDockWidgetArea );
@@ -117,6 +136,7 @@ bool MainWindow::initDockWidget( ) {
 
 	return true;
 }
+
 bool MainWindow::initMainWindowSetting( ) {
 	// 获取 json 路径
 	auto mainWindowJsonFile = jsonFileKey->getMainWindowSettingJsonPath( );
@@ -156,6 +176,7 @@ bool MainWindow::initMainWindowSetting( ) {
 
 	return true;
 }
+
 bool MainWindow::initConnect( ) {
 	connect( showPlayListWidgetBtn, &QPushButton::clicked, [this]( ) {
 		mainStackedWidget->setCurrentWidget( playerWindow );
@@ -168,8 +189,8 @@ bool MainWindow::initConnect( ) {
 	} );
 	return true;
 }
-bool MainWindow::saveMainWindowSetting( ) {
 
+bool MainWindow::saveMainWindowSetting( ) {
 	QJsonObject wirteJsonObject;
 	wirteJsonObject.insert( jsonFileKey->getMainWindowPointXPos( ), x( ) );
 	wirteJsonObject.insert( jsonFileKey->getMainWindowPointYPos( ), y( ) );

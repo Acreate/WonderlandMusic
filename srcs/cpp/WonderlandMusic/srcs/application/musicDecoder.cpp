@@ -118,3 +118,21 @@ void MusicDecoder::insterMusicVector( PlayerListWidget *player_list_widget, cons
 
 void MusicDecoder::removeAtPlayerListWidgetMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector ) {
 }
+
+void MusicDecoder::setCurrentSelectPlay( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+}
+
+void MusicDecoder::insterCurrentSelectPlay( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+}
+
+void MusicDecoder::removePlayListSelectInfo( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+}
+
+void MusicDecoder::deletePlayListSelectFile( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+}
+
+void MusicDecoder::selectListMoveTop( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+}
+
+void MusicDecoder::selectListMoveBottom( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+}

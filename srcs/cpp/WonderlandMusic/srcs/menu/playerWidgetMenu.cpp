@@ -2,6 +2,7 @@
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
+#include "../application/musicDecoder.h"
 
 #include "../widget/playerListWidget.h"
 
@@ -9,11 +10,16 @@ PlayerWidgetMenu::PlayerWidgetMenu( PlayerListWidget *player_list_widget ) : QMe
 }
 
 bool PlayerWidgetMenu::initVar( ) {
+	if( playerListWidget == nullptr )
+		return false;
 	appInstance = AppInstance::getAppInstance( );
 	if( appInstance == nullptr )
 		return false;
 	appTranslate = appInstance->getTranslate( );
 	if( appTranslate == nullptr )
+		return false;
+	musicDecoder = appInstance->getMusicDecoder( );
+	if( musicDecoder == nullptr )
 		return false;
 	return true;
 }
@@ -21,13 +27,20 @@ bool PlayerWidgetMenu::initVar( ) {
 bool PlayerWidgetMenu::initSubMenu( ) {
 	playerMenu = addMenu( appTranslate->getPlayerListMenuenuPlayerMenu( ) );
 
+	removeMenu = addMenu( appTranslate->getPlayerListMenuMoveMenu( ) );
 	controlMenu = addMenu( appTranslate->getPlayerListMenuControlMenu( ) );
 	return true;
 }
 
 bool PlayerWidgetMenu::initSubMenuAcction( ) {
-	setCurrentSelectToPlayerList = playerMenu->QWidget::addAction( appTranslate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
-	insterCurrentSelectToPlayerList = playerMenu->QWidget::addAction( appTranslate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
+	setplay = playerMenu->QWidget::addAction( appTranslate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
+	insterPlay = playerMenu->QWidget::addAction( appTranslate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
+
+	moveTop = controlMenu->QWidget::addAction( appTranslate->getPlayerListMenuControlMenuMoveTopMusicAction( ) );
+	moveBottom = controlMenu->QWidget::addAction( appTranslate->getPlayerListMenuControlMenuMoveBottomMusicAction( ) );
+
+	removeMusic = removeMenu->QWidget::addAction( appTranslate->getPlayerListMenuControlMenuRemoveMusicAction( ) );
+	removeMusic = removeMenu->QWidget::addAction( appTranslate->getPlayerListMenuControlMenuDeleteMusicAction( ) );
 	return true;
 }
 
@@ -46,4 +59,40 @@ bool PlayerWidgetMenu::init( ) {
 	if( initConnectAcction( ) == false )
 		return false;
 	return true;
+}
+
+void PlayerWidgetMenu::setCurrentSelectPlay( ) {
+	QVector< MusicInfoItemWidget * > selectVector;
+	playerListWidget->getSelectItemWidgetVector( selectVector );
+	musicDecoder->setCurrentSelectPlay( selectVector );
+}
+
+void PlayerWidgetMenu::insterCurrentSelectPlay( ) {
+	QVector< MusicInfoItemWidget * > selectVector;
+	playerListWidget->getSelectItemWidgetVector( selectVector );
+	musicDecoder->insterCurrentSelectPlay( selectVector );
+}
+
+void PlayerWidgetMenu::removePlayListSelectInfo( ) {
+	QVector< MusicInfoItemWidget * > selectVector;
+	playerListWidget->getSelectItemWidgetVector( selectVector );
+	musicDecoder->removePlayListSelectInfo( selectVector );
+}
+
+void PlayerWidgetMenu::deletePlayListSelectFile( ) {
+	QVector< MusicInfoItemWidget * > selectVector;
+	playerListWidget->getSelectItemWidgetVector( selectVector );
+	musicDecoder->deletePlayListSelectFile( selectVector );
+}
+
+void PlayerWidgetMenu::selectListMoveTop( ) {
+	QVector< MusicInfoItemWidget * > selectVector;
+	playerListWidget->getSelectItemWidgetVector( selectVector );
+	musicDecoder->selectListMoveTop( selectVector );
+}
+
+void PlayerWidgetMenu::selectListMoveBottom( ) {
+	QVector< MusicInfoItemWidget * > selectVector;
+	playerListWidget->getSelectItemWidgetVector( selectVector );
+	musicDecoder->selectListMoveBottom( selectVector );
 }

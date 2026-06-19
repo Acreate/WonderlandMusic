@@ -58,6 +58,8 @@ protected:
 	QString playerListMenuPlayerMenuInsterCurrentPlayAction;
 	QString playerListMenuControlMenu;
 	QString playerListMenuControlMenuRemoveMusicAction;
+	QString playerListMenuControlMenuDeleteMusicAction;
+	QString playerListMenuMoveMenu;
 	QString playerListMenuControlMenuMoveTopMusicAction;
 	QString playerListMenuControlMenuMoveBottomMusicAction;
 
@@ -152,6 +154,10 @@ public:
 	virtual const QString & getPlayerListMenuControlMenuMoveTopMusicAction( ) const;
 
 	virtual const QString & getPlayerListMenuControlMenuMoveBottomMusicAction( ) const;
+
+	virtual const QString & getPlayerListMenuMoveMenu( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenuDeleteMusicAction( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

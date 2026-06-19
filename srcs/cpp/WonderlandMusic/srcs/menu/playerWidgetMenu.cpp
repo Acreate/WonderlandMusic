@@ -8,17 +8,42 @@
 PlayerWidgetMenu::PlayerWidgetMenu( PlayerListWidget *player_list_widget ) : QMenu( player_list_widget ), playerListWidget( player_list_widget ) {
 }
 
+bool PlayerWidgetMenu::initVar( ) {
+	appInstance = AppInstance::getAppInstance( );
+	if( appInstance == nullptr )
+		return false;
+	appTranslate = appInstance->getTranslate( );
+	if( appTranslate == nullptr )
+		return false;
+	return true;
+}
+
+bool PlayerWidgetMenu::initSubMenu( ) {
+	playerMenu = addMenu( appTranslate->getPlayerListMenuenuPlayerMenu( ) );
+
+	controlMenu = addMenu( appTranslate->getPlayerListMenuControlMenu( ) );
+	return true;
+}
+
+bool PlayerWidgetMenu::initSubMenuAcction( ) {
+	setCurrentSelectToPlayerList = playerMenu->QWidget::addAction( appTranslate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
+	insterCurrentSelectToPlayerList = playerMenu->QWidget::addAction( appTranslate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
+	return true;
+}
+
+bool PlayerWidgetMenu::initConnectAcction( ) {
+	return true;
+}
+
 bool PlayerWidgetMenu::init( ) {
 	clear( );
-	auto appInstance = AppInstance::getAppInstance( );
-	auto appTranslate = appInstance->getTranslate( );
-	auto menu = addMenu( appTranslate->getPlayerListMenuenuPlayerMenu( ) );
-	// 播放列表按钮
-	auto setCurrentSelectToPlayerList = menu->addAction( appTranslate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
-	// 插入列表按钮
-	auto insterCurrentSelectToPlayerList = menu->addAction( appTranslate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
-	
-	
-	
+	if( initVar( ) == false )
+		return false;
+	if( initSubMenu( ) == false )
+		return false;
+	if( initSubMenuAcction( ) == false )
+		return false;
+	if( initConnectAcction( ) == false )
+		return false;
 	return true;
 }

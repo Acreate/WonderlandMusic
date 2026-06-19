@@ -147,7 +147,7 @@ bool PlayerWindow::loadJsonPathInfo( ) {
 		else
 			dirSelectWorkPath = QDir::currentPath( );
 	}
-	
+
 	int width = playerListTopWidgetScrollArea->viewport( )->width( );
 	playerListTopWidget->setFixedWidth( width );
 	playerListTopWidget->autoSetItemSize( );

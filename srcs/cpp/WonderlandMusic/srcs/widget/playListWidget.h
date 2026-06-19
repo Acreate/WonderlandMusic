@@ -24,13 +24,26 @@ protected:
 	int musicNameWidth;
 	int musicSingerWidth;
 	int musicDurationWidth;
-	MusicInfoItemWidget * selectItemWidget;
+	qint64 doubleClickIntervalTimeMilliSecond;
+	QDateTime *beforeClickTime;
+	MusicInfoItemWidget *activeLeftItemWidget;
+	MusicInfoItemWidget *selectLeftItemWidget;
+	QVector< MusicInfoItemWidget * > selectItemWidgetVector;
+	int drawPenWidth;
+	QColor drawPenColor;
+	QColor drawFillColor;
+	QPen *pen;
+
 protected:
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const;
 
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target ) const;
 
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int split_width ) const;
+
+	virtual void doubleMusicItemWidget( MusicInfoItemWidget *double_target );
+
+	virtual void apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target );
 
 public:
 	~PlayListWidget( ) override;
@@ -85,7 +98,7 @@ protected:
 
 	void resizeEvent( QResizeEvent *event ) override;
 
-	void mouseDoubleClickEvent( QMouseEvent *event ) override;
+	void mouseMoveEvent( QMouseEvent *event ) override;
 
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 };

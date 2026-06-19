@@ -7,7 +7,6 @@
 #include <QUrl>
 #include <QMutex>
 #include <QPainter>
-#include <QThread>
 
 #include "playerListTopWidget.h"
 
@@ -42,13 +41,27 @@ void PlayListWidget::clearMusicInfoVector( ) {
 PlayListWidget::~PlayListWidget( ) {
 	clearMusicInfoVector( );
 	delete loadMusicFileMutex;
+	delete beforeClickTime;
+	delete pen;
 }
 
 PlayListWidget::PlayListWidget( QWidget *parent ) : QWidget( parent ) {
-	selectItemWidget = nullptr;
+	doubleClickIntervalTimeMilliSecond = 300;
+	activeLeftItemWidget = nullptr;
+	selectLeftItemWidget = nullptr;
 	loadMusicFileMutex = new QMutex;
+	beforeClickTime = new QDateTime;
+	pen = new QPen;
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
+	drawPenWidth = 4;
+	drawPenColor = QColor( "#7bffa1" );
+	drawFillColor = QColor( "#50a2ff" );
+	drawFillColor.setAlpha( 100 );
+	pen->setWidth( drawPenWidth );
+	pen->setColor( drawPenColor );
+
 	updateItemWidget( );
+	setMouseTracking( true );
 }
 
 void PlayListWidget::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {
@@ -392,6 +405,22 @@ bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicIn
 	return renderAtMusicInfoItem( result_render_image, render_target, itemHeight, split_width, musicNameWidth, musicSingerWidth, formatStringDurationeWidth, font );
 }
 
+void PlayListWidget::doubleMusicItemWidget( MusicInfoItemWidget *double_target ) {
+}
+
+void PlayListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target ) {
+	selectLeftItemWidget = append_select_target;
+	auto appInstance = AppInstance::getAppInstance( );
+	auto keyboardModifiers = appInstance->keyboardModifiers( );
+	if( keyboardModifiers.testFlags( Qt::ControlModifier ) )
+		selectItemWidgetVector.append( append_select_target );
+	else {
+		selectItemWidgetVector.resize( 1 );
+		selectItemWidgetVector.data( )[ 0 ] = append_select_target;
+	}
+	update( );
+}
+
 void PlayListWidget::updateItemWidget( ) {
 	int offsetY = 0;
 	auto appInstance = AppInstance::getAppInstance( );
@@ -477,6 +506,32 @@ bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicIn
 }
 
 void PlayListWidget::paintEvent( QPaintEvent *event ) {
+	QPainter painter;
+	painter.begin( this );
+
+	painter.setPen( *pen );
+
+	loadMusicFileMutex->lock( );
+	qsizetype count = selectItemWidgetVector.size( );
+	if( count ) {
+		auto data = selectItemWidgetVector.data( );
+		qsizetype index;
+		for( index = 0; index < count; index += 1 )
+			painter.fillRect( data[ index ]->geometry( ), drawFillColor );
+	}
+	loadMusicFileMutex->unlock( );
+
+	if( activeLeftItemWidget ) {
+		auto drawPenWidthOffset = drawPenWidth / 2;
+		auto geometry = activeLeftItemWidget->geometry( );
+		int x = geometry.x( ) + drawPenWidthOffset;
+		int y = geometry.y( ) + drawPenWidthOffset;
+		int width = geometry.width( ) - drawPenWidth;
+		int height = geometry.height( ) - drawPenWidth;
+
+		painter.drawRect( x, y, width, height );
+	}
+	painter.end( );
 }
 
 void PlayListWidget::resizeEvent( QResizeEvent *event ) {
@@ -486,9 +541,7 @@ void PlayListWidget::resizeEvent( QResizeEvent *event ) {
 	//repaint( );
 }
 
-void PlayListWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
-	if( event->button( ) != Qt::MouseButton::LeftButton )
-		return;
+void PlayListWidget::mouseMoveEvent( QMouseEvent *event ) {
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	if( count == 0 ) {
@@ -498,18 +551,46 @@ void PlayListWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
 	auto point = event->pos( );
 	auto data = musicInfoVector.data( );
 	qsizetype index;
-	selectItemWidget = nullptr;
 	for( index = 0; index < count; index += 1 )
 		if( data[ index ]->geometry( ).contains( point ) ) {
-			selectItemWidget = data[ index ];
+			activeLeftItemWidget = data[ index ];
 			break;
 		}
 	loadMusicFileMutex->unlock( );
-	
+	if( activeLeftItemWidget )
+		update( );
 }
 
 void PlayListWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	if( event->button( ) != Qt::MouseButton::RightButton )
-		return;
-	// todo : 弹出菜单
+	Qt::MouseButton mouseButton = event->button( );
+	switch( mouseButton ) {
+		case Qt::MouseButton::LeftButton : {
+			loadMusicFileMutex->lock( );
+			qsizetype count = musicInfoVector.size( );
+			if( count == 0 ) {
+				loadMusicFileMutex->unlock( );
+				return;
+			}
+			auto point = event->pos( );
+			auto data = musicInfoVector.data( );
+			qsizetype index;
+			for( index = 0; index < count; index += 1 )
+				if( data[ index ]->geometry( ).contains( point ) ) {
+					if( selectLeftItemWidget == data[ index ] ) {// 双击检测
+						auto currentDateTime = QDateTime::currentDateTime( );
+						auto milliseconds = currentDateTime - *beforeClickTime;
+						if( doubleClickIntervalTimeMilliSecond > milliseconds.count( ) )
+							doubleMusicItemWidget( data[ index ] );
+						*beforeClickTime = currentDateTime;
+					} else
+						apendSelectMusicItemWidget( data[ index ] );
+					break;
+				}
+			loadMusicFileMutex->unlock( );
+		}
+		break;
+		case Qt::MouseButton::RightButton : {
+		}
+		break;
+	}
 }

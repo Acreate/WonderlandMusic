@@ -9,6 +9,8 @@
 
 MusicInfoItemWidget::MusicInfoItemWidget( PlayListWidget *parent ) : QWidget( parent ), MusicInfoItem( parent ) {
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
+	// 开启鼠标穿透
+	setAttribute( Qt::WA_TransparentForMouseEvents, true );
 }
 
 void MusicInfoItemWidget::paintEvent( QPaintEvent *event ) {

@@ -129,6 +129,21 @@ void PlayListWidget::setMusicDurationWidth( const int format_string_duration_wid
 	updateItemWidget( );
 }
 
+MusicInfoItemWidget * PlayListWidget::getActiveLeftItemWidget( ) const {
+	return activeLeftItemWidget;
+}
+
+MusicInfoItemWidget * PlayListWidget::getSelectLeftItemWidget( ) const {
+	return selectLeftItemWidget;
+}
+
+QVector< MusicInfoItemWidget * > & PlayListWidget::getSelectItemWidgetVector( QVector< MusicInfoItemWidget * > &result_vector ) const {
+	selectItemMutex->lock( );
+	result_vector = selectItemWidgetVector;
+	selectItemMutex->unlock( );
+	return result_vector;
+}
+
 bool PlayListWidget::loadJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
@@ -343,23 +358,22 @@ bool PlayListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 	return true;
 }
 
-QVector< MusicInfoItemWidget * > PlayListWidget::getMusicInfoVector( ) const {
+QVector< MusicInfoItemWidget * > & PlayListWidget::getMusicInfoVector( QVector< MusicInfoItemWidget * > &result_vector ) const {
 	loadMusicFileMutex->lock( );
-	decltype(musicInfoVector) result = musicInfoVector;
+	result_vector = musicInfoVector;
 	loadMusicFileMutex->unlock( );
-	return result;
+	return result_vector;
 }
 
-QVector< QString > PlayListWidget::getListMusicFile( ) const {
-	QVector< QString > result;
+QVector< QString > & PlayListWidget::getListMusicFile( QVector< QString > &result_vector ) const {
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	if( count == 0 ) {
 		loadMusicFileMutex->unlock( );
-		return result;
+		return result_vector;
 	}
-	result.resize( count );
-	auto copyToData = result.data( );
+	result_vector.resize( count );
+	auto copyToData = result_vector.data( );
 	auto musicInfoData = musicInfoVector.data( );
 	qsizetype index;
 	for( index = 0; index < count; index += 1 )
@@ -368,12 +382,12 @@ QVector< QString > PlayListWidget::getListMusicFile( ) const {
 	count = loadMusicFileHistory.size( );
 	auto loadMusciFileHistoryData = loadMusicFileHistory.data( );
 	qsizetype newSize = count + index;
-	result.resize( newSize );
-	copyToData = result.data( ) + index;
+	result_vector.resize( newSize );
+	copyToData = result_vector.data( ) + index;
 	for( index = 0; index < count; index += 1 )
 		copyToData[ index ] = loadMusciFileHistoryData[ index ];
 	loadMusicFileMutex->unlock( );
-	return result;
+	return result_vector;
 }
 
 bool PlayListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {

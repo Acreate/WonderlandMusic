@@ -74,6 +74,16 @@ public:
 
 	virtual void setMusicDurationWidth( const int format_string_duration_width );
 
+	virtual MusicInfoItemWidget * getActiveLeftItemWidget( ) const;
+
+	virtual MusicInfoItemWidget * getSelectLeftItemWidget( ) const;
+
+	virtual QVector< MusicInfoItemWidget * > & getSelectItemWidgetVector( QVector< MusicInfoItemWidget * > &result_vector ) const;
+
+	virtual QVector< MusicInfoItemWidget * > & getMusicInfoVector( QVector< MusicInfoItemWidget * > &result_vector ) const;
+
+	virtual QVector< QString > & getListMusicFile( QVector< QString > &result_vector ) const;
+
 	// 功能
 public:
 	virtual void updateItemWidget( );
@@ -87,10 +97,6 @@ public:
 	virtual bool appendItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, const qint64 &duration );
 
 	virtual bool fromFileLoadItemInfo( const QString &music_file_path );
-
-	virtual QVector< MusicInfoItemWidget * > getMusicInfoVector( ) const;
-
-	virtual QVector< QString > getListMusicFile( ) const;
 
 	virtual bool renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const;
 

@@ -206,19 +206,18 @@ bool MainWindow::initConnect( ) {
 
 bool MainWindow::saveMainWindowSetting( ) {
 	QJsonObject wirteJsonObject;
-	wirteJsonObject.insert( jsonFileKey->getMainWindowPointXPos( ), x( ) );
-	wirteJsonObject.insert( jsonFileKey->getMainWindowPointYPos( ), y( ) );
-	wirteJsonObject.insert( jsonFileKey->getMainWindowSizeWidth( ), width( ) );
-	wirteJsonObject.insert( jsonFileKey->getMainWindowSizeHeight( ), height( ) );
+	auto geo = geometry( );
+	int windowX = geo.x( );
+	wirteJsonObject.insert( jsonFileKey->getMainWindowPointXPos( ), windowX );
+	int windowY = geo.y( );
+	wirteJsonObject.insert( jsonFileKey->getMainWindowPointYPos( ), windowY );
+	int windowWidth = geo.width( );
+	wirteJsonObject.insert( jsonFileKey->getMainWindowSizeWidth( ), windowWidth );
+	int windowHeight = geo.height( );
+	wirteJsonObject.insert( jsonFileKey->getMainWindowSizeHeight( ), windowHeight );
 
 	// 获取 json 路径
 	auto mainWindowJsonFile = jsonFileKey->getMainWindowSettingJsonPath( );
 	PathTools::writeJsonObject( wirteJsonObject, mainWindowJsonFile );
 	return true;
-}
-
-void MainWindow::hideEvent( QHideEvent *event ) {
-	QMainWindow::hideEvent( event );
-
-	writeWidgetSettingToFile( );
 }

@@ -1,15 +1,9 @@
 ﻿#include <QDateTime>
-#include <QLoggingCategory>
 #include <QProcessEnvironment>
 
-#include <QTextCodec>
-
 #include "application/appInstance.h"
-#include "application/eventFilter.h"
 
 #include "msgInfo/messageErrorOut.h"
-
-#include "tools/widgetTools.h"
 
 #include "window/mainWindow.h"
 
@@ -17,7 +11,6 @@ static MessageErrorOut *messageErrorOut = nullptr;
 static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
 
 void myCategoryFilter( QLoggingCategory *category ) {
-
 	QString name = category->categoryName( );
 	if( name.indexOf( "multimedia" ) != -1 ||
 		name.indexOf( "ffmpeg" ) != -1 ||
@@ -35,7 +28,6 @@ void myCategoryFilter( QLoggingCategory *category ) {
 		category->setEnabled( QtDebugMsg, true );
 	else if( oldCategoryFilter )
 		oldCategoryFilter( category );
-
 }
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {
@@ -44,7 +36,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	messageErrorOut->setJoinString( "\n" );
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
 	*messageErrorOut << QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序开始" ) << "----------------------";
-	EventFilter *eventFilter = new EventFilter;
+
 	AppInstance application( argc, argv );
 	QString resultString = QObject::tr( "返回值" );
 	if( application.init( ) == false ) {
@@ -55,12 +47,8 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete messageErrorOut;
 		return -1;
 	}
-	application.installEventFilter( eventFilter );
 
 	int exec = application.run( );
-
-	eventFilter->removeEventFilter( eventFilter );
-	delete eventFilter;
 
 	*messageErrorOut << "----------------------"
 		<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )

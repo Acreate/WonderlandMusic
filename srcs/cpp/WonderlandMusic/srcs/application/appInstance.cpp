@@ -40,6 +40,18 @@ AppInstance::~AppInstance( ) {
 	renderImage = nullptr;
 }
 
+bool AppInstance::notify( QObject *object, QEvent *event ) {
+	if( object == mainWindow ) {
+		auto type = event->type( );
+		switch( type ) {
+			case QEvent::Type::Close :
+				mainWindow->writeWidgetSettingToFile( );
+				break;
+		}
+	}
+	return QApplication::notify( object, event );
+}
+
 bool AppInstance::init( ) {
 	// 自身数据初始化先，再到子对象初始化
 	appSettingPath = applicationDirPath( );

@@ -45,7 +45,8 @@ public:
 
 	~AppInstance( ) override;
 
-public:
+	bool notify( QObject *, QEvent * ) override;
+
 	virtual bool init( );
 
 	virtual int run( );

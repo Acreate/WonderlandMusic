@@ -72,8 +72,6 @@ protected:
 	/// @return 失败返回 false
 	bool saveMainWindowSetting( );
 
-	void hideEvent( QHideEvent *event ) override;
-
 public:
 	~MainWindow( ) override;
 

@@ -33,6 +33,8 @@ protected:
 	AboutWidget *aboutWidget;
 	/// @brief 在主窗口配置左侧容器窗口
 	QDockWidget *leftOptionDockWidget;
+	// 在左容器窗口配置按钮组件
+	QWidget *leftOptionWidget;
 	/// @brief 显示播放列表按钮
 	QPushButton *showPlayListWidgetBtn;
 	/// @brief 显示软件设置按钮

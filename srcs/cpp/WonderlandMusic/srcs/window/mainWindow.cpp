@@ -39,6 +39,17 @@ void MainWindow::writeWidgetSettingToFile( ) {
 }
 
 MainWindow::~MainWindow( ) {
+	delete showSettingWidgetBtn;
+	delete showAboutWidgetBtn;
+	delete showPlayListWidgetBtn;
+	
+	delete leftOptionWidget;
+	delete leftOptionDockWidget;
+	
+	delete aboutWidget;
+	delete playerWindow;
+	delete settingWidget;
+	
 }
 
 MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ), isLoadJsonFile( false ) {
@@ -109,8 +120,8 @@ bool MainWindow::initDockWidget( ) {
 	addDockWidget( Qt::DockWidgetArea::LeftDockWidgetArea, leftOptionDockWidget );
 	leftOptionDockWidget->setTitleBarWidget( new QWidget( leftOptionDockWidget ) );
 	leftOptionDockWidget->setContentsMargins( 0, 0, 0, 0 );
-	// 在左容器窗口配置按钮组件
-	QWidget *leftOptionWidget = new QWidget( leftOptionDockWidget );
+	
+	leftOptionWidget = new QWidget( leftOptionDockWidget );
 	leftOptionDockWidget->setWidget( leftOptionWidget );
 	// 创建左侧容器组件布局
 	auto *optionLayout = new QVBoxLayout( leftOptionWidget );

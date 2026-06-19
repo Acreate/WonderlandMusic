@@ -43,6 +43,7 @@ PlayListWidget::~PlayListWidget( ) {
 	delete loadMusicFileMutex;
 	delete beforeClickTime;
 	delete pen;
+	delete selectItemMutex;
 }
 
 PlayListWidget::PlayListWidget( QWidget *parent ) : QWidget( parent ) {
@@ -50,6 +51,7 @@ PlayListWidget::PlayListWidget( QWidget *parent ) : QWidget( parent ) {
 	activeLeftItemWidget = nullptr;
 	selectLeftItemWidget = nullptr;
 	loadMusicFileMutex = new QMutex;
+	selectItemMutex = new QMutex;
 	beforeClickTime = new QDateTime;
 	pen = new QPen;
 	indexWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
@@ -407,7 +409,7 @@ bool PlayListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicIn
 	return renderAtMusicInfoItem( result_render_image, render_target, itemHeight, split_width, musicNameWidth, musicSingerWidth, formatStringDurationeWidth, font );
 }
 
-void PlayListWidget::doubleMusicItemWidget( MusicInfoItemWidget *double_target ) {
+void PlayListWidget::doubleClickMusicItemWidget( MusicInfoItemWidget *double_target ) {
 }
 
 void PlayListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target ) {
@@ -416,33 +418,36 @@ void PlayListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_sel
 	auto keyboardModifiers = ( Qt::KeyboardModifier ) appInstance->keyboardModifiers( ).toInt( );
 	qsizetype count;
 	switch( keyboardModifiers ) {
-		case Qt::KeyboardModifier::ControlModifier :
-			selectItemWidgetVector.append( append_select_target );
-			break;
-		case Qt::KeyboardModifier::ShiftModifier :
+		case Qt::KeyboardModifier::ControlModifier : {
+			QMutexLocker locker( selectItemMutex );
+			selectItemWidgetVector.emplace_back( append_select_target );
+		}
+		break;
+		case Qt::KeyboardModifier::ShiftModifier : {
+			QMutexLocker locker( selectItemMutex );
 			count = selectItemWidgetVector.size( );
 			if( count > 0 ) {
+				QMutexLocker loadFileLocker( loadMusicFileMutex );
 				auto selectItemWidgetData = selectItemWidgetVector.data( );
 				auto findFirstItemWidth = selectItemWidgetData[ 0 ];
-				loadMusicFileMutex->lock( );
 				qsizetype musicCount = musicInfoVector.size( );
 				auto findSourceData = musicInfoVector.data( );
 				qsizetype musicIndex = 0;
-				qsizetype getBegIndex = 0;
-				qsizetype getEndIndex = 0;
 				// 匹配 getBegIndex
 				for( ; musicIndex < musicCount; musicIndex += 1 )
-					if( findSourceData[ musicIndex ] == findFirstItemWidth ) {
-						getBegIndex = musicIndex;
+					if( findSourceData[ musicIndex ] == findFirstItemWidth )
 						break;
-					}
+				if( musicIndex == musicCount )
+					break;
+				qsizetype getBegIndex = musicIndex;
 
 				// 匹配 getEndIndex
 				for( musicIndex = 0; musicIndex < musicCount; musicIndex += 1 )
-					if( findSourceData[ musicIndex ] == append_select_target ) {
-						getEndIndex = musicIndex;
+					if( findSourceData[ musicIndex ] == append_select_target )
 						break;
-					}
+				if( musicIndex == musicCount )
+					break;
+				qsizetype getEndIndex = musicIndex;
 				if( getEndIndex != getBegIndex ) {
 					if( getEndIndex > getBegIndex ) {
 						auto endIndex = getEndIndex + 1;
@@ -458,22 +463,27 @@ void PlayListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_sel
 						selectItemWidgetVector.resize( count );
 						selectItemWidgetData = selectItemWidgetVector.data( );
 						findSourceData += getEndIndex;
-						qint64 destIndex = getBegIndex;
+						qint64 destIndex = count - 1;
 						for( musicIndex = 0; musicIndex < endIndex; musicIndex += 1, destIndex -= 1 )
 							selectItemWidgetData[ destIndex ] = findSourceData[ musicIndex ];
 					}
 				}
-				loadMusicFileMutex->unlock( );
-				QStringList out;
-				for( auto item : selectItemWidgetVector )
-					out.append( item->getMusicFilePath( ) );
-				Message_Error_Out << out;
 				break;
-			} // 如果 count == 0，这继续运行 default，直到跳出 switch
-		default :
+			}
+			// 如果 count == 0，这继续运行 default，直到跳出 switch
+		}
+		default : {
+			QMutexLocker locker( selectItemMutex );
 			selectItemWidgetVector.resize( 1 );
-			selectItemWidgetVector.data( )[ 0 ] = append_select_target;
+			auto musicInfoItemWidget = selectItemWidgetVector.data( );
+			musicInfoItemWidget[ 0 ] = append_select_target;
+		}
 	}
+	QMutexLocker locker( selectItemMutex );
+	QStringList out;
+	for( auto item : selectItemWidgetVector )
+		out.append( item->getFormatStringIndex( ) + " : " + item->getMusicFilePath( ) );
+	Message_Error_Out << out;
 	update( );
 }
 
@@ -569,7 +579,7 @@ void PlayListWidget::paintEvent( QPaintEvent *event ) {
 
 	painter.setPen( *pen );
 
-	loadMusicFileMutex->lock( );
+	QMutexLocker locker( selectItemMutex );
 	qsizetype count = selectItemWidgetVector.size( );
 	if( count ) {
 		auto data = selectItemWidgetVector.data( );
@@ -577,8 +587,6 @@ void PlayListWidget::paintEvent( QPaintEvent *event ) {
 		for( index = 0; index < count; index += 1 )
 			painter.fillRect( data[ index ]->geometry( ), drawFillColor );
 	}
-	loadMusicFileMutex->unlock( );
-
 	if( activeLeftItemWidget ) {
 		auto drawPenWidthOffset = drawPenWidth / 2;
 		auto geometry = activeLeftItemWidget->geometry( );
@@ -639,7 +647,7 @@ void PlayListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 						auto currentDateTime = QDateTime::currentDateTime( );
 						auto milliseconds = currentDateTime - *beforeClickTime;
 						if( doubleClickIntervalTimeMilliSecond > milliseconds.count( ) )
-							doubleMusicItemWidget( data[ index ] );
+							doubleClickMusicItemWidget( data[ index ] );
 						*beforeClickTime = currentDateTime;
 						break;
 					}

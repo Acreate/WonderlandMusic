@@ -29,6 +29,7 @@ protected:
 	QDateTime *beforeClickTime;
 	MusicInfoItemWidget *activeLeftItemWidget;
 	MusicInfoItemWidget *selectLeftItemWidget;
+	QMutex *selectItemMutex;
 	QVector< MusicInfoItemWidget * > selectItemWidgetVector;
 	int drawPenWidth;
 	QColor drawPenColor;
@@ -42,7 +43,7 @@ protected:
 
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int split_width ) const;
 
-	virtual void doubleMusicItemWidget( MusicInfoItemWidget *double_target );
+	virtual void doubleClickMusicItemWidget( MusicInfoItemWidget *double_target );
 
 	virtual void apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target );
 

@@ -109,6 +109,9 @@ protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 
 	void mouseReleaseEvent( QMouseEvent *event ) override;
+
+Q_SIGNALS:
+	void itemSelect( const QVector< MusicInfoItemWidget * > &select_vectir );
 };
 
 #endif // PLAYLISTWIDGET_H_H_HEAD__FILE__

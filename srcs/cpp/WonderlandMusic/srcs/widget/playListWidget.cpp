@@ -498,11 +498,11 @@ void PlayListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_sel
 			musicInfoItemWidget[ 0 ] = append_select_target;
 		}
 	}
-	QMutexLocker locker( selectItemMutex );
-	QStringList out;
-	for( auto item : selectItemWidgetVector )
-		out.append( item->getFormatStringIndex( ) + " : " + item->getMusicFilePath( ) );
-	Message_Error_Out << out;
+	selectItemMutex->lock( );
+	QVector< MusicInfoItemWidget * > resultVector;
+	getSelectItemWidgetVector( resultVector );
+	selectItemMutex->unlock( );
+	emit itemSelect( resultVector );
 	update( );
 }
 
@@ -665,8 +665,12 @@ void PlayListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 					if( selectLeftItemWidget == data[ index ] ) {// 双击检测
 						auto currentDateTime = QDateTime::currentDateTime( );
 						auto milliseconds = currentDateTime - *beforeClickTime;
-						if( doubleClickIntervalTimeMilliSecond > milliseconds.count( ) )
+						if( doubleClickIntervalTimeMilliSecond > milliseconds.count( ) ) {
 							doubleClickMusicItemWidget( data[ index ] );
+							loadMusicFileMutex->unlock( ); // 解锁
+							emit itemDoubleSelect( data[ index ] ); // 触发信号
+							loadMusicFileMutex->lock( ); // 上锁
+						}
 						*beforeClickTime = currentDateTime;
 						break;
 					}

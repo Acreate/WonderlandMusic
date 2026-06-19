@@ -529,7 +529,6 @@ bool PlayerListWidget::selectKeyShiftModifier( ) {
 			if( getEndIndex > getBegIndex ) {
 				auto endIndex = getEndIndex + 1;
 				count = endIndex - getBegIndex;
-				Message_Error_Out << count;
 				selectItemWidgetVector->resize( count );
 				selectItemWidgetData = selectItemWidgetVector->data( );
 				findSourceData += getBegIndex;
@@ -539,16 +538,13 @@ bool PlayerListWidget::selectKeyShiftModifier( ) {
 			} else {
 				auto endIndex = getBegIndex + 1;
 				count = endIndex - getEndIndex;
-				Message_Error_Out << count;
 				selectItemWidgetVector->resize( count );
 				selectItemWidgetData = selectItemWidgetVector->data( );
 				findSourceData += getEndIndex;
 				qint64 destIndex = count - 1;
 				musicIndex = 0;
-				for( ; musicIndex < count; musicIndex += 1, destIndex -= 1 ) {
+				for( ; musicIndex < count; musicIndex += 1, destIndex -= 1 )
 					selectItemWidgetData[ destIndex ] = findSourceData[ musicIndex ];
-					qDebug( ) << count << " : " << destIndex << " , " << musicIndex;
-				}
 			}
 		}
 		musicInfoMutex->unlock( );

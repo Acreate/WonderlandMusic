@@ -651,6 +651,7 @@ void PlayListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	switch( mouseButton ) {
 		case Qt::MouseButton::LeftButton : {
 			MusicInfoItemWidget *selectItem = nullptr;
+			MusicInfoItemWidget *doubleItemWidget = nullptr;
 			loadMusicFileMutex->lock( );
 			qsizetype count = musicInfoVector.size( );
 			if( count == 0 ) {
@@ -667,9 +668,7 @@ void PlayListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 						auto milliseconds = currentDateTime - *beforeClickTime;
 						if( doubleClickIntervalTimeMilliSecond > milliseconds.count( ) ) {
 							doubleClickMusicItemWidget( data[ index ] );
-							loadMusicFileMutex->unlock( ); // 解锁
-							emit itemDoubleSelect( data[ index ] ); // 触发信号
-							loadMusicFileMutex->lock( ); // 上锁
+							doubleItemWidget = data[ index ];
 						}
 						*beforeClickTime = currentDateTime;
 						break;
@@ -680,6 +679,8 @@ void PlayListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 			loadMusicFileMutex->unlock( );
 			if( selectItem )
 				apendSelectMusicItemWidget( data[ index ] );
+			if( doubleItemWidget )
+				emit itemDoubleSelect( doubleItemWidget ); // 触发信号
 		}
 		break;
 		case Qt::MouseButton::RightButton : {

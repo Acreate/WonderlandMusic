@@ -110,29 +110,29 @@ QString MusicDecoder::getMusicPlayerSourceFile( ) const {
 	return localFile;
 }
 
-void MusicDecoder::addPlayMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector ) {
+void MusicDecoder::addPlayMusicVector( PlayerListWidget *player_list_widget, const 	std::vector< MusicInfoItemWidget * > &play_vector ) {
 }
 
-void MusicDecoder::insterMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector ) {
+void MusicDecoder::insterMusicVector( PlayerListWidget *player_list_widget, const 	std::vector< MusicInfoItemWidget * > &play_vector ) {
 }
 
-void MusicDecoder::removeAtPlayerListWidgetMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector ) {
+void MusicDecoder::removeAtPlayerListWidgetMusicVector( PlayerListWidget *player_list_widget, const 	std::vector< MusicInfoItemWidget * > &play_vector ) {
 }
 
-void MusicDecoder::setCurrentSelectPlay( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+void MusicDecoder::setCurrentSelectPlay( const 	std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
 }
 
-void MusicDecoder::insterCurrentSelectPlay( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+void MusicDecoder::insterCurrentSelectPlay( const 	std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
 }
 
-void MusicDecoder::removePlayListSelectInfo( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+void MusicDecoder::removePlayListSelectInfo( const 	std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
 }
 
-void MusicDecoder::deletePlayListSelectFile( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+void MusicDecoder::deletePlayListSelectFile( const 	std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
 }
 
-void MusicDecoder::selectListMoveTop( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+void MusicDecoder::selectListMoveTop( const 	std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
 }
 
-void MusicDecoder::selectListMoveBottom( const QVector< MusicInfoItemWidget * > &selct_play_vector ) {
+void MusicDecoder::selectListMoveBottom( const 	std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
 }

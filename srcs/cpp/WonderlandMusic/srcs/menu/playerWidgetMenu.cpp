@@ -62,37 +62,37 @@ bool PlayerWidgetMenu::init( ) {
 }
 
 void PlayerWidgetMenu::setCurrentSelectPlay( ) {
-	QVector< MusicInfoItemWidget * > selectVector;
+	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
 	musicDecoder->setCurrentSelectPlay( selectVector );
 }
 
 void PlayerWidgetMenu::insterCurrentSelectPlay( ) {
-	QVector< MusicInfoItemWidget * > selectVector;
+	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
 	musicDecoder->insterCurrentSelectPlay( selectVector );
 }
 
 void PlayerWidgetMenu::removePlayListSelectInfo( ) {
-	QVector< MusicInfoItemWidget * > selectVector;
+	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
 	musicDecoder->removePlayListSelectInfo( selectVector );
 }
 
 void PlayerWidgetMenu::deletePlayListSelectFile( ) {
-	QVector< MusicInfoItemWidget * > selectVector;
+	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
 	musicDecoder->deletePlayListSelectFile( selectVector );
 }
 
 void PlayerWidgetMenu::selectListMoveTop( ) {
-	QVector< MusicInfoItemWidget * > selectVector;
+	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
 	musicDecoder->selectListMoveTop( selectVector );
 }
 
 void PlayerWidgetMenu::selectListMoveBottom( ) {
-	QVector< MusicInfoItemWidget * > selectVector;
+	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
 	musicDecoder->selectListMoveBottom( selectVector );
 }

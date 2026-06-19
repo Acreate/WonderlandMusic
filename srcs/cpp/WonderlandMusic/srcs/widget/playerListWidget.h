@@ -2,10 +2,14 @@
 #define PLAYLISTWIDGET_H_H_HEAD__FILE__
 
 #include <QWidget>
+
+namespace std {
+	class mutex;
+}
+
 class PlayerWidgetMenu;
 class PlayerListTopWidget;
 class MusicInfoItem;
-class QMutex;
 class MusicInfoItemWidget;
 class QMediaMetaData;
 
@@ -13,11 +17,6 @@ class PlayerListWidget : public QWidget {
 	Q_OBJECT;
 
 protected:
-	QMutex *widgetReleaseMutex;
-	QMutex *loadMusicFileMutex;
-
-	QStringList loadMusicFileHistory;
-	QVector< MusicInfoItemWidget * > musicInfoVector;
 	int currentWidgetWidth;
 	int currentWidgetHeight;
 	int widgetBeforeWidth;
@@ -28,16 +27,21 @@ protected:
 	int musicSingerWidth;
 	int musicDurationWidth;
 	qint64 doubleClickIntervalTimeMilliSecond;
+	QStringList loadMusicFileHistory;
+	std::mutex *updateMuex;
+	std::mutex *musicInfoMutex;
+	std::vector< MusicInfoItemWidget * > *musicInfoVector;
 	QDateTime *beforeClickTime;
 	MusicInfoItemWidget *activeLeftItemWidget;
 	MusicInfoItemWidget *selectLeftItemWidget;
-	QMutex *selectItemMutex;
-	QVector< MusicInfoItemWidget * > selectItemWidgetVector;
+	std::mutex *selectItemWidgetMutex;
+	std::vector< MusicInfoItemWidget * > *selectItemWidgetVector;
 	int drawPenWidth;
 	QColor drawPenColor;
 	QColor drawFillColor;
 	QPen *pen;
-	PlayerWidgetMenu* playerWidgetMenu;
+	PlayerWidgetMenu *playerWidgetMenu;
+
 protected:
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const;
 
@@ -48,6 +52,12 @@ protected:
 	virtual void doubleClickMusicItemWidget( MusicInfoItemWidget *double_target );
 
 	virtual void apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target );
+
+	virtual bool selectKeyShiftModifier( );
+
+	virtual bool selectKeyControlModifier( );
+
+	virtual bool selectKeyDefaultModifier( );
 
 public:
 	~PlayerListWidget( ) override;
@@ -80,11 +90,11 @@ public:
 
 	virtual MusicInfoItemWidget * getSelectLeftItemWidget( ) const;
 
-	virtual QVector< MusicInfoItemWidget * > & getSelectItemWidgetVector( QVector< MusicInfoItemWidget * > &result_vector ) const;
+	virtual std::vector< MusicInfoItemWidget * > & getSelectItemWidgetVector( std::vector< MusicInfoItemWidget * > &result_vector ) const;
 
-	virtual QVector< MusicInfoItemWidget * > & getMusicInfoVector( QVector< MusicInfoItemWidget * > &result_vector ) const;
+	virtual std::vector< MusicInfoItemWidget * > & getMusicInfoVector( std::vector< MusicInfoItemWidget * > &result_vector ) const;
 
-	virtual QVector< QString > & getListMusicFile( QVector< QString > &result_vector ) const;
+	virtual std::vector< QString > & getListMusicFile( std::vector< QString > &result_vector ) const;
 
 	// 功能
 public:
@@ -113,7 +123,7 @@ protected:
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 
 Q_SIGNALS:
-	void itemSelect( const QVector< MusicInfoItemWidget * > &select_vectir );
+	void itemSelect( const std::vector< MusicInfoItemWidget * > &select_vectir );
 
 	void itemDoubleSelect( MusicInfoItemWidget *double_click_item_widget );
 };

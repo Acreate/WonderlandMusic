@@ -119,7 +119,7 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	} );
 	connect( playerListTopWidget, &PlayerListTopWidget::changedWidth, [this]( ) {
 		//playerListTopWidgetScrollArea->setFixedHeight( playerListTopWidget->height( ) );
-		int width = playerListTopWidget->width( );
+		//int width = playerListTopWidget->width( );
 		playListWidget->setItemWidth( playerListTopWidget );
 	} );
 	auto playListHBar = playListWidgetScrollArea->horizontalScrollBar( );
@@ -147,7 +147,10 @@ bool PlayerWindow::loadJsonPathInfo( ) {
 		else
 			dirSelectWorkPath = QDir::currentPath( );
 	}
-	playerListTopWidget->setFixedWidth( topDocWidget->width( ) );
+	
+	int width = playerListTopWidgetScrollArea->viewport( )->width( );
+	playerListTopWidget->setFixedWidth( width );
+	playerListTopWidget->autoSetItemSize( );
 	playerListTopWidget->loadJsonPathInfo( );
 	playerListTopWidgetScrollArea->setFixedHeight( playerListTopWidget->height( ) );
 	playListWidget->setItemWidth( playerListTopWidget );

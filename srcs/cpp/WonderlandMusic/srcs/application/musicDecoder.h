@@ -1,8 +1,11 @@
 ﻿#ifndef MUSICDECODER_H_H_HEAD__FILE__
 #define MUSICDECODER_H_H_HEAD__FILE__
 
+#include <qcontainerfwd.h>
 #include <vector>
 
+class PlayerListWidget;
+class MusicInfoItemWidget;
 class QMediaPlayer;
 class QString;
 
@@ -30,6 +33,12 @@ public:
 	virtual bool pauseMusic( );
 
 	virtual QString getMusicPlayerSourceFile( ) const;
+
+	virtual void addPlayMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector );
+
+	virtual void insterMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector );
+
+	virtual void removeAtPlayerListWidgetMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector );
 };
 
 #endif // MUSICDECODER_H_H_HEAD__FILE__

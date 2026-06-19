@@ -8,12 +8,12 @@
 
 #include "../tools/dateTimeFormat.h"
 
-#include "../widget/playListWidget.h"
+#include "../widget/playerListWidget.h"
 
 MusicInfoItem::MusicInfoItem( ) : MusicInfoItem( nullptr ) {
 }
 
-MusicInfoItem::MusicInfoItem( PlayListWidget *parent ) : parentPlayListWidget( parent ) {
+MusicInfoItem::MusicInfoItem( PlayerListWidget *parent ) : parentPlayListWidget( parent ) {
 }
 
 bool MusicInfoItem::init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms ) {

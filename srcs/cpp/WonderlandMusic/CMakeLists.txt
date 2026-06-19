@@ -14,8 +14,8 @@ get_cmake_separator( _cmake_sep )
 init_std_builder_path( )
 
 
-set( qt_find_mode_list Widgets Core LinguistTools Network Multimedia OpenGLWidgets Core5Compat )
-set( qt_link_lib_list Qt6::Widgets Qt6::Core Qt6::Multimedia Qt6::OpenGLWidgets Qt6::Core5Compat )
+set( qt_find_mode_list Widgets Core LinguistTools Network Multimedia OpenGLWidgets Core5Compat Gui )
+set( qt_link_lib_list Qt6::Widgets Qt6::Core Qt6::Gui Qt6::Multimedia Qt6::OpenGLWidgets Qt6::Core5Compat )
 
 find_package( Qt6 QUIET COMPONENTS ${qt_find_mode_list} )
 

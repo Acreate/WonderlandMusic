@@ -2,13 +2,14 @@
 #define PLAYLISTWIDGET_H_H_HEAD__FILE__
 
 #include <QWidget>
+class PlayerWidgetMenu;
 class PlayerListTopWidget;
 class MusicInfoItem;
 class QMutex;
 class MusicInfoItemWidget;
 class QMediaMetaData;
 
-class PlayListWidget : public QWidget {
+class PlayerListWidget : public QWidget {
 	Q_OBJECT;
 
 protected:
@@ -35,7 +36,7 @@ protected:
 	QColor drawPenColor;
 	QColor drawFillColor;
 	QPen *pen;
-
+	PlayerWidgetMenu* playerWidgetMenu;
 protected:
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const;
 
@@ -48,9 +49,9 @@ protected:
 	virtual void apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target );
 
 public:
-	~PlayListWidget( ) override;
+	~PlayerListWidget( ) override;
 
-	PlayListWidget( QWidget *parent );
+	PlayerListWidget( QWidget *parent );
 
 	// get+set
 public:

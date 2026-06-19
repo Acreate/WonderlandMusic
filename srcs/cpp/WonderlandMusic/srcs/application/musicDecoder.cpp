@@ -109,3 +109,12 @@ QString MusicDecoder::getMusicPlayerSourceFile( ) const {
 	auto localFile = source.toLocalFile( );
 	return localFile;
 }
+
+void MusicDecoder::addPlayMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector ) {
+}
+
+void MusicDecoder::insterMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector ) {
+}
+
+void MusicDecoder::removeAtPlayerListWidgetMusicVector( PlayerListWidget *player_list_widget, const QVector< MusicInfoItemWidget * > &play_vector ) {
+}

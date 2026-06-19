@@ -46,9 +46,9 @@ bool AppInstance::init( ) {
 
 	if( translate->init( ) == false )
 		return false;
-	if( musicDecoder->init( ) == false )
-		return false;
 	if( jsonFileKey->init( ) == false )
+		return false;
+	if( musicDecoder->init( ) == false )
 		return false;
 	if( renderImage->init( ) == false )
 		return false;

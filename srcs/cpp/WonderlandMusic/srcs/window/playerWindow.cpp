@@ -15,7 +15,7 @@
 #include "../tools/pathTools.h"
 #include "../tools/widgetTools.h"
 
-#include "../widget/playListWidget.h"
+#include "../widget/playerListWidget.h"
 #include "../widget/playerListTopWidget.h"
 
 PlayerWindow::~PlayerWindow( ) {
@@ -51,7 +51,7 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	playListWidgetScrollArea->setWidgetResizable( true );
 	playListWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
 
-	playListWidget = new PlayListWidget( playListWidgetScrollArea );
+	playListWidget = new PlayerListWidget( playListWidgetScrollArea );
 	playListWidget->adjustSize( );
 	playListWidgetScrollArea->setWidget( playListWidget );
 

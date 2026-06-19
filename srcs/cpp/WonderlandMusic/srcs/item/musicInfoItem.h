@@ -4,14 +4,14 @@
 
 class QImage;
 class QJsonObject;
-class PlayListWidget;
+class PlayerListWidget;
 class QMediaMetaData;
 
 class MusicInfoItem {
-	friend class PlayListWidget;
+	friend class PlayerListWidget;
 
 protected:
-	PlayListWidget *parentPlayListWidget;
+	PlayerListWidget *parentPlayListWidget;
 
 	QString musicFilePath;
 	QString musicName;
@@ -23,7 +23,7 @@ protected:
 protected:
 	MusicInfoItem( );
 
-	MusicInfoItem( PlayListWidget *parent );
+	MusicInfoItem( PlayerListWidget *parent );
 
 	virtual ~MusicInfoItem( ) = default;
 

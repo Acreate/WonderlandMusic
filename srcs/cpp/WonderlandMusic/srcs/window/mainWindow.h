@@ -7,7 +7,7 @@ class QScrollArea;
 class QPushButton;
 class JsonFileKey;
 class QStackedWidget;
-class PlayListWidget;
+class PlayerListWidget;
 class SettingWidget;
 class AboutWidget;
 class AppTranslate;
@@ -24,27 +24,30 @@ protected:
 	/// @brief 获取 Json 关键字信息
 	const JsonFileKey *jsonFileKey;
 	/// @brief 配置主显示组件-层叠
-	QStackedWidget *mainStackedWidget;
+	QStackedWidget *mainStackedWidget = nullptr;
 	/// @brief 播放窗口
-	PlayerWindow *playerWindow;
+	PlayerWindow *playerWindow = nullptr;
 	/// @brief 在层叠组件配置设置组件
-	SettingWidget *settingWidget;
+	SettingWidget *settingWidget = nullptr;
 	/// @brief 在层叠组件配置关于组件
-	AboutWidget *aboutWidget;
+	AboutWidget *aboutWidget = nullptr;
 	/// @brief 在主窗口配置左侧容器窗口
-	QDockWidget *leftOptionDockWidget;
+	QDockWidget *leftOptionDockWidget = nullptr;
 	// 在左容器窗口配置按钮组件
-	QWidget *leftOptionWidget;
+	QWidget *leftOptionWidget = nullptr;
 	/// @brief 显示播放列表按钮
-	QPushButton *showPlayListWidgetBtn;
+	QPushButton *showPlayListWidgetBtn = nullptr;
 	/// @brief 显示软件设置按钮
-	QPushButton *showSettingWidgetBtn;
+	QPushButton *showSettingWidgetBtn = nullptr;
 	/// @brief 显示关于面板按钮
-	QPushButton *showAboutWidgetBtn;
+	QPushButton *showAboutWidgetBtn = nullptr;
 	/// @brief 是否初始化
 	bool isLoadJsonFile;
 
 protected:
+	/// @brief 释放资源
+	virtual void releaseResource( );
+
 	/// @brief 初始化 AppInstance 实例相关对象
 	/// @return 失败返回 false
 	bool initApp( );

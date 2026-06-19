@@ -5,9 +5,9 @@
 #include "../application/appInstance.h"
 #include "../application/renderImage.h"
 
-#include "../widget/playListWidget.h"
+#include "../widget/playerListWidget.h"
 
-MusicInfoItemWidget::MusicInfoItemWidget( PlayListWidget *parent ) : QWidget( parent ), MusicInfoItem( parent ) {
+MusicInfoItemWidget::MusicInfoItemWidget( PlayerListWidget *parent ) : QWidget( parent ), MusicInfoItem( parent ) {
 	index = 0;
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	// 开启鼠标穿透

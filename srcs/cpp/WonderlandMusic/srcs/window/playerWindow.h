@@ -4,7 +4,7 @@
 #include <QMainWindow>
 class PlayerListTopWidget;
 class QScrollArea;
-class PlayListWidget;
+class PlayerListWidget;
 
 class PlayerWindow : public QMainWindow {
 	Q_OBJECT;
@@ -13,7 +13,7 @@ protected:
 	/// @brief 播放列表的滚动容器
 	QScrollArea *playListWidgetScrollArea;
 	/// @brief 在层叠组件配置播放组件
-	PlayListWidget *playListWidget;
+	PlayerListWidget *playListWidget;
 	/// @brief 文件选择工作路径
 	QString fileSelectWorkPath;
 	/// @brief 目录选择工作路径

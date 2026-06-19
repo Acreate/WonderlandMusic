@@ -53,6 +53,14 @@ protected:
 	QString musicSinger;
 	QString musicDuration;
 
+	QString playerListMenuenuPlayerMenu;
+	QString playerListMenuPlayerMenuSetCurrentPlayAction;
+	QString playerListMenuPlayerMenuInsterCurrentPlayAction;
+	QString playerListMenuControlMenu;
+	QString playerListMenuControlMenuRemoveMusicAction;
+	QString playerListMenuControlMenuMoveTopMusicAction;
+	QString playerListMenuControlMenuMoveBottomMusicAction;
+
 protected:
 	void setCodecForLocale( );
 
@@ -130,6 +138,20 @@ public:
 	virtual const QString & getMusicSinger( ) const;
 
 	virtual const QString & getMusicDuration( ) const;
+
+	virtual const QString & getPlayerListMenuenuPlayerMenu( ) const;
+
+	virtual const QString & getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) const;
+
+	virtual const QString & getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenu( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenuRemoveMusicAction( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenuMoveTopMusicAction( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenuMoveBottomMusicAction( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

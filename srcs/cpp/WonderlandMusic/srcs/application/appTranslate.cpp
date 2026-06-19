@@ -55,6 +55,14 @@ void AppTranslate::translateString( ) {
 	musicName = QObject::tr( "歌名" );
 	musicSinger = QObject::tr( "歌手" );
 	musicDuration = QObject::tr( "时长" );
+
+	playerListMenuenuPlayerMenu = QObject::tr( "播放菜单" );
+	playerListMenuPlayerMenuSetCurrentPlayAction = QObject::tr( "从选中开始播放" );
+	playerListMenuPlayerMenuInsterCurrentPlayAction = QObject::tr( "插入选中并播放" );
+	playerListMenuControlMenu = QObject::tr( "控制菜单" );
+	playerListMenuControlMenuRemoveMusicAction = QObject::tr( "删除选中列表" );
+	playerListMenuControlMenuMoveTopMusicAction = QObject::tr( "选中列表移动到顶部" );
+	playerListMenuControlMenuMoveBottomMusicAction = QObject::tr( "选中列表移动到底部" );
 }
 
 bool AppTranslate::init( ) {
@@ -193,4 +201,32 @@ const QString & AppTranslate::getMusicSinger( ) const {
 
 const QString & AppTranslate::getMusicDuration( ) const {
 	return musicDuration;
+}
+
+const QString & AppTranslate::getPlayerListMenuenuPlayerMenu( ) const {
+	return playerListMenuenuPlayerMenu;
+}
+
+const QString & AppTranslate::getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) const {
+	return playerListMenuPlayerMenuSetCurrentPlayAction;
+}
+
+const QString & AppTranslate::getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) const {
+	return playerListMenuPlayerMenuInsterCurrentPlayAction;
+}
+
+const QString & AppTranslate::getPlayerListMenuControlMenu( ) const {
+	return playerListMenuControlMenu;
+}
+
+const QString & AppTranslate::getPlayerListMenuControlMenuRemoveMusicAction( ) const {
+	return playerListMenuControlMenuRemoveMusicAction;
+}
+
+const QString & AppTranslate::getPlayerListMenuControlMenuMoveTopMusicAction( ) const {
+	return playerListMenuControlMenuMoveTopMusicAction;
+}
+
+const QString & AppTranslate::getPlayerListMenuControlMenuMoveBottomMusicAction( ) const {
+	return playerListMenuControlMenuMoveBottomMusicAction;
 }

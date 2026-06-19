@@ -39,17 +39,7 @@ void MainWindow::writeWidgetSettingToFile( ) {
 }
 
 MainWindow::~MainWindow( ) {
-	delete showSettingWidgetBtn;
-	delete showAboutWidgetBtn;
-	delete showPlayListWidgetBtn;
-	
-	delete leftOptionWidget;
-	delete leftOptionDockWidget;
-	
-	delete aboutWidget;
-	delete playerWindow;
-	delete settingWidget;
-	
+	releaseResource( );
 }
 
 MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ), isLoadJsonFile( false ) {
@@ -64,6 +54,7 @@ bool MainWindow::loadSettingWidgetInfoAtFile( ) {
 }
 
 bool MainWindow::init( ) {
+	releaseResource( );
 	if( initApp( ) == false )
 		return false;
 	if( initStackedWidget( ) == false )
@@ -73,8 +64,6 @@ bool MainWindow::init( ) {
 	if( initMainWindowSetting( ) == false )
 		return false;
 
-	//if( loadSettingWidgetInfoAtFile( ) == false )
-	//	return false;
 	if( initConnect( ) == false )
 		return false;
 	return true;
@@ -86,6 +75,21 @@ void MainWindow::showEvent( QShowEvent *event ) {
 		isLoadJsonFile = true;
 		loadSettingWidgetInfoAtFile( );
 	}
+}
+
+void MainWindow::releaseResource( ) {
+	#define RS( ptr ) if( ptr ) {delete ptr; ptr = nullptr;}
+
+	RS( showSettingWidgetBtn );
+	RS( showAboutWidgetBtn );
+	RS( showPlayListWidgetBtn );
+
+	RS( leftOptionWidget );
+	RS( leftOptionDockWidget );
+
+	RS( aboutWidget );
+	RS( playerWindow );
+	RS( settingWidget );
 }
 
 bool MainWindow::initApp( ) {
@@ -120,7 +124,7 @@ bool MainWindow::initDockWidget( ) {
 	addDockWidget( Qt::DockWidgetArea::LeftDockWidgetArea, leftOptionDockWidget );
 	leftOptionDockWidget->setTitleBarWidget( new QWidget( leftOptionDockWidget ) );
 	leftOptionDockWidget->setContentsMargins( 0, 0, 0, 0 );
-	
+
 	leftOptionWidget = new QWidget( leftOptionDockWidget );
 	leftOptionDockWidget->setWidget( leftOptionWidget );
 	// 创建左侧容器组件布局

@@ -25,12 +25,19 @@ AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplicatio
 }
 
 AppInstance::~AppInstance( ) {
+	instance = nullptr;
 	delete mainWindow;
+	mainWindow = nullptr;
 	delete musicDecoder;
+	musicDecoder = nullptr;
 	delete jsonFileKey;
+	jsonFileKey = nullptr;
 	delete translate;
+	translate = nullptr;
 	delete startDateTime;
+	startDateTime = nullptr;
 	delete renderImage;
+	renderImage = nullptr;
 }
 
 bool AppInstance::init( ) {

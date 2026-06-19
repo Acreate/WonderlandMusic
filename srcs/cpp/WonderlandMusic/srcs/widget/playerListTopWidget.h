@@ -28,6 +28,8 @@ protected:
 public:
 	PlayerListTopWidget( QWidget *parent );
 
+	~PlayerListTopWidget( ) override;
+
 	virtual bool loadJsonPathInfo( );
 
 	virtual bool writeJsonPathInfo( );

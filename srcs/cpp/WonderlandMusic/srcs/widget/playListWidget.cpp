@@ -40,6 +40,11 @@ void PlayListWidget::clearMusicInfoVector( ) {
 
 PlayListWidget::~PlayListWidget( ) {
 	clearMusicInfoVector( );
+	selectItemMutex->lock( );
+	selectItemWidgetVector.clear( );
+	selectLeftItemWidget = nullptr;
+	activeLeftItemWidget = nullptr;
+	selectItemMutex->unlock( );
 	delete loadMusicFileMutex;
 	delete beforeClickTime;
 	delete pen;

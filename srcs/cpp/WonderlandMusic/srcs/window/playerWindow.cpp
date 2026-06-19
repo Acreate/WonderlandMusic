@@ -18,6 +18,13 @@
 #include "../widget/playListWidget.h"
 #include "../widget/playerListTopWidget.h"
 
+PlayerWindow::~PlayerWindow( ) {
+	//delete playerListTopWidget;
+	//delete playerListTopWidgetScrollArea;
+	delete topDocWidget;
+}
+
+
 PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	setWindowFlags( Qt::WindowType::Widget );
 

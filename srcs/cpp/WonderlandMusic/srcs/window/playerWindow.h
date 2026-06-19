@@ -27,6 +27,8 @@ protected:
 
 
 public:
+	~PlayerWindow( ) override;
+
 	PlayerWindow( QWidget *parent );
 
 	virtual bool loadJsonPathInfo( );

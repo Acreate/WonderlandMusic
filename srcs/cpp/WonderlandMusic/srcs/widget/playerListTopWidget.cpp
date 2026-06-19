@@ -26,6 +26,9 @@ PlayerListTopWidget::PlayerListTopWidget( QWidget *parent ) : QWidget( parent ),
 	cursorShape = Qt::ArrowCursor;
 }
 
+PlayerListTopWidget::~PlayerListTopWidget( ) {
+}
+
 bool PlayerListTopWidget::loadJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );

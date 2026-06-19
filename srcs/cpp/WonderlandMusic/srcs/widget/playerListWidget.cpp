@@ -28,6 +28,8 @@
 #include "../tools/pathTools.h"
 
 void PlayerListWidget::clearMusicInfoVector( ) {
+	if( loadMusicFileMutex == nullptr )
+		return;
 	loadMusicFileMutex->lock( );
 	auto count = musicInfoVector.size( );
 	if( count ) {
@@ -48,8 +50,9 @@ PlayerListWidget::~PlayerListWidget( ) {
 	activeLeftItemWidget = nullptr;
 	selectItemMutex->unlock( );
 	widgetReleaseMutex->lock( );
-	delete playerWidgetMenu;
 	delete loadMusicFileMutex;
+	loadMusicFileMutex = nullptr;
+	delete playerWidgetMenu;
 	delete beforeClickTime;
 	delete pen;
 	delete selectItemMutex;
@@ -80,6 +83,8 @@ PlayerListWidget::PlayerListWidget( QWidget *parent ) : QWidget( parent ) {
 }
 
 void PlayerListWidget::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {
+	if( loadMusicFileMutex == nullptr )
+		return;
 	int widgetBeforeWidth = player_list_top_widget->getWidgetBeforeWidth( );
 	int splitWidth = player_list_top_widget->getSplitWidth( );
 	int musicNameWidth = player_list_top_widget->getMusicNameWidth( );
@@ -91,6 +96,8 @@ void PlayerListWidget::setItemWidth( const PlayerListTopWidget *player_list_top_
 }
 
 void PlayerListWidget::setItemWidth( int widget_before_width, int splite_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width ) {
+	if( loadMusicFileMutex == nullptr )
+		return;
 	widgetBeforeWidth = widget_before_width;
 	splitWidth = splite_width;
 	musicNameWidth = music_name_width;
@@ -146,6 +153,8 @@ MusicInfoItemWidget * PlayerListWidget::getSelectLeftItemWidget( ) const {
 }
 
 QVector< MusicInfoItemWidget * > & PlayerListWidget::getSelectItemWidgetVector( QVector< MusicInfoItemWidget * > &result_vector ) const {
+	if( loadMusicFileMutex == nullptr )
+		return result_vector;
 	selectItemMutex->lock( );
 	result_vector = selectItemWidgetVector;
 	selectItemMutex->unlock( );
@@ -153,6 +162,8 @@ QVector< MusicInfoItemWidget * > & PlayerListWidget::getSelectItemWidgetVector( 
 }
 
 bool PlayerListWidget::loadJsonPathInfo( ) {
+	if( loadMusicFileMutex == nullptr )
+		return false;
 	if( playerWidgetMenu->init( ) == false )
 		return false;
 	auto appInstance = AppInstance::getAppInstance( );
@@ -220,6 +231,8 @@ bool PlayerListWidget::loadJsonPathInfo( ) {
 }
 
 bool PlayerListWidget::writeJsonPathInfo( ) {
+	if( loadMusicFileMutex == nullptr )
+		return false;
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 
@@ -257,6 +270,8 @@ bool PlayerListWidget::writeJsonPathInfo( ) {
 }
 
 bool PlayerListWidget::appendItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, const qint64 &duration ) {
+	if( loadMusicFileMutex == nullptr )
+		return false;
 	QFileInfo fileInfo( music_file_path );
 	bool resultBool = true;
 	auto absFilePath = fileInfo.absoluteFilePath( );
@@ -298,6 +313,8 @@ bool PlayerListWidget::appendItem( const QString &music_file_path, const QString
 }
 
 bool PlayerListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
+	if( loadMusicFileMutex == nullptr )
+		return false;
 	QFileInfo fileInfo( music_file_path );
 	bool resultBool = fileInfo.exists( );
 	if( resultBool == false )
@@ -369,6 +386,8 @@ bool PlayerListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 }
 
 QVector< MusicInfoItemWidget * > & PlayerListWidget::getMusicInfoVector( QVector< MusicInfoItemWidget * > &result_vector ) const {
+	if( loadMusicFileMutex == nullptr )
+		return result_vector;
 	loadMusicFileMutex->lock( );
 	result_vector = musicInfoVector;
 	loadMusicFileMutex->unlock( );
@@ -376,6 +395,8 @@ QVector< MusicInfoItemWidget * > & PlayerListWidget::getMusicInfoVector( QVector
 }
 
 QVector< QString > & PlayerListWidget::getListMusicFile( QVector< QString > &result_vector ) const {
+	if( loadMusicFileMutex == nullptr )
+		return result_vector;
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	if( count == 0 ) {
@@ -401,6 +422,8 @@ QVector< QString > & PlayerListWidget::getListMusicFile( QVector< QString > &res
 }
 
 bool PlayerListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {
+	if( loadMusicFileMutex == nullptr )
+		return false;
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	if( count == 0 ) {
@@ -442,6 +465,8 @@ void PlayerListWidget::doubleClickMusicItemWidget( MusicInfoItemWidget *double_t
 }
 
 void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target ) {
+	if( loadMusicFileMutex == nullptr )
+		return;
 	selectItemMutex->lock( );
 	activeLeftItemWidget = append_select_target;
 	selectLeftItemWidget = append_select_target;
@@ -544,6 +569,8 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 }
 
 void PlayerListWidget::updateItemWidget( ) {
+	if( loadMusicFileMutex == nullptr )
+		return;
 	int offsetY = 0;
 	auto appInstance = AppInstance::getAppInstance( );
 	auto renderImage = appInstance->getRenderImage( );
@@ -630,6 +657,8 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 }
 
 void PlayerListWidget::paintEvent( QPaintEvent *event ) {
+	if( loadMusicFileMutex == nullptr )
+		return;
 	widgetReleaseMutex->lock( );
 	QPainter painter;
 	painter.begin( this );
@@ -667,6 +696,8 @@ void PlayerListWidget::resizeEvent( QResizeEvent *event ) {
 }
 
 void PlayerListWidget::mouseMoveEvent( QMouseEvent *event ) {
+	if( loadMusicFileMutex == nullptr )
+		return;
 	loadMusicFileMutex->lock( );
 	qsizetype count = musicInfoVector.size( );
 	if( count == 0 ) {
@@ -687,6 +718,8 @@ void PlayerListWidget::mouseMoveEvent( QMouseEvent *event ) {
 }
 
 void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	if( loadMusicFileMutex == nullptr )
+		return;
 	Qt::MouseButton mouseButton = event->button( );
 	switch( mouseButton ) {
 		case Qt::MouseButton::LeftButton : {

@@ -112,6 +112,8 @@ protected:
 
 Q_SIGNALS:
 	void itemSelect( const QVector< MusicInfoItemWidget * > &select_vectir );
+
+	void itemDoubleSelect( MusicInfoItemWidget *double_click_item_widget );
 };
 
 #endif // PLAYLISTWIDGET_H_H_HEAD__FILE__

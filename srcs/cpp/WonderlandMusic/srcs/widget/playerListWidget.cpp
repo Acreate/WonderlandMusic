@@ -47,11 +47,14 @@ PlayerListWidget::~PlayerListWidget( ) {
 	selectLeftItemWidget = nullptr;
 	activeLeftItemWidget = nullptr;
 	selectItemMutex->unlock( );
+	widgetReleaseMutex->lock( );
 	delete playerWidgetMenu;
 	delete loadMusicFileMutex;
 	delete beforeClickTime;
 	delete pen;
 	delete selectItemMutex;
+	widgetReleaseMutex->unlock( );
+	delete widgetReleaseMutex;
 }
 
 PlayerListWidget::PlayerListWidget( QWidget *parent ) : QWidget( parent ) {
@@ -59,6 +62,7 @@ PlayerListWidget::PlayerListWidget( QWidget *parent ) : QWidget( parent ) {
 	activeLeftItemWidget = nullptr;
 	selectLeftItemWidget = nullptr;
 	loadMusicFileMutex = new QMutex;
+	widgetReleaseMutex = new QMutex;
 	selectItemMutex = new QMutex;
 	beforeClickTime = new QDateTime;
 	playerWidgetMenu = new PlayerWidgetMenu( this );
@@ -448,7 +452,7 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 	switch( keyboardModifiers ) {
 		case Qt::KeyboardModifier::ControlModifier : {
 			QMutexLocker locker( selectItemMutex );
-			qsizetype count = selectItemWidgetVector.size( );
+			count = selectItemWidgetVector.size( );
 			if( count ) {
 				auto musicInfoItemWidget = selectItemWidgetVector.data( );
 				qsizetype index = 0;
@@ -467,10 +471,12 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 		}
 		break;
 		case Qt::KeyboardModifier::ShiftModifier : {
-			QMutexLocker locker( selectItemMutex );
+			selectItemMutex->lock( );
 			count = selectItemWidgetVector.size( );
+			selectItemMutex->unlock( );
 			if( count > 0 ) {
-				QMutexLocker loadFileLocker( loadMusicFileMutex );
+				selectItemMutex->lock( );
+				loadMusicFileMutex->lock( );
 				auto selectItemWidgetData = selectItemWidgetVector.data( );
 				auto findFirstItemWidth = selectItemWidgetData[ 0 ];
 				qsizetype musicCount = musicInfoVector.size( );
@@ -480,16 +486,22 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 				for( ; musicIndex < musicCount; musicIndex += 1 )
 					if( findSourceData[ musicIndex ] == findFirstItemWidth )
 						break;
-				if( musicIndex == musicCount )
+				if( musicIndex == musicCount ) {
+					selectItemMutex->unlock( );
+					loadMusicFileMutex->unlock( );
 					break;
+				}
 				qsizetype getBegIndex = musicIndex;
 
 				// 匹配 getEndIndex
 				for( musicIndex = 0; musicIndex < musicCount; musicIndex += 1 )
 					if( findSourceData[ musicIndex ] == append_select_target )
 						break;
-				if( musicIndex == musicCount )
+				if( musicIndex == musicCount ) {
+					selectItemMutex->unlock( );
+					loadMusicFileMutex->unlock( );
 					break;
+				}
 				qsizetype getEndIndex = musicIndex;
 				if( getEndIndex != getBegIndex ) {
 					if( getEndIndex > getBegIndex ) {
@@ -511,15 +523,18 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 							selectItemWidgetData[ destIndex ] = findSourceData[ musicIndex ];
 					}
 				}
+				selectItemMutex->unlock( );
+				loadMusicFileMutex->unlock( );
 				break;
 			}
 			// 如果 count == 0，这继续运行 default，直到跳出 switch
 		}
 		default : {
-			QMutexLocker locker( selectItemMutex );
+			selectItemMutex->lock( );
 			selectItemWidgetVector.resize( 1 );
 			auto musicInfoItemWidget = selectItemWidgetVector.data( );
 			musicInfoItemWidget[ 0 ] = append_select_target;
+			selectItemMutex->unlock( );
 		}
 	}
 	QVector< MusicInfoItemWidget * > resultVector;
@@ -615,6 +630,7 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 }
 
 void PlayerListWidget::paintEvent( QPaintEvent *event ) {
+	widgetReleaseMutex->lock( );
 	QPainter painter;
 	painter.begin( this );
 
@@ -639,6 +655,8 @@ void PlayerListWidget::paintEvent( QPaintEvent *event ) {
 		painter.drawRect( x, y, width, height );
 	}
 	painter.end( );
+
+	widgetReleaseMutex->unlock( );
 }
 
 void PlayerListWidget::resizeEvent( QResizeEvent *event ) {

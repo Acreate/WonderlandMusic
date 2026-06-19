@@ -13,6 +13,7 @@ class PlayerListWidget : public QWidget {
 	Q_OBJECT;
 
 protected:
+	QMutex *widgetReleaseMutex;
 	QMutex *loadMusicFileMutex;
 
 	QStringList loadMusicFileHistory;

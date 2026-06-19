@@ -21,6 +21,7 @@ protected:
 	int widgetBeforeWidth;
 	int widgetAfterWidth;
 	int splitWidth;
+	int indexWidth;
 	int musicNameWidth;
 	int musicSingerWidth;
 	int musicDurationWidth;
@@ -54,7 +55,7 @@ public:
 public:
 	virtual void setItemWidth( const PlayerListTopWidget *player_list_top_widget );
 
-	virtual void setItemWidth( int widget_before_width, int splite_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
+	virtual void setItemWidth( int widget_before_width, int splite_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
 
 	virtual int getSplitWidth( ) const;
 

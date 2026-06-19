@@ -51,6 +51,7 @@ void AppTranslate::translateString( ) {
 
 	musicTypeName = QObject::tr( "音频" );
 
+	musicIndex = QObject::tr( "#" );
 	musicName = QObject::tr( "歌名" );
 	musicSinger = QObject::tr( "歌手" );
 	musicDuration = QObject::tr( "时长" );
@@ -176,6 +177,10 @@ const QString & AppTranslate::getMenuFileTitle( ) const {
 
 const QString & AppTranslate::getMusicTypeName( ) const {
 	return musicTypeName;
+}
+
+const QString & AppTranslate::getMusicIndex( ) const {
+	return musicIndex;
 }
 
 const QString & AppTranslate::getMusicName( ) const {

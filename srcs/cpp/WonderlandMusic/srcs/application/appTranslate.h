@@ -48,6 +48,7 @@ protected:
 
 	QString musicTypeName;
 
+	QString musicIndex;
 	QString musicName;
 	QString musicSinger;
 	QString musicDuration;
@@ -121,6 +122,8 @@ public:
 	virtual const QString & getMenuFileTitle( ) const;
 
 	virtual const QString & getMusicTypeName( ) const;
+
+	virtual const QString & getMusicIndex( ) const;
 
 	virtual const QString & getMusicName( ) const;
 

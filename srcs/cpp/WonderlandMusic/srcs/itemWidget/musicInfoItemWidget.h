@@ -12,10 +12,10 @@ protected:
 	int widgetBeforeWidth;
 	int widgetAfterWidth;
 	int splitWidth;
+	int indexWidth;
 	int musicNameWidth;
 	int musicSingerWidth;
 	int musicDurationWidth;
-
 public:
 	MusicInfoItemWidget( PlayListWidget *parent );
 

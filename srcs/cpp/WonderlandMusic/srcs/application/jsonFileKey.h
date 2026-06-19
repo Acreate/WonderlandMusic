@@ -25,6 +25,7 @@ protected:
 
 	QString playerListWidgetTopJsonPath;
 	QString playerListWidgetItemSplitWidth;
+	QString playerListWidgetItemWidgetIndexWidth;
 	QString playerListWidgetItemMusicNameWidth;
 	QString playerListWidgetItemMusicSingerWidth;
 	QString playerListWidgetItemMusicDurationWidth;
@@ -71,6 +72,8 @@ public:
 	virtual const QString & getPlayerWindowDirSelectWorkPath( ) const;
 
 	virtual const QString & getPlayerListWidgetItemSplitWidth( ) const;
+
+	virtual const QString & getPlayerListWidgetItemWidgetIndexWidth( ) const;
 
 	virtual const QString & getPlayerListWidgetItemMusicNameWidth( ) const;
 

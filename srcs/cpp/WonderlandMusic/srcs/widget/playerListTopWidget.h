@@ -10,6 +10,7 @@ protected:
 	int widgetBeforeWidth;
 	int widgetAfterWidth;
 	int splitWidth;
+	int indexWidth;
 	int musicNameWidth;
 	int musicSingerWidth;
 	int musicDurationWidth;
@@ -32,6 +33,8 @@ public:
 	virtual bool writeJsonPathInfo( );
 
 	virtual int getSplitWidth( ) const;
+
+	virtual int getIndexWidth( ) const;
 
 	virtual int getMusicNameWidth( ) const;
 
@@ -57,7 +60,7 @@ protected:
 	void leaveEvent( QEvent *event ) override;
 
 Q_SIGNALS:
-	void changedWidth( int split_width, int widget_before_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
+	void changedWidth( int split_width, int widget_before_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
 };
 
 #endif // PLAYERLISTTOPWIDGET_H_H_HEAD__FILE__

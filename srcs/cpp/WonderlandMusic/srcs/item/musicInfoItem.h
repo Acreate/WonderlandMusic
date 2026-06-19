@@ -18,7 +18,8 @@ protected:
 	QString musicSinger;
 	qint64 duration;
 	QString formatStringDuration;
-
+	size_t index;
+	QString formatStringIndex;
 protected:
 	MusicInfoItem( );
 
@@ -46,6 +47,12 @@ public:
 	static bool forJsonObject( MusicInfoItem &result_music_info, const QJsonObject &for_json_object );
 
 	virtual bool renderImage( QImage &result_render_image ) const;
+
+	virtual size_t getIndex( ) const;
+
+	virtual void setIndex( const size_t index );
+
+	virtual const QString & getFormatStringIndex( ) const;
 };
 
 #endif // MUSICINFOITEM_H_H_HEAD__FILE__

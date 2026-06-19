@@ -36,6 +36,7 @@ bool MusicInfoItem::init( const QString &file_path, const QMediaMetaData &mediaM
 		musicSinger = mediaMetaData.stringValue( QMediaMetaData::Author );
 	duration = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
 	formatStringDuration = DateTimeFormat::millsecondToHourMinSecFrom( duration );
+	musicFilePath = file_path;
 	return true;
 }
 
@@ -63,6 +64,19 @@ bool MusicInfoItem::renderImage( QImage &result_render_image ) const {
 	if( parentPlayListWidget == nullptr )
 		return false;
 	return parentPlayListWidget->renderMusicInfoItem( result_render_image, this );
+}
+
+size_t MusicInfoItem::getIndex( ) const {
+	return index;
+}
+
+void MusicInfoItem::setIndex( const size_t index ) {
+	this->index = index;
+	formatStringIndex = QString( "%1" ).arg( index, 4, 10, '0' );
+}
+
+const QString & MusicInfoItem::getFormatStringIndex( ) const {
+	return formatStringIndex;
 }
 
 bool MusicInfoItem::toJsonObect( QJsonObject &result_json_object, const MusicInfoItem &music_info ) {

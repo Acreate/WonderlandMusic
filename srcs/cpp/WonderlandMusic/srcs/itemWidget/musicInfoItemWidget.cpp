@@ -8,6 +8,7 @@
 #include "../widget/playListWidget.h"
 
 MusicInfoItemWidget::MusicInfoItemWidget( PlayListWidget *parent ) : QWidget( parent ), MusicInfoItem( parent ) {
+	index = 0;
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	// 开启鼠标穿透
 	setAttribute( Qt::WA_TransparentForMouseEvents, true );
@@ -27,6 +28,13 @@ void MusicInfoItemWidget::paintEvent( QPaintEvent *event ) {
 	int drawOffsetX = offsetSplitX + widgetBeforeWidth;
 	QRect drawRect;
 	auto currentHeight = height( );
+
+	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );
+	drawOffsetX += offsetSplitX;
+	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( indexWidth, currentHeight ) );
+	painter.drawText( drawRect, formatStringIndex );
+	drawOffsetX += indexWidth + offsetSplitX;
+
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );
 	drawOffsetX += offsetSplitX;
 	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( musicNameWidth, currentHeight ) );

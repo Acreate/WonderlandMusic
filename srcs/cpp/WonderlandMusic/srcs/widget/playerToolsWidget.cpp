@@ -202,6 +202,9 @@ bool PlayerToolsWidget::compMinSize( QSize &result_min_size, int progress_bar_wi
 	return true;
 }
 
+void PlayerToolsWidget::suggestWidth( int suggest_width ) {
+}
+
 void PlayerToolsWidget::resizeEvent( QResizeEvent *event ) {
 	QWidget::resizeEvent( event );
 	compLayout( );

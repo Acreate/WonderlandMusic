@@ -20,15 +20,61 @@
 #include "../widget/playerListTopWidget.h"
 #include "../widget/playerToolsWidget.h"
 
+void PlayerWindow::releaeseResource( ) {
+	#define d_r( ptr ) if(ptr) { delete ptr; ptr = nullptr ;}
+	d_r( topDocWidget );
+	d_r( bottomDocWidget );
+	d_r( windowMenuBar );
+}
+
 PlayerWindow::~PlayerWindow( ) {
-	//delete playerListTopWidget;
-	//delete playerListTopWidgetScrollArea;
-	delete topDocWidget;
+	releaeseResource( );
 }
 
 PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	setWindowFlags( Qt::WindowType::Widget );
+}
 
+bool PlayerWindow::loadJsonPathInfo( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto jsonFileKey = appInstance->getJsonFileKey( );
+	QJsonObject jsonObject;
+	auto path = jsonFileKey->getPlayerWindowSettingJsonPath( );
+	if( PathTools::readJsonObject( jsonObject, path ) == true ) {
+		auto end = jsonObject.end( );
+		QString key = jsonFileKey->getPlayerWindowFileSelectWorkPath( );
+		auto find = jsonObject.find( key );
+		if( find != end )
+			fileSelectWorkPath = find.value( ).toString( );
+		else
+			fileSelectWorkPath = QDir::currentPath( );
+		key = jsonFileKey->getPlayerWindowDirSelectWorkPath( );
+		find = jsonObject.find( key );
+		if( find != end )
+			dirSelectWorkPath = find.value( ).toString( );
+		else
+			dirSelectWorkPath = QDir::currentPath( );
+	}
+
+	return true;
+}
+
+bool PlayerWindow::writeJsonPathInfo( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto jsonFileKey = appInstance->getJsonFileKey( );
+	QJsonObject jsonObject;
+	QString key = jsonFileKey->getPlayerWindowFileSelectWorkPath( );
+	jsonObject.insert( key, fileSelectWorkPath );
+	key = jsonFileKey->getPlayerWindowDirSelectWorkPath( );
+	jsonObject.insert( key, dirSelectWorkPath );
+	auto path = jsonFileKey->getPlayerWindowSettingJsonPath( );
+	PathTools::writeJsonObject( jsonObject, path );
+	playListWidget->writeJsonPathInfo( );
+	playerListTopWidget->writeJsonPathInfo( );
+	return true;
+}
+
+bool PlayerWindow::initWidget( ) {
 	topDocWidget = new QDockWidget( this );
 	topDocWidget->setAllowedAreas( Qt::TopDockWidgetArea );
 	addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, topDocWidget );
@@ -46,38 +92,48 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	playerListTopWidget = new PlayerListTopWidget( playerListTopWidgetScrollArea );
 	playerListTopWidgetScrollArea->setWidget( playerListTopWidget );
 
+	bottomDocWidget = new QDockWidget( this );
 	playListWidgetScrollArea = new QScrollArea( this );
+
 	playListWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 	playListWidgetScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 	playListWidgetScrollArea->setWidgetResizable( true );
 	playListWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
 
-	bottomDocWidget = new QDockWidget( this );
 	bottomDocWidget->setAllowedAreas( Qt::BottomDockWidgetArea );
 	bottomDocWidget->setTitleBarWidget( new QWidget( bottomDocWidget ) );
 	bottomDocWidget->setContentsMargins( 0, 0, 0, 0 );
 	addDockWidget( Qt::DockWidgetArea::BottomDockWidgetArea, bottomDocWidget );
+
 	playerToolsWidget = new PlayerToolsWidget( bottomDocWidget );
-	bottomDocWidget->setWidget( playerToolsWidget );
-
 	playListWidget = new PlayerListWidget( playListWidgetScrollArea );
-	playListWidget->adjustSize( );
-	playListWidgetScrollArea->setWidget( playListWidget );
 
+	bottomDocWidget->setWidget( playerToolsWidget );
 	setCentralWidget( playListWidgetScrollArea );
 
+	if( playerListTopWidget->init( ) == false )
+		return false;
+	if( playerToolsWidget->init( ) == false )
+		return false;
+	return true;
+}
+
+bool PlayerWindow::initMenuBar( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appTranslate = appInstance->getTranslate( );
 	windowMenuBar = menuBar( );
 	if( windowMenuBar == nullptr ) {
 		windowMenuBar = new QMenuBar( this );
 		setMenuBar( windowMenuBar );
 	}
-	auto appInstance = AppInstance::getAppInstance( );
-	auto appTranslate = appInstance->getTranslate( );
 	auto fileMenu = windowMenuBar->addMenu( appTranslate->getMenuFileTitle( ) );
-	auto addMultiFileMusicToCollectionAction = fileMenu->addAction( appTranslate->getActionAddMultiMusicFileToCollection( ) );
-	auto addMultiMusicDirToCollection = fileMenu->addAction( appTranslate->getActionAddMultiMusicDirToCollection( ) );
-	auto removeMultiMusicItemAtCollectionAction = fileMenu->addAction( appTranslate->getActionRemoveMultiMusicAtCollection( ) );
+	addMultiFileMusicToCollectionAction = fileMenu->addAction( appTranslate->getActionAddMultiMusicFileToCollection( ) );
+	addMultiMusicDirToCollection = fileMenu->addAction( appTranslate->getActionAddMultiMusicDirToCollection( ) );
+	removeMultiMusicItemAtCollectionAction = fileMenu->addAction( appTranslate->getActionRemoveMultiMusicAtCollection( ) );
+	return true;
+}
 
+bool PlayerWindow::initConnect( ) {
 	connect( addMultiFileMusicToCollectionAction, &QAction::triggered, [this]( ) {
 		QFileDialog dialog( this );
 		dialog.setWindowTitle( tr( "多选文件" ) );
@@ -134,60 +190,32 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 		dirSelectWorkPath = files[ 0 ];
 	} );
 	connect( playerListTopWidget, &PlayerListTopWidget::changedWidth, [this]( ) {
-		//playerListTopWidgetScrollArea->setFixedHeight( playerListTopWidget->height( ) );
-		//int width = playerListTopWidget->width( );
 		playListWidget->setItemWidth( playerListTopWidget );
 	} );
 	auto playListHBar = playListWidgetScrollArea->horizontalScrollBar( );
 	auto topWidgetHBar = playerListTopWidgetScrollArea->horizontalScrollBar( );
 	connect( playListHBar, &QScrollBar::sliderMoved, topWidgetHBar, &QScrollBar::setValue );
-}
-
-bool PlayerWindow::loadJsonPathInfo( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getJsonFileKey( );
-	QJsonObject jsonObject;
-	auto path = jsonFileKey->getPlayerWindowSettingJsonPath( );
-	if( PathTools::readJsonObject( jsonObject, path ) == true ) {
-		auto end = jsonObject.end( );
-		QString key = jsonFileKey->getPlayerWindowFileSelectWorkPath( );
-		auto find = jsonObject.find( key );
-		if( find != end )
-			fileSelectWorkPath = find.value( ).toString( );
-		else
-			fileSelectWorkPath = QDir::currentPath( );
-		key = jsonFileKey->getPlayerWindowDirSelectWorkPath( );
-		find = jsonObject.find( key );
-		if( find != end )
-			dirSelectWorkPath = find.value( ).toString( );
-		else
-			dirSelectWorkPath = QDir::currentPath( );
-	}
-
-	int width = playerListTopWidgetScrollArea->viewport( )->width( );
-	playerListTopWidget->setFixedWidth( width );
-	playerListTopWidget->autoSetItemSize( );
-	playerListTopWidget->loadJsonPathInfo( );
-	playerListTopWidgetScrollArea->setFixedHeight( playerListTopWidget->height( ) );
-	playListWidget->setItemWidth( playerListTopWidget );
-	playListWidget->loadJsonPathInfo( );
-	if( playerToolsWidget->init( ) == false )
-		return false;
 	return true;
 }
 
-bool PlayerWindow::writeJsonPathInfo( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getJsonFileKey( );
-	QJsonObject jsonObject;
-	QString key = jsonFileKey->getPlayerWindowFileSelectWorkPath( );
-	jsonObject.insert( key, fileSelectWorkPath );
-	key = jsonFileKey->getPlayerWindowDirSelectWorkPath( );
-	jsonObject.insert( key, dirSelectWorkPath );
-	auto path = jsonFileKey->getPlayerWindowSettingJsonPath( );
-	PathTools::writeJsonObject( jsonObject, path );
-	playListWidget->writeJsonPathInfo( );
-	playerListTopWidget->writeJsonPathInfo( );
+bool PlayerWindow::updateSubCompoment( ) {
+	playListWidget->setFixedWidth( playerListTopWidget->width( ) );
+	topDocWidget->setFixedHeight( playerListTopWidget->height( ) );
+	return true;
+}
+
+bool PlayerWindow::init( ) {
+	releaeseResource( );
+	if( initWidget( ) == false )
+		return false;
+	if( initMenuBar( ) == false )
+		return false;
+	if( initConnect( ) == false )
+		return false;
+	if( loadJsonPathInfo( ) == false )
+		return false;
+	if( updateSubCompoment( ) == false )
+		return false;
 	return true;
 }
 
@@ -197,5 +225,7 @@ void PlayerWindow::showEvent( QShowEvent *event ) {
 
 void PlayerWindow::resizeEvent( QResizeEvent *event ) {
 	QMainWindow::resizeEvent( event );
-	playerToolsWidget->adjustSize( );
+	int width = event->size( ).width( );
+	playerListTopWidget->suggestWidth( width );
+	playerToolsWidget->suggestWidth( width );
 }

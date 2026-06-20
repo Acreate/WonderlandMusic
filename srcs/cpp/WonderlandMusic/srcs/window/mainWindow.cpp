@@ -1,9 +1,7 @@
 ﻿#include "mainWindow.h"
 
-#include <QDir>
 #include <QStackedWidget>
 #include <QDockWidget>
-#include <QFileInfo>
 #include <QPushButton>
 #include <QJsonObject>
 #include <qboxlayout.h>
@@ -38,6 +36,16 @@ void MainWindow::writeWidgetSettingToFile( ) {
 	settingWidget->writeJsonPathInfo( );
 }
 
+bool MainWindow::subCompomentInit( ) {
+	if( playerWindow->init( ) == false )
+		return false;
+	if( settingWidget->init( ) == false )
+		return false;
+	if( aboutWidget->init( ) == false )
+		return false;
+	return true;
+}
+
 MainWindow::~MainWindow( ) {
 	releaseResource( );
 }
@@ -46,10 +54,6 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 }
 
 bool MainWindow::loadSettingWidgetInfoAtFile( ) {
-	// 加载播放列表
-	playerWindow->loadJsonPathInfo( );
-	// 记载配置列表
-	settingWidget->loadJsonPathInfo( );
 	return true;
 }
 
@@ -66,15 +70,15 @@ bool MainWindow::init( ) {
 
 	if( initConnect( ) == false )
 		return false;
+
+	if( subCompomentInit( ) == false )
+		return false;
+
 	return true;
 }
 
 void MainWindow::showEvent( QShowEvent *event ) {
 	QMainWindow::showEvent( event );
-	if( isLoadJsonFile == false ) {
-		isLoadJsonFile = true;
-		loadSettingWidgetInfoAtFile( );
-	}
 }
 
 void MainWindow::releaseResource( ) {
@@ -107,6 +111,7 @@ bool MainWindow::initStackedWidget( ) {
 
 	playerWindow = new PlayerWindow( mainStackedWidget );
 	mainStackedWidget->addWidget( playerWindow );
+	playerWindow->adjustSize( );
 
 	settingWidget = new SettingWidget( mainStackedWidget );
 	mainStackedWidget->addWidget( settingWidget );
@@ -115,8 +120,7 @@ bool MainWindow::initStackedWidget( ) {
 	aboutWidget = new AboutWidget( mainStackedWidget );
 	mainStackedWidget->addWidget( aboutWidget );
 	aboutWidget->adjustSize( );
-	if( aboutWidget->init( ) == false )
-		return false;
+
 	return true;
 }
 

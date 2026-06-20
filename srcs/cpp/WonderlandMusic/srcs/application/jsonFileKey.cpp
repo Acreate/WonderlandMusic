@@ -29,6 +29,7 @@ bool JsonFileKey::init( ) {
 	playerWindowDirSelectWorkPath = "window.player.path.dir.select";
 
 	playerListWidgetTopJsonPath = applicationDirPath + "/program/json/app.window.player.top.info.json";
+	playerListWidgetItemWidth = "window.player.list.item.width.content.width";
 	playerListWidgetItemSplitWidth = "window.player.list.item.width.split";
 	playerListWidgetItemWidgetIndexWidth = "window.player.list.item.width.index";
 	playerListWidgetItemMusicNameWidth = "window.player.list.item.width.name";
@@ -60,6 +61,10 @@ const QString & JsonFileKey::getSongPlayerInfoJsonPath( ) const {
 
 const QString & JsonFileKey::getQtLogoIconPath( ) const {
 	return qtLogoIconPath;
+}
+
+const QString & JsonFileKey::getPlayerListWidgetItemWidth( ) const {
+	return playerListWidgetItemWidth;
 }
 
 const QString & JsonFileKey::getMainWindowSettingJsonPath( ) const {

@@ -63,8 +63,13 @@ bool PlayerListTopWidget::loadJsonPathInfo( ) {
 	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemWidgetIndexWidth( ) );
 	if( find != end )
 		indexWidth = find.value( ).toInt( musicDurationWidth );
+	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemWidth( ) );
+	if( find != end ) {
+		QRect rect = contentsRect( );
+		int w = find.value( ).toInt( rect.width( ) );
+		setFixedSize( w, rect.height( ) );
+	}
 
-	autoSetItemSize( );
 	return true;
 }
 
@@ -73,6 +78,8 @@ bool PlayerListTopWidget::writeJsonPathInfo( ) {
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 
 	QJsonObject fileJsonObject;
+	int width = contentsRect( ).width( );
+	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemWidth( ), width );
 	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemSplitWidth( ), splitWidth );
 	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemMusicNameWidth( ), musicNameWidth );
 	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemMusicSingerWidth( ), musicSingerWidth );
@@ -114,6 +121,13 @@ int PlayerListTopWidget::getWidgetAfterWidth( ) const {
 }
 
 void PlayerListTopWidget::autoSetItemSize( ) {
+	getMinSize( );
+	updateCurrentWidgetSize( );
+	update( );
+	emit changedWidth( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
+}
+
+bool PlayerListTopWidget::getMinSize( QSize &result_min_size ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getTranslate( );
 	auto renderImage = appInstance->getRenderImage( );
@@ -124,9 +138,11 @@ void PlayerListTopWidget::autoSetItemSize( ) {
 	auto singerWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicSinger( ) );
 	auto durationWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicDuration( ) );
 
-	double widthPercentage = nameWidth + singerWidth + durationWidth + indexWidth;
+	int widthPercentage = nameWidth + singerWidth + durationWidth + indexWidth;
 	auto spliteWidthUserSpace = splitWidth * 5;
 	int borderWidth = widgetBeforeWidth + widgetAfterWidth;
+	int minWidth = widthPercentage + spliteWidthUserSpace + borderWidth;
+
 	int width = this->width( );
 	double residue = width - spliteWidthUserSpace - borderWidth;
 	double part = residue / widthPercentage;
@@ -134,9 +150,26 @@ void PlayerListTopWidget::autoSetItemSize( ) {
 	this->musicDurationWidth = part * durationWidth;
 	this->musicSingerWidth = part * singerWidth;
 	this->musicNameWidth = residue - this->musicDurationWidth - this->musicSingerWidth;
-	updateCurrentWidgetSize( );
-	update( );
-	emit changedWidth( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
+
+	result_min_size = QSize( minWidth, fontMetrics->height( ) );
+	return minWidth;
+}
+
+bool PlayerListTopWidget::getMinSize( ) {
+	QSize result_min_size;
+	return getMinSize( result_min_size );
+}
+
+bool PlayerListTopWidget::init( ) {
+	QSize minSize;
+	getMinSize( minSize );
+	setMinimumSize( minSize );
+	loadJsonPathInfo( );
+	autoSetItemSize( );
+	return true;
+}
+
+void PlayerListTopWidget::suggestWidth( int suggest_width ) {
 }
 
 void PlayerListTopWidget::mouseMoveEvent( QMouseEvent *event ) {
@@ -217,6 +250,15 @@ void PlayerListTopWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	}
 }
 
+void PlayerListTopWidget::closeEvent( QCloseEvent *event ) {
+	QWidget::closeEvent( event );
+}
+
+void PlayerListTopWidget::hideEvent( QHideEvent *event ) {
+	writeJsonPathInfo( );
+	QWidget::hideEvent( event );
+}
+
 void PlayerListTopWidget::paintEvent( QPaintEvent *event ) {
 	AppInstance *appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getTranslate( );
@@ -261,6 +303,10 @@ void PlayerListTopWidget::paintEvent( QPaintEvent *event ) {
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );
 
 	painter.end( );
+}
+
+void PlayerListTopWidget::resizeEvent( QResizeEvent *event ) {
+	QWidget::resizeEvent( event );
 }
 
 void PlayerListTopWidget::leaveEvent( QEvent *event ) {

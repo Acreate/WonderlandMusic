@@ -50,6 +50,14 @@ public:
 
 	virtual void autoSetItemSize( );
 
+	virtual bool getMinSize( QSize &result_min_size );
+
+	virtual bool getMinSize( );
+
+	virtual bool init( );
+
+	virtual void suggestWidth( int suggest_width );
+
 protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 
@@ -57,7 +65,13 @@ protected:
 
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 
+	void closeEvent( QCloseEvent *event ) override;
+
+	void hideEvent( QHideEvent *event ) override;
+
 	void paintEvent( QPaintEvent *event ) override;
+
+	void resizeEvent( QResizeEvent *event ) override;
 
 	void leaveEvent( QEvent *event ) override;
 

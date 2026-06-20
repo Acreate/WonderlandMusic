@@ -54,6 +54,8 @@ public:
 
 	virtual bool compMinSize( QSize &result_min_size, int progress_bar_width );
 
+	virtual void suggestWidth( int suggest_width );
+
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
 

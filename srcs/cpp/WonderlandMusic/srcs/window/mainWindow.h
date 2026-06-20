@@ -50,34 +50,36 @@ protected:
 
 	/// @brief 初始化 AppInstance 实例相关对象
 	/// @return 失败返回 false
-	bool initApp( );
+	virtual bool initApp( );
 
 	/// @brief 初始化层叠组件
 	/// @return 失败返回 false
-	bool initStackedWidget( );
+	virtual bool initStackedWidget( );
 
 	/// @brief 初始化停靠容器组件
 	/// @return 失败返回 false
-	bool initDockWidget( );
+	virtual bool initDockWidget( );
 
 	/// @brief 初始化主窗口配置
 	/// @return 失败返回 false
-	bool initMainWindowSetting( );
+	virtual bool initMainWindowSetting( );
 
 	/// @brief 初始化信息
 	/// @return 失败返回 false
-	bool initConnect( );
+	virtual bool initConnect( );
 
 	/// @brief 保存主窗口配置
 	/// @return 失败返回 false
-	bool saveMainWindowSetting( );
+	virtual bool saveMainWindowSetting( );
+
+	/// @brief 初始化子控件
+	/// @return 失败返回 false
+	virtual bool subCompomentInit( );
 
 public:
 	~MainWindow( ) override;
 
 	MainWindow( QWidget *parent, Qt::WindowFlags flags );
-
-	bool loadSettingWidgetInfoAtFile( );
 
 	MainWindow( QWidget *parent );
 
@@ -85,7 +87,9 @@ public:
 
 	MainWindow( );
 
-	void writeWidgetSettingToFile( );
+	virtual bool loadSettingWidgetInfoAtFile( );
+
+	virtual void writeWidgetSettingToFile( );
 
 	virtual bool init( );
 

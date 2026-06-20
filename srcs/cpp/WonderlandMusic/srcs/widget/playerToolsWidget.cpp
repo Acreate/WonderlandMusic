@@ -59,6 +59,10 @@ bool PlayerToolsWidget::init( ) {
 
 	playDateTimeSpace->setText( appTranslate->getPlaySongDateTimeSpace( ) );
 
+	playProgress->setRange( 0, 100 );
+	playProgress->setValue( 100 );
+	playProgress->setTextVisible( false );
+
 	thePreviousSong->adjustSize( );
 	theNextSong->adjustSize( );
 	controlPlay->adjustSize( );

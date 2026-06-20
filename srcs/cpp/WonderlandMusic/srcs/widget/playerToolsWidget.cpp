@@ -9,6 +9,7 @@
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
 #include "../application/jsonKey/playerListToolWidgetJsonKey.h"
+#include "../application/translate/playerToolsWidgetTranslate.h"
 
 #include "../msgInfo/messageErrorOut.h"
 

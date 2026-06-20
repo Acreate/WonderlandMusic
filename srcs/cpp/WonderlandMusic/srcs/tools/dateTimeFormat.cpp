@@ -5,6 +5,7 @@
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
+#include "../application/translate/dateTimeFormatTranslate.h"
 
 void DateTimeFormat::fillData( const QChar *source_data, const qsizetype &source_count, QChar *dest_data ) const {
 	qsizetype index = 0;

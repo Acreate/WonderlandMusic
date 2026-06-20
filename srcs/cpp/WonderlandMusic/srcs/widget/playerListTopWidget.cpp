@@ -9,6 +9,7 @@
 #include "../application/jsonFileKey.h"
 #include "../application/renderImage.h"
 #include "../application/jsonKey/playerListTopWidgetJsonKey.h"
+#include "../application/translate/playerTopWidgetTranslate.h"
 
 #include "../tools/pathTools.h"
 

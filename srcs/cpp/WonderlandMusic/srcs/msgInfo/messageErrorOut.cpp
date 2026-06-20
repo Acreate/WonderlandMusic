@@ -4,6 +4,7 @@
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
+#include "../application/translate/messageTranslate.h"
 
 #include "../tools/dateTimeFormat.h"
 #ifdef Q_OS_WIN

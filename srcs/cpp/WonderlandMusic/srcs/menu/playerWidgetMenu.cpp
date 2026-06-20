@@ -5,6 +5,7 @@
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/musicDecoder.h"
+#include "../application/translate/playerListMenuTranslate.h"
 
 #include "../tools/pathTools.h"
 #include "../tools/widgetTools.h"

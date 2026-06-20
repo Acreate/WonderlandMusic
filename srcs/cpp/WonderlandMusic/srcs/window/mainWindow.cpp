@@ -12,6 +12,7 @@
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
+#include "../application/translate/mainWindowTranslate.h"
 
 #include "../msgInfo/messageErrorOut.h"
 

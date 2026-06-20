@@ -41,59 +41,10 @@ void PlayerListWidget::clearMusicInfoVector( ) {
 }
 
 PlayerListWidget::~PlayerListWidget( ) {
-	updateMuex->lock( );
-	clearMusicInfoVector( );
-	if( musicInfoVector ) {
-		musicInfoMutex->lock( );
-		delete musicInfoVector;
-		musicInfoVector = nullptr;
-		musicInfoMutex->unlock( );
-		delete musicInfoMutex;
-		musicInfoMutex = nullptr;
-	}
-	if( selectItemWidgetVector ) {
-		selectItemWidgetMutex->lock( );
-		//delete selectItemWidgetVector;
-		selectItemWidgetVector = nullptr;
-		selectItemWidgetMutex->unlock( );
-		delete selectItemWidgetMutex;
-		selectItemWidgetMutex = nullptr;
-	}
-
-	selectLeftItemWidget = nullptr;
-	activeLeftItemWidget = nullptr;
-	if( playerWidgetMenu )
-		delete playerWidgetMenu;
-	if( beforeClickTime )
-		delete beforeClickTime;
-	if( pen )
-		delete pen;
-	updateMuex->unlock( );
-	delete updateMuex;
-	updateMuex = nullptr;
+	releaseResource( );
 }
 
 PlayerListWidget::PlayerListWidget( QWidget *parent ) : QWidget( parent ) {
-	updateMuex = new std::mutex;
-	musicInfoMutex = new std::mutex;
-	selectItemWidgetMutex = new std::mutex;
-	doubleClickIntervalTimeMilliSecond = 300;
-	activeLeftItemWidget = nullptr;
-	selectLeftItemWidget = nullptr;
-	beforeClickTime = new QDateTime;
-	playerWidgetMenu = new PlayerWidgetMenu( this );
-	pen = new QPen;
-	selectItemWidgetVector = new std::vector< MusicInfoItemWidget * >;
-	musicInfoVector = new std::vector< MusicInfoItemWidget * >;
-	indexWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
-	drawPenWidth = 4;
-	drawPenColor = QColor( "#7bffa1" );
-	drawFillColor = QColor( "#50a2ff" );
-	drawFillColor.setAlpha( 100 );
-	pen->setWidth( drawPenWidth );
-	pen->setColor( drawPenColor );
-
-	updateItemWidget( );
 	setMouseTracking( true );
 }
 
@@ -438,6 +389,32 @@ bool PlayerListWidget::renderMusicInfoItem( QImage &result_render_image, const M
 	return renderAtMusicInfoItem( result_render_image, renderTarget );
 }
 
+bool PlayerListWidget::init( ) {
+	releaseResource( );
+	updateMuex = new std::mutex;
+	musicInfoMutex = new std::mutex;
+	selectItemWidgetMutex = new std::mutex;
+	doubleClickIntervalTimeMilliSecond = 300;
+	activeLeftItemWidget = nullptr;
+	selectLeftItemWidget = nullptr;
+	beforeClickTime = new QDateTime;
+	playerWidgetMenu = new PlayerWidgetMenu( this );
+	pen = new QPen;
+	selectItemWidgetVector = new std::vector< MusicInfoItemWidget * >;
+	musicInfoVector = new std::vector< MusicInfoItemWidget * >;
+	indexWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
+	drawPenWidth = 4;
+	drawPenColor = QColor( "#7bffa1" );
+	drawFillColor = QColor( "#50a2ff" );
+	drawFillColor.setAlpha( 100 );
+	pen->setWidth( drawPenWidth );
+	pen->setColor( drawPenColor );
+
+	loadJsonPathInfo( );
+	updateItemWidget( );
+	return true;
+}
+
 bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target ) const {
 	return renderAtMusicInfoItem( result_render_image, render_target, splitWidth );
 }
@@ -489,6 +466,35 @@ bool PlayerListWidget::selectKeyDefaultModifier( ) {
 	musicInfoItemWidget[ 0 ] = selectLeftItemWidget;
 	selectItemWidgetMutex->unlock( );
 	return true;
+}
+
+void PlayerListWidget::releaseResource( ) {
+	#define r_d(ptr) if(ptr) { delete ptr; ptr = nullptr;}
+	if( updateMuex ) {
+		updateMuex->lock( );
+		clearMusicInfoVector( );
+		if( musicInfoVector ) {
+			musicInfoMutex->lock( );
+			r_d( musicInfoVector );
+			musicInfoMutex->unlock( );
+		}
+		r_d( musicInfoMutex );
+
+		if( selectItemWidgetVector ) {
+			selectItemWidgetMutex->lock( );
+			r_d( selectItemWidgetVector );
+			selectItemWidgetMutex->unlock( );
+		}
+		r_d( selectItemWidgetVector );
+
+		selectLeftItemWidget = nullptr;
+		activeLeftItemWidget = nullptr;
+		r_d( playerWidgetMenu );
+		r_d( beforeClickTime );
+		r_d( pen );
+		updateMuex->unlock( );
+		r_d( updateMuex );
+	}
 }
 
 bool PlayerListWidget::selectKeyShiftModifier( ) {
@@ -717,6 +723,11 @@ void PlayerListWidget::mouseMoveEvent( QMouseEvent *event ) {
 	musicInfoMutex->unlock( );
 	if( activeLeftItemWidget )
 		update( );
+}
+
+void PlayerListWidget::hideEvent( QHideEvent *event ) {
+	writeJsonPathInfo( );
+	QWidget::hideEvent( event );
 }
 
 void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {

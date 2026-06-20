@@ -110,11 +110,7 @@ bool PlayerWindow::initWidget( ) {
 
 	bottomDocWidget->setWidget( playerToolsWidget );
 	setCentralWidget( playListWidgetScrollArea );
-
-	if( playerListTopWidget->init( ) == false )
-		return false;
-	if( playerToolsWidget->init( ) == false )
-		return false;
+	playListWidgetScrollArea->setWidget( playListWidget );
 	return true;
 }
 
@@ -199,6 +195,12 @@ bool PlayerWindow::initConnect( ) {
 }
 
 bool PlayerWindow::updateSubCompoment( ) {
+	if( playListWidget->init( ) == false )
+		return false;
+	if( playerToolsWidget->init( ) == false )
+		return false;
+	if( playerListTopWidget->init( ) == false )
+		return false;
 	playListWidget->setFixedWidth( playerListTopWidget->width( ) );
 	topDocWidget->setFixedHeight( playerListTopWidget->height( ) );
 	return true;

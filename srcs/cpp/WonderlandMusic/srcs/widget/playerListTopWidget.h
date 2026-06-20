@@ -54,6 +54,8 @@ public:
 
 	virtual bool getMinSize( );
 
+	virtual void emitChangedWidth( );
+
 	virtual bool init( );
 
 	virtual void suggestWidth( int suggest_width );

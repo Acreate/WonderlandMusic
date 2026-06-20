@@ -16,3 +16,8 @@ bool SettingWidget::init( ) {
 		return false;
 	return true;
 }
+
+void SettingWidget::hideEvent( QHideEvent *event ) {
+	writeJsonPathInfo( );
+	QWidget::hideEvent( event );
+}

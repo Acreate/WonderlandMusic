@@ -138,7 +138,7 @@ bool PlayerListTopWidget::getMinSize( QSize &result_min_size ) {
 	auto singerWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicSinger( ) );
 	auto durationWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicDuration( ) );
 
-	int widthPercentage = nameWidth + singerWidth + durationWidth + indexWidth;
+	double widthPercentage = nameWidth + singerWidth + durationWidth + indexWidth;
 	auto spliteWidthUserSpace = splitWidth * 5;
 	int borderWidth = widgetBeforeWidth + widgetAfterWidth;
 	int minWidth = widthPercentage + spliteWidthUserSpace + borderWidth;
@@ -160,12 +160,18 @@ bool PlayerListTopWidget::getMinSize( ) {
 	return getMinSize( result_min_size );
 }
 
+void PlayerListTopWidget::emitChangedWidth( ) {
+	emit changedWidth( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
+}
+
 bool PlayerListTopWidget::init( ) {
 	QSize minSize;
 	getMinSize( minSize );
 	setMinimumSize( minSize );
+	updateCurrentWidgetSize( );
 	loadJsonPathInfo( );
-	autoSetItemSize( );
+	update( );
+	emitChangedWidth( );
 	return true;
 }
 

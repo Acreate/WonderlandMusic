@@ -14,6 +14,9 @@ public:
 	virtual bool writeJsonPathInfo( );
 
 	virtual bool init( );
+
+protected:
+	void hideEvent( QHideEvent *event ) override;
 };
 
 #endif // SETTINGWIDGET_H_H_HEAD__FILE__

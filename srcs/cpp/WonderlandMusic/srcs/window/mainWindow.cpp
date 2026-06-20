@@ -31,9 +31,9 @@ MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) {
 void MainWindow::writeWidgetSettingToFile( ) {
 	saveMainWindowSetting( );
 	// 写入播放列表
-	playerWindow->writeJsonPathInfo( );
+	//playerWindow->writeJsonPathInfo( );
 	// 写入配置信息
-	settingWidget->writeJsonPathInfo( );
+	//settingWidget->writeJsonPathInfo( );
 }
 
 bool MainWindow::subCompomentInit( ) {

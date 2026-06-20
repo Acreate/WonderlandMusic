@@ -28,19 +28,19 @@ protected:
 	int musicDurationWidth;
 	qint64 doubleClickIntervalTimeMilliSecond;
 	QStringList loadMusicFileHistory;
-	std::mutex *updateMuex;
-	std::mutex *musicInfoMutex;
-	std::vector< MusicInfoItemWidget * > *musicInfoVector;
-	QDateTime *beforeClickTime;
-	MusicInfoItemWidget *activeLeftItemWidget;
-	MusicInfoItemWidget *selectLeftItemWidget;
-	std::mutex *selectItemWidgetMutex;
-	std::vector< MusicInfoItemWidget * > *selectItemWidgetVector;
+	std::mutex *updateMuex = nullptr;
+	std::mutex *musicInfoMutex = nullptr;
+	std::vector< MusicInfoItemWidget * > *musicInfoVector = nullptr;
+	QDateTime *beforeClickTime = nullptr;
+	MusicInfoItemWidget *activeLeftItemWidget = nullptr;
+	MusicInfoItemWidget *selectLeftItemWidget = nullptr;
+	std::mutex *selectItemWidgetMutex = nullptr;
+	std::vector< MusicInfoItemWidget * > *selectItemWidgetVector = nullptr;
 	int drawPenWidth;
 	QColor drawPenColor;
 	QColor drawFillColor;
-	QPen *pen;
-	PlayerWidgetMenu *playerWidgetMenu;
+	QPen *pen = nullptr;
+	PlayerWidgetMenu *playerWidgetMenu = nullptr;
 
 protected:
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const;
@@ -58,6 +58,8 @@ protected:
 	virtual bool selectKeyControlModifier( );
 
 	virtual bool selectKeyDefaultModifier( );
+
+	virtual void releaseResource( );
 
 public:
 	~PlayerListWidget( ) override;
@@ -112,6 +114,8 @@ public:
 
 	virtual bool renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const;
 
+	virtual bool init( );
+
 	// 重载
 protected:
 	void paintEvent( QPaintEvent *event ) override;
@@ -119,6 +123,8 @@ protected:
 	void resizeEvent( QResizeEvent *event ) override;
 
 	void mouseMoveEvent( QMouseEvent *event ) override;
+
+	void hideEvent( QHideEvent *event ) override;
 
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 

@@ -11,29 +11,34 @@ class PlayerToolsWidget : public QWidget {
 
 protected:
 	/// @brief 上一曲
-	QPushButton *thePreviousSong;
+	QPushButton *thePreviousSong = nullptr;
 	/// @brief 播放控制
-	QPushButton *controlPlay;
+	QPushButton *controlPlay = nullptr;
 	/// @brief 下一曲
-	QPushButton *theNextSong;
+	QPushButton *theNextSong = nullptr;
 	/// @brief 播放进度
-	QProgressBar *playProgress;
+	QProgressBar *playProgress = nullptr;
 	/// @brief 播放总时长
-	QLabel *playAllDateTime;
+	QLabel *playAllDateTime = nullptr;
 	/// @brief 播放时间信息的间隔
-	QLabel *playDateTimeSpace;
+	QLabel *playDateTimeSpace = nullptr;
 	/// @brief 播放使用时间
-	QLabel *playUseDateTime;
+	QLabel *playUseDateTime = nullptr;
 	/// @brief 显示播放列表
-	QPushButton *showCurrentPlayerList;
+	QPushButton *showCurrentPlayerList = nullptr;
 	/// @brief 播放按钮
-	QIcon *playIcon;
+	QIcon *playIcon = nullptr;
 	/// @brief 暂停按钮
-	QIcon *pauseIcon;
+	QIcon *pauseIcon = nullptr;
 	/// @brief 进度条最小宽度
 	int progressBarMinWidth;
 	/// @brief 组件的空格
 	int widgetSpace;
+	/// @brief 是否控制进度条
+	bool isControlPlayProgress;
+
+protected:
+	virtual void releaseResource( );
 
 public:
 	PlayerToolsWidget( QWidget *parent );
@@ -60,6 +65,8 @@ protected:
 	void resizeEvent( QResizeEvent *event ) override;
 
 	void mouseMoveEvent( QMouseEvent *event ) override;
+
+	void mousePressEvent( QMouseEvent *event ) override;
 
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 

@@ -8,46 +8,53 @@
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
-#include "../application/renderImage.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
 #include "../tools/dateTimeFormat.h"
 
+void PlayerToolsWidget::releaseResource( ) {
+	#define r_d( ptr ) if(ptr) { delete ptr; ptr = nullptr;}
+	r_d( thePreviousSong );
+	r_d( theNextSong );
+	r_d( controlPlay );
+	r_d( playProgress );
+	r_d( playAllDateTime );
+	r_d( playUseDateTime );
+	r_d( playDateTimeSpace );
+	r_d( showCurrentPlayerList );
+	r_d( playIcon );
+	r_d( pauseIcon );
+}
+
 PlayerToolsWidget::PlayerToolsWidget( QWidget *parent ) : QWidget( parent ) {
-	progressBarMinWidth = 100;
-	widgetSpace = 10;
-	this->thePreviousSong = new QPushButton( this );
-	this->theNextSong = new QPushButton( this );
-	this->controlPlay = new QPushButton( this );
-
-	this->playProgress = new QProgressBar( this );
-	this->playAllDateTime = new QLabel( this );
-	this->playUseDateTime = new QLabel( this );
-	this->playDateTimeSpace = new QLabel( this );
-	this->showCurrentPlayerList = new QPushButton( this );
-
-	this->playIcon = new QIcon;
-	this->pauseIcon = new QIcon;
 }
 
 PlayerToolsWidget::~PlayerToolsWidget( ) {
-	delete playIcon;
-	delete pauseIcon;
+	releaseResource( );
 }
 
 bool PlayerToolsWidget::init( ) {
+	releaseResource( );
+	isControlPlayProgress = false;
 	progressBarMinWidth = 100;
 	widgetSpace = 10;
+	thePreviousSong = new QPushButton( this );
+	theNextSong = new QPushButton( this );
+	controlPlay = new QPushButton( this );
+
+	playProgress = new QProgressBar( this );
+	playAllDateTime = new QLabel( this );
+	playUseDateTime = new QLabel( this );
+	playDateTimeSpace = new QLabel( this );
+	showCurrentPlayerList = new QPushButton( this );
+
+	playIcon = new QIcon;
+	pauseIcon = new QIcon;
 	setMouseTracking( true );
 	auto from = DateTimeFormat::millsecondToHourMinSecFrom( 0 );
 	playAllDateTime->setText( from );
 	playUseDateTime->setText( from );
-
-	thePreviousSong->disconnect( );
-	theNextSong->disconnect( );
-	controlPlay->disconnect( );
-	showCurrentPlayerList->disconnect( );
 
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getTranslate( );
@@ -92,6 +99,9 @@ bool PlayerToolsWidget::init( ) {
 	connect( controlPlay, &QPushButton::clicked, this, &PlayerToolsWidget::clickControlPlay );
 	connect( theNextSong, &QPushButton::clicked, this, &PlayerToolsWidget::clickNextSong );
 	connect( showCurrentPlayerList, &QPushButton::clicked, this, &PlayerToolsWidget::clickShowPlayList );
+
+	// 子组件
+
 	return true;
 }
 
@@ -212,16 +222,32 @@ void PlayerToolsWidget::resizeEvent( QResizeEvent *event ) {
 
 void PlayerToolsWidget::mouseMoveEvent( QMouseEvent *event ) {
 	QWidget::mouseMoveEvent( event );
+	if( isControlPlayProgress == true ) {
+		auto mouseeleasePos = event->pos( );
+		if( playProgress->geometry( ).contains( mouseeleasePos ) ) {
+			auto mapFromPos = playProgress->mapFromParent( mouseeleasePos );
+			double x = mapFromPos.x( );
+			double playProgressWidth = playProgress->width( );
+			int newVar = x * 100 / playProgressWidth + 0.99;
+			playProgress->setValue( newVar );
+		}
+	}
 }
 
-void PlayerToolsWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	QWidget::mouseReleaseEvent( event );
-	auto point = event->pos( );
-	if( playProgress->geometry( ).contains( point ) ) {
-		auto mapFromParent = playProgress->mapFromParent( point );
-		double x = mapFromParent.x( );
+void PlayerToolsWidget::mousePressEvent( QMouseEvent *event ) {
+	QWidget::mousePressEvent( event );
+	auto mousePressPos = event->pos( );
+	if( playProgress->geometry( ).contains( mousePressPos ) ) {
+		isControlPlayProgress = true;
+		auto mapFromPos = playProgress->mapFromParent( mousePressPos );
+		double x = mapFromPos.x( );
 		double playProgressWidth = playProgress->width( );
 		int newVar = x * 100 / playProgressWidth + 0.99;
 		playProgress->setValue( newVar );
 	}
+}
+
+void PlayerToolsWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	QWidget::mouseReleaseEvent( event );
+	isControlPlayProgress = false;
 }

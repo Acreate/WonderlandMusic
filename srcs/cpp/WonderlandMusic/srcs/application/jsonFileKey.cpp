@@ -36,7 +36,30 @@ bool JsonFileKey::init( ) {
 	playerListWidgetItemMusicDurationWidth = "window.player.list.item.width.duration";
 	playerListWidgetItemWidgetBeforeWidth = "window.player.list.item.width.before";
 	playerListWidgetItemWidgetAfterWidth = "window.player.list.item.width.after";
+
+	songPlayerInfoJsonPath = applicationDirPath + "/program/json/app.song.play.list.info.json";
+
+	thePreviousSongIconPath = applicationDirPath + "/program/png/上一曲.png";
+	controlPlayIconPath = applicationDirPath + "/program/png/播放.png";
+	controlPauseIconPath = applicationDirPath + "/program/png/暂停.png";
+	theNextSongIconPath = applicationDirPath + "/program/png/下一曲.png";
+	currentSongPlayListIconPath = applicationDirPath + "/program/png/列表.png";
+
+	qtLogoIconPath = applicationDirPath + "/program/png/qtlogo-64.png";
+
 	return true;
+}
+
+const QString & JsonFileKey::getCurrentSongPlayListIconPath( ) const {
+	return currentSongPlayListIconPath;
+}
+
+const QString & JsonFileKey::getSongPlayerInfoJsonPath( ) const {
+	return songPlayerInfoJsonPath;
+}
+
+const QString & JsonFileKey::getQtLogoIconPath( ) const {
+	return qtLogoIconPath;
 }
 
 const QString & JsonFileKey::getMainWindowSettingJsonPath( ) const {
@@ -133,4 +156,20 @@ const QString & JsonFileKey::getPlayerListWidgetItemWidgetBeforeWidth( ) const {
 
 const QString & JsonFileKey::getPlayerListWidgetItemWidgetAfterWidth( ) const {
 	return playerListWidgetItemWidgetAfterWidth;
+}
+
+const QString & JsonFileKey::getThePreviousSongIconPath( ) const {
+	return thePreviousSongIconPath;
+}
+
+const QString & JsonFileKey::getControlPlayIconPath( ) const {
+	return controlPlayIconPath;
+}
+
+const QString & JsonFileKey::getControlPauseIconPath( ) const {
+	return controlPauseIconPath;
+}
+
+const QString & JsonFileKey::getTheNextSongIconPath( ) const {
+	return theNextSongIconPath;
 }

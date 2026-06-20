@@ -1,5 +1,6 @@
 ﻿#include <QDateTime>
 #include <QProcessEnvironment>
+#include <qfile.h>
 
 #include "application/appInstance.h"
 
@@ -47,6 +48,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete messageErrorOut;
 		return -1;
 	}
+
 
 	int exec = application.run( );
 

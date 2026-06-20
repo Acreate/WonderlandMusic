@@ -115,6 +115,8 @@ bool MainWindow::initStackedWidget( ) {
 	aboutWidget = new AboutWidget( mainStackedWidget );
 	mainStackedWidget->addWidget( aboutWidget );
 	aboutWidget->adjustSize( );
+	if( aboutWidget->init( ) == false )
+		return false;
 	return true;
 }
 

@@ -62,7 +62,19 @@ protected:
 	QString playerListMenuMoveMenu;
 	QString playerListMenuControlMenuMoveTopMusicAction;
 	QString playerListMenuControlMenuMoveBottomMusicAction;
-
+	/// @brief 上一曲
+	QString thePreviousSong;
+	/// @brief 播放控制
+	QString controlPlay;
+	/// @brief 暂停播放
+	QString controlPausa;
+	/// @brief 下一曲
+	QString theNextSong;
+	/// @brief 当前播放列表
+	QString currentPlayList;
+	/// @brief 播放时间分隔
+	QString playSongDateTimeSpace;
+	
 protected:
 	void setCodecForLocale( );
 
@@ -71,9 +83,13 @@ protected:
 public:
 	virtual ~AppTranslate( ) = default;
 
+	virtual const QString & getControlPausa( ) const;
+
 	AppTranslate( );
 
 	virtual bool init( );
+
+	virtual const QString & getPlaySongDateTimeSpace( ) const;
 
 	virtual const QString & getSourceFile( ) const;
 
@@ -158,6 +174,14 @@ public:
 	virtual const QString & getPlayerListMenuMoveMenu( ) const;
 
 	virtual const QString & getPlayerListMenuControlMenuDeleteMusicAction( ) const;
+
+	virtual const QString & getThePreviousSong( ) const;
+
+	virtual const QString & getControlPlay( ) const;
+
+	virtual const QString & getTheNextSong( ) const;
+
+	virtual const QString & getCurrentPlayList( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

@@ -31,6 +31,20 @@ protected:
 	QString playerListWidgetItemMusicDurationWidth;
 	QString playerListWidgetItemWidgetBeforeWidth;
 	QString playerListWidgetItemWidgetAfterWidth;
+	/// @brief 上一曲图标
+	QString thePreviousSongIconPath;
+	/// @brief 播放图标
+	QString controlPlayIconPath;
+	/// @brief 暂停图标
+	QString controlPauseIconPath;
+	/// @brief 下一曲图标
+	QString theNextSongIconPath;
+	/// @brief 当前播放列表
+	QString currentSongPlayListIconPath;
+	/// @brief 播放列表位置
+	QString songPlayerInfoJsonPath;
+	/// @brief qt 标识
+	QString qtLogoIconPath;
 
 public:
 	virtual ~JsonFileKey( ) = default;
@@ -38,6 +52,12 @@ public:
 	JsonFileKey( );
 
 	virtual bool init( );
+
+	virtual const QString & getCurrentSongPlayListIconPath( ) const;
+
+	virtual const QString & getSongPlayerInfoJsonPath( ) const;
+
+	virtual const QString & getQtLogoIconPath( ) const;
 
 	virtual const QString & getMainWindowSettingJsonPath( ) const;
 
@@ -86,6 +106,14 @@ public:
 	virtual const QString & getPlayerListWidgetItemWidgetBeforeWidth( ) const;
 
 	virtual const QString & getPlayerListWidgetItemWidgetAfterWidth( ) const;
+
+	virtual const QString & getThePreviousSongIconPath( ) const;
+
+	virtual const QString & getControlPlayIconPath( ) const;
+
+	virtual const QString & getControlPauseIconPath( ) const;
+
+	virtual const QString & getTheNextSongIconPath( ) const;
 };
 
 #endif // JSONFILEKEY_H_H_HEAD__FILE__

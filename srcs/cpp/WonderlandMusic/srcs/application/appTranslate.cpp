@@ -3,6 +3,10 @@
 #include <QObject>
 #include <QTextCodec>
 
+const QString & AppTranslate::getControlPausa( ) const {
+	return controlPausa;
+}
+
 AppTranslate::AppTranslate( ) {
 }
 
@@ -67,12 +71,23 @@ void AppTranslate::translateString( ) {
 	playerListMenuControlMenu = QObject::tr( "控制菜单" );
 	playerListMenuControlMenuMoveTopMusicAction = QObject::tr( "选中列表移动到顶部" );
 	playerListMenuControlMenuMoveBottomMusicAction = QObject::tr( "选中列表移动到底部" );
+
+	thePreviousSong = QObject::tr( "上一曲" );
+	controlPlay = QObject::tr( "播放" );
+	controlPausa = QObject::tr( "暂停" );
+	theNextSong = QObject::tr( "下一曲" );
+	currentPlayList = QObject::tr( "当前播放列表" );
+	playSongDateTimeSpace = QObject::tr( "/" );
 }
 
 bool AppTranslate::init( ) {
 	setCodecForLocale( );
 	translateString( );
 	return true;
+}
+
+const QString & AppTranslate::getPlaySongDateTimeSpace( ) const {
+	return playSongDateTimeSpace;
 }
 
 const QString & AppTranslate::getSourceFile( ) const {
@@ -241,4 +256,20 @@ const QString & AppTranslate::getPlayerListMenuMoveMenu( ) const {
 
 const QString & AppTranslate::getPlayerListMenuControlMenuDeleteMusicAction( ) const {
 	return playerListMenuControlMenuDeleteMusicAction;
+}
+
+const QString & AppTranslate::getThePreviousSong( ) const {
+	return thePreviousSong;
+}
+
+const QString & AppTranslate::getControlPlay( ) const {
+	return controlPlay;
+}
+
+const QString & AppTranslate::getTheNextSong( ) const {
+	return theNextSong;
+}
+
+const QString & AppTranslate::getCurrentPlayList( ) const {
+	return currentPlayList;
 }

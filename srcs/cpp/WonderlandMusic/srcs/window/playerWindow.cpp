@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QJsonObject>
 #include <QScrollArea>
+#include <qevent.h>
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
@@ -17,13 +18,13 @@
 
 #include "../widget/playerListWidget.h"
 #include "../widget/playerListTopWidget.h"
+#include "../widget/playerToolsWidget.h"
 
 PlayerWindow::~PlayerWindow( ) {
 	//delete playerListTopWidget;
 	//delete playerListTopWidgetScrollArea;
 	delete topDocWidget;
 }
-
 
 PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	setWindowFlags( Qt::WindowType::Widget );
@@ -51,13 +52,21 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	playListWidgetScrollArea->setWidgetResizable( true );
 	playListWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
 
+	bottomDocWidget = new QDockWidget( this );
+	bottomDocWidget->setAllowedAreas( Qt::BottomDockWidgetArea );
+	bottomDocWidget->setTitleBarWidget( new QWidget( bottomDocWidget ) );
+	bottomDocWidget->setContentsMargins( 0, 0, 0, 0 );
+	addDockWidget( Qt::DockWidgetArea::BottomDockWidgetArea, bottomDocWidget );
+	playerToolsWidget = new PlayerToolsWidget( bottomDocWidget );
+	bottomDocWidget->setWidget( playerToolsWidget );
+
 	playListWidget = new PlayerListWidget( playListWidgetScrollArea );
 	playListWidget->adjustSize( );
 	playListWidgetScrollArea->setWidget( playListWidget );
 
 	setCentralWidget( playListWidgetScrollArea );
 
-	auto windowMenuBar = menuBar( );
+	windowMenuBar = menuBar( );
 	if( windowMenuBar == nullptr ) {
 		windowMenuBar = new QMenuBar( this );
 		setMenuBar( windowMenuBar );
@@ -162,6 +171,8 @@ bool PlayerWindow::loadJsonPathInfo( ) {
 	playerListTopWidgetScrollArea->setFixedHeight( playerListTopWidget->height( ) );
 	playListWidget->setItemWidth( playerListTopWidget );
 	playListWidget->loadJsonPathInfo( );
+	if( playerToolsWidget->init( ) == false )
+		return false;
 	return true;
 }
 
@@ -182,4 +193,10 @@ bool PlayerWindow::writeJsonPathInfo( ) {
 
 void PlayerWindow::showEvent( QShowEvent *event ) {
 	QMainWindow::showEvent( event );
+}
+
+void PlayerWindow::resizeEvent( QResizeEvent *event ) {
+	QMainWindow::resizeEvent( event );
+	QSize size = event->size( );
+	playerToolsWidget->setFixedSize( size.width( ), playerToolsWidget->getMinHeight( ) );
 }

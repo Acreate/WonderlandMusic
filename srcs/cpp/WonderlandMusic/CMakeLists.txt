@@ -33,13 +33,25 @@ printf_qt_cmake_out( )
 
 qt_standard_project_setup( )
 
-append_source_file_extensions( LANGUAGES C CXX SUFFIXS hc HC )
+# append_source_file_extensions( LANGUAGES C CXX SUFFIXS hc HC )
 
 get_path_sources( project_src_file PATHS "${CMAKE_CURRENT_LIST_DIR}/srcs" LANGUAGES CXX C )
 
 set( app_run_bin "${Project_Run_Bin_Path}/${prject_name}" )
 set( app_static_lib_bin "${Project_Run_Static_Lib_Path}/${prject_name}" )
 set( app_pdb_bin "${Project_Run_Pbd_Path}/${prject_name}" )
+
+## 编译时非常消耗内存，我不明白，为什么编译 41 mb 的资源需要消费 8 G 内存去运行编译器。
+## list( APPEND image_sources
+##     "${CMAKE_CURRENT_LIST_DIR}/resources/Resource.qrc"
+## )
+## qt_add_resources(
+##     resource_qrc
+##     ${image_sources}
+## 	OPTIONS -no-compress -threshold 10240
+## )
+
+list( APPEND project_src_file ${image_sources} ${resource_qrc} )
 
 if( ${QT_VERSION_MAJOR} GREATER_EQUAL 6 )
 	# cancel_target_PDB_propertie( "${prject_name}" )
@@ -104,8 +116,8 @@ set( app_resouce_path "${app_run_bin}/program/" )
 get_filename_component( app_resouce_path "${app_resouce_path}" ABSOLUTE ) # 全路径
 set( app_resouce_path "${app_resouce_path}/" )
 
+## 未完成项目，该处使用 FALSE
 set( generate_translation_file FALSE )
-
 if( generate_translation_file )
 	# # 需要生成的 *.ts 文件保存到 translation_file_list 变量当中
 	set( translation_file_list

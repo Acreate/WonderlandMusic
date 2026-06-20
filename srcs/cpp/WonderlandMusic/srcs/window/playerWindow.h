@@ -2,6 +2,7 @@
 #define PLAYERWINDOW_H_H_HEAD__FILE__
 
 #include <QMainWindow>
+class PlayerToolsWidget;
 class PlayerListTopWidget;
 class QScrollArea;
 class PlayerListWidget;
@@ -25,6 +26,12 @@ protected:
 	/// @brief 播放的顶部组件
 	PlayerListTopWidget *playerListTopWidget;
 
+	/// @brief 底部容器
+	QDockWidget *bottomDocWidget;
+	/// @brief 播放功能面板
+	PlayerToolsWidget *playerToolsWidget;
+	/// @brief 工具菜单
+	QMenuBar *windowMenuBar;
 
 public:
 	~PlayerWindow( ) override;
@@ -37,6 +44,8 @@ public:
 
 protected:
 	void showEvent( QShowEvent *event ) override;
+
+	void resizeEvent( QResizeEvent *event ) override;
 };
 
 #endif // PLAYERWINDOW_H_H_HEAD__FILE__

@@ -8,42 +8,49 @@
 #include <QLibraryInfo>
 
 #include "../application/appInstance.h"
+#include "../application/jsonFileKey.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
 AboutWidget::AboutWidget( QWidget *parent ) : QWidget( parent ) {
+	mainLayout = new QHBoxLayout( this );
+
+	qtIco = new QLabel( this );
+
+	mainLayout->addWidget( qtIco, 0, Qt::AlignTop );
+
+	textBox = new QTextEdit( this );
+	mainLayout->addWidget( textBox );
+}
+
+bool AboutWidget::init( ) {
 	auto applicationInstance = AppInstance::getAppInstance( );
 	setWindowTitle( tr( "%1 关于" ).arg( applicationInstance->applicationName( ) ) );
-	auto mainLayout = new QHBoxLayout( this );
 	mainLayout->setContentsMargins( 0, 0, 0, 0 );
 	mainLayout->setSpacing( 0 );
-	auto qtIco = new QLabel( this );
 	QStyle *stylePtr = style( );
 	auto icon = stylePtr->standardPixmap( QStyle::SP_TitleBarMenuButton );
 	icon = icon.scaled( 64, 64 );
 	qtIco->setPixmap( icon );
 
-	QFileInfo fileInfo( applicationInstance->applicationFilePath( ) );
-	QString qtLogIcoFilePath = fileInfo.dir( ).absolutePath( );
-	qtLogIcoFilePath = qtLogIcoFilePath + "/program/png/qtlogo-64.png";
+	auto jsonFileKey = applicationInstance->getJsonFileKey( );
+	auto logoIconPath = jsonFileKey->getQtLogoIconPath( );
+	QFileInfo fileInfo( logoIconPath );
 	QImage qImage;
-	if( fileInfo.exists( qtLogIcoFilePath ) == false ) {
-		Message_Error_Out << tr( "Qt 标识图像不存在" ) + " : " + qtLogIcoFilePath;
+	if( fileInfo.exists( ) == false ) {
+		Message_Error_Out << tr( "Qt 标识图像不存在" ) + " : " + logoIconPath;
 		qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
-	} else if( qImage.load( qtLogIcoFilePath ) == false ) {
-		Message_Error_Out << tr( "Qt 标识图像加载失败，重新使用 .rc 资源" ) + " : " + qtLogIcoFilePath;
+	} else if( qImage.load( logoIconPath ) == false ) {
+		Message_Error_Out << tr( "Qt 标识图像加载失败，重新使用 .rc 资源" ) + " : " + logoIconPath;
 		qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
 	}
 
 	auto pixmap = QPixmap::fromImage( qImage );
 	qtIco->setPixmap( pixmap );
-
-	mainLayout->addWidget( qtIco, 0, Qt::AlignTop );
-	auto textBox = new QTextEdit( this );
 	textBox->setReadOnly( true );
-	mainLayout->addWidget( textBox );
 	textBox->setText( getSoftwareProtocolInfo( ) );
 	textBox->setAutoFormatting( QTextEdit::AutoAll );
+	return true;
 }
 
 QString AboutWidget::getSoftwareProtocolInfo( ) {

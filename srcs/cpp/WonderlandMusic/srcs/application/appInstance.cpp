@@ -1,6 +1,7 @@
 ﻿#include "appInstance.h"
 
 #include <QDateTime>
+#include <qfile.h>
 
 #include "appTranslate.h"
 #include "jsonFileKey.h"
@@ -53,6 +54,17 @@ bool AppInstance::notify( QObject *object, QEvent *event ) {
 }
 
 bool AppInstance::init( ) {
+	QImage f;
+	bool load = f.load( ":/png/qtlogo-64.png" );
+	QFile open( ":/font/Alibaba/阿里巴巴普惠体v1.10版本更新说明.txt" );
+	if( open.open( QIODeviceBase::ReadOnly ) ) {
+		qDebug( ) << QString::fromLocal8Bit( open.readAll( ) ).toStdString( ).c_str( );
+	}
+	QFile open2( ":/font/Alibaba/Alibaba-PuHuiTi-Bold.ttf" );
+	if( open2.open( QIODeviceBase::ReadOnly ) ) {
+		qDebug( ) << "加载";
+	}
+
 	// 自身数据初始化先，再到子对象初始化
 	appSettingPath = applicationDirPath( );
 

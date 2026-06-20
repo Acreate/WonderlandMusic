@@ -2,6 +2,7 @@
 #define PLAYERWIDGETMENU_H_H_HEAD__FILE__
 
 #include <QMenu>
+class PlayerListMenuTranslate;
 class MusicDecoder;
 class AppTranslate;
 class AppInstance;
@@ -14,7 +15,12 @@ class PlayerWidgetMenu : public QMenu {
 protected:
 	AppInstance *appInstance;
 	const AppTranslate *appTranslate;
+	PlayerListMenuTranslate *playerListMenuTranslate;
 	MusicDecoder *musicDecoder;
+	/// @brief 文件选择工作路径
+	QString fileSelectWorkPath;
+	/// @brief 目录选择工作路径
+	QString dirSelectWorkPath;
 	PlayerListWidget *playerListWidget;
 	QVector< MusicInfoItemWidget * > musicInfoItemWidgetVector;
 	/// @brief 播放菜单
@@ -35,6 +41,12 @@ protected:
 	QAction *removeMusic;
 	/// @brief 删除选中
 	QAction *deleteMusic;
+	/// @brief 加载菜单
+	QMenu *loadMenu;
+	/// @brief 添加选择文件到集
+	QAction *addMultiFileMusicToCollectionAction;
+	/// @brief 添加选择目录到集
+	QAction *addMultiMusicDirToCollection;
 
 public:
 	PlayerWidgetMenu( PlayerListWidget *player_list_widget );

@@ -40,7 +40,6 @@ protected:
 	QColor drawPenColor;
 	QColor drawFillColor;
 	QPen *pen = nullptr;
-	PlayerWidgetMenu *playerWidgetMenu = nullptr;
 
 protected:
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const;
@@ -74,19 +73,11 @@ public:
 
 	virtual int getSplitWidth( ) const;
 
-	virtual void setSplitWidth( const int split_width );
-
 	virtual int getMusicNameWidth( ) const;
-
-	virtual void setMusicNameWidth( const int music_name_width );
 
 	virtual int getMusicSingerWidth( ) const;
 
-	virtual void setMusicSingerWidth( const int music_singer_width );
-
 	virtual int getMusicDurationWidth( ) const;
-
-	virtual void setMusicDurationWidth( const int format_string_duration_width );
 
 	virtual MusicInfoItemWidget * getActiveLeftItemWidget( ) const;
 

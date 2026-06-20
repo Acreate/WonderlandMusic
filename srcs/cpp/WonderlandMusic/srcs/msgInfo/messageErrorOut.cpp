@@ -168,7 +168,8 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 	if( dir.exists( ) == false ) {
 		if( dir.mkdir( logHomePtah ) == false ) {
 			outString.clear( );
-			formatMessageOut( date_time_format, outString, std::source_location::current( ), translate->getCreateDirError( ) + " : " + logHomePtah );
+			auto messageTranslate = translate->getMessage( );
+			formatMessageOut( date_time_format, outString, std::source_location::current( ), messageTranslate->getCreateDirError( ) + " : " + logHomePtah );
 			StdErrorConsoleOut( outString );
 			return outString;
 		}
@@ -177,7 +178,8 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 	QFlags< QIODevice::OpenMode::enum_type > flags = QIODeviceBase::ReadWrite | QIODeviceBase::Append;
 	if( openFile.open( flags ) == false ) {
 		outString.clear( );
-		formatMessageOut( date_time_format, outString, std::source_location::current( ), translate->getOpenFileError( ) + " : " + writeFilePath );
+		auto messageTranslate = translate->getMessage( );
+		formatMessageOut( date_time_format, outString, std::source_location::current( ), messageTranslate->getOpenFileError( ) + " : " + writeFilePath );
 		StdErrorConsoleOut( outString );
 		return outString;
 	}
@@ -213,9 +215,10 @@ QString & MessageErrorOut::formatMessageOut( const DateTimeFormat &date_time_for
 
 	auto *applicationInstance = AppInstance::getAppInstance( );
 	auto translate = applicationInstance->getTranslate( );
-	QString sourceFile = translate->getSourceFile( );
-	QString sourceFunction = translate->getSourceFunction( );
-	QString sourceLine = translate->getSourceLine( );
+	auto messageTranslate = translate->getMessage( );
+	QString sourceFile = messageTranslate->getSourceFile( );
+	QString sourceFunction = messageTranslate->getSourceFunction( );
+	QString sourceLine = messageTranslate->getSourceLine( );
 	result_msg.append( "\n-----\n :: \n : " ).append( sourceFile ).append( " = " ).append( msgCodeFileName ).append( "\n : " ).append( sourceFunction ).append( " = " ).append( msgCodeFunctionName ).append( "\n : " ).append( sourceLine ).append( " = " ).append( QString::number( msgCodeLine ) ).append( "\n : " ).append( currentDataTimeToString ).append( " ->\n ::\n" ).append( msg ).append( "\n-----\n" );
 
 	return result_msg;

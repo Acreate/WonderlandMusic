@@ -8,6 +8,7 @@
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
+#include "../application/jsonKey/playerListToolWidgetJsonKey.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -58,21 +59,23 @@ bool PlayerToolsWidget::init( ) {
 
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getTranslate( );
-	thePreviousSong->setText( appTranslate->getThePreviousSong( ) );
-	theNextSong->setText( appTranslate->getTheNextSong( ) );
-	controlPlay->setText( appTranslate->getControlPlay( ) );
-	showCurrentPlayerList->setText( appTranslate->getCurrentPlayList( ) );
+	auto playerToolsWidgetTranslate = appTranslate->getPlayerToolsWidget( );
+	thePreviousSong->setText( playerToolsWidgetTranslate->getThePreviousSong( ) );
+	theNextSong->setText( playerToolsWidgetTranslate->getTheNextSong( ) );
+	controlPlay->setText( playerToolsWidgetTranslate->getControlPlay( ) );
+	showCurrentPlayerList->setText( playerToolsWidgetTranslate->getCurrentPlayList( ) );
 
 	auto jsonFileKey = appInstance->getJsonFileKey( );
-	playIcon->addFile( jsonFileKey->getControlPlayIconPath( ) );
-	pauseIcon->addFile( jsonFileKey->getControlPauseIconPath( ) );
+	auto musicPlayerListToolWidgetJsonFileKey = jsonFileKey->getPlayerListToolWidget( );
+	playIcon->addFile( musicPlayerListToolWidgetJsonFileKey->getControlPlayIconPath( ) );
+	pauseIcon->addFile( musicPlayerListToolWidgetJsonFileKey->getControlPauseIconPath( ) );
 
-	thePreviousSong->setIcon( QIcon( jsonFileKey->getThePreviousSongIconPath( ) ) );
-	theNextSong->setIcon( QIcon( jsonFileKey->getTheNextSongIconPath( ) ) );
+	thePreviousSong->setIcon( QIcon( musicPlayerListToolWidgetJsonFileKey->getThePreviousSongIconPath( ) ) );
+	theNextSong->setIcon( QIcon( musicPlayerListToolWidgetJsonFileKey->getTheNextSongIconPath( ) ) );
 	controlPlay->setIcon( *playIcon );
-	showCurrentPlayerList->setIcon( QIcon( jsonFileKey->getCurrentSongPlayListIconPath( ) ) );
+	showCurrentPlayerList->setIcon( QIcon( musicPlayerListToolWidgetJsonFileKey->getCurrentSongPlayListIconPath( ) ) );
 
-	playDateTimeSpace->setText( appTranslate->getPlaySongDateTimeSpace( ) );
+	playDateTimeSpace->setText( playerToolsWidgetTranslate->getPlaySongDateTimeSpace( ) );
 
 	playProgress->setRange( 0, 100 );
 	playProgress->setValue( 100 );

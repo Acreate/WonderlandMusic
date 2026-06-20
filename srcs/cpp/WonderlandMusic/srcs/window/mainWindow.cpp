@@ -11,6 +11,7 @@
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
+#include "../application/jsonKey/mainWindowJsonKey.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -101,7 +102,7 @@ bool MainWindow::initApp( ) {
 	appTranslate = appInstance->getTranslate( );
 	jsonFileKey = appInstance->getJsonFileKey( );
 	// 配置窗口顶部显示
-	setWindowTitle( appTranslate->getAppWindowTitleName( ) );
+	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
 	return true;
 }
 
@@ -137,14 +138,14 @@ bool MainWindow::initDockWidget( ) {
 	auto *optionLayout = new QVBoxLayout( leftOptionWidget );
 	optionLayout->setContentsMargins( 0, 0, 0, 0 );
 	optionLayout->setSpacing( 0 );
-
-	showPlayListWidgetBtn = new QPushButton( appTranslate->getPlayListWidget( ), leftOptionWidget );
+	auto mainWindowTranslate = appTranslate->getMainWindow( );
+	showPlayListWidgetBtn = new QPushButton( mainWindowTranslate->getMusicTypeName( ), leftOptionWidget );
 	optionLayout->addWidget( showPlayListWidgetBtn, 0, Qt::AlignTop );
 
-	showSettingWidgetBtn = new QPushButton( appTranslate->getSettingWidget( ), leftOptionWidget );
+	showSettingWidgetBtn = new QPushButton( mainWindowTranslate->getSettingWidget( ), leftOptionWidget );
 	optionLayout->addWidget( showSettingWidgetBtn, 0, Qt::AlignTop );
 
-	showAboutWidgetBtn = new QPushButton( appTranslate->getAboutWidget( ), leftOptionWidget );
+	showAboutWidgetBtn = new QPushButton( mainWindowTranslate->getAboutWidget( ), leftOptionWidget );
 	optionLayout->addWidget( showAboutWidgetBtn, 0, Qt::AlignTop );
 
 	// 底部弹顶
@@ -159,7 +160,8 @@ bool MainWindow::initDockWidget( ) {
 
 bool MainWindow::initMainWindowSetting( ) {
 	// 获取 json 路径
-	auto mainWindowJsonFile = jsonFileKey->getMainWindowSettingJsonPath( );
+	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
+	auto mainWindowJsonFile = windowJsonFileKey->getMainWindowSettingJsonPath( );
 	QJsonObject mainWindowSettingJsonObject;
 	if( PathTools::readJsonObject( mainWindowSettingJsonObject, mainWindowJsonFile ) == false )
 		return true;
@@ -176,19 +178,19 @@ bool MainWindow::initMainWindowSetting( ) {
 	// 查找返回
 	QJsonObject::iterator find;
 	// 查找 x 坐标
-	find = mainWindowSettingJsonObject.find( jsonFileKey->getMainWindowPointXPos( ) );
+	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getMainWindowPointXPos( ) );
 	if( find != end )
 		x = find.value( ).toInt( );
 	// 查找 y 坐标
-	find = mainWindowSettingJsonObject.find( jsonFileKey->getMainWindowPointYPos( ) );
+	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getMainWindowPointYPos( ) );
 	if( find != end )
 		y = find.value( ).toInt( );
 	// 查找 w 宽度
-	find = mainWindowSettingJsonObject.find( jsonFileKey->getMainWindowSizeWidth( ) );
+	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getMainWindowSizeWidth( ) );
 	if( find != end )
 		width = find.value( ).toInt( );
 	// 查找 h 高度
-	find = mainWindowSettingJsonObject.find( jsonFileKey->getMainWindowSizeHeight( ) );
+	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getMainWindowSizeHeight( ) );
 	if( find != end )
 		height = find.value( ).toInt( );
 	// 设置坐标与宽高
@@ -214,16 +216,17 @@ bool MainWindow::saveMainWindowSetting( ) {
 	QJsonObject wirteJsonObject;
 	auto geo = geometry( );
 	int windowX = geo.x( );
-	wirteJsonObject.insert( jsonFileKey->getMainWindowPointXPos( ), windowX );
+	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
+	wirteJsonObject.insert( mainWindowJsonFileKey->getMainWindowPointXPos( ), windowX );
 	int windowY = geo.y( );
-	wirteJsonObject.insert( jsonFileKey->getMainWindowPointYPos( ), windowY );
+	wirteJsonObject.insert( mainWindowJsonFileKey->getMainWindowPointYPos( ), windowY );
 	int windowWidth = geo.width( );
-	wirteJsonObject.insert( jsonFileKey->getMainWindowSizeWidth( ), windowWidth );
+	wirteJsonObject.insert( mainWindowJsonFileKey->getMainWindowSizeWidth( ), windowWidth );
 	int windowHeight = geo.height( );
-	wirteJsonObject.insert( jsonFileKey->getMainWindowSizeHeight( ), windowHeight );
+	wirteJsonObject.insert( mainWindowJsonFileKey->getMainWindowSizeHeight( ), windowHeight );
 
 	// 获取 json 路径
-	auto mainWindowJsonFile = jsonFileKey->getMainWindowSettingJsonPath( );
+	auto mainWindowJsonFile = mainWindowJsonFileKey->getMainWindowSettingJsonPath( );
 	PathTools::writeJsonObject( wirteJsonObject, mainWindowJsonFile );
 	return true;
 }

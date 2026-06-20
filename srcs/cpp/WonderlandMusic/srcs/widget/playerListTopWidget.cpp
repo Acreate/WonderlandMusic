@@ -8,6 +8,7 @@
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
 #include "../application/renderImage.h"
+#include "../application/jsonKey/playerListTopWidgetJsonKey.h"
 
 #include "../tools/pathTools.h"
 
@@ -29,38 +30,39 @@ PlayerListTopWidget::~PlayerListTopWidget( ) {
 bool PlayerListTopWidget::loadJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
-	auto fileJsonPath = jsonFileKey->getPlayerListWidgetTopJsonPath( );
+	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
+	auto fileJsonPath = listTopWidgetJsonKey->getPlayerListWidgetTopJsonPath( );
 	QJsonObject fileJsonObject;
 	if( PathTools::readJsonObject( fileJsonObject, fileJsonPath ) == false )
 		return true;
 	auto end = fileJsonObject.end( );
 	QJsonObject::iterator find;
 
-	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemSplitWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemSplitWidth( ) );
 	if( find != end )
 		splitWidth = find.value( ).toInt( splitWidth );
-	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemMusicNameWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemMusicNameWidth( ) );
 	if( find != end )
 		musicNameWidth = find.value( ).toInt( musicNameWidth );
-	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemMusicSingerWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemMusicSingerWidth( ) );
 	if( find != end )
 		musicSingerWidth = find.value( ).toInt( musicSingerWidth );
-	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemMusicDurationWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemMusicDurationWidth( ) );
 	if( find != end )
 		musicDurationWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemWidgetBeforeWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetBeforeWidth( ) );
 	if( find != end )
 		widgetBeforeWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemWidgetAfterWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetAfterWidth( ) );
 	if( find != end )
 		widgetAfterWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemWidgetIndexWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetIndexWidth( ) );
 	if( find != end )
 		indexWidth = find.value( ).toInt( musicDurationWidth );
-	find = fileJsonObject.find( jsonFileKey->getPlayerListWidgetItemWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemWidth( ) );
 	if( find != end ) {
 		QRect rect = contentsRect( );
 		int w = find.value( ).toInt( rect.width( ) );
@@ -76,15 +78,16 @@ bool PlayerListTopWidget::writeJsonPathInfo( ) {
 
 	QJsonObject fileJsonObject;
 	int width = contentsRect( ).width( );
-	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemWidth( ), width );
-	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemSplitWidth( ), splitWidth );
-	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemMusicNameWidth( ), musicNameWidth );
-	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemMusicSingerWidth( ), musicSingerWidth );
-	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemMusicDurationWidth( ), musicDurationWidth );
-	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemWidgetBeforeWidth( ), widgetBeforeWidth );
-	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemWidgetAfterWidth( ), widgetAfterWidth );
-	fileJsonObject.insert( jsonFileKey->getPlayerListWidgetItemWidgetIndexWidth( ), indexWidth );
-	auto fileJsonPath = jsonFileKey->getPlayerListWidgetTopJsonPath( );
+	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
+	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemWidth( ), width );
+	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemSplitWidth( ), splitWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemMusicNameWidth( ), musicNameWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemMusicSingerWidth( ), musicSingerWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemMusicDurationWidth( ), musicDurationWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetBeforeWidth( ), widgetBeforeWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetAfterWidth( ), widgetAfterWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetIndexWidth( ), indexWidth );
+	auto fileJsonPath = listTopWidgetJsonKey->getPlayerListWidgetTopJsonPath( );
 	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
 	return true;
 }
@@ -142,13 +145,14 @@ bool PlayerListTopWidget::getMinSize( QSize &result_min_size ) {
 	auto indexWidth = fontMetrics->horizontalAdvance( "0000" );
 	if( indexWidth < 0 )
 		return false;
-	auto nameWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicName( ) );
+	auto playerTopWidgetTranslate = appTranslate->getPlayerTopWidget( );
+	auto nameWidth = fontMetrics->horizontalAdvance( playerTopWidgetTranslate->getMusicName( ) );
 	if( nameWidth < 0 )
 		return false;
-	auto singerWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicSinger( ) );
+	auto singerWidth = fontMetrics->horizontalAdvance( playerTopWidgetTranslate->getMusicSinger( ) );
 	if( singerWidth < 0 )
 		return false;
-	auto durationWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicDuration( ) );
+	auto durationWidth = fontMetrics->horizontalAdvance( playerTopWidgetTranslate->getMusicDuration( ) );
 	if( durationWidth < 0 )
 		return false;
 
@@ -202,11 +206,11 @@ bool PlayerListTopWidget::averageItem( ) {// 获取字符串最小宽度
 	auto appTranslate = appInstance->getTranslate( );
 	auto renderImage = appInstance->getRenderImage( );
 	auto fontMetrics = renderImage->getFontMetrics( );
-
+	auto playerTopWidgetTranslate = appTranslate->getPlayerTopWidget( );
 	auto indexWidth = fontMetrics->horizontalAdvance( "0000" );
-	auto nameWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicName( ) );
-	auto singerWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicSinger( ) );
-	auto durationWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicDuration( ) );
+	auto nameWidth = fontMetrics->horizontalAdvance( playerTopWidgetTranslate->getMusicName( ) );
+	auto singerWidth = fontMetrics->horizontalAdvance( playerTopWidgetTranslate->getMusicSinger( ) );
+	auto durationWidth = fontMetrics->horizontalAdvance( playerTopWidgetTranslate->getMusicDuration( ) );
 
 	// 获取字符串最小宽度
 	double widthPercentage = nameWidth + singerWidth + durationWidth + indexWidth;
@@ -328,29 +332,29 @@ void PlayerListTopWidget::paintEvent( QPaintEvent *event ) {
 	int drawOffsetX = offsetSplitX + widgetBeforeWidth;
 	QRect drawRect;
 	auto currentHeight = height( );
-
+	auto playerTopWidget = appTranslate->getPlayerTopWidget( );
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );
 	drawOffsetX += offsetSplitX;
 	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( indexWidth, currentHeight ) );
-	painter.drawText( drawRect, appTranslate->getMusicIndex( ) );
+	painter.drawText( drawRect, playerTopWidget->getMusicIndex( ) );
 	drawOffsetX += indexWidth + offsetSplitX;
 
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );
 	drawOffsetX += offsetSplitX;
 	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( musicNameWidth, currentHeight ) );
-	painter.drawText( drawRect, appTranslate->getMusicName( ) );
+	painter.drawText( drawRect, playerTopWidget->getMusicName( ) );
 	drawOffsetX += musicNameWidth + offsetSplitX;
 
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );
 	drawOffsetX += offsetSplitX;
 	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( musicSingerWidth, currentHeight ) );
-	painter.drawText( drawRect, appTranslate->getMusicSinger( ) );
+	painter.drawText( drawRect, playerTopWidget->getMusicSinger( ) );
 	drawOffsetX += musicSingerWidth + offsetSplitX;
 
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );
 	drawOffsetX += offsetSplitX;
 	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( musicDurationWidth, currentHeight ) );
-	painter.drawText( drawRect, appTranslate->getMusicDuration( ) );
+	painter.drawText( drawRect, playerTopWidget->getMusicDuration( ) );
 	drawOffsetX += musicDurationWidth + offsetSplitX;
 
 	painter.drawLine( drawOffsetX, 0, drawOffsetX, currentHeight );

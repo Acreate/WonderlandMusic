@@ -5,6 +5,7 @@
 
 #include "../application/appInstance.h"
 #include "../application/jsonFileKey.h"
+#include "../application/jsonKey/musicInfoItemJsonKey.h"
 
 #include "../tools/dateTimeFormat.h"
 
@@ -82,10 +83,11 @@ const QString & MusicInfoItem::getFormatStringIndex( ) const {
 bool MusicInfoItem::toJsonObect( QJsonObject &result_json_object, const MusicInfoItem &music_info ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
-	result_json_object.insert( jsonFileKey->getMusicInfoFile( ), music_info.musicFilePath );
-	result_json_object.insert( jsonFileKey->getMusicInfoName( ), music_info.musicName );
-	result_json_object.insert( jsonFileKey->getMusicInfoSinger( ), music_info.musicSinger );
-	result_json_object.insert( jsonFileKey->getMusicInfoDuration( ), music_info.duration );
+	auto musicInfoItemJsonKey = jsonFileKey->getMusicInfoItem( );
+	result_json_object.insert( musicInfoItemJsonKey->getMusicInfoFile( ), music_info.musicFilePath );
+	result_json_object.insert( musicInfoItemJsonKey->getMusicInfoName( ), music_info.musicName );
+	result_json_object.insert( musicInfoItemJsonKey->getMusicInfoSinger( ), music_info.musicSinger );
+	result_json_object.insert( musicInfoItemJsonKey->getMusicInfoDuration( ), music_info.duration );
 	return true;
 }
 
@@ -93,20 +95,21 @@ bool MusicInfoItem::forJsonObject( MusicInfoItem &result_music_info, const QJson
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 
+	auto musicInfoItemJsonKey = jsonFileKey->getMusicInfoItem( );
 	auto end = for_json_object.end( );
-	auto find = for_json_object.find( jsonFileKey->getMusicInfoFile( ) );
+	auto find = for_json_object.find( musicInfoItemJsonKey->getMusicInfoFile( ) );
 	if( end == find )
 		return false;
 	result_music_info.musicFilePath = find.value( ).toString( );
-	find = for_json_object.find( jsonFileKey->getMusicInfoName( ) );
+	find = for_json_object.find( musicInfoItemJsonKey->getMusicInfoName( ) );
 	if( end == find )
 		return false;
 	result_music_info.musicName = find.value( ).toString( );
-	find = for_json_object.find( jsonFileKey->getMusicInfoSinger( ) );
+	find = for_json_object.find( musicInfoItemJsonKey->getMusicInfoSinger( ) );
 	if( end == find )
 		return false;
 	result_music_info.musicSinger = find.value( ).toString( );
-	find = for_json_object.find( jsonFileKey->getMusicInfoDuration( ) );
+	find = for_json_object.find( musicInfoItemJsonKey->getMusicInfoDuration( ) );
 	if( end == find )
 		return false;
 	result_music_info.duration = find.value( ).toInteger( );

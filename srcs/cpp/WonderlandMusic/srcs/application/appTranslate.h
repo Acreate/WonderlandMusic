@@ -2,8 +2,18 @@
 #define APPTRANSLATE_H_H_HEAD__FILE__
 #include <qstring.h>
 
-class AppTranslate {
-protected:
+class ITranslate {
+public:
+	ITranslate( ) {
+	}
+
+	virtual ~ITranslate( ) {
+	}
+
+	virtual bool init( ) = 0;
+};
+
+class MessageTranslate : public ITranslate {
 	QString sourceFile;
 	QString sourceFunction;
 	QString sourceLine;
@@ -15,13 +25,75 @@ protected:
 	QString writeFileError;
 	QString readFileError;
 
+public:
+	bool init( ) override;
+
+	virtual const QString & getSourceFile( ) const;
+
+	virtual const QString & getSourceFunction( ) const;
+
+	virtual const QString & getSourceLine( ) const;
+
+	virtual const QString & getCreateDirError( ) const;
+
+	virtual const QString & getCreateFileError( ) const;
+
+	virtual const QString & getOpenFileError( ) const;
+
+	virtual const QString & getWriteFileError( ) const;
+
+	virtual const QString & getReadFileError( ) const;
+};
+
+class MainWindowTranslate : public ITranslate {
 	QString appWindowTitleName;
+
+	QString settingWidget;
+
+	QString aboutWidget;
+	QString musicTypeName;
+
+public:
+	bool init( ) override;
+
+	virtual const QString & getAppWindowTitleName( ) const;
+
+	virtual const QString & getSettingWidget( ) const;
+
+	virtual const QString & getAboutWidget( ) const;
+
+	virtual const QString & getMusicTypeName( ) const;
+};
+
+class PlayerWidgetTranslate : public ITranslate {
 	QString playMusic;
 	QString stopMusic;
 	QString pauseMusic;
 	QString playListWidget;
-	QString settingWidget;
-	QString aboutWidget;
+
+public:
+	bool init( ) override;
+
+	virtual const QString & getPlayMusic( ) const;
+
+	virtual const QString & getStopMusic( ) const;
+
+	virtual const QString & getPauseMusic( ) const;
+
+	virtual const QString & getPlayListWidget( ) const;
+};
+
+class SettingWidgetTranslate : public ITranslate {
+public:
+	bool init( ) override;
+};
+
+class AboutWidgetTranslate : public ITranslate {
+public:
+	bool init( ) override;
+};
+
+class DateTimeFormatTranslate : public ITranslate {
 	/// @brief 年
 	QString year;
 	/// @brief 月
@@ -37,85 +109,8 @@ protected:
 	/// @brief 毫秒
 	QString millsecond;
 
-	QString fileConverJsonDocError;
-	QString notFindJsonKey;
-
-	QString menuFileTitle;
-
-	QString actionAddMultiMusicFileToCollection;
-	QString actionAddMultiMusicDirToCollection;
-	QString actionRemoveMultiMusicAtCollection;
-
-	QString musicTypeName;
-
-	QString musicIndex;
-	QString musicName;
-	QString musicSinger;
-	QString musicDuration;
-
-	QString playerListMenuenuPlayerMenu;
-	QString playerListMenuPlayerMenuSetCurrentPlayAction;
-	QString playerListMenuPlayerMenuInsterCurrentPlayAction;
-	QString playerListMenuControlMenu;
-	QString playerListMenuControlMenuRemoveMusicAction;
-	QString playerListMenuControlMenuDeleteMusicAction;
-	QString playerListMenuMoveMenu;
-	QString playerListMenuControlMenuMoveTopMusicAction;
-	QString playerListMenuControlMenuMoveBottomMusicAction;
-	/// @brief 上一曲
-	QString thePreviousSong;
-	/// @brief 播放控制
-	QString controlPlay;
-	/// @brief 暂停播放
-	QString controlPausa;
-	/// @brief 下一曲
-	QString theNextSong;
-	/// @brief 当前播放列表
-	QString currentPlayList;
-	/// @brief 播放时间分隔
-	QString playSongDateTimeSpace;
-	
-protected:
-	void setCodecForLocale( );
-
-	void translateString( );
-
 public:
-	virtual ~AppTranslate( ) = default;
-
-	virtual const QString & getControlPausa( ) const;
-
-	AppTranslate( );
-
-	virtual bool init( );
-
-	virtual const QString & getPlaySongDateTimeSpace( ) const;
-
-	virtual const QString & getSourceFile( ) const;
-
-	virtual const QString & getSourceFunction( ) const;
-
-	virtual const QString & getSourceLine( ) const;
-
-	virtual const QString & getCreateDirError( ) const;
-
-	virtual const QString & getCreateFileError( ) const;
-
-	virtual const QString & getOpenFileError( ) const;
-
-	virtual const QString & getAppWindowTitleName( ) const;
-
-	virtual const QString & getPlay( ) const;
-
-	virtual const QString & getStop( ) const;
-
-	virtual const QString & getPause( ) const;
-
-	virtual const QString & getPlayListWidget( ) const;
-
-	virtual const QString & getSettingWidget( ) const;
-
-	virtual const QString & getAboutWidget( ) const;
+	bool init( ) override;
 
 	virtual const QString & getYear( ) const;
 
@@ -130,24 +125,33 @@ public:
 	virtual const QString & getSecond( ) const;
 
 	virtual const QString & getMillsecond( ) const;
+};
 
-	virtual const QString & getWriteFileError( ) const;
+class JsonTranslate : public ITranslate {
+	QString fileConverJsonDocError;
+	QString notFindJsonKey;
 
-	virtual const QString & getReadFileError( ) const;
+public:
+	bool init( ) override;
 
 	virtual const QString & getFileConverJsonDocError( ) const;
 
 	virtual const QString & getNotFindJsonKey( ) const;
+};
 
-	virtual const QString & getActionAddMultiMusicFileToCollection( ) const;
+class PlayerWindowTranslate : public ITranslate {
+public:
+	bool init( ) override;
+};
 
-	virtual const QString & getActionAddMultiMusicDirToCollection( ) const;
+class PlayerTopWidgetTranslate : public ITranslate {
+	QString musicIndex;
+	QString musicName;
+	QString musicSinger;
+	QString musicDuration;
 
-	virtual const QString & getActionRemoveMultiMusicAtCollection( ) const;
-
-	virtual const QString & getMenuFileTitle( ) const;
-
-	virtual const QString & getMusicTypeName( ) const;
+public:
+	bool init( ) override;
 
 	virtual const QString & getMusicIndex( ) const;
 
@@ -156,6 +160,32 @@ public:
 	virtual const QString & getMusicSinger( ) const;
 
 	virtual const QString & getMusicDuration( ) const;
+};
+
+class PlayerListMenuTranslate : public ITranslate {
+	QString playerListMenuFileLoadMenu;
+	QString playerListAddMultiMusicFileToCollectionAction;
+	QString playerListAddMultiMusicDirToCollectionAction;
+	QString playerListMenuenuPlayerMenu;
+	QString playerListMenuPlayerMenuSetCurrentPlayAction;
+	QString playerListMenuPlayerMenuInsterCurrentPlayAction;
+	QString playerListMenuControlMenu;
+	QString playerListMenuControlMenuRemoveMusicAction;
+	QString playerListMenuControlMenuDeleteMusicAction;
+	QString playerListMenuMoveMenu;
+	QString playerListMenuControlMenuMoveTopMusicAction;
+	QString playerListMenuControlMenuMoveBottomMusicAction;
+
+	QString musicTypeName;
+
+public:
+	bool init( ) override;
+
+	virtual const QString & getPlayerListMenuFileLoadMenu( ) const;
+
+	virtual const QString & getPlayerListAddMultiMusicFileToCollectionAction( ) const;
+
+	virtual const QString & getPlayerListAddMultiMusicDirToCollectionAction( ) const;
 
 	virtual const QString & getPlayerListMenuenuPlayerMenu( ) const;
 
@@ -167,21 +197,96 @@ public:
 
 	virtual const QString & getPlayerListMenuControlMenuRemoveMusicAction( ) const;
 
+	virtual const QString & getPlayerListMenuControlMenuDeleteMusicAction( ) const;
+
+	virtual const QString & getPlayerListMenuMoveMenu( ) const;
+
 	virtual const QString & getPlayerListMenuControlMenuMoveTopMusicAction( ) const;
 
 	virtual const QString & getPlayerListMenuControlMenuMoveBottomMusicAction( ) const;
 
-	virtual const QString & getPlayerListMenuMoveMenu( ) const;
+	virtual const QString & getMusicTypeName( ) const;
+};
 
-	virtual const QString & getPlayerListMenuControlMenuDeleteMusicAction( ) const;
+class PlayerToolsWidgetTranslate : public ITranslate {
+	/// @brief 上一曲
+	QString thePreviousSong;
+	/// @brief 播放控制
+	QString controlPlay;
+	/// @brief 暂停播放
+	QString controlPausa;
+	/// @brief 下一曲
+	QString theNextSong;
+	/// @brief 当前播放列表
+	QString currentPlayList;
+	/// @brief 播放时间分隔
+	QString playSongDateTimeSpace;
+
+public:
+	bool init( ) override;
 
 	virtual const QString & getThePreviousSong( ) const;
 
 	virtual const QString & getControlPlay( ) const;
 
+	virtual const QString & getControlPausa( ) const;
+
 	virtual const QString & getTheNextSong( ) const;
 
 	virtual const QString & getCurrentPlayList( ) const;
+
+	virtual const QString & getPlaySongDateTimeSpace( ) const;
+};
+
+class AppTranslate {
+protected:
+	SettingWidgetTranslate *settingWidget = nullptr;
+	PlayerToolsWidgetTranslate *playerToolsWidget = nullptr;
+	PlayerListMenuTranslate *playerListMenu = nullptr;
+	PlayerTopWidgetTranslate *playerTopWidget = nullptr;
+	PlayerWindowTranslate *playerWindow = nullptr;
+	JsonTranslate *json = nullptr;
+	DateTimeFormatTranslate *dateTimeFormat = nullptr;
+	AboutWidgetTranslate *aboutWidget = nullptr;
+	PlayerWidgetTranslate *playerWidget = nullptr;
+	MainWindowTranslate *mainWindow = nullptr;
+	MessageTranslate *message = nullptr;
+
+protected:
+	virtual void setCodecForLocale( );
+
+	virtual bool translateString( );
+
+	virtual void deleteResource( );
+
+public:
+	virtual ~AppTranslate( );
+
+	AppTranslate( );
+
+	virtual bool init( );
+
+	virtual SettingWidgetTranslate * getSettingWidget( ) const;
+
+	virtual PlayerToolsWidgetTranslate * getPlayerToolsWidget( ) const;
+
+	virtual PlayerListMenuTranslate * getPlayerListMenu( ) const;
+
+	virtual PlayerTopWidgetTranslate * getPlayerTopWidget( ) const;
+
+	virtual PlayerWindowTranslate * getPlayerWindow( ) const;
+
+	virtual JsonTranslate * getJson( ) const;
+
+	virtual DateTimeFormatTranslate * getDateTimeFormat( ) const;
+
+	virtual AboutWidgetTranslate * getAboutWidget( ) const;
+
+	virtual PlayerWidgetTranslate * getPlayerWidget( ) const;
+
+	virtual MainWindowTranslate * getMainWindow( ) const;
+
+	virtual MessageTranslate * getMessage( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

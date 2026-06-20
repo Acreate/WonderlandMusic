@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "../application/appTranslate.h"
+class PlayerWidgetMenu;
 class PlayerToolsWidget;
 class PlayerListTopWidget;
 class QScrollArea;
@@ -17,10 +18,6 @@ protected:
 	QScrollArea *playListWidgetScrollArea;
 	/// @brief 在层叠组件配置播放组件
 	PlayerListWidget *playListWidget;
-	/// @brief 文件选择工作路径
-	QString fileSelectWorkPath;
-	/// @brief 目录选择工作路径
-	QString dirSelectWorkPath;
 	/// @brief 顶部容器
 	QDockWidget *topDocWidget = nullptr;
 	/// @brief 播放的顶部组件的滚动容器
@@ -32,19 +29,15 @@ protected:
 	QDockWidget *bottomDocWidget = nullptr;
 	/// @brief 播放功能面板
 	PlayerToolsWidget *playerToolsWidget;
-	/// @brief 工具菜单
-	QMenuBar *windowMenuBar = nullptr;
-
-	QAction *addMultiFileMusicToCollectionAction;
-	QAction *addMultiMusicDirToCollection;
-	QAction *removeMultiMusicItemAtCollectionAction;
+	/// @brief 播放列表菜单
+	PlayerWidgetMenu *playerWidgetMenu = nullptr;
 
 protected:
 	virtual void releaeseResource( );
 
 	virtual bool initWidget( );
 
-	virtual bool initMenuBar( );
+	virtual bool initMenu( );
 
 	virtual bool initConnect( );
 
@@ -65,6 +58,8 @@ protected:
 	void showEvent( QShowEvent *event ) override;
 
 	void resizeEvent( QResizeEvent *event ) override;
+
+	void mouseReleaseEvent( QMouseEvent *event ) override;
 };
 
 #endif // PLAYERWINDOW_H_H_HEAD__FILE__

@@ -11,25 +11,30 @@ void DateTimeFormat::fillData( const QChar *source_data, const qsizetype &source
 	for( ; index < source_count; ++index )
 		dest_data[ index ] = source_data[ index ];
 }
+
 DateTimeFormat::DateTimeFormat( const QDate &current_date, const QTime &current_time ) {
 	currentDate = current_date;
 	currentTime = current_time;
 }
+
 DateTimeFormat::DateTimeFormat( const QDateTime &current_date_time ) {
 	currentDate = current_date_time.date( );
 	currentTime = current_date_time.time( );
 }
+
 DateTimeFormat::DateTimeFormat( ) {
 	auto current = QDateTime::currentDateTime( );
 	currentDate = current.date( );
 	currentTime = current.time( );
 }
+
 QString & DateTimeFormat::formatData( QString &result_format, const QDate &format_data ) const {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getTranslate( );
-	auto year = appTranslate->getYear( );
-	auto month = appTranslate->getMonth( );
-	auto day = appTranslate->getDay( );
+	auto dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
+	auto year = dateTimeFormatTranslate->getYear( );
+	auto month = dateTimeFormatTranslate->getMonth( );
+	auto day = dateTimeFormatTranslate->getDay( );
 	// 测量年翻译的长度
 	qsizetype translateYearLenght = year.length( );
 	// 测量月翻译的长度
@@ -79,13 +84,15 @@ QString & DateTimeFormat::formatData( QString &result_format, const QDate &forma
 
 	return result_format;
 }
+
 QString & DateTimeFormat::formatTime( QString &result_format, const QTime &format_time ) const {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getTranslate( );
-	auto hour = appTranslate->getHour( );
-	auto minute = appTranslate->getMinute( );
-	auto second = appTranslate->getSecond( );
-	auto millsecond = appTranslate->getMillsecond( );
+	auto dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
+	auto hour = dateTimeFormatTranslate->getHour( );
+	auto minute = dateTimeFormatTranslate->getMinute( );
+	auto second = dateTimeFormatTranslate->getSecond( );
+	auto millsecond = dateTimeFormatTranslate->getMillsecond( );
 	// 测量时翻译的长度
 	qsizetype translateHourLenght = hour.length( );
 	// 测量分翻译的长度
@@ -153,28 +160,35 @@ QString & DateTimeFormat::formatTime( QString &result_format, const QTime &forma
 
 	return result_format;
 }
+
 QString DateTimeFormat::formatData( const QDate &format_data ) const {
 	QString result;
 	return formatData( result, format_data );
 }
+
 QString DateTimeFormat::formatTime( const QTime &format_time ) const {
 	QString result;
 	return formatTime( result, format_time );
 }
+
 QString & DateTimeFormat::formatData( QString &result_format ) const {
 	return formatData( result_format, this->currentDate );
 }
+
 QString & DateTimeFormat::formatTime( QString &result_format ) const {
 	return formatTime( result_format, this->currentTime );
 }
+
 QString DateTimeFormat::formatData( ) const {
 	QString result;
 	return formatData( result );
 }
+
 QString DateTimeFormat::formatTime( ) const {
 	QString result;
 	return formatTime( result );
 }
+
 QString DateTimeFormat::millsecondToHourMinSecFrom( qint64 totalMs ) {
 	qint64 totalSec = totalMs / 1000;
 	qint64 h = totalSec / 3600;

@@ -2,179 +2,74 @@
 
 #include "appInstance.h"
 
+#include "jsonKey/aboutWidgetJsonKey.h"
+#include "jsonKey/mainWindowJsonKey.h"
+#include "jsonKey/musicInfoItemJsonKey.h"
+#include "jsonKey/playerListJsonKey.h"
+#include "jsonKey/playerListToolWidgetJsonKey.h"
+#include "jsonKey/playerListTopWidgetJsonKey.h"
+#include "jsonKey/playerWindowJsonKey.h"
+
+void JsonFileKey::deleteResource( ) {
+	#define d_r(ptr) if(ptr) (delete ptr, ptr = nullptr)
+	d_r( playerListToolWidget );
+	d_r( aboutWidgetJsonFileKey );
+	d_r( playerListTopWidget );
+	d_r( playerWindow );
+	d_r( playerList );
+	d_r( mainWindow );
+	d_r( musicInfoItem );
+}
+
 JsonFileKey::JsonFileKey( ) {
 }
 
 bool JsonFileKey::init( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppSettingPath( );
+	deleteResource( );
 
-	mainWindowSettingJsonPath = applicationDirPath + "/program/json/app.main.window.stting.json";
-	mainWindowPointXPos = "app.main.window.point.x";
-	mainWindowPointYPos = "app.main.window.point.y";
-	mainWindowSizeWidth = "app.main.window.size.w";
-	mainWindowSizeHeight = "app.main.window.size.h";
-
-	musicPlayerListInfoFileJsonPath = applicationDirPath + "/program/json/app.player.list.widget.music.list.info.json";
-	musicInfoListCount = "list.size";
-	musicInfoListName = "list.name";
-	musicInfoListIndex = "list.index";
-	musicInfoFile = "file.name";
-	musicInfoName = "music.name";
-	musicInfoSinger = "music.singer";
-	musicInfoDuration = "music.duartion";
-
-	playerWindowSettingJsonPath = applicationDirPath + "/program/json/app.window.player.work.select.info.json";
-	playerWindowFileSelectWorkPath = "window.player.path.file.select";
-	playerWindowDirSelectWorkPath = "window.player.path.dir.select";
-
-	playerListWidgetTopJsonPath = applicationDirPath + "/program/json/app.window.player.top.info.json";
-	playerListWidgetItemWidth = "window.player.list.item.width.content.width";
-	playerListWidgetItemSplitWidth = "window.player.list.item.width.split";
-	playerListWidgetItemWidgetIndexWidth = "window.player.list.item.width.index";
-	playerListWidgetItemMusicNameWidth = "window.player.list.item.width.name";
-	playerListWidgetItemMusicSingerWidth = "window.player.list.item.width.singer";
-	playerListWidgetItemMusicDurationWidth = "window.player.list.item.width.duration";
-	playerListWidgetItemWidgetBeforeWidth = "window.player.list.item.width.before";
-	playerListWidgetItemWidgetAfterWidth = "window.player.list.item.width.after";
-
-	songPlayerInfoJsonPath = applicationDirPath + "/program/json/app.song.play.list.info.json";
-
-	thePreviousSongIconPath = applicationDirPath + "/program/png/上一曲.png";
-	controlPlayIconPath = applicationDirPath + "/program/png/播放.png";
-	controlPauseIconPath = applicationDirPath + "/program/png/暂停.png";
-	theNextSongIconPath = applicationDirPath + "/program/png/下一曲.png";
-	currentSongPlayListIconPath = applicationDirPath + "/program/png/列表.png";
-
-	qtLogoIconPath = applicationDirPath + "/program/png/qtlogo-64.png";
+	playerListToolWidget = new PlayerListToolWidgetJsonKey;
+	aboutWidgetJsonFileKey = new AboutWidgetJsonKey;
+	playerListTopWidget = new PlayerListTopWidgetJsonKey;
+	playerWindow = new PlayerWindowJsonKey;
+	playerList = new PlayerListJsonKey;
+	mainWindow = new MainWindowJsonKey;
+	musicInfoItem = new MusicInfoItemJsonKey;
+	#define if_init_result(ptr) if(ptr->init() == false) return false
+	if_init_result( playerListToolWidget );
+	if_init_result( aboutWidgetJsonFileKey );
+	if_init_result( playerListTopWidget );
+	if_init_result( playerWindow );
+	if_init_result( playerList );
+	if_init_result( mainWindow );
+	if_init_result( musicInfoItem );
 
 	return true;
 }
 
-const QString & JsonFileKey::getCurrentSongPlayListIconPath( ) const {
-	return currentSongPlayListIconPath;
+PlayerListToolWidgetJsonKey * JsonFileKey::getPlayerListToolWidget( ) const {
+	return playerListToolWidget;
 }
 
-const QString & JsonFileKey::getSongPlayerInfoJsonPath( ) const {
-	return songPlayerInfoJsonPath;
+AboutWidgetJsonKey * JsonFileKey::getAboutWidgetJsonFileKey( ) const {
+	return aboutWidgetJsonFileKey;
 }
 
-const QString & JsonFileKey::getQtLogoIconPath( ) const {
-	return qtLogoIconPath;
+PlayerListTopWidgetJsonKey * JsonFileKey::getPlayerListTopWidget( ) const {
+	return playerListTopWidget;
 }
 
-const QString & JsonFileKey::getPlayerListWidgetItemWidth( ) const {
-	return playerListWidgetItemWidth;
+PlayerWindowJsonKey * JsonFileKey::getPlayerWindow( ) const {
+	return playerWindow;
 }
 
-const QString & JsonFileKey::getMainWindowSettingJsonPath( ) const {
-	return mainWindowSettingJsonPath;
+MusicInfoItemJsonKey * JsonFileKey::getMusicInfoItem( ) const {
+	return musicInfoItem;
 }
 
-const QString & JsonFileKey::getMainWindowPointXPos( ) const {
-	return mainWindowPointXPos;
+PlayerListJsonKey * JsonFileKey::getPlayerList( ) const {
+	return playerList;
 }
 
-const QString & JsonFileKey::getMainWindowPointYPos( ) const {
-	return mainWindowPointYPos;
-}
-
-const QString & JsonFileKey::getMainWindowSizeWidth( ) const {
-	return mainWindowSizeWidth;
-}
-
-const QString & JsonFileKey::getMainWindowSizeHeight( ) const {
-	return mainWindowSizeHeight;
-}
-
-const QString & JsonFileKey::getMusicPlayerListInfoFileJsonPath( ) const {
-	return musicPlayerListInfoFileJsonPath;
-}
-
-const QString & JsonFileKey::getMusicInfoFile( ) const {
-	return musicInfoFile;
-}
-
-const QString & JsonFileKey::getMusicInfoName( ) const {
-	return musicInfoName;
-}
-
-const QString & JsonFileKey::getMusicInfoSinger( ) const {
-	return musicInfoSinger;
-}
-
-const QString & JsonFileKey::getMusicInfoDuration( ) const {
-	return musicInfoDuration;
-}
-
-const QString & JsonFileKey::getMusicInfoListCount( ) const {
-	return musicInfoListCount;
-}
-
-const QString & JsonFileKey::getMusicInfoListName( ) const {
-	return musicInfoListName;
-}
-
-const QString & JsonFileKey::getMusicInfoListIndex( ) const {
-	return musicInfoListIndex;
-}
-
-const QString & JsonFileKey::getPlayerWindowSettingJsonPath( ) const {
-	return playerWindowSettingJsonPath;
-}
-
-const QString & JsonFileKey::getPlayerWindowFileSelectWorkPath( ) const {
-	return playerWindowFileSelectWorkPath;
-}
-
-const QString & JsonFileKey::getPlayerWindowDirSelectWorkPath( ) const {
-	return playerWindowDirSelectWorkPath;
-}
-
-const QString & JsonFileKey::getPlayerListWidgetItemSplitWidth( ) const {
-	return playerListWidgetItemSplitWidth;
-}
-
-const QString & JsonFileKey::getPlayerListWidgetItemWidgetIndexWidth( ) const {
-	return playerListWidgetItemWidgetIndexWidth;
-}
-
-const QString & JsonFileKey::getPlayerListWidgetItemMusicNameWidth( ) const {
-	return playerListWidgetItemMusicNameWidth;
-}
-
-const QString & JsonFileKey::getPlayerListWidgetItemMusicSingerWidth( ) const {
-	return playerListWidgetItemMusicSingerWidth;
-}
-
-const QString & JsonFileKey::getPlayerListWidgetItemMusicDurationWidth( ) const {
-	return playerListWidgetItemMusicDurationWidth;
-}
-
-const QString & JsonFileKey::getPlayerListWidgetTopJsonPath( ) const {
-	return playerListWidgetTopJsonPath;
-}
-
-const QString & JsonFileKey::getPlayerListWidgetItemWidgetBeforeWidth( ) const {
-	return playerListWidgetItemWidgetBeforeWidth;
-}
-
-const QString & JsonFileKey::getPlayerListWidgetItemWidgetAfterWidth( ) const {
-	return playerListWidgetItemWidgetAfterWidth;
-}
-
-const QString & JsonFileKey::getThePreviousSongIconPath( ) const {
-	return thePreviousSongIconPath;
-}
-
-const QString & JsonFileKey::getControlPlayIconPath( ) const {
-	return controlPlayIconPath;
-}
-
-const QString & JsonFileKey::getControlPauseIconPath( ) const {
-	return controlPauseIconPath;
-}
-
-const QString & JsonFileKey::getTheNextSongIconPath( ) const {
-	return theNextSongIconPath;
+MainWindowJsonKey * JsonFileKey::getMainWindow( ) const {
+	return mainWindow;
 }

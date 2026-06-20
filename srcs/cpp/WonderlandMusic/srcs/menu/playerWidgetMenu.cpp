@@ -1,8 +1,13 @@
 ﻿#include "playerWidgetMenu.h"
 
+#include <QFileDialog>
+
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/musicDecoder.h"
+
+#include "../tools/pathTools.h"
+#include "../tools/widgetTools.h"
 
 #include "../widget/playerListWidget.h"
 
@@ -18,6 +23,9 @@ bool PlayerWidgetMenu::initVar( ) {
 	appTranslate = appInstance->getTranslate( );
 	if( appTranslate == nullptr )
 		return false;
+	playerListMenuTranslate = appTranslate->getPlayerListMenu( );
+	if( playerListMenuTranslate == nullptr )
+		return false;
 	musicDecoder = appInstance->getMusicDecoder( );
 	if( musicDecoder == nullptr )
 		return false;
@@ -25,26 +33,98 @@ bool PlayerWidgetMenu::initVar( ) {
 }
 
 bool PlayerWidgetMenu::initSubMenu( ) {
-	playerMenu = addMenu( appTranslate->getPlayerListMenuenuPlayerMenu( ) );
+	playerMenu = addMenu( playerListMenuTranslate->getPlayerListMenuenuPlayerMenu( ) );
 
-	removeMenu = addMenu( appTranslate->getPlayerListMenuMoveMenu( ) );
-	controlMenu = addMenu( appTranslate->getPlayerListMenuControlMenu( ) );
+	removeMenu = addMenu( playerListMenuTranslate->getPlayerListMenuMoveMenu( ) );
+	controlMenu = addMenu( playerListMenuTranslate->getPlayerListMenuControlMenu( ) );
+
+	loadMenu = addMenu( playerListMenuTranslate->getPlayerListMenuControlMenu( ) );
 	return true;
 }
 
 bool PlayerWidgetMenu::initSubMenuAcction( ) {
-	setplay = playerMenu->QWidget::addAction( appTranslate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
-	insterPlay = playerMenu->QWidget::addAction( appTranslate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
+	setplay = playerMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
+	insterPlay = playerMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
 
-	moveTop = controlMenu->QWidget::addAction( appTranslate->getPlayerListMenuControlMenuMoveTopMusicAction( ) );
-	moveBottom = controlMenu->QWidget::addAction( appTranslate->getPlayerListMenuControlMenuMoveBottomMusicAction( ) );
+	moveTop = controlMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuMoveTopMusicAction( ) );
+	moveBottom = controlMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuMoveBottomMusicAction( ) );
 
-	removeMusic = removeMenu->QWidget::addAction( appTranslate->getPlayerListMenuControlMenuRemoveMusicAction( ) );
-	removeMusic = removeMenu->QWidget::addAction( appTranslate->getPlayerListMenuControlMenuDeleteMusicAction( ) );
+	removeMusic = removeMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuRemoveMusicAction( ) );
+	removeMusic = removeMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuDeleteMusicAction( ) );
+
+	addMultiFileMusicToCollectionAction = loadMenu->addAction( playerListMenuTranslate->getPlayerListAddMultiMusicFileToCollectionAction( ) );
+	addMultiMusicDirToCollection = loadMenu->addAction( playerListMenuTranslate->getPlayerListAddMultiMusicDirToCollectionAction( ) );
+
 	return true;
 }
 
 bool PlayerWidgetMenu::initConnectAcction( ) {
+	connect( addMultiFileMusicToCollectionAction, &QAction::triggered, [this]( ) {
+		QFileDialog dialog( this );
+		dialog.setWindowTitle( tr( "多选文件" ) );
+		dialog.setDirectory( fileSelectWorkPath );
+		dialog.setFileMode( QFileDialog::ExistingFiles );
+
+		auto decodeFileSuffix = musicDecoder->getSupperDecodeFileSuffix( );
+		QStringList filterSuffixList;
+		size_t count = decodeFileSuffix.size( );
+		auto data = decodeFileSuffix.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			filterSuffixList.append( "*." + data[ index ] );
+		auto musicTypeName = playerListMenuTranslate->getMusicTypeName( );
+		auto filterSuffix = filterSuffixList.join( " " );
+		auto filterName = musicTypeName + "(" + filterSuffix + ")";
+		dialog.setNameFilter( filterName );
+		QRect geometry = this->geometry( );
+		auto curentWindowSize = geometry.size( );
+		dialog.resize( curentWindowSize );
+		auto center = geometry.center( );
+		center = mapToGlobal( center );
+		WidgetTools::moveWidgetToCenterPos( center, &dialog );
+		if( dialog.exec( ) != QDialog::Accepted )
+			return;
+		QStringList files = dialog.selectedFiles( );
+		count = files.size( );
+		auto selectFileData = files.data( );
+		QFileInfo fileInfo( selectFileData[ 0 ] );
+		auto dir = fileInfo.dir( );
+		fileSelectWorkPath = dir.absolutePath( );
+		for( index = 0; index < count; index += 1 )
+			playerListWidget->fromFileLoadItemInfo( selectFileData[ index ] );
+	} );
+
+	connect( addMultiMusicDirToCollection, &QAction::triggered, [this]( ) {
+		QFileDialog dialog( this );
+		dialog.setWindowTitle( tr( "选择目录" ) );
+		dialog.setDirectory( dirSelectWorkPath );
+		dialog.setFileMode( QFileDialog::Directory );
+
+		QRect geometry = this->geometry( );
+		auto curentWindowSize = geometry.size( );
+		dialog.resize( curentWindowSize );
+		auto center = geometry.center( );
+		center = mapToGlobal( center );
+		WidgetTools::moveWidgetToCenterPos( center, &dialog );
+		if( dialog.exec( ) != QDialog::Accepted )
+			return;
+		QStringList files = dialog.selectedFiles( );
+		dirSelectWorkPath = files[ 0 ];
+		QStringList result;
+		bool entryList = PathTools::entryList( result, dirSelectWorkPath );
+		if( entryList == false )
+			return;
+
+		QStringList superMusicList;
+		if( PathTools::filterMusicFile( superMusicList, result ) == 0 )
+			return;
+		qsizetype count = superMusicList.size( );
+		qsizetype index;
+		auto selectFileData = superMusicList.data( );
+		for( index = 0; index < count; index += 1 )
+			playerListWidget->fromFileLoadItemInfo( selectFileData[ index ] );
+	} );
+
 	return true;
 }
 

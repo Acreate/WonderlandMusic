@@ -14,12 +14,11 @@
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
 #include "../application/renderImage.h"
+#include "../application/jsonKey/playerListJsonKey.h"
 
 #include "../item/musicInfoItem.h"
 
 #include "../itemWidget/musicInfoItemWidget.h"
-
-#include "../menu/playerWidgetMenu.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -74,36 +73,16 @@ int PlayerListWidget::getSplitWidth( ) const {
 	return splitWidth;
 }
 
-void PlayerListWidget::setSplitWidth( const int split_width ) {
-	splitWidth = split_width;
-	updateItemWidget( );
-}
-
 int PlayerListWidget::getMusicNameWidth( ) const {
 	return musicNameWidth;
-}
-
-void PlayerListWidget::setMusicNameWidth( const int music_name_width ) {
-	musicNameWidth = music_name_width;
-	updateItemWidget( );
 }
 
 int PlayerListWidget::getMusicSingerWidth( ) const {
 	return musicSingerWidth;
 }
 
-void PlayerListWidget::setMusicSingerWidth( const int music_singer_width ) {
-	musicSingerWidth = music_singer_width;
-	updateItemWidget( );
-}
-
 int PlayerListWidget::getMusicDurationWidth( ) const {
 	return musicDurationWidth;
-}
-
-void PlayerListWidget::setMusicDurationWidth( const int format_string_duration_width ) {
-	musicDurationWidth = format_string_duration_width;
-	updateItemWidget( );
 }
 
 MusicInfoItemWidget * PlayerListWidget::getActiveLeftItemWidget( ) const {
@@ -122,24 +101,23 @@ std::vector< MusicInfoItemWidget * > & PlayerListWidget::getSelectItemWidgetVect
 }
 
 bool PlayerListWidget::loadJsonPathInfo( ) {
-	if( playerWidgetMenu->init( ) == false )
-		return false;
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
-	auto fileJsonPath = jsonFileKey->getMusicPlayerListInfoFileJsonPath( );
+	auto playerListJsonKey = jsonFileKey->getPlayerList( );
+	auto fileJsonPath = playerListJsonKey->getMusicPlayerListInfoFileJsonPath( );
 	QJsonObject fileJsonObject;
 	if( PathTools::readJsonObject( fileJsonObject, fileJsonPath ) == false )
 		return true;
 	auto end = fileJsonObject.end( );
 	QJsonObject::iterator find;
 
-	find = fileJsonObject.find( jsonFileKey->getMusicInfoListCount( ) );
+	find = fileJsonObject.find( playerListJsonKey->getMusicInfoListCount( ) );
 	if( end == find )
 		return true;
 	qint64 count = find.value( ).toInteger( );
 	if( count == 0 )
 		return true;
-	find = fileJsonObject.find( jsonFileKey->getMusicInfoListName( ) );
+	find = fileJsonObject.find( playerListJsonKey->getMusicInfoListName( ) );
 	if( end == find )
 		return true;
 
@@ -151,6 +129,7 @@ bool PlayerListWidget::loadJsonPathInfo( ) {
 	std::vector< MusicInfoItemWidget * > buff( count, nullptr );
 	auto maxIndex = count - 1;
 	auto data = buff.data( );
+	size_t validCount = 0; // 有效个数
 	for( ; foreachIterator != foreachEnd; ++foreachIterator ) {
 		auto indexJsonKey = foreachIterator.key( );
 		bool isConverOk;
@@ -167,22 +146,36 @@ bool PlayerListWidget::loadJsonPathInfo( ) {
 		}
 		ctreaItem->parentPlayListWidget = this;
 		data[ converResultIndex ] = ctreaItem;
+		validCount += 1;
 	}
+
 	musicInfoMutex->lock( );
+
+	// 以前大小
 	auto oldCount = musicInfoVector->size( );
+
 	std::vector< MusicInfoItemWidget * > releaseVector( oldCount, nullptr );
 	auto buffToData = releaseVector.data( );
 	auto copyToData = musicInfoVector->data( );
 	for( maxIndex = 0; maxIndex < oldCount; maxIndex += 1 )
 		buffToData[ maxIndex ] = copyToData[ maxIndex ];
-	musicInfoVector->resize( count );
+	// 拷贝新的目标
+	musicInfoVector->resize( validCount );
+	// 充当下标
+	validCount = 0;
 	copyToData = musicInfoVector->data( );
 	for( maxIndex = 0; maxIndex < count; maxIndex += 1 )
-		copyToData[ maxIndex ] = data[ maxIndex ];
-
+		if( data[ maxIndex ] ) {
+			copyToData[ validCount ] = data[ maxIndex ];
+			validCount += 1;
+		}
+	selectItemWidgetVector->clear( );
+	activeLeftItemWidget = nullptr;
+	selectLeftItemWidget = nullptr;
+	musicInfoMutex->unlock( );
+	// 释放以前的目标
 	for( maxIndex = 0; maxIndex < oldCount; maxIndex += 1 )
 		delete buffToData[ maxIndex ];
-	musicInfoMutex->unlock( );
 	updateItemWidget( );
 	return true;
 }
@@ -209,7 +202,8 @@ bool PlayerListWidget::writeJsonPathInfo( ) {
 		musicInfoMutex->unlock( );
 		return false;
 	}
-	fileJsonObject.insert( jsonFileKey->getMusicInfoListCount( ), max );
+	auto musicPlayerListJsonKey = jsonFileKey->getPlayerList( );
+	fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListCount( ), max );
 	musicInfoMutex->unlock( );
 	QJsonObject arrayJsonObject;
 
@@ -220,9 +214,9 @@ bool PlayerListWidget::writeJsonPathInfo( ) {
 		arrayJsonObject.insert( QString::number( index ), subJsonObject );
 	}
 
-	fileJsonObject.insert( jsonFileKey->getMusicInfoListName( ), arrayJsonObject );
+	fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListName( ), arrayJsonObject );
 
-	auto fileJsonPath = jsonFileKey->getMusicPlayerListInfoFileJsonPath( );
+	auto fileJsonPath = musicPlayerListJsonKey->getMusicPlayerListInfoFileJsonPath( );
 	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
 	return true;
 }
@@ -398,7 +392,6 @@ bool PlayerListWidget::init( ) {
 	activeLeftItemWidget = nullptr;
 	selectLeftItemWidget = nullptr;
 	beforeClickTime = new QDateTime;
-	playerWidgetMenu = new PlayerWidgetMenu( this );
 	pen = new QPen;
 	selectItemWidgetVector = new std::vector< MusicInfoItemWidget * >;
 	musicInfoVector = new std::vector< MusicInfoItemWidget * >;
@@ -442,7 +435,6 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 	selectLeftItemWidget = append_select_target;
 	auto appInstance = AppInstance::getAppInstance( );
 	auto keyboardModifiers = ( Qt::KeyboardModifier ) appInstance->keyboardModifiers( ).toInt( );
-	size_t count;
 	switch( keyboardModifiers ) {
 		case Qt::KeyboardModifier::ControlModifier :
 			selectKeyControlModifier( );
@@ -489,7 +481,6 @@ void PlayerListWidget::releaseResource( ) {
 
 		selectLeftItemWidget = nullptr;
 		activeLeftItemWidget = nullptr;
-		r_d( playerWidgetMenu );
 		r_d( beforeClickTime );
 		r_d( pen );
 		updateMuex->unlock( );
@@ -670,6 +661,8 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 }
 
 void PlayerListWidget::paintEvent( QPaintEvent *event ) {
+	if( updateMuex == nullptr )
+		return;
 	std::lock_guard lock( *updateMuex );
 	QPainter painter;
 	painter.begin( this );
@@ -786,10 +779,8 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 					break;
 				}
 			musicInfoMutex->unlock( );
-			if( selectItem ) {
+			if( selectItem )
 				apendSelectMusicItemWidget( selectItem );
-				playerWidgetMenu->exec( QCursor::pos( ) );
-			}
 		}
 		break;
 	}

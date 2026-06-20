@@ -9,6 +9,7 @@
 
 #include "../application/appInstance.h"
 #include "../application/jsonFileKey.h"
+#include "../application/jsonKey/aboutWidgetJsonKey.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -34,7 +35,8 @@ bool AboutWidget::init( ) {
 	qtIco->setPixmap( icon );
 
 	auto jsonFileKey = applicationInstance->getJsonFileKey( );
-	auto logoIconPath = jsonFileKey->getQtLogoIconPath( );
+	auto aboutWidgetJsonFileKey = jsonFileKey->getAboutWidgetJsonFileKey( );
+	auto logoIconPath = aboutWidgetJsonFileKey->getQtLogoIconPath( );
 	QFileInfo fileInfo( logoIconPath );
 	QImage qImage;
 	if( fileInfo.exists( ) == false ) {

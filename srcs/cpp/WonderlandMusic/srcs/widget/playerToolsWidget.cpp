@@ -87,7 +87,11 @@ bool PlayerToolsWidget::init( ) {
 	compLayout( );
 
 	// 链接信号
-
+	connect( playProgress, &QProgressBar::valueChanged, this, &PlayerToolsWidget::duratctionProgressBarChange );
+	connect( thePreviousSong, &QPushButton::clicked, this, &PlayerToolsWidget::clickPreviousSong );
+	connect( controlPlay, &QPushButton::clicked, this, &PlayerToolsWidget::clickControlPlay );
+	connect( theNextSong, &QPushButton::clicked, this, &PlayerToolsWidget::clickNextSong );
+	connect( showCurrentPlayerList, &QPushButton::clicked, this, &PlayerToolsWidget::clickShowPlayList );
 	return true;
 }
 
@@ -180,11 +184,15 @@ int PlayerToolsWidget::getMinWidth( int progress_bar_width ) {
 }
 
 bool PlayerToolsWidget::setCurrentPlayerTime( qint64 current ) {
-	return false;
+	auto from = DateTimeFormat::millsecondToHourMinSecFrom( current );
+	playUseDateTime->setText( from );
+	return true;
 }
 
 bool PlayerToolsWidget::setDuratctionPlayerTime( qint64 duratction ) {
-	return false;
+	auto from = DateTimeFormat::millsecondToHourMinSecFrom( duratction );
+	playAllDateTime->setText( from );
+	return true;
 }
 
 bool PlayerToolsWidget::compMinSize( QSize &result_min_size, int progress_bar_width ) {

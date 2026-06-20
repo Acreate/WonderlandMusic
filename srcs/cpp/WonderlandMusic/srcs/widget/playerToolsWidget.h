@@ -34,6 +34,7 @@ protected:
 	int progressBarMinWidth;
 	/// @brief 组件的空格
 	int widgetSpace;
+
 public:
 	PlayerToolsWidget( QWidget *parent );
 
@@ -67,7 +68,9 @@ Q_SIGNALS:
 
 	void clickNextSong( );
 
-	void duratctionChange( qint64 duratction );
+	void clickShowPlayList( );
+
+	void duratctionProgressBarChange( int new_var );
 };
 
 #endif // PLAYERTOOLSWIDGET_H_H_HEAD__FILE__

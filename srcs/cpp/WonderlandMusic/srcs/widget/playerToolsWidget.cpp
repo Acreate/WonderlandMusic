@@ -16,6 +16,7 @@
 
 PlayerToolsWidget::PlayerToolsWidget( QWidget *parent ) : QWidget( parent ) {
 	progressBarMinWidth = 100;
+	widgetSpace = 10;
 	this->thePreviousSong = new QPushButton( this );
 	this->theNextSong = new QPushButton( this );
 	this->controlPlay = new QPushButton( this );
@@ -37,9 +38,16 @@ PlayerToolsWidget::~PlayerToolsWidget( ) {
 
 bool PlayerToolsWidget::init( ) {
 	progressBarMinWidth = 100;
+	widgetSpace = 10;
+	setMouseTracking( true );
 	auto from = DateTimeFormat::millsecondToHourMinSecFrom( 0 );
 	playAllDateTime->setText( from );
 	playUseDateTime->setText( from );
+
+	thePreviousSong->disconnect( );
+	theNextSong->disconnect( );
+	controlPlay->disconnect( );
+	showCurrentPlayerList->disconnect( );
 
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getTranslate( );
@@ -62,6 +70,7 @@ bool PlayerToolsWidget::init( ) {
 	playProgress->setRange( 0, 100 );
 	playProgress->setValue( 100 );
 	playProgress->setTextVisible( false );
+	playProgress->setAttribute( Qt::WA_TransparentForMouseEvents, true );
 
 	thePreviousSong->adjustSize( );
 	theNextSong->adjustSize( );
@@ -76,6 +85,9 @@ bool PlayerToolsWidget::init( ) {
 	compMinSize( minSize, progressBarMinWidth );
 	setMinimumSize( minSize );
 	compLayout( );
+
+	// 链接信号
+
 	return true;
 }
 
@@ -88,17 +100,17 @@ bool PlayerToolsWidget::compLayout( ) {
 	int offsetY;
 	int buttonHeightHalf;
 
-	offsetX = 0;
+	offsetX = widgetSpace;
 	buttonHeightHalf = thePreviousSong->height( ) / 2;
 	offsetY = half - buttonHeightHalf;
 	this->thePreviousSong->move( offsetX, offsetY );
 
-	offsetX += this->thePreviousSong->width( );
+	offsetX += this->thePreviousSong->width( ) + widgetSpace;
 	buttonHeightHalf = controlPlay->height( ) / 2;
 	offsetY = half - buttonHeightHalf;
 	this->controlPlay->move( offsetX, offsetY );
 
-	offsetX += this->controlPlay->width( );
+	offsetX += this->controlPlay->width( ) + widgetSpace;
 	buttonHeightHalf = theNextSong->height( ) / 2;
 	offsetY = half - buttonHeightHalf;
 	this->theNextSong->move( offsetX, offsetY );
@@ -106,28 +118,26 @@ bool PlayerToolsWidget::compLayout( ) {
 
 	// 播放进度的起始 x 位置
 	height = this->theNextSong->width( );
-	offsetX = theNextSongX + height;
+	offsetX = theNextSongX + height + widgetSpace;
 	this->playProgress->move( offsetX, 0 );
 
 	offsetY = playProgress->height( );
 	playAllDateTime->move( offsetX, offsetY );
 
-	offsetX += playAllDateTime->width( );
+	offsetX += playAllDateTime->width( ) + widgetSpace;
 	playDateTimeSpace->move( offsetX, offsetY );
 
-	offsetX += playDateTimeSpace->width( );
+	offsetX += playDateTimeSpace->width( ) + widgetSpace;
 	playUseDateTime->move( offsetX, offsetY );
 
-	// 播放进度的终止 x 位置
-	offsetX = width - showCurrentPlayerList->width( );
+	offsetX = width - showCurrentPlayerList->width( ) - widgetSpace;
 	buttonHeightHalf = showCurrentPlayerList->height( ) / 2;
 	offsetY = half - buttonHeightHalf;
 	showCurrentPlayerList->move( offsetX, offsetY );
 
-	offsetX = offsetX - theNextSongX - height;
-	// 剩余空间留给进度条
-	if( offsetX < progressBarMinWidth )
-		offsetX = progressBarMinWidth;
+	offsetX = offsetX - theNextSongX - height - widgetSpace - widgetSpace;
+	if( offsetX < 0 )
+		offsetX = 1;
 	this->playProgress->setFixedWidth( offsetX );
 	return true;
 }
@@ -164,7 +174,7 @@ int PlayerToolsWidget::getMinWidth( int progress_bar_width ) {
 	playerDateWidth = playUseDateTime->width( ) + playDateTimeSpace->width( );
 	maxWidth = maxWidth > playerDateWidth ? maxWidth : playerDateWidth;
 
-	int minWidth = thePreviousSong->width( ) + this->controlPlay->width( ) + this->theNextSong->width( ) + maxWidth + showCurrentPlayerList->width( );
+	int minWidth = thePreviousSong->width( ) + this->controlPlay->width( ) + this->theNextSong->width( ) + maxWidth + showCurrentPlayerList->width( ) + widgetSpace * 6;
 
 	return minWidth;
 }
@@ -187,4 +197,20 @@ bool PlayerToolsWidget::compMinSize( QSize &result_min_size, int progress_bar_wi
 void PlayerToolsWidget::resizeEvent( QResizeEvent *event ) {
 	QWidget::resizeEvent( event );
 	compLayout( );
+}
+
+void PlayerToolsWidget::mouseMoveEvent( QMouseEvent *event ) {
+	QWidget::mouseMoveEvent( event );
+}
+
+void PlayerToolsWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	QWidget::mouseReleaseEvent( event );
+	auto point = event->pos( );
+	if( playProgress->geometry( ).contains( point ) ) {
+		auto mapFromParent = playProgress->mapFromParent( point );
+		double x = mapFromParent.x( );
+		double playProgressWidth = playProgress->width( );
+		int newVar = x * 100 / playProgressWidth + 0.99;
+		playProgress->setValue( newVar );
+	}
 }

@@ -32,7 +32,8 @@ protected:
 	QIcon *pauseIcon;
 	/// @brief 进度条最小宽度
 	int progressBarMinWidth;
-
+	/// @brief 组件的空格
+	int widgetSpace;
 public:
 	PlayerToolsWidget( QWidget *parent );
 
@@ -54,6 +55,19 @@ public:
 
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
+
+	void mouseMoveEvent( QMouseEvent *event ) override;
+
+	void mouseReleaseEvent( QMouseEvent *event ) override;
+
+Q_SIGNALS:
+	void clickPreviousSong( );
+
+	void clickControlPlay( );
+
+	void clickNextSong( );
+
+	void duratctionChange( qint64 duratction );
 };
 
 #endif // PLAYERTOOLSWIDGET_H_H_HEAD__FILE__

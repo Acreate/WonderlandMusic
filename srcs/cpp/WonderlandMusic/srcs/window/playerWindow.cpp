@@ -197,6 +197,5 @@ void PlayerWindow::showEvent( QShowEvent *event ) {
 
 void PlayerWindow::resizeEvent( QResizeEvent *event ) {
 	QMainWindow::resizeEvent( event );
-	QSize size = event->size( );
-	playerToolsWidget->setFixedSize( size.width( ), playerToolsWidget->getMinHeight( ) );
+	playerToolsWidget->adjustSize( );
 }

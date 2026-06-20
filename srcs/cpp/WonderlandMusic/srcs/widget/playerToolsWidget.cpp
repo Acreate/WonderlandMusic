@@ -10,9 +10,12 @@
 #include "../application/jsonFileKey.h"
 #include "../application/renderImage.h"
 
+#include "../msgInfo/messageErrorOut.h"
+
 #include "../tools/dateTimeFormat.h"
 
 PlayerToolsWidget::PlayerToolsWidget( QWidget *parent ) : QWidget( parent ) {
+	progressBarMinWidth = 100;
 	this->thePreviousSong = new QPushButton( this );
 	this->theNextSong = new QPushButton( this );
 	this->controlPlay = new QPushButton( this );
@@ -73,22 +76,36 @@ bool PlayerToolsWidget::init( ) {
 }
 
 bool PlayerToolsWidget::compLayout( ) {
-	int width = this->contentsRect( ).width( );
+	auto contentsRect = this->contentsRect( );
+	int width = contentsRect.width( );
+	int height = contentsRect.height( );
+	int half = height / 2;
+	int offsetX;
+	int offsetY;
+	int buttonHeightHalf;
 
-	int offsetX = 0;
-	this->thePreviousSong->move( offsetX, 0 );
+	offsetX = 0;
+	buttonHeightHalf = thePreviousSong->height( ) / 2;
+	offsetY = half - buttonHeightHalf;
+	this->thePreviousSong->move( offsetX, offsetY );
 
 	offsetX += this->thePreviousSong->width( );
-	this->controlPlay->move( offsetX, 0 );
+	buttonHeightHalf = controlPlay->height( ) / 2;
+	offsetY = half - buttonHeightHalf;
+	this->controlPlay->move( offsetX, offsetY );
 
 	offsetX += this->controlPlay->width( );
-	this->theNextSong->move( offsetX, 0 );
+	buttonHeightHalf = theNextSong->height( ) / 2;
+	offsetY = half - buttonHeightHalf;
+	this->theNextSong->move( offsetX, offsetY );
+	auto theNextSongX = offsetX;
 
 	// 播放进度的起始 x 位置
-	offsetX += this->controlPlay->width( );
+	height = this->theNextSong->width( );
+	offsetX = theNextSongX + height;
 	this->playProgress->move( offsetX, 0 );
 
-	int offsetY = showCurrentPlayerList->height( );
+	offsetY = playProgress->height( );
 	playAllDateTime->move( offsetX, offsetY );
 
 	offsetX += playAllDateTime->width( );
@@ -99,13 +116,15 @@ bool PlayerToolsWidget::compLayout( ) {
 
 	// 播放进度的终止 x 位置
 	offsetX = width - showCurrentPlayerList->width( );
-	showCurrentPlayerList->move( offsetX, 0 );
+	buttonHeightHalf = showCurrentPlayerList->height( ) / 2;
+	offsetY = half - buttonHeightHalf;
+	showCurrentPlayerList->move( offsetX, offsetY );
 
+	offsetX = offsetX - theNextSongX - height;
 	// 剩余空间留给进度条
 	if( offsetX < progressBarMinWidth )
 		offsetX = progressBarMinWidth;
 	this->playProgress->setFixedWidth( offsetX );
-
 	return true;
 }
 

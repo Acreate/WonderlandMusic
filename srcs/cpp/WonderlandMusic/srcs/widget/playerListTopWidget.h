@@ -60,6 +60,8 @@ public:
 
 	virtual void suggestWidth( int suggest_width );
 
+	virtual bool averageItem( );
+
 protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 

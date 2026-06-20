@@ -20,10 +20,7 @@ void PlayerListTopWidget::updateCurrentWidgetSize( ) {
 }
 
 PlayerListTopWidget::PlayerListTopWidget( QWidget *parent ) : QWidget( parent ), isDrag( false ), isReadyDrag( false ) {
-	indexWidth = widgetBeforeWidth = widgetAfterWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
-	updateCurrentWidgetSize( );
 	setMouseTracking( true );
-	cursorShape = Qt::ArrowCursor;
 }
 
 PlayerListTopWidget::~PlayerListTopWidget( ) {
@@ -138,18 +135,14 @@ bool PlayerListTopWidget::getMinSize( QSize &result_min_size ) {
 	auto singerWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicSinger( ) );
 	auto durationWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicDuration( ) );
 
+	// 获取字符串最小宽度
 	double widthPercentage = nameWidth + singerWidth + durationWidth + indexWidth;
-	auto spliteWidthUserSpace = splitWidth * 5;
-	int borderWidth = widgetBeforeWidth + widgetAfterWidth;
-	int minWidth = widthPercentage + spliteWidthUserSpace + borderWidth;
-
-	int width = this->width( );
-	double residue = width - spliteWidthUserSpace - borderWidth;
-	double part = residue / widthPercentage;
-	this->indexWidth = part * indexWidth;
-	this->musicDurationWidth = part * durationWidth;
-	this->musicSingerWidth = part * singerWidth;
-	this->musicNameWidth = residue - this->musicDurationWidth - this->musicSingerWidth;
+	// 获取分割最小宽度
+	double spliteWidthUserSpace = splitWidth * 5;
+	// 获取两侧最小宽度
+	double borderWidth = widgetBeforeWidth + widgetAfterWidth;
+	// 整体最小宽度
+	double minWidth = widthPercentage + spliteWidthUserSpace + borderWidth;
 
 	result_min_size = QSize( minWidth, fontMetrics->height( ) );
 	return minWidth;
@@ -165,17 +158,47 @@ void PlayerListTopWidget::emitChangedWidth( ) {
 }
 
 bool PlayerListTopWidget::init( ) {
+	cursorShape = Qt::ArrowCursor;
+	indexWidth = widgetBeforeWidth = widgetAfterWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	QSize minSize;
 	getMinSize( minSize );
-	setMinimumSize( minSize );
-	updateCurrentWidgetSize( );
+	setFixedSize( minSize );
+	averageItem( );
 	loadJsonPathInfo( );
-	update( );
+	repaint( );
 	emitChangedWidth( );
 	return true;
 }
 
 void PlayerListTopWidget::suggestWidth( int suggest_width ) {
+}
+
+bool PlayerListTopWidget::averageItem( ) {// 获取字符串最小宽度
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appTranslate = appInstance->getTranslate( );
+	auto renderImage = appInstance->getRenderImage( );
+	auto fontMetrics = renderImage->getFontMetrics( );
+
+	auto indexWidth = fontMetrics->horizontalAdvance( "0000" );
+	auto nameWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicName( ) );
+	auto singerWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicSinger( ) );
+	auto durationWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicDuration( ) );
+
+	// 获取字符串最小宽度
+	double widthPercentage = nameWidth + singerWidth + durationWidth + indexWidth;
+	// 获取分割最小宽度
+	double spliteWidthUserSpace = splitWidth * 5;
+	// 获取两侧最小宽度
+	double borderWidth = widgetBeforeWidth + widgetAfterWidth;
+
+	double width = this->width( );
+	double residue = width - spliteWidthUserSpace - borderWidth;
+	double part = residue / widthPercentage;
+	this->indexWidth = part * indexWidth;
+	this->musicDurationWidth = part * durationWidth;
+	this->musicSingerWidth = part * singerWidth;
+	this->musicNameWidth = residue - this->musicDurationWidth - this->musicSingerWidth;
+	return true;
 }
 
 void PlayerListTopWidget::mouseMoveEvent( QMouseEvent *event ) {

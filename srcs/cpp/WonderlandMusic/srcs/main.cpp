@@ -48,10 +48,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete messageErrorOut;
 		return -1;
 	}
-
-
 	int exec = application.run( );
-
 	*messageErrorOut << "----------------------"
 		<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
 		<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "

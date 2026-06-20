@@ -118,22 +118,39 @@ int PlayerListTopWidget::getWidgetAfterWidth( ) const {
 }
 
 void PlayerListTopWidget::autoSetItemSize( ) {
-	getMinSize( );
+	if( getMinSize( ) == false )
+		return;
 	updateCurrentWidgetSize( );
 	update( );
-	emit changedWidth( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
+	emitChangedWidth( );
 }
 
 bool PlayerListTopWidget::getMinSize( QSize &result_min_size ) {
 	auto appInstance = AppInstance::getAppInstance( );
+	if( appInstance == nullptr )
+		return false;
 	auto appTranslate = appInstance->getTranslate( );
+	if( appTranslate == nullptr )
+		return false;
 	auto renderImage = appInstance->getRenderImage( );
+	if( renderImage == nullptr )
+		return false;
 	auto fontMetrics = renderImage->getFontMetrics( );
+	if( fontMetrics == nullptr )
+		return false;
 
 	auto indexWidth = fontMetrics->horizontalAdvance( "0000" );
+	if( indexWidth < 0 )
+		return false;
 	auto nameWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicName( ) );
+	if( nameWidth < 0 )
+		return false;
 	auto singerWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicSinger( ) );
+	if( singerWidth < 0 )
+		return false;
 	auto durationWidth = fontMetrics->horizontalAdvance( appTranslate->getMusicDuration( ) );
+	if( durationWidth < 0 )
+		return false;
 
 	// 获取字符串最小宽度
 	double widthPercentage = nameWidth + singerWidth + durationWidth + indexWidth;
@@ -143,8 +160,12 @@ bool PlayerListTopWidget::getMinSize( QSize &result_min_size ) {
 	double borderWidth = widgetBeforeWidth + widgetAfterWidth;
 	// 整体最小宽度
 	double minWidth = widthPercentage + spliteWidthUserSpace + borderWidth;
-
-	result_min_size = QSize( minWidth, fontMetrics->height( ) );
+	if( minWidth < 0 )
+		return false;
+	int h = fontMetrics->height( );
+	if( h < 0 )
+		return false;
+	result_min_size = QSize( minWidth, h );
 	return minWidth;
 }
 
@@ -161,10 +182,13 @@ bool PlayerListTopWidget::init( ) {
 	cursorShape = Qt::ArrowCursor;
 	indexWidth = widgetBeforeWidth = widgetAfterWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	QSize minSize;
-	getMinSize( minSize );
+	if( getMinSize( minSize ) == false )
+		return false;
 	setFixedSize( minSize );
-	averageItem( );
-	loadJsonPathInfo( );
+	if( averageItem( ) == false )
+		return false;
+	if( loadJsonPathInfo( ) == false )
+		return false;
 	repaint( );
 	emitChangedWidth( );
 	return true;

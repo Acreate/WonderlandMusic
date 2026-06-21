@@ -44,6 +44,7 @@ bool PlayerWidgetMenu::initVar( ) {
 	fileSelectWorkPath = QDir::currentPath( );
 	dirSelectWorkPath = QDir::currentPath( );
 	playerListWidgetFriend = new PlayerListWidgetFriend( this, playerListWidget );
+	loadJsonPathInfo( );
 	return true;
 }
 

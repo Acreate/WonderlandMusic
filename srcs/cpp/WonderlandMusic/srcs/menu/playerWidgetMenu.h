@@ -89,11 +89,11 @@ protected:
 
 	/// @brief 从磁盘删除文件
 	/// @param file_path_info_vector 删除路径列表
-	virtual void deleteDiskMusicFileList( const std::vector< QString > &file_path_info_vector );
+	virtual void deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector );
 
 	/// @brief 从列表删除文件
 	/// @param file_path_info_vector 删除路径列表
-	virtual void removeListMusicFileList( const std::vector< QString > &file_path_info_vector );
+	virtual void removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector );
 
 	/// @brief 从磁盘路径加载文件
 	/// @param file_path_info_vector 加载文件列表

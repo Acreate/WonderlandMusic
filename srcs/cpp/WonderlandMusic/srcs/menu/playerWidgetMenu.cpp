@@ -125,9 +125,7 @@ bool PlayerWidgetMenu::initConnectAcction( ) {
 		WidgetTools::moveWidgetToCenterPos( center, &dialog );
 		if( dialog.exec( ) != QDialog::Accepted )
 			return;
-		
-		
-		
+
 		QStringList files = dialog.selectedFiles( );
 		qsizetype count = files.size( );
 		auto data = files.data( );
@@ -226,11 +224,11 @@ void PlayerWidgetMenu::hideEvent( QHideEvent *hide_event ) {
 	QMenu::hideEvent( hide_event );
 }
 
-void PlayerWidgetMenu::deleteDiskMusicFileList( const std::vector< QString > &file_path_info_vector ) {
+void PlayerWidgetMenu::deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
 	playerListWidgetFriend->deleteDiskMusicFileList( file_path_info_vector );
 }
 
-void PlayerWidgetMenu::removeListMusicFileList( const std::vector< QString > &file_path_info_vector ) {
+void PlayerWidgetMenu::removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
 	playerListWidgetFriend->removeListMusicFileList( file_path_info_vector );
 }
 

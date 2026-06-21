@@ -1,6 +1,7 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
 
+class PlayerListWidgetTranslate;
 class MessageTranslate;
 class MainWindowTranslate;
 class PlayerWidgetTranslate;
@@ -26,6 +27,7 @@ protected:
 	PlayerWidgetTranslate *playerWidget = nullptr;
 	MainWindowTranslate *mainWindow = nullptr;
 	MessageTranslate *message = nullptr;
+	PlayerListWidgetTranslate *playerListWidget = nullptr;
 
 protected:
 	virtual void setCodecForLocale( );
@@ -62,6 +64,8 @@ public:
 	virtual MainWindowTranslate * getMainWindow( ) const;
 
 	virtual MessageTranslate * getMessage( ) const;
+
+	virtual PlayerListWidgetTranslate * getPlayerListWidget( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

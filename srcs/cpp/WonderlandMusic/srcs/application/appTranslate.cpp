@@ -8,6 +8,7 @@
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
 #include "translate/playerListMenuTranslate.h"
+#include "translate/playerListWidgetTranslate.h"
 #include "translate/playerToolsWidgetTranslate.h"
 #include "translate/playerTopWidgetTranslate.h"
 #include "translate/playerWidgetTranslate.h"
@@ -35,6 +36,7 @@ bool AppTranslate::translateString( ) {
 	if_init_result( playerWidget );
 	if_init_result( mainWindow );
 	if_init_result( message );
+	if_init_result( playerListWidget );
 
 	return true;
 }
@@ -52,6 +54,7 @@ void AppTranslate::deleteResource( ) {
 	d_r( playerWidget );
 	d_r( mainWindow );
 	d_r( message );
+	d_r( playerListWidget );
 }
 
 AppTranslate::~AppTranslate( ) {
@@ -72,7 +75,7 @@ bool AppTranslate::init( ) {
 	playerWidget = new PlayerWidgetTranslate;
 	mainWindow = new MainWindowTranslate;
 	message = new MessageTranslate;
-
+	playerListWidget = new PlayerListWidgetTranslate;
 	setCodecForLocale( );
 	if( translateString( ) == false )
 		return false;
@@ -121,4 +124,8 @@ MainWindowTranslate * AppTranslate::getMainWindow( ) const {
 
 MessageTranslate * AppTranslate::getMessage( ) const {
 	return message;
+}
+
+PlayerListWidgetTranslate * AppTranslate::getPlayerListWidget( ) const {
+	return playerListWidget;
 }

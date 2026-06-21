@@ -15,6 +15,7 @@
 #include "../application/jsonFileKey.h"
 #include "../application/renderImage.h"
 #include "../application/jsonKey/playerListJsonKey.h"
+#include "../application/translate/playerListWidgetTranslate.h"
 
 #include "../item/musicInfoItem.h"
 
@@ -25,6 +26,7 @@
 #include "../thread/widgetThread.h"
 
 #include "../tools/pathTools.h"
+#include "../tools/vectorTools.h"
 
 void PlayerListWidget::clearMusicInfoVector( ) {
 	musicInfoMutex->lock( );
@@ -786,14 +788,71 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	}
 }
 
-// todo : 未完成
-bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< QString > &file_path_info_vector ) {
-	return false;
+bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
+	updateMuex->lock( );
+	std::vector< MusicInfoItemWidget * > unionSetVector;
+	std::vector< MusicInfoItemWidget * > deleteSetVector;
+
+	musicInfoMutex->lock( );
+	VectorTools::unionSetVector( *musicInfoVector, file_path_info_vector, deleteSetVector );
+	size_t count = unionSetVector.size( );
+	if( count == 0 ) {
+		musicInfoMutex->unlock( );
+		updateMuex->unlock( );
+		return false;
+	}
+	VectorTools::differenceSetVector( *musicInfoVector, deleteSetVector, unionSetVector );
+	*musicInfoVector = unionSetVector;
+	selectItemWidgetVector->clear( );
+	selectLeftItemWidget = nullptr;
+	activeLeftItemWidget = nullptr;
+	musicInfoMutex->unlock( );
+	auto deleteFileData = deleteSetVector.data( );
+	size_t deleteFileCount = deleteSetVector.size( );
+	size_t deleteFileIndex;
+	QFile file;
+	MessageErrorOut out;
+	PlayerListWidgetTranslate *playerListWidget = AppInstance::getAppInstance( )->getTranslate( )->getPlayerListWidget( );
+	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 ) {
+		file.setFileName( deleteFileData[ deleteFileIndex ]->musicFilePath );
+		delete deleteFileData[ deleteFileIndex ];
+		bool moveToTrash = file.moveToTrash( );
+		if( moveToTrash )
+			continue;
+		out << playerListWidget->getRemoveDiskFileError( ) + " : " + deleteFileData[ deleteFileIndex ]->musicFilePath;
+	}
+	updateMuex->unlock( );
+	update( );
+	return true;
 }
 
-// todo : 未完成
-bool PlayerListWidget::removeListMusicFileList( const std::vector< QString > &file_path_info_vector ) {
-	return false;
+bool PlayerListWidget::removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
+	updateMuex->lock( );
+	std::vector< MusicInfoItemWidget * > unionSetVector;
+	std::vector< MusicInfoItemWidget * > deleteSetVector;
+
+	musicInfoMutex->lock( );
+	VectorTools::unionSetVector( *musicInfoVector, file_path_info_vector, deleteSetVector );
+	size_t count = unionSetVector.size( );
+	if( count == 0 ) {
+		musicInfoMutex->unlock( );
+		updateMuex->unlock( );
+		return false;
+	}
+	VectorTools::differenceSetVector( *musicInfoVector, deleteSetVector, unionSetVector );
+	*musicInfoVector = unionSetVector;
+	selectItemWidgetVector->clear( );
+	selectLeftItemWidget = nullptr;
+	activeLeftItemWidget = nullptr;
+	musicInfoMutex->unlock( );
+	auto deleteFileData = deleteSetVector.data( );
+	size_t deleteFileCount = deleteSetVector.size( );
+	size_t deleteFileIndex;
+	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 )
+		delete deleteFileData[ deleteFileIndex ];
+	updateMuex->unlock( );
+	update( );
+	return true;
 }
 
 bool PlayerListWidget::loadDiskMusicFileList( const std::vector< QString > &file_path_info_vector ) {

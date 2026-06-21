@@ -60,7 +60,9 @@ protected:
 	virtual bool selectKeyDefaultModifier( );
 
 	virtual void releaseResource( );
-	
+
+	virtual bool removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_target, std::vector< MusicInfoItemWidget * > &result_move_target );
+
 public:
 	~PlayerListWidget( ) override;
 
@@ -123,11 +125,11 @@ protected:
 protected:
 	/// @brief 从磁盘删除文件
 	/// @param file_path_info_vector 删除路径列表
-	virtual bool deleteDiskMusicFileList( const std::vector<MusicInfoItemWidget *> &file_path_info_vector );
+	virtual bool deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector );
 
 	/// @brief 从列表删除文件
 	/// @param file_path_info_vector 删除路径列表
-	virtual bool removeListMusicFileList( const std::vector<MusicInfoItemWidget *> &file_path_info_vector );
+	virtual bool removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector );
 
 	/// @brief 从磁盘路径加载文件
 	/// @param file_path_info_vector 加载文件列表

@@ -788,25 +788,39 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	}
 }
 
-bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
-	updateMuex->lock( );
+bool PlayerListWidget::removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target ) {
 	std::vector< MusicInfoItemWidget * > unionSetVector;
-	std::vector< MusicInfoItemWidget * > deleteSetVector;
 
 	musicInfoMutex->lock( );
-	VectorTools::unionSetVector( *musicInfoVector, file_path_info_vector, deleteSetVector );
+	VectorTools::unionSetVector( *musicInfoVector, result_move_target, unionSetVector );
 	size_t count = unionSetVector.size( );
 	if( count == 0 ) {
 		musicInfoMutex->unlock( );
-		updateMuex->unlock( );
 		return false;
 	}
-	VectorTools::differenceSetVector( *musicInfoVector, deleteSetVector, unionSetVector );
-	*musicInfoVector = unionSetVector;
+	VectorTools::differenceSetVector( *musicInfoVector, unionSetVector, result_move_target );
+	*musicInfoVector = result_move_target;
+	result_move_target = unionSetVector;
+	// *
+	VectorTools::differenceSetVector( *selectItemWidgetVector, result_move_target, unionSetVector );
+	*selectItemWidgetVector = unionSetVector;
+	// *
+
 	selectItemWidgetVector->clear( );
 	selectLeftItemWidget = nullptr;
 	activeLeftItemWidget = nullptr;
 	musicInfoMutex->unlock( );
+	return true;
+}
+
+bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
+	updateMuex->lock( );
+
+	std::vector< MusicInfoItemWidget * > deleteSetVector;
+	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
+		updateMuex->unlock( );
+		return false;
+	}
 	auto deleteFileData = deleteSetVector.data( );
 	size_t deleteFileCount = deleteSetVector.size( );
 	size_t deleteFileIndex;
@@ -828,23 +842,13 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 
 bool PlayerListWidget::removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
 	updateMuex->lock( );
-	std::vector< MusicInfoItemWidget * > unionSetVector;
-	std::vector< MusicInfoItemWidget * > deleteSetVector;
+	updateMuex->lock( );
 
-	musicInfoMutex->lock( );
-	VectorTools::unionSetVector( *musicInfoVector, file_path_info_vector, deleteSetVector );
-	size_t count = unionSetVector.size( );
-	if( count == 0 ) {
-		musicInfoMutex->unlock( );
+	std::vector< MusicInfoItemWidget * > deleteSetVector;
+	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
 		updateMuex->unlock( );
 		return false;
 	}
-	VectorTools::differenceSetVector( *musicInfoVector, deleteSetVector, unionSetVector );
-	*musicInfoVector = unionSetVector;
-	selectItemWidgetVector->clear( );
-	selectLeftItemWidget = nullptr;
-	activeLeftItemWidget = nullptr;
-	musicInfoMutex->unlock( );
 	auto deleteFileData = deleteSetVector.data( );
 	size_t deleteFileCount = deleteSetVector.size( );
 	size_t deleteFileIndex;

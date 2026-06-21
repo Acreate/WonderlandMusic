@@ -32,6 +32,7 @@ namespace entryList {
 			return true;
 		}
 	}
+
 	namespace inDir {
 		inline bool entryList( QStringList &result_get_path, const QString &entry_path, bool foreach_in_dir_path, QDir::Filters filters ) {
 			QFileInfo fileInfo( entry_path );
@@ -51,7 +52,6 @@ namespace entryList {
 			qint64 index = 0;
 
 			if( foreach_in_dir_path ) {
-
 				QStringList appendList;
 				QStringList subResult;
 				for( ; index < entryCount; ++index ) {
@@ -72,6 +72,7 @@ namespace entryList {
 		}
 	}
 }
+
 bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path, bool foreach_in_dir_path, QDir::Filters filters ) {
 	return ::entryList::inDir::entryList( result_get_path, entry_path, foreach_in_dir_path, filters );
 }
@@ -79,15 +80,19 @@ bool PathTools::entryList( QStringList &result_get_path, const QString &entry_pa
 bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path, bool foreach_in_dir_path ) {
 	return ::entryList::inDir::entryList( result_get_path, entry_path, foreach_in_dir_path, QDir::NoDotAndDotDot | QDir::AllEntries | QDir::NoSymLinks );
 }
+
 bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path, QDir::Filters filters, QDir::SortFlags sort ) {
 	return ::entryList::sort::entryList( result_get_path, entry_path, filters, sort );
 }
+
 bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path, QDir::Filters filters ) {
 	return ::entryList::sort::entryList( result_get_path, entry_path, filters, QDir::NoSort );
 }
+
 bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path ) {
 	return ::entryList::sort::entryList( result_get_path, entry_path, QDir::NoDotAndDotDot | QDir::AllEntries | QDir::NoSymLinks, QDir::NoSort );
 }
+
 bool PathTools::entryList( QStringList &result_get_path, const QStringList &entry_path, bool foreach_in_dir_path, QDir::Filters filters ) {
 	qsizetype count = entry_path.size( );
 	if( count == 0 )
@@ -101,9 +106,11 @@ bool PathTools::entryList( QStringList &result_get_path, const QStringList &entr
 			result_get_path.append( entryResult );
 	return result_get_path.size( );
 }
+
 bool PathTools::entryList( QStringList &result_get_path, const QStringList &entry_path, bool foreach_in_dir_path ) {
 	return entryList( result_get_path, entry_path, foreach_in_dir_path, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks );
 }
+
 bool PathTools::entryList( QStringList &result_get_path, const QStringList &entry_path, QDir::Filters filters ) {
 	qsizetype count = entry_path.size( );
 	if( count == 0 )
@@ -121,6 +128,95 @@ bool PathTools::entryList( QStringList &result_get_path, const QStringList &entr
 bool PathTools::entryList( QStringList &result_get_path, const QStringList &entry_path ) {
 	return entryList( result_get_path, entry_path, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks );
 }
+
+bool PathTools::entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, bool foreach_in_dir_path, QDir::Filters filters ) {
+	auto count = entry_path.size( );
+	if( count == 0 )
+		return false;
+	QStringList entryResult;
+	result_get_path.clear( );
+	auto data = entry_path.data( );
+	decltype(count) index = 0;
+	for( ; index < count; ++index )
+		if( ::entryList::inDir::entryList( entryResult, data[ index ], foreach_in_dir_path, filters ) )
+			result_get_path.append( entryResult );
+	return result_get_path.size( );
+}
+
+bool PathTools::entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, bool foreach_in_dir_path ) {
+	return entryList( result_get_path, entry_path, foreach_in_dir_path, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks );
+}
+
+bool PathTools::entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, QDir::Filters filters ) {
+	auto count = entry_path.size( );
+	if( count == 0 )
+		return false;
+	QStringList entryResult;
+	result_get_path.clear( );
+	auto data = entry_path.data( );
+	decltype(count) index = 0;
+	for( ; index < count; ++index )
+		if( ::entryList::sort::entryList( entryResult, data[ index ], filters, QDir::NoSort ) )
+			result_get_path.append( entryResult );
+	return result_get_path.size( );
+}
+
+bool PathTools::entryList( QStringList &result_get_path, const std::vector< QString > &entry_path ) {
+	return entryList( result_get_path, entry_path, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks );
+}
+
+qsizetype PathTools::filterFile( QStringList &result_get_path, const std::vector< QString > &entry_path ) {
+	qsizetype resultDataIndex = 0;
+	QFileInfo info;
+	auto count = entry_path.size( );
+	if( count == 0 )
+		return resultDataIndex;
+	auto data = entry_path.data( );
+	auto resultData = result_get_path.data( );
+	decltype(count) index = 0;
+	for( ; index < count; ++index )
+		if( info.setFile( data[ index ] ), info.isFile( ) )
+			resultData[ resultDataIndex++ ];
+	result_get_path.resize( resultDataIndex );
+	return resultDataIndex;
+}
+
+qsizetype PathTools::filterDir( QStringList &result_get_path, const std::vector< QString > &entry_path ) {
+	qsizetype resultDataIndex = 0;
+	QFileInfo info;
+	auto count = entry_path.size( );
+	if( count == 0 )
+		return resultDataIndex;
+	auto data = entry_path.data( );
+	auto resultData = result_get_path.data( );
+	decltype(count) index = 0;
+	for( ; index < count; ++index )
+		if( info.setFile( data[ index ] ), info.isDir( ) )
+			resultData[ resultDataIndex++ ];
+	result_get_path.resize( resultDataIndex );
+	return resultDataIndex;
+}
+
+qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::vector< QString > &entry_path ) {
+	auto count = entry_path.size( );
+	decltype(count) index;
+	qsizetype resultCount = 0;
+	if( count == 0 )
+		return resultCount;
+	result_get_path.resize( count );
+	auto resultData = result_get_path.data( );
+	auto foreachData = entry_path.data( );
+	auto applicationInstance = AppInstance::getAppInstance( );
+	auto musicDecoder = applicationInstance->getMusicDecoder( );
+	for( index = 0; index < count; ++index )
+		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
+			resultData[ resultCount ] = foreachData[ index ];
+			resultCount += 1;
+		}
+	result_get_path.resize( resultCount );
+	return resultCount;
+}
+
 qsizetype PathTools::filterFile( QStringList &result_get_path, const QStringList &entry_path ) {
 	qsizetype resultDataIndex = 0;
 	QFileInfo info;
@@ -136,6 +232,7 @@ qsizetype PathTools::filterFile( QStringList &result_get_path, const QStringList
 	result_get_path.resize( resultDataIndex );
 	return resultDataIndex;
 }
+
 qsizetype PathTools::filterDir( QStringList &result_get_path, const QStringList &entry_path ) {
 	qsizetype resultDataIndex = 0;
 	QFileInfo info;
@@ -151,6 +248,7 @@ qsizetype PathTools::filterDir( QStringList &result_get_path, const QStringList 
 	result_get_path.resize( resultDataIndex );
 	return resultDataIndex;
 }
+
 qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStringList &entry_path ) {
 	qsizetype count = entry_path.size( );
 	qsizetype index;
@@ -170,6 +268,7 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStrin
 	result_get_path.resize( resultCount );
 	return resultCount;
 }
+
 bool PathTools::readJsonObject( QJsonObject &result_json_object, const QString &json_file_path ) {
 	// 查看是否存在
 	QFileInfo info( json_file_path );
@@ -191,8 +290,8 @@ bool PathTools::readJsonObject( QJsonObject &result_json_object, const QString &
 
 	return true;
 }
-bool PathTools::writeJsonObject( const QJsonObject &result_json_object, const QString &json_file_path ) {
 
+bool PathTools::writeJsonObject( const QJsonObject &result_json_object, const QString &json_file_path ) {
 	QFileInfo info( json_file_path );
 	if( info.exists( ) == false ) {
 		QDir dir = info.dir( );

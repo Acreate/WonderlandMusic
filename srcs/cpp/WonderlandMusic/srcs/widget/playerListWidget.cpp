@@ -785,3 +785,63 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		break;
 	}
 }
+
+// todo : 未完成
+bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< QString > &file_path_info_vector ) {
+	return false;
+}
+
+// todo : 未完成
+bool PlayerListWidget::removeListMusicFileList( const std::vector< QString > &file_path_info_vector ) {
+	return false;
+}
+
+bool PlayerListWidget::loadDiskMusicFileList( const std::vector< QString > &file_path_info_vector ) {
+	QStringList superMusicList;
+	if( PathTools::filterMusicFile( superMusicList, file_path_info_vector ) == 0 )
+		return false;
+	qsizetype count = superMusicList.size( );
+	qsizetype index;
+	auto selectFileData = superMusicList.data( );
+	for( index = 0; index < count; index += 1 )
+		fromFileLoadItemInfo( selectFileData[ index ] );
+	return true;
+}
+
+bool PlayerListWidget::loadDiskMusicDirList( const std::vector< QString > &file_path_info_vector ) {
+	QStringList result;
+
+	bool entryList = PathTools::entryList( result, file_path_info_vector );
+	if( entryList == false )
+		return false;
+
+	QStringList superMusicList;
+	if( PathTools::filterMusicFile( superMusicList, result ) == 0 )
+		return false;
+	qsizetype count = superMusicList.size( );
+	qsizetype index;
+	auto selectFileData = superMusicList.data( );
+	for( index = 0; index < count; index += 1 )
+		fromFileLoadItemInfo( selectFileData[ index ] );
+	return true;
+}
+
+// todo : 未完成
+bool PlayerListWidget::setCurrentPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
+	return false;
+}
+
+// todo : 未完成
+bool PlayerListWidget::setInsertPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
+	return false;
+}
+
+// todo : 未完成
+bool PlayerListWidget::moveMusicToListTop( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
+	return false;
+}
+
+// todo : 未完成
+bool PlayerListWidget::moveMusicToListBottom( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
+	return false;
+}

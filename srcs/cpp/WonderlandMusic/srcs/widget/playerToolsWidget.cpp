@@ -24,7 +24,6 @@ void PlayerToolsWidget::releaseResource( ) {
 	r_d( playAllDateTime );
 	r_d( playUseDateTime );
 	r_d( playDateTimeSpace );
-	r_d( showCurrentPlayerList );
 	r_d( playIcon );
 	r_d( pauseIcon );
 }
@@ -49,7 +48,6 @@ bool PlayerToolsWidget::init( ) {
 	playAllDateTime = new QLabel( this );
 	playUseDateTime = new QLabel( this );
 	playDateTimeSpace = new QLabel( this );
-	showCurrentPlayerList = new QPushButton( this );
 
 	playIcon = new QIcon;
 	pauseIcon = new QIcon;
@@ -64,7 +62,6 @@ bool PlayerToolsWidget::init( ) {
 	thePreviousSong->setText( playerToolsWidgetTranslate->getThePreviousSong( ) );
 	theNextSong->setText( playerToolsWidgetTranslate->getTheNextSong( ) );
 	controlPlay->setText( playerToolsWidgetTranslate->getControlPlay( ) );
-	showCurrentPlayerList->setText( playerToolsWidgetTranslate->getCurrentPlayList( ) );
 
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 	auto musicPlayerListToolWidgetJsonFileKey = jsonFileKey->getPlayerListToolWidget( );
@@ -74,7 +71,6 @@ bool PlayerToolsWidget::init( ) {
 	thePreviousSong->setIcon( QIcon( musicPlayerListToolWidgetJsonFileKey->getThePreviousSongIconPath( ) ) );
 	theNextSong->setIcon( QIcon( musicPlayerListToolWidgetJsonFileKey->getTheNextSongIconPath( ) ) );
 	controlPlay->setIcon( *playIcon );
-	showCurrentPlayerList->setIcon( QIcon( musicPlayerListToolWidgetJsonFileKey->getCurrentSongPlayListIconPath( ) ) );
 
 	playDateTimeSpace->setText( playerToolsWidgetTranslate->getPlaySongDateTimeSpace( ) );
 
@@ -86,7 +82,7 @@ bool PlayerToolsWidget::init( ) {
 	thePreviousSong->adjustSize( );
 	theNextSong->adjustSize( );
 	controlPlay->adjustSize( );
-	showCurrentPlayerList->adjustSize( );
+
 	playDateTimeSpace->adjustSize( );
 	playAllDateTime->adjustSize( );
 	playUseDateTime->adjustSize( );
@@ -103,7 +99,6 @@ bool PlayerToolsWidget::init( ) {
 	connect( thePreviousSong, &QPushButton::clicked, this, &PlayerToolsWidget::clickPreviousSong );
 	connect( controlPlay, &QPushButton::clicked, this, &PlayerToolsWidget::clickControlPlay );
 	connect( theNextSong, &QPushButton::clicked, this, &PlayerToolsWidget::clickNextSong );
-	connect( showCurrentPlayerList, &QPushButton::clicked, this, &PlayerToolsWidget::clickShowPlayList );
 
 	// 子组件
 
@@ -149,12 +144,7 @@ bool PlayerToolsWidget::compLayout( ) {
 	offsetX += playDateTimeSpace->width( ) + widgetSpace;
 	playUseDateTime->move( offsetX, offsetY );
 
-	offsetX = width - showCurrentPlayerList->width( ) - widgetSpace;
-	buttonHeightHalf = showCurrentPlayerList->height( ) / 2;
-	offsetY = half - buttonHeightHalf;
-	showCurrentPlayerList->move( offsetX, offsetY );
-
-	offsetX = offsetX - theNextSongX - height - widgetSpace - widgetSpace;
+	offsetX = width - offsetX - widgetSpace;
 	if( offsetX < 0 )
 		offsetX = 1;
 	this->playProgress->setFixedWidth( offsetX );
@@ -180,9 +170,6 @@ int PlayerToolsWidget::getMinHeight( ) {
 	if( maxHeight < cmpHeight )
 		maxHeight = cmpHeight;
 
-	cmpHeight = showCurrentPlayerList->height( );
-	if( maxHeight < cmpHeight )
-		maxHeight = cmpHeight;
 	return maxHeight;
 }
 
@@ -193,7 +180,7 @@ int PlayerToolsWidget::getMinWidth( int progress_bar_width ) {
 	playerDateWidth = playUseDateTime->width( ) + playDateTimeSpace->width( );
 	maxWidth = maxWidth > playerDateWidth ? maxWidth : playerDateWidth;
 
-	int minWidth = thePreviousSong->width( ) + this->controlPlay->width( ) + this->theNextSong->width( ) + maxWidth + showCurrentPlayerList->width( ) + widgetSpace * 6;
+	int minWidth = thePreviousSong->width( ) + this->controlPlay->width( ) + this->theNextSong->width( ) + maxWidth + widgetSpace * 6;
 
 	return minWidth;
 }

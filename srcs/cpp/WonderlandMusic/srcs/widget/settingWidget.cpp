@@ -8,7 +8,7 @@ bool SettingWidget::loadJsonPathInfo( ) {
 }
 
 bool SettingWidget::writeJsonPathInfo( ) {
-	return false;
+	return true;
 }
 
 bool SettingWidget::init( ) {

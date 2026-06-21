@@ -24,8 +24,6 @@ protected:
 	QLabel *playDateTimeSpace = nullptr;
 	/// @brief 播放使用时间
 	QLabel *playUseDateTime = nullptr;
-	/// @brief 显示播放列表
-	QPushButton *showCurrentPlayerList = nullptr;
 	/// @brief 播放按钮
 	QIcon *playIcon = nullptr;
 	/// @brief 暂停按钮
@@ -76,8 +74,6 @@ Q_SIGNALS:
 	void clickControlPlay( );
 
 	void clickNextSong( );
-
-	void clickShowPlayList( );
 
 	void duratctionProgressBarChange( int new_var );
 };

@@ -77,6 +77,7 @@ bool PlayerWindow::initWidget( ) {
 	bottomDocWidget->setWidget( playerToolsWidget );
 	setCentralWidget( playListWidgetScrollArea );
 	playListWidgetScrollArea->setWidget( playListWidget );
+
 	return true;
 }
 
@@ -93,6 +94,7 @@ bool PlayerWindow::initConnect( ) {
 	auto playListHBar = playListWidgetScrollArea->horizontalScrollBar( );
 	auto topWidgetHBar = playerListTopWidgetScrollArea->horizontalScrollBar( );
 	connect( playListHBar, &QScrollBar::sliderMoved, topWidgetHBar, &QScrollBar::setValue );
+	connect( playListWidget, &PlayerListWidget::popMenu, this, &PlayerWindow::popPlayerWidgetMenu );
 	return true;
 }
 
@@ -141,13 +143,19 @@ void PlayerWindow::mouseReleaseEvent( QMouseEvent *event ) {
 	auto mouseButton = event->button( );
 
 	switch( mouseButton ) {
-		case Qt::MouseButton::RightButton : {
-			auto point = QCursor::pos( );
-			auto mapFromGlobal = playListWidgetScrollArea->mapFromGlobal( point );
-			auto contentsRect = playListWidgetScrollArea->contentsRect( );
-			if( contentsRect.contains( mapFromGlobal ) )
-				playerWidgetMenu->exec( point );
-		}
-		break;
+		case Qt::MouseButton::RightButton :
+			popPlayerWidgetMenu( );
+			break;
 	}
+}
+
+bool PlayerWindow::popPlayerWidgetMenu( ) {
+	auto point = QCursor::pos( );
+	auto mapFromGlobal = playListWidgetScrollArea->mapFromGlobal( point );
+	auto contentsRect = playListWidgetScrollArea->contentsRect( );
+	if( contentsRect.contains( mapFromGlobal ) ) {
+		playerWidgetMenu->exec( point );
+		return true;
+	}
+	return false;
 }

@@ -785,8 +785,10 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 					break;
 				}
 			musicInfoMutex->unlock( );
-			if( selectItem )
+			if( selectItem ) {
 				apendSelectMusicItemWidget( selectItem );
+				emit popMenu( );
+			}
 		}
 		break;
 	}

@@ -43,6 +43,8 @@ protected:
 
 	virtual bool updateSubCompoment( );
 
+	virtual bool popPlayerWidgetMenu( );
+
 public:
 	~PlayerWindow( ) override;
 

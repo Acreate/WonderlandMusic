@@ -43,6 +43,7 @@ bool PlayerWidgetMenu::initVar( ) {
 		return false;
 	fileSelectWorkPath = QDir::currentPath( );
 	dirSelectWorkPath = QDir::currentPath( );
+	playerListWidgetFriend = new PlayerListWidgetFriend( this, playerListWidget );
 	return true;
 }
 
@@ -73,81 +74,89 @@ bool PlayerWidgetMenu::initSubMenuAcction( ) {
 }
 
 bool PlayerWidgetMenu::initConnectAcction( ) {
-	connect( addMultiFileMusicToCollectionAction, &QAction::triggered, [this]( ) {
-		QFileDialog dialog( this );
-		dialog.setWindowTitle( tr( "多选文件" ) );
-		dialog.setDirectory( fileSelectWorkPath );
-		dialog.setFileMode( QFileDialog::ExistingFiles );
+	connect( addMultiFileMusicToCollectionAction, &QAction::triggered, this, &PlayerWidgetMenu::loadDiskFile );
 
-		auto decodeFileSuffix = musicDecoder->getSupperDecodeFileSuffix( );
-		QStringList filterSuffixList;
-		size_t count = decodeFileSuffix.size( );
-		auto data = decodeFileSuffix.data( );
-		size_t index = 0;
-		for( ; index < count; index += 1 )
-			filterSuffixList.append( "*." + data[ index ] );
-		auto musicTypeName = playerListMenuTranslate->getMusicTypeName( );
-		auto filterSuffix = filterSuffixList.join( " " );
-		auto filterName = musicTypeName + "(" + filterSuffix + ")";
-		dialog.setNameFilter( filterName );
-		QRect geometry = this->geometry( );
-		auto curentWindowSize = geometry.size( );
-		dialog.resize( curentWindowSize );
-		auto center = geometry.center( );
-		center = mapToGlobal( center );
-		WidgetTools::moveWidgetToCenterPos( center, &dialog );
-		if( dialog.exec( ) != QDialog::Accepted )
-			return;
-		QStringList files = dialog.selectedFiles( );
-		count = files.size( );
-		auto selectFileData = files.data( );
-		QFileInfo fileInfo( selectFileData[ 0 ] );
-		auto dir = fileInfo.dir( );
-		fileSelectWorkPath = dir.absolutePath( );
-		std::vector< QString > loadVector( count );
-		auto dataPtr = loadVector.data( );
-		for( index = 0; index < count; index += 1 )
-			dataPtr[ index ] = selectFileData[ index ];
-		loadDiskMusicFileList( loadVector );
-	} );
-
-	connect( addMultiMusicDirToCollection, &QAction::triggered, [this]( ) {
-		QFileDialog dialog( this );
-		dialog.setWindowTitle( tr( "选择目录" ) );
-		dialog.setDirectory( dirSelectWorkPath );
-		dialog.setFileMode( QFileDialog::Directory );
-
-		QRect geometry = this->geometry( );
-		auto curentWindowSize = geometry.size( );
-		dialog.resize( curentWindowSize );
-		auto center = geometry.center( );
-		center = mapToGlobal( center );
-		WidgetTools::moveWidgetToCenterPos( center, &dialog );
-		if( dialog.exec( ) != QDialog::Accepted )
-			return;
-
-		QStringList files = dialog.selectedFiles( );
-		qsizetype count = files.size( );
-		auto data = files.data( );
-		dirSelectWorkPath = data[ 0 ];
-		size_t index;
-		std::vector< QString > loadVector( count );
-		auto dataPtr = loadVector.data( );
-		for( index = 0; index < count; index += 1 )
-			dataPtr[ index ] = data[ index ];
-		loadDiskMusicDirList( loadVector );
-	} );
+	connect( addMultiMusicDirToCollection, &QAction::triggered, this, &PlayerWidgetMenu::loadDiskDir );
 
 	return true;
 }
 
-bool PlayerWidgetMenu::init( ) {
+void PlayerWidgetMenu::loadDiskFile( ) {
+	QFileDialog dialog( this );
+
+	dialog.setWindowTitle( playerListMenuTranslate->getLoadDiskFileTitle( ) );
+	dialog.setDirectory( fileSelectWorkPath );
+	dialog.setFileMode( QFileDialog::ExistingFiles );
+
+	auto decodeFileSuffix = musicDecoder->getSupperDecodeFileSuffix( );
+	QStringList filterSuffixList;
+	size_t count = decodeFileSuffix.size( );
+	auto data = decodeFileSuffix.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		filterSuffixList.append( "*." + data[ index ] );
+	auto musicTypeName = playerListMenuTranslate->getMusicTypeName( );
+	auto filterSuffix = filterSuffixList.join( " " );
+	auto filterName = musicTypeName + "(" + filterSuffix + ")";
+	dialog.setNameFilter( filterName );
+	QRect geometry = this->geometry( );
+	auto curentWindowSize = geometry.size( );
+	dialog.resize( curentWindowSize );
+	auto center = geometry.center( );
+	center = mapToGlobal( center );
+	WidgetTools::moveWidgetToCenterPos( center, &dialog );
+	if( dialog.exec( ) != QDialog::Accepted )
+		return;
+	QStringList files = dialog.selectedFiles( );
+	count = files.size( );
+	auto selectFileData = files.data( );
+	QFileInfo fileInfo( selectFileData[ 0 ] );
+	auto dir = fileInfo.dir( );
+	fileSelectWorkPath = dir.absolutePath( );
+	std::vector< QString > loadVector( count );
+	auto dataPtr = loadVector.data( );
+	for( index = 0; index < count; index += 1 )
+		dataPtr[ index ] = selectFileData[ index ];
+	loadDiskMusicFileList( loadVector );
+}
+
+void PlayerWidgetMenu::loadDiskDir( ) {
+	QFileDialog dialog( this );
+	dialog.setWindowTitle( playerListMenuTranslate->getLoadDiskDirTitle( ) );
+	dialog.setDirectory( dirSelectWorkPath );
+	dialog.setFileMode( QFileDialog::Directory );
+
+	QRect geometry = this->geometry( );
+	auto curentWindowSize = geometry.size( );
+	dialog.resize( curentWindowSize );
+	auto center = geometry.center( );
+	center = mapToGlobal( center );
+	WidgetTools::moveWidgetToCenterPos( center, &dialog );
+	if( dialog.exec( ) != QDialog::Accepted )
+		return;
+
+	QStringList files = dialog.selectedFiles( );
+	qsizetype count = files.size( );
+	auto data = files.data( );
+	dirSelectWorkPath = data[ 0 ];
+	size_t index;
+	std::vector< QString > loadVector( count );
+	auto dataPtr = loadVector.data( );
+	for( index = 0; index < count; index += 1 )
+		dataPtr[ index ] = data[ index ];
+	loadDiskMusicDirList( loadVector );
+}
+
+void PlayerWidgetMenu::deleteResource( ) {
 	clear( );
 	if( playerListWidgetFriend )
 		( delete playerListWidgetFriend, playerListWidgetFriend = nullptr );
+}
+
+bool PlayerWidgetMenu::init( ) {
+	deleteResource( );
 	if( initVar( ) == false )
 		return false;
-	playerListWidgetFriend = new PlayerListWidgetFriend( this, playerListWidget );
 	if( initSubMenu( ) == false )
 		return false;
 	if( initSubMenuAcction( ) == false )

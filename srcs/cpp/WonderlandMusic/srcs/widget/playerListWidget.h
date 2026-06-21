@@ -159,6 +159,8 @@ Q_SIGNALS:
 	void itemSelect( const std::vector< MusicInfoItemWidget * > &select_vectir );
 
 	void itemDoubleSelect( MusicInfoItemWidget *double_click_item_widget );
+
+	void popMenu( );
 };
 
 #endif // PLAYLISTWIDGET_H_H_HEAD__FILE__

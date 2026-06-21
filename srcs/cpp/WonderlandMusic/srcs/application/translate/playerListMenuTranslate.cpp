@@ -19,7 +19,18 @@ bool PlayerListMenuTranslate::init( ) {
 	playerListMenuControlMenuMoveTopMusicAction = QObject::tr( "选中列表移动到顶部" );
 	playerListMenuControlMenuMoveBottomMusicAction = QObject::tr( "选中列表移动到底部" );
 	musicTypeName = QObject::tr( "音频" );
+
+	loadDiskFileTitle = QObject::tr( "加载多个文件" );
+	loadDiskDirTitle = QObject::tr( "加载多个目录" );
 	return true;
+}
+
+const QString & PlayerListMenuTranslate::getLoadDiskFileTitle( ) const {
+	return loadDiskFileTitle;
+}
+
+const QString & PlayerListMenuTranslate::getLoadDiskDirTitle( ) const {
+	return loadDiskDirTitle;
 }
 
 const QString & PlayerListMenuTranslate::getPlayerListMenuFileLoadMenu( ) const {

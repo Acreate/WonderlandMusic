@@ -54,6 +54,9 @@ protected:
 	QAction *addMultiMusicDirToCollection;
 	PlayerListWidgetFriend *playerListWidgetFriend = nullptr;
 
+protected:
+	virtual void deleteResource( );
+
 public:
 	PlayerWidgetMenu( PlayerListWidget *player_list_widget );
 
@@ -71,6 +74,10 @@ protected:
 	virtual bool initSubMenuAcction( );
 
 	virtual bool initConnectAcction( );
+
+	virtual void loadDiskFile( );
+
+	virtual void loadDiskDir( );
 
 	virtual void setCurrentSelectPlay( );
 

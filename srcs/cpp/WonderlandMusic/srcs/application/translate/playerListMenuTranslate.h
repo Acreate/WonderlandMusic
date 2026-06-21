@@ -20,9 +20,14 @@ class PlayerListMenuTranslate : public ITranslate {
 	QString playerListMenuControlMenuMoveBottomMusicAction;
 
 	QString musicTypeName;
-
+	QString loadDiskFileTitle;
+	QString loadDiskDirTitle;
 public:
 	bool init( ) override;
+
+	virtual const QString & getLoadDiskFileTitle( ) const;
+
+	virtual const QString & getLoadDiskDirTitle( ) const;
 
 	virtual const QString & getPlayerListMenuFileLoadMenu( ) const;
 

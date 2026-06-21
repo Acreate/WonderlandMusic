@@ -94,7 +94,8 @@ bool PlayerToolsWidget::init( ) {
 
 	QSize minSize;
 	compMinSize( minSize, progressBarMinWidth );
-	setMinimumSize( minSize );
+	setMinimumWidth( minSize.width( ) );
+	setFixedHeight( minSize.height( ) );
 	compLayout( );
 
 	// 链接信号

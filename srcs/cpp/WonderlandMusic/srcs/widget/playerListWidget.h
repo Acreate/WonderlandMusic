@@ -61,7 +61,7 @@ protected:
 
 	virtual void releaseResource( );
 
-	virtual bool removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_target, std::vector< MusicInfoItemWidget * > &result_move_target );
+	virtual bool removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target );
 
 public:
 	~PlayerListWidget( ) override;

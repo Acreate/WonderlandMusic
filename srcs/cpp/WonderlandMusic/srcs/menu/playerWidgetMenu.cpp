@@ -64,8 +64,8 @@ bool PlayerWidgetMenu::initSubMenuAcction( ) {
 	moveTop = controlMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuMoveTopMusicAction( ) );
 	moveBottom = controlMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuMoveBottomMusicAction( ) );
 
-	removeMusic = removeMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuRemoveMusicAction( ) );
-	removeMusic = removeMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuDeleteMusicAction( ) );
+	removeMusicAtList = removeMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuRemoveMusicAction( ) );
+	deleteMusicAtDiskFile = removeMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuDeleteMusicAction( ) );
 
 	addMultiFileMusicToCollectionAction = loadMenu->addAction( playerListMenuTranslate->getPlayerListAddMultiMusicFileToCollectionAction( ) );
 	addMultiMusicDirToCollection = loadMenu->addAction( playerListMenuTranslate->getPlayerListAddMultiMusicDirToCollectionAction( ) );
@@ -75,8 +75,16 @@ bool PlayerWidgetMenu::initSubMenuAcction( ) {
 
 bool PlayerWidgetMenu::initConnectAcction( ) {
 	connect( addMultiFileMusicToCollectionAction, &QAction::triggered, this, &PlayerWidgetMenu::loadDiskFile );
-
 	connect( addMultiMusicDirToCollection, &QAction::triggered, this, &PlayerWidgetMenu::loadDiskDir );
+
+	connect( moveTop, &QAction::triggered, this, &PlayerWidgetMenu::selectListMoveTop );
+	connect( moveBottom, &QAction::triggered, this, &PlayerWidgetMenu::selectListMoveBottom );
+
+	connect( setplay, &QAction::triggered, this, &PlayerWidgetMenu::setCurrentSelectPlay );
+	connect( insterPlay, &QAction::triggered, this, &PlayerWidgetMenu::insterCurrentSelectPlay );
+
+	connect( removeMusicAtList, &QAction::triggered, this, &PlayerWidgetMenu::removePlayListSelectInfo );
+	connect( deleteMusicAtDiskFile, &QAction::triggered, this, &PlayerWidgetMenu::deletePlayListSelectFile );
 
 	return true;
 }
@@ -113,11 +121,12 @@ void PlayerWidgetMenu::loadDiskFile( ) {
 	QFileInfo fileInfo( selectFileData[ 0 ] );
 	auto dir = fileInfo.dir( );
 	fileSelectWorkPath = dir.absolutePath( );
+	writeJsonPathInfo( );
 	std::vector< QString > loadVector( count );
 	auto dataPtr = loadVector.data( );
 	for( index = 0; index < count; index += 1 )
 		dataPtr[ index ] = selectFileData[ index ];
-	loadDiskMusicFileList( loadVector );
+	playerListWidgetFriend->loadDiskMusicFileList( loadVector );
 }
 
 void PlayerWidgetMenu::loadDiskDir( ) {
@@ -139,12 +148,13 @@ void PlayerWidgetMenu::loadDiskDir( ) {
 	qsizetype count = files.size( );
 	auto data = files.data( );
 	dirSelectWorkPath = data[ 0 ];
+	writeJsonPathInfo( );
 	size_t index;
 	std::vector< QString > loadVector( count );
 	auto dataPtr = loadVector.data( );
 	for( index = 0; index < count; index += 1 )
 		dataPtr[ index ] = data[ index ];
-	loadDiskMusicDirList( loadVector );
+	playerListWidgetFriend->loadDiskMusicDirList( loadVector );
 }
 
 void PlayerWidgetMenu::deleteResource( ) {
@@ -195,72 +205,35 @@ bool PlayerWidgetMenu::writeJsonPathInfo( ) {
 void PlayerWidgetMenu::setCurrentSelectPlay( ) {
 	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
-	musicDecoder->setCurrentSelectPlay( selectVector );
+	playerListWidgetFriend->setCurrentPlayerMusicList( selectVector );
 }
 
 void PlayerWidgetMenu::insterCurrentSelectPlay( ) {
 	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
-	musicDecoder->insterCurrentSelectPlay( selectVector );
+	playerListWidgetFriend->setInsertPlayerMusicList( selectVector );
 }
 
 void PlayerWidgetMenu::removePlayListSelectInfo( ) {
 	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
-	musicDecoder->removePlayListSelectInfo( selectVector );
+	playerListWidgetFriend->removeListMusicFileList( selectVector );
 }
 
 void PlayerWidgetMenu::deletePlayListSelectFile( ) {
 	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
-	musicDecoder->deletePlayListSelectFile( selectVector );
+	playerListWidgetFriend->deleteDiskMusicFileList( selectVector );
 }
 
 void PlayerWidgetMenu::selectListMoveTop( ) {
 	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
-	musicDecoder->selectListMoveTop( selectVector );
+	playerListWidgetFriend->moveMusicToListTop( selectVector );
 }
 
 void PlayerWidgetMenu::selectListMoveBottom( ) {
 	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
-	musicDecoder->selectListMoveBottom( selectVector );
-}
-
-void PlayerWidgetMenu::hideEvent( QHideEvent *hide_event ) {
-	writeJsonPathInfo( );
-	QMenu::hideEvent( hide_event );
-}
-
-void PlayerWidgetMenu::deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
-	playerListWidgetFriend->deleteDiskMusicFileList( file_path_info_vector );
-}
-
-void PlayerWidgetMenu::removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
-	playerListWidgetFriend->removeListMusicFileList( file_path_info_vector );
-}
-
-void PlayerWidgetMenu::loadDiskMusicFileList( const std::vector< QString > &file_path_info_vector ) {
-	playerListWidgetFriend->loadDiskMusicFileList( file_path_info_vector );
-}
-
-void PlayerWidgetMenu::loadDiskMusicDirList( const std::vector< QString > &file_path_info_vector ) {
-	playerListWidgetFriend->loadDiskMusicDirList( file_path_info_vector );
-}
-
-void PlayerWidgetMenu::setCurrentPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
-	playerListWidgetFriend->setCurrentPlayerMusicList( music_item_vector );
-}
-
-void PlayerWidgetMenu::setInsertPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
-	playerListWidgetFriend->setInsertPlayerMusicList( music_item_vector );
-}
-
-void PlayerWidgetMenu::moveMusicToListTop( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
-	playerListWidgetFriend->moveMusicToListTop( music_item_vector );
-}
-
-void PlayerWidgetMenu::moveMusicToListBottom( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
-	playerListWidgetFriend->moveMusicToListBottom( music_item_vector );
+	playerListWidgetFriend->moveMusicToListBottom( selectVector );
 }

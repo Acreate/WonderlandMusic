@@ -6,6 +6,7 @@
 #include "jsonKey/mainWindowJsonKey.h"
 #include "jsonKey/musicInfoItemJsonKey.h"
 #include "jsonKey/playerListJsonKey.h"
+#include "jsonKey/playerListMenuJsonKey.h"
 #include "jsonKey/playerListToolWidgetJsonKey.h"
 #include "jsonKey/playerListTopWidgetJsonKey.h"
 #include "jsonKey/playerWindowJsonKey.h"
@@ -19,6 +20,11 @@ void JsonFileKey::deleteResource( ) {
 	d_r( playerList );
 	d_r( mainWindow );
 	d_r( musicInfoItem );
+	d_r( playerListMenu );
+}
+
+JsonFileKey::~JsonFileKey( ) {
+	deleteResource( );
 }
 
 JsonFileKey::JsonFileKey( ) {
@@ -34,6 +40,7 @@ bool JsonFileKey::init( ) {
 	playerList = new PlayerListJsonKey;
 	mainWindow = new MainWindowJsonKey;
 	musicInfoItem = new MusicInfoItemJsonKey;
+	playerListMenu = new PlayerListMenuJsonKey;
 	#define if_init_result(ptr) if(ptr->init() == false) return false
 	if_init_result( playerListToolWidget );
 	if_init_result( aboutWidgetJsonFileKey );
@@ -42,6 +49,7 @@ bool JsonFileKey::init( ) {
 	if_init_result( playerList );
 	if_init_result( mainWindow );
 	if_init_result( musicInfoItem );
+	if_init_result( playerListMenu );
 
 	return true;
 }
@@ -72,4 +80,8 @@ PlayerListJsonKey * JsonFileKey::getPlayerList( ) const {
 
 MainWindowJsonKey * JsonFileKey::getMainWindow( ) const {
 	return mainWindow;
+}
+
+PlayerListMenuJsonKey * JsonFileKey::getPlayerListMenu( ) const {
+	return playerListMenu;
 }

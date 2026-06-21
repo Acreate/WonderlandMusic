@@ -143,6 +143,6 @@ set( copy_file_src_dir "${CMAKE_CURRENT_SOURCE_DIR}/resources" )
 copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/font" "${app_resouce_path}" )
 copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/music" "${app_resouce_path}" )
 copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/png" "${app_resouce_path}" )
-copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/setting" "${app_resouce_path}" )
+copy_file( FALSE "${copy_file_src_dir}" "${copy_file_src_dir}/json" "${app_resouce_path}" )
 
 set_property( TARGET "${prject_name}" PROPERTY appResoucePath "${app_resouce_path}" )

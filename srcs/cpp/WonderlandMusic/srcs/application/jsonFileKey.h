@@ -1,6 +1,7 @@
 ﻿#ifndef JSONFILEKEY_H_H_HEAD__FILE__
 #define JSONFILEKEY_H_H_HEAD__FILE__
 
+class PlayerListMenuJsonKey;
 class PlayerWindowJsonKey;
 class PlayerListJsonKey;
 class MainWindowJsonKey;
@@ -18,12 +19,13 @@ protected:
 	MusicInfoItemJsonKey *musicInfoItem = nullptr;
 	PlayerListJsonKey *playerList = nullptr;
 	MainWindowJsonKey *mainWindow = nullptr;
+	PlayerListMenuJsonKey *playerListMenu = nullptr;
 
 protected:
 	virtual void deleteResource( );
 
 public:
-	virtual ~JsonFileKey( ) = default;
+	virtual ~JsonFileKey( );
 
 	JsonFileKey( );
 
@@ -42,6 +44,8 @@ public:
 	virtual PlayerListJsonKey * getPlayerList( ) const;
 
 	virtual MainWindowJsonKey * getMainWindow( ) const;
+
+	virtual PlayerListMenuJsonKey * getPlayerListMenu( ) const;
 };
 
 #endif // JSONFILEKEY_H_H_HEAD__FILE__

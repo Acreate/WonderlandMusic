@@ -32,38 +32,38 @@ bool PlayerListTopWidget::loadJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getJsonFileKey( );
 	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
-	auto fileJsonPath = listTopWidgetJsonKey->getPlayerListWidgetTopJsonPath( );
+	auto fileJsonPath = listTopWidgetJsonKey->getTopJsonPath( );
 	QJsonObject fileJsonObject;
 	if( PathTools::readJsonObject( fileJsonObject, fileJsonPath ) == false )
 		return true;
 	auto end = fileJsonObject.end( );
 	QJsonObject::iterator find;
 
-	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemSplitWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getItemSplitWidth( ) );
 	if( find != end )
 		splitWidth = find.value( ).toInt( splitWidth );
-	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemMusicNameWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getItemMusicNameWidth( ) );
 	if( find != end )
 		musicNameWidth = find.value( ).toInt( musicNameWidth );
-	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemMusicSingerWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getItemMusicSingerWidth( ) );
 	if( find != end )
 		musicSingerWidth = find.value( ).toInt( musicSingerWidth );
-	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemMusicDurationWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getItemMusicDurationWidth( ) );
 	if( find != end )
 		musicDurationWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetBeforeWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ) );
 	if( find != end )
 		widgetBeforeWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetAfterWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getItemWidgetAfterWidth( ) );
 	if( find != end )
 		widgetAfterWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetIndexWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getItemIndexWidth( ) );
 	if( find != end )
 		indexWidth = find.value( ).toInt( musicDurationWidth );
-	find = fileJsonObject.find( listTopWidgetJsonKey->getPlayerListWidgetItemWidth( ) );
+	find = fileJsonObject.find( listTopWidgetJsonKey->getItemWidth( ) );
 	if( find != end ) {
 		QRect rect = contentsRect( );
 		int w = find.value( ).toInt( rect.width( ) );
@@ -80,15 +80,15 @@ bool PlayerListTopWidget::writeJsonPathInfo( ) {
 	QJsonObject fileJsonObject;
 	int width = contentsRect( ).width( );
 	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
-	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemWidth( ), width );
-	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemSplitWidth( ), splitWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemMusicNameWidth( ), musicNameWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemMusicSingerWidth( ), musicSingerWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemMusicDurationWidth( ), musicDurationWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetBeforeWidth( ), widgetBeforeWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetAfterWidth( ), widgetAfterWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getPlayerListWidgetItemWidgetIndexWidth( ), indexWidth );
-	auto fileJsonPath = listTopWidgetJsonKey->getPlayerListWidgetTopJsonPath( );
+	fileJsonObject.insert( listTopWidgetJsonKey->getItemWidth( ), width );
+	fileJsonObject.insert( listTopWidgetJsonKey->getItemSplitWidth( ), splitWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getItemMusicNameWidth( ), musicNameWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getItemMusicSingerWidth( ), musicSingerWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getItemMusicDurationWidth( ), musicDurationWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ), widgetBeforeWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getItemWidgetAfterWidth( ), widgetAfterWidth );
+	fileJsonObject.insert( listTopWidgetJsonKey->getItemIndexWidth( ), indexWidth );
+	auto fileJsonPath = listTopWidgetJsonKey->getTopJsonPath( );
 	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
 	return true;
 }

@@ -6,50 +6,50 @@ bool PlayerListTopWidgetJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppSettingPath( );
 
-	playerListWidgetTopJsonPath = applicationDirPath + "/program/json/app.window.player.top.info.json";
-	playerListWidgetItemWidth = "window.player.list.item.width.content.width";
-	playerListWidgetItemSplitWidth = "window.player.list.item.width.split";
-	playerListWidgetItemWidgetIndexWidth = "window.player.list.item.width.index";
-	playerListWidgetItemMusicNameWidth = "window.player.list.item.width.name";
-	playerListWidgetItemMusicSingerWidth = "window.player.list.item.width.singer";
-	playerListWidgetItemMusicDurationWidth = "window.player.list.item.width.duration";
-	playerListWidgetItemWidgetBeforeWidth = "window.player.list.item.width.before";
-	playerListWidgetItemWidgetAfterWidth = "window.player.list.item.width.after";
+	topJsonPath = applicationDirPath + "/program/json/app.window.player.top.info.json";
+	itemWidth = "window.player.list.item.width.content.width";
+	itemSplitWidth = "window.player.list.item.width.split";
+	itemIndexWidth = "window.player.list.item.width.index";
+	itemMusicNameWidth = "window.player.list.item.width.name";
+	itemMusicSingerWidth = "window.player.list.item.width.singer";
+	itemMusicDurationWidth = "window.player.list.item.width.duration";
+	itemWidgetBeforeWidth = "window.player.list.item.width.before";
+	itemWidgetAfterWidth = "window.player.list.item.width.after";
 	return true;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetTopJsonPath( ) const {
-	return playerListWidgetTopJsonPath;
+const QString & PlayerListTopWidgetJsonKey::getTopJsonPath( ) const {
+	return topJsonPath;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetItemWidth( ) const {
-	return playerListWidgetItemWidth;
+const QString & PlayerListTopWidgetJsonKey::getItemWidth( ) const {
+	return itemWidth;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetItemSplitWidth( ) const {
-	return playerListWidgetItemSplitWidth;
+const QString & PlayerListTopWidgetJsonKey::getItemSplitWidth( ) const {
+	return itemSplitWidth;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetItemWidgetIndexWidth( ) const {
-	return playerListWidgetItemWidgetIndexWidth;
+const QString & PlayerListTopWidgetJsonKey::getItemIndexWidth( ) const {
+	return itemIndexWidth;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetItemMusicNameWidth( ) const {
-	return playerListWidgetItemMusicNameWidth;
+const QString & PlayerListTopWidgetJsonKey::getItemMusicNameWidth( ) const {
+	return itemMusicNameWidth;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetItemMusicSingerWidth( ) const {
-	return playerListWidgetItemMusicSingerWidth;
+const QString & PlayerListTopWidgetJsonKey::getItemMusicSingerWidth( ) const {
+	return itemMusicSingerWidth;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetItemMusicDurationWidth( ) const {
-	return playerListWidgetItemMusicDurationWidth;
+const QString & PlayerListTopWidgetJsonKey::getItemMusicDurationWidth( ) const {
+	return itemMusicDurationWidth;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetItemWidgetBeforeWidth( ) const {
-	return playerListWidgetItemWidgetBeforeWidth;
+const QString & PlayerListTopWidgetJsonKey::getItemWidgetBeforeWidth( ) const {
+	return itemWidgetBeforeWidth;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getPlayerListWidgetItemWidgetAfterWidth( ) const {
-	return playerListWidgetItemWidgetAfterWidth;
+const QString & PlayerListTopWidgetJsonKey::getItemWidgetAfterWidth( ) const {
+	return itemWidgetAfterWidth;
 }

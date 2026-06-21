@@ -3,36 +3,36 @@
 #include "iJsonKey.h"
 
 class PlayerListTopWidgetJsonKey : public IJsonKey {
-	QString playerListWidgetTopJsonPath;
-	QString playerListWidgetItemWidth;
-	QString playerListWidgetItemSplitWidth;
-	QString playerListWidgetItemWidgetIndexWidth;
-	QString playerListWidgetItemMusicNameWidth;
-	QString playerListWidgetItemMusicSingerWidth;
-	QString playerListWidgetItemMusicDurationWidth;
-	QString playerListWidgetItemWidgetBeforeWidth;
-	QString playerListWidgetItemWidgetAfterWidth;
+	QString topJsonPath;
+	QString itemWidth;
+	QString itemSplitWidth;
+	QString itemIndexWidth;
+	QString itemMusicNameWidth;
+	QString itemMusicSingerWidth;
+	QString itemMusicDurationWidth;
+	QString itemWidgetBeforeWidth;
+	QString itemWidgetAfterWidth;
 
 public:
 	bool init( ) override;
 
-	virtual const QString & getPlayerListWidgetTopJsonPath( ) const;
+	virtual const QString & getTopJsonPath( ) const;
 
-	virtual const QString & getPlayerListWidgetItemWidth( ) const;
+	virtual const QString & getItemWidth( ) const;
 
-	virtual const QString & getPlayerListWidgetItemSplitWidth( ) const;
+	virtual const QString & getItemSplitWidth( ) const;
 
-	virtual const QString & getPlayerListWidgetItemWidgetIndexWidth( ) const;
+	virtual const QString & getItemIndexWidth( ) const;
 
-	virtual const QString & getPlayerListWidgetItemMusicNameWidth( ) const;
+	virtual const QString & getItemMusicNameWidth( ) const;
 
-	virtual const QString & getPlayerListWidgetItemMusicSingerWidth( ) const;
+	virtual const QString & getItemMusicSingerWidth( ) const;
 
-	virtual const QString & getPlayerListWidgetItemMusicDurationWidth( ) const;
+	virtual const QString & getItemMusicDurationWidth( ) const;
 
-	virtual const QString & getPlayerListWidgetItemWidgetBeforeWidth( ) const;
+	virtual const QString & getItemWidgetBeforeWidth( ) const;
 
-	virtual const QString & getPlayerListWidgetItemWidgetAfterWidth( ) const;
+	virtual const QString & getItemWidgetAfterWidth( ) const;
 };
 
 #endif // PLAYERLISTTOPWIDGETJSONKEY_H_H_HEAD__FILE__

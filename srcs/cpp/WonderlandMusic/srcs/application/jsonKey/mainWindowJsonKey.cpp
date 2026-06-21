@@ -6,30 +6,30 @@ bool MainWindowJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppSettingPath( );
 
-	mainWindowSettingJsonPath = applicationDirPath + "/program/json/app.main.window.stting.json";
-	mainWindowPointXPos = "app.main.window.point.x";
-	mainWindowPointYPos = "app.main.window.point.y";
-	mainWindowSizeWidth = "app.main.window.size.w";
-	mainWindowSizeHeight = "app.main.window.size.h";
+	settingJsonPath = applicationDirPath + "/program/json/app.main.window.stting.json";
+	pointXPos = "app.main.window.point.x";
+	pointYPos = "app.main.window.point.y";
+	sizeWidth = "app.main.window.size.w";
+	sizeHeight = "app.main.window.size.h";
 	return true;
 }
 
-const QString & MainWindowJsonKey::getMainWindowSettingJsonPath( ) const {
-	return mainWindowSettingJsonPath;
+const QString & MainWindowJsonKey::getSettingJsonPath( ) const {
+	return settingJsonPath;
 }
 
-const QString & MainWindowJsonKey::getMainWindowPointXPos( ) const {
-	return mainWindowPointXPos;
+const QString & MainWindowJsonKey::getPointXPos( ) const {
+	return pointXPos;
 }
 
-const QString & MainWindowJsonKey::getMainWindowPointYPos( ) const {
-	return mainWindowPointYPos;
+const QString & MainWindowJsonKey::getPointYPos( ) const {
+	return pointYPos;
 }
 
-const QString & MainWindowJsonKey::getMainWindowSizeWidth( ) const {
-	return mainWindowSizeWidth;
+const QString & MainWindowJsonKey::getSizeWidth( ) const {
+	return sizeWidth;
 }
 
-const QString & MainWindowJsonKey::getMainWindowSizeHeight( ) const {
-	return mainWindowSizeHeight;
+const QString & MainWindowJsonKey::getSizeHeight( ) const {
+	return sizeHeight;
 }

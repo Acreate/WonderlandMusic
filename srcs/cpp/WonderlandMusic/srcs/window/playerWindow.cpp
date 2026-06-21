@@ -141,8 +141,13 @@ void PlayerWindow::mouseReleaseEvent( QMouseEvent *event ) {
 	auto mouseButton = event->button( );
 
 	switch( mouseButton ) {
-		case Qt::MouseButton::RightButton :
-			playerWidgetMenu->exec( QCursor::pos( ) );
-			break;
+		case Qt::MouseButton::RightButton : {
+			auto point = QCursor::pos( );
+			auto mapFromGlobal = playListWidgetScrollArea->mapFromGlobal( point );
+			auto contentsRect = playListWidgetScrollArea->contentsRect( );
+			if( contentsRect.contains( mapFromGlobal ) )
+				playerWidgetMenu->exec( point );
+		}
+		break;
 	}
 }

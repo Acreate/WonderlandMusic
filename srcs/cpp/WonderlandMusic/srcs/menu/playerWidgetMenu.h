@@ -2,6 +2,8 @@
 #define PLAYERWIDGETMENU_H_H_HEAD__FILE__
 
 #include <QMenu>
+class JsonFileKey;
+class PlayerListMenuJsonKey;
 class PlayerListMenuTranslate;
 class MusicDecoder;
 class AppTranslate;
@@ -17,6 +19,8 @@ protected:
 	const AppTranslate *appTranslate;
 	PlayerListMenuTranslate *playerListMenuTranslate;
 	MusicDecoder *musicDecoder;
+	const JsonFileKey *jsonFileKey;
+	PlayerListMenuJsonKey *playerListMenuJsonKey;
 	/// @brief 文件选择工作路径
 	QString fileSelectWorkPath;
 	/// @brief 目录选择工作路径
@@ -51,6 +55,13 @@ protected:
 public:
 	PlayerWidgetMenu( PlayerListWidget *player_list_widget );
 
+	virtual bool init( );
+
+	virtual bool loadJsonPathInfo( );
+
+	virtual bool writeJsonPathInfo( );
+
+protected:
 	virtual bool initVar( );
 
 	virtual bool initSubMenu( );
@@ -59,20 +70,20 @@ public:
 
 	virtual bool initConnectAcction( );
 
-	virtual bool init( );
+	virtual void setCurrentSelectPlay( );
 
+	virtual void insterCurrentSelectPlay( );
+
+	virtual void removePlayListSelectInfo( );
+
+	virtual void deletePlayListSelectFile( );
+
+	virtual void selectListMoveTop( );
+
+	virtual void selectListMoveBottom( );
+	
 protected:
-	void setCurrentSelectPlay( );
-
-	void insterCurrentSelectPlay( );
-
-	void removePlayListSelectInfo( );
-
-	void deletePlayListSelectFile( );
-
-	void selectListMoveTop( );
-
-	void selectListMoveBottom( );
+	void hideEvent( QHideEvent * ) override;
 };
 
 #endif // PLAYERWIDGETMENU_H_H_HEAD__FILE__

@@ -1,10 +1,13 @@
 ﻿#include "playerWidgetMenu.h"
 
 #include <QFileDialog>
+#include <QJsonObject>
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
+#include "../application/jsonFileKey.h"
 #include "../application/musicDecoder.h"
+#include "../application/jsonKey/playerListMenuJsonKey.h"
 #include "../application/translate/playerListMenuTranslate.h"
 
 #include "../tools/pathTools.h"
@@ -30,6 +33,14 @@ bool PlayerWidgetMenu::initVar( ) {
 	musicDecoder = appInstance->getMusicDecoder( );
 	if( musicDecoder == nullptr )
 		return false;
+	jsonFileKey = appInstance->getJsonFileKey( );
+	if( jsonFileKey == nullptr )
+		return false;
+	playerListMenuJsonKey = jsonFileKey->getPlayerListMenu( );
+	if( playerListMenuJsonKey == nullptr )
+		return false;
+	fileSelectWorkPath = QDir::currentPath( );
+	dirSelectWorkPath = QDir::currentPath( );
 	return true;
 }
 
@@ -39,7 +50,7 @@ bool PlayerWidgetMenu::initSubMenu( ) {
 	removeMenu = addMenu( playerListMenuTranslate->getPlayerListMenuMoveMenu( ) );
 	controlMenu = addMenu( playerListMenuTranslate->getPlayerListMenuControlMenu( ) );
 
-	loadMenu = addMenu( playerListMenuTranslate->getPlayerListMenuControlMenu( ) );
+	loadMenu = addMenu( playerListMenuTranslate->getPlayerListMenuFileLoadMenu( ) );
 	return true;
 }
 
@@ -142,6 +153,32 @@ bool PlayerWidgetMenu::init( ) {
 	return true;
 }
 
+bool PlayerWidgetMenu::loadJsonPathInfo( ) {
+	auto jsonPath = playerListMenuJsonKey->getSettingJsonPath( );
+	QJsonObject readObj;
+	if( PathTools::readJsonObject( readObj, jsonPath ) == false )
+		return true;
+	auto end = readObj.end( );
+	auto find = readObj.find( playerListMenuJsonKey->getFileSelectWorkPath( ) );
+	if( find != end )
+		fileSelectWorkPath = find.value( ).toString( fileSelectWorkPath );
+	find = readObj.find( playerListMenuJsonKey->getDirSelectWorkPath( ) );
+	if( find != end )
+		dirSelectWorkPath = find.value( ).toString( dirSelectWorkPath );
+	return true;
+}
+
+bool PlayerWidgetMenu::writeJsonPathInfo( ) {
+	auto jsonPath = playerListMenuJsonKey->getSettingJsonPath( );
+	QJsonObject writeObj;
+
+	writeObj.insert( playerListMenuJsonKey->getFileSelectWorkPath( ), fileSelectWorkPath );
+	writeObj.insert( playerListMenuJsonKey->getDirSelectWorkPath( ), dirSelectWorkPath );
+
+	PathTools::writeJsonObject( writeObj, jsonPath );
+	return true;
+}
+
 void PlayerWidgetMenu::setCurrentSelectPlay( ) {
 	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
@@ -176,4 +213,9 @@ void PlayerWidgetMenu::selectListMoveBottom( ) {
 	std::vector< MusicInfoItemWidget * > selectVector;
 	playerListWidget->getSelectItemWidgetVector( selectVector );
 	musicDecoder->selectListMoveBottom( selectVector );
+}
+
+void PlayerWidgetMenu::hideEvent( QHideEvent *hide_event ) {
+	writeJsonPathInfo( );
+	QMenu::hideEvent( hide_event );
 }

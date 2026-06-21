@@ -162,7 +162,7 @@ bool MainWindow::initDockWidget( ) {
 bool MainWindow::initMainWindowSetting( ) {
 	// 获取 json 路径
 	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
-	auto mainWindowJsonFile = windowJsonFileKey->getMainWindowSettingJsonPath( );
+	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
 	QJsonObject mainWindowSettingJsonObject;
 	if( PathTools::readJsonObject( mainWindowSettingJsonObject, mainWindowJsonFile ) == false )
 		return true;
@@ -179,19 +179,19 @@ bool MainWindow::initMainWindowSetting( ) {
 	// 查找返回
 	QJsonObject::iterator find;
 	// 查找 x 坐标
-	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getMainWindowPointXPos( ) );
+	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getPointXPos( ) );
 	if( find != end )
 		x = find.value( ).toInt( );
 	// 查找 y 坐标
-	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getMainWindowPointYPos( ) );
+	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getPointYPos( ) );
 	if( find != end )
 		y = find.value( ).toInt( );
 	// 查找 w 宽度
-	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getMainWindowSizeWidth( ) );
+	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getSizeWidth( ) );
 	if( find != end )
 		width = find.value( ).toInt( );
 	// 查找 h 高度
-	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getMainWindowSizeHeight( ) );
+	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getSizeHeight( ) );
 	if( find != end )
 		height = find.value( ).toInt( );
 	// 设置坐标与宽高
@@ -218,16 +218,16 @@ bool MainWindow::saveMainWindowSetting( ) {
 	auto geo = geometry( );
 	int windowX = geo.x( );
 	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
-	wirteJsonObject.insert( mainWindowJsonFileKey->getMainWindowPointXPos( ), windowX );
+	wirteJsonObject.insert( mainWindowJsonFileKey->getPointXPos( ), windowX );
 	int windowY = geo.y( );
-	wirteJsonObject.insert( mainWindowJsonFileKey->getMainWindowPointYPos( ), windowY );
+	wirteJsonObject.insert( mainWindowJsonFileKey->getPointYPos( ), windowY );
 	int windowWidth = geo.width( );
-	wirteJsonObject.insert( mainWindowJsonFileKey->getMainWindowSizeWidth( ), windowWidth );
+	wirteJsonObject.insert( mainWindowJsonFileKey->getSizeWidth( ), windowWidth );
 	int windowHeight = geo.height( );
-	wirteJsonObject.insert( mainWindowJsonFileKey->getMainWindowSizeHeight( ), windowHeight );
+	wirteJsonObject.insert( mainWindowJsonFileKey->getSizeHeight( ), windowHeight );
 
 	// 获取 json 路径
-	auto mainWindowJsonFile = mainWindowJsonFileKey->getMainWindowSettingJsonPath( );
+	auto mainWindowJsonFile = mainWindowJsonFileKey->getSettingJsonPath( );
 	PathTools::writeJsonObject( wirteJsonObject, mainWindowJsonFile );
 	return true;
 }

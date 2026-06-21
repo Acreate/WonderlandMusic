@@ -6,12 +6,15 @@ class PlayerListMenuTranslate : public ITranslate {
 	QString playerListMenuFileLoadMenu;
 	QString playerListAddMultiMusicFileToCollectionAction;
 	QString playerListAddMultiMusicDirToCollectionAction;
+	
 	QString playerListMenuenuPlayerMenu;
 	QString playerListMenuPlayerMenuSetCurrentPlayAction;
 	QString playerListMenuPlayerMenuInsterCurrentPlayAction;
+	
 	QString playerListMenuControlMenu;
 	QString playerListMenuControlMenuRemoveMusicAction;
 	QString playerListMenuControlMenuDeleteMusicAction;
+	
 	QString playerListMenuMoveMenu;
 	QString playerListMenuControlMenuMoveTopMusicAction;
 	QString playerListMenuControlMenuMoveBottomMusicAction;

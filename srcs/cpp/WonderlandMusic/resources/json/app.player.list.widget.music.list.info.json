@@ -1,0 +1,41 @@
+{
+    "list.name": {
+        "0": {
+            "music.duartion": 251480,
+            "music.file": "D:/downLoads/Music/audio/暧昧 - 杨丞琳.mp3",
+            "music.name": "暧昧",
+            "music.singer": "杨丞琳"
+        },
+        "1": {
+            "music.duartion": 250070,
+            "music.file": "D:/downLoads/Music/audio/流星雨又来临 - 魏晨.mp3",
+            "music.name": "流星雨又来临",
+            "music.singer": "魏晨"
+        },
+        "2": {
+            "music.duartion": 141609,
+            "music.file": "D:/downLoads/Music/audio/不娶恩 - 任夏.mp3",
+            "music.name": "不娶恩",
+            "music.singer": "任夏"
+        },
+        "3": {
+            "music.duartion": 280711,
+            "music.file": "D:/downLoads/Music/audio/暧昧 - 王菲.mp3",
+            "music.name": "暧昧",
+            "music.singer": "王菲"
+        },
+        "4": {
+            "music.duartion": 311327,
+            "music.file": "D:/downLoads/Music/audio/雪落下的声音 - 陆虎.mp3",
+            "music.name": "雪落下的声音",
+            "music.singer": "陆虎"
+        },
+        "5": {
+            "music.duartion": 294008,
+            "music.file": "D:/downLoads/Music/audio/菊花台 - 周杰伦.mp3",
+            "music.name": "菊花台",
+            "music.singer": "周杰伦"
+        }
+    },
+    "list.size": 6
+}

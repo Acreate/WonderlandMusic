@@ -6,6 +6,8 @@
 
 #include "msgInfo/messageErrorOut.h"
 
+#include "tools/autoMakePtrTools.h"
+
 #include "window/mainWindow.h"
 
 static MessageErrorOut *messageErrorOut = nullptr;
@@ -48,6 +50,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete messageErrorOut;
 		return -1;
 	}
+
 	int exec = application.run( );
 	*messageErrorOut << "----------------------"
 		<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )

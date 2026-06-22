@@ -29,7 +29,6 @@ protected:
 
 protected:
 	std::vector< QString * > supperDecodeFileSuffix;
-	QMediaPlayer *mediaPlayer;
 
 protected:
 	virtual void appendDecodeFileSuffix( const QString &decode_file_suffix );
@@ -53,16 +52,6 @@ public:
 	virtual bool init( );
 
 	virtual std::vector< QString > getSupperDecodeFileSuffix( ) const;
-
-	virtual bool setMusicPlayerSourceFile( const QString &file_path );
-
-	virtual bool playerMusic( );
-
-	virtual bool stopMusic( );
-
-	virtual bool pauseMusic( );
-
-	virtual QString getMusicPlayerSourceFile( ) const;
 };
 
 #endif // MUSICDECODER_H_H_HEAD__FILE__

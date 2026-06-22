@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+class MusicPlayer;
+
 namespace std {
 	class mutex;
 }
@@ -41,7 +43,7 @@ protected:
 	QColor drawPenColor;
 	QColor drawFillColor;
 	QPen *pen = nullptr;
-
+	MusicPlayer * musicPlayer;
 protected:
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const;
 

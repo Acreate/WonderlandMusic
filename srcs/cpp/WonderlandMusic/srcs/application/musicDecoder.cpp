@@ -14,11 +14,9 @@
 MusicDecoder::~MusicDecoder( ) {
 	VectorTools::deleteVectorPtr( supperDecodeFileSuffix );
 	supperDecodeFileSuffix.clear( );
-	delete mediaPlayer;
 }
 
 MusicDecoder::MusicDecoder( ) {
-	mediaPlayer = new QMediaPlayer;
 }
 
 bool MusicDecoder::musicFileNmaeSupperDecoder( const QString &music_file_path ) const {
@@ -112,48 +110,4 @@ std::vector< QString > MusicDecoder::getSupperDecodeFileSuffix( ) const {
 		resultData[ index ] = *data[ index ];
 
 	return result;
-}
-
-bool MusicDecoder::setMusicPlayerSourceFile( const QString &file_path ) {
-	QFileInfo info( file_path );
-	if( info.exists( ) == false )
-		return false;
-	if( mediaPlayer->isPlaying( ) )
-		mediaPlayer->stop( );
-	auto source = QUrl::fromLocalFile( file_path );
-	mediaPlayer->setSource( source );
-	return true;
-}
-
-bool MusicDecoder::playerMusic( ) {
-	bool hasAudio = mediaPlayer->hasAudio( );
-	if( hasAudio == false )
-		return false;
-	auto appInstance = AppInstance::getAppInstance( );
-	while( mediaPlayer->mediaStatus( ) != QMediaPlayer::LoadedMedia )
-		appInstance->processEvents( );
-	mediaPlayer->play( );
-	return true;
-}
-
-bool MusicDecoder::stopMusic( ) {
-	bool hasAudio = mediaPlayer->hasAudio( );
-	if( hasAudio == false )
-		return true;
-	mediaPlayer->stop( );
-	return true;
-}
-
-bool MusicDecoder::pauseMusic( ) {
-	bool hasAudio = mediaPlayer->hasAudio( );
-	if( hasAudio == false )
-		return true;
-	mediaPlayer->pause( );
-	return true;
-}
-
-QString MusicDecoder::getMusicPlayerSourceFile( ) const {
-	auto source = mediaPlayer->source( );
-	auto localFile = source.toLocalFile( );
-	return localFile;
 }

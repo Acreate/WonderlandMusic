@@ -23,6 +23,8 @@
 
 #include "../msgInfo/messageErrorOut.h"
 
+#include "../musicPlayer/musicPlayer.h"
+
 #include "../thread/widgetThread.h"
 
 #include "../tools/pathTools.h"
@@ -397,6 +399,7 @@ bool PlayerListWidget::init( ) {
 	selectLeftItemWidget = nullptr;
 	beforeClickTime = new QDateTime;
 	pen = new QPen;
+	musicPlayer = new MusicPlayer;
 	selectItemWidgetVector = new std::vector< MusicInfoItemWidget * >;
 	musicInfoVector = new std::vector< MusicInfoItemWidget * >;
 	indexWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
@@ -482,7 +485,7 @@ bool PlayerListWidget::selectKeyDefaultModifier( ) {
 }
 
 void PlayerListWidget::releaseResource( ) {
-	#define r_d(ptr) if(ptr) { delete ptr; ptr = nullptr;}
+	#define r_d(ptr) if(ptr)  (delete ptr,ptr = nullptr)
 	if( updateMuex ) {
 		updateMuex->lock( );
 		clearMusicInfoVector( );
@@ -504,6 +507,7 @@ void PlayerListWidget::releaseResource( ) {
 		activeLeftItemWidget = nullptr;
 		r_d( beforeClickTime );
 		r_d( pen );
+		r_d( musicPlayer );
 		updateMuex->unlock( );
 		r_d( updateMuex );
 	}

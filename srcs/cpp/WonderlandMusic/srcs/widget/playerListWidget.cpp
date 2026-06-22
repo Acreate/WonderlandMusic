@@ -284,7 +284,7 @@ bool PlayerListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
 			auto data = musicInfoVector->data( );
 			size_t index = 0;
 			for( ; index < count; index += 1 )
-				if( data[ index ]->getMusicFilePath( ) == absFilePath ) {
+				if( data[ index ]->isFile( absFilePath ) ) {
 					resultBool = false;
 					break; // 存在
 				}
@@ -438,19 +438,33 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 	activeLeftItemWidget = append_select_target;
 	selectLeftItemWidget = append_select_target;
 	if( check_key_board_modifier == false ) {
+		selectItemWidgetMutex->lock( );
 		selectKeyControlModifier( );
+		selectItemWidgetMutex->unlock( );
 	} else {
 		auto appInstance = AppInstance::getAppInstance( );
 		auto keyboardModifiers = ( Qt::KeyboardModifier ) appInstance->keyboardModifiers( ).toInt( );
 		switch( keyboardModifiers ) {
 			case Qt::KeyboardModifier::ControlModifier :
+				selectItemWidgetMutex->lock( );
 				selectKeyControlModifier( );
+				selectItemWidgetMutex->unlock( );
 				break;
 			case Qt::KeyboardModifier::ShiftModifier :
-				if( selectKeyShiftModifier( ) == true )
+				selectItemWidgetMutex->lock( );
+				musicInfoMutex->lock( );
+				if( selectKeyShiftModifier( ) == true ) {
+					musicInfoMutex->unlock( );
+					selectItemWidgetMutex->unlock( );
 					break;
+				}
+				musicInfoMutex->unlock( );
+				selectItemWidgetMutex->unlock( );
+
 			default :
+				selectItemWidgetMutex->lock( );
 				selectKeyDefaultModifier( );
+				selectItemWidgetMutex->unlock( );
 		}
 	}
 
@@ -461,11 +475,9 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 }
 
 bool PlayerListWidget::selectKeyDefaultModifier( ) {
-	selectItemWidgetMutex->lock( );
 	selectItemWidgetVector->resize( 1 );
 	auto musicInfoItemWidget = selectItemWidgetVector->data( );
 	musicInfoItemWidget[ 0 ] = selectLeftItemWidget;
-	selectItemWidgetMutex->unlock( );
 	return true;
 }
 
@@ -499,12 +511,10 @@ void PlayerListWidget::releaseResource( ) {
 
 bool PlayerListWidget::selectKeyShiftModifier( ) {
 	std::lock_guard lock( *updateMuex );
-	selectItemWidgetMutex->lock( );
 	auto count = selectItemWidgetVector->size( );
 	if( count > 0 ) {
 		auto selectItemWidgetData = selectItemWidgetVector->data( );
 		auto findFirstItemWidth = selectItemWidgetData[ 0 ];
-		musicInfoMutex->lock( );
 		size_t musicCount = musicInfoVector->size( );
 		auto findSourceData = musicInfoVector->data( );
 		size_t musicIndex = 0;
@@ -512,11 +522,8 @@ bool PlayerListWidget::selectKeyShiftModifier( ) {
 		for( ; musicIndex < musicCount; musicIndex += 1 )
 			if( findSourceData[ musicIndex ] == findFirstItemWidth )
 				break;
-		if( musicIndex == musicCount ) {
-			musicInfoMutex->unlock( );
-			selectItemWidgetMutex->unlock( );
+		if( musicIndex == musicCount )
 			return false;
-		}
 
 		size_t getBegIndex = musicIndex;
 
@@ -524,11 +531,8 @@ bool PlayerListWidget::selectKeyShiftModifier( ) {
 		for( musicIndex = 0; musicIndex < musicCount; musicIndex += 1 )
 			if( findSourceData[ musicIndex ] == selectLeftItemWidget )
 				break;
-		if( musicIndex == musicCount ) {
-			musicInfoMutex->unlock( );
-			selectItemWidgetMutex->unlock( );
+		if( musicIndex == musicCount )
 			return false;
-		}
 
 		size_t getEndIndex = musicIndex;
 		if( getEndIndex != getBegIndex ) {
@@ -553,16 +557,12 @@ bool PlayerListWidget::selectKeyShiftModifier( ) {
 					selectItemWidgetData[ destIndex ] = findSourceData[ musicIndex ];
 			}
 		}
-		musicInfoMutex->unlock( );
-		selectItemWidgetMutex->unlock( );
 		return true;
 	}
-	selectItemWidgetMutex->unlock( );
 	return false; // 未处理
 }
 
 bool PlayerListWidget::selectKeyControlModifier( ) {
-	selectItemWidgetMutex->lock( );
 	auto count = selectItemWidgetVector->size( );
 	if( count ) {
 		auto musicInfoItemWidget = selectItemWidgetVector->data( );
@@ -575,13 +575,25 @@ bool PlayerListWidget::selectKeyControlModifier( ) {
 			for( ; index < count; index += 1 )
 				musicInfoItemWidget[ index ] = musicInfoItemWidget[ index + 1 ];
 			musicInfoItemWidget[ index ] = selectLeftItemWidget; // 排序到末尾
-			selectItemWidgetMutex->unlock( );
 			return true;
 		}
 	}
 	selectItemWidgetVector->emplace_back( selectLeftItemWidget );
-	selectItemWidgetMutex->unlock( );
 	return true;
+}
+
+void PlayerListWidget::removeRepetition( ) {
+	using compUnity = MusicInfoItemWidget *;
+	VectorTools::compIdenticalTypeFinction< compUnity > compFunction = [] ( const compUnity &left, const compUnity &right ) ->bool {
+		if( left->musicFilePath == right->musicFilePath )
+			return true;
+		return false;
+	};
+	std::vector< MusicInfoItemWidget * > release;
+	std::vector< MusicInfoItemWidget * > buff;
+	VectorTools::getRepetition( buff, release, *musicInfoVector, compFunction );
+	VectorTools::deleteVectorPtr( release );
+	*musicInfoVector = buff;
 }
 
 void PlayerListWidget::updateItemWidget( ) {
@@ -596,25 +608,16 @@ void PlayerListWidget::updateItemWidget( ) {
 	if( count == 0 ) {
 		if( newWidth > 0 )
 			setFixedWidth( newWidth );
-		musicInfoMutex->unlock( );
 		return;
 	}
 	decltype(musicInfoVector) buff = new std::vector< MusicInfoItemWidget * >;
-	decltype(musicInfoVector) release = new std::vector< MusicInfoItemWidget * >;
+	// 删除空指针
 	VectorTools::removeNullptrVectorPtr( *buff, *musicInfoVector );
 	*musicInfoVector = *buff;
-	using compUnity = MusicInfoItemWidget *;
-	VectorTools::compIdenticalTypeFinction< compUnity > compFunction = [] ( const compUnity &left, const compUnity &right ) ->bool {
-		if( left->musicFilePath == right->musicFilePath )
-			return true;
-		return false;
-	};
-	VectorTools::getRepetition( *buff, *release, *musicInfoVector, compFunction );
-	*musicInfoVector = *buff;
-	VectorTools::deleteVectorPtr( *release );
+	// 删除重复
+	removeRepetition( );
 	count = musicInfoVector->size( );
 	delete buff;
-	delete release;
 	auto data = musicInfoVector->data( );
 	size_t index;
 	for( index = 0; index < count; index += 1 ) {
@@ -812,27 +815,27 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 bool PlayerListWidget::removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target ) {
 	std::vector< MusicInfoItemWidget * > unionSetVector;
 
-	musicInfoMutex->lock( );
 	VectorTools::unionSetVector( *musicInfoVector, remove_source_target, unionSetVector );
 	size_t count = unionSetVector.size( );
-	if( count == 0 ) {
-		musicInfoMutex->unlock( );
+	if( count == 0 )
 		return false;
-	}
 	VectorTools::differenceSetVector( *musicInfoVector, unionSetVector, result_move_target );
 	*musicInfoVector = result_move_target;
 	result_move_target = unionSetVector;
 	selectItemWidgetVector->clear( );
 	selectLeftItemWidget = nullptr;
 	activeLeftItemWidget = nullptr;
-	musicInfoMutex->unlock( );
 	return true;
 }
 
 bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
+	musicInfoMutex->lock( );
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
-	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false )
+	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
+		musicInfoMutex->unlock( );
 		return false;
+	}
+	musicInfoMutex->unlock( );
 	updateItemWidget( );
 	update( );
 	auto deleteFileData = deleteSetVector.data( );
@@ -854,8 +857,12 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 
 bool PlayerListWidget::removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
-	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false )
+	musicInfoMutex->lock( );
+	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
+		musicInfoMutex->unlock( );
 		return false;
+	}
+	musicInfoMutex->unlock( );
 	updateItemWidget( );
 	update( );
 	auto deleteFileData = deleteSetVector.data( );

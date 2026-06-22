@@ -12,7 +12,8 @@ class MusicInfoItem {
 
 protected:
 	PlayerListWidget *parentPlayListWidget;
-
+	bool equFilePath;
+	QString absFilePath;
 	QString musicFilePath;
 	QString musicName;
 	QString musicSinger;
@@ -20,6 +21,7 @@ protected:
 	QString formatStringDuration;
 	size_t index;
 	QString formatStringIndex;
+
 protected:
 	MusicInfoItem( );
 
@@ -31,6 +33,8 @@ public:
 	virtual bool init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms );
 
 	virtual bool init( const QString &file_path, const QMediaMetaData &mediaMetaData );
+
+	virtual bool isFile( const QString &comp_file ) const;
 
 	virtual const QString & getMusicFilePath( ) const;
 

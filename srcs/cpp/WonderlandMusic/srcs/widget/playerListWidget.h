@@ -63,6 +63,8 @@ protected:
 
 	virtual bool removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target );
 
+	virtual void removeRepetition( );
+
 public:
 	~PlayerListWidget( ) override;
 

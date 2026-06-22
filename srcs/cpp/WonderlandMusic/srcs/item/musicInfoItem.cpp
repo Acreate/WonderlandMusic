@@ -22,11 +22,14 @@ MusicInfoItem::MusicInfoItem( PlayerListWidget *parent ) : parentPlayListWidget(
 }
 
 bool MusicInfoItem::init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms ) {
-	musicFilePath = music_file_path;
+	QFileInfo info( music_file_path );
+	musicFilePath = PathTools::getAutoShortenPathName( music_file_path );
+	absFilePath = info.absoluteFilePath( );
 	musicName = music_name;
 	musicSinger = music_singer;
 	this->duration = duration_ms;
 	this->formatStringDuration = DateTimeFormat::millsecondToHourMinSecFrom( duration_ms );
+	equFilePath = absFilePath == musicFilePath;
 	return true;
 }
 
@@ -51,7 +54,16 @@ bool MusicInfoItem::init( const QString &file_path, const QMediaMetaData &mediaM
 		QFileInfo info( musicFilePath );
 		musicName = info.baseName( );
 	}
+	QFileInfo info( file_path );
+	absFilePath = info.absoluteFilePath( );
+	equFilePath = absFilePath == musicFilePath;
 	return true;
+}
+
+bool MusicInfoItem::isFile( const QString &comp_file ) const {
+	if( equFilePath == false )
+		return musicFilePath == comp_file || absFilePath == comp_file;
+	return musicFilePath == comp_file;
 }
 
 const QString & MusicInfoItem::getMusicFilePath( ) const {
@@ -127,5 +139,9 @@ bool MusicInfoItem::forJsonObject( MusicInfoItem &result_music_info, const QJson
 		return false;
 	result_music_info.duration = find.value( ).toInteger( );
 	result_music_info.formatStringDuration = DateTimeFormat::millsecondToHourMinSecFrom( result_music_info.duration );
+
+	QFileInfo info( result_music_info.musicFilePath );
+	result_music_info.absFilePath = info.absoluteFilePath( );
+	result_music_info.equFilePath = result_music_info.absFilePath == result_music_info.musicFilePath;
 	return true;
 }

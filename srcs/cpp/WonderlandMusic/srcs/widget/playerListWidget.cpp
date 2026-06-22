@@ -600,9 +600,21 @@ void PlayerListWidget::updateItemWidget( ) {
 		return;
 	}
 	decltype(musicInfoVector) buff = new std::vector< MusicInfoItemWidget * >;
-	count = VectorTools::removeNullptrVectorPtr( *musicInfoVector, *buff );
+	decltype(musicInfoVector) release = new std::vector< MusicInfoItemWidget * >;
+	VectorTools::removeNullptrVectorPtr( *buff, *musicInfoVector );
 	*musicInfoVector = *buff;
+	using compUnity = MusicInfoItemWidget *;
+	VectorTools::compIdenticalTypeFinction< compUnity > compFunction = [] ( const compUnity &left, const compUnity &right ) ->bool {
+		if( left->musicFilePath == right->musicFilePath )
+			return true;
+		return false;
+	};
+	VectorTools::getRepetition( *buff, *release, *musicInfoVector, compFunction );
+	*musicInfoVector = *buff;
+	VectorTools::deleteVectorPtr( *release );
+	count = musicInfoVector->size( );
 	delete buff;
+	delete release;
 	auto data = musicInfoVector->data( );
 	size_t index;
 	for( index = 0; index < count; index += 1 ) {

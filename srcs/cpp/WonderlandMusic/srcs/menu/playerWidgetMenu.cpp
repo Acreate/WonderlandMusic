@@ -91,10 +91,13 @@ bool PlayerWidgetMenu::initConnectAcction( ) {
 }
 
 void PlayerWidgetMenu::loadDiskFile( ) {
+	QFileInfo fileInfo;
 	QFileDialog dialog( this );
 
 	dialog.setWindowTitle( playerListMenuTranslate->getLoadDiskFileTitle( ) );
-	dialog.setDirectory( fileSelectWorkPath );
+	fileInfo.setFile( fileSelectWorkPath );
+	auto openDirPath = fileInfo.absoluteFilePath( );
+	dialog.setDirectory( openDirPath );
 	dialog.setFileMode( QFileDialog::ExistingFiles );
 
 	auto decodeFileSuffix = musicDecoder->getSupperDecodeFileSuffix( );
@@ -106,7 +109,7 @@ void PlayerWidgetMenu::loadDiskFile( ) {
 		filterSuffixList.append( "*." + data[ index ] );
 	auto musicTypeName = playerListMenuTranslate->getMusicTypeName( );
 	auto filterSuffix = filterSuffixList.join( " " );
-	auto filterName = musicTypeName + "(" + filterSuffix + ")";
+	auto filterName = musicTypeName + "(" + filterSuffix + ");;" + playerListMenuTranslate->getAnyTypeName( ) + "(*.*)";
 	dialog.setNameFilter( filterName );
 	QRect geometry = this->geometry( );
 	auto curentWindowSize = geometry.size( );
@@ -119,7 +122,7 @@ void PlayerWidgetMenu::loadDiskFile( ) {
 	QStringList files = dialog.selectedFiles( );
 	count = files.size( );
 	auto selectFileData = files.data( );
-	QFileInfo fileInfo( selectFileData[ 0 ] );
+	fileInfo.setFile( selectFileData[ 0 ] );
 	auto dir = fileInfo.dir( );
 	fileSelectWorkPath = PathTools::getAutoShortenPathName( dir.absolutePath( ) );
 	writeJsonPathInfo( );
@@ -131,9 +134,13 @@ void PlayerWidgetMenu::loadDiskFile( ) {
 }
 
 void PlayerWidgetMenu::loadDiskDir( ) {
+	QFileInfo fileInfo;
+
 	QFileDialog dialog( this );
 	dialog.setWindowTitle( playerListMenuTranslate->getLoadDiskDirTitle( ) );
-	dialog.setDirectory( dirSelectWorkPath );
+	fileInfo.setFile( dirSelectWorkPath );
+	auto openDirPath = fileInfo.absoluteFilePath( );
+	dialog.setDirectory( openDirPath );
 	dialog.setFileMode( QFileDialog::Directory );
 
 	QRect geometry = this->geometry( );

@@ -78,13 +78,13 @@ public:
 
 	/// @brief 查找重复元素
 	/// @tparam UnityType_ 元素类型
-	/// @param find_vector_source 查找源
 	/// @param single_cace_vector 返回单例列表
 	/// @param result_repetion_vector 返回重复列表
+	/// @param find_vector_source 查找源
 	/// @param comp_function 比较方法
 	/// @return 重复数量
 	template< typename UnityType_ >
-	static size_t getRepetition( const std::vector< UnityType_ > &find_vector_source, std::vector< UnityType_ > &single_cace_vector, std::vector< UnityType_ > &result_repetion_vector, const compIdenticalTypeFinction< UnityType_ > &comp_function ) {
+	static size_t getRepetition( std::vector< UnityType_ > &single_cace_vector, std::vector< UnityType_ > &result_repetion_vector, const std::vector< UnityType_ > &find_vector_source, const compIdenticalTypeFinction< UnityType_ > &comp_function ) {
 		auto count = find_vector_source.size( );
 		if( count == 0 )
 			return 0;
@@ -139,11 +139,11 @@ public:
 
 	/// @brief 去除空指针
 	/// @tparam UnityType_ 元素指针类型
-	/// @param sort_vector_source 源序列
 	/// @param result_vector_source 返回序列结果
+	/// @param sort_vector_source 源序列
 	/// @return 有效个数
 	template< typename UnityType_ >
-	static size_t removeNullptrVectorPtr( const std::vector< UnityType_ * > &sort_vector_source, std::vector< UnityType_ * > &result_vector_source ) {
+	static size_t removeNullptrVectorPtr( std::vector< UnityType_ * > &result_vector_source, const std::vector< UnityType_ * > &sort_vector_source ) {
 		auto count = sort_vector_source.size( );
 		if( count == 0 )
 			return count;

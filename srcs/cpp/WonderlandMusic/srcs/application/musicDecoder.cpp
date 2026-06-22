@@ -95,7 +95,7 @@ bool MusicDecoder::init( ) {
 			return true;
 		return false;
 	};
-	VectorTools::getRepetition( supperDecodeFileSuffix, singleCase, repetition, compFunction );
+	VectorTools::getRepetition( singleCase, repetition, supperDecodeFileSuffix, compFunction );
 	supperDecodeFileSuffix = singleCase;
 	VectorTools::deleteVectorPtr( repetition );
 

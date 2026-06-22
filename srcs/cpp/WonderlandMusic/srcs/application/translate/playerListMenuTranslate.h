@@ -20,6 +20,7 @@ class PlayerListMenuTranslate : public ITranslate {
 	QString playerListMenuControlMenuMoveBottomMusicAction;
 
 	QString musicTypeName;
+	QString anyTypeName;
 	QString loadDiskFileTitle;
 	QString loadDiskDirTitle;
 public:
@@ -54,6 +55,8 @@ public:
 	virtual const QString & getPlayerListMenuControlMenuMoveBottomMusicAction( ) const;
 
 	virtual const QString & getMusicTypeName( ) const;
+
+	virtual const QString & getAnyTypeName( ) const;
 };
 
 #endif // PLAYERLISTMENUTRANSLATE_H_H_HEAD__FILE__

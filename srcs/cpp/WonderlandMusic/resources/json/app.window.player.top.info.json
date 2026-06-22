@@ -1,10 +1,10 @@
 {
     "window.player.list.item.width.after": 4,
     "window.player.list.item.width.before": 4,
-    "window.player.list.item.width.content.width": 371,
-    "window.player.list.item.width.duration": 85,
-    "window.player.list.item.width.index": 44,
-    "window.player.list.item.width.name": 82,
-    "window.player.list.item.width.singer": 132,
+    "window.player.list.item.width.content.width": 815,
+    "window.player.list.item.width.duration": 203,
+    "window.player.list.item.width.index": 170,
+    "window.player.list.item.width.name": 203,
+    "window.player.list.item.width.singer": 211,
     "window.player.list.item.width.split": 4
 }

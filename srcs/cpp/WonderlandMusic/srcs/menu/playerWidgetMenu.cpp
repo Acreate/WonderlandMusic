@@ -121,7 +121,7 @@ void PlayerWidgetMenu::loadDiskFile( ) {
 	auto selectFileData = files.data( );
 	QFileInfo fileInfo( selectFileData[ 0 ] );
 	auto dir = fileInfo.dir( );
-	fileSelectWorkPath = dir.absolutePath( );
+	fileSelectWorkPath = PathTools::getAutoShortenPathName( dir.absolutePath( ) );
 	writeJsonPathInfo( );
 	std::vector< QString > loadVector( count );
 	auto dataPtr = loadVector.data( );
@@ -148,7 +148,7 @@ void PlayerWidgetMenu::loadDiskDir( ) {
 	QStringList files = dialog.selectedFiles( );
 	qsizetype count = files.size( );
 	auto data = files.data( );
-	dirSelectWorkPath = data[ 0 ];
+	dirSelectWorkPath = PathTools::getAutoShortenPathName( data[ 0 ] );
 	writeJsonPathInfo( );
 	size_t index;
 	std::vector< QString > loadVector( count );

@@ -7,6 +7,7 @@
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
+#include "translate/musicInfoItemTranslate.h"
 #include "translate/playerListMenuTranslate.h"
 #include "translate/playerListWidgetTranslate.h"
 #include "translate/playerToolsWidgetTranslate.h"
@@ -37,6 +38,7 @@ bool AppTranslate::translateString( ) {
 	if_init_result( mainWindow );
 	if_init_result( message );
 	if_init_result( playerListWidget );
+	if_init_result( musicInfoItem );
 
 	return true;
 }
@@ -55,6 +57,7 @@ void AppTranslate::deleteResource( ) {
 	d_r( mainWindow );
 	d_r( message );
 	d_r( playerListWidget );
+	d_r( musicInfoItem );
 }
 
 AppTranslate::~AppTranslate( ) {
@@ -76,6 +79,7 @@ bool AppTranslate::init( ) {
 	mainWindow = new MainWindowTranslate;
 	message = new MessageTranslate;
 	playerListWidget = new PlayerListWidgetTranslate;
+	musicInfoItem = new MusicInfoItemTranslate;
 	setCodecForLocale( );
 	if( translateString( ) == false )
 		return false;
@@ -128,4 +132,8 @@ MessageTranslate * AppTranslate::getMessage( ) const {
 
 PlayerListWidgetTranslate * AppTranslate::getPlayerListWidget( ) const {
 	return playerListWidget;
+}
+
+MusicInfoItemTranslate * AppTranslate::getMusicInfoItem( ) const {
+	return musicInfoItem;
 }

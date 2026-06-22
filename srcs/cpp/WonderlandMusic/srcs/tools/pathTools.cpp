@@ -197,6 +197,18 @@ qsizetype PathTools::filterDir( QStringList &result_get_path, const std::vector<
 	return resultDataIndex;
 }
 
+QString PathTools::getAutoShortenPathName( const QString &org_file_path ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationFilePath = appInstance->applicationDirPath( );
+	QDir base( applicationFilePath );
+
+	QString result = base.relativeFilePath( org_file_path );
+	if( result.startsWith( "../" ) == false )
+		return "./" + result; // 不存在上级路径
+	QFileInfo info( org_file_path );
+	return info.absoluteFilePath( ); // 使用绝对路径
+}
+
 qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::vector< QString > &entry_path ) {
 	auto count = entry_path.size( );
 	decltype(count) index;

@@ -43,6 +43,11 @@ public:
 
 	static qsizetype filterDir( QStringList &result_get_path, const std::vector< QString > &entry_path );
 
+	/// @brief 获取建议路径，如果在 app 路径下，则使用相对路径，如果不在，则使用绝对路径
+	/// @param org_file_path 计算路径
+	/// @return 建议路径
+	static QString getAutoShortenPathName( const QString &org_file_path );
+
 	static qsizetype filterMusicFile( QStringList &result_get_path, const std::vector< QString > &entry_path );
 
 	static bool readJsonObject( QJsonObject &result_json_object, const QString &json_file_path );

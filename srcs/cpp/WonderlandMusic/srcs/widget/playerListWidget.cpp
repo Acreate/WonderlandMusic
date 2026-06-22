@@ -189,34 +189,32 @@ bool PlayerListWidget::writeJsonPathInfo( ) {
 	QJsonObject fileJsonObject;
 	musicInfoMutex->lock( );
 	size_t count = musicInfoVector->size( );
-	if( count == 0 ) {
-		musicInfoMutex->unlock( );
-		return true;
-	}
-	auto sourceData = musicInfoVector->data( );
-	std::vector< MusicInfoItemWidget * > buff( count );
-	auto destData = buff.data( );
-	size_t index = 0;
-	for( ; index < count; index += 1 )
-		destData[ index ] = sourceData[ index ];
 	qsizetype max = count;
-	if( ( size_t ) max != count ) {
+	if( ( ( size_t ) max ) != count ) {
 		musicInfoMutex->unlock( );
 		return false;
 	}
 	auto musicPlayerListJsonKey = jsonFileKey->getPlayerList( );
 	fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListCount( ), max );
-	musicInfoMutex->unlock( );
-	QJsonObject arrayJsonObject;
+	if( count ) {
+		auto sourceData = musicInfoVector->data( );
+		std::vector< MusicInfoItemWidget * > buff( count );
+		MusicInfoItemWidget **destData = buff.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			destData[ index ] = sourceData[ index ];
+		musicInfoMutex->unlock( );
+		QJsonObject arrayJsonObject;
 
-	for( index = 0; index < count; index += 1 ) {
-		QJsonObject subJsonObject;
-		if( MusicInfoItem::toJsonObect( subJsonObject, *destData[ index ] ) == false )
-			continue;
-		arrayJsonObject.insert( QString::number( index ), subJsonObject );
-	}
-
-	fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListName( ), arrayJsonObject );
+		for( index = 0; index < count; index += 1 ) {
+			QJsonObject subJsonObject;
+			if( MusicInfoItem::toJsonObect( subJsonObject, *destData[ index ] ) == false )
+				continue;
+			arrayJsonObject.insert( QString::number( index ), subJsonObject );
+		}
+		fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListName( ), arrayJsonObject );
+	} else
+		musicInfoMutex->unlock( );
 
 	auto fileJsonPath = musicPlayerListJsonKey->getMusicPlayerListInfoFileJsonPath( );
 	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
@@ -436,21 +434,26 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 void PlayerListWidget::doubleClickMusicItemWidget( MusicInfoItemWidget *double_target ) {
 }
 
-void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target ) {
+void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier ) {
 	activeLeftItemWidget = append_select_target;
 	selectLeftItemWidget = append_select_target;
-	auto appInstance = AppInstance::getAppInstance( );
-	auto keyboardModifiers = ( Qt::KeyboardModifier ) appInstance->keyboardModifiers( ).toInt( );
-	switch( keyboardModifiers ) {
-		case Qt::KeyboardModifier::ControlModifier :
-			selectKeyControlModifier( );
-			break;
-		case Qt::KeyboardModifier::ShiftModifier :
-			if( selectKeyShiftModifier( ) == true )
+	if( check_key_board_modifier == false ) {
+		selectKeyControlModifier( );
+	} else {
+		auto appInstance = AppInstance::getAppInstance( );
+		auto keyboardModifiers = ( Qt::KeyboardModifier ) appInstance->keyboardModifiers( ).toInt( );
+		switch( keyboardModifiers ) {
+			case Qt::KeyboardModifier::ControlModifier :
+				selectKeyControlModifier( );
 				break;
-		default :
-			selectKeyDefaultModifier( );
+			case Qt::KeyboardModifier::ShiftModifier :
+				if( selectKeyShiftModifier( ) == true )
+					break;
+			default :
+				selectKeyDefaultModifier( );
+		}
 	}
+
 	std::vector< MusicInfoItemWidget * > resultVector;
 	getSelectItemWidgetVector( resultVector );
 	emit itemSelect( resultVector );
@@ -596,6 +599,10 @@ void PlayerListWidget::updateItemWidget( ) {
 		musicInfoMutex->unlock( );
 		return;
 	}
+	decltype(musicInfoVector) buff = new std::vector< MusicInfoItemWidget * >;
+	count = VectorTools::removeNullptrVectorPtr( *musicInfoVector, *buff );
+	*musicInfoVector = *buff;
+	delete buff;
 	auto data = musicInfoVector->data( );
 	size_t index;
 	for( index = 0; index < count; index += 1 ) {
@@ -762,7 +769,7 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				}
 			musicInfoMutex->unlock( );
 			if( selectItem )
-				apendSelectMusicItemWidget( selectItem );
+				apendSelectMusicItemWidget( selectItem, true );
 			if( doubleItemWidget )
 				emit itemDoubleSelect( doubleItemWidget ); // 触发信号
 		}
@@ -771,24 +778,20 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 			MusicInfoItemWidget *selectItem = nullptr;
 			musicInfoMutex->lock( );
 			size_t count = musicInfoVector->size( );
-			if( count == 0 ) {
-				musicInfoMutex->unlock( );
-				return;
+			if( count ) {
+				auto point = event->pos( );
+				auto data = musicInfoVector->data( );
+				size_t index;
+				for( index = 0; index < count; index += 1 )
+					if( data[ index ]->geometry( ).contains( point ) ) {
+						selectItem = data[ index ];
+						break;
+					}
 			}
-
-			auto point = event->pos( );
-			auto data = musicInfoVector->data( );
-			size_t index;
-			for( index = 0; index < count; index += 1 )
-				if( data[ index ]->geometry( ).contains( point ) ) {
-					selectItem = data[ index ];
-					break;
-				}
 			musicInfoMutex->unlock( );
-			if( selectItem ) {
-				apendSelectMusicItemWidget( selectItem );
-				emit popMenu( );
-			}
+			if( selectItem )
+				apendSelectMusicItemWidget( selectItem, false );
+			emit popMenu( );
 		}
 		break;
 	}
@@ -798,7 +801,7 @@ bool PlayerListWidget::removeMusicInfoVector( const std::vector< MusicInfoItemWi
 	std::vector< MusicInfoItemWidget * > unionSetVector;
 
 	musicInfoMutex->lock( );
-	VectorTools::unionSetVector( *musicInfoVector, result_move_target, unionSetVector );
+	VectorTools::unionSetVector( *musicInfoVector, remove_source_target, unionSetVector );
 	size_t count = unionSetVector.size( );
 	if( count == 0 ) {
 		musicInfoMutex->unlock( );
@@ -818,6 +821,7 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
 	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false )
 		return false;
+	updateItemWidget( );
 	update( );
 	auto deleteFileData = deleteSetVector.data( );
 	size_t deleteFileCount = deleteSetVector.size( );
@@ -840,6 +844,7 @@ bool PlayerListWidget::removeListMusicFileList( const std::vector< MusicInfoItem
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
 	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false )
 		return false;
+	updateItemWidget( );
 	update( );
 	auto deleteFileData = deleteSetVector.data( );
 	size_t deleteFileCount = deleteSetVector.size( );

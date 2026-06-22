@@ -51,7 +51,7 @@ protected:
 
 	virtual void doubleClickMusicItemWidget( MusicInfoItemWidget *double_target );
 
-	virtual void apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target );
+	virtual void apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier );
 
 	virtual bool selectKeyShiftModifier( );
 

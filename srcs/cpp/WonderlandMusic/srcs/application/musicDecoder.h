@@ -1,6 +1,7 @@
 ﻿#ifndef MUSICDECODER_H_H_HEAD__FILE__
 #define MUSICDECODER_H_H_HEAD__FILE__
 
+#include <iostream>
 #include <qcontainerfwd.h>
 #include <vector>
 
@@ -10,8 +11,37 @@ class QMediaPlayer;
 class QString;
 
 class MusicDecoder {
+protected:
+	class StringOperator {
+		QStringList *stringList;
+
+	public:
+		StringOperator( );
+
+		virtual ~StringOperator( );
+
+		virtual StringOperator & operator<<( const QString &append );
+
+		virtual const QStringList & getStringList( ) const {
+			return *stringList;
+		}
+	};
+
+protected:
 	std::vector< QString * > supperDecodeFileSuffix;
 	QMediaPlayer *mediaPlayer;
+
+protected:
+	virtual void appendDecodeFileSuffix( const QString &decode_file_suffix );
+
+	virtual void appendDecodeFileSuffix( const QStringList &decode_file_suffix );
+
+	template< typename ...QString >
+	void appendAnyDecodeFileSuffix( QString && ...file_path_vector ) {
+		StringOperator stringBuff;
+		(stringBuff << ... << file_path_vector);
+		appendDecodeFileSuffix( stringBuff.getStringList( ) );
+	}
 
 public:
 	virtual ~MusicDecoder( );
@@ -33,24 +63,6 @@ public:
 	virtual bool pauseMusic( );
 
 	virtual QString getMusicPlayerSourceFile( ) const;
-
-	virtual void addPlayMusicVector( PlayerListWidget *player_list_widget, const std::vector< MusicInfoItemWidget * > &play_vector );
-
-	virtual void insterMusicVector( PlayerListWidget *player_list_widget, const std::vector< MusicInfoItemWidget * > &play_vector );
-
-	virtual void removeAtPlayerListWidgetMusicVector( PlayerListWidget *player_list_widget, const std::vector< MusicInfoItemWidget * > &play_vector );
-
-	virtual void setCurrentSelectPlay( const std::vector< MusicInfoItemWidget * > &selct_play_vector );
-
-	virtual void insterCurrentSelectPlay( const std::vector< MusicInfoItemWidget * > &selct_play_vector );
-
-	virtual void removePlayListSelectInfo( const std::vector< MusicInfoItemWidget * > &selct_play_vector );
-
-	virtual void deletePlayListSelectFile( const std::vector< MusicInfoItemWidget * > &selct_play_vector );
-
-	virtual void selectListMoveTop( const std::vector< MusicInfoItemWidget * > &selct_play_vector );
-
-	virtual void selectListMoveBottom( const std::vector< MusicInfoItemWidget * > &selct_play_vector );
 };
 
 #endif // MUSICDECODER_H_H_HEAD__FILE__

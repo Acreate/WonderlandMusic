@@ -1,13 +1,17 @@
 ﻿#include "musicInfoItem.h"
 
+#include <QFileInfo>
 #include <QJsonObject>
 #include <QMediaMetaData>
 
 #include "../application/appInstance.h"
+#include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
 #include "../application/jsonKey/musicInfoItemJsonKey.h"
+#include "../application/translate/musicInfoItemTranslate.h"
 
 #include "../tools/dateTimeFormat.h"
+#include "../tools/pathTools.h"
 
 #include "../widget/playerListWidget.h"
 
@@ -29,15 +33,24 @@ bool MusicInfoItem::init( const QString &music_file_path, const QString &music_n
 bool MusicInfoItem::init( const QString &file_path, const QMediaMetaData &mediaMetaData ) {
 	if( mediaMetaData.isEmpty( ) )
 		return false;
-	musicName = mediaMetaData.stringValue( QMediaMetaData::Title );
+
 	musicSinger = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
 	if( musicSinger.isEmpty( ) )
 		musicSinger = mediaMetaData.stringValue( QMediaMetaData::AlbumArtist );
 	if( musicSinger.isEmpty( ) )
 		musicSinger = mediaMetaData.stringValue( QMediaMetaData::Author );
+	if( musicSinger.isEmpty( ) ) {
+		auto beingNameNone = AppInstance::getAppInstance( )->getTranslate( )->getMusicInfoItem( )->getMusichumanBeingNameNone( );
+		musicSinger = beingNameNone; // 使用匿名
+	}
 	duration = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
 	formatStringDuration = DateTimeFormat::millsecondToHourMinSecFrom( duration );
-	musicFilePath = file_path;
+	musicFilePath = PathTools::getAutoShortenPathName( file_path );
+	musicName = mediaMetaData.stringValue( QMediaMetaData::Title );
+	if( musicName.isEmpty( ) ) {
+		QFileInfo info( musicFilePath );
+		musicName = info.baseName( );
+	}
 	return true;
 }
 
@@ -100,7 +113,7 @@ bool MusicInfoItem::forJsonObject( MusicInfoItem &result_music_info, const QJson
 	auto find = for_json_object.find( musicInfoItemJsonKey->getMusicInfoFile( ) );
 	if( end == find )
 		return false;
-	result_music_info.musicFilePath = find.value( ).toString( );
+	result_music_info.musicFilePath = PathTools::getAutoShortenPathName( find.value( ).toString( ) );
 	find = for_json_object.find( musicInfoItemJsonKey->getMusicInfoName( ) );
 	if( end == find )
 		return false;

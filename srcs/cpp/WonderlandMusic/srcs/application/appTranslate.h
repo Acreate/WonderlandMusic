@@ -1,6 +1,7 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
 
+class MusicInfoItemTranslate;
 class PlayerListWidgetTranslate;
 class MessageTranslate;
 class MainWindowTranslate;
@@ -28,6 +29,7 @@ protected:
 	MainWindowTranslate *mainWindow = nullptr;
 	MessageTranslate *message = nullptr;
 	PlayerListWidgetTranslate *playerListWidget = nullptr;
+	MusicInfoItemTranslate *musicInfoItem = nullptr;
 
 protected:
 	virtual void setCodecForLocale( );
@@ -66,6 +68,8 @@ public:
 	virtual MessageTranslate * getMessage( ) const;
 
 	virtual PlayerListWidgetTranslate * getPlayerListWidget( ) const;
+
+	virtual MusicInfoItemTranslate * getMusicInfoItem( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

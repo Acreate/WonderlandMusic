@@ -8,15 +8,12 @@
 
 #include "appInstance.h"
 
+#include "../tools/stringTools.h"
+#include "../tools/vectorTools.h"
+
 MusicDecoder::~MusicDecoder( ) {
-	size_t count = supperDecodeFileSuffix.size( );
-	if( count ) {
-		auto data = supperDecodeFileSuffix.data( );
-		size_t index = 0;
-		for( ; index < count; index += 1 )
-			delete data[ index ];
-		supperDecodeFileSuffix.clear( );
-	}
+	VectorTools::deleteVectorPtr( supperDecodeFileSuffix );
+	supperDecodeFileSuffix.clear( );
 	delete mediaPlayer;
 }
 
@@ -41,16 +38,67 @@ bool MusicDecoder::musicFileNmaeSupperDecoder( const QString &music_file_path ) 
 	return false;
 }
 
+MusicDecoder::StringOperator::StringOperator( ) {
+	this->stringList = new QStringList;
+}
+
+MusicDecoder::StringOperator::~StringOperator( ) {
+	delete stringList;
+}
+
+MusicDecoder::StringOperator & MusicDecoder::StringOperator::operator<<( const QString &append ) {
+	*stringList << append;
+	return *this;
+}
+
+void MusicDecoder::appendDecodeFileSuffix( const QString &decode_file_suffix ) {
+	QString *newItemSuffixes = new QString( StringTools::getFileSuffix( decode_file_suffix ).toUpper( ) );
+	*newItemSuffixes = newItemSuffixes->toUpper( );
+
+	supperDecodeFileSuffix.emplace_back( newItemSuffixes );
+}
+
+void MusicDecoder::appendDecodeFileSuffix( const QStringList &decode_file_suffix ) {
+	auto count = decode_file_suffix.size( );
+	if( count == 0 )
+		return;
+	auto data = decode_file_suffix.data( );
+	decltype(count) index = 0;
+	for( ; index < count; index += 1 )
+		appendDecodeFileSuffix( data[ index ] );
+}
+
 bool MusicDecoder::init( ) {
+	// 自定义添加
+	appendAnyDecodeFileSuffix( "wav", "wma", "flac", "m4a", "aac", "ogg" );
 	// 遍历所有支持的媒体格式
 	QMediaFormat mediaFormat;
 	const auto &formats = mediaFormat.supportedAudioCodecs( QMediaFormat::Decode );
 	QMetaEnum metaEnum = QMetaEnum::fromType< QMediaFormat::AudioCodec >( );
+
 	for( const auto &fmt : formats ) {
-		QString *string = new QString( metaEnum.valueToKey( ( quint64 ) fmt ) );
+		QString *string;
+		string = new QString( metaEnum.valueToKey( ( quint64 ) fmt ) );
+		*string = string->toUpper( );
+		supperDecodeFileSuffix.emplace_back( string );
+
+		string = new QString( mediaFormat.audioCodecName( fmt ) );
 		*string = string->toUpper( );
 		supperDecodeFileSuffix.emplace_back( string );
 	}
+	decltype(supperDecodeFileSuffix) singleCase;
+	decltype(supperDecodeFileSuffix) repetition;
+
+	using unityType = QString *;
+	VectorTools::compIdenticalTypeFinction< unityType > compFunction = [] ( auto &left_string_ptr, auto &right_string_ptr ) {
+		if( *left_string_ptr == *right_string_ptr )
+			return true;
+		return false;
+	};
+	VectorTools::getRepetition( supperDecodeFileSuffix, singleCase, repetition, compFunction );
+	supperDecodeFileSuffix = singleCase;
+	VectorTools::deleteVectorPtr( repetition );
+
 	return true;
 }
 
@@ -108,31 +156,4 @@ QString MusicDecoder::getMusicPlayerSourceFile( ) const {
 	auto source = mediaPlayer->source( );
 	auto localFile = source.toLocalFile( );
 	return localFile;
-}
-
-void MusicDecoder::addPlayMusicVector( PlayerListWidget *player_list_widget, const std::vector< MusicInfoItemWidget * > &play_vector ) {
-}
-
-void MusicDecoder::insterMusicVector( PlayerListWidget *player_list_widget, const std::vector< MusicInfoItemWidget * > &play_vector ) {
-}
-
-void MusicDecoder::removeAtPlayerListWidgetMusicVector( PlayerListWidget *player_list_widget, const std::vector< MusicInfoItemWidget * > &play_vector ) {
-}
-
-void MusicDecoder::setCurrentSelectPlay( const std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
-}
-
-void MusicDecoder::insterCurrentSelectPlay( const std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
-}
-
-void MusicDecoder::removePlayListSelectInfo( const std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
-}
-
-void MusicDecoder::deletePlayListSelectFile( const std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
-}
-
-void MusicDecoder::selectListMoveTop( const std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
-}
-
-void MusicDecoder::selectListMoveBottom( const std::vector< MusicInfoItemWidget * > &selct_play_vector ) {
 }

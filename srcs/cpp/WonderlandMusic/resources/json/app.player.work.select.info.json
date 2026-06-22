@@ -1,4 +1,4 @@
 {
-    "play.window.menu.player.path.dir.select": "D:/userCodes/qt/WonderlandMusic/builder/Debug/x86_64_MSVC_bin/WonderlandMusic",
-    "play.window.menu.player.path.file.select": "D:/downLoads/Music/audio"
+    "play.window.menu.player.path.dir.select": "./program/music",
+    "play.window.menu.player.path.file.select": "./program/music"
 }

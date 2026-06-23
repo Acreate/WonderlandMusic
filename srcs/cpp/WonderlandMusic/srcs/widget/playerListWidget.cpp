@@ -25,8 +25,6 @@
 
 #include "../musicPlayer/musicPlayer.h"
 
-#include "../thread/widgetThread.h"
-
 #include "../tools/pathTools.h"
 #include "../tools/vectorTools.h"
 
@@ -778,10 +776,11 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 			for( index = 0; index < count; index += 1 )
 				if( data[ index ]->geometry( ).contains( point ) ) {
 					selectItem = data[ index ];
+
 					// 双击检测
 					auto currentDateTime = QDateTime::currentDateTime( );
-					auto milliseconds = currentDateTime - *beforeClickTime;
-					isDoubleClick = doubleClickIntervalTimeMilliSecond > milliseconds.count( );
+					if( selectLeftItemWidget == selectItem )
+						isDoubleClick = doubleClickIntervalTimeMilliSecond > ( currentDateTime - *beforeClickTime ).count( );
 					*beforeClickTime = currentDateTime;
 					break;
 				}

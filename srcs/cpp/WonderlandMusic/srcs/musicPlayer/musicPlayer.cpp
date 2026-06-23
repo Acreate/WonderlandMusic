@@ -87,6 +87,15 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	QFileInfo loadMusicFileInfo( music_file );
 	if( loadMusicFileInfo.exists( ) == false )
 		return false;
+	
+	// 使用 QMediaPlayer 时，没有噪音
+	/*QAudioOutput *audioOutput = new QAudioOutput;
+	QMediaPlayer *mediaPlayer = new QMediaPlayer;
+	mediaPlayer->setSource( QUrl::fromLocalFile( music_file ) );
+	audioOutput->setVolume( 1.0 );
+	mediaPlayer->setAudioOutput( audioOutput );
+	mediaPlayer->play( );*/
+
 	if( isPlayerMisucFile ) {
 		isStop = false;
 		isPlayerMisucFile = false;
@@ -98,6 +107,7 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 		musicDecode->stop( );
 
 	musicDecode->setSource( music_file );
+
 	musicDecode->start( );
 	return true;
 }

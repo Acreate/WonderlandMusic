@@ -53,17 +53,15 @@ void MusicPlayerThread::run( ) {
 		audioSink->reset( );
 		delete audioSink;
 	}
-	audioSink = new QAudioSink( audioDevice, audioFormat );
-
+	qsizetype sampleCount = audioBuffer.sampleCount( );
+	int channelCount = audioFormat.channelCount( );
 	int sampleRate = audioFormat.sampleRate( );
-	int bytesPerSample = audioFormat.bytesPerSample( );
-	int channels = audioFormat.channelCount( );
-	qsizetype frameByteSize = audioBuffer.sampleCount( );
-	qsizetype byteCount = audioBuffer.byteCount( );
-	double samplesPerFrame = byteCount * 1000.0;
-	samplesPerFrame = samplesPerFrame / bytesPerSample / channels / sampleRate;
+	double samplesPerFrame = sampleCount * 1000.0 / channelCount / sampleRate;
 
-	audioSink->setBufferSize( sampleRate * 100 * frameByteSize / 1000 );
+	//qsizetype frameByteSize = audioBuffer.sampleCount( );
+
+	audioSink = new QAudioSink( audioDevice, audioFormat );
+	audioSink->setBufferSize( sampleRate * 100 * sampleCount / 1000 );
 	audioSink->setVolume( 0.5 );
 	// 获取播放路径
 	ioAudioSinkDevice = audioSink->start( );

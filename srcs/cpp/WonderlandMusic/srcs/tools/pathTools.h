@@ -1,6 +1,7 @@
 ﻿#ifndef PATHTOOLS_H_H_HEAD__FILE__
 #define PATHTOOLS_H_H_HEAD__FILE__
 
+#include <QAudioBuffer>
 #include <QDir>
 #include <QFileInfo>
 class QString;
@@ -53,6 +54,10 @@ public:
 	static bool readJsonObject( QJsonObject &result_json_object, const QString &json_file_path );
 
 	static bool writeJsonObject( const QJsonObject &result_json_object, const QString &json_file_path );
+
+	static bool wirteWavFile( const QString &wirte_file_path, const std::vector< char > &wirte_pcm_vector_data );
+
+	static bool wirteWavFile( const QString &wirte_file_path, const std::vector< QAudioBuffer > &wirte_pcm_vector_data );
 };
 
 #endif // PATHTOOLS_H_H_HEAD__FILE__

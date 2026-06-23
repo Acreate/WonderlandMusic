@@ -320,3 +320,100 @@ bool PathTools::writeJsonObject( const QJsonObject &result_json_object, const QS
 	file.write( byteArray );
 	return true;
 }
+
+#include <QFile>
+#include <QDataStream>
+#include <QByteArray>
+
+// WAV头部结构体 44字节
+struct WavHeader {
+	// RIFF Chunk
+	char riffId[ 4 ] = { 'R', 'I', 'F', 'F' };
+	quint32 fileSize;       // 文件总长度 - 8
+	char waveId[ 4 ] = { 'W', 'A', 'V', 'E' };
+
+	// fmt Chunk
+	char fmtId[ 4 ] = { 'f', 'm', 't', ' ' };
+	quint32 fmtSize = 16;
+	quint16 audioFormat = 1; // 1=PCM
+	quint16 channels;        // 声道数
+	quint32 sampleRate;      // 采样率
+	quint32 byteRate;        // 采样率 * 通道 * 位深度/8
+	quint16 blockAlign;      // 通道 * 位深度/8
+	quint16 bitsPerSample;   // 16 / 8 / 32
+
+	// data Chunk
+	char dataId[ 4 ] = { 'd', 'a', 't', 'a' };
+	quint32 dataSize;        // PCM数据字节长度
+};
+
+/**
+ * @brief 将PCM 16bit数据写入wav文件
+ * @param filePath 输出路径
+ * @param pcmData 原始s16 PCM二进制数据
+ * @param sampleRate 采样率
+ * @param channels 声道 1/2
+ * @return 成功true
+ */
+bool writeWavFile( const QString &filePath, const QByteArray &pcmData,
+					int sampleRate = 44100, int channels = 2 ) {
+	QFile file( filePath );
+	if( !file.open( QIODevice::WriteOnly ) )
+		return false;
+
+	WavHeader header;
+	header.channels = channels;
+	header.sampleRate = sampleRate;
+	header.bitsPerSample = 16;
+
+	header.blockAlign = channels * header.bitsPerSample / 8;
+	header.byteRate = sampleRate * header.blockAlign;
+	header.dataSize = pcmData.size( );
+	header.fileSize = 36 + header.dataSize; // 44-8=36
+
+	QDataStream stream( &file );
+	stream.setByteOrder( QDataStream::LittleEndian ); // WAV小端存储
+
+	// 写入RIFF ID
+	stream.writeRawData( header.riffId, 4 );
+	stream << header.fileSize;
+	stream.writeRawData( header.waveId, 4 );
+
+	// fmt块
+	stream.writeRawData( header.fmtId, 4 );
+	stream << header.fmtSize;
+	stream << header.audioFormat;
+	stream << header.channels;
+	stream << header.sampleRate;
+	stream << header.byteRate;
+	stream << header.blockAlign;
+	stream << header.bitsPerSample;
+
+	// data块
+	stream.writeRawData( header.dataId, 4 );
+	stream << header.dataSize;
+
+	// 写入PCM音频数据
+	file.write( pcmData );
+
+	file.close( );
+	return true;
+}
+
+bool PathTools::wirteWavFile( const QString &wirte_file_path, const std::vector< char > &wirte_pcm_vector_data ) {
+	QByteArray pcm( wirte_pcm_vector_data.data( ), wirte_pcm_vector_data.size( ) );
+	return writeWavFile( wirte_file_path, pcm );
+}
+
+bool PathTools::wirteWavFile( const QString &wirte_file_path, const std::vector< QAudioBuffer > &wirte_pcm_vector_data ) {
+	auto data = wirte_pcm_vector_data.data( );
+	size_t count = wirte_pcm_vector_data.size( );
+	size_t index = 0;
+	QByteArray pcm;
+	auto audioFormat = data[ index ].format( );
+	int channelCount = audioFormat.channelCount( );
+	int sampleRate = audioFormat.sampleRate( );
+	for( ; index < count; index += 1 )
+		pcm.append( data[ index ].data< char >( ), data[ index ].byteCount( ) );
+	return writeWavFile( wirte_file_path, pcm, sampleRate, channelCount );
+}

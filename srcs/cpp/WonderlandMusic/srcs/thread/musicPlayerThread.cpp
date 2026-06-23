@@ -20,11 +20,8 @@ MusicPlayerThread::MusicPlayerThread( const std::vector< QAudioBuffer > &audio_b
 MusicPlayerThread::~MusicPlayerThread( ) {
 	emit overPlayerMusic( currentThisPtr );
 	currentThisPtr = nullptr;
-	if( audioSink ) {
-		audioSink->stop( );
-		audioSink->reset( );
+	if( audioSink )
 		audioSink->deleteLater( );
-	}
 }
 
 void MusicPlayerThread::stop( ) {
@@ -37,37 +34,25 @@ void MusicPlayerThread::run( ) {
 		emit overPlayerMusic( this );
 		return;
 	}
-	auto audioBufferData = audioBufferVector.data( );
+	QAudioBuffer *audioBufferData = audioBufferVector.data( );
 	// 获取播放格式
 	QAudioBuffer audioBuffer = audioBufferData[ 0 ];
 	QAudioFormat audioFormat = audioBuffer.format( );
 	auto audioDevice = QMediaDevices::defaultAudioOutput( );
 	if( !audioDevice.isFormatSupported( audioFormat ) ) {
-		Message_Error_Out << audioDevice.description( ) << " : " << "并不支持该格式";
+		emit overPlayerMusic( this );
 		return;
 	}
 
 	isJuimp = false;
-
-	// 创建播放对象
-	if( audioSink ) {
-		audioSink->stop( );
-		audioSink->reset( );
-		delete audioSink;
-	}
-	qsizetype sampleCount = audioBuffer.sampleCount( );
-	int channelCount = audioFormat.channelCount( );
-	int sampleRate = audioFormat.sampleRate( );
-	// 噪音 点 1 ：等待误差
-	double samplesPerFrame = sampleCount * 1000.0 / channelCount / sampleRate - 20;
-
-	//qsizetype frameByteSize = audioBuffer.sampleCount( );
-
+	// 每帧
+	double samplesPerFrame = 1000.0 / audioFormat.sampleRate( );
 	audioSink = new QAudioSink( audioDevice, audioFormat );
-	// 噪音 点 2 : 缓存过小
-	qsizetype bytes = ( double ) sampleRate * sampleCount / 1000;
-	audioSink->setBufferSize( bytes );
-	audioSink->setVolume( 0.5 );
+	audioSink->reset( );
+	qint64 frameCount = audioBuffer.frameCount( );
+	ulong sleepMS = samplesPerFrame * frameCount;
+	audioSink->setBufferFrameCount( frameCount );
+	audioSink->setVolume( 1.0 );
 	// 获取播放路径
 	ioAudioSinkDevice = audioSink->start( );
 
@@ -78,9 +63,7 @@ void MusicPlayerThread::run( ) {
 		if( isJuimp )
 			break;
 		else {
-			msleep( samplesPerFrame );
-			if( isJuimp )
-				break;
+			msleep( sleepMS );
 			audioBuffer = audioBufferData[ index ];
 			emit playerMusicFrame( currentThisPtr, audioSink, ioAudioSinkDevice, audioBuffer );
 		}

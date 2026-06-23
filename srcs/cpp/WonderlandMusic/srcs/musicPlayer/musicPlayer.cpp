@@ -19,6 +19,7 @@
 
 #include "../tools/autoMakePtrTools.h"
 #include "../tools/calculateTools.h"
+#include "../tools/pathTools.h"
 
 #define  d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr)
 
@@ -61,7 +62,8 @@ bool MusicPlayer::init( ) {
 		size_t size = audio_buffer_vector.size( );
 		if( size == 0 )
 			return;// 不存在帧数据
-
+		if( PathTools::wirteWavFile( "./wriet.wav", audio_buffer_vector ) == false )
+			return;// 缓存写入失败
 		// 创建播放线程
 		auto musicPlayerThread = new MusicPlayerThread( audio_buffer_vector );
 
@@ -88,14 +90,6 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	QFileInfo loadMusicFileInfo( music_file );
 	if( loadMusicFileInfo.exists( ) == false )
 		return false;
-
-	// 使用 QMediaPlayer 时，没有噪音
-	/*QAudioOutput *audioOutput = new QAudioOutput;
-	QMediaPlayer *mediaPlayer = new QMediaPlayer;
-	mediaPlayer->setSource( QUrl::fromLocalFile( music_file ) );
-	audioOutput->setVolume( 1.0 );
-	mediaPlayer->setAudioOutput( audioOutput );
-	mediaPlayer->play( );*/
 
 	if( isPlayerMisucFile ) {
 		isStop = false;

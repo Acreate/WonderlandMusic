@@ -409,7 +409,8 @@ bool PlayerListWidget::init( ) {
 	drawFillColor.setAlpha( 100 );
 	pen->setWidth( drawPenWidth );
 	pen->setColor( drawPenColor );
-
+	if( musicPlayer->init( ) == false )
+		return false;
 	loadJsonPathInfo( );
 	updateItemWidget( );
 	return true;
@@ -435,6 +436,9 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 }
 
 void PlayerListWidget::doubleClickMusicItemWidget( MusicInfoItemWidget *double_target ) {
+	if( musicPlayer->playerMusic( double_target->getMusicFilePath( ) ) == false )
+		return; // 播放失败，则返回
+	emit itemDoubleSelect( double_target ); // 触发信号
 }
 
 void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier ) {
@@ -760,7 +764,7 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	switch( mouseButton ) {
 		case Qt::MouseButton::LeftButton : {
 			MusicInfoItemWidget *selectItem = nullptr;
-			MusicInfoItemWidget *doubleItemWidget = nullptr;
+			bool isDoubleClick = false;
 			musicInfoMutex->lock( );
 			size_t count = musicInfoVector->size( );
 			if( count == 0 ) {
@@ -773,24 +777,20 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 			size_t index;
 			for( index = 0; index < count; index += 1 )
 				if( data[ index ]->geometry( ).contains( point ) ) {
-					if( selectLeftItemWidget == data[ index ] ) {// 双击检测
-						auto currentDateTime = QDateTime::currentDateTime( );
-						auto milliseconds = currentDateTime - *beforeClickTime;
-						if( doubleClickIntervalTimeMilliSecond > milliseconds.count( ) ) {
-							doubleClickMusicItemWidget( data[ index ] );
-							doubleItemWidget = data[ index ];
-						}
-						*beforeClickTime = currentDateTime;
-						break;
-					}
 					selectItem = data[ index ];
+					// 双击检测
+					auto currentDateTime = QDateTime::currentDateTime( );
+					auto milliseconds = currentDateTime - *beforeClickTime;
+					isDoubleClick = doubleClickIntervalTimeMilliSecond > milliseconds.count( );
+					*beforeClickTime = currentDateTime;
 					break;
 				}
 			musicInfoMutex->unlock( );
-			if( selectItem )
+			// 双击或单击，二选一
+			if( isDoubleClick ) // 双击
+				doubleClickMusicItemWidget( selectItem );
+			else if( selectItem ) // 单击
 				apendSelectMusicItemWidget( selectItem, true );
-			if( doubleItemWidget )
-				emit itemDoubleSelect( doubleItemWidget ); // 触发信号
 		}
 		break;
 		case Qt::MouseButton::RightButton : {

@@ -13,12 +13,18 @@
 static MessageErrorOut *messageErrorOut = nullptr;
 static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
 
+#define is_en_filter 0
+
+#if is_en_filter
+	#define en_filter() return
+#else
+	#define en_filter()
+#endif
 void myCategoryFilter( QLoggingCategory *category ) {
 	QString name = category->categoryName( );
-	if( name.indexOf( "multimedia" ) != -1 ||
-		name.indexOf( "ffmpeg" ) != -1 ||
-		name.indexOf( "audio" ) != -1 ||
-		name.indexOf( "video" ) != -1 ) {
+	if( name == "qt.multimedia.ffmpeg" || name == "qt.multimedia.ffmpeg.metadata" || name == "qt.multimedia.audiodevice.probes" || name == "qt.multimedia.ffmpeg.mediadataholder" ) {
+		en_filter( );
+
 		category->setEnabled( QtCriticalMsg, false );
 		category->setEnabled( QtDebugMsg, false );
 		category->setEnabled( QtFatalMsg, false );
@@ -26,11 +32,14 @@ void myCategoryFilter( QLoggingCategory *category ) {
 		category->setEnabled( QtSystemMsg, false );
 		category->setEnabled( QtWarningMsg, false );
 		*messageErrorOut << QObject::tr( "屏蔽" ) + "\"" + name + "\"" + QObject::tr( "日志" );
-	} else if( name.indexOf( "usb" ) != -1 ||
-		name.indexOf( "driver" ) != -1 )
-		category->setEnabled( QtDebugMsg, true );
-	else if( oldCategoryFilter )
-		oldCategoryFilter( category );
+	} else {
+		if( name.indexOf( "usb" ) != -1 ||
+			name.indexOf( "driver" ) != -1 )
+			category->setEnabled( QtDebugMsg, true );
+		else if( oldCategoryFilter )
+			oldCategoryFilter( category );
+		*messageErrorOut << QObject::tr( "通过" ) + "\"" + name + "\"" + QObject::tr( "日志" );
+	}
 }
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {

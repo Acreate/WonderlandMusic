@@ -43,7 +43,8 @@ protected:
 	QColor drawPenColor;
 	QColor drawFillColor;
 	QPen *pen = nullptr;
-	MusicPlayer * musicPlayer;
+	MusicPlayer *musicPlayer;
+
 protected:
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const;
 
@@ -51,6 +52,8 @@ protected:
 
 	virtual bool renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int split_width ) const;
 
+	/// @brief 双击时，调用该函数
+	/// @param double_target 被双击的目标选项
 	virtual void doubleClickMusicItemWidget( MusicInfoItemWidget *double_target );
 
 	virtual void apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier );

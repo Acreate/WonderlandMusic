@@ -2,6 +2,8 @@
 #define MUSICPLAYER_H_H_HEAD__FILE__
 #include <QObject>
 
+class QAudioOutput;
+class QMediaPlayer;
 class QAudioFormat;
 class QAudioDecoder;
 class QAudioSink;
@@ -10,6 +12,8 @@ class MusicPlayer : public QObject {
 	Q_OBJECT;
 
 protected:
+	QAudioOutput *audioOutput;
+	QMediaPlayer *mediaPlayer = nullptr;
 	QAudioSink *audioSink = nullptr;
 	QAudioDecoder *audioDecoder = nullptr;
 	QIODevice *ioDevice;

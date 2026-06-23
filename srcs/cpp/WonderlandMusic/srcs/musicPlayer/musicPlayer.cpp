@@ -18,6 +18,7 @@
 #include "../thread/musicPlayerThread.h"
 
 #include "../tools/autoMakePtrTools.h"
+#include "../tools/calculateTools.h"
 
 #define  d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr)
 
@@ -87,7 +88,7 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	QFileInfo loadMusicFileInfo( music_file );
 	if( loadMusicFileInfo.exists( ) == false )
 		return false;
-	
+
 	// 使用 QMediaPlayer 时，没有噪音
 	/*QAudioOutput *audioOutput = new QAudioOutput;
 	QMediaPlayer *mediaPlayer = new QMediaPlayer;

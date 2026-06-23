@@ -22,6 +22,7 @@ MusicPlayerThread::~MusicPlayerThread( ) {
 	currentThisPtr = nullptr;
 	if( audioSink ) {
 		audioSink->stop( );
+		audioSink->reset( );
 		audioSink->deleteLater( );
 	}
 }
@@ -83,4 +84,5 @@ void MusicPlayerThread::run( ) {
 			audioBuffer = audioBufferData[ index ];
 			emit playerMusicFrame( currentThisPtr, audioSink, ioAudioSinkDevice, audioBuffer );
 		}
+	audioSink->stop( );
 }

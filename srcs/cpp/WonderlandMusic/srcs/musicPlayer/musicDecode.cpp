@@ -5,6 +5,7 @@
 #include <QUrl>
 #include <windows.h>
 
+
 #include "../msgInfo/messageErrorOut.h"
 
 void MusicDecode::deleteResource( ) {
@@ -27,6 +28,7 @@ bool MusicDecode::init( ) {
 
 	connect( audioDecoder, &QAudioDecoder::bufferReady, [this]( ) {
 		QAudioBuffer audioBuffer = audioDecoder->read( );
+		audioBuffer.detach(  );
 		audioBufferVector.emplace_back( audioBuffer );
 	} );
 	connect( audioDecoder, &QAudioDecoder::finished, [this]( ) {
@@ -44,6 +46,7 @@ bool MusicDecode::setSource( const QUrl &url ) {
 	*loadUrl = url;
 	if( audioDecoder->isDecoding( ) )
 		audioDecoder->stop( );
+	audioBufferVector.clear( );
 	audioDecoder->setSource( url );
 	return true;
 }

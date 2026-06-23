@@ -22,51 +22,63 @@
 #define  d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr)
 
 void MusicPlayer::deleteResource( ) {
-	d_r( audioSink );
 	d_r( musicDecode );
 }
 
-void MusicPlayer::playerMusicFrame( MusicPlayerThread *music_player_thread, const QAudioBuffer &audio_buffer ) {
+void MusicPlayer::playerMusicFrame( MusicPlayerThread *music_player_thread, QAudioSink *audioSink, QIODevice *ioAudioSinkDevice, const QAudioBuffer &audio_buffer ) {
+	if( music_player_thread == nullptr )
+		return;
 	if( isPlayerMisucFile == false ) {
 		music_player_thread->stop( );
 		return;
 	}
-	if( audioSink == nullptr ) {
-		audioSink = new QAudioSink( audio_buffer.format( ) );
-		audioSink->setVolume( 1.0 );
-		ioAudioSinkDevice = audioSink->start( );
-	}
 	auto constData = audio_buffer.constData< char >( );
-	qsizetype byteCount = audio_buffer.byteCount( );
+	auto byteCount = audio_buffer.byteCount( );
 	ioAudioSinkDevice->write( constData, byteCount );
 }
 
 void MusicPlayer::overPlayerMusic( MusicPlayerThread *music_player_thread ) {
-	music_player_thread->deleteLater( );
-	if( audioSink ) {
-		delete audioSink;
-		audioSink = nullptr;
-		ioAudioSinkDevice = nullptr;
-	}
+	isPlayerMisucFile = false;
+	isStop = true;
 }
 
 MusicPlayer::MusicPlayer( QObject *parent ) : QObject( parent ) {
 }
 
+MusicPlayer::~MusicPlayer( ) {
+}
+
 bool MusicPlayer::init( ) {
 	deleteResource( );
 	isPlayerMisucFile = false;
+	isStop = true;
+
 	musicDecode = new MusicDecode;
 	if( musicDecode->init( ) == false )
 		return false;
 	connect( musicDecode, &MusicDecode::finished_Signal, [this] ( const std::vector< QAudioBuffer > &audio_buffer_vector ) {
+		size_t size = audio_buffer_vector.size( );
+		if( size == 0 )
+			return;// 不存在帧数据
+
+		// 创建播放线程
 		auto musicPlayerThread = new MusicPlayerThread( audio_buffer_vector );
-		connect( musicPlayerThread, &MusicPlayerThread::playerMusicFrame, this, &MusicPlayer::playerMusicFrame );
-		connect( musicPlayerThread, &MusicPlayerThread::overPlayerMusic, this, &MusicPlayer::overPlayerMusic );
+
+		// 链接线程播放帧信号
+		connect( musicPlayerThread, &MusicPlayerThread::playerMusicFrame, this, &MusicPlayer::playerMusicFrame, Qt::QueuedConnection );
+		// 链接线程帧播放完毕的信号
+		connect( musicPlayerThread, &MusicPlayerThread::overPlayerMusic, this, &MusicPlayer::overPlayerMusic, Qt::QueuedConnection );
+		connect( musicPlayerThread, &QThread::finished, musicPlayerThread, &MusicPlayer::deleteLater, Qt::QueuedConnection );
+
+		// 配置当前对象播放状态
 		isPlayerMisucFile = true;
+		// 开始播放
 		musicPlayerThread->start( );
+		isStop = false;
 	} );
-	connect( musicDecode, &MusicDecode::error_Signal, [] ( MusicDecode::Error error, const QString &error_msg ) {
+	connect( musicDecode, &MusicDecode::error_Signal, [this] ( MusicDecode::Error error, const QString &error_msg ) {
+		if( musicDecode->isDecoding( ) )
+			musicDecode->stop( );
 	} );
 	return true;
 }
@@ -76,12 +88,15 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	if( loadMusicFileInfo.exists( ) == false )
 		return false;
 	if( isPlayerMisucFile ) {
+		isStop = false;
+		isPlayerMisucFile = false;
 		auto appInstance = AppInstance::getAppInstance( );
-		while( isPlayerMisucFile )
+		while( isStop == false )
 			appInstance->processEvents( );
 	}
 	if( musicDecode->isDecoding( ) )
 		musicDecode->stop( );
+
 	musicDecode->setSource( music_file );
 	musicDecode->start( );
 	return true;

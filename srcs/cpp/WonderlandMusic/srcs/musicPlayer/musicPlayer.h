@@ -2,6 +2,7 @@
 #define MUSICPLAYER_H_H_HEAD__FILE__
 #include <QObject>
 
+class QAudioDevice;
 class QAudioBuffer;
 class MusicPlayerThread;
 class MusicDecode;
@@ -15,19 +16,20 @@ class MusicPlayer : public QObject {
 	Q_OBJECT;
 
 protected:
-	QAudioSink *audioSink = nullptr;
 	MusicDecode *musicDecode = nullptr;
-	QIODevice *ioAudioSinkDevice;
 	QString musicFilePath;
 	bool isPlayerMisucFile;
+	bool isStop;
 
 protected:
 	virtual void deleteResource( );
 
 	/// @brief 播放帧
 	/// @param music_player_thread 线程对象
+	/// @param audioSink 音频播放对象
+	/// @param ioAudioSinkDevice 音频输出 io
 	/// @param audio_buffer 帧数据
-	void playerMusicFrame( MusicPlayerThread *music_player_thread, const QAudioBuffer &audio_buffer );
+	void playerMusicFrame( MusicPlayerThread *music_player_thread, QAudioSink *audioSink, QIODevice *ioAudioSinkDevice, const QAudioBuffer &audio_buffer );
 
 	/// @brief 音频播放完毕
 	/// @param music_player_thread 线程对象
@@ -35,6 +37,8 @@ protected:
 
 public:
 	MusicPlayer( QObject *parent = nullptr );
+
+	~MusicPlayer( ) override;
 
 	virtual bool init( );
 

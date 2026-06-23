@@ -2,6 +2,7 @@
 #define MUSICPLAYER_H_H_HEAD__FILE__
 #include <QObject>
 
+class MusicDecode;
 class QAudioOutput;
 class QMediaPlayer;
 class QAudioFormat;
@@ -13,22 +14,13 @@ class MusicPlayer : public QObject {
 
 protected:
 	QAudioOutput *audioOutput;
-	QMediaPlayer *mediaPlayer = nullptr;
 	QAudioSink *audioSink = nullptr;
-	QAudioDecoder *audioDecoder = nullptr;
-	QIODevice *ioDevice;
+	MusicDecode *musicDecode = nullptr;
+	QIODevice *ioAudioSinkDevice;
 	QString musicFilePath;
 
 protected:
 	virtual void deleteResource( );
-
-	// 信号
-protected:
-	virtual void bufferReady( );
-
-	virtual void finished( );
-
-	virtual void formatChanged( const QAudioFormat &fmt );
 
 public:
 	MusicPlayer( QObject *parent = nullptr );

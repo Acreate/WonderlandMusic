@@ -1,5 +1,6 @@
 ﻿#include "musicPlayerThread.h"
 
+#include <QAudioOutput>
 #include <QBuffer>
 #include <QAudioSink>
 #include <QDateTime>
@@ -56,12 +57,15 @@ void MusicPlayerThread::run( ) {
 	qsizetype sampleCount = audioBuffer.sampleCount( );
 	int channelCount = audioFormat.channelCount( );
 	int sampleRate = audioFormat.sampleRate( );
-	double samplesPerFrame = sampleCount * 1000.0 / channelCount / sampleRate;
+	// 噪音 点 1 ：等待误差
+	double samplesPerFrame = sampleCount * 1000.0 / channelCount / sampleRate - 20;
 
 	//qsizetype frameByteSize = audioBuffer.sampleCount( );
 
 	audioSink = new QAudioSink( audioDevice, audioFormat );
-	audioSink->setBufferSize( sampleRate * 100 * sampleCount / 1000 );
+	// 噪音 点 2 : 缓存过小
+	qsizetype bytes = ( double ) sampleRate * sampleCount / 1000;
+	audioSink->setBufferSize( bytes );
 	audioSink->setVolume( 0.5 );
 	// 获取播放路径
 	ioAudioSinkDevice = audioSink->start( );

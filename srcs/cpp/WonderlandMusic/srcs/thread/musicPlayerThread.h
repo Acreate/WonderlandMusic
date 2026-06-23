@@ -2,6 +2,7 @@
 #define MUSICPLAYERTHREAD_H_H_HEAD__FILE__
 #include <QThread>
 
+class QAudioOutput;
 class QBuffer;
 class QAudioDevice;
 class QAudioSink;
@@ -17,6 +18,7 @@ protected:
 	bool isJuimp;
 	QAudioSink *audioSink = nullptr;
 	QIODevice *ioAudioSinkDevice;
+	QAudioOutput* audioOutput;
 
 public:
 	MusicPlayerThread( const std::vector< QAudioBuffer > &audio_buffer_vector );

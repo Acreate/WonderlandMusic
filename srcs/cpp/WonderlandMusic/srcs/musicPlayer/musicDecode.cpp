@@ -3,8 +3,6 @@
 #include <QAudioDecoder>
 #include <QFileInfo>
 #include <QUrl>
-#include <windows.h>
-
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -28,7 +26,7 @@ bool MusicDecode::init( ) {
 
 	connect( audioDecoder, &QAudioDecoder::bufferReady, [this]( ) {
 		QAudioBuffer audioBuffer = audioDecoder->read( );
-		audioBuffer.detach(  );
+		audioBuffer.detach( );
 		audioBufferVector.emplace_back( audioBuffer );
 	} );
 	connect( audioDecoder, &QAudioDecoder::finished, [this]( ) {

@@ -1,7 +1,7 @@
 ﻿#ifndef MUSICDECODE_H_H_HEAD__FILE__
 #define MUSICDECODE_H_H_HEAD__FILE__
 #include <QObject>
-#include <qaudiobuffer.h>
+#include <QAudioBuffer>
 
 class QAudioFormat;
 class QString;

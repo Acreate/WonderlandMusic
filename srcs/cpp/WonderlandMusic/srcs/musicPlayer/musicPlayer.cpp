@@ -15,10 +15,8 @@
 
 #include "../msgInfo/messageErrorOut.h"
 
-#include "../thread/musicPlayerThread.h"
+#include "../thread/musicMediaPlayerThread.h"
 
-#include "../tools/autoMakePtrTools.h"
-#include "../tools/calculateTools.h"
 #include "../tools/pathTools.h"
 
 #define  d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr)
@@ -27,27 +25,11 @@ void MusicPlayer::deleteResource( ) {
 	d_r( musicDecode );
 }
 
-void MusicPlayer::playerMusicFrame( MusicPlayerThread *music_player_thread, QAudioSink *audioSink, QIODevice *ioAudioSinkDevice, const QAudioBuffer &audio_buffer ) {
-	if( music_player_thread == nullptr )
-		return;
-	if( isPlayerMisucFile == false ) {
-		music_player_thread->stop( );
-		return;
-	}
-	auto constData = audio_buffer.constData< char >( );
-	auto byteCount = audio_buffer.byteCount( );
-	ioAudioSinkDevice->write( constData, byteCount );
-}
-
-void MusicPlayer::overPlayerMusic( MusicPlayerThread *music_player_thread ) {
-	isPlayerMisucFile = false;
-	isStop = true;
-}
-
 MusicPlayer::MusicPlayer( QObject *parent ) : QObject( parent ) {
 }
 
 MusicPlayer::~MusicPlayer( ) {
+	deleteResource( );
 }
 
 bool MusicPlayer::init( ) {
@@ -62,16 +44,27 @@ bool MusicPlayer::init( ) {
 		size_t size = audio_buffer_vector.size( );
 		if( size == 0 )
 			return;// 不存在帧数据
-		if( PathTools::wirteWavFile( "./wriet.wav", audio_buffer_vector ) == false )
+		auto wirteFilePath = "./wriet.wav";
+		if( PathTools::wirteWavFile( wirteFilePath, audio_buffer_vector ) == false )
 			return;// 缓存写入失败
+		auto loadUrl = musicDecode->getLoadUrl( );
+		auto localFile = loadUrl->toLocalFile( );
 		// 创建播放线程
-		auto musicPlayerThread = new MusicPlayerThread( audio_buffer_vector );
+		auto musicPlayerThread = new MusicMediaPlayerThread( localFile );
 
-		// 链接线程播放帧信号
-		connect( musicPlayerThread, &MusicPlayerThread::playerMusicFrame, this, &MusicPlayer::playerMusicFrame, Qt::QueuedConnection );
-		// 链接线程帧播放完毕的信号
-		connect( musicPlayerThread, &MusicPlayerThread::overPlayerMusic, this, &MusicPlayer::overPlayerMusic, Qt::QueuedConnection );
-		connect( musicPlayerThread, &QThread::finished, musicPlayerThread, &MusicPlayer::deleteLater, Qt::QueuedConnection );
+		connect( musicPlayerThread, &MusicMediaPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
+		} );
+		connect( musicPlayerThread, &MusicMediaPlayerThread::durationChanged, musicPlayerThread, [this, musicPlayerThread] ( qint64 duration ) {
+			if( isPlayerMisucFile == false ) {
+				musicPlayerThread->stop( );
+				return;
+			}
+		} );
+		connect( musicPlayerThread, &MusicMediaPlayerThread::finished, [musicPlayerThread, this]( ) {
+			musicPlayerThread->deleteLater( );
+			isPlayerMisucFile = false;
+			isStop = true;
+		} );
 
 		// 配置当前对象播放状态
 		isPlayerMisucFile = true;

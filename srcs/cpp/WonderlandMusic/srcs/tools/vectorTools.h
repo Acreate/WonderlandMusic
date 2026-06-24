@@ -6,25 +6,48 @@
 class VectorTools {
 public:
 	/// @brief 相同类型的比较方法
-	/// @tparam UintyType_ 
+	/// @tparam UintyType_ 序列中的元素类型
 	template< typename UintyType_ >
 	using compIdenticalTypeFinction = std::function< bool( const UintyType_ &left, const UintyType_ &right ) >;
+	/// @brief 查找匹配方法
+	/// @tparam UintyType_ 查找序列中的元素类型
+	/// @tparam FindType_ 查找的元素类型
+	template< typename UintyType_, typename FindType_ >
+	using findItemFinction = std::function< bool( const UintyType_ &org, const FindType_ &find ) >;
 
 	/// @brief 查找元素
 	/// @tparam UnityType_ 序列元素类型
+	/// @param result_index 目标下标
 	/// @param find_vector_source 查找源
 	/// @param find_var_target 查找目标
-	/// @param result_index 目标下标
 	/// @return 不存在返回 false
 	template< typename UnityType_ >
-	static bool findIndex( const std::vector< UnityType_ > &find_vector_source, const UnityType_ &find_var_target, size_t &result_index ) {
+	static bool findIndex( size_t &result_index, const std::vector< UnityType_ > &find_vector_source, const UnityType_ &find_var_target ) {
 		auto count = find_vector_source.size( );
 		if( count == 0 )
 			return false;
 		auto data = find_vector_source.data( );
-		result_index = 0;
 		for( ; result_index < count; ++result_index )
 			if( data[ result_index ] == find_var_target )
+				return true;
+		return false;
+	}
+
+	/// @brief 查找元素
+	/// @tparam UnityType_ 序列元素类型
+	/// @param result_index 目标下标
+	/// @param find_vector_source 查找源
+	/// @param find_var_target 查找目标
+	/// @param find_function 查找函数调用
+	/// @return 不存在返回 false
+	template< typename UnityType_, typename FindType_ >
+	static bool findIndex( size_t &result_index, const std::vector< UnityType_ > &find_vector_source, const FindType_ &find_var_target, const findItemFinction< UnityType_, FindType_ > &find_function ) {
+		auto count = find_vector_source.size( );
+		if( count == 0 )
+			return false;
+		auto data = find_vector_source.data( );
+		for( ; result_index < count; ++result_index )
+			if( find_function( data[ result_index ], find_var_target ) )
 				return true;
 		return false;
 	}

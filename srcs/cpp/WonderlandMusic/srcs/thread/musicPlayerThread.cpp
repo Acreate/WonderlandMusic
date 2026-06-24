@@ -1,6 +1,7 @@
 ﻿#include "musicPlayerThread.h"
-#include <QFutureWatcher>
 #include <QtConcurrent>
+
+#include "../application/appInstance.h"
 
 MusicPlayerThread::MusicPlayerThread( const QString &music_file_path ) : musicFilePath( music_file_path ) {
 	controlGepTime = 100;
@@ -14,7 +15,14 @@ bool MusicPlayerThread::startPlayerMusic( ) {
 	if( this == nullptr )
 		return false;
 
-	QFutureWatcher< void > *watcher = new QFutureWatcher< void >( this );
+	if( watcher ) {
+		stopPlayerMusic( );
+		auto appInstance = AppInstance::getAppInstance( );
+		while( watcher )
+			appInstance->processEvents( );
+	}
+
+	watcher = new QFutureWatcher< void >( this );
 	if( watcher == nullptr )
 		return false;
 
@@ -25,9 +33,13 @@ bool MusicPlayerThread::startPlayerMusic( ) {
 		watcher->deleteLater( );
 		return false;
 	}
+	connect( watcher, &QFutureWatcher< void >::started, this, [=]( ) {
+		emit threadStart( );
+	} );
 	connect( watcher, &QFutureWatcher< void >::finished, this, [=]( ) {
 		emit threadOver( );
 		watcher->deleteLater( );
+		watcher = nullptr;
 	} );
 
 	watcher->setFuture( future );

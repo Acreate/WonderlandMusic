@@ -33,10 +33,12 @@ protected:
 	QStringList loadMusicFileHistory;
 	std::mutex *updateMuex = nullptr;
 	std::mutex *musicInfoMutex = nullptr;
+	std::mutex *playerMutex = nullptr;
 	std::vector< MusicInfoItemWidget * > *musicInfoVector = nullptr;
 	QDateTime *beforeClickTime = nullptr;
 	MusicInfoItemWidget *activeLeftItemWidget = nullptr;
 	MusicInfoItemWidget *selectLeftItemWidget = nullptr;
+	MusicInfoItemWidget *playerItemWidget = nullptr;
 	std::mutex *selectItemWidgetMutex = nullptr;
 	std::vector< MusicInfoItemWidget * > *selectItemWidgetVector = nullptr;
 	int drawPenWidth;
@@ -69,6 +71,10 @@ protected:
 	virtual bool removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target );
 
 	virtual void removeRepetition( );
+
+protected Q_SLOTS:
+	void playerStart_slot( const QString &player_music_file );
+	void playerOver_slot( const QString &player_music_file );
 
 public:
 	~PlayerListWidget( ) override;

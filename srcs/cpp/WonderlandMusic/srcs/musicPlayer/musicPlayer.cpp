@@ -16,6 +16,7 @@
 #define  d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr)
 
 void MusicPlayer::deleteResource( ) {
+	playerStop( );
 }
 
 MusicPlayer::MusicPlayer( QObject *parent ) : QObject( parent ) {
@@ -27,8 +28,6 @@ MusicPlayer::~MusicPlayer( ) {
 
 bool MusicPlayer::init( ) {
 	deleteResource( );
-	isPlayerMisucFile = false;
-	isStop = true;
 	return true;
 }
 
@@ -36,40 +35,29 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	QFileInfo loadMusicFileInfo( music_file );
 	if( loadMusicFileInfo.exists( ) == false )
 		return false;
+	playerStop( );
 
-	if( isPlayerMisucFile ) {
-		isStop = false;
-		isPlayerMisucFile = false;
-		auto appInstance = AppInstance::getAppInstance( );
-		while( isStop == false )
-			appInstance->processEvents( );
-	}
+	auto newLoadFile = loadMusicFileInfo.absoluteFilePath( );
 
-	musicFilePath = loadMusicFileInfo.absoluteFilePath( );
-	auto musicPlayerThread = new MusicMediaPlayerThread( musicFilePath );
+	musicPlayerThread = new MusicMediaPlayerThread( newLoadFile );
 
 	connect( musicPlayerThread, &MusicPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
 	} );
-	connect( musicPlayerThread, &MusicPlayerThread::durationChanged, musicPlayerThread, [this, musicPlayerThread] ( qint64 duration ) {
-		if( isPlayerMisucFile == false ) {
-			musicPlayerThread->stopPlayerMusic( );
-			return;
-		}
+	connect( musicPlayerThread, &MusicPlayerThread::durationChanged, musicPlayerThread, [this] ( qint64 duration ) {
 	} );
-	connect( musicPlayerThread, &MusicPlayerThread::threadOver, [musicPlayerThread, this]( ) {
+	connect( musicPlayerThread, &MusicPlayerThread::threadOver, [ this, newLoadFile]( ) {
+		emit playerOver( newLoadFile );
 		this->disconnect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
 		musicPlayerThread->disconnect( );
 		musicPlayerThread->deleteLater( );
-		isPlayerMisucFile = false;
-		isStop = true;
+		musicPlayerThread = nullptr;
 	} );
-	connect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
-	// 配置当前对象播放状态
-	isPlayerMisucFile = true;
+	connect( musicPlayerThread, &MusicPlayerThread::threadStart, [ this, newLoadFile]( ) {
+		emit playerStart( newLoadFile );
+	} );
 	// 开始播放
 	musicPlayerThread->startPlayerMusic( );
-	isStop = false;
-
+	musicFilePath = newLoadFile;
 	return true;
 }
 
@@ -77,10 +65,16 @@ const QString & MusicPlayer::getMusicFilePath( ) const {
 	return musicFilePath;
 }
 
-bool MusicPlayer::isIsPlayerMisucFile( ) const {
-	return isPlayerMisucFile;
+bool MusicPlayer::getIsStop( ) const {
+	return musicPlayerThread;
 }
 
-bool MusicPlayer::isIsStop( ) const {
-	return isStop;
+bool MusicPlayer::playerStop( ) {
+	if( musicPlayerThread ) {
+		musicPlayerThread->stopPlayerMusic( );
+		auto appInstance = AppInstance::getAppInstance( );
+		while( musicPlayerThread )
+			appInstance->processEvents( );
+	}
+	return true;
 }

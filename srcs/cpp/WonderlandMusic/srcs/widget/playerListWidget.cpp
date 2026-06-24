@@ -392,6 +392,7 @@ bool PlayerListWidget::init( ) {
 	updateMuex = new std::mutex;
 	musicInfoMutex = new std::mutex;
 	selectItemWidgetMutex = new std::mutex;
+	playerMutex = new std::mutex;
 	doubleClickIntervalTimeMilliSecond = 300;
 	activeLeftItemWidget = nullptr;
 	selectLeftItemWidget = nullptr;
@@ -411,6 +412,11 @@ bool PlayerListWidget::init( ) {
 		return false;
 	loadJsonPathInfo( );
 	updateItemWidget( );
+
+	// 信号
+	connect( musicPlayer, &MusicPlayer::playerStart, this, &PlayerListWidget::playerStart_slot );
+	connect( musicPlayer, &MusicPlayer::playerOver, this, &PlayerListWidget::playerOver_slot );
+
 	return true;
 }
 
@@ -436,7 +442,6 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 void PlayerListWidget::doubleClickMusicItemWidget( MusicInfoItemWidget *double_target ) {
 	if( musicPlayer->playerMusic( double_target->getMusicFilePath( ) ) == false )
 		return; // 播放失败，则返回
-	emit itemDoubleSelect( double_target ); // 触发信号
 }
 
 void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier ) {
@@ -507,6 +512,10 @@ void PlayerListWidget::releaseResource( ) {
 
 		selectLeftItemWidget = nullptr;
 		activeLeftItemWidget = nullptr;
+		playerMutex->lock( );
+		playerItemWidget = nullptr;
+		playerMutex->unlock( );
+		r_d( playerMutex );
 		r_d( beforeClickTime );
 		r_d( pen );
 		r_d( musicPlayer );
@@ -600,6 +609,33 @@ void PlayerListWidget::removeRepetition( ) {
 	VectorTools::getRepetition( buff, release, *musicInfoVector, compFunction );
 	VectorTools::deleteVectorPtr( release );
 	*musicInfoVector = buff;
+}
+
+void PlayerListWidget::playerStart_slot( const QString &player_music_file ) {
+	musicInfoMutex->lock( );
+	size_t index = 0;
+	using findVectorUnityType = MusicInfoItemWidget *;
+	VectorTools::findItemFinction< findVectorUnityType, QString > findItemFunction = [] ( const findVectorUnityType left, const QString &find_target ) {
+		return left->isFile( find_target );
+	};
+	if( VectorTools::findIndex( index, *musicInfoVector, player_music_file, findItemFunction ) == true )
+		playerItemWidget = musicInfoVector->data( )[ index ];
+	else
+		playerItemWidget = nullptr;
+
+	musicInfoMutex->unlock( );
+}
+
+void PlayerListWidget::playerOver_slot( const QString &player_music_file ) {
+	musicInfoMutex->lock( );
+	size_t index = 0;
+	using findVectorUnityType = MusicInfoItemWidget *;
+	VectorTools::findItemFinction< findVectorUnityType, QString > findItemFunction = [] ( const findVectorUnityType left, const QString &find_target ) {
+		return left->isFile( find_target );
+	};
+	if( VectorTools::findIndex( index, *musicInfoVector, player_music_file, findItemFunction ) == true )
+		playerItemWidget = nullptr;
+	musicInfoMutex->unlock( );
 }
 
 void PlayerListWidget::updateItemWidget( ) {
@@ -786,9 +822,13 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				}
 			musicInfoMutex->unlock( );
 			// 双击或单击，二选一
-			if( isDoubleClick ) // 双击
+			if( isDoubleClick ) {
+				// 双击
+				playerMutex->lock( );
 				doubleClickMusicItemWidget( selectItem );
-			else if( selectItem ) // 单击
+				playerMutex->unlock( );
+				emit itemDoubleSelect( selectItem ); // 触发信号
+			} else if( selectItem ) // 单击
 				apendSelectMusicItemWidget( selectItem, true );
 		}
 		break;
@@ -825,20 +865,22 @@ bool PlayerListWidget::removeMusicInfoVector( const std::vector< MusicInfoItemWi
 	VectorTools::differenceSetVector( *musicInfoVector, unionSetVector, result_move_target );
 	*musicInfoVector = result_move_target;
 	result_move_target = unionSetVector;
-	selectItemWidgetVector->clear( );
-	selectLeftItemWidget = nullptr;
-	activeLeftItemWidget = nullptr;
 	return true;
 }
 
 bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
+	selectItemWidgetMutex->lock( );
 	musicInfoMutex->lock( );
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
 	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
 		musicInfoMutex->unlock( );
 		return false;
 	}
+	selectItemWidgetVector->clear( );
+	selectLeftItemWidget = nullptr;
+	activeLeftItemWidget = nullptr;
 	musicInfoMutex->unlock( );
+	selectItemWidgetMutex->unlock( );
 	updateItemWidget( );
 	update( );
 	auto deleteFileData = deleteSetVector.data( );
@@ -847,9 +889,16 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 	QFile file;
 	MessageErrorOut out;
 	PlayerListWidgetTranslate *playerListWidget = AppInstance::getAppInstance( )->getTranslate( )->getPlayerListWidget( );
+
 	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 ) {
 		file.setFileName( deleteFileData[ deleteFileIndex ]->musicFilePath );
 		bool moveToTrash = file.moveToTrash( );
+		if( deleteFileData[ deleteFileIndex ] == playerItemWidget ) {
+			playerMutex->lock( );
+			musicPlayer->playerStop( ); // 如果存在列表当中，则停止
+			playerItemWidget = nullptr;
+			playerMutex->unlock( );
+		}
 		delete deleteFileData[ deleteFileIndex ];
 		if( moveToTrash )
 			continue;
@@ -860,19 +909,31 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 
 bool PlayerListWidget::removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
+	selectItemWidgetMutex->lock( );
 	musicInfoMutex->lock( );
 	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
 		musicInfoMutex->unlock( );
 		return false;
 	}
+	selectItemWidgetVector->clear( );
+	selectLeftItemWidget = nullptr;
+	activeLeftItemWidget = nullptr;
 	musicInfoMutex->unlock( );
+	selectItemWidgetMutex->unlock( );
 	updateItemWidget( );
 	update( );
 	auto deleteFileData = deleteSetVector.data( );
 	size_t deleteFileCount = deleteSetVector.size( );
 	size_t deleteFileIndex;
-	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 )
+	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 ) {
+		if( deleteFileData[ deleteFileIndex ] == playerItemWidget ) {
+			playerMutex->lock( );
+			musicPlayer->playerStop( ); // 如果存在列表当中，则停止
+			playerItemWidget = nullptr;
+			playerMutex->unlock( );
+		}
 		delete deleteFileData[ deleteFileIndex ];
+	}
 	return true;
 }
 

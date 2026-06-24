@@ -17,8 +17,7 @@ class MusicPlayer : public QObject {
 
 protected:
 	QString musicFilePath;
-	bool isPlayerMisucFile;
-	bool isStop;
+	MusicPlayerThread *musicPlayerThread = nullptr;
 
 protected:
 	virtual void deleteResource( );
@@ -34,9 +33,14 @@ public:
 
 	virtual const QString & getMusicFilePath( ) const;
 
-	virtual bool isIsPlayerMisucFile( ) const;
+	virtual bool getIsStop( ) const;
 
-	virtual bool isIsStop( ) const;
+	virtual bool playerStop( );
+
+Q_SIGNALS:
+	void playerOver( const QString &music_file_path );
+
+	void playerStart( const QString &music_file_path );
 };
 
 #endif // MUSICPLAYER_H_H_HEAD__FILE__

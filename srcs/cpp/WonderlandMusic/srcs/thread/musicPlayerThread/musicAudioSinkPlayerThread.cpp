@@ -9,6 +9,8 @@
 #include <qaudiobuffer.h>
 #include <qaudioformat.h>
 
+#include "../../application/appInstance.h"
+
 MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_music_file ) : MusicPlayerThread( load_music_file ) {
 }
 
@@ -75,13 +77,16 @@ bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_t
 	ioAudioSinkDevice->write( audioBuffer.data< char >( ), audioBuffer.byteCount( ) );
 	auto currentThread = QThread::currentThread( );
 	size_t index;
-	qint64 playerDuration = 0;
+	qint64 playerDurationMillisecond = 0;
 	for( index = 1; index < count; index += 1 ) {
-		qint64 duration = audioBuffer.duration( );
-		playerDuration += duration;
-		emit durationChanged( playerDuration );
+		// 微妙
+		qint64 durationMicroseconds = audioBuffer.duration( );
+		// 毫秒
+		qint64 durationMillisecond = durationMicroseconds / 1000;
+		playerDurationMillisecond += durationMillisecond;
+		emit durationChanged( playerDurationMillisecond );
 		emit positionChanged( index );
-		currentThread->usleep( duration );
+		currentThread->usleep( durationMicroseconds );
 		if( isJump )
 			break;
 		audioBuffer = audioBufferData[ index ];

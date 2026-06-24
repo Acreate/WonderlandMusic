@@ -46,7 +46,7 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	}
 
 	auto localFile = loadMusicFileInfo.absoluteFilePath( );
-	auto musicPlayerThread = new MusicAudioSinkPlayerThread( localFile );
+	auto musicPlayerThread = new MusicMediaPlayerThread( localFile );
 
 	connect( musicPlayerThread, &MusicPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
 	} );

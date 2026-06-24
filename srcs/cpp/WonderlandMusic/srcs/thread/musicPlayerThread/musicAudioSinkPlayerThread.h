@@ -26,6 +26,8 @@ public:
 
 	~MusicAudioSinkPlayerThread( ) override;
 
+	bool startPlayerMusic( ) override;
+
 	bool stopPlayerMusic( ) override;
 
 	bool setPlayerMusicPosition( qint64 position ) override;

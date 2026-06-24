@@ -1,9 +1,11 @@
 ﻿#include "musicAudioSinkPlayerThread.h"
 
+#include <QAudioDecoder>
 #include <QAudioOutput>
 #include <QAudioSink>
 #include <QDateTime>
 #include <QMediaDevices>
+#include <QUrl>
 #include <qaudiobuffer.h>
 #include <qaudioformat.h>
 
@@ -13,6 +15,23 @@ MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_musi
 MusicAudioSinkPlayerThread::~MusicAudioSinkPlayerThread( ) {
 	if( audioSink )
 		audioSink->deleteLater( );
+}
+
+bool MusicAudioSinkPlayerThread::startPlayerMusic( ) {
+	audioDecoder = new QAudioDecoder;
+	connect( audioDecoder, &QAudioDecoder::bufferReady, [this]( ) {
+		auto audioBuffer = audioDecoder->read( );
+		audioBuffer.detach( );
+		audioBufferVector.emplace_back( audioBuffer );
+	} );
+	connect( audioDecoder, &QAudioDecoder::finished, [this]( ) {
+		audioDecoder->deleteLater( );
+		MusicPlayerThread::startPlayerMusic( );
+	} );
+	QUrl musicFile = QUrl::fromLocalFile( MusicPlayerThread::musicFilePath );
+	audioDecoder->setSource( musicFile );
+	audioDecoder->start( );
+	return true;
 }
 
 bool MusicAudioSinkPlayerThread::stopPlayerMusic( ) {
@@ -52,18 +71,21 @@ bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_t
 	audioSink->setVolume( 1.0 );
 	// 获取播放路径
 	ioAudioSinkDevice = audioSink->start( );
+
+	ioAudioSinkDevice->write( audioBuffer.data< char >( ), audioBuffer.byteCount( ) );
 	auto currentThread = QThread::currentThread( );
-	emit playerMusicFrame( this, audioSink, ioAudioSinkDevice, audioBuffer );
 	size_t index;
-	QDateTime pre = QDateTime::currentDateTime( );
+	qint64 playerDuration = 0;
 	for( index = 1; index < count; index += 1 ) {
 		qint64 duration = audioBuffer.duration( );
+		playerDuration += duration;
+		emit durationChanged( playerDuration );
+		emit positionChanged( index );
 		currentThread->usleep( duration );
 		if( isJump )
 			break;
 		audioBuffer = audioBufferData[ index ];
-		emit playerMusicFrame( this, audioSink, ioAudioSinkDevice, audioBuffer );
-		pre = QDateTime::currentDateTime( );
+		ioAudioSinkDevice->write( audioBuffer.data< char >( ), audioBuffer.byteCount( ) );
 	}
 	audioSink->stop( );
 	return true;

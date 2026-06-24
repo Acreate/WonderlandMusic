@@ -8,6 +8,7 @@
 
 #include "../msgInfo/messageErrorOut.h"
 
+#include "../thread/musicPlayerThread/musicAudioSinkPlayerThread.h"
 #include "../thread/musicPlayerThread/musicMediaPlayerThread.h"
 
 #include "../tools/pathTools.h"
@@ -45,24 +46,24 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	}
 
 	auto localFile = loadMusicFileInfo.absoluteFilePath( );
-	auto musicPlayerThread = new MusicMediaPlayerThread( localFile );
+	auto musicPlayerThread = new MusicAudioSinkPlayerThread( localFile );
 
-	connect( musicPlayerThread, &MusicMediaPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
+	connect( musicPlayerThread, &MusicPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
 	} );
-	connect( musicPlayerThread, &MusicMediaPlayerThread::durationChanged, musicPlayerThread, [this, musicPlayerThread] ( qint64 duration ) {
+	connect( musicPlayerThread, &MusicPlayerThread::durationChanged, musicPlayerThread, [this, musicPlayerThread] ( qint64 duration ) {
 		if( isPlayerMisucFile == false ) {
 			musicPlayerThread->stopPlayerMusic( );
 			return;
 		}
 	} );
-	connect( musicPlayerThread, &MusicMediaPlayerThread::threadOver, [musicPlayerThread, this]( ) {
+	connect( musicPlayerThread, &MusicPlayerThread::threadOver, [musicPlayerThread, this]( ) {
+		this->disconnect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
+		musicPlayerThread->disconnect( );
 		musicPlayerThread->deleteLater( );
 		isPlayerMisucFile = false;
 		isStop = true;
 	} );
-	connect( this, &QObject::destroyed, [musicPlayerThread]( ) {
-		musicPlayerThread->stopPlayerMusic( );
-	} );
+	connect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
 	// 配置当前对象播放状态
 	isPlayerMisucFile = true;
 	// 开始播放

@@ -36,71 +36,6 @@ MessageErrorOut & MessageErrorOut::operator<<( const MessageString &msg ) {
 	return *this;
 }
 
-MessageErrorOut & MessageErrorOut::operator<<( const QString &msg ) {
-	outMsgVector.emplace_back( msg );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const QStringList &msg ) {
-	return MessageErrorOut::operator<<( "QStringList[" + QString::number( msg.count( ) ) + "]{\n\t\t" + msg.join( ",\n\t\t" ) + "\n\t};" );
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const QChar &msg ) {
-	outMsgVector.emplace_back( msg );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const char &msg ) {
-	outMsgVector.emplace_back( QChar( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const wchar_t &msg ) {
-	outMsgVector.emplace_back( QChar::fromUcs2( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const int64_t &msg ) {
-	outMsgVector.emplace_back( QString::number( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const int32_t &msg ) {
-	outMsgVector.emplace_back( QString::number( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const int16_t &msg ) {
-	outMsgVector.emplace_back( QString::number( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const uint64_t &msg ) {
-	outMsgVector.emplace_back( QString::number( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const uint32_t &msg ) {
-	outMsgVector.emplace_back( QString::number( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const uint16_t &msg ) {
-	outMsgVector.emplace_back( QString::number( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const uint8_t &msg ) {
-	outMsgVector.emplace_back( QString::number( msg ) );
-	return *this;
-}
-
-MessageErrorOut & MessageErrorOut::operator<<( const void_ptr &msg ) {
-	constexpr size_t base = sizeof( void_ptr ) * 2;
-	outMsgVector.emplace_back( QString( "0x%1" ).arg( ( qulonglong ) msg, 16, base, '0' ).toUpper( ) );
-	return *this;
-}
-
 const QString & MessageErrorOut::getJoinString( ) const {
 	return jointString;
 }
@@ -125,8 +60,8 @@ void MessageErrorOut::setEndString( const QString &end_string ) {
 	endString = end_string;
 }
 
-const std::vector< QString > & MessageErrorOut::getOutMsgVector( ) const {
-	return outMsgVector;
+const std::vector< MessageString > & MessageErrorOut::getOutMsgVector( ) const {
+	return this->outMsgVector;
 }
 
 MessageErrorOut::~MessageErrorOut( ) {
@@ -146,8 +81,8 @@ QString MessageErrorOut::toQString( const DateTimeFormat &date_time_format ) con
 		auto data = outMsgVector.data( );
 		count -= 1;
 		for( index = 0; index < count; ++index )
-			complete += data[ index ] + jointString;
-		complete += data[ index ] + endString;
+			complete += data[ index ].toQString( ) + jointString;
+		complete += data[ index ].toQString( ) + endString;
 	}
 	formatMessageOut( date_time_format, outString, location, complete );
 	return outString;

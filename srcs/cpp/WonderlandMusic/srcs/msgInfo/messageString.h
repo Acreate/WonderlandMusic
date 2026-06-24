@@ -6,7 +6,7 @@ class MessageString {
 protected:
 	QStringList messageList;
 	QString jion;
-
+	bool isTranslate = false;
 public:
 	using void_ptr = void *;
 
@@ -21,6 +21,42 @@ public:
 	MessageString( const QString &message );
 
 	MessageString( const MessageString &message_string );
+
+	MessageString( const void_ptr &in_obj );
+
+	MessageString( const uint8_t &in_obj );
+
+	MessageString( const uint16_t &in_obj );
+
+	MessageString( const uint32_t &in_obj );
+
+	MessageString( const uint64_t &in_obj );
+
+	MessageString( const int8_t &in_obj );
+
+	MessageString( const int16_t &in_obj );
+
+	MessageString( const int32_t &in_obj );
+
+	MessageString( const int64_t &in_obj );
+
+	MessageString( const char in_obj[ ] );
+
+	MessageString( const wchar_t in_obj[ ] );
+
+	MessageString( const char * &in_obj );
+
+	MessageString( const wchar_t * &in_obj );
+
+	MessageString( const std::wstring &in_obj );
+
+	MessageString( const std::string &in_obj );
+
+	virtual const QStringList & getMessageList( ) const;
+
+	virtual bool isIsTranslate( ) const;
+
+	virtual void setIsTranslate( const bool is_translate );
 
 	virtual operator QStringList( ) const;
 
@@ -49,6 +85,10 @@ public:
 	virtual MessageString & operator<<( const int32_t &in_obj );
 
 	virtual MessageString & operator<<( const int64_t &in_obj );
+
+	virtual MessageString & operator<<( const char in_obj[ ] );
+
+	virtual MessageString & operator<<( const wchar_t in_obj[ ] );
 
 	virtual MessageString & operator<<( const char * &in_obj );
 

@@ -1,5 +1,4 @@
 ﻿#include <QDateTime>
-#include <QProcessEnvironment>
 #include <qfile.h>
 
 #include "application/appInstance.h"
@@ -7,8 +6,6 @@
 #include "msgInfo/messageErrorOut.h"
 
 #include "tools/autoMakePtrTools.h"
-
-#include "window/mainWindow.h"
 
 static MessageErrorOut *messageErrorOut = nullptr;
 static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
@@ -67,9 +64,9 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	if( messageErrorOut ) {
 		*messageErrorOut << QObject::tr( "\t: <<<< == 程序日志 == >>>>" );
 		messageErrorOut->setJoinString( "\n" );
+		*messageErrorOut << QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序开始" ) << "----------------------";
 	}
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
-	*messageErrorOut << QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序开始" ) << "----------------------";
 
 	AppInstance application( argc, argv );
 	QString resultString = QObject::tr( "返回值" );

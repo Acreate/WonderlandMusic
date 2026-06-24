@@ -22,6 +22,79 @@ MessageString::MessageString( const MessageString &message_string ) {
 	operator=( message_string );
 }
 
+MessageString::MessageString( const void_ptr &in_obj ) {
+	constexpr size_t base = sizeof( void_ptr ) * 2;
+	this->messageList << QString( "0x%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( );
+}
+
+MessageString::MessageString( const uint8_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+
+MessageString::MessageString( const uint16_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+
+MessageString::MessageString( const uint32_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+
+MessageString::MessageString( const uint64_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+
+MessageString::MessageString( const int8_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+
+MessageString::MessageString( const int16_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+
+MessageString::MessageString( const int32_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+
+MessageString::MessageString( const int64_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+
+MessageString::MessageString( const char in_obj[ ] ) {
+	messageList << QString::fromLocal8Bit( in_obj );
+}
+
+MessageString::MessageString( const wchar_t in_obj[ ] ) {
+	messageList << QString::fromWCharArray( in_obj );
+}
+
+MessageString::MessageString( const char *&in_obj ) {
+	messageList << QString::fromLocal8Bit( in_obj );
+}
+
+MessageString::MessageString( const wchar_t *&in_obj ) {
+	messageList << QString::fromWCharArray( in_obj );
+}
+
+MessageString::MessageString( const std::wstring &in_obj ) {
+	messageList << QString::fromStdWString( in_obj );
+}
+
+MessageString::MessageString( const std::string &in_obj ) {
+	messageList << QString::fromStdString( in_obj );
+}
+
+const QStringList & MessageString::getMessageList( ) const {
+	return messageList;
+}
+
+bool MessageString::isIsTranslate( ) const {
+	return isTranslate;
+}
+
+void MessageString::setIsTranslate( const bool is_translate ) {
+	isTranslate = is_translate;
+}
+
 MessageString::operator QStringList( ) const {
 	return messageList;
 }
@@ -33,10 +106,16 @@ MessageString::operator QString( ) const {
 		count -= 1;
 		decltype(count) index = 0;
 		auto data = messageList.data( );
-		QString jionTranslate = QObject::tr( jion.toUtf8( ).data( ) );
-		for( ; index < count; index += 1 )
-			result = result + QObject::tr( data[ index ].toUtf8( ).data( ) ) + jionTranslate;
-		result = result + QObject::tr( data[ index ].toUtf8( ).data( ) );
+		if( isTranslate ) {
+			QString jionTranslate = QObject::tr( jion.toUtf8( ).data( ) );
+			for( ; index < count; index += 1 )
+				result = result + QObject::tr( data[ index ].toUtf8( ).data( ) ) + jionTranslate;
+			result = result + QObject::tr( data[ index ].toUtf8( ).data( ) );
+		} else {
+			for( ; index < count; index += 1 )
+				result = result + data[ index ] + jion;
+			result = result + data[ index ];
+		}
 	}
 	return result;
 }
@@ -103,6 +182,16 @@ MessageString & MessageString::operator<<( const int32_t &in_obj ) {
 
 MessageString & MessageString::operator<<( const int64_t &in_obj ) {
 	this->messageList << QString::number( in_obj );
+	return *this;
+}
+
+MessageString & MessageString::operator<<( const char in_obj[ ] ) {
+	this->messageList << QString::fromLocal8Bit( in_obj );
+	return *this;
+}
+
+MessageString & MessageString::operator<<( const wchar_t in_obj[ ] ) {
+	this->messageList << QString::fromWCharArray( in_obj );
 	return *this;
 }
 

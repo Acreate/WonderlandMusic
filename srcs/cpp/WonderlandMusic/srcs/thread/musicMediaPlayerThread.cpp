@@ -65,7 +65,7 @@ void MusicMediaPlayerThread::run( ) {
 	do {
 		emit durationChanged( mediaPlayer->duration( ) );
 		emit durationChanged( mediaPlayer->position( ) );
-		msleep( 100 );
+		msleep( 1000 );
 		appInstance->processEvents( );
 	} while( isJump == false );
 	mediaPlayer->stop( );

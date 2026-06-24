@@ -2,6 +2,7 @@
 #define MUSICAUDIOSINKPLAYERTHREAD_H_H_HEAD__FILE__
 #include <QThread>
 
+class QAudioDecoder;
 class QAudioOutput;
 class QBuffer;
 class QAudioDevice;
@@ -19,9 +20,10 @@ protected:
 	QAudioSink *audioSink = nullptr;
 	QIODevice *ioAudioSinkDevice;
 	QAudioOutput *audioOutput;
-
+	QAudioDecoder *audioDecoder = nullptr;
+	QString loadMusicFile;
 public:
-	MusicAudioSinkPlayerThread( const std::vector< QAudioBuffer > &audio_buffer_vector );
+	MusicAudioSinkPlayerThread( const QString &load_music_file );
 
 	~MusicAudioSinkPlayerThread( ) override;
 

@@ -7,13 +7,9 @@
 #include <qaudiobuffer.h>
 #include <qaudioformat.h>
 
-#include "../application/appInstance.h"
-
-#include "../msgInfo/messageErrorOut.h"
-
-MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const std::vector< QAudioBuffer > &audio_buffer_vector ) : audioBufferVector( audio_buffer_vector ) {
+MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_music_file ) {
 	currentThisPtr = this;
-	audioSink = nullptr;
+	loadMusicFile = load_music_file;
 }
 
 MusicAudioSinkPlayerThread::~MusicAudioSinkPlayerThread( ) {

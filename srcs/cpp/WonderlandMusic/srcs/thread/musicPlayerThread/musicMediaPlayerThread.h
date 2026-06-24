@@ -1,16 +1,15 @@
 ﻿#ifndef MUSICMEDIAPLAYERTHREAD_H_H_HEAD__FILE__
 #define MUSICMEDIAPLAYERTHREAD_H_H_HEAD__FILE__
-#include <QThread>
+
+#include "../musicPlayerThread.h"
 
 class QAudioOutput;
 class QMediaPlayer;
 
-class MusicMediaPlayerThread : public QThread {
+class MusicMediaPlayerThread : public MusicPlayerThread {
 	Q_OBJECT;
 
 protected:
-	QString load_file_path;
-	bool isJump;
 	QMediaPlayer *mediaPlayer = nullptr;
 	QAudioOutput *audioOutput = nullptr;
 
@@ -28,15 +27,16 @@ public:
 
 	~MusicMediaPlayerThread( ) override;
 
-	virtual void stop( );
+	bool startPlayerMusic( ) override;
+
+	bool stopPlayerMusic( ) override;
+
+	bool setPlayerMusicPosition( qint64 position ) override;
+
+	bool setPlayerMusicDuration( qint64 duration ) override;
 
 protected:
-	void run( ) override;
-
-Q_SIGNALS:
-	void positionChanged( qint64 position );
-
-	void durationChanged( qint64 duration );
+	bool playerThread( MusicPlayerThread *music_player_thread ) override;
 };
 
 #endif // MUSICMEDIAPLAYERTHREAD_H_H_HEAD__FILE__

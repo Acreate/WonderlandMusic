@@ -16,7 +16,6 @@ class MusicPlayer : public QObject {
 	Q_OBJECT;
 
 protected:
-	MusicDecode *musicDecode = nullptr;
 	QString musicFilePath;
 	bool isPlayerMisucFile;
 	bool isStop;

@@ -5,7 +5,7 @@
 #include <QFileInfo>
 #include <QMediaPlayer>
 
-#include "../application/appInstance.h"
+#include "../../application/appInstance.h"
 
 bool MusicMediaPlayerThread::initVar( ) {
 	if( mediaPlayer )
@@ -19,7 +19,7 @@ bool MusicMediaPlayerThread::initVar( ) {
 }
 
 bool MusicMediaPlayerThread::initSource( ) {
-	QFileInfo info( load_file_path );
+	QFileInfo info( musicFilePath );
 	if( info.exists( ) == false )
 		return false;
 	auto absoluteFilePath = info.absoluteFilePath( );
@@ -38,7 +38,8 @@ bool MusicMediaPlayerThread::initStartStatus( ) {
 	return true;
 }
 
-MusicMediaPlayerThread::MusicMediaPlayerThread( const QString &load_file_path ) : load_file_path( load_file_path ) {
+MusicMediaPlayerThread::MusicMediaPlayerThread( const QString &load_file_path ) : MusicPlayerThread( load_file_path ) {
+	controlGepTime = 100;
 }
 
 MusicMediaPlayerThread::~MusicMediaPlayerThread( ) {
@@ -48,25 +49,42 @@ MusicMediaPlayerThread::~MusicMediaPlayerThread( ) {
 		delete audioOutput;
 }
 
-void MusicMediaPlayerThread::stop( ) {
-	isJump = true;
+bool MusicMediaPlayerThread::startPlayerMusic( ) {
+	MusicPlayerThread::startPlayerMusic( );
+	return true;
 }
 
-void MusicMediaPlayerThread::run( ) {
+bool MusicMediaPlayerThread::stopPlayerMusic( ) {
+	isJump = true;
+	return true;
+}
+
+bool MusicMediaPlayerThread::setPlayerMusicPosition( qint64 position ) {
+	mediaPlayer->setPosition( position );
+	return true;
+}
+
+bool MusicMediaPlayerThread::setPlayerMusicDuration( qint64 duration ) {
+	return false;
+}
+
+bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_thread ) {
 	if( initVar( ) == false )
-		return;
+		return false;
 	if( initSource( ) == false )
-		return;
+		return false;
 	if( initConnectSignals( ) == false )
-		return;
+		return false;
 	if( initStartStatus( ) == false )
-		return;
+		return false;
 	auto appInstance = AppInstance::getAppInstance( );
+	auto currentThread = QThread::currentThread( );
 	do {
 		emit durationChanged( mediaPlayer->duration( ) );
 		emit durationChanged( mediaPlayer->position( ) );
-		msleep( 1000 );
+		currentThread->msleep( controlGepTime );
 		appInstance->processEvents( );
 	} while( isJump == false );
 	mediaPlayer->stop( );
+	return true;
 }

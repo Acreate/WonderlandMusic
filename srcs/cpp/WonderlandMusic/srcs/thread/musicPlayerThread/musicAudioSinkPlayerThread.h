@@ -1,6 +1,7 @@
 ﻿#ifndef MUSICAUDIOSINKPLAYERTHREAD_H_H_HEAD__FILE__
 #define MUSICAUDIOSINKPLAYERTHREAD_H_H_HEAD__FILE__
-#include <QThread>
+
+#include "../musicPlayerThread.h"
 
 class QAudioDecoder;
 class QAudioOutput;
@@ -10,28 +11,31 @@ class QAudioSink;
 class QAudioBuffer;
 class QAudioFormat;
 
-class MusicAudioSinkPlayerThread : public QThread {
+class MusicAudioSinkPlayerThread : public MusicPlayerThread {
 	Q_OBJECT;
 
 protected:
-	MusicAudioSinkPlayerThread *currentThisPtr;
 	std::vector< QAudioBuffer > audioBufferVector;
-	bool isJuimp;
 	QAudioSink *audioSink = nullptr;
 	QIODevice *ioAudioSinkDevice;
 	QAudioOutput *audioOutput;
 	QAudioDecoder *audioDecoder = nullptr;
-	QString loadMusicFile;
+
 public:
 	MusicAudioSinkPlayerThread( const QString &load_music_file );
 
 	~MusicAudioSinkPlayerThread( ) override;
 
-	virtual void stop( );
+	bool stopPlayerMusic( ) override;
+
+	bool setPlayerMusicPosition( qint64 position ) override;
+
+	bool setPlayerMusicDuration( qint64 duration ) override;
 
 protected:
-	void run( ) override;
+	bool playerThread( MusicPlayerThread *music_player_thread ) override;
 
+public:
 Q_SIGNALS :
 	/// @brief 播放帧
 	/// @param music_player_thread 线程对象

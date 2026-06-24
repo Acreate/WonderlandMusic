@@ -7,27 +7,32 @@
 #include <qaudiobuffer.h>
 #include <qaudioformat.h>
 
-MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_music_file ) {
-	currentThisPtr = this;
-	loadMusicFile = load_music_file;
+MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_music_file ) : MusicPlayerThread( load_music_file ) {
 }
 
 MusicAudioSinkPlayerThread::~MusicAudioSinkPlayerThread( ) {
-	emit overPlayerMusic( currentThisPtr );
-	currentThisPtr = nullptr;
 	if( audioSink )
 		audioSink->deleteLater( );
 }
 
-void MusicAudioSinkPlayerThread::stop( ) {
-	isJuimp = true;
+bool MusicAudioSinkPlayerThread::stopPlayerMusic( ) {
+	isJump = true;
+	return false;
 }
 
-void MusicAudioSinkPlayerThread::run( ) {
+bool MusicAudioSinkPlayerThread::setPlayerMusicPosition( qint64 position ) {
+	return false;
+}
+
+bool MusicAudioSinkPlayerThread::setPlayerMusicDuration( qint64 duration ) {
+	return false;
+}
+
+bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_thread ) {
 	size_t count = audioBufferVector.size( );
 	if( count == 0 ) {
 		emit overPlayerMusic( this );
-		return;
+		return false;
 	}
 	QAudioBuffer *audioBufferData = audioBufferVector.data( );
 	// 获取播放格式
@@ -36,10 +41,10 @@ void MusicAudioSinkPlayerThread::run( ) {
 	auto audioDevice = QMediaDevices::defaultAudioOutput( );
 	if( !audioDevice.isFormatSupported( audioFormat ) ) {
 		emit overPlayerMusic( this );
-		return;
+		return false;
 	}
 
-	isJuimp = false;
+	isJump = false;
 	// 每帧
 	audioSink = new QAudioSink( audioDevice, audioFormat );
 	qint64 frameCount = audioBuffer.frameCount( );
@@ -47,18 +52,19 @@ void MusicAudioSinkPlayerThread::run( ) {
 	audioSink->setVolume( 1.0 );
 	// 获取播放路径
 	ioAudioSinkDevice = audioSink->start( );
-
-	emit playerMusicFrame( currentThisPtr, audioSink, ioAudioSinkDevice, audioBuffer );
+	auto currentThread = QThread::currentThread( );
+	emit playerMusicFrame( this, audioSink, ioAudioSinkDevice, audioBuffer );
 	size_t index;
 	QDateTime pre = QDateTime::currentDateTime( );
 	for( index = 1; index < count; index += 1 ) {
 		qint64 duration = audioBuffer.duration( );
-		usleep( duration );
-		if( isJuimp )
+		currentThread->usleep( duration );
+		if( isJump )
 			break;
 		audioBuffer = audioBufferData[ index ];
-		emit playerMusicFrame( currentThisPtr, audioSink, ioAudioSinkDevice, audioBuffer );
+		emit playerMusicFrame( this, audioSink, ioAudioSinkDevice, audioBuffer );
 		pre = QDateTime::currentDateTime( );
 	}
 	audioSink->stop( );
+	return true;
 }

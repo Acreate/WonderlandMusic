@@ -45,8 +45,8 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 			appInstance->processEvents( );
 	}
 
-	auto localFile = loadMusicFileInfo.absoluteFilePath( );
-	auto musicPlayerThread = new MusicMediaPlayerThread( localFile );
+	musicFilePath = loadMusicFileInfo.absoluteFilePath( );
+	auto musicPlayerThread = new MusicMediaPlayerThread( musicFilePath );
 
 	connect( musicPlayerThread, &MusicPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
 	} );
@@ -71,4 +71,16 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	isStop = false;
 
 	return true;
+}
+
+const QString & MusicPlayer::getMusicFilePath( ) const {
+	return musicFilePath;
+}
+
+bool MusicPlayer::isIsPlayerMisucFile( ) const {
+	return isPlayerMisucFile;
+}
+
+bool MusicPlayer::isIsStop( ) const {
+	return isStop;
 }

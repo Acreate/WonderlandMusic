@@ -6,6 +6,7 @@
 /// @brief 临时创建一个 MessageErrorOut 对象
 #define Message_Error_Out MessageErrorOut()
 
+class MessageString;
 class QDateTime;
 class DateTimeFormat;
 class QDate;
@@ -37,6 +38,7 @@ public:
 public:
 	virtual ~MessageErrorOut( );
 	MessageErrorOut( bool is_write_file = true, const QString &log_home_path = "log", const std::source_location &source_location = std::source_location::current( ) );
+	MessageErrorOut & operator<<( const MessageString &msg );
 	MessageErrorOut & operator<<( const QString &msg );
 	MessageErrorOut & operator<<( const QStringList &msg );
 	MessageErrorOut & operator<<( const QChar &msg );

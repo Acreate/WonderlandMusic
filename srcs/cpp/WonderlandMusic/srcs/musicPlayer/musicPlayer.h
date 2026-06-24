@@ -31,6 +31,12 @@ public:
 	virtual bool init( );
 
 	virtual bool playerMusic( const QString &music_file );
+
+	virtual const QString & getMusicFilePath( ) const;
+
+	virtual bool isIsPlayerMisucFile( ) const;
+
+	virtual bool isIsStop( ) const;
 };
 
 #endif // MUSICPLAYER_H_H_HEAD__FILE__

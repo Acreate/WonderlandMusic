@@ -2,6 +2,8 @@
 #include <cmake_include_to_c_cpp_header_env.h>
 #include <qdir.h>
 
+#include "messageString.h"
+
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/translate/messageTranslate.h"
@@ -27,6 +29,11 @@ void StdErrorConsoleOut( const QString &text ) {
 #endif
 
 MessageErrorOut::MessageErrorOut( bool is_write_file, const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ), isWriteFile( is_write_file ) {
+}
+
+MessageErrorOut & MessageErrorOut::operator<<( const MessageString &msg ) {
+	outMsgVector.emplace_back( msg.toQString( ) );
+	return *this;
 }
 
 MessageErrorOut & MessageErrorOut::operator<<( const QString &msg ) {

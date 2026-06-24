@@ -20,19 +20,19 @@ private:
 
 protected:
 	/// @brief 起始时间
-	QDateTime *startDateTime;
+	QDateTime *startDateTime = nullptr;
 	/// @brief 翻译
-	AppTranslate *translate;
+	AppTranslate *translate = nullptr;
 	/// @brief json 关联的 key
-	JsonFileKey *jsonFileKey;
+	JsonFileKey *jsonFileKey = nullptr;
 	/// @brief 音频解码实例
-	MusicDecoder *musicDecoder;
+	MusicDecoder *musicDecoder = nullptr;
 	/// @brief 音频播放实例
-	MusicPlayerInstance *musicPlayerInstance;
+	MusicPlayerInstance *musicPlayerInstance = nullptr;
 	/// @brief 渲染对象
-	RenderImage *renderImage;
+	RenderImage *renderImage = nullptr;
 	/// @brief 主要执行窗口
-	MainWindow *mainWindow;
+	MainWindow *mainWindow = nullptr;
 	/// @brief 退出代码
 	int exitCode;
 	/// @brief 应用配置路径
@@ -50,6 +50,8 @@ public:
 	virtual bool init( );
 
 	virtual int run( );
+
+	virtual void deleteResource( );
 
 public:
 	virtual const QDateTime * getStartDateTime( ) const;

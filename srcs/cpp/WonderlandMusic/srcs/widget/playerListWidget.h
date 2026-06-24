@@ -72,8 +72,11 @@ protected:
 
 	virtual void removeRepetition( );
 
+	virtual bool fromFilePathFindItemWidget( size_t &index, std::vector< MusicInfoItemWidget * > &find_vector_source, const QString &find_file_path_target ) const;
+
 protected Q_SLOTS:
 	void playerStart_slot( const QString &player_music_file );
+
 	void playerOver_slot( const QString &player_music_file );
 
 public:

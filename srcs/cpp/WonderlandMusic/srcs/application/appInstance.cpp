@@ -16,29 +16,21 @@ AppInstance * AppInstance::getAppInstance( ) {
 }
 
 AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplication( argc, argv, app_flag_s ) {
-	instance = this;
-	startDateTime = new QDateTime( QDateTime::currentDateTime( ) );
-	translate = new AppTranslate;
-	jsonFileKey = new JsonFileKey;
-	musicDecoder = new MusicDecoder;
-	mainWindow = new MainWindow;
-	renderImage = new RenderImage;
+}
+
+void AppInstance::deleteResource( ) {
+	#define d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr )
+	instance = nullptr;
+	d_r( mainWindow );
+	d_r( musicDecoder );
+	d_r( jsonFileKey );
+	d_r( translate );
+	d_r( startDateTime );
+	d_r( renderImage );
 }
 
 AppInstance::~AppInstance( ) {
-	instance = nullptr;
-	delete mainWindow;
-	mainWindow = nullptr;
-	delete musicDecoder;
-	musicDecoder = nullptr;
-	delete jsonFileKey;
-	jsonFileKey = nullptr;
-	delete translate;
-	translate = nullptr;
-	delete startDateTime;
-	startDateTime = nullptr;
-	delete renderImage;
-	renderImage = nullptr;
+	deleteResource( );
 }
 
 bool AppInstance::notify( QObject *object, QEvent *event ) {
@@ -54,9 +46,17 @@ bool AppInstance::notify( QObject *object, QEvent *event ) {
 }
 
 bool AppInstance::init( ) {
+	deleteResource( );
 	// 自身数据初始化先，再到子对象初始化
 	appSettingPath = applicationDirPath( );
 
+	instance = this;
+	startDateTime = new QDateTime( QDateTime::currentDateTime( ) );
+	translate = new AppTranslate;
+	jsonFileKey = new JsonFileKey;
+	musicDecoder = new MusicDecoder;
+	mainWindow = new MainWindow;
+	renderImage = new RenderImage;
 	if( translate->init( ) == false )
 		return false;
 	if( jsonFileKey->init( ) == false )

@@ -88,6 +88,8 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 			<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
 			+ QString::number( exec ).toUpper( ) + " }";
 		delete messageErrorOut;
+		messageErrorOut = nullptr;
 	}
+	application.deleteResource( );
 	return exec;
 }

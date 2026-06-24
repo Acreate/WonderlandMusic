@@ -25,6 +25,7 @@
 
 #include "../musicPlayer/musicPlayer.h"
 
+#include "../tools/arrayTools.h"
 #include "../tools/pathTools.h"
 #include "../tools/vectorTools.h"
 
@@ -495,6 +496,7 @@ void PlayerListWidget::releaseResource( ) {
 	#define r_d(ptr) if(ptr)  (delete ptr,ptr = nullptr)
 	if( updateMuex ) {
 		updateMuex->lock( );
+		musicPlayer->playerStop( );
 		clearMusicInfoVector( );
 		if( musicInfoVector ) {
 			musicInfoMutex->lock( );
@@ -611,30 +613,44 @@ void PlayerListWidget::removeRepetition( ) {
 	*musicInfoVector = buff;
 }
 
+bool PlayerListWidget::fromFilePathFindItemWidget( size_t &index, std::vector< MusicInfoItemWidget * > &find_vector_source, const QString &find_file_path_target ) const {
+	size_t count = find_vector_source.size( );
+	if( count == 0 )
+		return false;
+	auto data = find_vector_source.data( );
+	for( ; index < count; index += 1 )
+		if( data[ index ]->isFile( find_file_path_target ) )
+			return true;
+	return false;
+}
+
 void PlayerListWidget::playerStart_slot( const QString &player_music_file ) {
 	musicInfoMutex->lock( );
 	size_t index = 0;
-	using findVectorUnityType = MusicInfoItemWidget *;
-	VectorTools::findItemFinction< findVectorUnityType, QString > findItemFunction = [] ( const findVectorUnityType left, const QString &find_target ) {
-		return left->isFile( find_target );
-	};
-	if( VectorTools::findIndex( index, *musicInfoVector, player_music_file, findItemFunction ) == true )
+	if( fromFilePathFindItemWidget( index, *musicInfoVector, player_music_file ) == true ) {
+		playerMutex->lock( );
 		playerItemWidget = musicInfoVector->data( )[ index ];
-	else
+		playerMutex->unlock( );
+	} else {
+		playerMutex->lock( );
 		playerItemWidget = nullptr;
-
+		playerMutex->unlock( );
+	}
 	musicInfoMutex->unlock( );
 }
 
 void PlayerListWidget::playerOver_slot( const QString &player_music_file ) {
+	if( this == nullptr )
+		return;
+	if( musicInfoMutex == nullptr )
+		return;
 	musicInfoMutex->lock( );
 	size_t index = 0;
-	using findVectorUnityType = MusicInfoItemWidget *;
-	VectorTools::findItemFinction< findVectorUnityType, QString > findItemFunction = [] ( const findVectorUnityType left, const QString &find_target ) {
-		return left->isFile( find_target );
-	};
-	if( VectorTools::findIndex( index, *musicInfoVector, player_music_file, findItemFunction ) == true )
+	if( fromFilePathFindItemWidget( index, *musicInfoVector, player_music_file ) == true ) {
+		playerMutex->lock( );
 		playerItemWidget = nullptr;
+		playerMutex->unlock( );
+	}
 	musicInfoMutex->unlock( );
 }
 
@@ -970,6 +986,108 @@ bool PlayerListWidget::loadDiskMusicDirList( const std::vector< QString > &file_
 
 // todo : 未完成
 bool PlayerListWidget::setCurrentPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
+	// 如果存在播放
+	playerMutex->lock( );
+	musicInfoMutex->lock( );
+	if( playerItemWidget )/* 正在播放音乐 */ {
+		// 缓存的原始数量
+		size_t musicCount = musicInfoVector->size( );
+		// 缓存对象
+		std::vector< MusicInfoItemWidget * > buff( musicCount );
+		// 缓存指针
+		auto buffDataPtr = buff.data( );
+		// 选择个数
+		size_t selectDataCount = music_item_vector.size( );
+		// 选择数组指针
+		auto selectDataPtr = music_item_vector.data( );
+		// 选择数组访问下标
+		size_t dataIndex;
+		// 偏移
+		MusicInfoItemWidget **offsetPtr;
+		for( dataIndex = 0; dataIndex < selectDataCount; dataIndex += 1 )
+			if( selectDataPtr[ dataIndex ] == playerItemWidget ) {
+				size_t before;
+				buffDataPtr[ 0 ] = playerItemWidget;
+
+				offsetPtr = buffDataPtr + 1;
+				for( before = 0; before < dataIndex; before += 1 )
+					offsetPtr[ before ] = selectDataPtr[ before ];
+				dataIndex += 1;
+				for( ; dataIndex < selectDataCount; dataIndex += 1 )
+					buffDataPtr[ dataIndex ] = selectDataPtr[ dataIndex ];
+				break;
+			} else
+				buffDataPtr[ dataIndex ] = selectDataPtr[ dataIndex ];
+		// 缓存访问下标
+		size_t buffDataIndexCount = selectDataCount;
+		if( buffDataPtr[ 0 ] == playerItemWidget )/* 播放项在选择列表当中 */ {
+			// 原始数据
+			auto musicData = musicInfoVector->data( );
+			// 原始数据遍历下标
+			size_t musicIndex;
+			// 播放选项的下标
+			for( musicIndex = 0; musicIndex < musicCount; musicIndex += 1 )
+				if( musicData[ musicIndex ] == playerItemWidget )
+					break; // 找到播放项
+			// 保存播放项下标
+			size_t playerItemWidgetFindIndex = musicIndex;
+			size_t buffDataIndex;
+			MusicInfoItemWidget *compItem;
+			size_t nullptrCount = 0;
+			for( ; musicIndex < playerItemWidgetFindIndex; musicIndex += 1 ) {
+				compItem = musicData[ musicIndex ];
+				for( buffDataIndex = 0; buffDataIndex < buffDataIndexCount; buffDataIndex += 1 )
+					if( compItem == buffDataPtr[ buffDataIndex ] )
+						break; // 找到相同项目
+				if( buffDataIndex == buffDataIndexCount )
+					continue; // 找不到
+				// 找到则置 nullptr
+				musicData[ musicIndex ] = nullptr;
+				nullptrCount += 1;
+			}
+			size_t notNullptrCount = playerItemWidgetFindIndex - nullptrCount;
+			if( notNullptrCount != 0 )/* 前面需要保存 */ {
+				// 移动数据
+				std::vector< MusicInfoItemWidget * > moveBuff( buffDataIndexCount );
+				auto moveDataPtr = moveBuff.data( );
+				// 填充被移动的数据
+				for( nullptrCount = 0; nullptrCount < buffDataIndexCount; nullptrCount += 1 )
+					moveDataPtr[ nullptrCount ] = buffDataPtr[ nullptrCount ];
+				// 把移动的数据覆盖到目标位置
+				offsetPtr = buffDataPtr + notNullptrCount;
+				for( nullptrCount = 0; nullptrCount < buffDataIndexCount; nullptrCount += 1 )
+					offsetPtr[ nullptrCount ] = moveDataPtr[ nullptrCount ];
+				// 填充前部分
+				nullptrCount = 0;
+				for( musicIndex = 0; musicIndex < playerItemWidgetFindIndex; musicIndex += 1 )
+					if( musicData[ musicIndex ] ) {
+						buffDataPtr[ nullptrCount ] = musicData[ musicIndex ];
+						nullptrCount += 1;
+					}
+
+				// 数据访问下标
+				nullptrCount = buffDataIndexCount + nullptrCount;
+
+				// 匹配播放项的后部分
+				musicIndex = playerItemWidgetFindIndex + 1;
+				for( ; musicIndex < musicCount; musicIndex += 1 ) {
+					compItem = musicData[ musicIndex ];
+					for( buffDataIndex = 0; buffDataIndex < buffDataIndexCount; buffDataIndex += 1 )
+						if( compItem == offsetPtr[ buffDataIndex ] )
+							break; // 找到相同项目
+					if( buffDataIndex != buffDataIndexCount )
+						continue; // 找到，则不加入缓存
+					// 找到则置 nullptr
+					musicData[ nullptrCount ] = compItem;
+				}
+				*musicInfoVector = buff;
+			}
+		} else /*播放项不在选择列表当中*/ {
+		}
+	} else/* 不在播放音乐 */ {
+	}
+	musicInfoMutex->unlock( );
+	playerMutex->unlock( );
 	return false;
 }
 

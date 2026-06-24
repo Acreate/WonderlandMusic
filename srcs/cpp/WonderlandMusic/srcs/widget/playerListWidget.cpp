@@ -876,10 +876,11 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 		musicInfoMutex->unlock( );
 		return false;
 	}
+	musicInfoMutex->unlock( );
+	selectItemWidgetMutex->lock( );
 	selectItemWidgetVector->clear( );
 	selectLeftItemWidget = nullptr;
 	activeLeftItemWidget = nullptr;
-	musicInfoMutex->unlock( );
 	selectItemWidgetMutex->unlock( );
 	updateItemWidget( );
 	update( );
@@ -909,16 +910,16 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 
 bool PlayerListWidget::removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
-	selectItemWidgetMutex->lock( );
 	musicInfoMutex->lock( );
 	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
 		musicInfoMutex->unlock( );
 		return false;
 	}
+	musicInfoMutex->unlock( );
+	selectItemWidgetMutex->lock( );
 	selectItemWidgetVector->clear( );
 	selectLeftItemWidget = nullptr;
 	activeLeftItemWidget = nullptr;
-	musicInfoMutex->unlock( );
 	selectItemWidgetMutex->unlock( );
 	updateItemWidget( );
 	update( );

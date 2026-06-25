@@ -9,18 +9,6 @@ class QMediaPlayer;
 class MusicMediaPlayerThread : public MusicPlayerThread {
 	Q_OBJECT;
 
-protected:
-	QMediaPlayer *mediaPlayer = nullptr;
-	QAudioOutput *audioOutput = nullptr;
-protected:
-	virtual bool initVar( );
-
-	virtual bool initSource( );
-
-	virtual bool initConnectSignals( );
-
-	virtual bool initStartStatus( );
-
 public:
 	MusicMediaPlayerThread( const QString &load_file_path );
 

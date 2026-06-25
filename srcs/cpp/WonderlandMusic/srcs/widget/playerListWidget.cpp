@@ -385,8 +385,8 @@ bool PlayerListWidget::renderMusicInfoItem( QImage &result_render_image, const M
 
 bool PlayerListWidget::init( ) {
 	releaseResource( );
-	updateMuex = new std::mutex;
 	musicInfoMutex = new std::mutex;
+	playerMutex = new std::mutex;
 	doubleClickIntervalTimeMilliSecond = 300;
 	activeLeftItemWidget = nullptr;
 	selectLeftItemWidget = nullptr;
@@ -434,7 +434,12 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 }
 
 void PlayerListWidget::doubleClickMusicItemWidget( MusicInfoItemWidget *double_target ) {
-	if( musicPlayer->playerMusic( double_target->getMusicFilePath( ) ) == false )
+	if( widgetState != PlayerListWidgetState::None )
+		return; // 如果不是被设置成任意状态，则返回，不处理事件
+	widgetState = PlayerListWidgetState::Set_Player_Run;
+	bool playerMusic = musicPlayer->playerMusic( double_target->getMusicFilePath( ) );
+	widgetState = PlayerListWidgetState::None;
+	if( playerMusic == false )
 		return; // 播放失败，则返回
 }
 
@@ -464,9 +469,13 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 
 void PlayerListWidget::releaseResource( ) {
 	#define r_d(ptr) if(ptr)  (delete ptr,ptr = nullptr)
-	if( updateMuex ) {
-		updateMuex->lock( );
+	if( playerMutex ) {
+		playerMutex->lock( );
+		widgetState = PlayerListWidgetState::Set_Player_Run;
 		musicPlayer->playerStop( );
+		playerItemWidget = nullptr;
+		widgetState = PlayerListWidgetState::None;
+		playerMutex->unlock( );
 		musicInfoMutex->lock( );
 		if( selectItemWidgetVector )
 			r_d( selectItemWidgetVector );
@@ -474,7 +483,6 @@ void PlayerListWidget::releaseResource( ) {
 
 		selectLeftItemWidget = nullptr;
 		activeLeftItemWidget = nullptr;
-		playerItemWidget = nullptr;
 
 		musicInfoMutex->unlock( );
 		clearMusicInfoVector( );
@@ -486,8 +494,6 @@ void PlayerListWidget::releaseResource( ) {
 		r_d( beforeClickTime );
 		r_d( pen );
 		r_d( musicPlayer );
-		updateMuex->unlock( );
-		r_d( updateMuex );
 	}
 }
 
@@ -647,6 +653,8 @@ void PlayerListWidget::updateItemWidget( ) {
 		itemWidget->musicDurationWidth = this->musicDurationWidth;
 		itemWidget->indexWidth = this->indexWidth;
 		itemWidget->setIndex( index + 1 );
+		itemWidget->update( );
+		itemWidget->show( );
 		itemWidget->setGeometry( 0, offsetY, newWidth, height );
 		offsetY += height;
 	}
@@ -657,12 +665,6 @@ void PlayerListWidget::updateItemWidget( ) {
 	else if( offsetY > 0 && newWidth == 0 )
 		setFixedHeight( offsetY );
 	musicInfoMutex->unlock( );
-	updateMuex->lock( );
-	for( index = 0; index < count; index += 1 ) {
-		data[ index ]->update( );
-		data[ index ]->show( );
-	}
-	updateMuex->unlock( );
 }
 
 bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const {
@@ -710,10 +712,10 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 }
 
 void PlayerListWidget::paintEvent( QPaintEvent *event ) {
-	if( updateMuex == nullptr )
+	if( widgetState != PlayerListWidgetState::None )
+		return; // 如果不是被设置成任意状态，则返回，不处理事件
+	if( musicInfoMutex->try_lock( ) == false )
 		return;
-	QMutexLocker updateLocker( updateMuex );
-	musicInfoMutex->lock( );
 	QPainter painter;
 	painter.begin( this );
 	painter.setPen( *pen );
@@ -746,6 +748,8 @@ void PlayerListWidget::resizeEvent( QResizeEvent *event ) {
 }
 
 void PlayerListWidget::mouseMoveEvent( QMouseEvent *event ) {
+	if( widgetState != PlayerListWidgetState::None )
+		return; // 如果不是被设置成任意状态，则返回，不处理事件
 	musicInfoMutex->lock( );
 	size_t count = musicInfoVector->size( );
 	if( count == 0 ) {
@@ -776,6 +780,8 @@ void PlayerListWidget::hideEvent( QHideEvent *event ) {
 }
 
 void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	if( widgetState != PlayerListWidgetState::None )
+		return; // 如果不是被设置成任意状态，则返回，不处理事件
 	Qt::MouseButton mouseButton = event->button( );
 	switch( mouseButton ) {
 		case Qt::MouseButton::LeftButton : {
@@ -903,7 +909,9 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 			musicInfoMutex->lock( );
 			playerItemWidget = nullptr;
 			musicInfoMutex->unlock( );
-			musicPlayer->playerStop( ); // 如果存在列表当中，则停止
+			widgetState = PlayerListWidgetState::Set_Player_Run;
+			musicPlayer->playerStop( );
+			widgetState = PlayerListWidgetState::None;
 		}
 		delete deleteFileData[ deleteFileIndex ];
 		if( moveToTrash )
@@ -936,7 +944,10 @@ bool PlayerListWidget::removeListMusicFileList( const std::vector< MusicInfoItem
 			musicInfoMutex->lock( );
 			playerItemWidget = nullptr;
 			musicInfoMutex->unlock( );
-			musicPlayer->playerStop( ); // 如果存在列表当中，则停止
+
+			widgetState = PlayerListWidgetState::Set_Player_Run;
+			musicPlayer->playerStop( );
+			widgetState = PlayerListWidgetState::None;
 		}
 		delete deleteFileData[ deleteFileIndex ];
 	}

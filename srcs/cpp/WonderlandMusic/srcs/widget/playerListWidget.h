@@ -19,7 +19,14 @@ class PlayerListWidget : public QWidget {
 	Q_OBJECT;
 	friend class PlayerListWidgetFriend;
 
+public:
+	enum class PlayerListWidgetState {
+		None,
+		Set_Player_Run,
+	};
+
 protected:
+	PlayerListWidgetState widgetState = PlayerListWidgetState::None;
 	int currentWidgetWidth;
 	int currentWidgetHeight;
 	int widgetBeforeWidth;
@@ -31,8 +38,8 @@ protected:
 	int musicDurationWidth;
 	qint64 doubleClickIntervalTimeMilliSecond;
 	QStringList loadMusicFileHistory;
-	std::mutex *updateMuex = nullptr;
 	std::mutex *musicInfoMutex = nullptr;
+	std::mutex *playerMutex = nullptr;
 	std::vector< MusicInfoItemWidget * > *musicInfoVector = nullptr;
 	QDateTime *beforeClickTime = nullptr;
 	MusicInfoItemWidget *activeLeftItemWidget = nullptr;

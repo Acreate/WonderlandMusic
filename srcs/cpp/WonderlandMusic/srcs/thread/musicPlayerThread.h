@@ -10,7 +10,9 @@ protected:
 	QString musicFilePath;
 	bool isJump;
 	unsigned long controlGepTime;
-
+	bool isSetPos = false;
+	quint64 pos = 0;
+	bool isRunOver = true;
 protected:
 	virtual bool startPlayerTread( );
 

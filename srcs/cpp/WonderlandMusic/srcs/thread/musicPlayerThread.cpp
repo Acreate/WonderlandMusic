@@ -12,6 +12,7 @@ bool MusicPlayerThread::startPlayerTread( ) {
 		return false;
 
 	QFuture< void > future = QtConcurrent::run( [this]( ) {
+		isRunOver = false;
 		playerThread( this );
 	} );
 	if( future.isValid( ) == false ) {
@@ -24,6 +25,7 @@ bool MusicPlayerThread::startPlayerTread( ) {
 	connect( watcher, &QFutureWatcher< void >::finished, this, [=]( ) {
 		watcher->deleteLater( );
 		emit threadOver( );
+		isRunOver = true;
 	} );
 	watcher->setFuture( future );
 	return true;
@@ -33,6 +35,8 @@ MusicPlayerThread::MusicPlayerThread( const QString &music_file_path ) : musicFi
 	controlGepTime = 100;
 	isJump = true;
 	connect( this, &MusicPlayerThread::startPlayerMusic, [this]( ) {
+		while( isRunOver == false )
+			QThread::currentThread( )->msleep( 200 );
 		startPlayerTread( );
 	} );
 	connect( this, &MusicPlayerThread::stopPlayerMusic, this, [=]( ) {
@@ -41,6 +45,11 @@ MusicPlayerThread::MusicPlayerThread( const QString &music_file_path ) : musicFi
 }
 
 MusicPlayerThread::~MusicPlayerThread( ) {
+	if( isRunOver == false ) {
+		auto appInstance = AppInstance::getAppInstance( );
+		while( isRunOver == false )
+			appInstance->processEvents( );
+	}
 }
 
 unsigned long MusicPlayerThread::getControlGepTime( ) const {

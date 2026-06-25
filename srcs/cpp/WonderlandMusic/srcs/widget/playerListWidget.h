@@ -77,7 +77,15 @@ protected:
 
 	virtual bool fromFilePathFindItemWidget( size_t &index, std::vector< MusicInfoItemWidget * > &find_vector_source, const QString &find_file_path_target ) const;
 
-	virtual bool translationToCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source );
+	/// @brief 当播放时候，移动到列表，并且播放列表当中的首个音频时，调用该函数
+	/// @param translation_vector_source 移动序列
+	/// @return 失败返回 false
+	virtual bool playerStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source );
+
+	/// @brief 当未播放时候，移动到列表，并且播放列表当中的首个音频时，调用该函数
+	/// @param translation_vector_source 移动序列
+	/// @return 失败返回 false
+	virtual bool setoutStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source );
 
 protected Q_SLOTS:
 	void playerStart_slot( const QString &player_music_file );

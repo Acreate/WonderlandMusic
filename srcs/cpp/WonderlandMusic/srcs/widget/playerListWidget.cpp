@@ -973,28 +973,103 @@ bool PlayerListWidget::loadDiskMusicDirList( const std::vector< QString > &file_
 	return true;
 }
 
-bool PlayerListWidget::translationToNextPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
-	return false;
-}
-
-bool PlayerListWidget::translationToCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
+// todo : 未完成
+bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
 	return false;
 }
 
 // todo : 未完成
+bool PlayerListWidget::playerStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
+	// 列表当中是否存在播放项
+	size_t translCount = translation_vector_source.size( );
+	if( translCount == 0 )
+		return false;
+	// 移动的序列
+	std::vector< MusicInfoItemWidget * > moveVector( translCount );
+	auto moveData = moveVector.data( );
+	size_t moveIndex;
+	auto translData = translation_vector_source.data( );
+	size_t translIndex = 0;
+	// 排序移动序列
+	for( ; translIndex < translCount; translIndex += 1 )
+		if( translData[ translIndex ] == playerItemWidget ) {
+			moveIndex = translIndex;
+			for( ; moveIndex > 0; moveIndex -= 1 )
+				moveData[ moveIndex ] = moveData[ moveIndex - 1 ];
+			moveData[ 0 ] = playerItemWidget;
+		} else
+			moveData[ translIndex ] = translData[ translIndex ];
+	// 找到选择列表的末尾项
+
+	translCount -= 1; // 排除末尾
+	auto moveLastItem = moveData[ translCount ]; // 获取末尾项
+	size_t playerListCount = musicInfoVector->size( ); // 原始列表个数
+	auto playerListData = musicInfoVector->data( ); // 原始列表起始指针
+	std::vector< MusicInfoItemWidget * > cloneOrgVector( playerListCount ); // 克隆数据放置序列
+	auto cloneOrgData = cloneOrgVector.data( ); // 克隆数据列表起始指针
+	size_t cloneOrgIndex = 0; // 克隆数据的放置下标
+	for( translIndex = 0; translIndex < playerListCount; translIndex += 1 ) {
+		auto cmpItem = playerListData[ translIndex ];
+		if( cmpItem == moveLastItem ) /* 如果匹配到末尾项，则把移动序列拷贝到克隆序列 */ {
+			// 偏移指针到起始克隆数据放置位置
+			auto offsetClonePtr = cloneOrgData + cloneOrgIndex;
+			// 拷贝移动列表到克隆序列
+			for( moveIndex = 0; moveIndex < translCount; moveIndex += 1 )
+				offsetClonePtr[ moveIndex ] = moveData[ moveIndex ];
+			offsetClonePtr[ moveIndex ] = moveData[ moveIndex ]; // 拷贝末尾
+			cloneOrgIndex += moveIndex + 1;// 增加扩张数据
+			translIndex += 1;
+			// 接手循环
+			for( ; translIndex < playerListCount; translIndex += 1 ) {
+				cmpItem = playerListData[ translIndex ];
+				for( moveIndex = 0; moveIndex < translCount; moveIndex += 1 )
+					if( cmpItem == moveData[ moveIndex ] )
+						break;
+				if( moveIndex < translCount )
+					continue; // 在移动列表当中时，不拷贝到克隆序列
+				cloneOrgData[ cloneOrgIndex ] = cmpItem;
+				cloneOrgIndex += 1;
+			}
+			break; // 已经实现循环
+		}
+		for( moveIndex = 0; moveIndex < translCount; moveIndex += 1 )
+			if( cmpItem == moveData[ moveIndex ] )
+				break;
+		if( moveIndex < translCount )
+			continue; // 在移动列表当中时，不拷贝到克隆序列
+		cloneOrgData[ cloneOrgIndex ] = cmpItem;
+		cloneOrgIndex += 1;
+	}
+	*musicInfoVector = cloneOrgVector;
+	*selectItemWidgetVector = moveVector;
+	selectLeftItemWidget = activeLeftItemWidget = moveLastItem;
+	return true;
+}
+
 bool PlayerListWidget::setCurrentPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
 	bool result;
 	// 如果存在播放
 	musicInfoMutex->lock( );
 	if( playerItemWidget )
 		/* 正在播放音乐 */
-		result = translationToCurrentPlayer( music_item_vector );
+		result = playerStatusTranslationMoveCurrentPlayer( music_item_vector );
 	else
 		/* 不在播放音乐 */
-		result = translationToNextPlayer( music_item_vector );
+		result = setoutStatusTranslationMoveCurrentPlayer( music_item_vector );
 	musicInfoMutex->unlock( );
-	if( result )
+	if( result ) {
 		updateItemWidget( );
+		if( playerItemWidget ) {
+			musicPlayer->playerStop( );
+			auto appInstance = AppInstance::getAppInstance( );
+			while( widgetState != PlayerListWidgetState::None )
+				appInstance->processEvents( );
+		}
+		widgetState = PlayerListWidgetState::Set_Player_Run;
+		result = musicPlayer->playerMusic( selectItemWidgetVector->data( )[ 0 ]->getMusicFilePath( ) );
+		widgetState = PlayerListWidgetState::None;
+		return result;
+	}
 	return result;
 }
 

@@ -2,8 +2,7 @@
 #define MUSICPLAYERTHREAD_H_H_HEAD__FILE__
 
 #include <QThread>
-template <typename T>
-class QFutureWatcher ;
+
 class MusicPlayerThread : public QObject {
 	Q_OBJECT;
 
@@ -11,7 +10,9 @@ protected:
 	QString musicFilePath;
 	bool isJump;
 	unsigned long controlGepTime;
-	QFutureWatcher< void > *watcher = nullptr;
+
+protected:
+	virtual bool startPlayerTread( );
 
 public:
 	MusicPlayerThread( const QString &music_file_path );
@@ -19,10 +20,6 @@ public:
 	~MusicPlayerThread( ) override;
 
 public:
-	virtual bool startPlayerMusic( );
-
-	virtual bool stopPlayerMusic( ) = 0;
-
 	virtual bool setPlayerMusicPosition( qint64 position ) = 0;
 
 	virtual bool setPlayerMusicDuration( qint64 duration ) = 0;
@@ -43,6 +40,10 @@ Q_SIGNALS:
 	void threadOver( );
 
 	void threadStart( );
+
+	bool stopPlayerMusic( );
+
+	bool startPlayerMusic( );
 };
 
 #endif // MUSICPLAYERTHREAD_H_H_HEAD__FILE__

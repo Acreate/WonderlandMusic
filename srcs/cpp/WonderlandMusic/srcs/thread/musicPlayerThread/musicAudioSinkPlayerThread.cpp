@@ -11,15 +11,7 @@
 
 #include "../../application/appInstance.h"
 
-MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_music_file ) : MusicPlayerThread( load_music_file ) {
-}
-
-MusicAudioSinkPlayerThread::~MusicAudioSinkPlayerThread( ) {
-	if( audioSink )
-		audioSink->deleteLater( );
-}
-
-bool MusicAudioSinkPlayerThread::startPlayerMusic( ) {
+bool MusicAudioSinkPlayerThread::startPlayerTread( ) {
 	audioDecoder = new QAudioDecoder;
 	connect( audioDecoder, &QAudioDecoder::bufferReady, [this]( ) {
 		auto audioBuffer = audioDecoder->read( );
@@ -28,17 +20,21 @@ bool MusicAudioSinkPlayerThread::startPlayerMusic( ) {
 	} );
 	connect( audioDecoder, &QAudioDecoder::finished, [this]( ) {
 		audioDecoder->deleteLater( );
-		MusicPlayerThread::startPlayerMusic( );
+		MusicPlayerThread::startPlayerTread( );
 	} );
 	QUrl musicFile = QUrl::fromLocalFile( MusicPlayerThread::musicFilePath );
 	audioDecoder->setSource( musicFile );
 	audioDecoder->start( );
+
 	return true;
 }
 
-bool MusicAudioSinkPlayerThread::stopPlayerMusic( ) {
-	isJump = true;
-	return false;
+MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_music_file ) : MusicPlayerThread( load_music_file ) {
+}
+
+MusicAudioSinkPlayerThread::~MusicAudioSinkPlayerThread( ) {
+	if( audioSink )
+		audioSink->deleteLater( );
 }
 
 bool MusicAudioSinkPlayerThread::setPlayerMusicPosition( qint64 position ) {

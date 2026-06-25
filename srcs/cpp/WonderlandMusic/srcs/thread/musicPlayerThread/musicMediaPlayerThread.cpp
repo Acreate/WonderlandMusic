@@ -15,6 +15,13 @@ bool MusicMediaPlayerThread::initVar( ) {
 	audioOutput->setVolume( 1.0 );
 
 	mediaPlayer->setAudioOutput( audioOutput );
+	connect( mediaPlayer, &QObject::destroyed, [&] ( QObject *del ) {
+		if( del != mediaPlayer )
+			return;
+		mediaPlayer = nullptr;
+		delete audioOutput;
+		audioOutput = nullptr;
+	} );
 	return true;
 }
 
@@ -43,20 +50,11 @@ MusicMediaPlayerThread::MusicMediaPlayerThread( const QString &load_file_path ) 
 }
 
 MusicMediaPlayerThread::~MusicMediaPlayerThread( ) {
-	if( mediaPlayer )
-		delete mediaPlayer;
-	if( audioOutput )
-		delete audioOutput;
-}
-
-bool MusicMediaPlayerThread::startPlayerMusic( ) {
-	MusicPlayerThread::startPlayerMusic( );
-	return true;
-}
-
-bool MusicMediaPlayerThread::stopPlayerMusic( ) {
-	isJump = true;
-	return true;
+	if( mediaPlayer ) {
+		auto appInstance = AppInstance::getAppInstance( );
+		while( mediaPlayer )
+			appInstance->processEvents( );
+	}
 }
 
 bool MusicMediaPlayerThread::setPlayerMusicPosition( qint64 position ) {
@@ -86,5 +84,6 @@ bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_threa
 		appInstance->processEvents( );
 	} while( isJump == false );
 	mediaPlayer->stop( );
+	mediaPlayer->deleteLater( );
 	return true;
 }

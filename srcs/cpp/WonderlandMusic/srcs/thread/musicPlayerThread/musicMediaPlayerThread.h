@@ -12,7 +12,6 @@ class MusicMediaPlayerThread : public MusicPlayerThread {
 protected:
 	QMediaPlayer *mediaPlayer = nullptr;
 	QAudioOutput *audioOutput = nullptr;
-
 protected:
 	virtual bool initVar( );
 
@@ -26,10 +25,6 @@ public:
 	MusicMediaPlayerThread( const QString &load_file_path );
 
 	~MusicMediaPlayerThread( ) override;
-
-	bool startPlayerMusic( ) override;
-
-	bool stopPlayerMusic( ) override;
 
 	bool setPlayerMusicPosition( qint64 position ) override;
 

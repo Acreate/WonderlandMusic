@@ -33,13 +33,11 @@ protected:
 	QStringList loadMusicFileHistory;
 	std::mutex *updateMuex = nullptr;
 	std::mutex *musicInfoMutex = nullptr;
-	std::mutex *playerMutex = nullptr;
 	std::vector< MusicInfoItemWidget * > *musicInfoVector = nullptr;
 	QDateTime *beforeClickTime = nullptr;
 	MusicInfoItemWidget *activeLeftItemWidget = nullptr;
 	MusicInfoItemWidget *selectLeftItemWidget = nullptr;
 	MusicInfoItemWidget *playerItemWidget = nullptr;
-	std::mutex *selectItemWidgetMutex = nullptr;
 	std::vector< MusicInfoItemWidget * > *selectItemWidgetVector = nullptr;
 	int drawPenWidth;
 	QColor drawPenColor;
@@ -63,8 +61,6 @@ protected:
 	virtual bool selectKeyShiftModifier( );
 
 	virtual bool selectKeyControlModifier( );
-
-	virtual bool selectKeyDefaultModifier( );
 
 	virtual void releaseResource( );
 

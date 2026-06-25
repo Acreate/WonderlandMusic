@@ -21,14 +21,12 @@ protected:
 	QAudioOutput *audioOutput;
 	QAudioDecoder *audioDecoder = nullptr;
 
+	bool startPlayerTread( ) override;
+
 public:
 	MusicAudioSinkPlayerThread( const QString &load_music_file );
 
 	~MusicAudioSinkPlayerThread( ) override;
-
-	bool startPlayerMusic( ) override;
-
-	bool stopPlayerMusic( ) override;
 
 	bool setPlayerMusicPosition( qint64 position ) override;
 

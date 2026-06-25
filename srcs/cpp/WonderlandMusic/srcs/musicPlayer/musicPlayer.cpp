@@ -73,7 +73,7 @@ bool MusicPlayer::playerStop( ) {
 	if( musicPlayerThread ) {
 		musicPlayerThread->stopPlayerMusic( );
 		auto appInstance = AppInstance::getAppInstance( );
-		while( musicPlayerThread )
+		while( musicPlayerThread != nullptr )
 			appInstance->processEvents( );
 	}
 	return true;

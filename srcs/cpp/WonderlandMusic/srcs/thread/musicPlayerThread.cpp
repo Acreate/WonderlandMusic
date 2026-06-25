@@ -6,12 +6,9 @@
 bool MusicPlayerThread::startPlayerTread( ) {
 	if( this == nullptr )
 		return false;
-	sleepMutex->lock( );
 	auto watcher = new QFutureWatcher< void >( this );
-	if( watcher == nullptr ) {
-		sleepMutex->unlock( );
+	if( watcher == nullptr )
 		return false;
-	}
 
 	QFuture< void > future = QtConcurrent::run( [this]( ) {
 		isRunOver = false;
@@ -19,7 +16,6 @@ bool MusicPlayerThread::startPlayerTread( ) {
 	} );
 	if( future.isValid( ) == false ) {
 		watcher->deleteLater( );
-		sleepMutex->unlock( );
 		return false;
 	}
 	connect( watcher, &QFutureWatcher< void >::started, this, [=]( ) {
@@ -31,7 +27,6 @@ bool MusicPlayerThread::startPlayerTread( ) {
 		isRunOver = true;
 	} );
 	watcher->setFuture( future );
-	sleepMutex->unlock( );
 	return true;
 }
 
@@ -41,11 +36,16 @@ MusicPlayerThread::MusicPlayerThread( const QString &music_file_path ) : musicFi
 }
 
 MusicPlayerThread::~MusicPlayerThread( ) {
+	stopPlayerMusic( );
 	if( isRunOver == false ) {
 		auto appInstance = AppInstance::getAppInstance( );
 		while( isRunOver == false )
 			appInstance->processEvents( );
 	}
+}
+
+bool MusicPlayerThread::isIsRunOver( ) const {
+	return isRunOver;
 }
 
 unsigned long MusicPlayerThread::getControlGepTime( ) const {

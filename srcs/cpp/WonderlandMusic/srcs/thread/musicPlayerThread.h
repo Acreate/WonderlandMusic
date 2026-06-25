@@ -16,7 +16,6 @@ protected:
 	quint64 pos = 0;
 	qint64 duration;
 	bool isRunOver = true;
-	QMutex* sleepMutex = nullptr;
 
 protected:
 	virtual bool startPlayerTread( );
@@ -27,6 +26,8 @@ public:
 	MusicPlayerThread( const QString &music_file_path );
 
 	~MusicPlayerThread( ) override;
+
+	virtual bool isIsRunOver( ) const;
 
 	virtual unsigned long getControlGepTime( ) const;
 

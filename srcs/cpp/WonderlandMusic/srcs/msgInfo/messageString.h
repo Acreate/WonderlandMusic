@@ -7,6 +7,7 @@ protected:
 	QStringList messageList;
 	QString jion;
 	bool isTranslate = false;
+
 public:
 	using void_ptr = void *;
 
@@ -15,6 +16,12 @@ public:
 	virtual void setJion( const QString &jion );
 
 	virtual ~MessageString( );
+
+	MessageString( );
+
+	MessageString( const QStringList &message_list, const QString &jion );
+
+	MessageString( const QStringList &message_list, const QString &jion, bool is_translate );
 
 	MessageString( const QStringList &message_list );
 

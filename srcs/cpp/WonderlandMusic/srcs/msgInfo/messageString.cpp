@@ -11,6 +11,18 @@ void MessageString::setJion( const QString &jion ) {
 MessageString::~MessageString( ) {
 }
 
+MessageString::MessageString( ) {
+}
+
+MessageString::MessageString( const QStringList &message_list, const QString &jion ) : messageList( message_list ),
+	jion( jion ) {
+}
+
+MessageString::MessageString( const QStringList &message_list, const QString &jion, bool is_translate ) : messageList( message_list ),
+	jion( jion ),
+	isTranslate( is_translate ) {
+}
+
 MessageString::MessageString( const QStringList &message_list ) : messageList( message_list ) {
 }
 

@@ -530,8 +530,12 @@ bool PlayerListWidget::selectKeyShiftModifier( ) {
 				selectItemWidgetData = selectItemWidgetVector->data( );
 				findSourceData += getBegIndex;
 				musicIndex = 0;
-				for( ; musicIndex < endIndex; musicIndex += 1 )
+				MessageString messageString;
+				for( ; musicIndex < count; musicIndex += 1 ) {
 					selectItemWidgetData[ musicIndex ] = findSourceData[ musicIndex ];
+					qDebug( ) << " set : " << musicIndex << " , size : " << count << "\n";
+				}
+				Message_Error_Out << messageString;
 			} else {
 				auto endIndex = getBegIndex + 1;
 				count = endIndex - getEndIndex;
@@ -540,8 +544,12 @@ bool PlayerListWidget::selectKeyShiftModifier( ) {
 				findSourceData += getEndIndex;
 				qint64 destIndex = count - 1;
 				musicIndex = 0;
-				for( ; musicIndex < count; musicIndex += 1, destIndex -= 1 )
+				MessageString messageString;
+				for( ; musicIndex < count; musicIndex += 1, destIndex -= 1 ) {
 					selectItemWidgetData[ destIndex ] = findSourceData[ musicIndex ];
+					qDebug( ) << " set : " << destIndex << " , size : " << count << "\n";
+				}
+				Message_Error_Out << messageString;
 			}
 		}
 		return true;
@@ -787,45 +795,38 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		case Qt::MouseButton::LeftButton : {
 			bool isDoubleClick = false;
 			MusicInfoItemWidget *selectItem = nullptr;
-			{
-				musicInfoMutex->lock( );
-				size_t count = musicInfoVector->size( );
-				if( count == 0 ) {
-					musicInfoMutex->unlock( );
-					return;
-				}
-
-				auto point = event->pos( );
-				auto data = musicInfoVector->data( );
-				size_t index;
-				for( index = 0; index < count; index += 1 )
-					if( data[ index ]->geometry( ).contains( point ) ) {
-						selectItem = data[ index ];
-
-						// 双击检测
-						auto currentDateTime = QDateTime::currentDateTime( );
-						if( selectLeftItemWidget == selectItem )
-							isDoubleClick = doubleClickIntervalTimeMilliSecond > ( currentDateTime - *beforeClickTime ).count( );
-						*beforeClickTime = currentDateTime;
-						break;
-					}
+			musicInfoMutex->lock( );
+			size_t count = musicInfoVector->size( );
+			if( count == 0 ) {
 				musicInfoMutex->unlock( );
+				return;
 			}
+
+			auto point = event->pos( );
+			auto data = musicInfoVector->data( );
+			size_t index;
+			for( index = 0; index < count; index += 1 )
+				if( data[ index ]->geometry( ).contains( point ) ) {
+					selectItem = data[ index ];
+
+					// 双击检测
+					auto currentDateTime = QDateTime::currentDateTime( );
+					if( selectLeftItemWidget == selectItem )
+						isDoubleClick = doubleClickIntervalTimeMilliSecond > ( currentDateTime - *beforeClickTime ).count( );
+					*beforeClickTime = currentDateTime;
+					break;
+				}
+			musicInfoMutex->unlock( );
 			// 双击或单击，二选一
 			if( isDoubleClick ) {
-				{
-					doubleClickMusicItemWidget( selectItem );
-				}
+				doubleClickMusicItemWidget( selectItem );
 				emit itemDoubleSelect( selectItem ); // 触发信号
-			} else if( selectItem ) {
+			} else if( selectItem ) { // 单击
 				std::vector< MusicInfoItemWidget * > resultVector;
-				{
-					musicInfoMutex->lock( );
-					// 单击
-					apendSelectMusicItemWidget( selectItem, true );
-					resultVector = *selectItemWidgetVector;
-					musicInfoMutex->unlock( );
-				}
+				musicInfoMutex->lock( );
+				apendSelectMusicItemWidget( selectItem, true );
+				resultVector = *selectItemWidgetVector;
+				musicInfoMutex->unlock( );
 				emit itemSelect( resultVector );
 				update( );
 			}
@@ -833,30 +834,26 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		break;
 		case Qt::MouseButton::RightButton : {
 			MusicInfoItemWidget *selectItem = nullptr;
-			{
-				musicInfoMutex->lock( );
+			musicInfoMutex->lock( );
 
-				size_t count = musicInfoVector->size( );
-				if( count ) {
-					auto point = event->pos( );
-					auto data = musicInfoVector->data( );
-					size_t index;
-					for( index = 0; index < count; index += 1 )
-						if( data[ index ]->geometry( ).contains( point ) ) {
-							selectItem = data[ index ];
-							break;
-						}
-				}
-				musicInfoMutex->unlock( );
+			size_t count = musicInfoVector->size( );
+			if( count ) {
+				auto point = event->pos( );
+				auto data = musicInfoVector->data( );
+				size_t index;
+				for( index = 0; index < count; index += 1 )
+					if( data[ index ]->geometry( ).contains( point ) ) {
+						selectItem = data[ index ];
+						break;
+					}
 			}
+			musicInfoMutex->unlock( );
 			if( selectItem ) {
 				std::vector< MusicInfoItemWidget * > resultVector;
-				{
-					musicInfoMutex->lock( );
-					apendSelectMusicItemWidget( selectItem, false );
-					resultVector = *selectItemWidgetVector;
-					musicInfoMutex->unlock( );
-				}
+				musicInfoMutex->lock( );
+				apendSelectMusicItemWidget( selectItem, false );
+				resultVector = *selectItemWidgetVector;
+				musicInfoMutex->unlock( );
 				emit itemSelect( resultVector );
 				update( );
 			}

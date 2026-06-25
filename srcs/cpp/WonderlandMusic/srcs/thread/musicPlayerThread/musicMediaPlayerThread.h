@@ -9,7 +9,15 @@ class QMediaPlayer;
 class MusicMediaPlayerThread : public MusicPlayerThread {
 	Q_OBJECT;
 
+protected:
+	QMediaPlayer *mediaPlayer = nullptr;
+	QAudioOutput *audioOutput = nullptr;
+
+	bool startPlayerTread( ) override;
+
 public:
+	bool stopPlayerMusic( ) override;
+
 	MusicMediaPlayerThread( const QString &load_file_path );
 
 	~MusicMediaPlayerThread( ) override;

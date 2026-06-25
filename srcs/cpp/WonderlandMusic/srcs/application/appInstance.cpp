@@ -20,13 +20,13 @@ AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplicatio
 
 void AppInstance::deleteResource( ) {
 	#define d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr )
-	instance = nullptr;
 	d_r( mainWindow );
 	d_r( musicDecoder );
 	d_r( jsonFileKey );
 	d_r( translate );
 	d_r( startDateTime );
 	d_r( renderImage );
+	instance = nullptr;
 }
 
 AppInstance::~AppInstance( ) {

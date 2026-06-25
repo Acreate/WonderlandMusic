@@ -839,10 +839,7 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 			musicInfoMutex->unlock( );
 			// 双击或单击，二选一
 			if( isDoubleClick ) {
-				// 双击
-				playerMutex->lock( );
 				doubleClickMusicItemWidget( selectItem );
-				playerMutex->unlock( );
 				emit itemDoubleSelect( selectItem ); // 触发信号
 			} else if( selectItem ) // 单击
 				apendSelectMusicItemWidget( selectItem, true );

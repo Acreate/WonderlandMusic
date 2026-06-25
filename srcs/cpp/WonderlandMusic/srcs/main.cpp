@@ -68,9 +68,9 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	}
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
 
-	AppInstance application( argc, argv );
+	AppInstance *application = new AppInstance( argc, argv );
 	QString resultString = QObject::tr( "返回值" );
-	if( application.init( ) == false ) {
+	if( application->init( ) == false ) {
 		if( messageErrorOut ) {
 			*messageErrorOut << "----------------------"
 				<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
@@ -81,7 +81,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		return -1;
 	}
 
-	int exec = application.run( );
+	int exec = application->run( );
 	if( messageErrorOut ) {
 		*messageErrorOut << "----------------------"
 			<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
@@ -90,6 +90,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete messageErrorOut;
 		messageErrorOut = nullptr;
 	}
-	application.deleteResource( );
+	application->deleteResource( );
+	delete application;
 	return exec;
 }

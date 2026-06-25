@@ -19,13 +19,14 @@ bool MusicAudioSinkPlayerThread::startPlayerTread( ) {
 		audioBufferVector.emplace_back( audioBuffer );
 	} );
 	connect( audioDecoder, &QAudioDecoder::finished, [this]( ) {
+		disconnect( this, &QObject::destroyed, audioDecoder, &QAudioDecoder::deleteLater );
 		audioDecoder->deleteLater( );
 		MusicPlayerThread::startPlayerTread( );
 	} );
 	QUrl musicFile = QUrl::fromLocalFile( MusicPlayerThread::musicFilePath );
 	audioDecoder->setSource( musicFile );
 	audioDecoder->start( );
-
+	connect( this, &QObject::destroyed, audioDecoder, &QAudioDecoder::deleteLater );
 	return true;
 }
 
@@ -33,33 +34,19 @@ MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_musi
 }
 
 MusicAudioSinkPlayerThread::~MusicAudioSinkPlayerThread( ) {
-	if( audioSink )
-		audioSink->deleteLater( );
-}
-
-bool MusicAudioSinkPlayerThread::setPlayerMusicPosition( qint64 position ) {
-	return false;
-}
-
-bool MusicAudioSinkPlayerThread::setPlayerMusicDuration( qint64 duration ) {
-	return false;
 }
 
 bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_thread ) {
 	size_t count = audioBufferVector.size( );
-	if( count == 0 ) {
-		emit overPlayerMusic( this );
+	if( count == 0 )
 		return false;
-	}
 	QAudioBuffer *audioBufferData = audioBufferVector.data( );
 	// 获取播放格式
 	QAudioBuffer audioBuffer = audioBufferData[ 0 ];
 	QAudioFormat audioFormat = audioBuffer.format( );
 	auto audioDevice = QMediaDevices::defaultAudioOutput( );
-	if( !audioDevice.isFormatSupported( audioFormat ) ) {
-		emit overPlayerMusic( this );
+	if( !audioDevice.isFormatSupported( audioFormat ) )
 		return false;
-	}
 
 	isJump = false;
 	// 每帧
@@ -89,5 +76,6 @@ bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_t
 		ioAudioSinkDevice->write( audioBuffer.data< char >( ), audioBuffer.byteCount( ) );
 	}
 	audioSink->stop( );
+	audioSink->deleteLater( );
 	return true;
 }

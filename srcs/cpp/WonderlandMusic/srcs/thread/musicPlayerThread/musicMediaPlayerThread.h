@@ -14,10 +14,6 @@ public:
 
 	~MusicMediaPlayerThread( ) override;
 
-	bool setPlayerMusicPosition( qint64 position ) override;
-
-	bool setPlayerMusicDuration( qint64 duration ) override;
-
 protected:
 	bool playerThread( MusicPlayerThread *music_player_thread ) override;
 };

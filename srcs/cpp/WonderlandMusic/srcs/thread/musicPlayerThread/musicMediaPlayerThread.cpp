@@ -4,6 +4,7 @@
 #include <QAudioOutput>
 #include <QFileInfo>
 #include <QMediaPlayer>
+#include <QMutex>
 
 #include "../../application/appInstance.h"
 
@@ -14,21 +15,11 @@ MusicMediaPlayerThread::MusicMediaPlayerThread( const QString &load_file_path ) 
 MusicMediaPlayerThread::~MusicMediaPlayerThread( ) {
 }
 
-bool MusicMediaPlayerThread::setPlayerMusicPosition( qint64 position ) {
-	isSetPos = true;
-	this->pos = position;
-	return true;
-}
-
-bool MusicMediaPlayerThread::setPlayerMusicDuration( qint64 duration ) {
-	return false;
-}
-
 bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_thread ) {
 	QMediaPlayer *mediaPlayer = new QMediaPlayer;
 	QAudioOutput *audioOutput = new QAudioOutput;
 
-	connect( mediaPlayer, &QMediaPlayer::destroyed, [mediaPlayer] ( QObject *release_ptr ) {
+	connect( mediaPlayer, &QObject::destroyed, [mediaPlayer] ( QObject *release_ptr ) {
 		bool cond = release_ptr == mediaPlayer;
 	} );
 
@@ -51,7 +42,10 @@ bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_threa
 	do {
 		emit durationChanged( mediaPlayer->duration( ) );
 		emit durationChanged( mediaPlayer->position( ) );
+
+		sleepMutex->lock( );
 		currentThread->msleep( controlGepTime );
+		sleepMutex->unlock( );
 		appInstance->processEvents( );
 		if( isSetPos ) {
 			isSetPos = false;

@@ -12,27 +12,31 @@ protected:
 	unsigned long controlGepTime;
 	bool isSetPos = false;
 	quint64 pos = 0;
+	qint64 duration;
 	bool isRunOver = true;
+	bool isTaskRunning = false;
+
 protected:
 	virtual bool startPlayerTread( );
+
+	virtual bool playerThread( MusicPlayerThread *music_player_thread ) = 0;
 
 public:
 	MusicPlayerThread( const QString &music_file_path );
 
 	~MusicPlayerThread( ) override;
 
-public:
-	virtual bool setPlayerMusicPosition( qint64 position ) = 0;
-
-	virtual bool setPlayerMusicDuration( qint64 duration ) = 0;
-
-public:
 	virtual unsigned long getControlGepTime( ) const;
 
-	virtual void setControlGepTime( const unsigned long control_gep_time );
+	virtual bool stopPlayerMusic( );
 
-protected:
-	virtual bool playerThread( MusicPlayerThread *music_player_thread ) = 0;
+	virtual bool startPlayerMusic( );
+
+	virtual void setPlayerMusicPosition( qint64 position );
+
+	virtual void setPlayerMusicDuration( qint64 duration );
+
+	virtual void setControlGepTime( const unsigned long control_gep_time );
 
 Q_SIGNALS:
 	void positionChanged( qint64 position );
@@ -42,10 +46,6 @@ Q_SIGNALS:
 	void threadOver( );
 
 	void threadStart( );
-
-	bool stopPlayerMusic( );
-
-	bool startPlayerMusic( );
 };
 
 #endif // MUSICPLAYERTHREAD_H_H_HEAD__FILE__

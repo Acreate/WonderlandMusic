@@ -3,6 +3,8 @@
 
 #include <QThread>
 
+class QMutex;
+
 class MusicPlayerThread : public QObject {
 	Q_OBJECT;
 
@@ -14,7 +16,7 @@ protected:
 	quint64 pos = 0;
 	qint64 duration;
 	bool isRunOver = true;
-	bool isTaskRunning = false;
+	QMutex* sleepMutex = nullptr;
 
 protected:
 	virtual bool startPlayerTread( );

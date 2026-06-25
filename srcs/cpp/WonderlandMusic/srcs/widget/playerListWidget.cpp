@@ -974,11 +974,64 @@ bool PlayerListWidget::loadDiskMusicDirList( const std::vector< QString > &file_
 }
 
 // todo : 未完成
-bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
-	return false;
+bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {// 列表当中是否存在播放项
+	size_t translCount = translation_vector_source.size( );
+	if( translCount == 0 )
+		return false;
+	auto translData = translation_vector_source.data( );
+	size_t translIndex;
+
+	size_t playerListCount = musicInfoVector->size( ); // 原始列表个数
+	auto playerListData = musicInfoVector->data( ); // 原始列表起始指针
+	size_t playerListIndex;
+	translCount -= 1;
+	auto selectLastItem = translData[ translCount ];
+	std::vector< MusicInfoItemWidget * > cloneOrgVector( playerListCount ); // 克隆数据放置序列
+	auto cloneOrgData = cloneOrgVector.data( ); // 克隆数据列表起始指针
+	size_t cloneOrgIndex = 0; // 克隆数据的放置下标
+	for( playerListIndex = 0; playerListIndex < playerListCount; playerListIndex += 1 ) {
+		auto cmpItem = playerListData[ playerListIndex ];
+		if( selectLastItem == cmpItem ) {
+			// 偏移指针到起始克隆数据放置位置
+			auto offsetClonePtr = cloneOrgData + cloneOrgIndex;
+			// 拷贝移动列表到克隆序列
+			for( translIndex = 0; translIndex < translCount; translIndex += 1 )
+				offsetClonePtr[ translIndex ] = translData[ translIndex ];
+			offsetClonePtr[ translIndex ] = translData[ translIndex ]; // 拷贝末尾
+			translIndex += 1;
+			cloneOrgIndex += translIndex;// 增加扩张数据
+			playerListIndex = playerListIndex + translIndex;
+			// 接手循环
+			for( ; playerListIndex < playerListCount; playerListIndex += 1 ) {
+				cmpItem = playerListData[ playerListIndex ];
+				for( translIndex = 0; translIndex < translCount; translIndex += 1 )
+					if( cmpItem == translData[ translIndex ] )
+						break;
+				if( translIndex < translCount )
+					continue;
+				cloneOrgData[ cloneOrgIndex ] = cmpItem;
+				cloneOrgIndex += 1;
+			}
+			break; // 已经实现循环
+		}
+		for( translIndex = 0; translIndex < translCount; translIndex += 1 )
+			if( cmpItem == translData[ translIndex ] )
+				break;
+		if( translIndex < translCount )
+			continue;
+		cloneOrgData[ cloneOrgIndex ] = cmpItem;
+		cloneOrgIndex += 1;
+	}
+	if( VectorTools::hasNullptrUnity( cloneOrgVector, translIndex ) == true )
+		return false;
+	if( VectorTools::isSingleCase( cloneOrgVector, translIndex ) == false )
+		return false;
+	*musicInfoVector = cloneOrgVector;
+	*selectItemWidgetVector = translation_vector_source;
+	selectLeftItemWidget = activeLeftItemWidget = selectLastItem;
+	return true;
 }
 
-// todo : 未完成
 bool PlayerListWidget::playerStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
 	// 列表当中是否存在播放项
 	size_t translCount = translation_vector_source.size( );

@@ -3,8 +3,7 @@
 #include <functional>
 #include <vector>
 
-class VectorTools {
-public:
+namespace VectorTools {
 	/// @brief 相同类型的比较方法
 	/// @tparam UintyType_ 序列中的元素类型
 	template< typename UintyType_ >
@@ -272,6 +271,52 @@ public:
 			setIndex += 1;
 		}
 		union_set_vector.resize( setIndex );
+	}
+
+	/// @brief 检查序列是否元素单例，失败返回首个非单例下标
+	/// @tparam Vector_Unity_Type_ 序列元素类型
+	/// @param check 检测序列
+	/// @param result_index 第一个非单例元素下标
+	/// @return true 表示全员单例，不存在相同元素
+	template< typename Vector_Unity_Type_ >
+	bool isSingleCase( const std::vector< Vector_Unity_Type_ > &check, size_t &result_index ) {
+		auto count = check.size( );
+		if( count == 0 )
+			return true;
+		auto data = check.data( );
+		decltype(count) findUnityIndex;
+
+		decltype(count) currentUnityIndex;
+
+		for( currentUnityIndex = 0; currentUnityIndex < count; currentUnityIndex += 1 )
+			for( findUnityIndex = 0; findUnityIndex < count; findUnityIndex += 1 )
+				if( findUnityIndex == currentUnityIndex )
+					continue;
+				else if( data[ currentUnityIndex ] == data[ findUnityIndex ] ) {
+					result_index = currentUnityIndex;
+					return false;
+				}
+		return true;
+	}
+
+	/// @brief 获取一个指针下标位置，失败返回 false
+	/// @tparam Vector_Unity_Type_ 序列元素类型，必须为指针类型
+	/// @param check 检查序列
+	/// @param result_index 空指针下标
+	/// @return 存在返回 true 并改变 result_index 值
+	template< typename Vector_Unity_Type_ >
+	bool hasNullptrUnity( const std::vector< Vector_Unity_Type_ * > &check, size_t &result_index ) {
+		auto count = check.size( );
+		if( count == 0 )
+			return false;
+		auto data = check.data( );
+		decltype(count) currentUnityIndex;
+		for( currentUnityIndex = 0; currentUnityIndex < count; currentUnityIndex += 1 )
+			if( data[ currentUnityIndex ] == nullptr ) {
+				result_index = currentUnityIndex;
+				return true;
+			}
+		return false;
 	}
 };
 

@@ -973,14 +973,29 @@ bool PlayerListWidget::loadDiskMusicDirList( const std::vector< QString > &file_
 	return true;
 }
 
+bool PlayerListWidget::translationToNextPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
+	return false;
+}
+
+bool PlayerListWidget::translationToCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
+	return false;
+}
+
 // todo : 未完成
 bool PlayerListWidget::setCurrentPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
+	bool result;
 	// 如果存在播放
 	musicInfoMutex->lock( );
-	if( playerItemWidget )/* 正在播放音乐 */ {
-	} else/* 不在播放音乐 */ {
-	}
-	return false;
+	if( playerItemWidget )
+		/* 正在播放音乐 */
+		result = translationToCurrentPlayer( music_item_vector );
+	else
+		/* 不在播放音乐 */
+		result = translationToNextPlayer( music_item_vector );
+	musicInfoMutex->unlock( );
+	if( result )
+		updateItemWidget( );
+	return result;
 }
 
 // todo : 未完成

@@ -1191,7 +1191,6 @@ bool PlayerListWidget::setInsertPlayerMusicList( const std::vector< MusicInfoIte
 	return result;
 }
 
-// todo : 未完成
 bool PlayerListWidget::moveMusicToListTop( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
 	musicInfoMutex->lock( );
 	size_t count = musicInfoVector->size( );
@@ -1222,7 +1221,6 @@ bool PlayerListWidget::moveMusicToListTop( const std::vector< MusicInfoItemWidge
 	return true;
 }
 
-// todo : 未完成
 bool PlayerListWidget::moveMusicToListBottom( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
 	musicInfoMutex->lock( );
 	size_t count = musicInfoVector->size( );

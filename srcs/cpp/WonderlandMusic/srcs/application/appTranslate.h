@@ -1,6 +1,8 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
 
+class SystemTrayIconTranslate;
+class SystemTrayIconMenuTranslate;
 class MusicInfoItemTranslate;
 class PlayerListWidgetTranslate;
 class MessageTranslate;
@@ -30,6 +32,8 @@ protected:
 	MessageTranslate *message = nullptr;
 	PlayerListWidgetTranslate *playerListWidget = nullptr;
 	MusicInfoItemTranslate *musicInfoItem = nullptr;
+	SystemTrayIconMenuTranslate *systemTrayIconMenu = nullptr;
+	SystemTrayIconTranslate *systemTrayIcon = nullptr;
 
 protected:
 	virtual void setCodecForLocale( );
@@ -70,6 +74,10 @@ public:
 	virtual PlayerListWidgetTranslate * getPlayerListWidget( ) const;
 
 	virtual MusicInfoItemTranslate * getMusicInfoItem( ) const;
+
+	virtual SystemTrayIconMenuTranslate * getSystemTrayIconMenu( ) const;
+
+	virtual SystemTrayIconTranslate * getSystemTrayIcon( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

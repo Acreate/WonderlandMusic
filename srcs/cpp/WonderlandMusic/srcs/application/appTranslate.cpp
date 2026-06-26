@@ -15,6 +15,8 @@
 #include "translate/playerWidgetTranslate.h"
 #include "translate/playerWindowTranslate.h"
 #include "translate/settingWidgetTranslate.h"
+#include "translate/systemTrayIconMenuTranslate.h"
+#include "translate/systemTrayIconTranslate.h"
 
 AppTranslate::AppTranslate( ) {
 }
@@ -39,6 +41,8 @@ bool AppTranslate::translateString( ) {
 	if_init_result( message );
 	if_init_result( playerListWidget );
 	if_init_result( musicInfoItem );
+	if_init_result( systemTrayIconMenu );
+	if_init_result( systemTrayIcon );
 
 	return true;
 }
@@ -58,6 +62,8 @@ void AppTranslate::deleteResource( ) {
 	d_r( message );
 	d_r( playerListWidget );
 	d_r( musicInfoItem );
+	d_r( systemTrayIconMenu );
+	d_r( systemTrayIcon );
 }
 
 AppTranslate::~AppTranslate( ) {
@@ -80,6 +86,8 @@ bool AppTranslate::init( ) {
 	message = new MessageTranslate;
 	playerListWidget = new PlayerListWidgetTranslate;
 	musicInfoItem = new MusicInfoItemTranslate;
+	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
+	systemTrayIcon = new SystemTrayIconTranslate;
 	setCodecForLocale( );
 	if( translateString( ) == false )
 		return false;
@@ -136,4 +144,12 @@ PlayerListWidgetTranslate * AppTranslate::getPlayerListWidget( ) const {
 
 MusicInfoItemTranslate * AppTranslate::getMusicInfoItem( ) const {
 	return musicInfoItem;
+}
+
+SystemTrayIconMenuTranslate * AppTranslate::getSystemTrayIconMenu( ) const {
+	return systemTrayIconMenu;
+}
+
+SystemTrayIconTranslate * AppTranslate::getSystemTrayIcon( ) const {
+	return systemTrayIcon;
 }

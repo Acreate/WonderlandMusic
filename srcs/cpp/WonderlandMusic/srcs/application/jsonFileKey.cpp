@@ -10,6 +10,7 @@
 #include "jsonKey/playerListToolWidgetJsonKey.h"
 #include "jsonKey/playerListTopWidgetJsonKey.h"
 #include "jsonKey/playerWindowJsonKey.h"
+#include "jsonKey/systemTrayIconJsonKey.h"
 
 void JsonFileKey::deleteResource( ) {
 	#define d_r(ptr) if(ptr) (delete ptr, ptr = nullptr)
@@ -21,6 +22,7 @@ void JsonFileKey::deleteResource( ) {
 	d_r( mainWindow );
 	d_r( musicInfoItem );
 	d_r( playerListMenu );
+	d_r( systemTrayIcon );
 }
 
 JsonFileKey::~JsonFileKey( ) {
@@ -41,6 +43,7 @@ bool JsonFileKey::init( ) {
 	mainWindow = new MainWindowJsonKey;
 	musicInfoItem = new MusicInfoItemJsonKey;
 	playerListMenu = new PlayerListMenuJsonKey;
+	systemTrayIcon = new SystemTrayIconJsonKey;
 	#define if_init_result(ptr) if(ptr->init() == false) return false
 	if_init_result( playerListToolWidget );
 	if_init_result( aboutWidgetJsonFileKey );
@@ -50,6 +53,7 @@ bool JsonFileKey::init( ) {
 	if_init_result( mainWindow );
 	if_init_result( musicInfoItem );
 	if_init_result( playerListMenu );
+	if_init_result( systemTrayIcon );
 
 	return true;
 }
@@ -84,4 +88,8 @@ MainWindowJsonKey * JsonFileKey::getMainWindow( ) const {
 
 PlayerListMenuJsonKey * JsonFileKey::getPlayerListMenu( ) const {
 	return playerListMenu;
+}
+
+SystemTrayIconJsonKey * JsonFileKey::getSystemTrayIcon( ) const {
+	return systemTrayIcon;
 }

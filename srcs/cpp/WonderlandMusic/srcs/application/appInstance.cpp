@@ -8,7 +8,13 @@
 #include "musicDecoder.h"
 #include "renderImage.h"
 
+#include "../msgInfo/messageErrorOut.h"
+
+#include "../systemTrayIcon/systemTrayIcon.h"
+
 #include "../window/mainWindow.h"
+
+#include "translate/systemTrayIconTranslate.h"
 AppInstance *AppInstance::instance = nullptr;
 
 AppInstance * AppInstance::getAppInstance( ) {
@@ -26,6 +32,7 @@ void AppInstance::deleteResource( ) {
 	d_r( translate );
 	d_r( startDateTime );
 	d_r( renderImage );
+	d_r( systemTrayIcon );
 	instance = nullptr;
 }
 
@@ -56,6 +63,7 @@ bool AppInstance::init( ) {
 	jsonFileKey = new JsonFileKey;
 	musicDecoder = new MusicDecoder;
 	mainWindow = new MainWindow;
+	systemTrayIcon = new SystemTrayIcon;
 	renderImage = new RenderImage;
 	if( translate->init( ) == false )
 		return false;
@@ -67,6 +75,10 @@ bool AppInstance::init( ) {
 		return false;
 	if( mainWindow->init( ) == false )
 		return false;
+	// 托盘可能会初始化失败，它的可选的，需要时可
+	if( systemTrayIcon->init( ) == false )
+		Message_Error_Out << translate->getSystemTrayIcon( )->getIsSystemTrayAvailableError( );
+
 	return true;
 }
 
@@ -104,4 +116,24 @@ const RenderImage * AppInstance::getRenderImage( ) const {
 
 QString AppInstance::getAppSettingPath( ) const {
 	return appSettingPath;
+}
+
+bool AppInstance::showMainWindow( ) const {
+	if( mainWindow == nullptr )
+		return false;
+	mainWindow->show( );
+	mainWindow->raise( );
+	mainWindow->activateWindow( );
+	return true;
+}
+
+bool AppInstance::hideMainWindow( ) const {
+	if( mainWindow == nullptr )
+		return false;
+	mainWindow->hide( );
+	return true;
+}
+
+MainWindow * AppInstance::getMainWindow( ) const {
+	return mainWindow;
 }

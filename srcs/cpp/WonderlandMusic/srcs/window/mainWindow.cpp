@@ -79,6 +79,17 @@ bool MainWindow::init( ) {
 	return true;
 }
 
+bool MainWindow::event( QEvent *event ) {
+	auto type = event->type( );
+	switch( type ) {
+		case QEvent::Close :
+			hide( );
+			event->ignore( );
+			return true;
+	}
+	return QMainWindow::event( event );
+}
+
 void MainWindow::showEvent( QShowEvent *event ) {
 	QMainWindow::showEvent( event );
 }

@@ -94,6 +94,9 @@ public:
 	virtual bool init( );
 
 protected:
+	//void closeEvent( QCloseEvent *event ) override;
+	bool event( QEvent *event ) override;
+
 	void showEvent( QShowEvent *event ) override;
 };
 

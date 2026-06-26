@@ -3,7 +3,7 @@
 #include <QObject>
 
 bool MainWindowTranslate::init( ) {
-	appWindowTitleName = QObject::tr( "仙缘村落" );
+	appWindowTitleName = QObject::tr( "仙村音乐" );
 	musicTypeName = QObject::tr( "音频" );
 	settingWidget = QObject::tr( "软件设置" );
 	aboutWidget = QObject::tr( "关于" );

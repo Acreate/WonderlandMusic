@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QLoggingCategory>
 
+class SystemTrayIcon;
 class MusicPlayerInstance;
 class RenderImage;
 class MainWindow;
@@ -33,6 +34,8 @@ protected:
 	RenderImage *renderImage = nullptr;
 	/// @brief 主要执行窗口
 	MainWindow *mainWindow = nullptr;
+	/// @brief 系统托盘
+	SystemTrayIcon* systemTrayIcon = nullptr;
 	/// @brief 退出代码
 	int exitCode;
 	/// @brief 应用配置路径
@@ -67,5 +70,9 @@ public:
 	virtual const RenderImage * getRenderImage( ) const;
 
 	virtual QString getAppSettingPath( ) const;
+	virtual bool showMainWindow() const;
+	virtual bool hideMainWindow() const;
+
+	virtual MainWindow * getMainWindow( ) const;
 };
 #endif // APPINSTANCE_H_H_HEAD__FILE__

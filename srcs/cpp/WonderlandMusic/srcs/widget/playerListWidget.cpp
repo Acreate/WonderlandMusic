@@ -858,11 +858,11 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 bool PlayerListWidget::removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target ) {
 	std::vector< MusicInfoItemWidget * > unionSetVector;
 
-	VectorTools::unionSetVector( *musicInfoVector, remove_source_target, unionSetVector );
+	VectorTools::unionSetVector( unionSetVector, *musicInfoVector, remove_source_target );
 	size_t count = unionSetVector.size( );
 	if( count == 0 )
 		return false;
-	VectorTools::differenceSetVector( *musicInfoVector, unionSetVector, result_move_target );
+	VectorTools::differenceSetVector( result_move_target, *musicInfoVector, unionSetVector );
 	*musicInfoVector = result_move_target;
 	result_move_target = unionSetVector;
 	return true;
@@ -973,7 +973,6 @@ bool PlayerListWidget::loadDiskMusicDirList( const std::vector< QString > &file_
 	return true;
 }
 
-// todo : 未完成
 bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {// 列表当中是否存在播放项
 	size_t translCount = translation_vector_source.size( );
 	if( translCount == 0 )
@@ -1120,9 +1119,51 @@ bool PlayerListWidget::setCurrentPlayerMusicList( const std::vector< MusicInfoIt
 	return result;
 }
 
-// todo : 未完成
-bool PlayerListWidget::setInsertPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
+bool PlayerListWidget::playerStatusTranslationMoveCurrentPlayerNext( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
+	size_t findIndex = 0;
+	if( VectorTools::findIndex( findIndex, translation_vector_source, playerItemWidget ) == true )
+		return playerStatusTranslationMoveCurrentPlayer( translation_vector_source );
+	std::vector< MusicInfoItemWidget * > clone;
+	VectorTools::filterVector( clone, *musicInfoVector, translation_vector_source );
+	// 使用 findIndex 下标，对 clone 进行往后排序
+	if( VectorTools::findIndex( findIndex, clone, playerItemWidget ) == false )
+		return false; // 找不到
+	findIndex += 1;
+	if( VectorTools::inster( clone, translation_vector_source, findIndex ) == false )
+		return false;
+	//*musicInfoVector = clone;
 	return false;
+}
+
+bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayerNext( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
+	return setoutStatusTranslationMoveCurrentPlayer( translation_vector_source );;
+}
+
+bool PlayerListWidget::setInsertPlayerMusicList( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
+	bool result;
+	// 如果存在播放
+	musicInfoMutex->lock( );
+	if( playerItemWidget )
+		/* 正在播放音乐 */
+		result = playerStatusTranslationMoveCurrentPlayerNext( music_item_vector );
+	else
+		/* 不在播放音乐 */
+		result = setoutStatusTranslationMoveCurrentPlayerNext( music_item_vector );
+	musicInfoMutex->unlock( );
+	if( result ) {
+		updateItemWidget( );
+		if( playerItemWidget ) {
+			musicPlayer->playerStop( );
+			auto appInstance = AppInstance::getAppInstance( );
+			while( widgetState != PlayerListWidgetState::None )
+				appInstance->processEvents( );
+		}
+		widgetState = PlayerListWidgetState::Set_Player_Run;
+		result = musicPlayer->playerMusic( selectItemWidgetVector->data( )[ 0 ]->getMusicFilePath( ) );
+		widgetState = PlayerListWidgetState::None;
+		return result;
+	}
+	return result;
 }
 
 // todo : 未完成

@@ -998,9 +998,7 @@ bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayer( const std::vect
 			for( translIndex = 0; translIndex < translCount; translIndex += 1 )
 				offsetClonePtr[ translIndex ] = translData[ translIndex ];
 			offsetClonePtr[ translIndex ] = translData[ translIndex ]; // 拷贝末尾
-			translIndex += 1;
 			cloneOrgIndex += translIndex;// 增加扩张数据
-			playerListIndex = playerListIndex + translIndex;
 			// 接手循环
 			for( ; playerListIndex < playerListCount; playerListIndex += 1 ) {
 				cmpItem = playerListData[ playerListIndex ];
@@ -1022,10 +1020,6 @@ bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayer( const std::vect
 		cloneOrgData[ cloneOrgIndex ] = cmpItem;
 		cloneOrgIndex += 1;
 	}
-	if( VectorTools::hasNullptrUnity( cloneOrgVector, translIndex ) == true )
-		return false;
-	if( VectorTools::isSingleCase( cloneOrgVector, translIndex ) == false )
-		return false;
 	*musicInfoVector = cloneOrgVector;
 	*selectItemWidgetVector = translation_vector_source;
 	selectLeftItemWidget = activeLeftItemWidget = selectLastItem;

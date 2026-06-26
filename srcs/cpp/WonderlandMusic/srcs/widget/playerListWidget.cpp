@@ -888,11 +888,11 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 	size_t deleteFileCount = deleteSetVector.size( );
 	size_t deleteFileIndex;
 	QFile file;
-	MessageErrorOut out;
 	PlayerListWidgetTranslate *playerListWidget = AppInstance::getAppInstance( )->getTranslate( )->getPlayerListWidget( );
 
 	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 ) {
-		file.setFileName( deleteFileData[ deleteFileIndex ]->musicFilePath );
+		QString musicFilePath = deleteFileData[ deleteFileIndex ]->musicFilePath;
+		file.setFileName( musicFilePath );
 		bool moveToTrash = file.moveToTrash( );
 		if( deleteFileData[ deleteFileIndex ] == playerItemWidget ) {
 			musicInfoMutex->lock( );
@@ -905,7 +905,7 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 		delete deleteFileData[ deleteFileIndex ];
 		if( moveToTrash )
 			continue;
-		out << playerListWidget->getRemoveDiskFileError( ) + " : " + deleteFileData[ deleteFileIndex ]->musicFilePath;
+		Message_Error_Out << playerListWidget->getRemoveDiskFileError( ) + " : " + musicFilePath;
 	}
 	return true;
 }
@@ -1120,19 +1120,55 @@ bool PlayerListWidget::setCurrentPlayerMusicList( const std::vector< MusicInfoIt
 }
 
 bool PlayerListWidget::playerStatusTranslationMoveCurrentPlayerNext( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
-	size_t findIndex = 0;
-	if( VectorTools::findIndex( findIndex, translation_vector_source, playerItemWidget ) == true )
-		return playerStatusTranslationMoveCurrentPlayer( translation_vector_source );
-	std::vector< MusicInfoItemWidget * > clone;
-	VectorTools::filterVector( clone, *musicInfoVector, translation_vector_source );
-	// 使用 findIndex 下标，对 clone 进行往后排序
-	if( VectorTools::findIndex( findIndex, clone, playerItemWidget ) == false )
-		return false; // 找不到
-	findIndex += 1;
-	if( VectorTools::inster( clone, translation_vector_source, findIndex ) == false )
-		return false;
-	//*musicInfoVector = clone;
-	return false;
+	size_t translationCount = translation_vector_source.size( );
+	auto translationData = translation_vector_source.data( );
+	size_t translationIndex = 0;
+	for( ; translationIndex < translationCount; translationIndex += 1 )
+		if( translationData[ translationIndex ] == playerItemWidget ) // 如果选择在内
+			return playerStatusTranslationMoveCurrentPlayer( translation_vector_source );
+
+	size_t count = musicInfoVector->size( );
+	auto data = musicInfoVector->data( );
+	std::vector< MusicInfoItemWidget * > clone( count );
+	auto cloneData = clone.data( );
+	size_t cloneIndex = 0;
+	size_t index = 0;
+	for( ; index < count; index += 1 ) {
+		auto comp = data[ index ];
+
+		// 如果当前放置项为播放，则接管循环
+		if( comp == playerItemWidget ) {
+			cloneData[ cloneIndex ] = comp;
+			cloneIndex += 1;
+			auto offsetCloneData = cloneData + cloneIndex;
+			for( translationIndex = 0; translationIndex < translationCount; translationIndex += 1 )
+				offsetCloneData[ translationIndex ] = translationData[ translationIndex ];
+			cloneIndex += translationCount;
+			for( index += 1; index < count; index += 1 ) {
+				comp = data[ index ]; // 跳过 playerItemWidget 项
+				for( translationIndex = 0; translationIndex < translationCount; translationIndex += 1 )
+					if( comp == translationData[ translationIndex ] )
+						break;
+				if( translationIndex < translationCount )
+					continue;
+				if( cloneIndex >= count )
+					break;
+				cloneData[ cloneIndex ] = comp;
+				cloneIndex += 1;
+			}
+			break;
+		}
+
+		for( translationIndex = 0; translationIndex < translationCount; translationIndex += 1 )
+			if( comp == translationData[ translationIndex ] )
+				break;
+		if( translationIndex < translationCount )
+			continue;
+		cloneData[ cloneIndex ] = comp;
+		cloneIndex += 1;
+	}
+	*musicInfoVector = clone;
+	return true;
 }
 
 bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayerNext( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
@@ -1150,28 +1186,69 @@ bool PlayerListWidget::setInsertPlayerMusicList( const std::vector< MusicInfoIte
 		/* 不在播放音乐 */
 		result = setoutStatusTranslationMoveCurrentPlayerNext( music_item_vector );
 	musicInfoMutex->unlock( );
-	if( result ) {
+	if( result )
 		updateItemWidget( );
-		if( playerItemWidget ) {
-			musicPlayer->playerStop( );
-			auto appInstance = AppInstance::getAppInstance( );
-			while( widgetState != PlayerListWidgetState::None )
-				appInstance->processEvents( );
-		}
-		widgetState = PlayerListWidgetState::Set_Player_Run;
-		result = musicPlayer->playerMusic( selectItemWidgetVector->data( )[ 0 ]->getMusicFilePath( ) );
-		widgetState = PlayerListWidgetState::None;
-		return result;
-	}
 	return result;
 }
 
 // todo : 未完成
 bool PlayerListWidget::moveMusicToListTop( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
-	return false;
+	musicInfoMutex->lock( );
+	size_t count = musicInfoVector->size( );
+	auto data = musicInfoVector->data( );
+	size_t index = 0;
+	size_t checkCount = music_item_vector.size( );
+	auto checkData = music_item_vector.data( );
+	std::vector< MusicInfoItemWidget * > clone( count );
+	auto cloneData = clone.data( );
+	size_t cloneIndex = 0;
+	size_t checkIndex;
+
+	for( checkIndex = 0; checkIndex < checkCount; checkIndex += 1, cloneIndex += 1 )
+		cloneData[ cloneIndex ] = checkData[ checkIndex ];
+	for( ; index < count; index += 1 ) {
+		auto comp = data[ index ];
+		for( checkIndex = 0; checkIndex < checkCount; checkIndex += 1 )
+			if( comp == checkData[ checkIndex ] )
+				break;
+		if( checkIndex < checkCount )
+			continue;
+		cloneData[ cloneIndex ] = comp;
+		cloneIndex += 1;
+	}
+	*musicInfoVector = clone;
+	musicInfoMutex->unlock( );
+	updateItemWidget( );
+	return true;
 }
 
 // todo : 未完成
 bool PlayerListWidget::moveMusicToListBottom( const std::vector< MusicInfoItemWidget * > &music_item_vector ) {
-	return false;
+	musicInfoMutex->lock( );
+	size_t count = musicInfoVector->size( );
+	auto data = musicInfoVector->data( );
+	size_t index = 0;
+	size_t checkCount = music_item_vector.size( );
+	auto checkData = music_item_vector.data( );
+	std::vector< MusicInfoItemWidget * > clone( count );
+	auto cloneData = clone.data( );
+	size_t cloneIndex = 0;
+	size_t checkIndex;
+
+	for( ; index < count; index += 1 ) {
+		auto comp = data[ index ];
+		for( checkIndex = 0; checkIndex < checkCount; checkIndex += 1 )
+			if( comp == checkData[ checkIndex ] )
+				break;
+		if( checkIndex < checkCount )
+			continue;
+		cloneData[ cloneIndex ] = comp;
+		cloneIndex += 1;
+	}
+	for( checkIndex = 0; checkIndex < checkCount; checkIndex += 1, cloneIndex += 1 )
+		cloneData[ cloneIndex ] = checkData[ checkIndex ];
+	*musicInfoVector = clone;
+	musicInfoMutex->unlock( );
+	updateItemWidget( );
+	return true;
 }

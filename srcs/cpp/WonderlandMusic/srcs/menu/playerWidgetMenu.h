@@ -28,8 +28,6 @@ protected:
 	QString dirSelectWorkPath;
 	PlayerListWidget *playerListWidget;
 	QVector< MusicInfoItemWidget * > musicInfoItemWidgetVector;
-	/// @brief 播放菜单
-	QMenu *playerMenu;
 	/// @brief 删除菜单
 	QMenu *removeMenu;
 	/// @brief 控制菜单

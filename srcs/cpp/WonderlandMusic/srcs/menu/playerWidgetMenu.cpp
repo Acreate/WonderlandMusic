@@ -49,8 +49,6 @@ bool PlayerWidgetMenu::initVar( ) {
 }
 
 bool PlayerWidgetMenu::initSubMenu( ) {
-	playerMenu = addMenu( playerListMenuTranslate->getPlayerListMenuenuPlayerMenu( ) );
-
 	removeMenu = addMenu( playerListMenuTranslate->getPlayerListMenuMoveMenu( ) );
 	controlMenu = addMenu( playerListMenuTranslate->getPlayerListMenuControlMenu( ) );
 
@@ -59,8 +57,8 @@ bool PlayerWidgetMenu::initSubMenu( ) {
 }
 
 bool PlayerWidgetMenu::initSubMenuAcction( ) {
-	setplay = playerMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
-	insterPlay = playerMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
+	setplay = controlMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
+	insterPlay = controlMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
 
 	moveTop = controlMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuMoveTopMusicAction( ) );
 	moveBottom = controlMenu->QWidget::addAction( playerListMenuTranslate->getPlayerListMenuControlMenuMoveBottomMusicAction( ) );

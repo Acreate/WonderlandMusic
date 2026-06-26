@@ -472,10 +472,11 @@ namespace VectorTools {
 	/// @brief 检查序列是否元素单例，失败返回首个非单例下标
 	/// @tparam Vector_Unity_Type_ 序列元素类型
 	/// @param result_index 第一个非单例元素下标
+	/// @param result_repetition_index 当前重复匹配的首个下标
 	/// @param check 检测序列
 	/// @return true 表示全员单例，不存在相同元素
 	template< typename Vector_Unity_Type_ >
-	bool isSingleCase( size_t &result_index, const std::vector< Vector_Unity_Type_ > &check ) {
+	bool isSingleCase( size_t &result_index, size_t &result_repetition_index, const std::vector< Vector_Unity_Type_ > &check ) {
 		auto count = check.size( );
 		if( count == 0 )
 			return true;
@@ -490,6 +491,7 @@ namespace VectorTools {
 					continue;
 				else if( data[ currentUnityIndex ] == data[ findUnityIndex ] ) {
 					result_index = currentUnityIndex;
+					result_repetition_index = findUnityIndex;
 					return false;
 				}
 		return true;
@@ -498,11 +500,12 @@ namespace VectorTools {
 	/// @brief 检查序列是否元素单例，失败返回首个非单例下标
 	/// @tparam Vector_Unity_Type_ 序列元素类型
 	/// @param result_index 第一个非单例元素下标
+	/// @param result_repetition_index 当前重复匹配的首个下标
 	/// @param check 检测序列
 	/// @param comp 比较函数
 	/// @return true 表示全员单例，不存在相同元素
 	template< typename Vector_Unity_Type_ >
-	bool isSingleCase( size_t &result_index, const std::vector< Vector_Unity_Type_ > &check, const compIdenticalTypeFinction< Vector_Unity_Type_ > &comp ) {
+	bool isSingleCase( size_t &result_index, size_t &result_repetition_index, const std::vector< Vector_Unity_Type_ > &check, const compIdenticalTypeFinction< Vector_Unity_Type_ > &comp ) {
 		auto count = check.size( );
 		if( count == 0 )
 			return true;
@@ -517,6 +520,7 @@ namespace VectorTools {
 					continue;
 				else if( comp( data[ currentUnityIndex ], data[ findUnityIndex ] ) ) {
 					result_index = currentUnityIndex;
+					result_repetition_index = findUnityIndex;
 					return false;
 				}
 		return true;
@@ -616,42 +620,6 @@ namespace VectorTools {
 		targetData[ maxIndex ] = startData[ maxIndex ]; // 移动首个
 		return true;
 	}
-
-	/// @brief 插入序列
-	/// @tparam Unity_Type_ 插入元素类型
-	/// @param inster_dsc 被插入的序列
-	/// @param inster_src 插入的序列
-	/// @param inster_idnex 插入位置
-	/// @return 失败返回 false
-	template< typename Unity_Type_ >
-	bool inster( std::vector< Unity_Type_ > &inster_dsc, const std::vector< Unity_Type_ > &inster_src, const size_t &inster_idnex ) {
-		auto srcCount = inster_src.size( );
-		if( srcCount == 0 )
-			return true;
-		auto desCount = inster_dsc.size( );
-		auto insterEndIndex = desCount - inster_idnex + srcCount + 1;
-		if( insterEndIndex > desCount ) {
-			inster_dsc.resize( insterEndIndex ); // 扩容
-			desCount = inster_dsc.size( );
-			if( desCount != insterEndIndex )
-				return false; // 扩容失败
-		}
-		auto data = inster_dsc.data( );
-		// 偏移到插入位置
-		auto offsetDataPtr = data + inster_idnex;
-		auto offsetMoveStartDataPtr = offsetDataPtr + srcCount;
-		// 数据往后推
-		insterEndIndex = srcCount - 1;
-		for( ; insterEndIndex < srcCount; insterEndIndex -= 1 )
-			offsetMoveStartDataPtr[ insterEndIndex ] = offsetDataPtr[ insterEndIndex ];
-		offsetDataPtr[ insterEndIndex ] = offsetDataPtr[ insterEndIndex ];
-		// 数据拷贝
-		auto insterSrcDataPtr = inster_src.data( );
-		insterEndIndex = 0;
-		for( ; insterEndIndex < srcCount; insterEndIndex += 1 )
-			offsetDataPtr[ insterEndIndex ] = insterSrcDataPtr[ insterEndIndex ];
-		return true;
-	}
-};
+}
 
 #endif // VECTORTOOLS_H_H_HEAD__FILE__

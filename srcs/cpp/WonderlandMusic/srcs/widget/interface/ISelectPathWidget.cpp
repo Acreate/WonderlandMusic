@@ -41,8 +41,6 @@ ISelectPathWidget::ISelectPathWidget( QWidget *parent ) {
 
 void ISelectPathWidget::setPath( const QString &new_path ) {
 	auto autoShortenPathName = PathTools::getAutoShortenPathName( new_path );
-	if( autoShortenPathName == dirSelectWorkPath )
-		return;
 	dirSelectWorkPath = autoShortenPathName;
 	pathEditor->setText( new_path );
 	editorPathBtnEvent( dirSelectWorkPath );

@@ -203,6 +203,8 @@ QString PathTools::getAutoShortenPathName( const QString &org_file_path ) {
 	QDir base( applicationFilePath );
 
 	QString result = base.relativeFilePath( org_file_path );
+	if( result == "." )
+		return "./";
 	if( result.startsWith( "../" ) == false )
 		return "./" + result; // 不存在上级路径
 	QFileInfo info( org_file_path );

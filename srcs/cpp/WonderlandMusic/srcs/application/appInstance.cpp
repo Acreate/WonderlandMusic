@@ -22,7 +22,7 @@ AppInstance *AppInstance::instance = nullptr;
 
 bool AppInstance::initVar( ) {
 	QString dirPath = applicationDirPath( );
-	appSettingPath = dirPath + "/program/";
+	appSettingPath = PathTools::getAutoShortenPathName( dirPath ) + "/program/";
 
 	constAppSettingPath = appSettingPath + "/json/AppInstance.json";
 	constAppDefaultTranslatePath = appSettingPath + "/translations/WonderlandMusic.qm";

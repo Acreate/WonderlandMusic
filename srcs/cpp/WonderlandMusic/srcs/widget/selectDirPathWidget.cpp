@@ -3,7 +3,6 @@
 #include <QFileDialog>
 #include <QHBoxLayout>
 #include <QLineEdit>
-#include <QPushButton>
 
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"

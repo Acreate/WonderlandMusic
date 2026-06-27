@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <QJsonObject>
 #include <qfile.h>
+#include <qtranslator.h>
 
 #include "appTranslate.h"
 #include "jsonFileKey.h"
@@ -37,6 +38,7 @@ bool AppInstance::initVar( ) {
 	mainWindow = new MainWindow;
 	systemTrayIcon = new SystemTrayIcon;
 	renderImage = new RenderImage;
+	appTranslator = new QTranslator;
 	return true;
 }
 
@@ -55,12 +57,15 @@ bool AppInstance::initReadJson( ) {
 
 bool AppInstance::writeJson( ) {
 	QJsonObject appJsonObject;
-	appJsonObject.insert( constAppIniDirHomePathJsonKey, appSettingPath );
+	appJsonObject.insert( constAppIniDirHomePathJsonKey, PathTools::getAutoShortenPathName( appSettingPath ) );
 	PathTools::writeJsonObject( appJsonObject, constAppSettingPath );
 	return true;
 }
 
 bool AppInstance::initTranslate( ) {
+	if( setAppStringTranslate( constAppDefaultTranslatePath ) == false )
+		return false;
+
 	return true;
 }
 
@@ -80,6 +85,11 @@ void AppInstance::deleteResource( ) {
 	d_r( startDateTime );
 	d_r( renderImage );
 	d_r( systemTrayIcon );
+	if( appTranslator ) {
+		removeTranslator( appTranslator );
+		delete appTranslator;
+		appTranslator = nullptr;
+	}
 	instance = nullptr;
 }
 
@@ -185,4 +195,22 @@ bool AppInstance::hideMainWindow( ) const {
 
 MainWindow * AppInstance::getMainWindow( ) const {
 	return mainWindow;
+}
+
+bool AppInstance::setAppStringTranslate( const QString &translate_file_path ) {
+	QFileInfo info( translate_file_path );
+	if( info.exists( ) == false )
+		return false;
+	QTranslator *newTranslator = new QTranslator;
+	if( newTranslator->load( info.absoluteFilePath( ) ) == false ) {
+		delete newTranslator;
+		return false;
+	}
+	if( appTranslator ) {
+		removeTranslator( appTranslator );
+		delete appTranslator;
+	}
+	appTranslator = newTranslator;
+	installTranslator( appTranslator );
+	return true;
 }

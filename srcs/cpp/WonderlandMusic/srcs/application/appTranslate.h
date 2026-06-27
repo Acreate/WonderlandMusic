@@ -46,6 +46,8 @@ protected:
 
 	virtual void deleteResource( );
 
+	virtual void loadTranslateQMFile( );
+
 public:
 	virtual ~AppTranslate( );
 

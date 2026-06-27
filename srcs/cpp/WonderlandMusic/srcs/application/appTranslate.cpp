@@ -3,6 +3,8 @@
 #include <QObject>
 #include <QTextCodec>
 
+#include "appInstance.h"
+
 #include "translate/dateTimeFormatTranslate.h"
 #include "translate/iSelectDirWidgetTranslate.h"
 #include "translate/jsonTranslate.h"
@@ -72,6 +74,13 @@ void AppTranslate::deleteResource( ) {
 	d_r( selectDirWidget );
 }
 
+void AppTranslate::loadTranslateQMFile( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appSettingPath = appInstance->getAppSettingPath( );
+	auto currentQMFile = appSettingPath + QObject::tr( "/translations/WonderlandMusic_zh_CN.qm" );
+	appInstance->setAppStringTranslate( currentQMFile );
+}
+
 AppTranslate::~AppTranslate( ) {
 	deleteResource( );
 }
@@ -97,6 +106,9 @@ bool AppTranslate::init( ) {
 	userMutex = new UserMutexTranslate;
 	selectDirWidget = new ISelectDirWidgetTranslate;
 	setCodecForLocale( );
+
+	loadTranslateQMFile( );
+
 	if( translateString( ) == false )
 		return false;
 	return true;

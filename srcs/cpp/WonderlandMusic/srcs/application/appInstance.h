@@ -46,6 +46,8 @@ protected:
 	QString constAppDefaultTranslatePath;
 	/// @brief 获取 json 中的关键 key
 	QString constAppIniDirHomePathJsonKey;
+	/// @brief 翻译
+	QTranslator *appTranslator = nullptr;
 
 protected:
 	virtual bool initVar( );
@@ -91,5 +93,7 @@ public:
 	virtual bool hideMainWindow( ) const;
 
 	virtual MainWindow * getMainWindow( ) const;
+
+	virtual bool setAppStringTranslate( const QString &translate_file_path );
 };
 #endif // APPINSTANCE_H_H_HEAD__FILE__

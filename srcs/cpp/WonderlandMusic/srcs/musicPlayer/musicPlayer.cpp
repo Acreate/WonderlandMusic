@@ -61,6 +61,36 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	return true;
 }
 
+bool MusicPlayer::playerNextMusic( const QString &music_file ) {
+	QFileInfo loadMusicFileInfo( music_file );
+	if( loadMusicFileInfo.exists( ) == false )
+		return false;
+	//playerStop( ); // 下一曲不会停止
+
+	auto newLoadFile = loadMusicFileInfo.absoluteFilePath( );
+
+	musicPlayerThread = new MusicMediaPlayerThread( newLoadFile );
+
+	connect( musicPlayerThread, &MusicPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
+	}, Qt::QueuedConnection );
+	connect( musicPlayerThread, &MusicPlayerThread::durationChanged, musicPlayerThread, [this] ( qint64 duration ) {
+	}, Qt::QueuedConnection );
+	connect( musicPlayerThread, &MusicPlayerThread::threadOver, this, [ this, newLoadFile]( ) {
+		emit playerOver( newLoadFile );
+		this->disconnect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
+		musicPlayerThread->disconnect( );
+		musicPlayerThread->deleteLater( );
+		musicPlayerThread = nullptr;
+	}, Qt::QueuedConnection );
+	connect( musicPlayerThread, &MusicPlayerThread::threadStart, this, [ this, newLoadFile]( ) {
+		emit playerStart( newLoadFile );
+	}, Qt::QueuedConnection );
+	// 开始播放
+	musicPlayerThread->startPlayerMusic( );
+	musicFilePath = newLoadFile;
+	return true;
+}
+
 const QString & MusicPlayer::getMusicFilePath( ) const {
 	return musicFilePath;
 }

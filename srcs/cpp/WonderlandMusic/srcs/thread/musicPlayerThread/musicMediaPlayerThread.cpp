@@ -42,7 +42,25 @@ bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_threa
 	emit threadStart( );
 	mediaPlayer = new QMediaPlayer;
 	audioOutput = new QAudioOutput;
-
+	connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [this] ( QMediaPlayer::MediaStatus status ) {
+		switch( status ) {
+			case QMediaPlayer::LoadingMedia :
+				break;
+			case QMediaPlayer::LoadedMedia :
+				break;
+			case QMediaPlayer::StalledMedia :
+				break;
+			case QMediaPlayer::BufferingMedia :
+				break;
+			case QMediaPlayer::BufferedMedia :
+				break;
+			case QMediaPlayer::NoMedia :
+			case QMediaPlayer::EndOfMedia :
+			case QMediaPlayer::InvalidMedia :
+				emit threadOver( );
+				break;
+		}
+	}, Qt::QueuedConnection );
 	audioOutput->setVolume( 1.0 );
 
 	mediaPlayer->setAudioOutput( audioOutput );

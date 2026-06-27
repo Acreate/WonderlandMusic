@@ -644,7 +644,7 @@ void PlayerListWidget::playerOver_slot( const QString &player_music_file ) {
 		}
 	musicInfoMutex->unlock( );
 	widgetState = PlayerListWidgetState::Set_Player_Run;
-	musicPlayer->playerMusic( nextPlayerFile );
+	musicPlayer->playerNextMusic( nextPlayerFile );
 	widgetState = PlayerListWidgetState::None;
 }
 

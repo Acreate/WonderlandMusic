@@ -1,4 +1,5 @@
 ﻿#include <QDateTime>
+#include <QLoggingCategory>
 #include <qfile.h>
 
 #include "application/appInstance.h"

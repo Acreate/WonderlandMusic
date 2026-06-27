@@ -1,6 +1,5 @@
 ﻿#include "appInstance.h"
 
-#include <QDateTime>
 #include <QJsonObject>
 #include <qfile.h>
 #include <qtranslator.h>
@@ -175,6 +174,10 @@ const RenderImage * AppInstance::getRenderImage( ) const {
 
 QString AppInstance::getAppSettingPath( ) const {
 	return appSettingPath;
+}
+
+void AppInstance::setAppSettingPath( const QString &app_setting_dir_home_path ) {
+	appSettingPath = PathTools::getAutoShortenPathName( app_setting_dir_home_path );
 }
 
 bool AppInstance::showMainWindow( ) const {

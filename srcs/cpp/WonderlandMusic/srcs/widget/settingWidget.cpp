@@ -4,6 +4,8 @@
 
 #include "selectDirPathWidget.h"
 
+#include "../application/appInstance.h"
+
 #include "../tools/autoMakePtrTools.h"
 
 void SettingWidget::deleteResource( ) {
@@ -25,6 +27,8 @@ bool SettingWidget::writeJsonPathInfo( ) {
 bool SettingWidget::initWidget( ) {
 	if( AutoMakePtrTools::makePtr( appJsonPathWidget, this ) == nullptr )
 		return false;
+	auto appSettingDirPath = AppInstance::getAppInstance( )->getAppSettingPath( );
+	appJsonPathWidget->setPath( appSettingDirPath );
 	QVBoxLayout *vBoxLayout = new QVBoxLayout( this );
 
 	vBoxLayout->addWidget( appJsonPathWidget );

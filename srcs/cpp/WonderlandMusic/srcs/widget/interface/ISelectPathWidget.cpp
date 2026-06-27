@@ -1,4 +1,4 @@
-﻿#include "ISelectDirWidget.h"
+﻿#include "ISelectPathWidget.h"
 
 #include <QFileInfo>
 #include <QHBoxLayout>
@@ -7,22 +7,22 @@
 
 #include "../../application/appInstance.h"
 #include "../../application/appTranslate.h"
-#include "../../application/translate/iSelectDirWidgetTranslate.h"
+#include "../../application/translate/ISelectPathWidgetTranslate.h"
 
 #include "../../tools/pathTools.h"
 
-ISelectDirWidget::ISelectDirWidget( QWidget *parent ) {
+ISelectPathWidget::ISelectPathWidget( QWidget *parent ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto selectDirWidgetTranslate = appInstance->getTranslate( )->getSelectDirWidget( );
+	auto selectDirWidgetTranslate = appInstance->getTranslate( )->getSelectPathWidget( );
 	hBoxLayout = new QHBoxLayout( this );
 	hBoxLayout->setContentsMargins( 0, 0, 0, 0 );
 	hBoxLayout->setSpacing( 0 );
 	pathEditor = new QLineEdit( this );
 	pathEditor->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
-	pathEditor->setPlaceholderText( selectDirWidgetTranslate->getPathLineEditorPlaceholderText( ) );
+	pathEditor->setPlaceholderText( selectDirWidgetTranslate->getLineEditorPlaceholderText( ) );
 	hBoxLayout->addWidget( pathEditor );
 	selectPathButton = new QPushButton( this );
-	selectPathButton->setText( selectDirWidgetTranslate->getPathSelectButtonText( ) );
+	selectPathButton->setText( selectDirWidgetTranslate->getSelectButtonText( ) );
 	hBoxLayout->addWidget( selectPathButton );
 	selectPathButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
@@ -39,12 +39,15 @@ ISelectDirWidget::ISelectDirWidget( QWidget *parent ) {
 	} );
 }
 
-void ISelectDirWidget::setPath( const QString &new_path ) {
-	dirSelectWorkPath = PathTools::getAutoShortenPathName( new_path );;
+void ISelectPathWidget::setPath( const QString &new_path ) {
+	auto autoShortenPathName = PathTools::getAutoShortenPathName( new_path );
+	if( autoShortenPathName == dirSelectWorkPath )
+		return;
+	dirSelectWorkPath = autoShortenPathName;
 	pathEditor->setText( new_path );
-	emit this->editorPathBtnEvent( dirSelectWorkPath );
+	editorPathBtnEvent( dirSelectWorkPath );
 }
 
-const QString & ISelectDirWidget::getPath( ) const {
+const QString & ISelectPathWidget::getPath( ) const {
 	return dirSelectWorkPath;
 }

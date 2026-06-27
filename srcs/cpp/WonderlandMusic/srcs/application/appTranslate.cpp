@@ -6,7 +6,7 @@
 #include "appInstance.h"
 
 #include "translate/dateTimeFormatTranslate.h"
-#include "translate/iSelectDirWidgetTranslate.h"
+#include "translate/iSelectPathWidgetTranslate.h"
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
@@ -48,7 +48,7 @@ bool AppTranslate::translateString( ) {
 	if_init_result( systemTrayIconMenu );
 	if_init_result( systemTrayIcon );
 	if_init_result( userMutex );
-	if_init_result( selectDirWidget );
+	if_init_result( selectPathWidget );
 
 	return true;
 }
@@ -71,7 +71,7 @@ void AppTranslate::deleteResource( ) {
 	d_r( systemTrayIconMenu );
 	d_r( systemTrayIcon );
 	d_r( userMutex );
-	d_r( selectDirWidget );
+	d_r( selectPathWidget );
 }
 
 void AppTranslate::loadTranslateQMFile( ) {
@@ -104,7 +104,7 @@ bool AppTranslate::init( ) {
 	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
 	systemTrayIcon = new SystemTrayIconTranslate;
 	userMutex = new UserMutexTranslate;
-	selectDirWidget = new ISelectDirWidgetTranslate;
+	selectPathWidget = new ISelectPathWidgetTranslate;
 	setCodecForLocale( );
 
 	loadTranslateQMFile( );
@@ -178,6 +178,6 @@ UserMutexTranslate * AppTranslate::getUserMutex( ) const {
 	return userMutex;
 }
 
-ISelectDirWidgetTranslate * AppTranslate::getSelectDirWidget( ) const {
-	return selectDirWidget;
+ISelectPathWidgetTranslate * AppTranslate::getSelectPathWidget( ) const {
+	return selectPathWidget;
 }

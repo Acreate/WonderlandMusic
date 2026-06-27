@@ -1,6 +1,7 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
 
+class ISelectPathWidgetTranslate;
 class SystemTrayIconTranslate;
 class SystemTrayIconMenuTranslate;
 class MusicInfoItemTranslate;
@@ -20,6 +21,8 @@ class UserMutexTranslate;
 class ISelectDirWidgetTranslate;
 
 class AppTranslate {
+	
+
 protected:
 	SettingWidgetTranslate *settingWidget = nullptr;
 	PlayerToolsWidgetTranslate *playerToolsWidget = nullptr;
@@ -37,7 +40,7 @@ protected:
 	SystemTrayIconMenuTranslate *systemTrayIconMenu = nullptr;
 	SystemTrayIconTranslate *systemTrayIcon = nullptr;
 	UserMutexTranslate *userMutex = nullptr;
-	ISelectDirWidgetTranslate *selectDirWidget = nullptr;
+	ISelectPathWidgetTranslate *selectPathWidget = nullptr;
 
 protected:
 	virtual void setCodecForLocale( );
@@ -87,7 +90,7 @@ public:
 
 	virtual UserMutexTranslate * getUserMutex( ) const;
 
-	virtual ISelectDirWidgetTranslate * getSelectDirWidget( ) const;
+	virtual ISelectPathWidgetTranslate * getSelectPathWidget( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

@@ -1,9 +1,9 @@
 ﻿#ifndef SELECTDIRPATHWIDGET_H_H_HEAD__FILE__
 #define SELECTDIRPATHWIDGET_H_H_HEAD__FILE__
 
-#include "interface/ISelectDirWidget.h"
+#include "interface/ISelectPathWidget.h"
 
-class SelectDirPathWidget : public ISelectDirWidget {
+class SelectDirPathWidget : public ISelectPathWidget {
 	Q_OBJECT;
 
 protected:

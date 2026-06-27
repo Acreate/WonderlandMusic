@@ -2,7 +2,6 @@
 #define APPINSTANCE_H_H_HEAD__FILE__
 
 #include <QApplication>
-#include <QLoggingCategory>
 
 class SystemTrayIcon;
 class MusicPlayerInstance;
@@ -87,6 +86,8 @@ public:
 	virtual const RenderImage * getRenderImage( ) const;
 
 	virtual QString getAppSettingPath( ) const;
+
+	virtual void setAppSettingPath( const QString &app_setting_dir_home_path );
 
 	virtual bool showMainWindow( ) const;
 

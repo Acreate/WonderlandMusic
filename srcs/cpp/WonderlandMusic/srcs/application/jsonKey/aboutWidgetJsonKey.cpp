@@ -5,7 +5,7 @@
 bool AboutWidgetJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppSettingPath( );
-	qtLogoIconPath = applicationDirPath + "/program/png/qtlogo-64.png";
+	qtLogoIconPath = applicationDirPath + "/png/qtlogo-64.png";
 	return true;
 }
 

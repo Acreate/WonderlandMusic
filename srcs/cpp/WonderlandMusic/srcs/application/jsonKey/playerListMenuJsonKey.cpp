@@ -5,8 +5,7 @@
 bool PlayerListMenuJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppSettingPath( );
-
-	settingJsonPath = applicationDirPath + "/program/json/app.player.work.select.info.json";
+	settingJsonPath = applicationDirPath + "/json/app.player.work.select.info.json";
 	fileSelectWorkPath = "play.window.menu.player.path.file.select";
 	dirSelectWorkPath = "play.window.menu.player.path.dir.select";
 	return true;

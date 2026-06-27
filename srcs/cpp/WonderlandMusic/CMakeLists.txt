@@ -114,6 +114,7 @@ endif( )
 if( MSVC )
 	target_compile_options( "${prject_name}" PRIVATE "/utf-8" )
 	un_show_include_info( ${prject_name} )
+	add_compile_options( /MP )
 endif( )
 
 target_include_directories( "${prject_name}" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/srcs" )

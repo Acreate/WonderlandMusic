@@ -10,7 +10,8 @@
 #include "../application/jsonKey/musicInfoItemJsonKey.h"
 #include "../application/translate/musicInfoItemTranslate.h"
 
-#include "../tools/dateTimeFormat.h"
+#include "../dateTimeFormat/dateTimeFormat.h"
+
 #include "../tools/pathTools.h"
 
 #include "../widget/playerListWidget.h"

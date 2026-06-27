@@ -1,6 +1,7 @@
 ﻿#include "appInstance.h"
 
 #include <QDateTime>
+#include <QJsonObject>
 #include <qfile.h>
 
 #include "appTranslate.h"
@@ -12,10 +13,56 @@
 
 #include "../systemTrayIcon/systemTrayIcon.h"
 
+#include "../tools/pathTools.h"
+
 #include "../window/mainWindow.h"
 
 #include "translate/systemTrayIconTranslate.h"
 AppInstance *AppInstance::instance = nullptr;
+
+bool AppInstance::initVar( ) {
+	QString dirPath = applicationDirPath( );
+	appSettingPath = dirPath + "/program/";
+
+	constAppSettingPath = appSettingPath + "/json/AppInstance.json";
+	constAppDefaultTranslatePath = appSettingPath + "/translations/WonderlandMusic.qm";
+	constAppIniDirHomePathJsonKey = "app.ini.dir.home.path";
+
+	instance = this;
+	// 创建变量
+	startDateTime = new QDateTime( QDateTime::currentDateTime( ) );
+	translate = new AppTranslate;
+	jsonFileKey = new JsonFileKey;
+	musicDecoder = new MusicDecoder;
+	mainWindow = new MainWindow;
+	systemTrayIcon = new SystemTrayIcon;
+	renderImage = new RenderImage;
+	return true;
+}
+
+bool AppInstance::initReadJson( ) {
+	QJsonObject appJsonObject;
+	if( PathTools::readJsonObject( appJsonObject, constAppSettingPath ) == false )
+		return true;
+	auto end = appJsonObject.end( );
+	auto find = appJsonObject.find( constAppIniDirHomePathJsonKey );
+	if( end != find ) {
+		auto string = find.value( ).toString( );
+		appSettingPath = PathTools::getAutoShortenPathName( string );
+	}
+	return true;
+}
+
+bool AppInstance::writeJson( ) {
+	QJsonObject appJsonObject;
+	appJsonObject.insert( constAppIniDirHomePathJsonKey, appSettingPath );
+	PathTools::writeJsonObject( appJsonObject, constAppSettingPath );
+	return true;
+}
+
+bool AppInstance::initTranslate( ) {
+	return true;
+}
 
 AppInstance * AppInstance::getAppInstance( ) {
 	return instance;
@@ -37,6 +84,7 @@ void AppInstance::deleteResource( ) {
 }
 
 AppInstance::~AppInstance( ) {
+	writeJson( );
 	deleteResource( );
 }
 
@@ -57,16 +105,15 @@ bool AppInstance::notify( QObject *object, QEvent *event ) {
 bool AppInstance::init( ) {
 	deleteResource( );
 	// 自身数据初始化先，再到子对象初始化
-	appSettingPath = applicationDirPath( );
+	if( initVar( ) == false )
+		return false;
+	// 读取配置文件
+	if( initReadJson( ) == false )
+		return false;
+	// 初始化翻译文件
+	if( initTranslate( ) == false )
+		return false;
 
-	instance = this;
-	startDateTime = new QDateTime( QDateTime::currentDateTime( ) );
-	translate = new AppTranslate;
-	jsonFileKey = new JsonFileKey;
-	musicDecoder = new MusicDecoder;
-	mainWindow = new MainWindow;
-	systemTrayIcon = new SystemTrayIcon;
-	renderImage = new RenderImage;
 	if( translate->init( ) == false )
 		return false;
 	if( jsonFileKey->init( ) == false )

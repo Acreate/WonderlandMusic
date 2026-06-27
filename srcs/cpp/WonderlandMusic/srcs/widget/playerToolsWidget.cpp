@@ -11,9 +11,9 @@
 #include "../application/jsonKey/playerListToolWidgetJsonKey.h"
 #include "../application/translate/playerToolsWidgetTranslate.h"
 
-#include "../msgInfo/messageErrorOut.h"
+#include "../dateTimeFormat/dateTimeFormat.h"
 
-#include "../tools/dateTimeFormat.h"
+#include "../msgInfo/messageErrorOut.h"
 
 void PlayerToolsWidget::releaseResource( ) {
 	#define r_d( ptr ) if(ptr) { delete ptr; ptr = nullptr;}

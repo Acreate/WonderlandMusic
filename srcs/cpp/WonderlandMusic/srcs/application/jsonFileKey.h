@@ -1,6 +1,7 @@
 ﻿#ifndef JSONFILEKEY_H_H_HEAD__FILE__
 #define JSONFILEKEY_H_H_HEAD__FILE__
 
+class AppInstanceJsonKey;
 class SystemTrayIconJsonKey;
 class PlayerListMenuJsonKey;
 class PlayerWindowJsonKey;
@@ -22,6 +23,7 @@ protected:
 	MainWindowJsonKey *mainWindow = nullptr;
 	PlayerListMenuJsonKey *playerListMenu = nullptr;
 	SystemTrayIconJsonKey *systemTrayIcon = nullptr;
+	AppInstanceJsonKey *appInstance = nullptr;
 
 protected:
 	virtual void deleteResource( );
@@ -50,6 +52,8 @@ public:
 	virtual PlayerListMenuJsonKey * getPlayerListMenu( ) const;
 
 	virtual SystemTrayIconJsonKey * getSystemTrayIcon( ) const;
+
+	virtual AppInstanceJsonKey * getAppInstance( ) const;
 };
 
 #endif // JSONFILEKEY_H_H_HEAD__FILE__

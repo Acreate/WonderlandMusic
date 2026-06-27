@@ -35,11 +35,26 @@ protected:
 	/// @brief 主要执行窗口
 	MainWindow *mainWindow = nullptr;
 	/// @brief 系统托盘
-	SystemTrayIcon* systemTrayIcon = nullptr;
+	SystemTrayIcon *systemTrayIcon = nullptr;
 	/// @brief 退出代码
 	int exitCode;
 	/// @brief 应用配置路径
 	QString appSettingPath;
+	/// @brief 固定的配置路径
+	QString constAppSettingPath;
+	/// @brief 默认的翻译文件
+	QString constAppDefaultTranslatePath;
+	/// @brief 获取 json 中的关键 key
+	QString constAppIniDirHomePathJsonKey;
+
+protected:
+	virtual bool initVar( );
+
+	virtual bool initReadJson( );
+
+	virtual bool writeJson( );
+
+	virtual bool initTranslate( );
 
 public:
 	static AppInstance * getAppInstance( );
@@ -70,8 +85,10 @@ public:
 	virtual const RenderImage * getRenderImage( ) const;
 
 	virtual QString getAppSettingPath( ) const;
-	virtual bool showMainWindow() const;
-	virtual bool hideMainWindow() const;
+
+	virtual bool showMainWindow( ) const;
+
+	virtual bool hideMainWindow( ) const;
 
 	virtual MainWindow * getMainWindow( ) const;
 };

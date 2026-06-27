@@ -4,7 +4,7 @@
 
 namespace AutoMakePtrTools {
 	template< typename Make_Type_, typename ...ptr_args >
-	static Make_Type_ * makePtr( Make_Type_ *&ptr, ptr_args && ...args ) {
+	Make_Type_ * makePtr( Make_Type_ *&ptr, ptr_args && ...args ) {
 		ptr = new Make_Type_( std::forward< ptr_args >( args ) ... );
 		return ptr;
 	}

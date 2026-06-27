@@ -5,9 +5,8 @@
 bool PlayerListJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppSettingPath( );
-
-	songPlayerInfoJsonPath = applicationDirPath + "/program/json/app.song.play.list.info.json";
-	musicPlayerListInfoFileJsonPath = applicationDirPath + "/program/json/app.player.list.widget.music.list.info.json";
+	songPlayerInfoJsonPath = applicationDirPath + "/json/app.song.play.list.info.json";
+	musicPlayerListInfoFileJsonPath = applicationDirPath + "/json/app.player.list.widget.music.list.info.json";
 	musicInfoListCount = "list.size";
 	musicInfoListName = "list.name";
 	musicInfoListIndex = "list.index";

@@ -8,7 +8,8 @@
 #include "../application/appTranslate.h"
 #include "../application/translate/messageTranslate.h"
 
-#include "../tools/dateTimeFormat.h"
+#include "../dateTimeFormat/dateTimeFormat.h"
+
 #ifdef Q_OS_WIN
 #include <windows.h>
 

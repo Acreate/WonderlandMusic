@@ -5,7 +5,7 @@
 bool SystemTrayIconJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppSettingPath( );
-	iconFilePath = applicationDirPath + "/program/png/qtlogo-64.png";
+	iconFilePath = applicationDirPath + "/png/qtlogo-64.png";
 	return true;
 }
 

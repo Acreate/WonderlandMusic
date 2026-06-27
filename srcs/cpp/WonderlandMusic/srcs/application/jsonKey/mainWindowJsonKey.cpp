@@ -5,8 +5,7 @@
 bool MainWindowJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppSettingPath( );
-
-	settingJsonPath = applicationDirPath + "/program/json/app.main.window.stting.json";
+	settingJsonPath = applicationDirPath + "/json/app.main.window.stting.json";
 	pointXPos = "app.main.window.point.x";
 	pointYPos = "app.main.window.point.y";
 	sizeWidth = "app.main.window.size.w";

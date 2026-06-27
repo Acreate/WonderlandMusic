@@ -4,12 +4,11 @@
 
 class QString;
 
-class StringTools {
-public:
+namespace StringTools {
 	/// @brief 返回文件的后缀名
 	/// @param file_name 文件
 	/// @return 匹配后缀位
-	static QString getFileSuffix( const QString &file_name );
-};
+	QString getFileSuffix( const QString &file_name );
+}
 
 #endif // STRINGTOOLS_H_H_HEAD__FILE__

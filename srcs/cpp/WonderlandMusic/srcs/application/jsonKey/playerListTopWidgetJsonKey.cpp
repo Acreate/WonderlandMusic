@@ -5,8 +5,7 @@
 bool PlayerListTopWidgetJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppSettingPath( );
-
-	topJsonPath = applicationDirPath + "/program/json/app.window.player.top.info.json";
+	topJsonPath = applicationDirPath + "/json/app.window.player.top.info.json";
 	itemWidth = "window.player.list.item.width.content.width";
 	itemSplitWidth = "window.player.list.item.width.split";
 	itemIndexWidth = "window.player.list.item.width.index";

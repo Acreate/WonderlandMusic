@@ -43,7 +43,7 @@ void SelectDirPathWidget::selectPathBtnEvent( ) {
 
 void SelectDirPathWidget::editorPathBtnEvent( const QString &editor_txt ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	appInstance->setAppSettingPath( editor_txt );
+	appInstance->setAppSettingPath( editor_txt, true );
 }
 
 SelectDirPathWidget::SelectDirPathWidget( QWidget *parent ) : ISelectPathWidget( parent ) {

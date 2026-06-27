@@ -87,7 +87,7 @@ public:
 
 	virtual QString getAppSettingPath( ) const;
 
-	virtual void setAppSettingPath( const QString &app_setting_dir_home_path );
+	virtual void setAppSettingPath( const QString &app_setting_dir_home_path, bool is_move_old_files );
 
 	virtual bool showMainWindow( ) const;
 

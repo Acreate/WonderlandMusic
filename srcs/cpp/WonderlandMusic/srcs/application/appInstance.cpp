@@ -176,7 +176,19 @@ QString AppInstance::getAppSettingPath( ) const {
 	return appSettingPath;
 }
 
-void AppInstance::setAppSettingPath( const QString &app_setting_dir_home_path ) {
+void AppInstance::setAppSettingPath( const QString &app_setting_dir_home_path, bool is_move_old_files ) {
+	QFileInfo info( app_setting_dir_home_path );
+	if( info.exists( ) && info.isFile( ) )
+		return;// 存在并且是文件，返回
+	auto newFileAbsoluteFilePath = info.absoluteFilePath( );
+	info.setFile( appSettingPath );
+	auto oldFileAbsoluteFilePath = info.absoluteFilePath( );
+	if( oldFileAbsoluteFilePath == newFileAbsoluteFilePath )
+		return; // 路径相同，返回
+	// todo : 移动旧文件
+	if( is_move_old_files ) {
+	}
+	// 赋值
 	appSettingPath = PathTools::getAutoShortenPathName( app_setting_dir_home_path );
 }
 

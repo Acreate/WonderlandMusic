@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+class UserMutex;
 class MusicPlayer;
 
 namespace std {
@@ -38,8 +39,8 @@ protected:
 	int musicDurationWidth;
 	qint64 doubleClickIntervalTimeMilliSecond;
 	QStringList loadMusicFileHistory;
-	std::mutex *musicInfoMutex = nullptr;
-	std::mutex *playerMutex = nullptr;
+	UserMutex *musicInfoMutex = nullptr;
+	UserMutex *playerMutex = nullptr;
 	std::vector< MusicInfoItemWidget * > *musicInfoVector = nullptr;
 	QDateTime *beforeClickTime = nullptr;
 	MusicInfoItemWidget *activeLeftItemWidget = nullptr;
@@ -74,8 +75,6 @@ protected:
 	virtual bool removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target );
 
 	virtual void removeRepetition( );
-
-	virtual bool fromFilePathFindItemWidget( size_t &index, std::vector< MusicInfoItemWidget * > &find_vector_source, const QString &find_file_path_target ) const;
 
 	/// @brief 当播放时候，移动到列表，并且播放列表当中的首个音频时，调用该函数
 	/// @param translation_vector_source 移动序列

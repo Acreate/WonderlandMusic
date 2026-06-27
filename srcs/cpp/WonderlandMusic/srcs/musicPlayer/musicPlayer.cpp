@@ -42,19 +42,19 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	musicPlayerThread = new MusicMediaPlayerThread( newLoadFile );
 
 	connect( musicPlayerThread, &MusicPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
-	} );
+	}, Qt::QueuedConnection );
 	connect( musicPlayerThread, &MusicPlayerThread::durationChanged, musicPlayerThread, [this] ( qint64 duration ) {
-	} );
-	connect( musicPlayerThread, &MusicPlayerThread::threadOver, [ this, newLoadFile]( ) {
+	}, Qt::QueuedConnection );
+	connect( musicPlayerThread, &MusicPlayerThread::threadOver, this, [ this, newLoadFile]( ) {
 		emit playerOver( newLoadFile );
 		this->disconnect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
 		musicPlayerThread->disconnect( );
 		musicPlayerThread->deleteLater( );
 		musicPlayerThread = nullptr;
-	} );
-	connect( musicPlayerThread, &MusicPlayerThread::threadStart, [ this, newLoadFile]( ) {
+	}, Qt::QueuedConnection );
+	connect( musicPlayerThread, &MusicPlayerThread::threadStart, this, [ this, newLoadFile]( ) {
 		emit playerStart( newLoadFile );
-	} );
+	}, Qt::QueuedConnection );
 	// 开始播放
 	musicPlayerThread->startPlayerMusic( );
 	musicFilePath = newLoadFile;

@@ -26,6 +26,8 @@
 
 #include "../musicPlayer/musicPlayer.h"
 
+#include "../mutex/userMutex.h"
+
 #include "../tools/arrayTools.h"
 #include "../tools/pathTools.h"
 #include "../tools/vectorTools.h"
@@ -367,26 +369,31 @@ std::vector< QString > & PlayerListWidget::getListMusicFile( std::vector< QStrin
 }
 
 bool PlayerListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {
-	QMutexLocker musicInfoLocker( musicInfoMutex );
+	musicInfoMutex->lock( );
 
 	size_t count = musicInfoVector->size( );
-	if( count == 0 )
+	if( count == 0 ) {
+		musicInfoMutex->unlock( );
 		return false;
+	}
 
 	auto data = musicInfoVector->data( );
 	size_t index;
 	for( index = 0; index < count; index += 1 )
-		if( render_target == data[ index ] )
+		if( render_target == data[ index ] ) {
+			musicInfoMutex->unlock( );
 			return false;
+		}
 
 	auto renderTarget = data[ index ];
+	musicInfoMutex->unlock( );
 	return renderAtMusicInfoItem( result_render_image, renderTarget );
 }
 
 bool PlayerListWidget::init( ) {
 	releaseResource( );
-	musicInfoMutex = new std::mutex;
-	playerMutex = new std::mutex;
+	musicInfoMutex = new UserMutex;
+	playerMutex = new UserMutex;
 	doubleClickIntervalTimeMilliSecond = 300;
 	activeLeftItemWidget = nullptr;
 	selectLeftItemWidget = nullptr;
@@ -583,25 +590,30 @@ void PlayerListWidget::removeRepetition( ) {
 	*musicInfoVector = buff;
 }
 
-bool PlayerListWidget::fromFilePathFindItemWidget( size_t &index, std::vector< MusicInfoItemWidget * > &find_vector_source, const QString &find_file_path_target ) const {
-	size_t count = find_vector_source.size( );
-	if( count == 0 )
-		return false;
-	auto data = find_vector_source.data( );
-	for( ; index < count; index += 1 )
-		if( data[ index ]->isFile( find_file_path_target ) )
-			return true;
-	return false;
-}
-
 void PlayerListWidget::playerStart_slot( const QString &player_music_file ) {
-	QMutexLocker musicInfoLocker( musicInfoMutex );
-	size_t index = 0;
-	if( fromFilePathFindItemWidget( index, *musicInfoVector, player_music_file ) == true ) {
-		playerItemWidget = musicInfoVector->data( )[ index ];
-	} else {
+	if( this == nullptr )
+		return;
+	if( musicInfoMutex == nullptr )
+		return;
+	size_t index;
+	size_t count;
+	musicInfoMutex->lock( );
+	count = musicInfoVector->size( );
+	if( count == 0 ) {
 		playerItemWidget = nullptr;
+		musicInfoMutex->unlock( );
+		return;
 	}
+	auto data = musicInfoVector->data( );
+	index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ]->isFile( player_music_file ) ) {
+			playerItemWidget = musicInfoVector->data( )[ index ];
+			musicInfoMutex->unlock( );
+			return;
+		}
+	playerItemWidget = nullptr;
+	musicInfoMutex->unlock( );
 }
 
 void PlayerListWidget::playerOver_slot( const QString &player_music_file ) {
@@ -609,12 +621,31 @@ void PlayerListWidget::playerOver_slot( const QString &player_music_file ) {
 		return;
 	if( musicInfoMutex == nullptr )
 		return;
+	size_t index;
+	size_t count;
+	QString nextPlayerFile;
 	musicInfoMutex->lock( );
-	size_t index = 0;
-	if( fromFilePathFindItemWidget( index, *musicInfoVector, player_music_file ) == true ) {
-		playerItemWidget = nullptr;
+	count = musicInfoVector->size( );
+	if( count == 0 ) {
+		musicInfoMutex->unlock( );
+		return;
 	}
+	auto data = musicInfoVector->data( );
+	index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ]->isFile( player_music_file ) ) {
+			playerItemWidget = nullptr;
+			index += 1;
+			if( index == count )
+				nextPlayerFile = data[ 0 ]->getMusicFilePath( );
+			else
+				nextPlayerFile = data[ index ]->getMusicFilePath( );
+			break;
+		}
 	musicInfoMutex->unlock( );
+	widgetState = PlayerListWidgetState::Set_Player_Run;
+	musicPlayer->playerMusic( nextPlayerFile );
+	widgetState = PlayerListWidgetState::None;
 }
 
 void PlayerListWidget::updateItemWidget( ) {
@@ -714,7 +745,7 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 void PlayerListWidget::paintEvent( QPaintEvent *event ) {
 	if( widgetState != PlayerListWidgetState::None )
 		return; // 如果不是被设置成任意状态，则返回，不处理事件
-	if( musicInfoMutex->try_lock( ) == false )
+	if( musicInfoMutex->tryLock( ) == false )
 		return;
 	QPainter painter;
 	painter.begin( this );
@@ -750,7 +781,8 @@ void PlayerListWidget::resizeEvent( QResizeEvent *event ) {
 void PlayerListWidget::mouseMoveEvent( QMouseEvent *event ) {
 	if( widgetState != PlayerListWidgetState::None )
 		return; // 如果不是被设置成任意状态，则返回，不处理事件
-	musicInfoMutex->lock( );
+	if( musicInfoMutex->tryLock( ) == false )
+		return;
 	size_t count = musicInfoVector->size( );
 	if( count == 0 ) {
 		musicInfoMutex->unlock( );
@@ -765,11 +797,8 @@ void PlayerListWidget::mouseMoveEvent( QMouseEvent *event ) {
 			activeLeftItemWidget = data[ index ];
 			break;
 		}
-	if( activeLeftItemWidget ) {
-		musicInfoMutex->unlock( );
-		update( );
-	} else
-		musicInfoMutex->unlock( );
+	musicInfoMutex->unlock( );
+	update( );
 }
 
 void PlayerListWidget::hideEvent( QHideEvent *event ) {
@@ -870,18 +899,17 @@ bool PlayerListWidget::removeMusicInfoVector( const std::vector< MusicInfoItemWi
 
 bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
-	{
-		musicInfoMutex->lock( );
+	musicInfoMutex->lock( );
 
-		if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
-			musicInfoMutex->unlock( );
-			return false;
-		}
-		selectItemWidgetVector->clear( );
-		selectLeftItemWidget = nullptr;
-		activeLeftItemWidget = nullptr;
+	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
 		musicInfoMutex->unlock( );
+		return false;
 	}
+	selectItemWidgetVector->clear( );
+	selectLeftItemWidget = nullptr;
+	activeLeftItemWidget = nullptr;
+	musicInfoMutex->unlock( );
+
 	updateItemWidget( );
 	update( );
 	auto deleteFileData = deleteSetVector.data( );
@@ -912,17 +940,15 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 
 bool PlayerListWidget::removeListMusicFileList( const std::vector< MusicInfoItemWidget * > &file_path_info_vector ) {
 	std::vector< MusicInfoItemWidget * > deleteSetVector;
-	{
-		musicInfoMutex->lock( );
-		if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
-			musicInfoMutex->unlock( );
-			return false;
-		}
-		selectItemWidgetVector->clear( );
-		selectLeftItemWidget = nullptr;
-		activeLeftItemWidget = nullptr;
+	musicInfoMutex->lock( );
+	if( removeMusicInfoVector( file_path_info_vector, deleteSetVector ) == false ) {
 		musicInfoMutex->unlock( );
+		return false;
 	}
+	selectItemWidgetVector->clear( );
+	selectLeftItemWidget = nullptr;
+	activeLeftItemWidget = nullptr;
+	musicInfoMutex->unlock( );
 	updateItemWidget( );
 	update( );
 	auto deleteFileData = deleteSetVector.data( );
@@ -1106,7 +1132,9 @@ bool PlayerListWidget::setCurrentPlayerMusicList( const std::vector< MusicInfoIt
 	if( result ) {
 		updateItemWidget( );
 		if( playerItemWidget ) {
+			widgetState = PlayerListWidgetState::Set_Player_Run;
 			musicPlayer->playerStop( );
+			widgetState = PlayerListWidgetState::None;
 			auto appInstance = AppInstance::getAppInstance( );
 			while( widgetState != PlayerListWidgetState::None )
 				appInstance->processEvents( );

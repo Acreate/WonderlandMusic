@@ -123,7 +123,7 @@ get_filename_component( app_resouce_path "${app_resouce_path}" ABSOLUTE ) # 全�
 set( app_resouce_path "${app_resouce_path}/" )
 
 ## 未完成项目，该处使用 FALSE
-set( generate_translation_file FALSE )
+set( generate_translation_file TRUE )
 if( generate_translation_file )
 	# # 需要生成的 *.ts 文件保存到 translation_file_list 变量当中
 	set( translation_file_list

@@ -2,6 +2,10 @@
 #define MESSAGESTRING_H_H_HEAD__FILE__
 #include <QObject>
 
+namespace std {
+	struct source_location;
+}
+
 class MessageString {
 protected:
 	QStringList messageList;
@@ -18,6 +22,8 @@ public:
 	virtual ~MessageString( );
 
 	MessageString( );
+
+	MessageString( const std::source_location &source_location );
 
 	MessageString( const QStringList &message_list, const QString &jion );
 
@@ -74,6 +80,8 @@ public:
 	virtual MessageString operator+( const MessageString &source_obj ) const;
 
 	virtual MessageString & operator+=( const MessageString &source_obj );
+
+	virtual MessageString & operator<<( const std::source_location &source_location );
 
 	virtual MessageString & operator<<( const void_ptr &in_obj );
 

@@ -46,6 +46,8 @@ bool AppInstance::notify( QObject *object, QEvent *event ) {
 		switch( type ) {
 			case QEvent::Type::Close :
 				mainWindow->writeWidgetSettingToFile( );
+				if( QSystemTrayIcon::isSystemTrayAvailable( ) == false )
+					quit( ); // 如果不支持托盘，隐藏则退出
 				break;
 		}
 	}

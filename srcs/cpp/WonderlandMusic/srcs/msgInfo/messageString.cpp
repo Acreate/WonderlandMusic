@@ -1,5 +1,7 @@
 ﻿#include "messageString.h"
 
+#include <source_location>
+
 const QString & MessageString::getJion( ) const {
 	return jion;
 }
@@ -12,6 +14,15 @@ MessageString::~MessageString( ) {
 }
 
 MessageString::MessageString( ) {
+}
+
+MessageString::MessageString( const std::source_location &source_location ) {
+	messageList << QString( "%1 : %2 : [%3]" ).arg( source_location.file_name( ) ).arg( source_location.function_name( ) ).arg( source_location.line( ) );
+}
+
+MessageString & MessageString::operator<<( const std::source_location &source_location ) {
+	messageList << QString( "%1 : %2 : [%3]" ).arg( source_location.file_name( ) ).arg( source_location.function_name( ) ).arg( source_location.line( ) );
+	return *this;
 }
 
 MessageString::MessageString( const QStringList &message_list, const QString &jion ) : messageList( message_list ),

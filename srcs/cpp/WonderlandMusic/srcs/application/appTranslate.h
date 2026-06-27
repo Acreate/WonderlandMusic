@@ -16,6 +16,7 @@ class PlayerTopWidgetTranslate;
 class PlayerListMenuTranslate;
 class PlayerToolsWidgetTranslate;
 class SettingWidgetTranslate;
+class UserMutexTranslate;
 
 class AppTranslate {
 protected:
@@ -34,6 +35,7 @@ protected:
 	MusicInfoItemTranslate *musicInfoItem = nullptr;
 	SystemTrayIconMenuTranslate *systemTrayIconMenu = nullptr;
 	SystemTrayIconTranslate *systemTrayIcon = nullptr;
+	UserMutexTranslate *userMutex = nullptr;
 
 protected:
 	virtual void setCodecForLocale( );
@@ -78,6 +80,8 @@ public:
 	virtual SystemTrayIconMenuTranslate * getSystemTrayIconMenu( ) const;
 
 	virtual SystemTrayIconTranslate * getSystemTrayIcon( ) const;
+
+	virtual UserMutexTranslate * getUserMutex( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

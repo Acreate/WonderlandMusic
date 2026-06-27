@@ -17,6 +17,7 @@
 #include "translate/settingWidgetTranslate.h"
 #include "translate/systemTrayIconMenuTranslate.h"
 #include "translate/systemTrayIconTranslate.h"
+#include "translate/userMutexTranslate.h"
 
 AppTranslate::AppTranslate( ) {
 }
@@ -43,6 +44,7 @@ bool AppTranslate::translateString( ) {
 	if_init_result( musicInfoItem );
 	if_init_result( systemTrayIconMenu );
 	if_init_result( systemTrayIcon );
+	if_init_result( userMutex );
 
 	return true;
 }
@@ -64,6 +66,7 @@ void AppTranslate::deleteResource( ) {
 	d_r( musicInfoItem );
 	d_r( systemTrayIconMenu );
 	d_r( systemTrayIcon );
+	d_r( userMutex );
 }
 
 AppTranslate::~AppTranslate( ) {
@@ -88,6 +91,7 @@ bool AppTranslate::init( ) {
 	musicInfoItem = new MusicInfoItemTranslate;
 	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
 	systemTrayIcon = new SystemTrayIconTranslate;
+	userMutex = new UserMutexTranslate;
 	setCodecForLocale( );
 	if( translateString( ) == false )
 		return false;
@@ -152,4 +156,8 @@ SystemTrayIconMenuTranslate * AppTranslate::getSystemTrayIconMenu( ) const {
 
 SystemTrayIconTranslate * AppTranslate::getSystemTrayIcon( ) const {
 	return systemTrayIcon;
+}
+
+UserMutexTranslate * AppTranslate::getUserMutex( ) const {
+	return userMutex;
 }

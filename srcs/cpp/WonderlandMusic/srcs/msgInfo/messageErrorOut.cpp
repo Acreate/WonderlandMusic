@@ -31,6 +31,12 @@ void StdErrorConsoleOut( const QString &text ) {
 MessageErrorOut::MessageErrorOut( bool is_write_file, const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ), isWriteFile( is_write_file ) {
 }
 
+MessageErrorOut::MessageErrorOut( const QString &log_home_path, const std::source_location &source_location ) : MessageErrorOut( true, log_home_path, source_location ) {
+}
+
+MessageErrorOut::MessageErrorOut( const std::source_location &source_location ) : MessageErrorOut( true, "log", source_location ) {
+}
+
 MessageErrorOut & MessageErrorOut::operator<<( const MessageString &msg ) {
 	outMsgVector.emplace_back( msg.toQString( ) );
 	return *this;

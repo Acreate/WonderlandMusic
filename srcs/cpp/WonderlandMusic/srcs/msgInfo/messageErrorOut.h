@@ -46,6 +46,10 @@ public:
 
 	MessageErrorOut( bool is_write_file = true, const QString &log_home_path = "log", const std::source_location &source_location = std::source_location::current( ) );
 
+	MessageErrorOut( const QString &log_home_path, const std::source_location &source_location );
+
+	MessageErrorOut( const std::source_location &source_location );
+
 	MessageErrorOut & operator<<( const MessageString &msg );
 
 	virtual const QString & getJoinString( ) const;

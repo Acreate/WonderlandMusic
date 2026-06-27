@@ -1,20 +1,21 @@
 ﻿#ifndef USERMUTEX_H_H_HEAD__FILE__
 #define USERMUTEX_H_H_HEAD__FILE__
 #include <memory>
+#include <mutex>
 #include <source_location>
 
-class MessageErrorOut;
-
-namespace std {
-	struct source_location;
-	class mutex;
-}
-
 class UserMutex {
+public:
+	using LockGuard = std::shared_ptr< std::lock_guard< std::mutex > >;
+
+protected:
 	std::mutex *mutexCorPtr;
 	std::source_location *lockSourceLocation;
 	std::source_location *trylockSourceLocation;
 	std::source_location *unlockSourceLocation;
+
+protected:
+	virtual void out_debug_info( ) const;
 
 public:
 	UserMutex( );
@@ -28,7 +29,9 @@ public:
 	virtual bool lock( const std::source_location &source_location = std::source_location::current( ) ) const;
 
 	virtual bool unlock( const std::source_location &source_location = std::source_location::current( ) ) const;
-	virtual std::mutex& getMutex() const;
+
+	virtual LockGuard getLockGuard( ) const;
+
 	virtual ~UserMutex( );
 };
 

@@ -25,7 +25,6 @@ bool MusicMediaPlayerThread::stopPlayerMusic( ) {
 		audioOutput = nullptr;
 	}
 	isRunOver = true;
-	isRunOver = true;
 	bool stopPlayerMusic = MusicPlayerThread::stopPlayerMusic( );
 	emit threadOver( );
 	return stopPlayerMusic;
@@ -57,6 +56,11 @@ bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_threa
 			case QMediaPlayer::NoMedia :
 			case QMediaPlayer::EndOfMedia :
 			case QMediaPlayer::InvalidMedia :
+				delete mediaPlayer;
+				delete audioOutput;
+				mediaPlayer = nullptr;
+				audioOutput = nullptr;
+				isRunOver = true;
 				emit threadOver( );
 				break;
 		}

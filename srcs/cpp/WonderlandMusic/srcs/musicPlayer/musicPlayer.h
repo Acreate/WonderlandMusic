@@ -30,7 +30,6 @@ public:
 	virtual bool init( );
 
 	virtual bool playerMusic( const QString &music_file );
-	virtual bool playerNextMusic( const QString &music_file );
 
 	virtual const QString & getMusicFilePath( ) const;
 

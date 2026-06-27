@@ -8,6 +8,8 @@
 #include "tools/autoMakePtrTools.h"
 
 static MessageErrorOut *messageErrorOut = nullptr;
+static MessageString *permit = nullptr;
+static MessageString *screening = nullptr;
 static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
 
 #ifdef CANCEL_FILTER
@@ -47,7 +49,7 @@ void myCategoryFilter( QLoggingCategory *category ) {
 		category->setEnabled( QtSystemMsg, false );
 		category->setEnabled( QtWarningMsg, false );
 		if( messageErrorOut )
-			*messageErrorOut << QObject::tr( "屏蔽" ) + "\"" + name + "\"" + QObject::tr( "日志" );
+			*screening << QObject::tr( "屏蔽" ) + "\"" + name + "\"" + QObject::tr( "日志" );
 	} else {
 		if( name.indexOf( "usb" ) != -1 ||
 			name.indexOf( "driver" ) != -1 )
@@ -55,12 +57,14 @@ void myCategoryFilter( QLoggingCategory *category ) {
 		else if( oldCategoryFilter )
 			oldCategoryFilter( category );
 		if( messageErrorOut )
-			*messageErrorOut << QObject::tr( "通过" ) + "\"" + name + "\"" + QObject::tr( "日志" );
+			*permit << QObject::tr( "通过" ) + "\"" + name + "\"" + QObject::tr( "日志" );
 	}
 }
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {
 	messageErrorOut = new_ptr( messageErrorOut );
+	permit = new_ptr( permit );
+	screening = new_ptr( screening );
 	if( messageErrorOut ) {
 		*messageErrorOut << QObject::tr( "\t: <<<< == 程序日志 == >>>>" );
 		messageErrorOut->setJoinString( "\n" );
@@ -83,6 +87,11 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 
 	int exec = application->run( );
 	if( messageErrorOut ) {
+		permit->setJion( "\n" );
+		screening->setJion( "\n" );
+		*messageErrorOut << *permit;
+		*messageErrorOut << "";
+		*messageErrorOut << *screening;
 		*messageErrorOut << "----------------------"
 			<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
 			<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "

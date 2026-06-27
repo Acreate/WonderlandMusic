@@ -17,6 +17,7 @@ class PlayerListMenuTranslate;
 class PlayerToolsWidgetTranslate;
 class SettingWidgetTranslate;
 class UserMutexTranslate;
+class ISelectDirWidgetTranslate;
 
 class AppTranslate {
 protected:
@@ -36,6 +37,7 @@ protected:
 	SystemTrayIconMenuTranslate *systemTrayIconMenu = nullptr;
 	SystemTrayIconTranslate *systemTrayIcon = nullptr;
 	UserMutexTranslate *userMutex = nullptr;
+	ISelectDirWidgetTranslate *selectDirWidget = nullptr;
 
 protected:
 	virtual void setCodecForLocale( );
@@ -82,6 +84,8 @@ public:
 	virtual SystemTrayIconTranslate * getSystemTrayIcon( ) const;
 
 	virtual UserMutexTranslate * getUserMutex( ) const;
+
+	virtual ISelectDirWidgetTranslate * getSelectDirWidget( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

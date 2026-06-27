@@ -4,6 +4,7 @@
 #include <QTextCodec>
 
 #include "translate/dateTimeFormatTranslate.h"
+#include "translate/iSelectDirWidgetTranslate.h"
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
@@ -45,6 +46,7 @@ bool AppTranslate::translateString( ) {
 	if_init_result( systemTrayIconMenu );
 	if_init_result( systemTrayIcon );
 	if_init_result( userMutex );
+	if_init_result( selectDirWidget );
 
 	return true;
 }
@@ -67,6 +69,7 @@ void AppTranslate::deleteResource( ) {
 	d_r( systemTrayIconMenu );
 	d_r( systemTrayIcon );
 	d_r( userMutex );
+	d_r( selectDirWidget );
 }
 
 AppTranslate::~AppTranslate( ) {
@@ -92,6 +95,7 @@ bool AppTranslate::init( ) {
 	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
 	systemTrayIcon = new SystemTrayIconTranslate;
 	userMutex = new UserMutexTranslate;
+	selectDirWidget = new ISelectDirWidgetTranslate;
 	setCodecForLocale( );
 	if( translateString( ) == false )
 		return false;
@@ -160,4 +164,8 @@ SystemTrayIconTranslate * AppTranslate::getSystemTrayIcon( ) const {
 
 UserMutexTranslate * AppTranslate::getUserMutex( ) const {
 	return userMutex;
+}
+
+ISelectDirWidgetTranslate * AppTranslate::getSelectDirWidget( ) const {
+	return selectDirWidget;
 }

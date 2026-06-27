@@ -24,6 +24,7 @@ public:
 	enum class PlayerListWidgetState {
 		None,
 		Set_Player_Run,
+		Set_Player_Next,
 	};
 
 protected:

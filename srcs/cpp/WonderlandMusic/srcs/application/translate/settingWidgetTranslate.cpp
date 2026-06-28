@@ -9,6 +9,7 @@ bool SettingWidgetTranslate::init( ) {
 	selectDirBtnTxt = QObject::tr( "选择目录..." );
 	selectDirLinePlaceholderTxt = QObject::tr( "软件配置路径" );
 	setectPathGroupTitle = QObject::tr( "配置路径" );
+	selectDirPathDialogTitle = QObject::tr( "选择目录" );
 	return true;
 }
 
@@ -34,4 +35,8 @@ const QString & SettingWidgetTranslate::getSelectDirLinePlaceholderTxt( ) const 
 
 const QString & SettingWidgetTranslate::getSetectPathGroupTitle( ) const {
 	return setectPathGroupTitle;
+}
+
+const QString & SettingWidgetTranslate::getSelectDirPathDialogTitle( ) const {
+	return selectDirPathDialogTitle;
 }

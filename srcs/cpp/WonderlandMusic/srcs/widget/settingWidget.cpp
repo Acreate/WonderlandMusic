@@ -1,5 +1,7 @@
 ﻿#include "settingWidget.h"
 
+#include <QFileDialog>
+#include <QFileInfo>
 #include <QPushButton>
 #include <qboxlayout.h>
 #include <QScrollArea>
@@ -10,8 +12,57 @@
 #include "../application/appTranslate.h"
 #include "../application/translate/settingWidgetTranslate.h"
 
+#include "../tools/pathTools.h"
+#include "../tools/widgetTools.h"
+
 void SettingWidget::deleteResource( ) {
 	#define d_r( ptr ) if(ptr ) (delete ptr, ptr = nullptr)
+	d_r( mainSettingWdiget );
+}
+
+void SettingWidget::clickSelectAppSettingPathBtn( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto settingWidgetTranslate = appInstance->getTranslate( )->getSettingWidget( );
+	QFileInfo fileInfo;
+
+	QFileDialog dialog( this );
+	dialog.setWindowTitle( settingWidgetTranslate->getSelectDirPathDialogTitle( ) );
+	auto editorAppSettingHomePath = selectDirPathLineEdit->text( );
+	fileInfo.setFile( editorAppSettingHomePath );
+
+	auto openDirPath = fileInfo.absoluteFilePath( );
+	dialog.setDirectory( openDirPath );
+	dialog.setFileMode( QFileDialog::Directory );
+
+	QRect geometry = this->geometry( );
+	auto curentWindowSize = geometry.size( );
+	dialog.resize( curentWindowSize );
+	auto center = geometry.center( );
+	center = mapToGlobal( center );
+	WidgetTools::moveWidgetToCenterPos( center, &dialog );
+	if( dialog.exec( ) != QDialog::Accepted )
+		return;
+	QStringList files = dialog.selectedFiles( );
+	auto data = files.data( );
+	editorAppSettingHomePath = PathTools::getAutoShortenPathName( data[ 0 ] );
+	selectDirPathLineEdit->setText( editorAppSettingHomePath );
+}
+
+void SettingWidget::changedSelectAppSettingPathEditor( ) {
+	auto text = selectDirPathLineEdit->text( );
+	auto editorAppSettingHomePath = PathTools::getAutoShortenPathName( text );
+	selectDirPathLineEdit->setText( editorAppSettingHomePath );
+}
+
+void SettingWidget::clickOkBtn( ) {
+	AppInstance::getAppInstance( )->setAppSettingPath( selectDirPathLineEdit->text( ), true );
+}
+
+void SettingWidget::clickCancelBtn( ) {
+	if( selectDirPathLineEdit == nullptr )
+		return;
+	auto appSetHomePath = AppInstance::getAppInstance( )->getAppSettingPath( );
+	selectDirPathLineEdit->setText( appSetHomePath );
 }
 
 QWidget * SettingWidget::initMainSettingWdiget( ) {
@@ -55,7 +106,6 @@ QWidget * SettingWidget::initSettingScrollWdiget( ) {
 	selectGroupBox->setParent( settingConter );
 	conterLayout->addWidget( selectGroupBox );
 	conterLayout->addSpacerItem( new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-	settingConter->adjustSize( );
 	return settingScrollArea;
 }
 
@@ -76,7 +126,9 @@ QWidget * SettingWidget::initSettingButtonWdiget( ) {
 	ok->setText( settingWidgetTranslate->getOkBtnTxt( ) );
 	cancel->setText( settingWidgetTranslate->getCancelBtnTxt( ) );
 
-	buttonWidget->adjustSize( );
+	connect( ok, &QPushButton::clicked, this, &SettingWidget::clickOkBtn );
+	connect( cancel, &QPushButton::clicked, this, &SettingWidget::clickCancelBtn );
+
 	return buttonWidget;
 }
 
@@ -95,8 +147,6 @@ QWidget * SettingWidget::initSelectSettingPathGroupBoxWdiget( ) {
 	auto settingWidgetTranslate = appInstance->getTranslate( )->getSettingWidget( );
 	selectSettingPathGroupBox->setTitle( settingWidgetTranslate->getSetectPathGroupTitle( ) );
 
-	selectSettingPathGroupBox->adjustSize( );
-
 	return selectSettingPathGroupBox;
 }
 
@@ -107,17 +157,17 @@ QWidget * SettingWidget::initAppSettingPathWdiget( ) {
 	QWidget *selectWidget = new QWidget( );
 	QHBoxLayout *seleceLayout = new QHBoxLayout( selectWidget );
 
-	QLineEdit *selectDirPathLineEdit = new QLineEdit( selectWidget );
+	selectDirPathLineEdit = new QLineEdit( selectWidget );
 	selectDirPathLineEdit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 	selectDirPathLineEdit->setPlaceholderText( settingWidgetTranslate->getSelectDirLinePlaceholderTxt( ) );
 	seleceLayout->addWidget( selectDirPathLineEdit );
+	connect( selectDirPathLineEdit, &QLineEdit::editingFinished, this, &SettingWidget::changedSelectAppSettingPathEditor );
 
 	QPushButton *selectDirPathBtn = new QPushButton( selectWidget );
 	selectDirPathBtn->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 	selectDirPathBtn->setText( settingWidgetTranslate->getSelectDirBtnTxt( ) );
 	seleceLayout->addWidget( selectDirPathBtn );
-
-	selectWidget->adjustSize( );
+	connect( selectDirPathBtn, &QPushButton::clicked, this, &SettingWidget::clickSelectAppSettingPathBtn );
 	return selectWidget;
 }
 
@@ -133,7 +183,7 @@ bool SettingWidget::writeJsonPathInfo( ) {
 }
 
 bool SettingWidget::initWidget( ) {
-	auto mainSettingWdiget = initMainSettingWdiget( );
+	mainSettingWdiget = initMainSettingWdiget( );
 	if( mainSettingWdiget == nullptr )
 		return false;
 	QVBoxLayout *vBoxLayout = new QVBoxLayout( this );
@@ -147,7 +197,7 @@ bool SettingWidget::init( ) {
 	deleteResource( );
 	if( initWidget( ) == false )
 		return false;
-
+	selectDirPathLineEdit->setText( AppInstance::getAppInstance( )->getAppSettingPath( ) );
 	if( loadJsonPathInfo( ) == false )
 		return false;
 	return true;
@@ -156,4 +206,5 @@ bool SettingWidget::init( ) {
 void SettingWidget::hideEvent( QHideEvent *event ) {
 	writeJsonPathInfo( );
 	QWidget::hideEvent( event );
+	clickCancelBtn( );
 }

@@ -3,15 +3,32 @@
 
 #include <QWidget>
 
+class QPushButton;
+class QLineEdit;
 class QScrollArea;
 
 class SettingWidget : public QWidget {
 	Q_OBJECT;
 
 protected:
+	QLineEdit *selectDirPathLineEdit = nullptr;
+	QWidget *mainSettingWdiget = nullptr;
 
 protected:
 	virtual void deleteResource( );
+
+protected Q_SLOTS:
+	/// @brief 点击了软件配置选择路径
+	virtual void clickSelectAppSettingPathBtn( );
+
+	/// @brief 软件选择路径被修改完毕
+	virtual void changedSelectAppSettingPathEditor( );
+
+	/// @brief 点击确定按钮
+	virtual void clickOkBtn( );
+
+	/// @brief 点击取消按钮
+	virtual void clickCancelBtn( );
 
 protected:
 	virtual QWidget * initMainSettingWdiget( );

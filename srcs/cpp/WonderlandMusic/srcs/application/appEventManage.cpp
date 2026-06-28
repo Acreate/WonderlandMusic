@@ -24,6 +24,7 @@ bool AppEventManage::init( ) {
 	mainWindow = appUserInterfaceManage->getMainWindow( );
 	if( mainWindow == nullptr )
 		return false;
+	appInstance->installEventFilter( this );
 	return true;
 }
 

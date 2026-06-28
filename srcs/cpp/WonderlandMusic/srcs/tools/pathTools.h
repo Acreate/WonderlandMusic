@@ -7,32 +7,6 @@
 class QString;
 
 namespace PathTools {
-	bool entryList( QStringList &result_get_path, const QString &entry_path, bool foreach_in_dir_path, QDir::Filters filters );
-
-	bool entryList( QStringList &result_get_path, const QString &entry_path, bool foreach_in_dir_path );
-
-	bool entryList( QStringList &result_get_path, const QString &entry_path, QDir::Filters filters, QDir::SortFlags sort );
-
-	bool entryList( QStringList &result_get_path, const QString &entry_path, QDir::Filters filters );
-
-	bool entryList( QStringList &result_get_path, const QString &entry_path );
-
-	bool entryList( QStringList &result_get_path, const QStringList &entry_path, bool foreach_in_dir_path, QDir::Filters filters );
-
-	bool entryList( QStringList &result_get_path, const QStringList &entry_path, bool foreach_in_dir_path );
-
-	bool entryList( QStringList &result_get_path, const QStringList &entry_path, QDir::Filters filters );
-
-	bool entryList( QStringList &result_get_path, const QStringList &entry_path );
-
-	bool entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, bool foreach_in_dir_path, QDir::Filters filters );
-
-	bool entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, bool foreach_in_dir_path );
-
-	bool entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, QDir::Filters filters );
-
-	bool entryList( QStringList &result_get_path, const std::vector< QString > &entry_path );
-
 	qsizetype filterFile( QStringList &result_get_path, const QStringList &entry_path );
 
 	qsizetype filterDir( QStringList &result_get_path, const QStringList &entry_path );
@@ -57,6 +31,18 @@ namespace PathTools {
 	bool wirteWavFile( const QString &wirte_file_path, const std::vector< char > &wirte_pcm_vector_data );
 
 	bool wirteWavFile( const QString &wirte_file_path, const std::vector< QAudioBuffer > &wirte_pcm_vector_data );
+
+	bool entryFilePath( QStringList &result_file_path, const QString &entry_path );
+
+	bool entryFilePath( QStringList &result_file_path, const std::vector< QString > &entry_path_list );
+
+	/// @brief 枚举最终路径，如：文件，最后的目录。不会返回诸如上级目录
+	/// @param result_final_path 返回路径
+	/// @param entry_path 枚举路径
+	/// @return 失败返回 false
+	bool entryFinalPath( QStringList &result_final_path, const QString &entry_path );
+
+	bool copyPath( const QString &source_path, const QString &destination_path );
 }
 
 #endif // PATHTOOLS_H_H_HEAD__FILE__

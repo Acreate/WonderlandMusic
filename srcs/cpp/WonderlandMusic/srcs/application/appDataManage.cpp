@@ -63,9 +63,8 @@ void AppDataManage::setAppSettingPath( const QString &app_setting_dir_home_path,
 	auto oldFileAbsoluteFilePath = info.absoluteFilePath( );
 	if( oldFileAbsoluteFilePath == newFileAbsoluteFilePath )
 		return; // 路径相同，返回
-	// todo : 移动旧文件
-	if( is_move_old_files ) {
-	}
+	if( is_move_old_files )
+		PathTools::copyPath( oldFileAbsoluteFilePath, newFileAbsoluteFilePath );
 	// 赋值
 	appSettingPath = PathTools::getAutoShortenPathName( app_setting_dir_home_path );
 }

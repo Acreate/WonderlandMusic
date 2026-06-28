@@ -8,6 +8,8 @@
 
 #include "msgInfo/messageErrorOut.h"
 
+#include "tools/pathTools.h"
+
 static MessageErrorOut *messageErrorOut = nullptr;
 static MessageString *permit = nullptr;
 static MessageString *screening = nullptr;
@@ -74,6 +76,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
 
 	AppInstance *application = new AppInstance( argc, argv );
+
 	QString resultString = QObject::tr( "返回值" );
 	if( application->init( ) == false ) {
 		if( messageErrorOut ) {

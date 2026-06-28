@@ -2,6 +2,7 @@
 #define VECTORTOOLS_H_H_HEAD__FILE__
 #include <functional>
 #include <vector>
+#include <QVector>
 
 namespace VectorTools {
 	/// @brief 传递元素
@@ -146,6 +147,98 @@ namespace VectorTools {
 		return repetitionCount;
 	}
 
+	/// @brief 查找重复元素
+	/// @tparam UnityType_ 元素类型
+	/// @param single_cace_vector 返回单例列表
+	/// @param result_repetion_vector 返回重复列表
+	/// @param find_vector_source 查找源
+	/// @return 重复数量
+	template< typename UnityType_ >
+	static size_t getRepetition( QVector< UnityType_ > &single_cace_vector, QVector< UnityType_ > &result_repetion_vector, const QVector< UnityType_ > &find_vector_source ) {
+		auto count = find_vector_source.size( );
+		if( count == 0 )
+			return 0;
+		auto data = find_vector_source.data( );
+		result_repetion_vector.resize( count );
+		single_cace_vector.resize( count );
+		auto resultSingCaceData = single_cace_vector.data( );
+		auto resultRepetionData = result_repetion_vector.data( );
+		decltype(count) foreachIndex = 0;
+		decltype(count) repetitionIndex;
+		decltype(count) singCaceIndex;
+		size_t singCaceCount = 0;
+		size_t repetitionCount = 0;
+		for( ; foreachIndex < count; ++foreachIndex ) {
+			auto &unityRef = data[ foreachIndex ];
+			for( singCaceIndex = 0; singCaceIndex < singCaceCount; singCaceIndex += 1 )
+				if( resultSingCaceData[ singCaceIndex ] == unityRef )
+					break;
+			if( singCaceIndex == repetitionCount ) { // 单例
+				resultSingCaceData[ singCaceCount ] = unityRef;
+				singCaceCount += 1;
+			} else {
+				bool isJump = false;
+				for( repetitionIndex = 0; repetitionIndex < repetitionCount; repetitionIndex += 1 )
+					if( resultRepetionData[ repetitionIndex ] == unityRef ) {
+						isJump = true;
+						break;
+					}
+				if( isJump )
+					continue;
+				resultSingCaceData[ repetitionCount ] = unityRef;
+				repetitionCount += 1;
+			}
+		}
+		result_repetion_vector.resize( repetitionCount );
+		single_cace_vector.resize( singCaceCount );
+		return repetitionCount;
+	}
+
+	/// @brief 查找重复元素
+	/// @tparam UnityType_ 元素类型
+	/// @param single_cace_vector 返回单例列表
+	/// @param result_repetion_vector 返回重复列表
+	/// @param find_vector_source 查找源
+	/// @param comp_function 比较方法
+	/// @return 重复数量
+	template< typename UnityType_ >
+	static size_t getRepetition( QVector< UnityType_ > &single_cace_vector, QVector< UnityType_ > &result_repetion_vector, const QVector< UnityType_ > &find_vector_source, const compIdenticalTypeFinction< UnityType_ > &comp_function ) {
+		auto count = find_vector_source.size( );
+		if( count == 0 )
+			return 0;
+		auto data = find_vector_source.data( );
+		result_repetion_vector.resize( count );
+		single_cace_vector.resize( count );
+		auto resultSingCaceData = single_cace_vector.data( );
+		auto resultRepetionData = result_repetion_vector.data( );
+		decltype(count) foreachIndex = 0;
+		decltype(count) repetitionIndex;
+		decltype(count) singCaceIndex;
+		size_t singCaceCount = 0;
+		size_t repetitionCount = 0;
+		for( ; foreachIndex < count; ++foreachIndex ) {
+			//auto &unityRef = data[ foreachIndex ];
+			for( singCaceIndex = 0; singCaceIndex < singCaceCount; singCaceIndex += 1 )
+				if( comp_function( resultSingCaceData[ singCaceIndex ], data[ foreachIndex ] ) )
+					break;
+			if( singCaceIndex == singCaceCount ) { // 单例
+				resultSingCaceData[ singCaceCount ] = data[ foreachIndex ];
+				singCaceCount += 1;
+			} else {
+				for( repetitionIndex = 0; repetitionIndex < repetitionCount; repetitionIndex += 1 )
+					if( comp_function( resultRepetionData[ repetitionIndex ], data[ foreachIndex ] ) )
+						break;
+				if( repetitionIndex < repetitionCount )
+					continue;
+				resultRepetionData[ repetitionCount ] = data[ foreachIndex ];
+				repetitionCount += 1;
+			}
+		}
+		result_repetion_vector.resize( repetitionCount );
+		single_cace_vector.resize( singCaceCount );
+		return repetitionCount;
+	}
+
 	/// @brief 释放序列元素
 	/// @tparam UnityType_ 元素类型
 	/// @param delete_vector_source 释放目标目标
@@ -165,10 +258,44 @@ namespace VectorTools {
 	/// @brief 释放序列元素
 	/// @tparam UnityType_ 元素类型
 	/// @param delete_vector_source 释放目标目标
+	/// @return 释放个数
+	template< typename UnityType_ >
+	static size_t deleteVectorPtr( const QVector< UnityType_ * > &delete_vector_source ) {
+		auto count = delete_vector_source.size( );
+		if( count == 0 )
+			return count;
+		decltype(count) index = 0;
+		auto data = delete_vector_source.data( );
+		for( ; index < count; index += 1 )
+			delete data[ index ];
+		return count;
+	}
+
+	/// @brief 释放序列元素
+	/// @tparam UnityType_ 元素类型
+	/// @param delete_vector_source 释放目标目标
 	/// @param comp 匹配函数
 	/// @return 释放个数
 	template< typename UnityType_ >
 	static size_t deleteVectorPtr( const std::vector< UnityType_ * > &delete_vector_source, const compSingleTypeFinction< UnityType_ > &comp ) {
+		auto count = delete_vector_source.size( );
+		if( count == 0 )
+			return count;
+		decltype(count) index = 0;
+		auto data = delete_vector_source.data( );
+		for( ; index < count; index += 1 )
+			if( comp( data[ index ] ) )
+				delete data[ index ];
+		return count;
+	}
+
+	/// @brief 释放序列元素
+	/// @tparam UnityType_ 元素类型
+	/// @param delete_vector_source 释放目标目标
+	/// @param comp 匹配函数
+	/// @return 释放个数
+	template< typename UnityType_ >
+	static size_t deleteVectorPtr( const QVector< UnityType_ * > &delete_vector_source, const compSingleTypeFinction< UnityType_ > &comp ) {
 		auto count = delete_vector_source.size( );
 		if( count == 0 )
 			return count;
@@ -209,10 +336,61 @@ namespace VectorTools {
 	/// @tparam UnityType_ 元素指针类型
 	/// @param result_vector_source 返回序列结果
 	/// @param sort_vector_source 源序列
+	/// @return 有效个数
+	template< typename UnityType_ >
+	static size_t removeNullptrVectorPtr( QVector< UnityType_ * > &result_vector_source, const QVector< UnityType_ * > &sort_vector_source ) {
+		auto count = sort_vector_source.size( );
+		if( count == 0 )
+			return count;
+		result_vector_source.resize( count );
+		decltype(count) index = 0;
+		decltype(count) setIndex = 0;
+		auto data = sort_vector_source.data( );
+		auto destData = result_vector_source.data( );
+
+		for( ; index < count; index += 1 )
+			if( data[ index ] ) {
+				destData[ setIndex ] = data[ index ];
+				setIndex += 1;
+			}
+		result_vector_source.resize( setIndex );
+		return setIndex;
+	}
+
+	/// @brief 去除空指针
+	/// @tparam UnityType_ 元素指针类型
+	/// @param result_vector_source 返回序列结果
+	/// @param sort_vector_source 源序列
 	/// @param comp 匹配函数
 	/// @return 有效个数
 	template< typename UnityType_ >
 	static size_t resetVector( std::vector< UnityType_ * > &result_vector_source, const std::vector< UnityType_ * > &sort_vector_source, const compSingleTypeFinction< UnityType_ > &comp ) {
+		auto count = sort_vector_source.size( );
+		if( count == 0 )
+			return count;
+		result_vector_source.resize( count );
+		decltype(count) index = 0;
+		decltype(count) setIndex = 0;
+		auto data = sort_vector_source.data( );
+		auto destData = result_vector_source.data( );
+
+		for( ; index < count; index += 1 )
+			if( comp( data[ index ] ) ) {
+				destData[ setIndex ] = data[ index ];
+				setIndex += 1;
+			}
+		result_vector_source.resize( setIndex );
+		return setIndex;
+	}
+
+	/// @brief 去除空指针
+	/// @tparam UnityType_ 元素指针类型
+	/// @param result_vector_source 返回序列结果
+	/// @param sort_vector_source 源序列
+	/// @param comp 匹配函数
+	/// @return 有效个数
+	template< typename UnityType_ >
+	static size_t resetVector( QVector< UnityType_ * > &result_vector_source, const QVector< UnityType_ * > &sort_vector_source, const compSingleTypeFinction< UnityType_ > &comp ) {
 		auto count = sort_vector_source.size( );
 		if( count == 0 )
 			return count;
@@ -506,6 +684,63 @@ namespace VectorTools {
 	/// @return true 表示全员单例，不存在相同元素
 	template< typename Vector_Unity_Type_ >
 	bool isSingleCase( size_t &result_index, size_t &result_repetition_index, const std::vector< Vector_Unity_Type_ > &check, const compIdenticalTypeFinction< Vector_Unity_Type_ > &comp ) {
+		auto count = check.size( );
+		if( count == 0 )
+			return true;
+		auto data = check.data( );
+		decltype(count) findUnityIndex;
+
+		decltype(count) currentUnityIndex;
+
+		for( currentUnityIndex = 0; currentUnityIndex < count; currentUnityIndex += 1 )
+			for( findUnityIndex = 0; findUnityIndex < count; findUnityIndex += 1 )
+				if( findUnityIndex == currentUnityIndex )
+					continue;
+				else if( comp( data[ currentUnityIndex ], data[ findUnityIndex ] ) ) {
+					result_index = currentUnityIndex;
+					result_repetition_index = findUnityIndex;
+					return false;
+				}
+		return true;
+	}
+
+	/// @brief 检查序列是否元素单例，失败返回首个非单例下标
+	/// @tparam Vector_Unity_Type_ 序列元素类型
+	/// @param result_index 第一个非单例元素下标
+	/// @param result_repetition_index 当前重复匹配的首个下标
+	/// @param check 检测序列
+	/// @return true 表示全员单例，不存在相同元素
+	template< typename Vector_Unity_Type_ >
+	bool isSingleCase( size_t &result_index, size_t &result_repetition_index, const QVector< Vector_Unity_Type_ > &check ) {
+		auto count = check.size( );
+		if( count == 0 )
+			return true;
+		auto data = check.data( );
+		decltype(count) findUnityIndex;
+
+		decltype(count) currentUnityIndex;
+
+		for( currentUnityIndex = 0; currentUnityIndex < count; currentUnityIndex += 1 )
+			for( findUnityIndex = 0; findUnityIndex < count; findUnityIndex += 1 )
+				if( findUnityIndex == currentUnityIndex )
+					continue;
+				else if( data[ currentUnityIndex ] == data[ findUnityIndex ] ) {
+					result_index = currentUnityIndex;
+					result_repetition_index = findUnityIndex;
+					return false;
+				}
+		return true;
+	}
+
+	/// @brief 检查序列是否元素单例，失败返回首个非单例下标
+	/// @tparam Vector_Unity_Type_ 序列元素类型
+	/// @param result_index 第一个非单例元素下标
+	/// @param result_repetition_index 当前重复匹配的首个下标
+	/// @param check 检测序列
+	/// @param comp 比较函数
+	/// @return true 表示全员单例，不存在相同元素
+	template< typename Vector_Unity_Type_ >
+	bool isSingleCase( size_t &result_index, size_t &result_repetition_index, const QVector< Vector_Unity_Type_ > &check, const compIdenticalTypeFinction< Vector_Unity_Type_ > &comp ) {
 		auto count = check.size( );
 		if( count == 0 )
 			return true;

@@ -4,167 +4,13 @@
 #include <qjsondocument.h>
 #include <qjsonparseerror.h>
 
+#include "vectorTools.h"
+
 #include "../application/appInstance.h"
 #include "../application/musicDecoder.h"
 #include "../application/musicManage.h"
 
 #include "../msgInfo/messageErrorOut.h"
-
-namespace entryList {
-	namespace sort {
-		inline bool entryList( QStringList &result_get_path, const QString &entry_path, QDir::Filters filters, QDir::SortFlags sort ) {
-			QFileInfo fileInfo( entry_path );
-			if( fileInfo.exists( ) == false )
-				return false;
-			QString absFilePath = fileInfo.absoluteFilePath( );
-			if( fileInfo.isFile( ) ) {
-				result_get_path = { absFilePath };
-				return true;
-			}
-			QDir dir( absFilePath );
-			result_get_path = dir.entryList( filters, sort );
-			qint64 entryCount = result_get_path.size( );
-			if( entryCount == 0 )
-				return false;
-			auto data = result_get_path.data( );
-			qint64 index = 0;
-			for( ; index < entryCount; ++index )
-				data[ index ] = absFilePath + "/" + data[ index ];
-			return true;
-		}
-	}
-
-	namespace inDir {
-		inline bool entryList( QStringList &result_get_path, const QString &entry_path, bool foreach_in_dir_path, QDir::Filters filters ) {
-			QFileInfo fileInfo( entry_path );
-			if( fileInfo.exists( ) == false )
-				return false;
-			QString absFilePath = fileInfo.absoluteFilePath( );
-			if( fileInfo.isFile( ) ) {
-				result_get_path = { absFilePath };
-				return true;
-			}
-			QDir dir( absFilePath );
-			result_get_path = dir.entryList( filters );
-			qint64 entryCount = result_get_path.size( );
-			if( entryCount == 0 )
-				return false;
-			auto data = result_get_path.data( );
-			qint64 index = 0;
-
-			if( foreach_in_dir_path ) {
-				QStringList appendList;
-				QStringList subResult;
-				for( ; index < entryCount; ++index ) {
-					data[ index ] = absFilePath + "/" + data[ index ];
-
-					fileInfo.setFile( data[ index ] );
-					if( fileInfo.isFile( ) )
-						continue;
-					if( entryList( subResult, data[ index ], foreach_in_dir_path, filters ) == false )
-						continue;
-					appendList.append( subResult );
-				}
-				result_get_path.append( appendList );
-			} else
-				for( ; index < entryCount; ++index )
-					data[ index ] = absFilePath + "/" + data[ index ];
-			return true;
-		}
-	}
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path, bool foreach_in_dir_path, QDir::Filters filters ) {
-	return ::entryList::inDir::entryList( result_get_path, entry_path, foreach_in_dir_path, filters );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path, bool foreach_in_dir_path ) {
-	return ::entryList::inDir::entryList( result_get_path, entry_path, foreach_in_dir_path, QDir::NoDotAndDotDot | QDir::AllEntries | QDir::NoSymLinks );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path, QDir::Filters filters, QDir::SortFlags sort ) {
-	return ::entryList::sort::entryList( result_get_path, entry_path, filters, sort );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path, QDir::Filters filters ) {
-	return ::entryList::sort::entryList( result_get_path, entry_path, filters, QDir::NoSort );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QString &entry_path ) {
-	return ::entryList::sort::entryList( result_get_path, entry_path, QDir::NoDotAndDotDot | QDir::AllEntries | QDir::NoSymLinks, QDir::NoSort );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QStringList &entry_path, bool foreach_in_dir_path, QDir::Filters filters ) {
-	qsizetype count = entry_path.size( );
-	if( count == 0 )
-		return false;
-	QStringList entryResult;
-	result_get_path.clear( );
-	auto data = entry_path.data( );
-	qsizetype index = 0;
-	for( ; index < count; ++index )
-		if( ::entryList::inDir::entryList( entryResult, data[ index ], foreach_in_dir_path, filters ) )
-			result_get_path.append( entryResult );
-	return result_get_path.size( );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QStringList &entry_path, bool foreach_in_dir_path ) {
-	return entryList( result_get_path, entry_path, foreach_in_dir_path, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QStringList &entry_path, QDir::Filters filters ) {
-	qsizetype count = entry_path.size( );
-	if( count == 0 )
-		return false;
-	QStringList entryResult;
-	result_get_path.clear( );
-	auto data = entry_path.data( );
-	qsizetype index = 0;
-	for( ; index < count; ++index )
-		if( ::entryList::sort::entryList( entryResult, data[ index ], filters, QDir::NoSort ) )
-			result_get_path.append( entryResult );
-	return result_get_path.size( );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const QStringList &entry_path ) {
-	return entryList( result_get_path, entry_path, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, bool foreach_in_dir_path, QDir::Filters filters ) {
-	auto count = entry_path.size( );
-	if( count == 0 )
-		return false;
-	QStringList entryResult;
-	result_get_path.clear( );
-	auto data = entry_path.data( );
-	decltype(count) index = 0;
-	for( ; index < count; ++index )
-		if( ::entryList::inDir::entryList( entryResult, data[ index ], foreach_in_dir_path, filters ) )
-			result_get_path.append( entryResult );
-	return result_get_path.size( );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, bool foreach_in_dir_path ) {
-	return entryList( result_get_path, entry_path, foreach_in_dir_path, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const std::vector< QString > &entry_path, QDir::Filters filters ) {
-	auto count = entry_path.size( );
-	if( count == 0 )
-		return false;
-	QStringList entryResult;
-	result_get_path.clear( );
-	auto data = entry_path.data( );
-	decltype(count) index = 0;
-	for( ; index < count; ++index )
-		if( ::entryList::sort::entryList( entryResult, data[ index ], filters, QDir::NoSort ) )
-			result_get_path.append( entryResult );
-	return result_get_path.size( );
-}
-
-bool PathTools::entryList( QStringList &result_get_path, const std::vector< QString > &entry_path ) {
-	return entryList( result_get_path, entry_path, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks );
-}
 
 qsizetype PathTools::filterFile( QStringList &result_get_path, const std::vector< QString > &entry_path ) {
 	qsizetype resultDataIndex = 0;
@@ -419,4 +265,126 @@ bool PathTools::wirteWavFile( const QString &wirte_file_path, const std::vector<
 	for( ; index < count; index += 1 )
 		pcm.append( data[ index ].data< char >( ), data[ index ].byteCount( ) );
 	return writeWavFile( wirte_file_path, pcm, sampleRate, channelCount );
+}
+
+bool PathTools::entryFilePath( QStringList &result_file_path, const QString &entry_path ) {
+	QFileInfo info( entry_path );
+	if( info.exists( ) == false )
+		return false;
+	QString absoluteFilePath = info.absoluteFilePath( );
+	result_file_path.append( absoluteFilePath );
+	if( info.isFile( ) )
+		return true;
+	QDir dir( absoluteFilePath );
+	auto entryList = dir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot );
+	qsizetype count = entryList.size( );
+	if( count == 0 )
+		return true;
+	auto data = entryList.data( );
+	qsizetype index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ].isDir( ) ) {
+			QStringList subList;
+			entryFilePath( subList, data[ index ].absoluteFilePath( ) );
+			result_file_path.append( subList );
+		} else
+			result_file_path.append( data[ index ].absoluteFilePath( ) );
+
+	return true;
+}
+
+bool PathTools::entryFilePath( QStringList &result_file_path, const std::vector< QString > &entry_path_list ) {
+	size_t count = entry_path_list.size( );
+
+	if( count == 0 )
+		return false;
+	auto data = entry_path_list.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		entryFilePath( result_file_path, data[ index ] );
+
+	return true;
+}
+
+bool PathTools::entryFinalPath( QStringList &result_final_path, const QString &entry_path ) {
+	QFileInfo info( entry_path );
+	if( info.exists( ) == false )
+		return false;
+	QString absoluteFilePath = info.absoluteFilePath( );
+	if( info.isFile( ) ) {
+		result_final_path.append( absoluteFilePath );
+		return true;
+	}
+	QDir dir( absoluteFilePath );
+	auto entryList = dir.entryInfoList( QDir::AllEntries | QDir::NoDotAndDotDot, QDir::DirsFirst );
+	qsizetype count = entryList.size( );
+	if( count == 0 ) {
+		result_final_path.append( absoluteFilePath );
+		return true;
+	}
+	auto data = entryList.data( );
+	qsizetype index = 0;
+
+	for( ; index < count; index += 1 )
+		if( data[ index ].isDir( ) ) {
+			QStringList subList;
+			entryFinalPath( subList, data[ index ].absoluteFilePath( ) );
+			result_final_path.append( subList );
+		} else
+			result_final_path.append( data[ index ].absoluteFilePath( ) );
+	return true;
+}
+
+bool PathTools::copyPath( const QString &source_path, const QString &destination_path ) {
+	QStringList resultFinal;
+	if( entryFinalPath( resultFinal, source_path ) == false )
+		return false;
+	QFileInfo info( source_path );
+
+	auto sourceAbsoluteFilePath = info.absoluteFilePath( );
+	info.setFile( destination_path );
+	auto destinationAbsoluteFilePath = info.absoluteFilePath( );
+	auto removeFileError = QObject::tr( "文件删除失败" );
+	if( info.exists( ) && info.isFile( ) )
+		if( QFile::remove( destinationAbsoluteFilePath ) == false ) {
+			Message_Error_Out << removeFileError + " : " << destinationAbsoluteFilePath;
+			return false;
+		}
+	qsizetype sourceHomePathSize = sourceAbsoluteFilePath.size( );
+	qsizetype sourceCount = resultFinal.size( );
+	auto sourceData = resultFinal.data( );
+	qsizetype index = 0;
+	auto makeDirError = QObject::tr( "创建目录失败" );
+	auto copyFileError = QObject::tr( "文件拷贝失败" );
+	for( ; index < sourceCount; index += 1 ) {
+		QString sourceFile = sourceData[ index ];
+		sourceAbsoluteFilePath = destinationAbsoluteFilePath + "/" + sourceFile.mid( sourceHomePathSize );
+		info.setFile( sourceFile );
+		if( info.isDir( ) ) {
+			QDir dir;
+			if( dir.mkpath( sourceAbsoluteFilePath ) == false )
+				Message_Error_Out << makeDirError + " : " << sourceAbsoluteFilePath;
+		} else {
+			// 覆盖目标文件
+			if( QFile::exists( sourceAbsoluteFilePath ) )
+				if( QFile::remove( sourceAbsoluteFilePath ) == false ) {
+					Message_Error_Out << removeFileError + " : " << sourceAbsoluteFilePath;
+					continue;
+				}
+			info.setFile( sourceAbsoluteFilePath );
+			auto dir = info.dir( );
+			if( dir.exists( ) == false ) {
+				auto dirPath = info.absolutePath( );
+				if( dir.mkpath( dirPath ) == false ) {
+					Message_Error_Out << makeDirError + " : " << dirPath;
+					continue;
+				}
+			}
+			if( QFile::copy( sourceFile, sourceAbsoluteFilePath ) == false ) {
+				Message_Error_Out << copyFileError + " : " << sourceFile << " => " << sourceAbsoluteFilePath;
+				continue;
+			}
+		}
+	}
+	return true;
 }

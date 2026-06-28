@@ -1,12 +1,11 @@
 ﻿#include "appTranslate.h"
 
-#include <QObject>
 #include <QTextCodec>
 
 #include "appInstance.h"
 
+#include "translate/aboutWidgetTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
-#include "translate/iSelectPathWidgetTranslate.h"
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
@@ -48,7 +47,6 @@ bool AppTranslate::translateString( ) {
 	if_init_result( systemTrayIconMenu );
 	if_init_result( systemTrayIcon );
 	if_init_result( userMutex );
-	if_init_result( selectPathWidget );
 
 	return true;
 }
@@ -71,7 +69,6 @@ void AppTranslate::deleteResource( ) {
 	d_r( systemTrayIconMenu );
 	d_r( systemTrayIcon );
 	d_r( userMutex );
-	d_r( selectPathWidget );
 }
 
 void AppTranslate::loadTranslateQMFile( ) {
@@ -104,7 +101,6 @@ bool AppTranslate::init( ) {
 	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
 	systemTrayIcon = new SystemTrayIconTranslate;
 	userMutex = new UserMutexTranslate;
-	selectPathWidget = new ISelectPathWidgetTranslate;
 	setCodecForLocale( );
 
 	loadTranslateQMFile( );
@@ -176,8 +172,4 @@ SystemTrayIconTranslate * AppTranslate::getSystemTrayIcon( ) const {
 
 UserMutexTranslate * AppTranslate::getUserMutex( ) const {
 	return userMutex;
-}
-
-ISelectPathWidgetTranslate * AppTranslate::getSelectPathWidget( ) const {
-	return selectPathWidget;
 }

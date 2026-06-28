@@ -3,16 +3,26 @@
 
 #include <QWidget>
 
-class SelectDirPathWidget;
+class QScrollArea;
 
 class SettingWidget : public QWidget {
 	Q_OBJECT;
 
 protected:
-	SelectDirPathWidget *appJsonPathWidget = nullptr;
 
 protected:
 	virtual void deleteResource( );
+
+protected:
+	virtual QWidget * initMainSettingWdiget( );
+
+	virtual QWidget * initSettingScrollWdiget( );
+
+	virtual QWidget * initSettingButtonWdiget( );
+
+	virtual QWidget * initSelectSettingPathGroupBoxWdiget( );
+
+	virtual QWidget * initAppSettingPathWdiget( );
 
 public:
 	SettingWidget( QWidget *parent );

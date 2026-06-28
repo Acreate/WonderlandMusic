@@ -1,7 +1,6 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
 
-class ISelectPathWidgetTranslate;
 class SystemTrayIconTranslate;
 class SystemTrayIconMenuTranslate;
 class MusicInfoItemTranslate;
@@ -40,7 +39,6 @@ protected:
 	SystemTrayIconMenuTranslate *systemTrayIconMenu = nullptr;
 	SystemTrayIconTranslate *systemTrayIcon = nullptr;
 	UserMutexTranslate *userMutex = nullptr;
-	ISelectPathWidgetTranslate *selectPathWidget = nullptr;
 
 protected:
 	virtual void setCodecForLocale( );
@@ -90,7 +88,6 @@ public:
 
 	virtual UserMutexTranslate * getUserMutex( ) const;
 
-	virtual ISelectPathWidgetTranslate * getSelectPathWidget( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

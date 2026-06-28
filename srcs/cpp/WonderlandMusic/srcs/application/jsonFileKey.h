@@ -1,5 +1,6 @@
 ﻿#ifndef JSONFILEKEY_H_H_HEAD__FILE__
 #define JSONFILEKEY_H_H_HEAD__FILE__
+#include "appCore.h"
 
 class SystemTrayIconJsonKey;
 class PlayerListMenuJsonKey;
@@ -11,7 +12,7 @@ class PlayerListTopWidgetJsonKey;
 class AboutWidgetJsonKey;
 class PlayerListToolWidgetJsonKey;
 
-class JsonFileKey {
+class JsonFileKey : public AppCore {
 protected:
 	PlayerListToolWidgetJsonKey *playerListToolWidget = nullptr;
 	AboutWidgetJsonKey *aboutWidgetJsonFileKey = nullptr;
@@ -24,14 +25,14 @@ protected:
 	SystemTrayIconJsonKey *systemTrayIcon = nullptr;
 
 protected:
-	virtual void deleteResource( );
+	bool deleteResource( ) override;
 
 public:
-	virtual ~JsonFileKey( );
+	~JsonFileKey( ) override;
 
 	JsonFileKey( );
 
-	virtual bool init( );
+	bool init( ) override;
 
 	virtual PlayerListToolWidgetJsonKey * getPlayerListToolWidget( ) const;
 

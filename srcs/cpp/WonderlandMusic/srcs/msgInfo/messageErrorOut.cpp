@@ -4,6 +4,8 @@
 
 #include "messageString.h"
 
+#include "../application/appDataManage.h"
+#include "../application/appDateTimerManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/translate/messageTranslate.h"
@@ -103,7 +105,7 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 	auto *applicationInstance = AppInstance::getAppInstance( );
 	if( applicationInstance == nullptr )
 		return outString;
-	auto appStartRunDataTime = *applicationInstance->getStartDateTime( );
+	auto appStartRunDataTime = *applicationInstance->getAppDateTimerManage( )->getStartDateTime( );
 	auto date = appStartRunDataTime.date( );
 	QString dateTimeFormatString;
 	date_time_format.formatData( dateTimeFormatString, date );
@@ -114,7 +116,7 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 	auto dir = fileInfo.dir( );
 	writeFilePath = fileInfo.absoluteFilePath( );
 	auto logHomePtah = dir.absolutePath( );
-	auto translate = applicationInstance->getTranslate( );
+	auto translate = applicationInstance->getAppDataManage( )->getTranslate( );
 	if( dir.exists( ) == false ) {
 		if( dir.mkdir( logHomePtah ) == false ) {
 			outString.clear( );
@@ -164,7 +166,7 @@ QString & MessageErrorOut::formatMessageOut( const DateTimeFormat &date_time_for
 	dateTimeFormat.formatData( currentDataTimeToString ).append( dateTimeFormat.formatTime( ) );
 
 	auto *applicationInstance = AppInstance::getAppInstance( );
-	auto translate = applicationInstance->getTranslate( );
+	auto translate = applicationInstance->getAppDataManage( )->getTranslate( );
 	auto messageTranslate = translate->getMessage( );
 	QString sourceFile = messageTranslate->getSourceFile( );
 	QString sourceFunction = messageTranslate->getSourceFunction( );

@@ -2,13 +2,11 @@
 #define IJSONKEY_H_H_HEAD__FILE__
 #include <QString>
 
-class IJsonKey {
-public:
-	IJsonKey( ) = default;
+#include <application/appCore.h>
 
-	virtual ~IJsonKey( ) = default;
-
-	virtual bool init( ) = 0;
+class IJsonKey : public AppCore {
+protected:
+	bool deleteResource( ) override;
 };
 
 #endif // IJSONKEY_H_H_HEAD__FILE__

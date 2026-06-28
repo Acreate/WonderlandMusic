@@ -8,6 +8,7 @@
 
 #include "playerWindow.h"
 
+#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
@@ -17,6 +18,7 @@
 #include "../msgInfo/messageErrorOut.h"
 
 #include "../tools/pathTools.h"
+#include "../tools/templateArgs.h"
 
 #include "../widget/aboutWidget.h"
 #include "../widget/settingWidget.h"
@@ -49,7 +51,7 @@ bool MainWindow::subCompomentInit( ) {
 }
 
 MainWindow::~MainWindow( ) {
-	releaseResource( );
+	deleteResource( );
 }
 
 MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ), isLoadJsonFile( false ) {
@@ -60,7 +62,6 @@ bool MainWindow::loadSettingWidgetInfoAtFile( ) {
 }
 
 bool MainWindow::init( ) {
-	releaseResource( );
 	if( initApp( ) == false )
 		return false;
 	if( initStackedWidget( ) == false )
@@ -79,6 +80,20 @@ bool MainWindow::init( ) {
 	return true;
 }
 
+bool MainWindow::deleteResource( ) {
+	TemplateArgs::delete_ptr( showSettingWidgetBtn );
+	TemplateArgs::delete_ptr( showAboutWidgetBtn );
+	TemplateArgs::delete_ptr( showPlayListWidgetBtn );
+
+	TemplateArgs::delete_ptr( leftOptionWidget );
+	TemplateArgs::delete_ptr( leftOptionDockWidget );
+
+	TemplateArgs::delete_ptr( aboutWidget );
+	TemplateArgs::delete_ptr( playerWindow );
+	TemplateArgs::delete_ptr( settingWidget );
+	return true;
+}
+
 bool MainWindow::event( QEvent *event ) {
 	auto type = event->type( );
 	switch( type ) {
@@ -94,25 +109,10 @@ void MainWindow::showEvent( QShowEvent *event ) {
 	QMainWindow::showEvent( event );
 }
 
-void MainWindow::releaseResource( ) {
-	#define RS( ptr ) if( ptr ) {delete ptr; ptr = nullptr;}
-
-	RS( showSettingWidgetBtn );
-	RS( showAboutWidgetBtn );
-	RS( showPlayListWidgetBtn );
-
-	RS( leftOptionWidget );
-	RS( leftOptionDockWidget );
-
-	RS( aboutWidget );
-	RS( playerWindow );
-	RS( settingWidget );
-}
-
 bool MainWindow::initApp( ) {
 	appInstance = AppInstance::getAppInstance( );
-	appTranslate = appInstance->getTranslate( );
-	jsonFileKey = appInstance->getJsonFileKey( );
+	appTranslate = appInstance->getAppDataManage( )->getTranslate( );
+	jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
 	// 配置窗口顶部显示
 	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
 	return true;

@@ -5,12 +5,14 @@
 #include <qcontainerfwd.h>
 #include <vector>
 
+#include "appCore.h"
+
 class PlayerListWidget;
 class MusicInfoItemWidget;
 class QMediaPlayer;
 class QString;
 
-class MusicDecoder {
+class MusicDecoder : public AppCore{
 protected:
 	class StringOperator {
 		QStringList *stringList;
@@ -43,14 +45,18 @@ protected:
 	}
 
 public:
-	virtual ~MusicDecoder( );
+	~MusicDecoder( ) override;
 
 	MusicDecoder( );
 
 	virtual bool musicFileNmaeSupperDecoder( const QString &music_file_path ) const;
 
-	virtual bool init( );
+	bool init( ) override;
 
+protected:
+	bool deleteResource( ) override;
+
+public:
 	virtual std::vector< QString > getSupperDecodeFileSuffix( ) const;
 };
 

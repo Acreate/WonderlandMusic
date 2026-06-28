@@ -3,25 +3,39 @@
 #include <QFontDatabase>
 #include <QPainter>
 #include <QWidget>
+
+#include "../tools/templateArgs.h"
+
+bool RenderImage::deleteResource( ) {
+	TemplateArgs::delete_ptr( brackGroundColor );
+	TemplateArgs::delete_ptr( drawPenColor );
+	TemplateArgs::delete_ptr( drawPen );
+	TemplateArgs::delete_ptr( font );
+	TemplateArgs::delete_ptr( fontMetrics );
+	return true;
+}
+
 RenderImage::RenderImage( ) {
-	brackGroundColor = new QColor( 0, 0, 0, 0 );
-	drawPenColor = new QColor( 0, 0, 0, 255 );
-	drawPen = new QPen;
-	drawPen->setColor( *drawPenColor );
-	font = new QFont( "Microsoft YaHei", 14 );
-	fontMetrics = new QFontMetrics( *font );
+}
+
+RenderImage::~RenderImage( ) {
+}
+
+bool RenderImage::init( ) {
+	if( TemplateArgs::make_ptr( brackGroundColor, 0, 0, 0, 0 ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( drawPenColor, 0, 0, 0, 255 ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( drawPen, *drawPenColor ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( font, "Microsoft YaHei", 14 ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( fontMetrics, *font ) == nullptr )
+		return false;
 	fontMetricsHeight = fontMetrics->height( );
 
 	fontMetricsAscent = fontMetrics->ascent( );;
-}
-RenderImage::~RenderImage( ) {
-	delete fontMetrics;
-	delete font;
-	delete brackGroundColor;
-	delete drawPenColor;
-	delete drawPen;
-}
-bool RenderImage::init( ) {
+
 	// 使用外部字体，加载字体
 	int fontId = QFontDatabase::addApplicationFont( "./program/font/Alibaba/Alibaba-PuHuiTi-Medium.ttf" );
 
@@ -39,8 +53,15 @@ bool RenderImage::init( ) {
 	fontMetricsAscent = fontMetrics->ascent( );;
 	return true;
 }
-const QFont * RenderImage::getFont( ) const { return font; }
-const QFontMetrics * RenderImage::getFontMetrics( ) const { return fontMetrics; }
+
+const QFont * RenderImage::getFont( ) const {
+	return font;
+}
+
+const QFontMetrics * RenderImage::getFontMetrics( ) const {
+	return fontMetrics;
+}
+
 bool RenderImage::renderTxt( QImage &result_render_image, const QString &render_txt ) const {
 	int renderWidth = fontMetrics->horizontalAdvance( render_txt );
 	auto buffImage = QImage( renderWidth, fontMetricsHeight, QImage::Format_RGBA8888 );
@@ -56,8 +77,8 @@ bool RenderImage::renderTxt( QImage &result_render_image, const QString &render_
 	result_render_image = buffImage;
 	return true;
 }
-bool RenderImage::renderWidget( QImage &result_render_image, QWidget *render_widget ) const {
 
+bool RenderImage::renderWidget( QImage &result_render_image, QWidget *render_widget ) const {
 	if( render_widget == nullptr )
 		return false;
 

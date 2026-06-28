@@ -21,6 +21,7 @@ class DateTimeFormatTranslate : public ITranslate {
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getYear( ) const;
 
 	virtual const QString & getMonth( ) const;

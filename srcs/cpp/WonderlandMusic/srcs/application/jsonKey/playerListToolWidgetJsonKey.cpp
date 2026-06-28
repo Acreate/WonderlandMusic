@@ -1,10 +1,11 @@
 ﻿#include "playerListToolWidgetJsonKey.h"
 
+#include "../appDataManage.h"
 #include "../appInstance.h"
 
 bool PlayerListToolWidgetJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppSettingPath( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
 	thePreviousSongIconPath = applicationDirPath + "/png/上一曲.png";
 	controlPlayIconPath = applicationDirPath + "/png/播放.png";
 	controlPauseIconPath = applicationDirPath + "/png/暂停.png";

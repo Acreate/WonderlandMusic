@@ -1,10 +1,11 @@
 ﻿#include "playerListTopWidgetJsonKey.h"
 
+#include "../appDataManage.h"
 #include "../appInstance.h"
 
 bool PlayerListTopWidgetJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppSettingPath( );
+	auto applicationDirPath = appInstance->getAppDataManage(  )->getAppSettingPath( );
 	topJsonPath = applicationDirPath + "/json/app.window.player.top.info.json";
 	itemWidth = "window.player.list.item.width.content.width";
 	itemSplitWidth = "window.player.list.item.width.split";

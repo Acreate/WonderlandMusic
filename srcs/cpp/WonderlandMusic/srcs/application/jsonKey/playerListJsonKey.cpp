@@ -1,10 +1,11 @@
 ﻿#include "playerListJsonKey.h"
 
+#include "../appDataManage.h"
 #include "../appInstance.h"
 
 bool PlayerListJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppSettingPath( );
+	auto applicationDirPath = appInstance->getAppDataManage(  )->getAppSettingPath( );
 	songPlayerInfoJsonPath = applicationDirPath + "/json/app.song.play.list.info.json";
 	musicPlayerListInfoFileJsonPath = applicationDirPath + "/json/app.player.list.widget.music.list.info.json";
 	musicInfoListCount = "list.size";

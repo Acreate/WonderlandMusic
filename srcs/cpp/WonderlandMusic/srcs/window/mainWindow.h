@@ -2,6 +2,8 @@
 #define MAINWINDOW_H_H_HEAD__FILE__
 
 #include <QMainWindow>
+
+#include "../application/appCore.h"
 class PlayerWindow;
 class QScrollArea;
 class QPushButton;
@@ -13,7 +15,7 @@ class AboutWidget;
 class AppTranslate;
 class AppInstance;
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow, public AppCore {
 	Q_OBJECT;
 
 protected:
@@ -45,9 +47,6 @@ protected:
 	bool isLoadJsonFile;
 
 protected:
-	/// @brief 释放资源
-	virtual void releaseResource( );
-
 	/// @brief 初始化 AppInstance 实例相关对象
 	/// @return 失败返回 false
 	virtual bool initApp( );
@@ -91,9 +90,11 @@ public:
 
 	virtual void writeWidgetSettingToFile( );
 
-	virtual bool init( );
+	bool init( ) override;
 
 protected:
+	bool deleteResource( ) override;
+
 	//void closeEvent( QCloseEvent *event ) override;
 	bool event( QEvent *event ) override;
 

@@ -4,7 +4,6 @@
 #include "iTranslate.h"
 
 class AboutWidgetTranslate : public ITranslate {
-	
 public:
 	bool init( ) override;
 };

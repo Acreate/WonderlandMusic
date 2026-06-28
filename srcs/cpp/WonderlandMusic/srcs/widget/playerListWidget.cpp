@@ -11,6 +11,8 @@
 
 #include "playerListTopWidget.h"
 
+#include "../application/appDataManage.h"
+#include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
@@ -108,7 +110,7 @@ std::vector< MusicInfoItemWidget * > & PlayerListWidget::getSelectItemWidgetVect
 
 bool PlayerListWidget::loadJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage(  )->getJsonFileKey( );
 	auto playerListJsonKey = jsonFileKey->getPlayerList( );
 	auto fileJsonPath = playerListJsonKey->getMusicPlayerListInfoFileJsonPath( );
 	QJsonObject fileJsonObject;
@@ -186,7 +188,7 @@ bool PlayerListWidget::loadJsonPathInfo( ) {
 
 bool PlayerListWidget::writeJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage(  )->getJsonFileKey( );
 
 	QJsonObject fileJsonObject;
 	size_t count = musicInfoVector->size( );
@@ -427,7 +429,7 @@ bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, Music
 
 bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int split_width ) const {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto renderImage = appInstance->getRenderImage( );
+	auto renderImage = appInstance->getAppDrawManage(  )->getRenderImage( );
 	auto font = renderImage->getFont( );
 	auto fontMetrics = renderImage->getFontMetrics( );
 	int itemHeight = fontMetrics->height( );
@@ -653,7 +655,7 @@ void PlayerListWidget::updateItemWidget( ) {
 
 	int offsetY = 0;
 	auto appInstance = AppInstance::getAppInstance( );
-	auto renderImage = appInstance->getRenderImage( );
+	auto renderImage = appInstance->getAppDrawManage(  )->getRenderImage( );
 	auto fontMetrics = renderImage->getFontMetrics( );
 	int height = fontMetrics->height( );
 	auto newWidth = this->widgetBeforeWidth + this->widgetAfterWidth + this->splitWidth * 5 + this->musicNameWidth + this->musicSingerWidth + this->musicDurationWidth + this->indexWidth;
@@ -916,7 +918,7 @@ bool PlayerListWidget::deleteDiskMusicFileList( const std::vector< MusicInfoItem
 	size_t deleteFileCount = deleteSetVector.size( );
 	size_t deleteFileIndex;
 	QFile file;
-	PlayerListWidgetTranslate *playerListWidget = AppInstance::getAppInstance( )->getTranslate( )->getPlayerListWidget( );
+	PlayerListWidgetTranslate *playerListWidget = AppInstance::getAppInstance( )->getAppDataManage(  )->getTranslate( )->getPlayerListWidget( );
 
 	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 ) {
 		QString musicFilePath = deleteFileData[ deleteFileIndex ]->musicFilePath;

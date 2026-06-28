@@ -2,11 +2,11 @@
 #include <QLoggingCategory>
 #include <qfile.h>
 
+#include "application/appEventManage.h"
 #include "application/appInstance.h"
+#include "application/appUserInterfaceManage.h"
 
 #include "msgInfo/messageErrorOut.h"
-
-#include "tools/autoMakePtrTools.h"
 
 static MessageErrorOut *messageErrorOut = nullptr;
 static MessageString *permit = nullptr;
@@ -26,8 +26,8 @@ static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
 #endif
 
 #if is_en_write_log
-#include "tools/autoMakePtrTools.h"
-	#define new_ptr( ptr ) AutoMakePtrTools::makePtr( ptr )
+#include "tools/templateArgs.h"
+	#define new_ptr( ptr ) TemplateArgs::make_ptr( ptr )
 #else
 	#define new_ptr( ptr ) ( ptr = nullptr)
 #endif
@@ -85,8 +85,9 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		}
 		return -1;
 	}
-
-	int exec = application->run( );
+	int exec = -1;
+	if( application->getAppUserInterfaceManage( )->showMainWindow( ) )
+		exec = application->getAppEventManage( )->exec( );
 	if( messageErrorOut ) {
 		permit->setJion( "\n" );
 		screening->setJion( "\n" );
@@ -100,7 +101,6 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete messageErrorOut;
 		messageErrorOut = nullptr;
 	}
-	application->deleteResource( );
 	delete application;
 	return exec;
 }

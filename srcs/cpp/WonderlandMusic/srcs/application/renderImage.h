@@ -1,5 +1,6 @@
 ﻿#ifndef RENDERIMAGE_H_H_HEAD__FILE__
 #define RENDERIMAGE_H_H_HEAD__FILE__
+#include "appCore.h"
 
 class QWidget;
 class QPen;
@@ -8,22 +9,33 @@ class QString;
 class QImage;
 class QFontMetrics;
 class QFont;
-class RenderImage {
+
+class RenderImage : public AppCore {
 protected:
-	QFont *font;
-	QFontMetrics *fontMetrics;
-	QColor *brackGroundColor;
-	QColor *drawPenColor;
-	QPen *drawPen;
+	QFont *font = nullptr;
+	QFontMetrics *fontMetrics = nullptr;
+	QColor *brackGroundColor = nullptr;
+	QColor *drawPenColor = nullptr;
+	QPen *drawPen = nullptr;
 	int fontMetricsHeight;
 	int fontMetricsAscent;
+
+protected:
+	bool deleteResource( ) override;
+
 public:
 	RenderImage( );
-	virtual ~RenderImage( );
-	virtual bool init( );
+
+	~RenderImage( ) override;
+
+	bool init( ) override;
+
 	virtual const QFont * getFont( ) const;
+
 	virtual const QFontMetrics * getFontMetrics( ) const;
+
 	virtual bool renderTxt( QImage &result_render_image, const QString &render_txt ) const;
+
 	virtual bool renderWidget( QImage &result_render_image, QWidget *render_widget ) const;
 };
 

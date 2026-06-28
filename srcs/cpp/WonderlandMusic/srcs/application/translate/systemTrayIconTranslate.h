@@ -1,15 +1,18 @@
 ﻿#ifndef SYSTEMTRAYICONTRANSLATE_H_H_HEAD__FILE__
 #define SYSTEMTRAYICONTRANSLATE_H_H_HEAD__FILE__
+
 #include "iTranslate.h"
 
-class SystemTrayIconTranslate : public ITranslate{
+class SystemTrayIconTranslate : public ITranslate {
 	QString isSystemTrayAvailableError;
 	QString iconFileNotExists;
 	QString iconLoadFileError;
 	QString appName;
+
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getIsSystemTrayAvailableError( ) const;
 
 	virtual const QString & getIconFileNotExists( ) const;

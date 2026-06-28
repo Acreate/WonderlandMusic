@@ -1,10 +1,11 @@
 ﻿#include "mainWindowJsonKey.h"
 
+#include "../appDataManage.h"
 #include "../appInstance.h"
 
 bool MainWindowJsonKey::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppSettingPath( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
 	settingJsonPath = applicationDirPath + "/json/app.main.window.stting.json";
 	pointXPos = "app.main.window.point.x";
 	pointYPos = "app.main.window.point.y";
@@ -12,6 +13,7 @@ bool MainWindowJsonKey::init( ) {
 	sizeHeight = "app.main.window.size.h";
 	return true;
 }
+
 
 const QString & MainWindowJsonKey::getSettingJsonPath( ) const {
 	return settingJsonPath;

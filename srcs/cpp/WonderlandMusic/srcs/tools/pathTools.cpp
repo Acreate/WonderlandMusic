@@ -6,6 +6,7 @@
 
 #include "../application/appInstance.h"
 #include "../application/musicDecoder.h"
+#include "../application/musicManage.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -221,7 +222,7 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::v
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
 	auto applicationInstance = AppInstance::getAppInstance( );
-	auto musicDecoder = applicationInstance->getMusicDecoder( );
+	auto musicDecoder = applicationInstance->getMusicManage( )->getMusicDecoder( );
 	for( index = 0; index < count; ++index )
 		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];
@@ -273,7 +274,7 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStrin
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
 	auto applicationInstance = AppInstance::getAppInstance( );
-	auto musicDecoder = applicationInstance->getMusicDecoder( );
+	auto musicDecoder = applicationInstance->getMusicManage( )->getMusicDecoder( );
 	for( index = 0; index < count; ++index )
 		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];

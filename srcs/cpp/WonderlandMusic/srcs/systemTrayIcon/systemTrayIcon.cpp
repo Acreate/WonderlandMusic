@@ -3,8 +3,10 @@
 #include <QFileInfo>
 #include <QMenu>
 
+#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
+#include "../application/appUserInterfaceManage.h"
 #include "../application/jsonFileKey.h"
 #include "../application/jsonKey/systemTrayIconJsonKey.h"
 #include "../application/translate/systemTrayIconMenuTranslate.h"
@@ -42,7 +44,7 @@ void SystemTrayIcon::activated_slot( QSystemTrayIcon::ActivationReason reason ) 
 			AppInstance *appInstance;
 			appInstance = AppInstance::getAppInstance( );
 			MainWindow *mainWindow;
-			mainWindow = appInstance->getMainWindow( );
+			mainWindow = appInstance->getAppUserInterfaceManage( )->getMainWindow( );
 			mainWindow->show( );
 			mainWindow->raise( );
 			mainWindow->activateWindow( );
@@ -63,9 +65,10 @@ bool SystemTrayIcon::init( ) {
 	if( deleteResource( ) == false )
 		return false;
 	auto applicationInstance = AppInstance::getAppInstance( );
-	auto systemTrayIconTranslate = applicationInstance->getTranslate( )->getSystemTrayIcon( );
+	auto appDataManage = applicationInstance->getAppDataManage( );
+	auto systemTrayIconTranslate = appDataManage->getTranslate( )->getSystemTrayIcon( );
 	if( icon( ).isNull( ) ) {
-		auto jsonFileKey = applicationInstance->getJsonFileKey( );
+		auto jsonFileKey = appDataManage->getJsonFileKey( );
 		auto systemTrayIconJsonKey = jsonFileKey->getSystemTrayIcon( );
 		auto logoIconPath = systemTrayIconJsonKey->getIconFilePath( );
 		QFileInfo fileInfo( logoIconPath );

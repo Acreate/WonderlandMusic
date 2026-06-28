@@ -6,15 +6,15 @@ class PlayerListMenuTranslate : public ITranslate {
 	QString playerListMenuFileLoadMenu;
 	QString playerListAddMultiMusicFileToCollectionAction;
 	QString playerListAddMultiMusicDirToCollectionAction;
-	
+
 	QString playerListMenuenuPlayerMenu;
 	QString playerListMenuPlayerMenuSetCurrentPlayAction;
 	QString playerListMenuPlayerMenuInsterCurrentPlayAction;
-	
+
 	QString playerListMenuControlMenu;
 	QString playerListMenuControlMenuRemoveMusicAction;
 	QString playerListMenuControlMenuDeleteMusicAction;
-	
+
 	QString playerListMenuMoveMenu;
 	QString playerListMenuControlMenuMoveTopMusicAction;
 	QString playerListMenuControlMenuMoveBottomMusicAction;
@@ -23,9 +23,11 @@ class PlayerListMenuTranslate : public ITranslate {
 	QString anyTypeName;
 	QString loadDiskFileTitle;
 	QString loadDiskDirTitle;
+
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getLoadDiskFileTitle( ) const;
 
 	virtual const QString & getLoadDiskDirTitle( ) const;

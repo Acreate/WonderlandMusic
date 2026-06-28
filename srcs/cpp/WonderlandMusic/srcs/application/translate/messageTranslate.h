@@ -17,6 +17,7 @@ class MessageTranslate : public ITranslate {
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getSourceFile( ) const;
 
 	virtual const QString & getSourceFunction( ) const;

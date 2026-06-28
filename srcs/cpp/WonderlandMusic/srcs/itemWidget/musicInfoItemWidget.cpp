@@ -2,6 +2,7 @@
 
 #include <QPainter>
 
+#include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
 #include "../application/renderImage.h"
 
@@ -16,7 +17,7 @@ MusicInfoItemWidget::MusicInfoItemWidget( PlayerListWidget *parent ) :
 }
 
 void MusicInfoItemWidget::paintEvent( QPaintEvent *event ) {
-	auto font = AppInstance::getAppInstance( )->getRenderImage( )->getFont( );
+	auto font = AppInstance::getAppInstance( )->getAppDrawManage(  )->getRenderImage( )->getFont( );
 
 	int offsetSplitX = splitWidth / 2;
 	QPainter painter;

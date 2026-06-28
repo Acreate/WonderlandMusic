@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QLibraryInfo>
 
+#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/jsonFileKey.h"
 #include "../application/jsonKey/aboutWidgetJsonKey.h"
@@ -34,7 +35,7 @@ bool AboutWidget::init( ) {
 	icon = icon.scaled( 64, 64 );
 	qtIco->setPixmap( icon );
 
-	auto jsonFileKey = applicationInstance->getJsonFileKey( );
+	auto jsonFileKey = applicationInstance->getAppDataManage(  )->getJsonFileKey( );
 	auto aboutWidgetJsonFileKey = jsonFileKey->getAboutWidgetJsonFileKey( );
 	auto logoIconPath = aboutWidgetJsonFileKey->getQtLogoIconPath( );
 	QFileInfo fileInfo( logoIconPath );

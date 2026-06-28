@@ -1,5 +1,6 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
+#include "appCore.h"
 
 class SystemTrayIconTranslate;
 class SystemTrayIconMenuTranslate;
@@ -19,9 +20,7 @@ class SettingWidgetTranslate;
 class UserMutexTranslate;
 class ISelectDirWidgetTranslate;
 
-class AppTranslate {
-	
-
+class AppTranslate : public AppCore {
 protected:
 	SettingWidgetTranslate *settingWidget = nullptr;
 	PlayerToolsWidgetTranslate *playerToolsWidget = nullptr;
@@ -45,16 +44,16 @@ protected:
 
 	virtual bool translateString( );
 
-	virtual void deleteResource( );
+	bool deleteResource( ) override;
 
 	virtual void loadTranslateQMFile( );
 
 public:
-	virtual ~AppTranslate( );
+	~AppTranslate( ) override;
 
 	AppTranslate( );
 
-	virtual bool init( );
+	bool init( ) override;
 
 	virtual SettingWidgetTranslate * getSettingWidget( ) const;
 
@@ -87,7 +86,6 @@ public:
 	virtual SystemTrayIconTranslate * getSystemTrayIcon( ) const;
 
 	virtual UserMutexTranslate * getUserMutex( ) const;
-
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

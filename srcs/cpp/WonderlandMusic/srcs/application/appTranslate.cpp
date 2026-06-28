@@ -2,7 +2,10 @@
 
 #include <QTextCodec>
 
+#include "appDataManage.h"
 #include "appInstance.h"
+
+#include "../tools/templateArgs.h"
 
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
@@ -51,31 +54,48 @@ bool AppTranslate::translateString( ) {
 	return true;
 }
 
-void AppTranslate::deleteResource( ) {
-	#define d_r( ptr ) if(ptr) {delete ptr; ptr = nullptr;}
-	d_r( settingWidget );
-	d_r( playerToolsWidget );
-	d_r( playerListMenu );
-	d_r( playerTopWidget );
-	d_r( playerWindow );
-	d_r( json );
-	d_r( dateTimeFormat );
-	d_r( aboutWidget );
-	d_r( playerWidget );
-	d_r( mainWindow );
-	d_r( message );
-	d_r( playerListWidget );
-	d_r( musicInfoItem );
-	d_r( systemTrayIconMenu );
-	d_r( systemTrayIcon );
-	d_r( userMutex );
+bool AppTranslate::deleteResource( ) {
+	if( TemplateArgs::delete_ptr( settingWidget ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerToolsWidget ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerListMenu ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerTopWidget ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerWindow ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( json ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( dateTimeFormat ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( aboutWidget ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerWidget ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( mainWindow ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( message ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerListWidget ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( musicInfoItem ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( systemTrayIconMenu ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( systemTrayIcon ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( userMutex ) == false )
+		return false;
+	return true;
 }
 
 void AppTranslate::loadTranslateQMFile( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto appSettingPath = appInstance->getAppSettingPath( );
+	AppDataManage *appDataManage = appInstance->getAppDataManage( );
+	auto appSettingPath = appDataManage->getAppSettingPath( );
 	auto currentQMFile = appSettingPath + QObject::tr( "/translations/WonderlandMusic_zh_CN.qm" );
-	appInstance->setAppStringTranslate( currentQMFile );
+	appDataManage->setAppStringTranslate( currentQMFile );
 }
 
 AppTranslate::~AppTranslate( ) {
@@ -84,6 +104,10 @@ AppTranslate::~AppTranslate( ) {
 
 bool AppTranslate::init( ) {
 	deleteResource( );
+
+	setCodecForLocale( );
+
+	loadTranslateQMFile( );
 
 	settingWidget = new SettingWidgetTranslate;
 	playerToolsWidget = new PlayerToolsWidgetTranslate;
@@ -101,9 +125,6 @@ bool AppTranslate::init( ) {
 	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
 	systemTrayIcon = new SystemTrayIconTranslate;
 	userMutex = new UserMutexTranslate;
-	setCodecForLocale( );
-
-	loadTranslateQMFile( );
 
 	if( translateString( ) == false )
 		return false;

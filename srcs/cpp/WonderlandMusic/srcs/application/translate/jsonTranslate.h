@@ -9,6 +9,7 @@ class JsonTranslate : public ITranslate {
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getFileConverJsonDocError( ) const;
 
 	virtual const QString & getNotFindJsonKey( ) const;

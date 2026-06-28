@@ -11,6 +11,7 @@ class PlayerTopWidgetTranslate : public ITranslate {
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getMusicIndex( ) const;
 
 	virtual const QString & getMusicName( ) const;

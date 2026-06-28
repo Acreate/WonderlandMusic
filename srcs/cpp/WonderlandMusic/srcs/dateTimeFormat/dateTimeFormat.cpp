@@ -3,6 +3,7 @@
 #include <QObject>
 #include <qdatetime.h>
 
+#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/translate/dateTimeFormatTranslate.h"
@@ -31,7 +32,7 @@ DateTimeFormat::DateTimeFormat( ) {
 
 QString & DateTimeFormat::formatData( QString &result_format, const QDate &format_data ) const {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto appTranslate = appInstance->getTranslate( );
+	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
 	auto dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
 	auto year = dateTimeFormatTranslate->getYear( );
 	auto month = dateTimeFormatTranslate->getMonth( );
@@ -88,7 +89,7 @@ QString & DateTimeFormat::formatData( QString &result_format, const QDate &forma
 
 QString & DateTimeFormat::formatTime( QString &result_format, const QTime &format_time ) const {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto appTranslate = appInstance->getTranslate( );
+	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
 	auto dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
 	auto hour = dateTimeFormatTranslate->getHour( );
 	auto minute = dateTimeFormatTranslate->getMinute( );

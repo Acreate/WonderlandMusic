@@ -1,0 +1,24 @@
+﻿#ifndef APPDATETIMERMANAGE_H_H_HEAD__FILE__
+#define APPDATETIMERMANAGE_H_H_HEAD__FILE__
+#include <QObject>
+
+#include "appCore.h"
+
+class AppDateTimerManage : public QObject, public AppCore {
+protected:
+	/// @brief 起始时间
+	QDateTime *startDateTime = nullptr;
+
+public:
+	bool init( ) override;
+
+protected:
+	bool deleteResource( ) override;
+
+public:
+	~AppDateTimerManage( ) override;
+
+	virtual const QDateTime * getStartDateTime( ) const;
+};
+
+#endif // APPDATETIMERMANAGE_H_H_HEAD__FILE__

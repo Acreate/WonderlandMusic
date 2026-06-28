@@ -11,6 +11,7 @@ class MusicInfoItemJsonKey : public IJsonKey {
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getMusicInfoFile( ) const;
 
 	virtual const QString & getMusicInfoName( ) const;

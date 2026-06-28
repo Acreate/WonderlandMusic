@@ -3,8 +3,15 @@
 
 #include <QApplication>
 
+#include "appCore.h"
+
+class MusicManage;
+class AppDateTimerManage;
+class AppUserInterfaceManage;
+class AppDrawManage;
+class AppDataManage;
+class AppEventManage;
 class SystemTrayIcon;
-class MusicPlayerInstance;
 class RenderImage;
 class MainWindow;
 class JsonFileKey;
@@ -12,51 +19,25 @@ class MusicDecoder;
 class AppTranslate;
 class MessageErrorOut;
 
-class AppInstance : public QApplication {
+class AppInstance : public QApplication, public AppCore {
 	Q_OBJECT;
 
 private:
 	static AppInstance *instance;
 
 protected:
-	/// @brief 起始时间
-	QDateTime *startDateTime = nullptr;
-	/// @brief 翻译
-	AppTranslate *translate = nullptr;
-	/// @brief json 关联的 key
-	JsonFileKey *jsonFileKey = nullptr;
-	/// @brief 音频解码实例
-	MusicDecoder *musicDecoder = nullptr;
-	/// @brief 音频播放实例
-	MusicPlayerInstance *musicPlayerInstance = nullptr;
-	/// @brief 渲染对象
-	RenderImage *renderImage = nullptr;
-	/// @brief 主要执行窗口
-	MainWindow *mainWindow = nullptr;
-	/// @brief 系统托盘
-	SystemTrayIcon *systemTrayIcon = nullptr;
-	/// @brief 退出代码
-	int exitCode;
-	/// @brief 应用配置路径
-	QString appSettingPath;
-	/// @brief 固定的配置路径
-	QString constAppSettingPath;
-	/// @brief 默认的翻译文件
-	QString constAppDefaultTranslatePath;
-	/// @brief 获取 json 中的关键 key
-	QString constAppIniDirHomePathJsonKey;
-	/// @brief 翻译
-	QTranslator *appTranslator = nullptr;
-
-protected:
-	virtual bool initVar( );
-
-	virtual bool initReadJson( );
-
-	virtual bool writeJson( );
-
-	virtual bool initTranslate( );
-
+	/// @brief 数据管理
+	AppDataManage *appDataManage = nullptr;
+	/// @brief 事件管理
+	AppEventManage *appEventManage = nullptr;
+	/// @brief 绘制管理
+	AppDrawManage *appDrawManage = nullptr;
+	/// @brief 用户界面
+	AppUserInterfaceManage *appUserInterfaceManage = nullptr;
+	/// @brief 时间管理
+	AppDateTimerManage *appDateTimerManage = nullptr;
+	/// @brief 音频管理
+	MusicManage* musicManage = nullptr;
 public:
 	static AppInstance * getAppInstance( );
 
@@ -66,35 +47,22 @@ public:
 
 	bool notify( QObject *, QEvent * ) override;
 
-	virtual bool init( );
+	bool init( ) override;
 
-	virtual int run( );
-
-	virtual void deleteResource( );
+protected:
+	bool deleteResource( ) override;
 
 public:
-	virtual const QDateTime * getStartDateTime( ) const;
+	virtual AppDataManage * getAppDataManage( ) const;
 
-	virtual const JsonFileKey * getJsonFileKey( ) const;
+	virtual AppEventManage * getAppEventManage( ) const;
 
-	virtual const AppTranslate * getTranslate( ) const;
+	virtual AppDrawManage * getAppDrawManage( ) const;
 
-	virtual MusicDecoder * getMusicDecoder( ) const;
+	virtual AppUserInterfaceManage * getAppUserInterfaceManage( ) const;
 
-	virtual int getExitCode( ) const;
+	virtual AppDateTimerManage * getAppDateTimerManage( ) const;
 
-	virtual const RenderImage * getRenderImage( ) const;
-
-	virtual QString getAppSettingPath( ) const;
-
-	virtual void setAppSettingPath( const QString &app_setting_dir_home_path, bool is_move_old_files );
-
-	virtual bool showMainWindow( ) const;
-
-	virtual bool hideMainWindow( ) const;
-
-	virtual MainWindow * getMainWindow( ) const;
-
-	virtual bool setAppStringTranslate( const QString &translate_file_path );
+	virtual MusicManage * getMusicManage( ) const;
 };
 #endif // APPINSTANCE_H_H_HEAD__FILE__

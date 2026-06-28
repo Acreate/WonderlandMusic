@@ -3,15 +3,17 @@
 
 #include <QSystemTrayIcon>
 
+#include "../application/appCore.h"
+
 class SystemTrayIconMenu;
 
-class SystemTrayIcon : public QSystemTrayIcon {
+class SystemTrayIcon : public QSystemTrayIcon, public AppCore {
 	Q_OBJECT;
 
 protected:
 	SystemTrayIconMenu *systemTrayIconMenu = nullptr;
 
-	virtual bool deleteResource( );
+	bool deleteResource( ) override;
 
 protected Q_SLOTS:
 	virtual void activated_slot( QSystemTrayIcon::ActivationReason reason );
@@ -21,7 +23,7 @@ public:
 
 	SystemTrayIcon( const QIcon &icon, QObject *parent );
 
-	virtual bool init( );
+	bool init( ) override;
 
 	~SystemTrayIcon( ) override;
 };

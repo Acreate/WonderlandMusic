@@ -4,7 +4,6 @@
 #include <QMetaEnum>
 #include <QString>
 #include <QMediaFormat>
-#include <QMediaPlayer>
 
 #include "appInstance.h"
 
@@ -12,8 +11,7 @@
 #include "../tools/vectorTools.h"
 
 MusicDecoder::~MusicDecoder( ) {
-	VectorTools::deleteVectorPtr( supperDecodeFileSuffix );
-	supperDecodeFileSuffix.clear( );
+	deleteResource( );
 }
 
 MusicDecoder::MusicDecoder( ) {
@@ -67,6 +65,7 @@ void MusicDecoder::appendDecodeFileSuffix( const QStringList &decode_file_suffix
 }
 
 bool MusicDecoder::init( ) {
+	deleteResource( );
 	// 自定义添加
 	appendAnyDecodeFileSuffix( "wav", "wma", "flac", "m4a", "aac", "ogg" );
 	// 遍历所有支持的媒体格式
@@ -97,6 +96,12 @@ bool MusicDecoder::init( ) {
 	supperDecodeFileSuffix = singleCase;
 	VectorTools::deleteVectorPtr( repetition );
 
+	return true;
+}
+
+bool MusicDecoder::deleteResource( ) {
+	VectorTools::deleteVectorPtr( supperDecodeFileSuffix );
+	supperDecodeFileSuffix.clear( );
 	return true;
 }
 

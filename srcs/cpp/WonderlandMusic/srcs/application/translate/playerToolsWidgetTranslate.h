@@ -19,6 +19,7 @@ class PlayerToolsWidgetTranslate : public ITranslate {
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getThePreviousSong( ) const;
 
 	virtual const QString & getControlPlay( ) const;

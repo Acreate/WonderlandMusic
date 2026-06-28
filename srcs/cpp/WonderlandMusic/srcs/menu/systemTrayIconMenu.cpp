@@ -1,7 +1,10 @@
 ﻿#include "systemTrayIconMenu.h"
 
+#include "../application/appDataManage.h"
+#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
+#include "../application/appUserInterfaceManage.h"
 #include "../application/translate/systemTrayIconMenuTranslate.h"
 
 bool SystemTrayIconMenu::deleteResource( ) {
@@ -12,15 +15,16 @@ bool SystemTrayIconMenu::deleteResource( ) {
 bool SystemTrayIconMenu::init( ) {
 	if( deleteResource( ) == false )
 		return false;
-	auto systemTrayIconMenuTranslate = AppInstance::getAppInstance( )->getTranslate( )->getSystemTrayIconMenu( );
+	AppInstance *instance = AppInstance::getAppInstance( );
+	auto systemTrayIconMenuTranslate = instance->getAppDataManage( )->getTranslate( )->getSystemTrayIconMenu( );
 	auto showMainWindowItem = addAction( systemTrayIconMenuTranslate->getShowMainMenu( ) );
 	connect( showMainWindowItem, &QAction::triggered, this, []( ) {
-		AppInstance::getAppInstance( )->showMainWindow( );
+		AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->showMainWindow( );
 	} );
 	addSeparator( );
 	auto quitApp = addAction( systemTrayIconMenuTranslate->getQuitApp( ) );
 	connect( quitApp, &QAction::triggered, this, []( ) {
-		AppInstance::getAppInstance( )->quit( );
+		AppInstance::getAppInstance( )->getAppEventManage( )->quit( );
 	} );
 	return true;
 }

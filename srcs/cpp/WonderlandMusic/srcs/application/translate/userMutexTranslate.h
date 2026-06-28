@@ -1,5 +1,6 @@
 ﻿#ifndef USERMUTEXTRANSLATE_H_H_HEAD__FILE__
 #define USERMUTEXTRANSLATE_H_H_HEAD__FILE__
+
 #include "iTranslate.h"
 
 class UserMutexTranslate : public ITranslate {
@@ -12,6 +13,7 @@ class UserMutexTranslate : public ITranslate {
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getNodeSetUnlockError( ) const;
 
 	virtual const QString & getTrylockError( ) const;

@@ -3,10 +3,12 @@
 #include <QFileDialog>
 #include <QJsonObject>
 
+#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
 #include "../application/musicDecoder.h"
+#include "../application/musicManage.h"
 #include "../application/jsonKey/playerListMenuJsonKey.h"
 #include "../application/translate/playerListMenuTranslate.h"
 
@@ -26,16 +28,17 @@ bool PlayerWidgetMenu::initVar( ) {
 	appInstance = AppInstance::getAppInstance( );
 	if( appInstance == nullptr )
 		return false;
-	appTranslate = appInstance->getTranslate( );
+	auto appDataManage = appInstance->getAppDataManage( );
+	appTranslate = appDataManage->getTranslate( );
 	if( appTranslate == nullptr )
 		return false;
 	playerListMenuTranslate = appTranslate->getPlayerListMenu( );
 	if( playerListMenuTranslate == nullptr )
 		return false;
-	musicDecoder = appInstance->getMusicDecoder( );
+	musicDecoder = appInstance->getMusicManage( )->getMusicDecoder( );
 	if( musicDecoder == nullptr )
 		return false;
-	jsonFileKey = appInstance->getJsonFileKey( );
+	jsonFileKey = appDataManage->getJsonFileKey( );
 	if( jsonFileKey == nullptr )
 		return false;
 	playerListMenuJsonKey = jsonFileKey->getPlayerListMenu( );

@@ -2,6 +2,8 @@
 
 #include "appInstance.h"
 
+#include "../tools/templateArgs.h"
+
 #include "jsonKey/aboutWidgetJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
 #include "jsonKey/musicInfoItemJsonKey.h"
@@ -12,17 +14,26 @@
 #include "jsonKey/playerWindowJsonKey.h"
 #include "jsonKey/systemTrayIconJsonKey.h"
 
-void JsonFileKey::deleteResource( ) {
-	#define d_r(ptr) if(ptr) (delete ptr, ptr = nullptr)
-	d_r( playerListToolWidget );
-	d_r( aboutWidgetJsonFileKey );
-	d_r( playerListTopWidget );
-	d_r( playerWindow );
-	d_r( playerList );
-	d_r( mainWindow );
-	d_r( musicInfoItem );
-	d_r( playerListMenu );
-	d_r( systemTrayIcon );
+bool JsonFileKey::deleteResource( ) {
+	if( TemplateArgs::delete_ptr( playerListToolWidget ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( aboutWidgetJsonFileKey ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerListTopWidget ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerWindow ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerList ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( mainWindow ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( musicInfoItem ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( playerListMenu ) == false )
+		return false;
+	if( TemplateArgs::delete_ptr( systemTrayIcon ) == false )
+		return false;
+	return true;
 }
 
 JsonFileKey::~JsonFileKey( ) {
@@ -34,16 +45,25 @@ JsonFileKey::JsonFileKey( ) {
 
 bool JsonFileKey::init( ) {
 	deleteResource( );
+	if( TemplateArgs::make_ptr( playerListToolWidget ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( aboutWidgetJsonFileKey ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( playerListTopWidget ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( playerWindow ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( playerList ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( mainWindow ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( musicInfoItem ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( playerListMenu ) == nullptr )
+		return false;
+	if( TemplateArgs::make_ptr( systemTrayIcon ) == nullptr )
+		return false;
 
-	playerListToolWidget = new PlayerListToolWidgetJsonKey;
-	aboutWidgetJsonFileKey = new AboutWidgetJsonKey;
-	playerListTopWidget = new PlayerListTopWidgetJsonKey;
-	playerWindow = new PlayerWindowJsonKey;
-	playerList = new PlayerListJsonKey;
-	mainWindow = new MainWindowJsonKey;
-	musicInfoItem = new MusicInfoItemJsonKey;
-	playerListMenu = new PlayerListMenuJsonKey;
-	systemTrayIcon = new SystemTrayIconJsonKey;
 	#define if_init_result(ptr) if( ptr == nullptr || ptr->init() == false) return false
 	if_init_result( playerListToolWidget );
 	if_init_result( aboutWidgetJsonFileKey );

@@ -10,9 +10,11 @@ class SettingWidgetTranslate : public ITranslate {
 	QString selectDirLinePlaceholderTxt;
 	QString setectPathGroupTitle;
 	QString selectDirPathDialogTitle;
+
 public:
 	bool init( ) override;
 
+public:
 	virtual const QString & getOkBtnTxt( ) const;
 
 	virtual const QString & getCancelBtnTxt( ) const;

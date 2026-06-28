@@ -3,6 +3,7 @@
 #include <mutex>
 #include <source_location>
 
+#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/translate/userMutexTranslate.h"
@@ -10,7 +11,7 @@
 #include "../msgInfo/messageErrorOut.h"
 
 void UserMutex::out_debug_info( ) const {
-	auto appTranslate = AppInstance::getAppInstance( )->getTranslate( );
+	auto appTranslate = AppInstance::getAppInstance( )->getAppDataManage( )->getTranslate( );
 	auto userMutexTranslate = appTranslate->getUserMutex( );
 	Message_Error_Out << userMutexTranslate->getTrylockError( ) << userMutexTranslate->getLastTrylock( ) << *trylockSourceLocation << userMutexTranslate->getLastLock( ) << *lockSourceLocation << userMutexTranslate->getLastUnlock( ) << *unlockSourceLocation;
 }

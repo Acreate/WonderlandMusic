@@ -8,6 +8,7 @@
 #include <QGroupBox>
 #include <QLineEdit>
 
+#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/translate/settingWidgetTranslate.h"
@@ -22,7 +23,7 @@ void SettingWidget::deleteResource( ) {
 
 void SettingWidget::clickSelectAppSettingPathBtn( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto settingWidgetTranslate = appInstance->getTranslate( )->getSettingWidget( );
+	auto settingWidgetTranslate = appInstance->getAppDataManage( )->getTranslate( )->getSettingWidget( );
 	QFileInfo fileInfo;
 
 	QFileDialog dialog( this );
@@ -55,13 +56,13 @@ void SettingWidget::changedSelectAppSettingPathEditor( ) {
 }
 
 void SettingWidget::clickOkBtn( ) {
-	AppInstance::getAppInstance( )->setAppSettingPath( selectDirPathLineEdit->text( ), true );
+	AppInstance::getAppInstance( )->getAppDataManage( )->setAppSettingPath( selectDirPathLineEdit->text( ), true );
 }
 
 void SettingWidget::clickCancelBtn( ) {
 	if( selectDirPathLineEdit == nullptr )
 		return;
-	auto appSetHomePath = AppInstance::getAppInstance( )->getAppSettingPath( );
+	auto appSetHomePath = AppInstance::getAppInstance( )->getAppDataManage( )->getAppSettingPath( );
 	selectDirPathLineEdit->setText( appSetHomePath );
 }
 
@@ -122,7 +123,7 @@ QWidget * SettingWidget::initSettingButtonWdiget( ) {
 	buttonWidgetLayout->addWidget( cancel );
 
 	auto appInstance = AppInstance::getAppInstance( );
-	auto settingWidgetTranslate = appInstance->getTranslate( )->getSettingWidget( );
+	auto settingWidgetTranslate = appInstance->getAppDataManage( )->getTranslate( )->getSettingWidget( );
 	ok->setText( settingWidgetTranslate->getOkBtnTxt( ) );
 	cancel->setText( settingWidgetTranslate->getCancelBtnTxt( ) );
 
@@ -144,7 +145,8 @@ QWidget * SettingWidget::initSelectSettingPathGroupBoxWdiget( ) {
 	selectGroupBox->addWidget( appSettingPathWdiget );
 
 	auto appInstance = AppInstance::getAppInstance( );
-	auto settingWidgetTranslate = appInstance->getTranslate( )->getSettingWidget( );
+	auto appDataManage = appInstance->getAppDataManage( );
+	auto settingWidgetTranslate = appDataManage->getTranslate( )->getSettingWidget( );
 	selectSettingPathGroupBox->setTitle( settingWidgetTranslate->getSetectPathGroupTitle( ) );
 
 	return selectSettingPathGroupBox;
@@ -152,7 +154,8 @@ QWidget * SettingWidget::initSelectSettingPathGroupBoxWdiget( ) {
 
 QWidget * SettingWidget::initAppSettingPathWdiget( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto settingWidgetTranslate = appInstance->getTranslate( )->getSettingWidget( );
+	auto appDataManage = appInstance->getAppDataManage( );
+	auto settingWidgetTranslate = appDataManage->getTranslate( )->getSettingWidget( );
 
 	QWidget *selectWidget = new QWidget( );
 	QHBoxLayout *seleceLayout = new QHBoxLayout( selectWidget );
@@ -197,7 +200,7 @@ bool SettingWidget::init( ) {
 	deleteResource( );
 	if( initWidget( ) == false )
 		return false;
-	selectDirPathLineEdit->setText( AppInstance::getAppInstance( )->getAppSettingPath( ) );
+	selectDirPathLineEdit->setText( AppInstance::getAppInstance( )->getAppDataManage( )->getAppSettingPath( ) );
 	if( loadJsonPathInfo( ) == false )
 		return false;
 	return true;

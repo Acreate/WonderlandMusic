@@ -12,6 +12,7 @@ class MainWindow;
 class AppUserInterfaceManage;
 class AppInstance;
 declaration_signal_event_info( PlayerListWidget );
+declaration_signal_event_info( PlayerToolsWidget );
 
 class AppEventManage : public QObject, public AppCore {
 	Q_OBJECT;
@@ -19,8 +20,6 @@ class AppEventManage : public QObject, public AppCore {
 protected:
 	AppInstance *appInstance;
 	int execResultCode;
-	AppUserInterfaceManage *appUserInterfaceManage;
-	MainWindow *mainWindow;
 
 private:
 	static AppEventManage * getInstance( );
@@ -53,14 +52,28 @@ public:
 
 	virtual bool notify( QObject *object, QEvent *event );
 
+	/*
+	 * 信号链接声明
+	 */
 public:
 	definition_AppEventManage_connect_Type( PlayerListWidget );
 
-	// 触发信号函数
+	definition_AppEventManage_connect_Type( PlayerToolsWidget );
+
+	/*
+	 * 触发信号函数声明
+	 */
 Q_SIGNALS:
 	declaration_AppEventManage_signal( PlayerListWidget );
+
+	declaration_AppEventManage_signal( PlayerToolsWidget );
 };
 
-// 触发信号
+/*
+ * 触发信号，事件函数声明
+ */
+
 definition_emit_event( PlayerListWidget );
+
+definition_emit_event( PlayerToolsWidget );
 #endif // APPEVENTMANAGE_H_H_HEAD__FILE__

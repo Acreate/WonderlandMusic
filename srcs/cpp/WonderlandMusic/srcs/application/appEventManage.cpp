@@ -23,13 +23,6 @@ bool AppEventManage::init( ) {
 	appInstance = AppInstance::getAppInstance( );
 	if( appInstance == nullptr )
 		return false;
-	appUserInterfaceManage = appInstance->getAppUserInterfaceManage( );
-	if( appUserInterfaceManage == nullptr )
-		return false;
-	mainWindow = appUserInterfaceManage->getMainWindow( );
-	if( mainWindow == nullptr )
-		return false;
-	appInstance->installEventFilter( this );
 	return true;
 }
 
@@ -75,11 +68,15 @@ void AppEventManage::quit( ) {
 }
 
 bool AppEventManage::notify( QObject *object, QEvent *event ) {
-	if( object == mainWindow ) {
+	auto userInterfaceManage = appInstance->getAppUserInterfaceManage( );
+	if( userInterfaceManage == nullptr )
+		return false;
+	MainWindow *window = userInterfaceManage->getMainWindow( );
+	if( object == window ) {
 		auto type = event->type( );
 		switch( type ) {
 			case QEvent::Type::Close :
-				mainWindow->writeWidgetSettingToFile( );
+				window->writeWidgetSettingToFile( );
 				if( QSystemTrayIcon::isSystemTrayAvailable( ) == false )
 					appInstance->quit( ); // 如果不支持托盘，隐藏则退出
 				break;

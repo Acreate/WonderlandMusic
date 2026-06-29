@@ -78,7 +78,9 @@ bool AppInstance::init( ) {
 		return false;
 	if( TemplateArgs::make_ptr( appEventManage ) == nullptr )
 		return false;
-
+		
+	if( appEventManage->init( ) == false )
+		return false;
 	if( appDateTimerManage->init( ) == false )
 		return false;
 	if( appDataManage->init( ) == false )
@@ -88,10 +90,6 @@ bool AppInstance::init( ) {
 	if( appDrawManage->init( ) == false )
 		return false;
 	if( appUserInterfaceManage->init( ) == false )
-		return false;
-	if( appUserInterfaceManage->init( ) == false )
-		return false;
-	if( appEventManage->init( ) == false )
 		return false;
 
 	return true;

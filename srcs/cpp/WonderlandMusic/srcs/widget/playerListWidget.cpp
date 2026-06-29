@@ -13,6 +13,7 @@
 
 #include "../application/appDataManage.h"
 #include "../application/appDrawManage.h"
+#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
@@ -843,14 +844,24 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 			// 双击或单击，二选一
 			if( isDoubleClick ) {
 				doubleClickMusicItemWidget( selectItem );
-				emit itemDoubleSelect( selectItem ); // 触发信号
+
+				// 触发信号
+				PlayerListWidgetEventInfo eventInfo;
+				eventInfo.eventSenderPtr = this;
+				eventInfo.event = PlayerListWidgetEventInfo::EventType::Item_Double_Select;
+				Emit_PlayerListWidget_Event( this, eventInfo );
 			} else if( selectItem ) { // 单击
 				std::vector< MusicInfoItemWidget * > resultVector;
 				musicInfoMutex->lock( );
 				apendSelectMusicItemWidget( selectItem, true );
 				resultVector = *selectItemWidgetVector;
 				musicInfoMutex->unlock( );
-				emit itemSelect( resultVector );
+
+				// 触发信号
+				PlayerListWidgetEventInfo eventInfo;
+				eventInfo.eventSenderPtr = this;
+				eventInfo.event = PlayerListWidgetEventInfo::EventType::Item_Select;
+				Emit_PlayerListWidget_Event( this, eventInfo );
 				update( );
 			}
 		}
@@ -877,10 +888,18 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				apendSelectMusicItemWidget( selectItem, false );
 				resultVector = *selectItemWidgetVector;
 				musicInfoMutex->unlock( );
-				emit itemSelect( resultVector );
+				// 触发信号
+				PlayerListWidgetEventInfo eventInfo;
+				eventInfo.eventSenderPtr = this;
+				eventInfo.event = PlayerListWidgetEventInfo::EventType::Item_Select;
+				Emit_PlayerListWidget_Event( this, eventInfo );
 				update( );
 			}
-			emit popMenu( );
+			// 触发信号
+			PlayerListWidgetEventInfo eventInfo;
+			eventInfo.eventSenderPtr = this;
+			eventInfo.event = PlayerListWidgetEventInfo::EventType::Pop_Menu;
+			Emit_PlayerListWidget_Event( this, eventInfo );
 		}
 		break;
 	}

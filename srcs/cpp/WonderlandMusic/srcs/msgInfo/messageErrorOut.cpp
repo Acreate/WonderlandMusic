@@ -32,7 +32,6 @@ void StdErrorConsoleOut( const QString &text ) {
 #endif
 
 MessageErrorOut::MessageErrorOut( bool is_write_file, const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ), isWriteFile( is_write_file ) {
-	messageErrorOutTranslate = new MessageTranslate;
 }
 
 MessageErrorOut::MessageErrorOut( const QString &log_home_path, const std::source_location &source_location ) : MessageErrorOut( true, log_home_path, source_location ) {
@@ -76,7 +75,6 @@ const std::vector< MessageString > & MessageErrorOut::getOutMsgVector( ) const {
 
 MessageErrorOut::~MessageErrorOut( ) {
 	writeLog( );
-	delete messageErrorOutTranslate;
 }
 
 QString MessageErrorOut::toQString( ) const {
@@ -106,13 +104,16 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 		return outString;
 	QDateTime appStartRunDataTime;
 	auto *applicationInstance = AppInstance::getAppInstance( );
-	AppDateTimerManage *appDateTimerManage = nullptr;
+	const QDateTime *startDateTime = nullptr;
 	if( applicationInstance ) {
-		appDateTimerManage = applicationInstance->getAppDateTimerManage( );
-		if( appDateTimerManage )
-			appStartRunDataTime = *appDateTimerManage->getStartDateTime( );
+		AppDateTimerManage *appDateTimerManage = applicationInstance->getAppDateTimerManage( );
+		if( appDateTimerManage ) {
+			startDateTime = appDateTimerManage->getStartDateTime( );
+			if( startDateTime )
+				appStartRunDataTime = *startDateTime;
+		}
 	}
-	if( appDateTimerManage == nullptr )
+	if( startDateTime == nullptr )
 		appStartRunDataTime = QDateTime::currentDateTime( );
 	auto date = appStartRunDataTime.date( );
 	QString dateTimeFormatString;
@@ -138,10 +139,12 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 				createDirError = messageTranslate->getCreateDirError( );
 			}
 			if( messageTranslate == nullptr ) {
-				if( messageErrorOutTranslate->init( ) )
-					createDirError = messageErrorOutTranslate->getCreateDirError( );
+				messageTranslate = new MessageTranslate;
+				if( messageTranslate->init( ) )
+					createDirError = messageTranslate->getCreateDirError( );
 				else
 					createDirError = QObject::tr( "创建目录失败" );
+				delete messageTranslate;
 			}
 			formatMessageOut( date_time_format, outString, std::source_location::current( ), createDirError + " : " + logHomePtah );
 			StdErrorConsoleOut( outString );
@@ -161,11 +164,14 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 			messageTranslate = translate->getMessage( );
 			openFileError = messageTranslate->getOpenFileError( );
 		}
-		if( messageTranslate == nullptr )
-			if( messageErrorOutTranslate->init( ) )
-				openFileError = messageErrorOutTranslate->getOpenFileError( );
+		if( messageTranslate == nullptr ) {
+			messageTranslate = new MessageTranslate;
+			if( messageTranslate->init( ) )
+				openFileError = messageTranslate->getOpenFileError( );
 			else
 				openFileError = QObject::tr( "打开文件失败" );
+			delete messageTranslate;
+		}
 		formatMessageOut( date_time_format, outString, std::source_location::current( ), openFileError + " : " + writeFilePath );
 		StdErrorConsoleOut( outString );
 		return outString;
@@ -209,22 +215,26 @@ QString & MessageErrorOut::formatMessageOut( const DateTimeFormat &date_time_for
 		auto appDataManage = applicationInstance->getAppDataManage( );
 		if( appDataManage ) {
 			auto translate = appDataManage->getTranslate( );
-			messageTranslate = translate->getMessage( );
-			sourceFile = messageTranslate->getSourceFile( );
-			sourceFunction = messageTranslate->getSourceFunction( );
-			sourceLine = messageTranslate->getSourceLine( );
+			if( translate ) {
+				messageTranslate = translate->getMessage( );
+				sourceFile = messageTranslate->getSourceFile( );
+				sourceFunction = messageTranslate->getSourceFunction( );
+				sourceLine = messageTranslate->getSourceLine( );
+			}
 		}
 	}
 	if( messageTranslate == nullptr ) {
-		if( messageErrorOutTranslate->init( ) ) {
-			sourceFile = messageErrorOutTranslate->getSourceFile( );
-			sourceFunction = messageErrorOutTranslate->getSourceFunction( );
-			sourceLine = messageErrorOutTranslate->getSourceLine( );
+		messageTranslate = new MessageTranslate;
+		if( messageTranslate->init( ) ) {
+			sourceFile = messageTranslate->getSourceFile( );
+			sourceFunction = messageTranslate->getSourceFunction( );
+			sourceLine = messageTranslate->getSourceLine( );
 		} else {
 			sourceFile = QObject::tr( "源文件" );
 			sourceFunction = QObject::tr( "源函数" );
 			sourceLine = QObject::tr( "源行号" );
 		}
+		delete messageTranslate;
 	}
 	result_msg.append( "\n-----\n :: \n : " ).append( sourceFile ).append( " = " ).append( msgCodeFileName ).append( "\n : " ).append( sourceFunction ).append( " = " ).append( msgCodeFunctionName ).append( "\n : " ).append( sourceLine ).append( " = " ).append( QString::number( msgCodeLine ) ).append( "\n : " ).append( currentDataTimeToString ).append( " ->\n ::\n" ).append( msg ).append( "\n-----\n" );
 

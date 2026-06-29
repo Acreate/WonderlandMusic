@@ -7,6 +7,7 @@
 #include <QScrollArea>
 #include <qevent.h>
 
+#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 
 #include "../menu/playerWidgetMenu.h"
@@ -94,7 +95,16 @@ bool PlayerWindow::initConnect( ) {
 	auto playListHBar = playListWidgetScrollArea->horizontalScrollBar( );
 	auto topWidgetHBar = playerListTopWidgetScrollArea->horizontalScrollBar( );
 	connect( playListHBar, &QScrollBar::sliderMoved, topWidgetHBar, &QScrollBar::setValue );
-	connect( playListWidget, &PlayerListWidget::popMenu, this, &PlayerWindow::popPlayerWidgetMenu );
+
+	AppEventManage::Connect_PlayerListWidget_Signal( [this] ( AppEventManage *sender_ptr, PlayerListWidget *event_obj_ptr, const PlayerListWidgetEventInfo &event_info_ref ) {
+		popPlayerWidgetMenu( );
+	} );
+
+	auto appEventManage = AppInstance::getAppInstance( )->getAppEventManage( );
+	connect( appEventManage, &AppEventManage::trigger_PlayerListWidget_signal, []( ) {
+		int i = 1 + 1;
+	} );
+
 	return true;
 }
 

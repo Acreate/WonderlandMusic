@@ -193,13 +193,8 @@ protected:
 	/// @brief 移动列表到底部
 	/// @param music_item_vector 被移动的列表
 	virtual bool moveMusicToListBottom( const std::vector< MusicInfoItemWidget * > &music_item_vector );
-
-Q_SIGNALS:
-	void itemSelect( const std::vector< MusicInfoItemWidget * > &select_vectir );
-
-	void itemDoubleSelect( MusicInfoItemWidget *double_click_item_widget );
-
-	void popMenu( );
 };
 
+#include <application/eventMacro/eventMacroDefault.h>
+definition_event_info_class_type( PlayerListWidget, Item_Select, Item_Double_Select, Pop_Menu, Player_Music, Player_Next );
 #endif // PLAYLISTWIDGET_H_H_HEAD__FILE__

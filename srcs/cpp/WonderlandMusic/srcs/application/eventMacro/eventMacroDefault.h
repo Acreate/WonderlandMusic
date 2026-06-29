@@ -11,30 +11,30 @@
 	class declaration_signal_class_name( class_type_ )
 /// @brief 根据类，生成类事件名称
 /// @param class_type_ 需要的类
-#define declaration_signal_event_name( class_type_ ) \
+#define declaration_signal_event_info_name( class_type_ ) \
 	class_type_##EventInfo
 /// @brief 根据类，生成类事件类声明
 /// @param class_type_ 需要的类
-#define declaration_signal_event_type( class_type_ ) \
-	class declaration_signal_event_name(class_type_)
+#define declaration_signal_event_info_type( class_type_ ) \
+	class declaration_signal_event_info_name(class_type_)
 /// @brief 根据类，生成类与类事件的类声明
 /// @param class_type_ 需要的类
 #define declaration_signal_event_info(  class_type_ ) \
 	declaration_signal_class_type( class_type_ );\
-	declaration_signal_event_type( class_type_ )
+	declaration_signal_event_info_type( class_type_ )
 
 /// @brief 根据类，生成事件参数
 /// @param class_type_ 需要的类
 #define declaration_signal_type_args( class_type_ ) \
 	declaration_signal_class_name(class_type_)* event_obj_ptr, \
-	const declaration_signal_event_name(class_type_)& event_info_ref
+	const declaration_signal_event_info_name(class_type_)& event_info_ref
 
 /// @brief 根据类，生成调用事件参数
 /// @param class_type_ 需要的类
 #define declaration_signal_AppEventManage_type_args( class_type_ ) \
 	AppEventManage * sender_ptr,\
 	declaration_signal_class_name(class_type_)* event_obj_ptr, \
-	const declaration_signal_event_name(class_type_)& event_info_ref
+	const declaration_signal_event_info_name(class_type_)& event_info_ref
 /// @brief 根据类，生成触发信号的信号名称
 /// @param class_type_ 需要的类
 #define declaration_AppEventManage_signal_name( class_type_ )\
@@ -57,7 +57,7 @@
 /// @param event_info_ref 信号绑定类对象事件信息
 #define trigger_signal( class_type_, event_obj_ptr, event_info_ref ) \
 	AppEventManage *appEventManage = AppEventManage::getInstance( ); \
-	appEventManage->declaration_AppEventManage_signal_name(class_type_)( appEventManage, event_obj_ptr, event_info_ref )
+	emit appEventManage->declaration_AppEventManage_signal_name(class_type_)( appEventManage, event_obj_ptr, event_info_ref )
 
 /// @brief 根据类，生成事件调用类名称
 /// @param class_type_ 需要的类
@@ -87,8 +87,36 @@ class declaration_AppEventManage_connect_Type_name(class_type_){ \
 	public:\
 	declaration_AppEventManage_connect_Type_name(class_type_)( const std::function<void (declaration_signal_AppEventManage_type_args(class_type_))> & call_function ){\
 		AppEventManage *appEventManage = AppEventManage::getInstance( ); \
-		appEventManage->connect( appEventManage,&declaration_AppEventManage_signal_name(class_type_), call_function) ; \
+		appEventManage->connect( appEventManage, &AppEventManage::declaration_AppEventManage_signal_name(class_type_), call_function) ; \
 	} \
+}
+
+/// @brief 根据类，生成事件消息类 __VA_ARGS__ ( 可变参数列表 ) 为枚举内容
+/// @param class_type_ 需要的类
+#define definition_event_info_class_type( class_type_, ... ) \
+declaration_signal_event_info_type( class_type_ ) { \
+	friend class class_type_; \
+public:\
+	/*事件类型*/ \
+	enum class EventType {\
+		__VA_ARGS__, \
+	};\
+protected:\
+	/* 事件类型 */ \
+	EventType event; \
+	/* 事件指针对象 */ \
+	class_type_ *eventSenderPtr; \
+	declaration_signal_event_info_name(class_type_)( EventType event, class_type_ *event_sender_ptr )\
+		: event( event ),\
+		eventSenderPtr( event_sender_ptr ) {\
+	}\
+	declaration_signal_event_info_name(class_type_)(  ){\
+	}\
+public: \
+	/* 获取事件类型 */ \
+	EventType getEventType() const { return event; } \
+	/* 获取事件指针对象 */ \
+	class_type_* getEventSenderPtr() const { return eventSenderPtr; } \
 }
 
 #endif // EVENTMACRODEFAULT_H_H_HEAD__FILE__

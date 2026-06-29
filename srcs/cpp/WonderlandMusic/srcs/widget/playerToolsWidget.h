@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include <application/eventMacro/eventMacroDefault.h>
+
 class QPushButton;
 class QProgressBar;
 
@@ -77,5 +79,7 @@ Q_SIGNALS:
 
 	void duratctionProgressBarChange( int new_var );
 };
+
+definition_event_info_class_type( PlayerToolsWidget, None, Previous_Song, Change_Play, Next_Song, Duratction_Change );
 
 #endif // PLAYERTOOLSWIDGET_H_H_HEAD__FILE__

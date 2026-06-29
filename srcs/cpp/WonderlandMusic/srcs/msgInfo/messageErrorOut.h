@@ -38,7 +38,7 @@ protected:
 	QString endString;
 
 	bool isWriteFile;
-	MessageTranslate* messageErrorOutTranslate;
+
 public:
 	using void_ptr = void *;
 

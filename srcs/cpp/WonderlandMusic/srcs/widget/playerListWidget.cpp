@@ -231,8 +231,8 @@ bool PlayerListWidget::writeJsonPathInfo( ) {
 
 	auto fileJsonPath = musicPlayerListJsonKey->getMusicPlayerListInfoFileJsonPath( );
 
-	fileJsonObject.insert( musicPlayerListJsonKey->getFileSelectWorkPath( ), fileSelectWorkPath );
-	fileJsonObject.insert( musicPlayerListJsonKey->getDirSelectWorkPath( ), dirSelectWorkPath );
+	fileJsonObject.insert( musicPlayerListJsonKey->getFileSelectWorkPath( ), PathTools::getAutoShortenPathName( fileSelectWorkPath ) );
+	fileJsonObject.insert( musicPlayerListJsonKey->getDirSelectWorkPath( ), PathTools::getAutoShortenPathName( dirSelectWorkPath ) );
 
 	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
 	return true;

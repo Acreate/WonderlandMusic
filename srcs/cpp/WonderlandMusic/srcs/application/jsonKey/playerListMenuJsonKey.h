@@ -4,16 +4,11 @@
 
 class PlayerListMenuJsonKey : public IJsonKey {
 	QString settingJsonPath;
-	QString fileSelectWorkPath;
-	QString dirSelectWorkPath;
+
 public:
 	bool init( ) override;
 
 	virtual const QString & getSettingJsonPath( ) const;
-
-	virtual const QString & getFileSelectWorkPath( ) const;
-
-	virtual const QString & getDirSelectWorkPath( ) const;
 };
 
 #endif // PLAYERLISTMENUJSONKEY_H_H_HEAD__FILE__

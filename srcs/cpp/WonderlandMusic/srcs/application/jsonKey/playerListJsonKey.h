@@ -8,6 +8,8 @@ class PlayerListJsonKey : public IJsonKey {
 	QString musicInfoListName;
 	QString musicInfoListIndex;
 	QString songPlayerInfoJsonPath;
+	QString fileSelectWorkPath;
+	QString dirSelectWorkPath;
 
 public:
 	bool init( ) override;
@@ -21,6 +23,10 @@ public:
 	virtual const QString & getMusicInfoListIndex( ) const;
 
 	virtual const QString & getSongPlayerInfoJsonPath( ) const;
+
+	virtual const QString & getFileSelectWorkPath( ) const;
+
+	virtual const QString & getDirSelectWorkPath( ) const;
 };
 
 #endif // PLAYERLISTJSONKEY_H_H_HEAD__FILE__

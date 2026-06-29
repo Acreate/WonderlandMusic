@@ -19,19 +19,10 @@ class PlayerListMenuTranslate : public ITranslate {
 	QString playerListMenuControlMenuMoveTopMusicAction;
 	QString playerListMenuControlMenuMoveBottomMusicAction;
 
-	QString musicTypeName;
-	QString anyTypeName;
-	QString loadDiskFileTitle;
-	QString loadDiskDirTitle;
-
 public:
 	bool init( ) override;
 
 public:
-	virtual const QString & getLoadDiskFileTitle( ) const;
-
-	virtual const QString & getLoadDiskDirTitle( ) const;
-
 	virtual const QString & getPlayerListMenuFileLoadMenu( ) const;
 
 	virtual const QString & getPlayerListAddMultiMusicFileToCollectionAction( ) const;
@@ -55,10 +46,6 @@ public:
 	virtual const QString & getPlayerListMenuControlMenuMoveTopMusicAction( ) const;
 
 	virtual const QString & getPlayerListMenuControlMenuMoveBottomMusicAction( ) const;
-
-	virtual const QString & getMusicTypeName( ) const;
-
-	virtual const QString & getAnyTypeName( ) const;
 };
 
 #endif // PLAYERLISTMENUTRANSLATE_H_H_HEAD__FILE__

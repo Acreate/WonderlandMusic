@@ -2,7 +2,8 @@
 #define PLAYERWIDGETMENU_H_H_HEAD__FILE__
 
 #include <QMenu>
-class PlayerListWidgetFriend;
+
+#include "../application/appCore.h"
 class JsonFileKey;
 class PlayerListMenuJsonKey;
 class PlayerListMenuTranslate;
@@ -12,7 +13,7 @@ class AppInstance;
 class MusicInfoItemWidget;
 class PlayerListWidget;
 
-class PlayerWidgetMenu : public QMenu {
+class PlayerWidgetMenu : public QMenu, public AppCore {
 	Q_OBJECT;
 
 protected:
@@ -22,10 +23,6 @@ protected:
 	MusicDecoder *musicDecoder;
 	const JsonFileKey *jsonFileKey;
 	PlayerListMenuJsonKey *playerListMenuJsonKey;
-	/// @brief 文件选择工作路径
-	QString fileSelectWorkPath;
-	/// @brief 目录选择工作路径
-	QString dirSelectWorkPath;
 	PlayerListWidget *playerListWidget;
 	QVector< MusicInfoItemWidget * > musicInfoItemWidgetVector;
 	/// @brief 删除菜单
@@ -50,19 +47,14 @@ protected:
 	QAction *addMultiFileMusicToCollectionAction;
 	/// @brief 添加选择目录到集
 	QAction *addMultiMusicDirToCollection;
-	PlayerListWidgetFriend *playerListWidgetFriend = nullptr;
 
 protected:
-	virtual void deleteResource( );
+	bool deleteResource( ) override;
 
 public:
 	PlayerWidgetMenu( PlayerListWidget *player_list_widget );
 
-	virtual bool init( );
-
-	virtual bool loadJsonPathInfo( );
-
-	virtual bool writeJsonPathInfo( );
+	bool init( ) override;
 
 protected:
 	virtual bool initVar( );
@@ -89,5 +81,8 @@ protected:
 
 	virtual void selectListMoveBottom( );
 };
+
+#include <application/eventMacro/eventMacroDefault.h>
+definition_event_info_class_type( PlayerWidgetMenu, Load_Disk_File, Load_Disk_Dir, Set_Current_Select_Play, Inster_Current_Select_Play, Remove_Play_List_Select_Info, Delete_Play_List_Select_File, Select_List_Move_Top, Select_List_Move_Bottom );
 
 #endif // PLAYERWIDGETMENU_H_H_HEAD__FILE__

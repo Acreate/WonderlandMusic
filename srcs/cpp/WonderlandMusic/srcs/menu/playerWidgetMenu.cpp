@@ -1,22 +1,12 @@
 ﻿#include "playerWidgetMenu.h"
 
-#include <QFileDialog>
-#include <QJsonObject>
-
 #include "../application/appDataManage.h"
+#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
-#include "../application/musicDecoder.h"
 #include "../application/musicManage.h"
-#include "../application/jsonKey/playerListMenuJsonKey.h"
 #include "../application/translate/playerListMenuTranslate.h"
-
-#include "../friend/playerListWidgetFriend.h"
-
-#include "../tools/pathTools.h"
-#include "../tools/widgetTools.h"
-
 #include "../widget/playerListWidget.h"
 
 PlayerWidgetMenu::PlayerWidgetMenu( PlayerListWidget *player_list_widget ) : QMenu( player_list_widget ), playerListWidget( player_list_widget ) {
@@ -44,10 +34,6 @@ bool PlayerWidgetMenu::initVar( ) {
 	playerListMenuJsonKey = jsonFileKey->getPlayerListMenu( );
 	if( playerListMenuJsonKey == nullptr )
 		return false;
-	fileSelectWorkPath = QDir::currentPath( );
-	dirSelectWorkPath = QDir::currentPath( );
-	playerListWidgetFriend = new PlayerListWidgetFriend( this, playerListWidget );
-	loadJsonPathInfo( );
 	return true;
 }
 
@@ -92,84 +78,18 @@ bool PlayerWidgetMenu::initConnectAcction( ) {
 }
 
 void PlayerWidgetMenu::loadDiskFile( ) {
-	QFileInfo fileInfo;
-	QFileDialog dialog( this );
-
-	dialog.setWindowTitle( playerListMenuTranslate->getLoadDiskFileTitle( ) );
-	fileInfo.setFile( fileSelectWorkPath );
-	auto openDirPath = fileInfo.absoluteFilePath( );
-	dialog.setDirectory( openDirPath );
-	dialog.setFileMode( QFileDialog::ExistingFiles );
-
-	auto decodeFileSuffix = musicDecoder->getSupperDecodeFileSuffix( );
-	QStringList filterSuffixList;
-	size_t count = decodeFileSuffix.size( );
-	auto data = decodeFileSuffix.data( );
-	size_t index = 0;
-	for( ; index < count; index += 1 )
-		filterSuffixList.append( "*." + data[ index ] );
-	auto musicTypeName = playerListMenuTranslate->getMusicTypeName( );
-	auto filterSuffix = filterSuffixList.join( " " );
-	auto filterName = musicTypeName + "(" + filterSuffix + ");;" + playerListMenuTranslate->getAnyTypeName( ) + "(*.*)";
-	dialog.setNameFilter( filterName );
-	QRect geometry = this->geometry( );
-	auto curentWindowSize = geometry.size( );
-	dialog.resize( curentWindowSize );
-	auto center = geometry.center( );
-	center = mapToGlobal( center );
-	WidgetTools::moveWidgetToCenterPos( center, &dialog );
-	if( dialog.exec( ) != QDialog::Accepted )
-		return;
-	QStringList files = dialog.selectedFiles( );
-	count = files.size( );
-	auto selectFileData = files.data( );
-	fileInfo.setFile( selectFileData[ 0 ] );
-	auto dir = fileInfo.dir( );
-	fileSelectWorkPath = PathTools::getAutoShortenPathName( dir.absolutePath( ) );
-	writeJsonPathInfo( );
-	std::vector< QString > loadVector( count );
-	auto dataPtr = loadVector.data( );
-	for( index = 0; index < count; index += 1 )
-		dataPtr[ index ] = selectFileData[ index ];
-	playerListWidgetFriend->loadDiskMusicFileList( loadVector );
+	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Load_Disk_File, this );
+	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }
 
 void PlayerWidgetMenu::loadDiskDir( ) {
-	QFileInfo fileInfo;
-
-	QFileDialog dialog( this );
-	dialog.setWindowTitle( playerListMenuTranslate->getLoadDiskDirTitle( ) );
-	fileInfo.setFile( dirSelectWorkPath );
-	auto openDirPath = fileInfo.absoluteFilePath( );
-	dialog.setDirectory( openDirPath );
-	dialog.setFileMode( QFileDialog::Directory );
-
-	QRect geometry = this->geometry( );
-	auto curentWindowSize = geometry.size( );
-	dialog.resize( curentWindowSize );
-	auto center = geometry.center( );
-	center = mapToGlobal( center );
-	WidgetTools::moveWidgetToCenterPos( center, &dialog );
-	if( dialog.exec( ) != QDialog::Accepted )
-		return;
-
-	QStringList files = dialog.selectedFiles( );
-	qsizetype count = files.size( );
-	auto data = files.data( );
-	dirSelectWorkPath = PathTools::getAutoShortenPathName( data[ 0 ] );
-	writeJsonPathInfo( );
-	size_t index;
-	std::vector< QString > loadVector( count );
-	auto dataPtr = loadVector.data( );
-	for( index = 0; index < count; index += 1 )
-		dataPtr[ index ] = data[ index ];
-	playerListWidgetFriend->loadDiskMusicDirList( loadVector );
+	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Load_Disk_Dir, this );
+	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }
 
-void PlayerWidgetMenu::deleteResource( ) {
+bool PlayerWidgetMenu::deleteResource( ) {
 	clear( );
-	if( playerListWidgetFriend )
-		( delete playerListWidgetFriend, playerListWidgetFriend = nullptr );
+	return true;
 }
 
 bool PlayerWidgetMenu::init( ) {
@@ -185,64 +105,32 @@ bool PlayerWidgetMenu::init( ) {
 	return true;
 }
 
-bool PlayerWidgetMenu::loadJsonPathInfo( ) {
-	auto jsonPath = playerListMenuJsonKey->getSettingJsonPath( );
-	QJsonObject readObj;
-	if( PathTools::readJsonObject( readObj, jsonPath ) == false )
-		return true;
-	auto end = readObj.end( );
-	auto find = readObj.find( playerListMenuJsonKey->getFileSelectWorkPath( ) );
-	if( find != end )
-		fileSelectWorkPath = find.value( ).toString( fileSelectWorkPath );
-	find = readObj.find( playerListMenuJsonKey->getDirSelectWorkPath( ) );
-	if( find != end )
-		dirSelectWorkPath = find.value( ).toString( dirSelectWorkPath );
-	return true;
-}
-
-bool PlayerWidgetMenu::writeJsonPathInfo( ) {
-	auto jsonPath = playerListMenuJsonKey->getSettingJsonPath( );
-	QJsonObject writeObj;
-
-	writeObj.insert( playerListMenuJsonKey->getFileSelectWorkPath( ), fileSelectWorkPath );
-	writeObj.insert( playerListMenuJsonKey->getDirSelectWorkPath( ), dirSelectWorkPath );
-
-	PathTools::writeJsonObject( writeObj, jsonPath );
-	return true;
-}
-
 void PlayerWidgetMenu::setCurrentSelectPlay( ) {
-	std::vector< MusicInfoItemWidget * > selectVector;
-	playerListWidget->getSelectItemWidgetVector( selectVector );
-	playerListWidgetFriend->setCurrentPlayerMusicList( selectVector );
+	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Set_Current_Select_Play, this );
+	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }
 
 void PlayerWidgetMenu::insterCurrentSelectPlay( ) {
-	std::vector< MusicInfoItemWidget * > selectVector;
-	playerListWidget->getSelectItemWidgetVector( selectVector );
-	playerListWidgetFriend->setInsertPlayerMusicList( selectVector );
+	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Inster_Current_Select_Play, this );
+	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }
 
 void PlayerWidgetMenu::removePlayListSelectInfo( ) {
-	std::vector< MusicInfoItemWidget * > selectVector;
-	playerListWidget->getSelectItemWidgetVector( selectVector );
-	playerListWidgetFriend->removeListMusicFileList( selectVector );
+	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Remove_Play_List_Select_Info, this );
+	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }
 
 void PlayerWidgetMenu::deletePlayListSelectFile( ) {
-	std::vector< MusicInfoItemWidget * > selectVector;
-	playerListWidget->getSelectItemWidgetVector( selectVector );
-	playerListWidgetFriend->deleteDiskMusicFileList( selectVector );
+	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Delete_Play_List_Select_File, this );
+	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }
 
 void PlayerWidgetMenu::selectListMoveTop( ) {
-	std::vector< MusicInfoItemWidget * > selectVector;
-	playerListWidget->getSelectItemWidgetVector( selectVector );
-	playerListWidgetFriend->moveMusicToListTop( selectVector );
+	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Select_List_Move_Top, this );
+	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }
 
 void PlayerWidgetMenu::selectListMoveBottom( ) {
-	std::vector< MusicInfoItemWidget * > selectVector;
-	playerListWidget->getSelectItemWidgetVector( selectVector );
-	playerListWidgetFriend->moveMusicToListBottom( selectVector );
+	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Select_List_Move_Bottom, this );
+	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }

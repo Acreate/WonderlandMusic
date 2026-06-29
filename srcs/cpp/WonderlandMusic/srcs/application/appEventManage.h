@@ -13,6 +13,7 @@ class AppUserInterfaceManage;
 class AppInstance;
 declaration_signal_event_info( PlayerListWidget );
 declaration_signal_event_info( PlayerToolsWidget );
+declaration_signal_event_info( PlayerWidgetMenu );
 
 class AppEventManage : public QObject, public AppCore {
 	Q_OBJECT;
@@ -60,6 +61,8 @@ public:
 
 	definition_AppEventManage_connect_Type( PlayerToolsWidget );
 
+	definition_AppEventManage_connect_Type( PlayerWidgetMenu );
+
 	/*
 	 * 触发信号函数声明
 	 */
@@ -67,6 +70,8 @@ Q_SIGNALS:
 	declaration_AppEventManage_signal( PlayerListWidget );
 
 	declaration_AppEventManage_signal( PlayerToolsWidget );
+
+	declaration_AppEventManage_signal( PlayerWidgetMenu );
 };
 
 /*
@@ -76,4 +81,6 @@ Q_SIGNALS:
 definition_emit_event( PlayerListWidget );
 
 definition_emit_event( PlayerToolsWidget );
+
+definition_emit_event( PlayerWidgetMenu );
 #endif // APPEVENTMANAGE_H_H_HEAD__FILE__

@@ -136,7 +136,19 @@ bool PlayerListWidget::loadJsonPathInfo( ) {
 	find = fileJsonObject.find( playerListJsonKey->getMusicInfoListCount( ) );
 	if( end == find )
 		return true;
-	qint64 count = find.value( ).toInteger( );
+	auto valueRef = find.value( );
+	QString error = "none";
+	auto string = valueRef.toString( error );
+
+	qulonglong count;
+	if( error == string )
+		count = valueRef.toInteger( 0 );
+	else {
+		bool conver;
+		count = string.toULongLong( &conver );
+		if( conver == false )
+			return true;
+	}
 	if( count == 0 )
 		return true;
 	find = fileJsonObject.find( playerListJsonKey->getMusicInfoListName( ) );
@@ -206,12 +218,10 @@ bool PlayerListWidget::writeJsonPathInfo( ) {
 
 	QJsonObject fileJsonObject;
 	size_t count = musicInfoVector->size( );
-	qsizetype max = count;
-	if( ( ( size_t ) max ) != count )
-		return false;
+
 	auto musicPlayerListJsonKey = jsonFileKey->getPlayerList( );
-	fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListCount( ), max );
 	if( count ) {
+		fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListCount( ), QString::number( count ) );
 		auto sourceData = musicInfoVector->data( );
 		std::vector< MusicInfoItemWidget * > buff( count );
 		MusicInfoItemWidget **destData = buff.data( );

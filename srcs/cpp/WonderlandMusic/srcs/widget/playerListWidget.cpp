@@ -888,12 +888,12 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				apendSelectMusicItemWidget( selectItem, false );
 				resultVector = *selectItemWidgetVector;
 				musicInfoMutex->unlock( );
+				update( );
 				// 触发信号
 				PlayerListWidgetEventInfo eventInfo;
 				eventInfo.eventSenderPtr = this;
 				eventInfo.event = PlayerListWidgetEventInfo::EventType::Item_Select;
 				Emit_PlayerListWidget_Event( this, eventInfo );
-				update( );
 			}
 			// 触发信号
 			PlayerListWidgetEventInfo eventInfo;

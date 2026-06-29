@@ -97,12 +97,20 @@ bool PlayerWindow::initConnect( ) {
 	connect( playListHBar, &QScrollBar::sliderMoved, topWidgetHBar, &QScrollBar::setValue );
 
 	AppEventManage::Connect_PlayerListWidget_Signal( [this] ( AppEventManage *sender_ptr, PlayerListWidget *event_obj_ptr, const PlayerListWidgetEventInfo &event_info_ref ) {
-		popPlayerWidgetMenu( );
-	} );
-
-	auto appEventManage = AppInstance::getAppInstance( )->getAppEventManage( );
-	connect( appEventManage, &AppEventManage::trigger_PlayerListWidget_signal, []( ) {
-		int i = 1 + 1;
+		auto eventType = event_info_ref.getEventType( );
+		switch( eventType ) {
+			case PlayerListWidgetEventInfo::EventType::Item_Select :
+				break;
+			case PlayerListWidgetEventInfo::EventType::Item_Double_Select :
+				break;
+			case PlayerListWidgetEventInfo::EventType::Pop_Menu :
+				popPlayerWidgetMenu( );
+				break;
+			case PlayerListWidgetEventInfo::EventType::Player_Music :
+				break;
+			case PlayerListWidgetEventInfo::EventType::Player_Next :
+				break;
+		}
 	} );
 
 	return true;

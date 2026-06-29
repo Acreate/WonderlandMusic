@@ -22,16 +22,18 @@ protected:
 	AppUserInterfaceManage *appUserInterfaceManage;
 	MainWindow *mainWindow;
 
+private:
+	static AppEventManage * getInstance( );
+
 protected:
 	bool deleteResource( ) override;
 
 public:
-	static AppEventManage* getInstance();
 	bool init( ) override;
 
 	~AppEventManage( ) override;
 
-	void processEvents(  );
+	void processEvents( );
 
 	bool sendEvent( QObject *receiver, QEvent *event );
 

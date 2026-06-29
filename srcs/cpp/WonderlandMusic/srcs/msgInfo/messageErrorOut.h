@@ -8,6 +8,7 @@
 /// @brief 临时创建一个 MessageErrorOut 对象
 #define Message_Error_Out MessageErrorOut()
 
+class MessageTranslate;
 class QDateTime;
 class DateTimeFormat;
 class QDate;
@@ -37,7 +38,7 @@ protected:
 	QString endString;
 
 	bool isWriteFile;
-
+	MessageTranslate* messageErrorOutTranslate;
 public:
 	using void_ptr = void *;
 

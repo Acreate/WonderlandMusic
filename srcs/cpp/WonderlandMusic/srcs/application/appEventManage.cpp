@@ -8,9 +8,14 @@
 #include "../window/mainWindow.h"
 
 bool AppEventManage::deleteResource( ) {
+	this->disconnect( );
 	appInstance = nullptr;
 	execResultCode = 0;
 	return true;
+}
+
+AppEventManage * AppEventManage::getInstance( ) {
+	return AppInstance::getAppInstance( )->getAppEventManage( );
 }
 
 bool AppEventManage::init( ) {
@@ -32,16 +37,8 @@ AppEventManage::~AppEventManage( ) {
 	deleteResource( );
 }
 
-void AppEventManage::processEvents( QEventLoop::ProcessEventsFlags flags ) {
-	appInstance->processEvents( flags );
-}
-
-void AppEventManage::processEvents( QEventLoop::ProcessEventsFlags flags, int maxtime ) {
-	appInstance->processEvents( flags, maxtime );
-}
-
-void AppEventManage::processEvents( QEventLoop::ProcessEventsFlags flags, QDeadlineTimer deadline ) {
-	appInstance->processEvents( flags, deadline );
+void AppEventManage::processEvents( ) {
+	appInstance->processEvents( );
 }
 
 bool AppEventManage::sendEvent( QObject *receiver, QEvent *event ) {

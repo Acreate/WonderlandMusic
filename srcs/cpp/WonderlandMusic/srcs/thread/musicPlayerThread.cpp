@@ -1,7 +1,6 @@
 ﻿#include "musicPlayerThread.h"
 #include <QtConcurrent>
 
-#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 
 bool MusicPlayerThread::startPlayerTread( ) {

@@ -7,7 +7,11 @@
 #include "../tools/templateArgs.h"
 
 bool RenderImage::deleteResource( ) {
-	delete_ptr( brackGroundColor, drawPenColor, drawPen, font, fontMetrics );
+	Delete_Resource_App_Core_Ptr( brackGroundColor );
+	Delete_Resource_App_Core_Ptr( drawPenColor );
+	Delete_Resource_App_Core_Ptr( drawPen );
+	Delete_Resource_App_Core_Ptr( font );
+	Delete_Resource_App_Core_Ptr( fontMetrics );
 	return true;
 }
 
@@ -18,16 +22,11 @@ RenderImage::~RenderImage( ) {
 }
 
 bool RenderImage::init( ) {
-	if( TemplateArgs::make_args_ptr( brackGroundColor, 0, 0, 0, 0 ) == nullptr )
-		return false;
-	if( TemplateArgs::make_args_ptr( drawPenColor, 0, 0, 0, 255 ) == nullptr )
-		return false;
-	if( TemplateArgs::make_args_ptr( drawPen, *drawPenColor ) == nullptr )
-		return false;
-	if( TemplateArgs::make_args_ptr( font, "Microsoft YaHei", 14 ) == nullptr )
-		return false;
-	if( TemplateArgs::make_args_ptr( fontMetrics, *font ) == nullptr )
-		return false;
+	brackGroundColor = new QColor( 0, 0, 0, 0 );
+	drawPenColor = new QColor( 0, 0, 0, 255 );
+	drawPen = new QPen( *drawPenColor );
+	font = new QFont( "Microsoft YaHei", 14 );
+	fontMetrics = new QFontMetrics( *font );
 	fontMetricsHeight = fontMetrics->height( );
 
 	fontMetricsAscent = fontMetrics->ascent( );;

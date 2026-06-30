@@ -4,18 +4,17 @@
 #include "../window/mainWindow.h"
 
 bool AppUserInterfaceManage::deleteResource( ) {
-	delete_ptr( mainWindow, systemTrayIcon );
+	Delete_Resource_App_Core_Ptr( mainWindow );
+	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 	return true;
 }
 
 bool AppUserInterfaceManage::init( ) {
 	deleteResource( );
-
-	if( make_ptr( mainWindow, systemTrayIcon ) == nullptr )
-		return false;
-	if( make_ptr( mainWindow, systemTrayIcon ) )
-		return false;
-
+	mainWindow = new MainWindow;
+	systemTrayIcon = new SystemTrayIcon;
+	Init_Resource_App_Core_Ptr( mainWindow );
+	Init_Resource_App_Core_Ptr( systemTrayIcon );
 	return true;
 }
 

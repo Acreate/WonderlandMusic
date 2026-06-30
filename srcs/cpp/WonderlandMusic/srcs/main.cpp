@@ -2,7 +2,6 @@
 #include <QLoggingCategory>
 #include <qfile.h>
 
-#include "application/appEventManage.h"
 #include "application/appInstance.h"
 #include "application/appUserInterfaceManage.h"
 
@@ -90,7 +89,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	}
 	int exec = -1;
 	if( application->getAppUserInterfaceManage( )->showMainWindow( ) )
-		exec = application->getAppEventManage( )->exec( );
+		exec = application->exec( );
 	if( messageErrorOut ) {
 		permit->setJion( "\n" );
 		screening->setJion( "\n" );

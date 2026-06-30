@@ -9,7 +9,6 @@
 #include "../application/appUserInterfaceManage.h"
 #include "../application/jsonFileKey.h"
 #include "../application/jsonKey/systemTrayIconJsonKey.h"
-#include "../application/translate/systemTrayIconMenuTranslate.h"
 #include "../application/translate/systemTrayIconTranslate.h"
 
 #include "../menu/systemTrayIconMenu.h"
@@ -20,11 +19,7 @@
 
 bool SystemTrayIcon::deleteResource( ) {
 	hide( );
-	#define d_r( ptr ) \
-	if( ptr ) \
-		(delete ptr, ptr = nullptr)
-
-	d_r( systemTrayIconMenu );
+	Delete_Resource_App_Core_Ptr( systemTrayIconMenu );
 	return true;
 }
 

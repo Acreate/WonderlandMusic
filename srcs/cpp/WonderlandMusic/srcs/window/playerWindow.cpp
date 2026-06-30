@@ -7,7 +7,6 @@
 #include <QScrollArea>
 #include <qevent.h>
 
-#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 
 #include "../menu/playerWidgetMenu.h"
@@ -27,7 +26,9 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 }
 
 bool PlayerWindow::deleteResource( ) {
-	delete_ptr( topDocWidget, bottomDocWidget, playerWidgetMenu );
+	Delete_Resource_App_Core_Ptr( topDocWidget );
+	Delete_Resource_App_Core_Ptr( bottomDocWidget );
+	Delete_Resource_App_Core_Ptr( playerWidgetMenu );
 	return true;
 }
 

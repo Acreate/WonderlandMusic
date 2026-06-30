@@ -12,8 +12,7 @@ bool AppDateTimerManage::init( ) {
 }
 
 bool AppDateTimerManage::deleteResource( ) {
-	if( delete_ptr( startDateTime ) )
-		return false;
+	Delete_Resource_App_Core_Ptr( startDateTime );
 	return true;
 }
 

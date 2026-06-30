@@ -1,7 +1,6 @@
 ﻿#include "systemTrayIconMenu.h"
 
 #include "../application/appDataManage.h"
-#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/appUserInterfaceManage.h"
@@ -24,7 +23,7 @@ bool SystemTrayIconMenu::init( ) {
 	addSeparator( );
 	auto quitApp = addAction( systemTrayIconMenuTranslate->getQuitApp( ) );
 	connect( quitApp, &QAction::triggered, this, []( ) {
-		AppInstance::getAppInstance( )->getAppEventManage( )->quit( );
+		AppInstance::getAppInstance( )->quit( );
 	} );
 	return true;
 }

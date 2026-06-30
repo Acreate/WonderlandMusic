@@ -12,8 +12,6 @@
 
 #include "../tools/pathTools.h"
 
-#define  d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr)
-
 bool MusicPlayer::deleteResource( ) {
 	playerStop( );
 	return true;

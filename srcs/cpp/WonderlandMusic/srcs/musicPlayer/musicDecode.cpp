@@ -7,9 +7,9 @@
 #include "../msgInfo/messageErrorOut.h"
 
 void MusicDecode::deleteResource( ) {
-	#define d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr)
-	d_r( audioDecoder );
-	d_r( loadUrl );
+	#define Delete_Resource_App_Core_Ptr( ptr ) if(ptr) (delete ptr, ptr = nullptr)
+	Delete_Resource_App_Core_Ptr( audioDecoder );
+	Delete_Resource_App_Core_Ptr( loadUrl );
 }
 
 MusicDecode::~MusicDecode( ) {

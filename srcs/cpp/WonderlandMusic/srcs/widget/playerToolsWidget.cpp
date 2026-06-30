@@ -8,7 +8,6 @@
 #include "playerListWidget.h"
 
 #include "../application/appDataManage.h"
-#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
@@ -22,8 +21,15 @@
 #include "../window/playerWindow.h"
 
 bool PlayerToolsWidget::deleteResource( ) {
-	if( delete_ptr( thePreviousSong, theNextSong, controlPlay, playProgress, playAllDateTime, playUseDateTime, playDateTimeSpace, playIcon, pauseIcon ) )
-		return false;
+	Delete_Resource_App_Core_Ptr( thePreviousSong );
+	Delete_Resource_App_Core_Ptr( theNextSong );
+	Delete_Resource_App_Core_Ptr( controlPlay );
+	Delete_Resource_App_Core_Ptr( playProgress );
+	Delete_Resource_App_Core_Ptr( playAllDateTime );
+	Delete_Resource_App_Core_Ptr( playUseDateTime );
+	Delete_Resource_App_Core_Ptr( playDateTimeSpace );
+	Delete_Resource_App_Core_Ptr( playIcon );
+	Delete_Resource_App_Core_Ptr( pauseIcon );
 	return true;
 }
 
@@ -113,6 +119,7 @@ bool PlayerToolsWidget::init( ) {
 		auto appTranslate = appDataManage->getTranslate( );
 		auto playerToolsWidgetTranslate = appTranslate->getPlayerToolsWidget( );
 		controlPlay->setText( playerToolsWidgetTranslate->getControlPlay( ) );
+		controlPlay->setIcon( *pauseIcon );
 	} );
 
 	// 子组件

@@ -15,8 +15,16 @@
 #include "jsonKey/systemTrayIconJsonKey.h"
 
 bool JsonFileKey::deleteResource( ) {
-	if( delete_ptr( playerListToolWidget, aboutWidgetJsonFileKey, playerListTopWidget, playerWindow, playerList, mainWindow, musicInfoItem, playerListMenu, systemTrayIcon ) )
-		return false;
+	Delete_Resource_App_Core_Ptr( playerListToolWidget );
+	Delete_Resource_App_Core_Ptr( aboutWidgetJsonFileKey );
+	Delete_Resource_App_Core_Ptr( playerListTopWidget );
+	Delete_Resource_App_Core_Ptr( playerWindow );
+	Delete_Resource_App_Core_Ptr( playerList );
+	Delete_Resource_App_Core_Ptr( mainWindow );
+	Delete_Resource_App_Core_Ptr( musicInfoItem );
+	Delete_Resource_App_Core_Ptr( playerListMenu );
+	Delete_Resource_App_Core_Ptr( systemTrayIcon );
+
 	return true;
 }
 
@@ -29,19 +37,25 @@ JsonFileKey::JsonFileKey( ) {
 
 bool JsonFileKey::init( ) {
 	deleteResource( );
-	if( delete_ptr( playerListToolWidget, aboutWidgetJsonFileKey, playerListTopWidget, playerWindow, playerList, mainWindow, musicInfoItem, playerListMenu, systemTrayIcon ) == nullptr )
-		return false;
+	playerListToolWidget = new PlayerListToolWidgetJsonKey;
+	aboutWidgetJsonFileKey = new AboutWidgetJsonKey;
+	playerListTopWidget = new PlayerListTopWidgetJsonKey;
+	playerWindow = new PlayerWindowJsonKey;
+	playerList = new PlayerListJsonKey;
+	mainWindow = new MainWindowJsonKey;
+	musicInfoItem = new MusicInfoItemJsonKey;
+	playerListMenu = new PlayerListMenuJsonKey;
+	systemTrayIcon = new SystemTrayIconJsonKey;
 
-	#define if_init_result(ptr) if( ptr == nullptr || ptr->init() == false) return false
-	if_init_result( playerListToolWidget );
-	if_init_result( aboutWidgetJsonFileKey );
-	if_init_result( playerListTopWidget );
-	if_init_result( playerWindow );
-	if_init_result( playerList );
-	if_init_result( mainWindow );
-	if_init_result( musicInfoItem );
-	if_init_result( playerListMenu );
-	if_init_result( systemTrayIcon );
+	Init_Resource_App_Core_Ptr( playerListToolWidget );
+	Init_Resource_App_Core_Ptr( aboutWidgetJsonFileKey );
+	Init_Resource_App_Core_Ptr( playerListTopWidget );
+	Init_Resource_App_Core_Ptr( playerWindow );
+	Init_Resource_App_Core_Ptr( playerList );
+	Init_Resource_App_Core_Ptr( mainWindow );
+	Init_Resource_App_Core_Ptr( musicInfoItem );
+	Init_Resource_App_Core_Ptr( playerListMenu );
+	Init_Resource_App_Core_Ptr( systemTrayIcon );
 
 	return true;
 }

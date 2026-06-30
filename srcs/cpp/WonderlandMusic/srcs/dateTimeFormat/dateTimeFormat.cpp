@@ -37,13 +37,16 @@ QString & DateTimeFormat::formatData( QString &result_format, const QDate &forma
 	DateTimeFormatTranslate *dateTimeFormatTranslate = nullptr;
 	auto appInstance = AppInstance::getAppInstance( );
 	if( appInstance ) {
-		auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-		if( appTranslate ) {
-			dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
-			if( dateTimeFormatTranslate ) {
-				year = dateTimeFormatTranslate->getYear( );
-				month = dateTimeFormatTranslate->getMonth( );
-				day = dateTimeFormatTranslate->getDay( );
+		auto appDataManage = appInstance->getAppDataManage( );
+		if( appDataManage ) {
+			auto appTranslate = appDataManage->getTranslate( );
+			if( appTranslate ) {
+				dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
+				if( dateTimeFormatTranslate ) {
+					year = dateTimeFormatTranslate->getYear( );
+					month = dateTimeFormatTranslate->getMonth( );
+					day = dateTimeFormatTranslate->getDay( );
+				}
 			}
 		}
 	}
@@ -120,14 +123,17 @@ QString & DateTimeFormat::formatTime( QString &result_format, const QTime &forma
 	DateTimeFormatTranslate *dateTimeFormatTranslate = nullptr;
 	auto appInstance = AppInstance::getAppInstance( );
 	if( appInstance ) {
-		auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-		if( appTranslate ) {
-			dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
-			if( dateTimeFormatTranslate ) {
-				hour = dateTimeFormatTranslate->getHour( );
-				minute = dateTimeFormatTranslate->getMinute( );
-				second = dateTimeFormatTranslate->getSecond( );
-				millsecond = dateTimeFormatTranslate->getMillsecond( );
+		auto appDataManage = appInstance->getAppDataManage( );
+		if( appDataManage ) {
+			auto appTranslate = appDataManage->getTranslate( );
+			if( appTranslate ) {
+				dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
+				if( dateTimeFormatTranslate ) {
+					hour = dateTimeFormatTranslate->getHour( );
+					minute = dateTimeFormatTranslate->getMinute( );
+					second = dateTimeFormatTranslate->getSecond( );
+					millsecond = dateTimeFormatTranslate->getMillsecond( );
+				}
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 ﻿#include "playerWidgetMenu.h"
 
 #include "../application/appDataManage.h"
-#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"

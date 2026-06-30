@@ -33,30 +33,43 @@ void AppTranslate::setCodecForLocale( ) {
 }
 
 bool AppTranslate::translateString( ) {
-	#define if_init_result( obj ) if(obj->init() == false) return false;
-	if_init_result( settingWidget );
-	if_init_result( playerToolsWidget );
-	if_init_result( playerListMenu );
-	if_init_result( playerTopWidget );
-	if_init_result( playerWindow );
-	if_init_result( json );
-	if_init_result( dateTimeFormat );
-	if_init_result( aboutWidget );
-	if_init_result( playerWidget );
-	if_init_result( mainWindow );
-	if_init_result( message );
-	if_init_result( playerListWidget );
-	if_init_result( musicInfoItem );
-	if_init_result( systemTrayIconMenu );
-	if_init_result( systemTrayIcon );
-	if_init_result( userMutex );
+	Init_Resource_App_Core_Ptr( settingWidget );
+	Init_Resource_App_Core_Ptr( playerToolsWidget );
+	Init_Resource_App_Core_Ptr( playerListMenu );
+	Init_Resource_App_Core_Ptr( playerTopWidget );
+	Init_Resource_App_Core_Ptr( playerWindow );
+	Init_Resource_App_Core_Ptr( json );
+	Init_Resource_App_Core_Ptr( dateTimeFormat );
+	Init_Resource_App_Core_Ptr( aboutWidget );
+	Init_Resource_App_Core_Ptr( playerWidget );
+	Init_Resource_App_Core_Ptr( mainWindow );
+	Init_Resource_App_Core_Ptr( message );
+	Init_Resource_App_Core_Ptr( playerListWidget );
+	Init_Resource_App_Core_Ptr( musicInfoItem );
+	Init_Resource_App_Core_Ptr( systemTrayIconMenu );
+	Init_Resource_App_Core_Ptr( systemTrayIcon );
+	Init_Resource_App_Core_Ptr( userMutex );
 
 	return true;
 }
 
 bool AppTranslate::deleteResource( ) {
-	if( delete_ptr( settingWidget, playerToolsWidget, playerListMenu, playerTopWidget, playerWindow, json, dateTimeFormat, aboutWidget, playerWidget, mainWindow, message, playerListWidget, musicInfoItem, systemTrayIconMenu, systemTrayIconMenu, systemTrayIcon, userMutex ) )
-		return false;
+	Delete_Resource_App_Core_Ptr( settingWidget );
+	Delete_Resource_App_Core_Ptr( playerToolsWidget );
+	Delete_Resource_App_Core_Ptr( playerListMenu );
+	Delete_Resource_App_Core_Ptr( playerTopWidget );
+	Delete_Resource_App_Core_Ptr( playerWindow );
+	Delete_Resource_App_Core_Ptr( json );
+	Delete_Resource_App_Core_Ptr( dateTimeFormat );
+	Delete_Resource_App_Core_Ptr( aboutWidget );
+	Delete_Resource_App_Core_Ptr( playerWidget );
+	Delete_Resource_App_Core_Ptr( mainWindow );
+	Delete_Resource_App_Core_Ptr( message );
+	Delete_Resource_App_Core_Ptr( playerListWidget );
+	Delete_Resource_App_Core_Ptr( musicInfoItem );
+	Delete_Resource_App_Core_Ptr( systemTrayIconMenu );
+	Delete_Resource_App_Core_Ptr( systemTrayIcon );
+	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
 }
 

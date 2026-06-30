@@ -10,7 +10,6 @@ class AppDateTimerManage;
 class AppUserInterfaceManage;
 class AppDrawManage;
 class AppDataManage;
-class AppEventManage;
 class SystemTrayIcon;
 class RenderImage;
 class MainWindow;
@@ -28,8 +27,6 @@ private:
 protected:
 	/// @brief 数据管理
 	AppDataManage *appDataManage = nullptr;
-	/// @brief 事件管理
-	AppEventManage *appEventManage = nullptr;
 	/// @brief 绘制管理
 	AppDrawManage *appDrawManage = nullptr;
 	/// @brief 用户界面
@@ -37,7 +34,8 @@ protected:
 	/// @brief 时间管理
 	AppDateTimerManage *appDateTimerManage = nullptr;
 	/// @brief 音频管理
-	MusicManage* musicManage = nullptr;
+	MusicManage *musicManage = nullptr;
+
 public:
 	static AppInstance * getAppInstance( );
 
@@ -54,8 +52,6 @@ protected:
 
 public:
 	virtual AppDataManage * getAppDataManage( ) const;
-
-	virtual AppEventManage * getAppEventManage( ) const;
 
 	virtual AppDrawManage * getAppDrawManage( ) const;
 

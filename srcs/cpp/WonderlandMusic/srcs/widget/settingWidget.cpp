@@ -17,8 +17,7 @@
 #include "../tools/widgetTools.h"
 
 void SettingWidget::deleteResource( ) {
-	#define d_r( ptr ) if(ptr ) (delete ptr, ptr = nullptr)
-	d_r( mainSettingWdiget );
+	Delete_Resource_App_Core_Ptr( mainSettingWdiget );
 }
 
 void SettingWidget::clickSelectAppSettingPathBtn( ) {

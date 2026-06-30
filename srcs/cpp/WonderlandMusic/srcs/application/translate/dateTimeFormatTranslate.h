@@ -1,5 +1,6 @@
 ﻿#ifndef DATETIMEFORMATTRANSLATE_H_H_HEAD__FILE__
 #define DATETIMEFORMATTRANSLATE_H_H_HEAD__FILE__
+
 #include "iTranslate.h"
 
 class DateTimeFormatTranslate : public ITranslate {

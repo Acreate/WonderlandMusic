@@ -6,16 +6,15 @@ MusicManage::~MusicManage( ) {
 }
 
 bool MusicManage::deleteResource( ) {
-	delete_ptr( musicDecoder );
+	Delete_Resource_App_Core_Ptr( musicDecoder );
 	return true;
 }
 
 bool MusicManage::init( ) {
 	deleteResource( );
-	if( make_ptr( musicDecoder ) == nullptr )
-		return false;
-	if( musicDecoder->init( ) == false )
-		return false;
+	musicDecoder = new MusicDecoder;
+
+	Init_Resource_App_Core_Ptr( musicDecoder );
 	return true;
 }
 

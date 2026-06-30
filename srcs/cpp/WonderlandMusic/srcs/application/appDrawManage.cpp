@@ -9,17 +9,14 @@ AppDrawManage::~AppDrawManage( ) {
 }
 
 bool AppDrawManage::deleteResource( ) {
-	if( make_ptr( renderImage ) )
-		return false;
+	Delete_Resource_App_Core_Ptr( renderImage );
 	return true;
 }
 
 bool AppDrawManage::init( ) {
 	deleteResource( );
-	if( make_ptr( renderImage ) == nullptr )
-		return false;
-	if( make_ptr( renderImage ) )
-		return false;
+	renderImage = new RenderImage;
+	Init_Resource_App_Core_Ptr( renderImage );
 	return true;
 }
 

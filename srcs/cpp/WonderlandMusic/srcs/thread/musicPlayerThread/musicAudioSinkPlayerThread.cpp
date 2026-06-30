@@ -9,7 +9,6 @@
 #include <qaudiobuffer.h>
 #include <qaudioformat.h>
 
-#include "../../application/appEventManage.h"
 #include "../../application/appInstance.h"
 
 bool MusicAudioSinkPlayerThread::startPlayerTread( ) {

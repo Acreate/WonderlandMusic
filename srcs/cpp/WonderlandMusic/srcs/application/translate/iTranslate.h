@@ -2,6 +2,7 @@
 #define ITRANSLATE_H_H_HEAD__FILE__
 
 #include "../appCore.h"
+#include <QString>
 
 class ITranslate : public AppCore {
 protected:

@@ -141,7 +141,14 @@ bool MainWindow::init( ) {
 }
 
 bool MainWindow::deleteResource( ) {
-	delete_ptr( showSettingWidgetBtn, showAboutWidgetBtn, showPlayListWidgetBtn, leftOptionWidget, leftOptionDockWidget, aboutWidget, playerWindow, settingWidget );
+	Delete_Resource_App_Core_Ptr( showSettingWidgetBtn );
+	Delete_Resource_App_Core_Ptr( showAboutWidgetBtn );
+	Delete_Resource_App_Core_Ptr( showPlayListWidgetBtn );
+	Delete_Resource_App_Core_Ptr( leftOptionWidget );
+	Delete_Resource_App_Core_Ptr( leftOptionDockWidget );
+	Delete_Resource_App_Core_Ptr( aboutWidget );
+	Delete_Resource_App_Core_Ptr( playerWindow );
+	Delete_Resource_App_Core_Ptr( settingWidget );
 	return true;
 }
 

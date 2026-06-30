@@ -14,7 +14,6 @@
 
 #include "../application/appDataManage.h"
 #include "../application/appDrawManage.h"
-#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"

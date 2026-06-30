@@ -586,7 +586,8 @@ void PlayerListWidget::doubleClickMusicItemWidget( MusicInfoItemWidget *double_t
 	if( widgetState != PlayerListWidgetState::None )
 		return; // 如果不是被设置成任意状态，则返回，不处理事件
 	widgetState = PlayerListWidgetState::Set_Player_Run;
-	bool playerMusic = musicPlayer->playerMusic( double_target->getMusicFilePath( ) );
+	QString musicFilePath = double_target->getMusicFilePath( );
+	bool playerMusic = musicPlayer->playerMusic( musicFilePath );
 	widgetState = PlayerListWidgetState::None;
 	if( playerMusic == false )
 		return; // 播放失败，则返回
@@ -763,6 +764,8 @@ void PlayerListWidget::playerOver_slot( const QString &player_music_file ) {
 	if( this == nullptr )
 		return;
 	if( musicInfoMutex == nullptr )
+		return;
+	if( widgetState != PlayerListWidgetState::None )
 		return;
 	size_t index;
 	size_t count;

@@ -70,8 +70,20 @@
 declaration_emit_event_type(class_type_) { \
 	/*只有 class_type_ 类可以生成该事件*/\
 	friend declaration_signal_class_type(class_type_); \
+	protected:\
 	declaration_emit_event_name(class_type_)( declaration_signal_type_args( class_type_ ) ) { \
 		trigger_signal( class_type_, event_obj_ptr, event_info_ref);\
+	} \
+}
+/// @brief 根据类，定义继承事件类
+/// @param class_type_ 需要的类
+/// @param base_class_type_ 继承的事件类
+#define definition_emit_inherit_event( class_type_ , base_class_type_) \
+declaration_emit_event_type(class_type_) : public declaration_emit_event_name( base_class_type_ ){ \
+	/*只有 class_type_ 类可以生成该事件*/\
+	friend declaration_signal_class_type(class_type_); \
+	protected:\
+	declaration_emit_event_name(class_type_)( declaration_signal_type_args( base_class_type_ ) ) : declaration_emit_event_name( base_class_type_ )( event_obj_ptr, event_info_ref ) { \
 	} \
 }
 
@@ -85,9 +97,9 @@ declaration_emit_event_type(class_type_) { \
 friend class declaration_AppEventManage_connect_Type_name(class_type_); \
 class declaration_AppEventManage_connect_Type_name(class_type_){ \
 	public:\
-	declaration_AppEventManage_connect_Type_name(class_type_)( const std::function<void (declaration_signal_AppEventManage_type_args(class_type_))> & call_function ){\
+	declaration_AppEventManage_connect_Type_name(class_type_)( const std::function<void (declaration_signal_AppEventManage_type_args(class_type_))> & call_function , Qt::ConnectionType connect_type = Qt::AutoConnection){\
 		AppEventManage *appEventManage = AppEventManage::getInstance( ); \
-		appEventManage->connect( appEventManage, &AppEventManage::declaration_AppEventManage_signal_name(class_type_), call_function) ; \
+		appEventManage->connect( appEventManage, &AppEventManage::declaration_AppEventManage_signal_name(class_type_), appEventManage, call_function, connect_type) ; \
 	} \
 }
 
@@ -114,9 +126,23 @@ protected:\
 	}\
 public: \
 	/* 获取事件类型 */ \
-	EventType getEventType() const { return event; } \
+	virtual EventType getEventType() const { return event; } \
 	/* 获取事件指针对象 */ \
-	class_type_* getEventSenderPtr() const { return eventSenderPtr; } \
+	virtual class_type_* getEventSenderPtr() const { return eventSenderPtr; } \
+}
+
+/// @brief 根据类，生成继承事件消息类
+/// @param class_type_ 需要的类
+/// @param base_class_type_ 继承的事件消息类
+#define definition_event_info_inherit_class_type( class_type_, base_class_type_ ) \
+declaration_signal_event_info_type( class_type_ ) : public declaration_signal_event_info_name(base_class_type_) { \
+	friend class class_type_; \
+protected:\
+	declaration_signal_event_info_name(class_type_)( EventType event, class_type_ *event_sender_ptr )\
+		: declaration_signal_event_info_name(base_class_type_)( event, event_sender_ptr ) {\
+	}\
+	declaration_signal_event_info_name(class_type_)(  ): declaration_signal_event_info_name(base_class_type_)(){\
+	}\
 }
 
 #endif // EVENTMACRODEFAULT_H_H_HEAD__FILE__

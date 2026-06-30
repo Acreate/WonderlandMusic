@@ -6,6 +6,7 @@
 #include <QMediaPlayer>
 #include <QMutex>
 
+#include "../../application/appEventManage.h"
 #include "../../application/appInstance.h"
 
 bool MusicMediaPlayerThread::startPlayerTread( ) {
@@ -26,7 +27,11 @@ bool MusicMediaPlayerThread::stopPlayerMusic( ) {
 	}
 	isRunOver = true;
 	bool stopPlayerMusic = MusicPlayerThread::stopPlayerMusic( );
-	emit threadOver( );
+
+	MusicMediaPlayerThreadEventInfo inf;
+	inf.eventSenderPtr = this;
+	inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Over;
+	Emit_MusicMediaPlayerThread_Event( this, inf );
 	return stopPlayerMusic;
 }
 
@@ -38,7 +43,10 @@ MusicMediaPlayerThread::~MusicMediaPlayerThread( ) {
 }
 
 bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_thread ) {
-	emit threadStart( );
+	MusicMediaPlayerThreadEventInfo inf;
+	inf.eventSenderPtr = this;
+	inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Start;
+	Emit_MusicMediaPlayerThread_Event( this, inf );
 	mediaPlayer = new QMediaPlayer;
 	audioOutput = new QAudioOutput;
 	connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [this] ( QMediaPlayer::MediaStatus status ) {
@@ -55,14 +63,19 @@ bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_threa
 				break;
 			case QMediaPlayer::NoMedia :
 			case QMediaPlayer::EndOfMedia :
-			case QMediaPlayer::InvalidMedia :
+			case QMediaPlayer::InvalidMedia : {
 				delete mediaPlayer;
 				delete audioOutput;
 				mediaPlayer = nullptr;
 				audioOutput = nullptr;
 				isRunOver = true;
-				emit threadOver( );
-				break;
+
+				MusicMediaPlayerThreadEventInfo inf;
+				inf.eventSenderPtr = this;
+				inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Over;
+				Emit_MusicMediaPlayerThread_Event( this, inf );
+			}
+			break;
 		}
 	}, Qt::QueuedConnection );
 	audioOutput->setVolume( 1.0 );

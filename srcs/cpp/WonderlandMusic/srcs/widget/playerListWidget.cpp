@@ -448,8 +448,19 @@ bool PlayerListWidget::init( ) {
 	updateItemWidget( );
 
 	// 信号
-	connect( musicPlayer, &MusicPlayer::playerStart, this, &PlayerListWidget::playerStart_slot, Qt::QueuedConnection );
-	connect( musicPlayer, &MusicPlayer::playerOver, this, &PlayerListWidget::playerOver_slot, Qt::QueuedConnection );
+	AppEventManage::Connect_MusicPlayer_Signal( [this] ( AppEventManage *sender_ptr, MusicPlayer *event_obj_ptr, const MusicPlayerEventInfo &event_info_ref ) {
+		auto eventType = event_info_ref.getEventType( );
+		switch( eventType ) {
+			case MusicPlayerEventInfo::EventType::Player_Over :
+				playerOver_slot( event_obj_ptr->getMusicFilePath( ) );
+				break;
+			case MusicPlayerEventInfo::EventType::Player_Start :
+				playerStart_slot( event_obj_ptr->getMusicFilePath( ) );
+				break;
+			case MusicPlayerEventInfo::EventType::Player_Duration :
+				break;
+		}
+	} );
 
 	AppEventManage::Connect_PlayerWidgetMenu_Signal( [this] ( AppEventManage *sender_ptr, PlayerWidgetMenu *event_obj_ptr, const PlayerWidgetMenuEventInfo &event_info_ref ) {
 		auto eventType = event_info_ref.getEventType( );

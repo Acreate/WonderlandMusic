@@ -9,6 +9,7 @@
 #include <qaudiobuffer.h>
 #include <qaudioformat.h>
 
+#include "../../application/appEventManage.h"
 #include "../../application/appInstance.h"
 
 bool MusicAudioSinkPlayerThread::startPlayerTread( ) {
@@ -61,14 +62,21 @@ bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_t
 	auto currentThread = QThread::currentThread( );
 	size_t index;
 	qint64 playerDurationMillisecond = 0;
+
+	MusicAudioSinkPlayerThreadEventInfo durationChangeInfo;
+	MusicAudioSinkPlayerThreadEventInfo positionChangeInfo;
+	durationChangeInfo.eventSenderPtr = positionChangeInfo.eventSenderPtr = this;
+	durationChangeInfo.event = MusicPlayerThreadEventInfo::EventType::Duration;
+	positionChangeInfo.event = MusicPlayerThreadEventInfo::EventType::Position;
+
 	for( index = 1; index < count; index += 1 ) {
 		// 微妙
 		qint64 durationMicroseconds = audioBuffer.duration( );
 		// 毫秒
 		qint64 durationMillisecond = durationMicroseconds / 1000;
 		playerDurationMillisecond += durationMillisecond;
-		emit durationChanged( playerDurationMillisecond );
-		emit positionChanged( index );
+		Emit_MusicAudioSinkPlayerThread_Event( this, durationChangeInfo );
+		Emit_MusicAudioSinkPlayerThread_Event( this, positionChangeInfo );
 		currentThread->usleep( durationMicroseconds );
 		if( isJump )
 			break;

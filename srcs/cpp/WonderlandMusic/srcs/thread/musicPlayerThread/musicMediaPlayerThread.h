@@ -26,4 +26,6 @@ protected:
 	bool playerThread( MusicPlayerThread *music_player_thread ) override;
 };
 
+#include <application/eventMacro/eventMacroDefault.h>
+definition_event_info_inherit_class_type( MusicMediaPlayerThread, MusicPlayerThread );
 #endif // MUSICMEDIAPLAYERTHREAD_H_H_HEAD__FILE__

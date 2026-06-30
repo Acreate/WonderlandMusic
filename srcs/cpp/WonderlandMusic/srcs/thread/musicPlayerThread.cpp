@@ -1,6 +1,7 @@
 ﻿#include "musicPlayerThread.h"
 #include <QtConcurrent>
 
+#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 
 bool MusicPlayerThread::startPlayerTread( ) {
@@ -19,11 +20,18 @@ bool MusicPlayerThread::startPlayerTread( ) {
 		return false;
 	}
 	connect( watcher, &QFutureWatcher< void >::started, this, [=]( ) {
-		emit threadStart( );
+		MusicPlayerThreadEventInfo inf;
+		inf.eventSenderPtr = this;
+		inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Start;
+		Emit_MusicPlayerThread_Event( this, inf );
 	} );
 	connect( watcher, &QFutureWatcher< void >::finished, this, [=]( ) {
 		watcher->deleteLater( );
-		emit threadOver( );
+
+		MusicPlayerThreadEventInfo inf;
+		inf.eventSenderPtr = this;
+		inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Over;
+		Emit_MusicPlayerThread_Event( this, inf );
 		isRunOver = true;
 	} );
 	watcher->setFuture( future );

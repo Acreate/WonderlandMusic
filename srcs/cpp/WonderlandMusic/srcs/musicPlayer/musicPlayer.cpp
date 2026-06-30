@@ -4,19 +4,21 @@
 #include <QMediaPlayer>
 #include <QIODevice>
 
+#include "../application/appDataManage.h"
+#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
-#include "../thread/musicPlayerThread/musicAudioSinkPlayerThread.h"
 #include "../thread/musicPlayerThread/musicMediaPlayerThread.h"
 
 #include "../tools/pathTools.h"
 
 #define  d_r( ptr ) if(ptr) (delete ptr, ptr = nullptr)
 
-void MusicPlayer::deleteResource( ) {
+bool MusicPlayer::deleteResource( ) {
 	playerStop( );
+	return true;
 }
 
 MusicPlayer::MusicPlayer( QObject *parent ) : QObject( parent ) {
@@ -40,21 +42,34 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	auto newLoadFile = loadMusicFileInfo.absoluteFilePath( );
 
 	musicPlayerThread = new MusicMediaPlayerThread( newLoadFile );
+	AppEventManage::Connect_MusicPlayerThread_Signal( [this] ( AppEventManage *sender_ptr, MusicPlayerThread *event_obj_ptr, const MusicPlayerThreadEventInfo &event_info_ref ) {
+		auto eventType = event_info_ref.getEventType( );
+		switch( eventType ) {
+			case MusicPlayerThreadEventInfo::EventType::Position :
+				break;
+			case MusicPlayerThreadEventInfo::EventType::Duration :
+				break;
+			case MusicPlayerThreadEventInfo::EventType::Thread_Over : {
+				this->disconnect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
+				musicPlayerThread->disconnect( );
+				musicPlayerThread->deleteLater( );
+				musicPlayerThread = nullptr;
+				MusicPlayerEventInfo info;
+				info.eventSenderPtr = this;
+				info.event = MusicPlayerEventInfo::EventType::Player_Over;
+				Emit_MusicPlayer_Event( this, info );
+			}
+			break;
+			case MusicPlayerThreadEventInfo::EventType::Thread_Start : {
+				MusicPlayerEventInfo info;
+				info.eventSenderPtr = this;
+				info.event = MusicPlayerEventInfo::EventType::Player_Start;
+				Emit_MusicPlayer_Event( this, info );
+			}
+			break;
+		}
+	} );
 
-	connect( musicPlayerThread, &MusicPlayerThread::positionChanged, musicPlayerThread, [] ( qint64 position ) {
-	}, Qt::QueuedConnection );
-	connect( musicPlayerThread, &MusicPlayerThread::durationChanged, musicPlayerThread, [this] ( qint64 duration ) {
-	}, Qt::QueuedConnection );
-	connect( musicPlayerThread, &MusicPlayerThread::threadOver, this, [ this, newLoadFile]( ) {
-		this->disconnect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
-		musicPlayerThread->disconnect( );
-		musicPlayerThread->deleteLater( );
-		musicPlayerThread = nullptr;
-		emit playerOver( newLoadFile );
-	}, Qt::QueuedConnection );
-	connect( musicPlayerThread, &MusicPlayerThread::threadStart, this, [ this, newLoadFile]( ) {
-		emit playerStart( newLoadFile );
-	}, Qt::QueuedConnection );
 	// 开始播放
 	musicPlayerThread->startPlayerMusic( );
 	musicFilePath = newLoadFile;

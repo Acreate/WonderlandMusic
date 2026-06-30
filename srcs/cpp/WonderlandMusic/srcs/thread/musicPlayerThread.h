@@ -40,15 +40,8 @@ public:
 	virtual void setPlayerMusicDuration( qint64 duration );
 
 	virtual void setControlGepTime( const unsigned long control_gep_time );
-
-Q_SIGNALS:
-	void positionChanged( qint64 position );
-
-	void durationChanged( qint64 duration );
-
-	void threadOver( );
-
-	void threadStart( );
 };
 
+#include <application/eventMacro/eventMacroDefault.h>
+definition_event_info_class_type( MusicPlayerThread, Position, Duration, Thread_Over, Thread_Start );
 #endif // MUSICPLAYERTHREAD_H_H_HEAD__FILE__

@@ -2,6 +2,8 @@
 #define MUSICPLAYER_H_H_HEAD__FILE__
 #include <QObject>
 
+#include "../application/appCore.h"
+
 class QAudioDevice;
 class QAudioBuffer;
 class MusicPlayerThread;
@@ -12,7 +14,7 @@ class QAudioFormat;
 class QAudioDecoder;
 class QAudioSink;
 
-class MusicPlayer : public QObject {
+class MusicPlayer : public QObject, public AppCore {
 	Q_OBJECT;
 
 protected:
@@ -20,14 +22,14 @@ protected:
 	MusicPlayerThread *musicPlayerThread = nullptr;
 
 protected:
-	virtual void deleteResource( );
+	bool deleteResource( ) override;
 
 public:
 	MusicPlayer( QObject *parent = nullptr );
 
 	~MusicPlayer( ) override;
 
-	virtual bool init( );
+	bool init( ) override;
 
 	virtual bool playerMusic( const QString &music_file );
 
@@ -36,11 +38,10 @@ public:
 	virtual bool getIsStop( ) const;
 
 	virtual bool playerStop( );
-
-Q_SIGNALS:
-	void playerOver( const QString &music_file_path );
-
-	void playerStart( const QString &music_file_path );
 };
+
+#include <application/eventMacro/eventMacroDefault.h>
+
+definition_event_info_class_type( MusicPlayer, Player_Over, Player_Start, Player_Duration );
 
 #endif // MUSICPLAYER_H_H_HEAD__FILE__

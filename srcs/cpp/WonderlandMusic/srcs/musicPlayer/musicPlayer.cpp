@@ -4,8 +4,6 @@
 #include <QMediaPlayer>
 #include <QIODevice>
 
-#include "../application/appDataManage.h"
-#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 
 #include "../msgInfo/messageErrorOut.h"
@@ -42,34 +40,16 @@ bool MusicPlayer::playerMusic( const QString &music_file ) {
 	auto newLoadFile = loadMusicFileInfo.absoluteFilePath( );
 
 	musicPlayerThread = new MusicMediaPlayerThread( newLoadFile );
-	AppEventManage::Connect_MusicPlayerThread_Signal( [this] ( AppEventManage *sender_ptr, MusicPlayerThread *event_obj_ptr, const MusicPlayerThreadEventInfo &event_info_ref ) {
-		auto eventType = event_info_ref.getEventType( );
-		switch( eventType ) {
-			case MusicPlayerThreadEventInfo::EventType::Position :
-				break;
-			case MusicPlayerThreadEventInfo::EventType::Duration :
-				break;
-			case MusicPlayerThreadEventInfo::EventType::Thread_Over : {
-				this->disconnect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
-				musicPlayerThread->disconnect( );
-				musicPlayerThread->deleteLater( );
-				musicPlayerThread = nullptr;
-				MusicPlayerEventInfo info;
-				info.eventSenderPtr = this;
-				info.event = MusicPlayerEventInfo::EventType::Player_Over;
-				Emit_MusicPlayer_Event( this, info );
-			}
-			break;
-			case MusicPlayerThreadEventInfo::EventType::Thread_Start : {
-				MusicPlayerEventInfo info;
-				info.eventSenderPtr = this;
-				info.event = MusicPlayerEventInfo::EventType::Player_Start;
-				Emit_MusicPlayer_Event( this, info );
-			}
-			break;
-		}
+	connect( musicPlayerThread, &MusicPlayerThread::threadOver, this, [this]( ) {
+		this->disconnect( this, &QObject::destroyed, musicPlayerThread, &MusicPlayerThread::stopPlayerMusic );
+		musicPlayerThread->disconnect( );
+		musicPlayerThread->deleteLater( );
+		musicPlayerThread = nullptr;
+		emit playerOver( );
 	} );
-
+	connect( musicPlayerThread, &MusicPlayerThread::threadStart, this, [this]( ) {
+		emit playerStart( );
+	} );
 	// 开始播放
 	musicPlayerThread->startPlayerMusic( );
 	musicFilePath = newLoadFile;
@@ -92,4 +72,10 @@ bool MusicPlayer::playerStop( ) {
 			appInstance->processEvents( );
 	}
 	return true;
+}
+
+qint64 MusicPlayer::getDuratction( ) const {
+	if( musicPlayerThread )
+		return 0;
+	return musicPlayerThread->getDuratction( );
 }

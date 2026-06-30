@@ -17,9 +17,10 @@ class MusicAudioSinkPlayerThread : public MusicPlayerThread {
 protected:
 	std::vector< QAudioBuffer > audioBufferVector;
 	QAudioSink *audioSink = nullptr;
-	QIODevice *ioAudioSinkDevice;
-	QAudioOutput *audioOutput;
+	QIODevice *ioAudioSinkDevice = nullptr;
+	QAudioOutput *audioOutput = nullptr;
 	QAudioDecoder *audioDecoder = nullptr;
+	qint64 duratction;
 
 	bool startPlayerTread( ) override;
 
@@ -28,10 +29,10 @@ public:
 
 	~MusicAudioSinkPlayerThread( ) override;
 
+	qint64 getDuratction( ) const override;
+
 protected:
 	bool playerThread( MusicPlayerThread *music_player_thread ) override;
 };
 
-#include <application/eventMacro/eventMacroDefault.h>
-definition_event_info_inherit_class_type( MusicAudioSinkPlayerThread, MusicPlayerThread );
 #endif // MUSICAUDIOSINKPLAYERTHREAD_H_H_HEAD__FILE__

@@ -62,8 +62,8 @@ bool PlayerWindow::initWidget( ) {
 	bottomDocWidget->setContentsMargins( 0, 0, 0, 0 );
 	addDockWidget( Qt::DockWidgetArea::BottomDockWidgetArea, bottomDocWidget );
 
-	playerToolsWidget = new PlayerToolsWidget( bottomDocWidget );
-	playListWidget = new PlayerListWidget( playListWidgetScrollArea );
+	playerToolsWidget = new PlayerToolsWidget( this );
+	playListWidget = new PlayerListWidget( this );
 
 	bottomDocWidget->setWidget( playerToolsWidget );
 	setCentralWidget( playListWidgetScrollArea );
@@ -85,24 +85,9 @@ bool PlayerWindow::initConnect( ) {
 	auto playListHBar = playListWidgetScrollArea->horizontalScrollBar( );
 	auto topWidgetHBar = playerListTopWidgetScrollArea->horizontalScrollBar( );
 	connect( playListHBar, &QScrollBar::sliderMoved, topWidgetHBar, &QScrollBar::setValue );
-
-	AppEventManage::Connect_PlayerListWidget_Signal( [this] ( AppEventManage *sender_ptr, PlayerListWidget *event_obj_ptr, const PlayerListWidgetEventInfo &event_info_ref ) {
-		auto eventType = event_info_ref.getEventType( );
-		switch( eventType ) {
-			case PlayerListWidgetEventInfo::EventType::Item_Select :
-				break;
-			case PlayerListWidgetEventInfo::EventType::Item_Double_Select :
-				break;
-			case PlayerListWidgetEventInfo::EventType::Pop_Menu :
-				popPlayerWidgetMenu( );
-				break;
-			case PlayerListWidgetEventInfo::EventType::Player_Music :
-				break;
-			case PlayerListWidgetEventInfo::EventType::Player_Next :
-				break;
-		}
+	connect( playListWidget, &PlayerListWidget::popMenu, this, [this]( ) {
+		popPlayerWidgetMenu( );
 	} );
-
 	return true;
 }
 
@@ -131,6 +116,22 @@ bool PlayerWindow::init( ) {
 	if( updateSubCompoment( ) == false )
 		return false;
 	return true;
+}
+
+PlayerListWidget * PlayerWindow::getPlayListWidget( ) const {
+	return playListWidget;
+}
+
+PlayerListTopWidget * PlayerWindow::getPlayerListTopWidget( ) const {
+	return playerListTopWidget;
+}
+
+PlayerToolsWidget * PlayerWindow::getPlayerToolsWidget( ) const {
+	return playerToolsWidget;
+}
+
+PlayerWidgetMenu * PlayerWindow::getPlayerWidgetMenu( ) const {
+	return playerWidgetMenu;
 }
 
 void PlayerWindow::showEvent( QShowEvent *event ) {

@@ -3,15 +3,17 @@
 
 #include <QWidget>
 
-#include <application/eventMacro/eventMacroDefault.h>
+#include "../application/appCore.h"
 
+class PlayerWindow;
 class QPushButton;
 class QProgressBar;
 
-class PlayerToolsWidget : public QWidget {
+class PlayerToolsWidget : public QWidget, public AppCore {
 	Q_OBJECT;
 
 protected:
+	PlayerWindow *playerWindow;
 	/// @brief 上一曲
 	QPushButton *thePreviousSong = nullptr;
 	/// @brief 播放控制
@@ -36,16 +38,20 @@ protected:
 	int widgetSpace;
 	/// @brief 是否控制进度条
 	bool isControlPlayProgress;
+	/// @brief 当前播放时间
+	qint64 useDuratction;
+	/// @brief 音乐总时长
+	qint64 musicDuratction;
 
 protected:
-	virtual void releaseResource( );
+	bool deleteResource( ) override;
 
 public:
-	PlayerToolsWidget( QWidget *parent );
+	PlayerToolsWidget( PlayerWindow *parent );
 
 	~PlayerToolsWidget( ) override;
 
-	virtual bool init( );
+	bool init( ) override;
 
 	virtual bool compLayout( );
 
@@ -53,13 +59,15 @@ public:
 
 	virtual int getMinWidth( int progress_bar_width );
 
-	virtual bool setCurrentPlayerTime( qint64 current );
-
 	virtual bool setDuratctionPlayerTime( qint64 duratction );
 
 	virtual bool compMinSize( QSize &result_min_size, int progress_bar_width );
 
 	virtual void suggestWidth( int suggest_width );
+
+	virtual qint64 getUseDuratction( ) const;
+
+	virtual qint64 getMusicDuratction( ) const;
 
 protected:
 	void resizeEvent( QResizeEvent *event ) override;
@@ -71,15 +79,13 @@ protected:
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 
 Q_SIGNALS:
-	void clickPreviousSong( );
+	void previousSong( );
 
-	void clickControlPlay( );
+	void changePlay( );
 
-	void clickNextSong( );
+	void nextSong( );
 
-	void duratctionProgressBarChange( int new_var );
+	void setUseduratctionChange( qint64 new_use_duratction );
 };
-
-definition_event_info_class_type( PlayerToolsWidget, None, Previous_Song, Change_Play, Next_Song, Duratction_Change );
 
 #endif // PLAYERTOOLSWIDGET_H_H_HEAD__FILE__

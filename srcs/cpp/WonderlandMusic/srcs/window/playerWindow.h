@@ -52,6 +52,14 @@ public:
 
 	bool init( ) override;
 
+	virtual PlayerListWidget * getPlayListWidget( ) const;
+
+	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
+
+	virtual PlayerToolsWidget * getPlayerToolsWidget( ) const;
+
+	virtual PlayerWidgetMenu * getPlayerWidgetMenu( ) const;
+
 protected:
 	void showEvent( QShowEvent *event ) override;
 

@@ -20,18 +20,11 @@ bool MusicPlayerThread::startPlayerTread( ) {
 		return false;
 	}
 	connect( watcher, &QFutureWatcher< void >::started, this, [=]( ) {
-		MusicPlayerThreadEventInfo inf;
-		inf.eventSenderPtr = this;
-		inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Start;
-		Emit_MusicPlayerThread_Event( this, inf );
+		emit threadStart( );
 	} );
 	connect( watcher, &QFutureWatcher< void >::finished, this, [=]( ) {
 		watcher->deleteLater( );
-
-		MusicPlayerThreadEventInfo inf;
-		inf.eventSenderPtr = this;
-		inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Over;
-		Emit_MusicPlayerThread_Event( this, inf );
+		emit threadOver( );
 		isRunOver = true;
 	} );
 	watcher->setFuture( future );

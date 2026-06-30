@@ -5,7 +5,10 @@
 #include <QProgressBar>
 #include <qevent.h>
 
+#include "playerListWidget.h"
+
 #include "../application/appDataManage.h"
+#include "../application/appEventManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonFileKey.h"
@@ -16,28 +19,23 @@
 
 #include "../msgInfo/messageErrorOut.h"
 
-void PlayerToolsWidget::releaseResource( ) {
-	#define r_d( ptr ) if(ptr) { delete ptr; ptr = nullptr;}
-	r_d( thePreviousSong );
-	r_d( theNextSong );
-	r_d( controlPlay );
-	r_d( playProgress );
-	r_d( playAllDateTime );
-	r_d( playUseDateTime );
-	r_d( playDateTimeSpace );
-	r_d( playIcon );
-	r_d( pauseIcon );
+#include "../window/playerWindow.h"
+
+bool PlayerToolsWidget::deleteResource( ) {
+	if( delete_ptr( thePreviousSong, theNextSong, controlPlay, playProgress, playAllDateTime, playUseDateTime, playDateTimeSpace, playIcon, pauseIcon ) )
+		return false;
+	return true;
 }
 
-PlayerToolsWidget::PlayerToolsWidget( QWidget *parent ) : QWidget( parent ) {
+PlayerToolsWidget::PlayerToolsWidget( PlayerWindow *parent ) : QWidget( parent ), playerWindow( parent ) {
 }
 
 PlayerToolsWidget::~PlayerToolsWidget( ) {
-	releaseResource( );
+	deleteResource( );
 }
 
 bool PlayerToolsWidget::init( ) {
-	releaseResource( );
+	deleteResource( );
 	isControlPlayProgress = false;
 	progressBarMinWidth = 100;
 	widgetSpace = 10;
@@ -97,10 +95,25 @@ bool PlayerToolsWidget::init( ) {
 	compLayout( );
 
 	// 链接信号
-	connect( playProgress, &QProgressBar::valueChanged, this, &PlayerToolsWidget::duratctionProgressBarChange );
-	connect( thePreviousSong, &QPushButton::clicked, this, &PlayerToolsWidget::clickPreviousSong );
-	connect( controlPlay, &QPushButton::clicked, this, &PlayerToolsWidget::clickControlPlay );
-	connect( theNextSong, &QPushButton::clicked, this, &PlayerToolsWidget::clickNextSong );
+	connect( playProgress, &QProgressBar::valueChanged, this, [this] ( int value ) {
+		if( musicDuratction > 0 )
+			return;
+		emit setUseduratctionChange( value * musicDuratction / 100 );
+	} );
+	connect( thePreviousSong, &QPushButton::clicked, this, []( ) {
+	} );
+	connect( controlPlay, &QPushButton::clicked, this, []( ) {
+	} );
+	connect( theNextSong, &QPushButton::clicked, this, []( ) {
+	} );
+	auto playerListWidget = playerWindow->getPlayListWidget( );
+	connect( playerListWidget, &PlayerListWidget::playerMusic, this, [this]( ) {
+		auto appInstance = AppInstance::getAppInstance( );
+		auto appDataManage = appInstance->getAppDataManage( );
+		auto appTranslate = appDataManage->getTranslate( );
+		auto playerToolsWidgetTranslate = appTranslate->getPlayerToolsWidget( );
+		controlPlay->setText( playerToolsWidgetTranslate->getControlPlay( ) );
+	} );
 
 	// 子组件
 
@@ -187,15 +200,10 @@ int PlayerToolsWidget::getMinWidth( int progress_bar_width ) {
 	return minWidth;
 }
 
-bool PlayerToolsWidget::setCurrentPlayerTime( qint64 current ) {
-	auto from = DateTimeFormat::millsecondToHourMinSecFrom( current );
-	playUseDateTime->setText( from );
-	return true;
-}
-
 bool PlayerToolsWidget::setDuratctionPlayerTime( qint64 duratction ) {
 	auto from = DateTimeFormat::millsecondToHourMinSecFrom( duratction );
 	playAllDateTime->setText( from );
+	this->useDuratction = duratction;
 	return true;
 }
 
@@ -207,6 +215,14 @@ bool PlayerToolsWidget::compMinSize( QSize &result_min_size, int progress_bar_wi
 }
 
 void PlayerToolsWidget::suggestWidth( int suggest_width ) {
+}
+
+qint64 PlayerToolsWidget::getUseDuratction( ) const {
+	return useDuratction;
+}
+
+qint64 PlayerToolsWidget::getMusicDuratction( ) const {
+	return musicDuratction;
 }
 
 void PlayerToolsWidget::resizeEvent( QResizeEvent *event ) {

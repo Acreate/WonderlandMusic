@@ -13,15 +13,19 @@
 #include "../../application/appInstance.h"
 
 bool MusicAudioSinkPlayerThread::startPlayerTread( ) {
+	duratction = 0;
+	audioBufferVector.clear( );
 	audioDecoder = new QAudioDecoder;
 	connect( audioDecoder, &QAudioDecoder::bufferReady, [this]( ) {
 		auto audioBuffer = audioDecoder->read( );
 		audioBuffer.detach( );
 		audioBufferVector.emplace_back( audioBuffer );
+		duratction += audioBuffer.duration( );
 	} );
 	connect( audioDecoder, &QAudioDecoder::finished, [this]( ) {
 		disconnect( this, &QObject::destroyed, audioDecoder, &QAudioDecoder::deleteLater );
 		audioDecoder->deleteLater( );
+		audioDecoder = nullptr;
 		MusicPlayerThread::startPlayerTread( );
 	} );
 	QUrl musicFile = QUrl::fromLocalFile( MusicPlayerThread::musicFilePath );
@@ -32,9 +36,16 @@ bool MusicAudioSinkPlayerThread::startPlayerTread( ) {
 }
 
 MusicAudioSinkPlayerThread::MusicAudioSinkPlayerThread( const QString &load_music_file ) : MusicPlayerThread( load_music_file ) {
+	duratction = 0;
 }
 
 MusicAudioSinkPlayerThread::~MusicAudioSinkPlayerThread( ) {
+}
+
+qint64 MusicAudioSinkPlayerThread::getDuratction( ) const {
+	if( audioDecoder )
+		return 0;
+	return duratction;
 }
 
 bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_thread ) {
@@ -60,14 +71,10 @@ bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_t
 
 	ioAudioSinkDevice->write( audioBuffer.data< char >( ), audioBuffer.byteCount( ) );
 	auto currentThread = QThread::currentThread( );
+	emit positionChange( 0 );
+	emit durationChange( 0 );
 	size_t index;
 	qint64 playerDurationMillisecond = 0;
-
-	MusicAudioSinkPlayerThreadEventInfo durationChangeInfo;
-	MusicAudioSinkPlayerThreadEventInfo positionChangeInfo;
-	durationChangeInfo.eventSenderPtr = positionChangeInfo.eventSenderPtr = this;
-	durationChangeInfo.event = MusicPlayerThreadEventInfo::EventType::Duration;
-	positionChangeInfo.event = MusicPlayerThreadEventInfo::EventType::Position;
 
 	for( index = 1; index < count; index += 1 ) {
 		// 微妙
@@ -75,8 +82,8 @@ bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_t
 		// 毫秒
 		qint64 durationMillisecond = durationMicroseconds / 1000;
 		playerDurationMillisecond += durationMillisecond;
-		Emit_MusicAudioSinkPlayerThread_Event( this, durationChangeInfo );
-		Emit_MusicAudioSinkPlayerThread_Event( this, positionChangeInfo );
+		emit positionChange( index );
+		emit durationChange( playerDurationMillisecond );
 		currentThread->usleep( durationMicroseconds );
 		if( isJump )
 			break;
@@ -85,5 +92,6 @@ bool MusicAudioSinkPlayerThread::playerThread( MusicPlayerThread *music_player_t
 	}
 	audioSink->stop( );
 	audioSink->deleteLater( );
+	duratction = 0;
 	return true;
 }

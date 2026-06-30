@@ -6,7 +6,6 @@
 #include <QMediaPlayer>
 #include <QMutex>
 
-#include "../../application/appEventManage.h"
 #include "../../application/appInstance.h"
 
 bool MusicMediaPlayerThread::startPlayerTread( ) {
@@ -27,11 +26,7 @@ bool MusicMediaPlayerThread::stopPlayerMusic( ) {
 	}
 	isRunOver = true;
 	bool stopPlayerMusic = MusicPlayerThread::stopPlayerMusic( );
-
-	MusicMediaPlayerThreadEventInfo inf;
-	inf.eventSenderPtr = this;
-	inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Over;
-	Emit_MusicMediaPlayerThread_Event( this, inf );
+	emit threadOver( );
 	return stopPlayerMusic;
 }
 
@@ -42,11 +37,14 @@ MusicMediaPlayerThread::MusicMediaPlayerThread( const QString &load_file_path ) 
 MusicMediaPlayerThread::~MusicMediaPlayerThread( ) {
 }
 
+qint64 MusicMediaPlayerThread::getDuratction( ) const {
+	if( mediaPlayer == nullptr )
+		return 0;
+	return mediaPlayer->duration( );
+}
+
 bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_thread ) {
-	MusicMediaPlayerThreadEventInfo inf;
-	inf.eventSenderPtr = this;
-	inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Start;
-	Emit_MusicMediaPlayerThread_Event( this, inf );
+	emit threadStart( );
 	mediaPlayer = new QMediaPlayer;
 	audioOutput = new QAudioOutput;
 	connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [this] ( QMediaPlayer::MediaStatus status ) {
@@ -63,19 +61,14 @@ bool MusicMediaPlayerThread::playerThread( MusicPlayerThread *music_player_threa
 				break;
 			case QMediaPlayer::NoMedia :
 			case QMediaPlayer::EndOfMedia :
-			case QMediaPlayer::InvalidMedia : {
+			case QMediaPlayer::InvalidMedia :
 				delete mediaPlayer;
 				delete audioOutput;
 				mediaPlayer = nullptr;
 				audioOutput = nullptr;
 				isRunOver = true;
-
-				MusicMediaPlayerThreadEventInfo inf;
-				inf.eventSenderPtr = this;
-				inf.event = MusicPlayerThreadEventInfo::EventType::Thread_Over;
-				Emit_MusicMediaPlayerThread_Event( this, inf );
-			}
-			break;
+				emit threadOver( );
+				break;
 		}
 	}, Qt::QueuedConnection );
 	audioOutput->setVolume( 1.0 );

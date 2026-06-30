@@ -41,6 +41,8 @@
 #include "../tools/vectorTools.h"
 #include "../tools/widgetTools.h"
 
+#include "../window/playerWindow.h"
+
 void PlayerListWidget::clearMusicInfoVector( ) {
 	musicInfoMutex->lock( );
 	auto count = musicInfoVector->size( );
@@ -58,7 +60,7 @@ PlayerListWidget::~PlayerListWidget( ) {
 	releaseResource( );
 }
 
-PlayerListWidget::PlayerListWidget( QWidget *parent ) : QWidget( parent ) {
+PlayerListWidget::PlayerListWidget( PlayerWindow *parent ) : QWidget( parent ), parentContent( parent ) {
 	setMouseTracking( true );
 }
 
@@ -398,6 +400,10 @@ std::vector< QString > & PlayerListWidget::getListMusicFile( std::vector< QStrin
 	return result_vector;
 }
 
+qint64 PlayerListWidget::getMusicDuratction( ) const {
+	return 0;
+}
+
 bool PlayerListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {
 	musicInfoMutex->lock( );
 
@@ -447,126 +453,112 @@ bool PlayerListWidget::init( ) {
 	loadJsonPathInfo( );
 	updateItemWidget( );
 
-	// 信号
-	AppEventManage::Connect_MusicPlayer_Signal( [this] ( AppEventManage *sender_ptr, MusicPlayer *event_obj_ptr, const MusicPlayerEventInfo &event_info_ref ) {
-		auto eventType = event_info_ref.getEventType( );
-		switch( eventType ) {
-			case MusicPlayerEventInfo::EventType::Player_Over :
-				playerOver_slot( event_obj_ptr->getMusicFilePath( ) );
-				break;
-			case MusicPlayerEventInfo::EventType::Player_Start :
-				playerStart_slot( event_obj_ptr->getMusicFilePath( ) );
-				break;
-			case MusicPlayerEventInfo::EventType::Player_Duration :
-				break;
-		}
+	connect( musicPlayer, &MusicPlayer::playerOver, this, [this]( ) {
+		playerOver_slot( musicPlayer->getMusicFilePath( ) );
+	} );
+	connect( musicPlayer, &MusicPlayer::playerOver, this, [this]( ) {
+		playerStart_slot( musicPlayer->getMusicFilePath( ) );
 	} );
 
-	AppEventManage::Connect_PlayerWidgetMenu_Signal( [this] ( AppEventManage *sender_ptr, PlayerWidgetMenu *event_obj_ptr, const PlayerWidgetMenuEventInfo &event_info_ref ) {
-		auto eventType = event_info_ref.getEventType( );
-		switch( eventType ) {
-			case PlayerWidgetMenuEventInfo::EventType::Load_Disk_File : {
-				QFileInfo fileInfo;
-				QFileDialog dialog( this );
-				auto appInstance = AppInstance::getAppInstance( );
-				auto appDataManage = appInstance->getAppDataManage( );
-				auto appTranslate = appDataManage->getTranslate( );
-				auto playerListWidgetTranslate = appTranslate->getPlayerListWidget( );
-				dialog.setWindowTitle( playerListWidgetTranslate->getLoadDiskDirTitle( ) );
-				fileInfo.setFile( fileSelectWorkPath );
-				auto openDirPath = fileInfo.absoluteFilePath( );
-				dialog.setDirectory( openDirPath );
-				dialog.setFileMode( QFileDialog::ExistingFiles );
-				auto musicManage = appInstance->getMusicManage( );
-				auto musicDecoder = musicManage->getMusicDecoder( );
-				auto decodeFileSuffix = musicDecoder->getSupperDecodeFileSuffix( );
-				QStringList filterSuffixList;
-				size_t count = decodeFileSuffix.size( );
-				auto data = decodeFileSuffix.data( );
-				size_t index = 0;
-				for( ; index < count; index += 1 )
-					filterSuffixList.append( "*." + data[ index ] );
-				auto musicTypeName = playerListWidgetTranslate->getMusicTypeName( );
-				auto filterSuffix = filterSuffixList.join( " " );
-				auto filterName = musicTypeName + "(" + filterSuffix + ");;" + playerListWidgetTranslate->getAnyTypeName( ) + "(*.*)";
-				dialog.setNameFilter( filterName );
-				QRect geometry = this->geometry( );
-				auto curentWindowSize = geometry.size( );
-				dialog.resize( curentWindowSize );
-				auto center = geometry.center( );
-				center = mapToGlobal( center );
-				WidgetTools::moveWidgetToCenterPos( center, &dialog );
-				if( dialog.exec( ) != QDialog::Accepted )
-					return;
-				QStringList files = dialog.selectedFiles( );
-				count = files.size( );
-				auto selectFileData = files.data( );
-				fileInfo.setFile( selectFileData[ 0 ] );
-				auto dir = fileInfo.dir( );
-				fileSelectWorkPath = PathTools::getAutoShortenPathName( dir.absolutePath( ) );
-				writeJsonPathInfo( );
-				std::vector< QString > loadVector( count );
-				auto dataPtr = loadVector.data( );
-				for( index = 0; index < count; index += 1 )
-					dataPtr[ index ] = selectFileData[ index ];
-				loadDiskMusicFileList( loadVector );
-			}
-			break;
-			case PlayerWidgetMenuEventInfo::EventType::Load_Disk_Dir : {
-				QFileInfo fileInfo;
+	auto playerWidgetMenu = parentContent->getPlayerWidgetMenu( );
+	connect( playerWidgetMenu, &PlayerWidgetMenu::loadDiskFile, this, [this]( ) {
+		QFileInfo fileInfo;
+		QFileDialog dialog( this );
+		auto appInstance = AppInstance::getAppInstance( );
+		auto appDataManage = appInstance->getAppDataManage( );
+		auto appTranslate = appDataManage->getTranslate( );
+		auto playerListWidgetTranslate = appTranslate->getPlayerListWidget( );
+		dialog.setWindowTitle( playerListWidgetTranslate->getLoadDiskDirTitle( ) );
+		fileInfo.setFile( fileSelectWorkPath );
+		auto openDirPath = fileInfo.absoluteFilePath( );
+		dialog.setDirectory( openDirPath );
+		dialog.setFileMode( QFileDialog::ExistingFiles );
+		auto musicManage = appInstance->getMusicManage( );
+		auto musicDecoder = musicManage->getMusicDecoder( );
+		auto decodeFileSuffix = musicDecoder->getSupperDecodeFileSuffix( );
+		QStringList filterSuffixList;
+		size_t count = decodeFileSuffix.size( );
+		auto data = decodeFileSuffix.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			filterSuffixList.append( "*." + data[ index ] );
+		auto musicTypeName = playerListWidgetTranslate->getMusicTypeName( );
+		auto filterSuffix = filterSuffixList.join( " " );
+		auto filterName = musicTypeName + "(" + filterSuffix + ");;" + playerListWidgetTranslate->getAnyTypeName( ) + "(*.*)";
+		dialog.setNameFilter( filterName );
+		QRect geometry = this->geometry( );
+		auto curentWindowSize = geometry.size( );
+		dialog.resize( curentWindowSize );
+		auto center = geometry.center( );
+		center = mapToGlobal( center );
+		WidgetTools::moveWidgetToCenterPos( center, &dialog );
+		if( dialog.exec( ) != QDialog::Accepted )
+			return;
+		QStringList files = dialog.selectedFiles( );
+		count = files.size( );
+		auto selectFileData = files.data( );
+		fileInfo.setFile( selectFileData[ 0 ] );
+		auto dir = fileInfo.dir( );
+		fileSelectWorkPath = PathTools::getAutoShortenPathName( dir.absolutePath( ) );
+		writeJsonPathInfo( );
+		std::vector< QString > loadVector( count );
+		auto dataPtr = loadVector.data( );
+		for( index = 0; index < count; index += 1 )
+			dataPtr[ index ] = selectFileData[ index ];
+		loadDiskMusicFileList( loadVector );
+	} );
+	connect( playerWidgetMenu, &PlayerWidgetMenu::loadDiskDir, this, [this]( ) {
+		QFileInfo fileInfo;
 
-				QFileDialog dialog( this );
-				auto appInstance = AppInstance::getAppInstance( );
-				auto appDataManage = appInstance->getAppDataManage( );
-				auto appTranslate = appDataManage->getTranslate( );
-				auto playerListWidgetTranslate = appTranslate->getPlayerListWidget( );
-				dialog.setWindowTitle( playerListWidgetTranslate->getLoadDiskDirTitle( ) );
-				fileInfo.setFile( dirSelectWorkPath );
-				auto openDirPath = fileInfo.absoluteFilePath( );
-				dialog.setDirectory( openDirPath );
-				dialog.setFileMode( QFileDialog::Directory );
+		QFileDialog dialog( this );
+		auto appInstance = AppInstance::getAppInstance( );
+		auto appDataManage = appInstance->getAppDataManage( );
+		auto appTranslate = appDataManage->getTranslate( );
+		auto playerListWidgetTranslate = appTranslate->getPlayerListWidget( );
+		dialog.setWindowTitle( playerListWidgetTranslate->getLoadDiskDirTitle( ) );
+		fileInfo.setFile( dirSelectWorkPath );
+		auto openDirPath = fileInfo.absoluteFilePath( );
+		dialog.setDirectory( openDirPath );
+		dialog.setFileMode( QFileDialog::Directory );
 
-				QRect geometry = this->geometry( );
-				auto curentWindowSize = geometry.size( );
-				dialog.resize( curentWindowSize );
-				auto center = geometry.center( );
-				center = mapToGlobal( center );
-				WidgetTools::moveWidgetToCenterPos( center, &dialog );
-				if( dialog.exec( ) != QDialog::Accepted )
-					return;
+		QRect geometry = this->geometry( );
+		auto curentWindowSize = geometry.size( );
+		dialog.resize( curentWindowSize );
+		auto center = geometry.center( );
+		center = mapToGlobal( center );
+		WidgetTools::moveWidgetToCenterPos( center, &dialog );
+		if( dialog.exec( ) != QDialog::Accepted )
+			return;
 
-				QStringList files = dialog.selectedFiles( );
-				qsizetype count = files.size( );
-				auto data = files.data( );
-				dirSelectWorkPath = PathTools::getAutoShortenPathName( data[ 0 ] );
-				writeJsonPathInfo( );
-				size_t index;
-				std::vector< QString > loadVector( count );
-				auto dataPtr = loadVector.data( );
-				for( index = 0; index < count; index += 1 )
-					dataPtr[ index ] = data[ index ];
-				loadDiskMusicDirList( loadVector );
-			}
-			break;
-			case PlayerWidgetMenuEventInfo::EventType::Set_Current_Select_Play :
-				setCurrentPlayerMusicList( );
-				break;
-			case PlayerWidgetMenuEventInfo::EventType::Inster_Current_Select_Play :
-				setInsertPlayerMusicList( );
-				break;
-			case PlayerWidgetMenuEventInfo::EventType::Remove_Play_List_Select_Info :
-				removeListMusicFileList( );
-				break;
-			case PlayerWidgetMenuEventInfo::EventType::Delete_Play_List_Select_File :
-				deleteDiskMusicFileList( );
-				break;
-			case PlayerWidgetMenuEventInfo::EventType::Select_List_Move_Top :
-				moveMusicToListTop( );
-				break;
-			case PlayerWidgetMenuEventInfo::EventType::Select_List_Move_Bottom :
-				moveMusicToListBottom( );
-				break;
-		}
+		QStringList files = dialog.selectedFiles( );
+		qsizetype count = files.size( );
+		auto data = files.data( );
+		dirSelectWorkPath = PathTools::getAutoShortenPathName( data[ 0 ] );
+		writeJsonPathInfo( );
+		size_t index;
+		std::vector< QString > loadVector( count );
+		auto dataPtr = loadVector.data( );
+		for( index = 0; index < count; index += 1 )
+			dataPtr[ index ] = data[ index ];
+		loadDiskMusicDirList( loadVector );
+	} );
+	connect( playerWidgetMenu, &PlayerWidgetMenu::setCurrentSelectPlay, this, [this]( ) {
+		setCurrentPlayerMusicList( );
+	} );
+	connect( playerWidgetMenu, &PlayerWidgetMenu::insterCurrentSelectPlay, this, [this]( ) {
+		setInsertPlayerMusicList( );
+	} );
+	connect( playerWidgetMenu, &PlayerWidgetMenu::removePlayListSelectInfo, this, [this]( ) {
+		removeListMusicFileList( );
+	} );
+	connect( playerWidgetMenu, &PlayerWidgetMenu::deletePlayListSelectFile, this, [this]( ) {
+		deleteDiskMusicFileList( );
+	} );
+	connect( playerWidgetMenu, &PlayerWidgetMenu::selectListMoveTop, this, [this]( ) {
+		moveMusicToListTop( );
+	} );
+	connect( playerWidgetMenu, &PlayerWidgetMenu::selectListMoveBottom, this, [this]( ) {
+		moveMusicToListBottom( );
 	} );
 
 	return true;
@@ -993,12 +985,8 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 			// 双击或单击，二选一
 			if( isDoubleClick ) {
 				doubleClickMusicItemWidget( selectItem );
-
 				// 触发信号
-				PlayerListWidgetEventInfo eventInfo;
-				eventInfo.eventSenderPtr = this;
-				eventInfo.event = PlayerListWidgetEventInfo::EventType::Item_Double_Select;
-				Emit_PlayerListWidget_Event( this, eventInfo );
+				emit itemDouble_Select( );
 			} else if( selectItem ) { // 单击
 				std::vector< MusicInfoItemWidget * > resultVector;
 				musicInfoMutex->lock( );
@@ -1007,10 +995,7 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				musicInfoMutex->unlock( );
 
 				// 触发信号
-				PlayerListWidgetEventInfo eventInfo;
-				eventInfo.eventSenderPtr = this;
-				eventInfo.event = PlayerListWidgetEventInfo::EventType::Item_Select;
-				Emit_PlayerListWidget_Event( this, eventInfo );
+				emit itemSelect( );
 				update( );
 			}
 		}
@@ -1039,16 +1024,10 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				musicInfoMutex->unlock( );
 				update( );
 				// 触发信号
-				PlayerListWidgetEventInfo eventInfo;
-				eventInfo.eventSenderPtr = this;
-				eventInfo.event = PlayerListWidgetEventInfo::EventType::Item_Select;
-				Emit_PlayerListWidget_Event( this, eventInfo );
+				emit itemSelect( );
 			}
 			// 触发信号
-			PlayerListWidgetEventInfo eventInfo;
-			eventInfo.eventSenderPtr = this;
-			eventInfo.event = PlayerListWidgetEventInfo::EventType::Pop_Menu;
-			Emit_PlayerListWidget_Event( this, eventInfo );
+			emit popMenu( );
 		}
 		break;
 	}

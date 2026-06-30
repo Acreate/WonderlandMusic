@@ -65,24 +65,22 @@ protected:
 
 	virtual bool initConnectAcction( );
 
-	virtual void loadDiskFile( );
+Q_SIGNALS:
+	void loadDiskFile( );
 
-	virtual void loadDiskDir( );
+	void loadDiskDir( );
 
-	virtual void setCurrentSelectPlay( );
+	void setCurrentSelectPlay( );
 
-	virtual void insterCurrentSelectPlay( );
+	void insterCurrentSelectPlay( );
 
-	virtual void removePlayListSelectInfo( );
+	void removePlayListSelectInfo( );
 
-	virtual void deletePlayListSelectFile( );
+	void deletePlayListSelectFile( );
 
-	virtual void selectListMoveTop( );
+	void selectListMoveTop( );
 
-	virtual void selectListMoveBottom( );
+	void selectListMoveBottom( );
 };
-
-#include <application/eventMacro/eventMacroDefault.h>
-definition_event_info_class_type( PlayerWidgetMenu, Load_Disk_File, Load_Disk_Dir, Set_Current_Select_Play, Inster_Current_Select_Play, Remove_Play_List_Select_Info, Delete_Play_List_Select_File, Select_List_Move_Top, Select_List_Move_Bottom );
 
 #endif // PLAYERWIDGETMENU_H_H_HEAD__FILE__

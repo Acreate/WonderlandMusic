@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+class PlayerWindow;
 class UserMutex;
 class MusicPlayer;
 
@@ -27,6 +28,7 @@ public:
 	};
 
 protected:
+	PlayerWindow *parentContent;
 	PlayerListWidgetState widgetState = PlayerListWidgetState::None;
 	int currentWidgetWidth;
 	int currentWidgetHeight;
@@ -109,7 +111,7 @@ protected Q_SLOTS:
 public:
 	~PlayerListWidget( ) override;
 
-	PlayerListWidget( QWidget *parent );
+	PlayerListWidget( PlayerWindow *parent );
 
 	// get+set
 public:
@@ -137,6 +139,8 @@ public:
 
 	// 功能
 public:
+	virtual qint64 getMusicDuratction( ) const;
+
 	virtual void updateItemWidget( );
 
 	virtual void clearMusicInfoVector( );
@@ -189,8 +193,17 @@ protected:
 
 	/// @brief 移动列表到底部
 	virtual bool moveMusicToListBottom( );
+
+Q_SIGNALS:
+	void itemSelect( );
+
+	void itemDouble_Select( );
+
+	void popMenu( );
+
+	void playerMusic( );
+
+	void playerNext( );
 };
 
-#include <application/eventMacro/eventMacroDefault.h>
-definition_event_info_class_type( PlayerListWidget, Item_Select, Item_Double_Select, Pop_Menu, Player_Music, Player_Next );
 #endif // PLAYLISTWIDGET_H_H_HEAD__FILE__

@@ -38,10 +38,15 @@ public:
 	virtual bool getIsStop( ) const;
 
 	virtual bool playerStop( );
+
+	virtual qint64 getDuratction( ) const;
+
+Q_SIGNALS:
+	void playerOver( );
+
+	void playerStart( );
+
+	void playerDuration( );
 };
-
-#include <application/eventMacro/eventMacroDefault.h>
-
-definition_event_info_class_type( MusicPlayer, Player_Over, Player_Start, Player_Duration );
 
 #endif // MUSICPLAYER_H_H_HEAD__FILE__

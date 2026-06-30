@@ -77,16 +77,6 @@ bool PlayerWidgetMenu::initConnectAcction( ) {
 	return true;
 }
 
-void PlayerWidgetMenu::loadDiskFile( ) {
-	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Load_Disk_File, this );
-	Emit_PlayerWidgetMenu_Event( this, eventInfo );
-}
-
-void PlayerWidgetMenu::loadDiskDir( ) {
-	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Load_Disk_Dir, this );
-	Emit_PlayerWidgetMenu_Event( this, eventInfo );
-}
-
 bool PlayerWidgetMenu::deleteResource( ) {
 	clear( );
 	return true;
@@ -103,34 +93,4 @@ bool PlayerWidgetMenu::init( ) {
 	if( initConnectAcction( ) == false )
 		return false;
 	return true;
-}
-
-void PlayerWidgetMenu::setCurrentSelectPlay( ) {
-	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Set_Current_Select_Play, this );
-	Emit_PlayerWidgetMenu_Event( this, eventInfo );
-}
-
-void PlayerWidgetMenu::insterCurrentSelectPlay( ) {
-	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Inster_Current_Select_Play, this );
-	Emit_PlayerWidgetMenu_Event( this, eventInfo );
-}
-
-void PlayerWidgetMenu::removePlayListSelectInfo( ) {
-	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Remove_Play_List_Select_Info, this );
-	Emit_PlayerWidgetMenu_Event( this, eventInfo );
-}
-
-void PlayerWidgetMenu::deletePlayListSelectFile( ) {
-	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Delete_Play_List_Select_File, this );
-	Emit_PlayerWidgetMenu_Event( this, eventInfo );
-}
-
-void PlayerWidgetMenu::selectListMoveTop( ) {
-	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Select_List_Move_Top, this );
-	Emit_PlayerWidgetMenu_Event( this, eventInfo );
-}
-
-void PlayerWidgetMenu::selectListMoveBottom( ) {
-	auto eventInfo = PlayerWidgetMenuEventInfo( PlayerWidgetMenuEventInfo::EventType::Select_List_Move_Bottom, this );
-	Emit_PlayerWidgetMenu_Event( this, eventInfo );
 }

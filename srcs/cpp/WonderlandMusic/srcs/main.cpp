@@ -29,7 +29,7 @@ static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
 
 #if is_en_write_log
 #include "tools/templateArgs.h"
-	#define new_ptr( ptr ) TemplateArgs::make_ptr( ptr )
+	#define new_ptr( ptr ) TemplateArgs::make_args_ptr( ptr )
 #else
 	#define new_ptr( ptr ) ( ptr = nullptr)
 #endif

@@ -55,37 +55,7 @@ bool AppTranslate::translateString( ) {
 }
 
 bool AppTranslate::deleteResource( ) {
-	if( TemplateArgs::delete_ptr( settingWidget ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerToolsWidget ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerListMenu ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerTopWidget ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerWindow ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( json ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( dateTimeFormat ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( aboutWidget ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerWidget ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( mainWindow ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( message ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerListWidget ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( musicInfoItem ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( systemTrayIconMenu ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( systemTrayIcon ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( userMutex ) == false )
+	if( delete_ptr( settingWidget, playerToolsWidget, playerListMenu, playerTopWidget, playerWindow, json, dateTimeFormat, aboutWidget, playerWidget, mainWindow, message, playerListWidget, musicInfoItem, systemTrayIconMenu, systemTrayIconMenu, systemTrayIcon, userMutex ) )
 		return false;
 	return true;
 }

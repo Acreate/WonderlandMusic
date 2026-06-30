@@ -20,81 +20,120 @@ namespace appCoreType {
 }
 
 class AppCore {
+	friend class Template;
+
+	class Template {
+		friend class AppCore;
+
+		template< appCoreType::AppCoreBase Make_Ptr >
+		static void * make_app_ptr( Make_Ptr *&make_ptr ) {
+			make_ptr = new Make_Ptr;
+			return make_ptr;
+		}
+
+		template< appCoreType::AppCoreBase Delete_Ptr >
+		static void * delete_app_ptr( Delete_Ptr *&delete_ptr ) {
+			if( delete_ptr == nullptr )
+				return nullptr;
+			if( static_cast< AppCore * >( delete_ptr )->deleteResource( ) == false )
+				return delete_ptr;
+			delete delete_ptr;
+			delete_ptr = nullptr;
+			return delete_ptr;
+		}
+
+		template< appCoreType::AppCoreBase Init_Ptr >
+		static void * init_app_ptr( Init_Ptr *&init_ptr ) {
+			if( init_ptr->init( ) == false )
+				return init_ptr;
+			return nullptr;
+		}
+
+		template< appCoreType::PtrBase Make_Ptr >
+		static void * make_any_ptr( Make_Ptr *&make_ptr ) {
+			make_ptr = new Make_Ptr;
+			return make_ptr;
+		}
+
+		template< appCoreType::PtrBase Delete_Ptr >
+		static void * delete_any_ptr( Delete_Ptr *&delete_ptr ) {
+			if( delete_ptr == nullptr )
+				return nullptr;
+			delete delete_ptr;
+			delete_ptr = nullptr;
+			return delete_ptr;
+		}
+
+		template< appCoreType::PtrBase Delete_Ptr >
+			requires requires ( Delete_Ptr *ptr, bool &result_bool ) {
+				result_bool = ptr->init( );
+			}
+		static void * init_any_ptr( Delete_Ptr *&init_ptr ) {
+			if( init_ptr->init( ) == false )
+				return init_ptr;
+			return nullptr;
+		}
+	};
+
 protected:
-	template< appCoreType::QStringType String_Array >
-	static void clearQString( String_Array &string_list ) {
-		string_list.clear( );
+	template< typename Type >
+	static void * make_ptr( Type * &make_ptr_ref ) {
+		if constexpr( appCoreType::AppCoreBase< Type > ) {
+			if( Template::make_app_ptr( make_ptr_ref ) == nullptr )
+				return nullptr;
+		} else {
+			if( Template::make_any_ptr( make_ptr_ref ) == nullptr )
+				return nullptr;
+		}
+		return make_ptr_ref;
 	}
 
-	template< appCoreType::QStringType ...String_Array >
-	static void clearQString( String_Array & ...string_list ) {
-		clearQString( string_list ... );
+	template< typename Type, typename ...Type_List >
+	static void * make_ptr( Type * &make_ptr_ref, Type_List ...make_ptr_ref_list ) {
+		if( make_ptr( make_ptr_ref ) == nullptr )
+			return nullptr;
+
+		return make_ptr( make_ptr_ref_list ... );
 	}
 
-	template< appCoreType::PtrBase Make_Unity >
-	static bool make_any_ptr( Make_Unity *&make_ptr ) {
-		make_ptr = new Make_Unity;
-		return make_ptr != nullptr;
+	template< typename Type >
+	static void * delete_ptr( Type * &make_ptr_ref ) {
+		if constexpr( appCoreType::AppCoreBase< Type > ) {
+			if( Template::delete_app_ptr( make_ptr_ref ) )
+				return make_ptr_ref;
+		} else {
+			if( Template::delete_any_ptr( make_ptr_ref ) == nullptr )
+				return make_ptr_ref;
+		}
+		return nullptr;
 	}
 
-	template< appCoreType::PtrBase Make_Unity, appCoreType::PtrBase ...Make_Array >
-	static bool make_any_ptr( Make_Unity *&init_ptr, Make_Array *& ...string_list ) {
-		if( make_any_ptr( init_ptr ) == false )
-			return false;
-		return make_any_ptr( string_list ... );
+	template< typename Type, typename ...Type_List >
+	static void * delete_ptr( Type * &make_ptr_ref, Type_List ...make_ptr_ref_list ) {
+		if( delete_ptr( make_ptr_ref ) )
+			return make_ptr_ref;
+
+		return delete_ptr( make_ptr_ref_list ... );
 	}
 
-	template< appCoreType::PtrBase Make_Unity >
-	static void del_any_ptr( Make_Unity *&make_ptr ) {
-		if( make_ptr )
-			delete make_ptr;
-		make_ptr = nullptr;
+	template< typename Type >
+	static void * init_ptr( Type * &make_ptr_ref ) {
+		if constexpr( appCoreType::AppCoreBase< Type > ) {
+			if( Template::init_app_ptr( make_ptr_ref ) )
+				return make_ptr_ref;
+		} else {
+			if( Template::init_any_ptr( make_ptr_ref ) == nullptr )
+				return make_ptr_ref;
+		}
+		return nullptr;
 	}
 
-	template< appCoreType::PtrBase Make_Unity, appCoreType::PtrBase ... Make_Array >
-	static void del_any_ptr( Make_Unity *&init_ptr, Make_Array *& ...string_list ) {
-		del_any_ptr( init_ptr );
-		del_any_ptr( string_list ... );
-	}
+	template< typename Type, typename ...Type_List >
+	static void * init_ptr( Type * &make_ptr_ref, Type_List ...make_ptr_ref_list ) {
+		if( init_ptr( make_ptr_ref ) )
+			return make_ptr_ref;
 
-	template< appCoreType::AppCoreBase Init_Unity >
-	static bool init_app_core_ptr( Init_Unity *init_ptr ) {
-		if( init_ptr->init( ) == false )
-			return false;
-		return true;
-	}
-
-	template< appCoreType::AppCoreBase Init_Unity, appCoreType::AppCoreBase ...Init_Array >
-	static bool init_app_core_ptr( Init_Unity *init_ptr, Init_Array * ...string_list ) {
-		if( init_ptr->init( ) == false )
-			return false;
-		return init_app_core_ptr( string_list ... );
-	}
-
-	template< appCoreType::AppCoreBase Make_Unity >
-	static bool make_app_core_ptr( Make_Unity *&make_ptr ) {
-		make_ptr = new Make_Unity;
-		return make_ptr != nullptr;
-	}
-
-	template< appCoreType::AppCoreBase Make_Unity, appCoreType::AppCoreBase ... Make_Array >
-	static bool make_app_core_ptr( Make_Unity *&init_ptr, Make_Array *& ...string_list ) {
-		if( make_app_core_ptr( init_ptr ) == false )
-			return false;
-		return make_app_core_ptr( string_list ... );
-	}
-
-	template< appCoreType::AppCoreBase Make_Unity >
-	static void del_app_core_ptr( Make_Unity *&make_ptr ) {
-		if( make_ptr )
-			delete make_ptr;
-		make_ptr = nullptr;
-	}
-
-	template< appCoreType::AppCoreBase Make_Unity, appCoreType::AppCoreBase ... Make_Array >
-	static void del_app_core_ptr( Make_Unity *&init_ptr, Make_Array *& ...string_list ) {
-		del_app_core_ptr( init_ptr );
-		del_app_core_ptr( string_list ... );
+		return init_ptr( make_ptr_ref_list ... );
 	}
 
 protected:

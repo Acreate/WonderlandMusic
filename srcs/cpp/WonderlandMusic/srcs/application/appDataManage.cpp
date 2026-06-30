@@ -22,11 +22,9 @@ bool AppDataManage::init( ) {
 	appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
 	setAppStringTranslate( constAppDefaultTranslatePath );
 
-	if( TemplateArgs::make_ptr( translate ) == nullptr )
+	if( make_ptr( translate, jsonFileKey ) == nullptr )
 		return false;
-	if( TemplateArgs::make_ptr( jsonFileKey ) == nullptr )
-		return false;
-	init_app_core_ptr( translate, jsonFileKey );
+	init_ptr( translate, jsonFileKey );
 	return true;
 }
 
@@ -35,9 +33,7 @@ AppDataManage::~AppDataManage( ) {
 }
 
 bool AppDataManage::deleteResource( ) {
-	if( TemplateArgs::delete_ptr( translate ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( jsonFileKey ) == false )
+	if( delete_ptr( translate, jsonFileKey ) )
 		return false;
 	return false;
 }

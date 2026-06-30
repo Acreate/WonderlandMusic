@@ -141,16 +141,7 @@ bool MainWindow::init( ) {
 }
 
 bool MainWindow::deleteResource( ) {
-	TemplateArgs::delete_ptr( showSettingWidgetBtn );
-	TemplateArgs::delete_ptr( showAboutWidgetBtn );
-	TemplateArgs::delete_ptr( showPlayListWidgetBtn );
-
-	TemplateArgs::delete_ptr( leftOptionWidget );
-	TemplateArgs::delete_ptr( leftOptionDockWidget );
-
-	TemplateArgs::delete_ptr( aboutWidget );
-	TemplateArgs::delete_ptr( playerWindow );
-	TemplateArgs::delete_ptr( settingWidget );
+	delete_ptr( showSettingWidgetBtn, showAboutWidgetBtn, showPlayListWidgetBtn, leftOptionWidget, leftOptionDockWidget, aboutWidget, playerWindow, settingWidget );
 	return true;
 }
 

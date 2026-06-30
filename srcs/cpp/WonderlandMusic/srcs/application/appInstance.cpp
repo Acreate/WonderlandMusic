@@ -19,12 +19,7 @@ AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplicatio
 }
 
 bool AppInstance::deleteResource( ) {
-	TemplateArgs::delete_ptr( appEventManage );
-	TemplateArgs::delete_ptr( appUserInterfaceManage );
-	TemplateArgs::delete_ptr( appDrawManage );
-	TemplateArgs::delete_ptr( musicManage );
-	TemplateArgs::delete_ptr( appDataManage );
-	TemplateArgs::delete_ptr( appDateTimerManage );
+	delete_ptr( appEventManage, appUserInterfaceManage, appDrawManage, musicManage, appDataManage, appDateTimerManage );
 	instance = nullptr;
 	return true;
 }
@@ -66,30 +61,9 @@ bool AppInstance::notify( QObject *object, QEvent *event ) {
 bool AppInstance::init( ) {
 	deleteResource( );
 	instance = this;
-	if( TemplateArgs::make_ptr( appDateTimerManage ) == nullptr )
+	if( make_ptr( appDateTimerManage, appDataManage, musicManage, appDrawManage, appUserInterfaceManage, appEventManage ) == nullptr )
 		return false;
-	if( TemplateArgs::make_ptr( appDataManage ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( musicManage ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( appDrawManage ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( appUserInterfaceManage ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( appEventManage ) == nullptr )
-		return false;
-		
-	if( appEventManage->init( ) == false )
-		return false;
-	if( appDateTimerManage->init( ) == false )
-		return false;
-	if( appDataManage->init( ) == false )
-		return false;
-	if( musicManage->init( ) == false )
-		return false;
-	if( appDrawManage->init( ) == false )
-		return false;
-	if( appUserInterfaceManage->init( ) == false )
+	if( make_ptr( appEventManage, appDateTimerManage, appDataManage, musicManage, appDrawManage, appUserInterfaceManage ) )
 		return false;
 
 	return true;

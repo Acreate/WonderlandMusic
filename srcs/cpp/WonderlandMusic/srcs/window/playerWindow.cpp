@@ -27,7 +27,7 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 }
 
 bool PlayerWindow::deleteResource( ) {
-	AppCore::del_any_ptr( topDocWidget, bottomDocWidget, playerWidgetMenu );
+	delete_ptr( topDocWidget, bottomDocWidget, playerWidgetMenu );
 	return true;
 }
 

@@ -1,25 +1,19 @@
 ﻿#include "appUserInterfaceManage.h"
-
-#include "../msgInfo/messageErrorOut.h"
-
 #include "../systemTrayIcon/systemTrayIcon.h"
-
-#include "../tools/templateArgs.h"
 
 #include "../window/mainWindow.h"
 
 bool AppUserInterfaceManage::deleteResource( ) {
-	TemplateArgs::delete_ptr( mainWindow );
-	TemplateArgs::delete_ptr( systemTrayIcon );
+	delete_ptr( mainWindow, systemTrayIcon );
 	return true;
 }
 
 bool AppUserInterfaceManage::init( ) {
 	deleteResource( );
 
-	if( make_app_core_ptr( mainWindow, systemTrayIcon ) == false )
+	if( make_ptr( mainWindow, systemTrayIcon ) == nullptr )
 		return false;
-	if( init_app_core_ptr( mainWindow, systemTrayIcon ) == false )
+	if( make_ptr( mainWindow, systemTrayIcon ) )
 		return false;
 
 	return true;

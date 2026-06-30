@@ -15,23 +15,7 @@
 #include "jsonKey/systemTrayIconJsonKey.h"
 
 bool JsonFileKey::deleteResource( ) {
-	if( TemplateArgs::delete_ptr( playerListToolWidget ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( aboutWidgetJsonFileKey ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerListTopWidget ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerWindow ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerList ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( mainWindow ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( musicInfoItem ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( playerListMenu ) == false )
-		return false;
-	if( TemplateArgs::delete_ptr( systemTrayIcon ) == false )
+	if( delete_ptr( playerListToolWidget, aboutWidgetJsonFileKey, playerListTopWidget, playerWindow, playerList, mainWindow, musicInfoItem, playerListMenu, systemTrayIcon ) )
 		return false;
 	return true;
 }
@@ -45,23 +29,7 @@ JsonFileKey::JsonFileKey( ) {
 
 bool JsonFileKey::init( ) {
 	deleteResource( );
-	if( TemplateArgs::make_ptr( playerListToolWidget ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( aboutWidgetJsonFileKey ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( playerListTopWidget ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( playerWindow ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( playerList ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( mainWindow ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( musicInfoItem ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( playerListMenu ) == nullptr )
-		return false;
-	if( TemplateArgs::make_ptr( systemTrayIcon ) == nullptr )
+	if( delete_ptr( playerListToolWidget, aboutWidgetJsonFileKey, playerListTopWidget, playerWindow, playerList, mainWindow, musicInfoItem, playerListMenu, systemTrayIcon ) == nullptr )
 		return false;
 
 	#define if_init_result(ptr) if( ptr == nullptr || ptr->init() == false) return false

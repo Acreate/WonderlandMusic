@@ -7,11 +7,7 @@
 #include "../tools/templateArgs.h"
 
 bool RenderImage::deleteResource( ) {
-	TemplateArgs::delete_ptr( brackGroundColor );
-	TemplateArgs::delete_ptr( drawPenColor );
-	TemplateArgs::delete_ptr( drawPen );
-	TemplateArgs::delete_ptr( font );
-	TemplateArgs::delete_ptr( fontMetrics );
+	delete_ptr( brackGroundColor, drawPenColor, drawPen, font, fontMetrics );
 	return true;
 }
 
@@ -22,15 +18,15 @@ RenderImage::~RenderImage( ) {
 }
 
 bool RenderImage::init( ) {
-	if( TemplateArgs::make_ptr( brackGroundColor, 0, 0, 0, 0 ) == nullptr )
+	if( TemplateArgs::make_args_ptr( brackGroundColor, 0, 0, 0, 0 ) == nullptr )
 		return false;
-	if( TemplateArgs::make_ptr( drawPenColor, 0, 0, 0, 255 ) == nullptr )
+	if( TemplateArgs::make_args_ptr( drawPenColor, 0, 0, 0, 255 ) == nullptr )
 		return false;
-	if( TemplateArgs::make_ptr( drawPen, *drawPenColor ) == nullptr )
+	if( TemplateArgs::make_args_ptr( drawPen, *drawPenColor ) == nullptr )
 		return false;
-	if( TemplateArgs::make_ptr( font, "Microsoft YaHei", 14 ) == nullptr )
+	if( TemplateArgs::make_args_ptr( font, "Microsoft YaHei", 14 ) == nullptr )
 		return false;
-	if( TemplateArgs::make_ptr( fontMetrics, *font ) == nullptr )
+	if( TemplateArgs::make_args_ptr( fontMetrics, *font ) == nullptr )
 		return false;
 	fontMetricsHeight = fontMetrics->height( );
 

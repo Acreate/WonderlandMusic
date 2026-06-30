@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "../application/appCore.h"
+#include "../application/appJsonData.h"
 class PlayerWindow;
 class QScrollArea;
 class QPushButton;
@@ -15,7 +16,7 @@ class AboutWidget;
 class AppTranslate;
 class AppInstance;
 
-class MainWindow : public QMainWindow, public AppCore {
+class MainWindow : public QMainWindow, public AppCore , public AppJsonData{
 	Q_OBJECT;
 
 protected:
@@ -86,9 +87,16 @@ public:
 
 	MainWindow( );
 
-	virtual bool loadSettingWidgetInfoAtFile( );
+protected:
+	bool readJsonData( ) override;
 
-	virtual void writeWidgetSettingToFile( );
+	bool writeJsonData( ) override;
+
+public:
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+
+	bool setJsonData( const QJsonObject &set_json_object ) override;
+
 
 	bool init( ) override;
 
@@ -99,6 +107,8 @@ protected:
 	bool event( QEvent *event ) override;
 
 	void showEvent( QShowEvent *event ) override;
+
+	void closeEvent( QCloseEvent *event ) override;
 };
 
 #endif // MAINWINDOW_H_H_HEAD__FILE__

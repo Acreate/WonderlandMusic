@@ -32,12 +32,76 @@ MainWindow::MainWindow( Qt::WindowFlags flags ) : MainWindow( nullptr, flags ) {
 MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) {
 }
 
-void MainWindow::writeWidgetSettingToFile( ) {
-	saveMainWindowSetting( );
-	// 写入播放列表
-	//playerWindow->writeJsonPathInfo( );
-	// 写入配置信息
-	//settingWidget->writeJsonPathInfo( );
+bool MainWindow::readJsonData( ) {
+	// 获取 json 路径
+	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
+	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
+	QJsonObject mainWindowSettingJsonObject;
+	if( PathTools::readJsonObject( mainWindowSettingJsonObject, mainWindowJsonFile ) == false )
+		return true;
+	return setJsonData( mainWindowSettingJsonObject );
+}
+
+bool MainWindow::writeJsonData( ) {
+	QJsonObject jsonObject;
+	if( getJsonData( jsonObject ) == false )
+		return false;
+	// 获取 json 路径
+	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
+	auto mainWindowJsonFile = mainWindowJsonFileKey->getSettingJsonPath( );
+	PathTools::writeJsonObject( jsonObject, mainWindowJsonFile );
+	return true;
+}
+
+bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
+	auto geo = geometry( );
+	int windowX = geo.x( );
+	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
+	get_json_object.insert( mainWindowJsonFileKey->getPointXPos( ), windowX );
+	int windowY = geo.y( );
+	get_json_object.insert( mainWindowJsonFileKey->getPointYPos( ), windowY );
+	int windowWidth = geo.width( );
+	get_json_object.insert( mainWindowJsonFileKey->getSizeWidth( ), windowWidth );
+	int windowHeight = geo.height( );
+	get_json_object.insert( mainWindowJsonFileKey->getSizeHeight( ), windowHeight );
+
+	return true;
+}
+
+bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
+	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
+	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
+	// 匹配 x
+	int x = this->x( );
+	// 匹配 y
+	int y = this->y( );
+	// 匹配 w
+	int width = this->width( );
+	// 匹配 h
+	int height = this->height( );
+	// 匹配终结符
+	auto end = set_json_object.end( );
+	// 查找返回
+	QJsonObject::const_iterator find;
+	// 查找 x 坐标
+	find = set_json_object.find( windowJsonFileKey->getPointXPos( ) );
+	if( find != end )
+		x = find.value( ).toInt( );
+	// 查找 y 坐标
+	find = set_json_object.find( windowJsonFileKey->getPointYPos( ) );
+	if( find != end )
+		y = find.value( ).toInt( );
+	// 查找 w 宽度
+	find = set_json_object.find( windowJsonFileKey->getSizeWidth( ) );
+	if( find != end )
+		width = find.value( ).toInt( );
+	// 查找 h 高度
+	find = set_json_object.find( windowJsonFileKey->getSizeHeight( ) );
+	if( find != end )
+		height = find.value( ).toInt( );
+	// 设置坐标与宽高
+	setGeometry( x, y, width, height );
+	return true;
 }
 
 bool MainWindow::subCompomentInit( ) {
@@ -55,10 +119,6 @@ MainWindow::~MainWindow( ) {
 }
 
 MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ), isLoadJsonFile( false ) {
-}
-
-bool MainWindow::loadSettingWidgetInfoAtFile( ) {
-	return true;
 }
 
 bool MainWindow::init( ) {
@@ -107,6 +167,11 @@ bool MainWindow::event( QEvent *event ) {
 
 void MainWindow::showEvent( QShowEvent *event ) {
 	QMainWindow::showEvent( event );
+}
+
+void MainWindow::closeEvent( QCloseEvent *event ) {
+	writeJsonData( );
+	QMainWindow::closeEvent( event );
 }
 
 bool MainWindow::initApp( ) {
@@ -171,42 +236,7 @@ bool MainWindow::initDockWidget( ) {
 }
 
 bool MainWindow::initMainWindowSetting( ) {
-	// 获取 json 路径
-	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
-	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
-	QJsonObject mainWindowSettingJsonObject;
-	if( PathTools::readJsonObject( mainWindowSettingJsonObject, mainWindowJsonFile ) == false )
-		return true;
-	// 匹配 x
-	int x = this->x( );
-	// 匹配 y
-	int y = this->y( );
-	// 匹配 w
-	int width = this->width( );
-	// 匹配 h
-	int height = this->height( );
-	// 匹配终结符
-	auto end = mainWindowSettingJsonObject.end( );
-	// 查找返回
-	QJsonObject::iterator find;
-	// 查找 x 坐标
-	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getPointXPos( ) );
-	if( find != end )
-		x = find.value( ).toInt( );
-	// 查找 y 坐标
-	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getPointYPos( ) );
-	if( find != end )
-		y = find.value( ).toInt( );
-	// 查找 w 宽度
-	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getSizeWidth( ) );
-	if( find != end )
-		width = find.value( ).toInt( );
-	// 查找 h 高度
-	find = mainWindowSettingJsonObject.find( windowJsonFileKey->getSizeHeight( ) );
-	if( find != end )
-		height = find.value( ).toInt( );
-	// 设置坐标与宽高
-	setGeometry( x, y, width, height );
+	readJsonData( );
 
 	return true;
 }

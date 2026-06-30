@@ -18,26 +18,16 @@
 #include "../widget/playerListTopWidget.h"
 #include "../widget/playerToolsWidget.h"
 
-void PlayerWindow::releaeseResource( ) {
-	#define d_r( ptr ) if(ptr) { delete ptr; ptr = nullptr ;}
-	d_r( topDocWidget );
-	d_r( bottomDocWidget );
-	d_r( playerWidgetMenu );
-}
-
 PlayerWindow::~PlayerWindow( ) {
-	releaeseResource( );
+	deleteResource( );
 }
 
 PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 	setWindowFlags( Qt::WindowType::Widget );
 }
 
-bool PlayerWindow::loadJsonPathInfo( ) {
-	return true;
-}
-
-bool PlayerWindow::writeJsonPathInfo( ) {
+bool PlayerWindow::deleteResource( ) {
+	AppCore::del_any_ptr( topDocWidget, bottomDocWidget, playerWidgetMenu );
 	return true;
 }
 
@@ -131,14 +121,12 @@ bool PlayerWindow::updateSubCompoment( ) {
 }
 
 bool PlayerWindow::init( ) {
-	releaeseResource( );
+	deleteResource( );
 	if( initWidget( ) == false )
 		return false;
 	if( initMenu( ) == false )
 		return false;
 	if( initConnect( ) == false )
-		return false;
-	if( loadJsonPathInfo( ) == false )
 		return false;
 	if( updateSubCompoment( ) == false )
 		return false;

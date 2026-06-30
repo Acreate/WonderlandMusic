@@ -10,7 +10,7 @@ class PlayerListTopWidget;
 class QScrollArea;
 class PlayerListWidget;
 
-class PlayerWindow : public QMainWindow {
+class PlayerWindow : public QMainWindow, public AppCore {
 	Q_OBJECT;
 
 protected:
@@ -33,7 +33,7 @@ protected:
 	PlayerWidgetMenu *playerWidgetMenu = nullptr;
 
 protected:
-	virtual void releaeseResource( );
+	bool deleteResource( ) override;
 
 	virtual bool initWidget( );
 
@@ -50,11 +50,7 @@ public:
 
 	PlayerWindow( QWidget *parent );
 
-	virtual bool loadJsonPathInfo( );
-
-	virtual bool writeJsonPathInfo( );
-
-	virtual bool init( );
+	bool init( ) override;
 
 protected:
 	void showEvent( QShowEvent *event ) override;

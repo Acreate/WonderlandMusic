@@ -76,7 +76,6 @@ bool AppEventManage::notify( QObject *object, QEvent *event ) {
 		auto type = event->type( );
 		switch( type ) {
 			case QEvent::Type::Close :
-				window->writeWidgetSettingToFile( );
 				if( QSystemTrayIcon::isSystemTrayAvailable( ) == false )
 					appInstance->quit( ); // 如果不支持托盘，隐藏则退出
 				break;

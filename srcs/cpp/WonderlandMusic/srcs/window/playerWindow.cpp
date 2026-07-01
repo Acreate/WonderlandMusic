@@ -318,6 +318,7 @@ bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {
 	auto &musicArrayObjName = playerWindowJsonKey->getMusicArrayObjName( );
 	QJsonObject musicArrayJsonObject;
 	size_t musicCount = musicInfoVector.size( );
+	// 音频序列个数
 	auto &arrayCount = playerWindowJsonKey->getMusicArrayCount( );
 	musicArrayJsonObject.insert( arrayCount, QString::number( musicCount ) );
 	MusicInfoItemWidget *const*musicData = musicInfoVector.data( );
@@ -332,15 +333,17 @@ bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {
 				continue;
 			itemJsonArray.insert( QString::number( musicIndex ), itemJson );
 		}
+		// 音频序列数据
 		auto &musicArrayData = playerWindowJsonKey->getMusicArrayData( );
 		musicArrayJsonObject.insert( musicArrayData, itemJsonArray );
 	}
 
 	get_json_object.insert( musicArrayObjName, musicArrayJsonObject );
-
+	// 收藏夹序列
 	auto &favoriteArrayObjName = playerWindowJsonKey->getFavoriteArrayObjName( );
 	QJsonObject favoriteArrayJsonObject;
 	auto favoriteCount = playerListStackedWidget->count( );
+	// 收藏夹序列个数
 	auto &favoriteArrayCount = playerWindowJsonKey->getFavoriteArrayCount( );
 	favoriteArrayJsonObject.insert( favoriteArrayCount, favoriteCount );
 	if( favoriteCount && musicCount ) {
@@ -350,6 +353,11 @@ bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {
 		size_t playerListIndex;
 		MusicInfoItemWidget **playerListData;
 		MusicInfoItemWidget *findItem;
+		QJsonObject favoriteData;
+		// 收藏夹名称
+		auto &favoriteName = playerWindowJsonKey->getFavoriteName( );
+		// 收藏夹歌曲号序列
+		auto &favoriteCodeArray = playerWindowJsonKey->getFavoriteCodeArray( );
 		for( ; index < favoriteCount; index += 1 ) {
 			auto widget = playerListStackedWidget->widget( index );
 			if( widget == nullptr )
@@ -361,6 +369,7 @@ bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {
 			// 匹配下标
 			playerListCount = musicInfoItemWidgets.size( );
 			playerListData = musicInfoItemWidgets.data( );
+			QJsonObject favorite;
 			QJsonArray playListMusicIndex;
 			for( playerListIndex = 0; playerListIndex < playerListCount; playerListIndex += 1 ) {
 				findItem = playerListData[ playerListIndex ];
@@ -371,8 +380,13 @@ bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {
 					continue; // 不匹配
 				playListMusicIndex.append( QString::number( musicIndex ) );
 			}
-			favoriteArrayJsonObject.insert( QString::number( index ), playListMusicIndex );
+			favorite.insert( favoriteName, widget->windowTitle( ) );
+			favorite.insert( favoriteCodeArray, playListMusicIndex );
+			favoriteData.insert( QString::number( index ), favorite );
 		}
+		// 收藏夹数据
+		auto &favoriteArrayData = playerWindowJsonKey->getFavoriteArrayData( );
+		favoriteArrayJsonObject.insert( favoriteArrayData, favoriteData );
 	}
 	get_json_object.insert( favoriteArrayObjName, favoriteArrayJsonObject );
 	musicInfoMutex->unlock( );
@@ -380,5 +394,160 @@ bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {
 }
 
 bool PlayerWindow::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	if( set_json_object.isEmpty( ) )
+		return false;
+
+	musicInfoMutex->lock( );
+	AppInstance *appInstance = AppInstance::getAppInstance( );
+	AppDataManage *appDataManage = appInstance->getAppDataManage( );
+	JsonFileKey *jsonFileKey = appDataManage->getJsonFileKey( );
+	auto playerWindowJsonKey = jsonFileKey->getPlayerWindow( );
+
+	// 文件择选路径
+	auto &fileSelect = playerWindowJsonKey->getFileSelect( );
+
+	// 目录选择路径
+	auto &dirSelect = playerWindowJsonKey->getDirSelect( );
+	// 音频序列
+	auto &musicArrayObjName = playerWindowJsonKey->getMusicArrayObjName( );
+
+	// 收藏夹序列
+	auto &favoriteArrayObjName = playerWindowJsonKey->getFavoriteArrayObjName( );
+	// 音频数据
+	QJsonObject musicJsonObject;
+	// 音频数据量
+	size_t musicInfoCount = 0;
+	// 收藏夹数据
+	QJsonObject favoriteArrayJsonObject;
+	// 收藏夹数量
+	int favoriteCount = 0;
+	// 遍历类型
+	using QJsonObjectIteratorType = QKeyValueIterator< QAnyStringView, QJsonValueRef, QJsonObject::iterator, QtPrivate::QJsonObjectKeyValues< QJsonValueRef, QJsonObject::iterator > >;
+	// 遍历结束
+	QJsonObjectIteratorType foreachEnd;
+	// 遍历起始
+	QJsonObjectIteratorType foreachIterator;
+	// 类型转换
+	bool isConver;
+	auto &arrayCount = playerWindowJsonKey->getMusicArrayCount( );
+	auto iterator = set_json_object.keyValueBegin( );
+	auto end = set_json_object.keyValueEnd( );
+	for( ; iterator != end; ++iterator ) {
+		auto key = iterator->first;
+		if( key == fileSelect ) {
+			fileSelectWorkPath = iterator->second.toString( fileSelectWorkPath );
+		} else if( key == dirSelect ) {
+			dirSelectWorkPath = iterator->second.toString( dirSelectWorkPath );
+		} else if( key == musicArrayObjName ) {
+			auto musicArrayJsonObject = iterator->second.toObject( );
+			if( musicArrayJsonObject.isEmpty( ) )
+				continue;
+			// 音频序列个数
+			foreachIterator = musicArrayJsonObject.keyValueBegin( );
+			foreachEnd = musicArrayJsonObject.keyValueEnd( );
+			for( ; foreachIterator != foreachEnd; ++foreachEnd )
+				if( foreachIterator->first == arrayCount )
+					break;
+			if( foreachIterator == foreachEnd )
+				continue; // 找不到
+
+			musicInfoCount = arrayCount.toULongLong( &isConver );
+			if( isConver == false )
+				continue; // 失败
+			musicArrayJsonObject = foreachIterator->second.toObject( );
+			if( musicArrayJsonObject.isEmpty( ) )
+				continue; // 失败
+
+			// 音频序列数据
+			auto &musicArrayData = playerWindowJsonKey->getMusicArrayData( );
+			foreachIterator = musicArrayJsonObject.keyValueBegin( );
+			foreachEnd = musicArrayJsonObject.keyValueEnd( );
+			for( ; foreachIterator != foreachEnd; ++foreachEnd )
+				if( foreachIterator->first == musicArrayData )
+					break;
+			if( foreachIterator == foreachEnd )
+				continue; // 找不到
+
+			musicJsonObject = foreachIterator->second.toObject( );
+		} else if( key == favoriteArrayObjName ) {
+			auto musicArrayJsonObject = iterator->second.toObject( );
+			if( musicArrayJsonObject.isEmpty( ) )
+				continue;
+
+			// 收藏夹序列个数
+			auto &favoriteArrayCount = playerWindowJsonKey->getFavoriteArrayCount( );
+
+			foreachIterator = musicArrayJsonObject.keyValueBegin( );
+			foreachEnd = musicArrayJsonObject.keyValueEnd( );
+			for( ; foreachIterator != foreachEnd; ++foreachIterator )
+				if( foreachIterator->first == favoriteArrayCount )
+					break;
+			if( foreachIterator == foreachEnd )
+				continue; // 找不到
+			favoriteCount = favoriteArrayCount.toULongLong( &isConver );
+			if( isConver == false )
+				continue; // 失败
+			musicArrayJsonObject = foreachIterator->second.toObject( );
+			if( musicArrayJsonObject.isEmpty( ) )
+				continue; // 失败
+			// 收藏夹数据
+			auto &favoriteArrayData = playerWindowJsonKey->getFavoriteArrayData( );
+			foreachIterator = musicArrayJsonObject.keyValueBegin( );
+			foreachEnd = musicArrayJsonObject.keyValueEnd( );
+			for( ; foreachIterator != foreachEnd; ++foreachIterator )
+				if( foreachIterator->first == favoriteArrayData )
+					break;
+			if( foreachIterator == foreachEnd )
+				continue; // 找不到
+
+			favoriteArrayJsonObject = foreachIterator->second.toObject( );
+		}
+	}
+	// 开始存储到序列
+	if( musicInfoCount && !musicJsonObject.isEmpty( ) && !favoriteArrayJsonObject.empty( ) ) {
+		size_t count = playerListStackedWidget->count( );
+		size_t index;
+		for( index = 0; index < count; index += 1 ) {
+			auto widget = playerListStackedWidget->widget( 0 );
+			playerListStackedWidget->widgetRemoved( 0 );
+			widget->deleteLater( );
+		}
+		MusicInfoItemWidget **infoItemWidget;
+
+		std::vector< MusicInfoItemWidget * > buff( musicInfoCount, nullptr );
+		infoItemWidget = buff.data( );
+
+		foreachIterator = musicJsonObject.keyValueBegin( );
+		foreachEnd = musicJsonObject.keyValueEnd( );
+		count = 0;
+		for( ; foreachIterator != foreachEnd; ++foreachIterator ) {
+			auto setIndex = foreachIterator->first.toString( ).toULongLong( &isConver );
+			if( isConver == false )
+				break;
+			if( setIndex >= musicInfoCount )
+				break; // 越界
+			auto jsonValueRef = foreachIterator->second.toObject( );
+			auto newItem = new MusicInfoItemWidget( this );
+			infoItemWidget[ setIndex ] = newItem;
+			newItem->hide( ); // 不要显示，应该使用后台渲染
+			if( newItem->forJsonObject( *newItem, jsonValueRef ) == false )
+				break;
+			count += 1;
+		}
+		if( count != musicInfoCount )/* 数据不匹配 */ {
+			for( index = 0; index < musicInfoCount; index += 1 )
+				if( infoItemWidget[ index ] )
+					delete infoItemWidget[ index ];
+			return false;
+		}
+		count = musicInfoVector.size( );
+		if( count )/* 删除旧有数据 */ {
+			infoItemWidget = musicInfoVector.data( );
+			for( index = 0; index < count; index += 1 )
+				delete infoItemWidget[ index ];
+		}
+		musicInfoVector = buff;
+	}
+	musicInfoMutex->unlock( );
+	return true;
 }

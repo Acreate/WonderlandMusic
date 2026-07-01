@@ -6,7 +6,7 @@
 
 class MusicInfoItemWidget : public QWidget, public MusicInfoItem {
 	Q_OBJECT;
-	friend class PlayerListWidget;
+	friend class PlayerWindow;
 
 protected:
 	int widgetBeforeWidth;
@@ -17,7 +17,7 @@ protected:
 	int musicSingerWidth;
 	int musicDurationWidth;
 public:
-	MusicInfoItemWidget( PlayerListWidget *parent );
+	MusicInfoItemWidget( PlayerWindow *parent );
 
 protected:
 	void paintEvent( QPaintEvent *event ) override;

@@ -14,6 +14,8 @@ bool PlayerWindowJsonKey::init( ) {
 	favoriteArrayObjName = "favorite.array";
 	favoriteArrayCount = "favorite.count";
 	favoriteArrayData = "favorite.data";
+	favoriteName = "favorite.name";
+	favoriteCodeArray = "favorite.code.array";
 
 	musicArrayObjName = "music.array";
 	musicArrayCount = "music.count";
@@ -55,4 +57,12 @@ const QString & PlayerWindowJsonKey::getMusicArrayCount( ) const {
 
 const QString & PlayerWindowJsonKey::getMusicArrayData( ) const {
 	return musicArrayData;
+}
+
+const QString & PlayerWindowJsonKey::getFavoriteName( ) const {
+	return favoriteName;
+}
+
+const QString & PlayerWindowJsonKey::getFavoriteCodeArray( ) const {
+	return favoriteCodeArray;
 }

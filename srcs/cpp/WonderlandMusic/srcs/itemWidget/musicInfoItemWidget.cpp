@@ -8,7 +8,9 @@
 
 #include "../widget/playerListWidget.h"
 
-MusicInfoItemWidget::MusicInfoItemWidget( PlayerListWidget *parent ) :
+#include "../window/playerWindow.h"
+
+MusicInfoItemWidget::MusicInfoItemWidget( PlayerWindow *parent ) :
 	QWidget( parent ), MusicInfoItem( parent ) {
 	index = 0;
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
@@ -17,7 +19,7 @@ MusicInfoItemWidget::MusicInfoItemWidget( PlayerListWidget *parent ) :
 }
 
 void MusicInfoItemWidget::paintEvent( QPaintEvent *event ) {
-	auto font = AppInstance::getAppInstance( )->getAppDrawManage(  )->getRenderImage( )->getFont( );
+	auto font = AppInstance::getAppInstance( )->getAppDrawManage( )->getRenderImage( )->getFont( );
 
 	int offsetSplitX = splitWidth / 2;
 	QPainter painter;

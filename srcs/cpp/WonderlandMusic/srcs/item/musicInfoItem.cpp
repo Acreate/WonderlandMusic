@@ -15,12 +15,10 @@
 
 #include "../tools/pathTools.h"
 
-#include "../widget/playerListWidget.h"
-
 MusicInfoItem::MusicInfoItem( ) : MusicInfoItem( nullptr ) {
 }
 
-MusicInfoItem::MusicInfoItem( PlayerListWidget *parent ) : parentPlayListWidget( parent ) {
+MusicInfoItem::MusicInfoItem( PlayerWindow *parent ) : playerWindowParent( parent ) {
 }
 
 bool MusicInfoItem::init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms ) {

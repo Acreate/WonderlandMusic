@@ -2,6 +2,7 @@
 #define MUSICINFOITEM_H_H_HEAD__FILE__
 #include <QString>
 
+class PlayerWindow;
 class QImage;
 class QJsonObject;
 class PlayerListWidget;
@@ -11,7 +12,7 @@ class MusicInfoItem {
 	friend class PlayerListWidget;
 
 protected:
-	PlayerListWidget *parentPlayListWidget;
+	PlayerWindow *playerWindowParent;
 	bool equFilePath;
 	QString absFilePath;
 	QString musicFilePath;
@@ -25,7 +26,7 @@ protected:
 protected:
 	MusicInfoItem( );
 
-	MusicInfoItem( PlayerListWidget *parent );
+	MusicInfoItem( PlayerWindow *parent );
 
 	virtual ~MusicInfoItem( ) = default;
 

@@ -10,6 +10,7 @@ class PlayerWindowJsonKey : public IJsonKey {
 	QString favoriteArrayObjName;
 	QString favoriteArrayCount;
 	QString favoriteArrayData;
+	
 	QString musicArrayObjName;
 	QString musicArrayCount;
 	QString musicArrayData;

@@ -1,6 +1,5 @@
 ﻿#include "musicInfoItem.h"
 
-#include <QFileInfo>
 #include <QJsonObject>
 #include <QMediaMetaData>
 

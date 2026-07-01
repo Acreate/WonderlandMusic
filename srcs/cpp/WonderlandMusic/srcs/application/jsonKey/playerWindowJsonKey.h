@@ -10,7 +10,8 @@ class PlayerWindowJsonKey : public IJsonKey {
 	QString favoriteArrayObjName;
 	QString favoriteArrayCount;
 	QString favoriteArrayData;
-	
+	QString favoriteName;
+	QString favoriteCodeArray;
 	QString musicArrayObjName;
 	QString musicArrayCount;
 	QString musicArrayData;
@@ -35,5 +36,9 @@ public:
 	virtual const QString & getMusicArrayCount( ) const;
 
 	virtual const QString & getMusicArrayData( ) const;
+
+	virtual const QString & getFavoriteName( ) const;
+
+	virtual const QString & getFavoriteCodeArray( ) const;
 };
 #endif // PLAYERWINDOWJSONKEY_H_H_HEAD__FILE__

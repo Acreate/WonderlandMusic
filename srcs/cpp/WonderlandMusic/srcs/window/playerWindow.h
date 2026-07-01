@@ -46,6 +46,8 @@ protected:
 	UserMutex *musicInfoMutex = nullptr;
 	/// @brief 音乐加载列表
 	std::vector< MusicInfoItemWidget * > musicInfoVector;
+	/// @brief 音乐显示列表
+	std::vector< PlayerListWidget * > playerListWidgetVector;
 
 protected:
 	bool deleteResource( ) override;

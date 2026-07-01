@@ -10,6 +10,7 @@ class QMediaMetaData;
 
 class MusicInfoItem {
 	friend class PlayerListWidget;
+	friend class PlayerWindow;
 
 protected:
 	PlayerWindow *playerWindowParent;

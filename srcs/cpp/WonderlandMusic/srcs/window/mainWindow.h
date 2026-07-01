@@ -16,7 +16,7 @@ class AboutWidget;
 class AppTranslate;
 class AppInstance;
 
-class MainWindow : public QMainWindow, public AppCore , public AppJsonData{
+class MainWindow : public QMainWindow, public AppCore, public AppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -97,18 +97,12 @@ public:
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
-
 	bool init( ) override;
 
 protected:
 	bool deleteResource( ) override;
 
-	//void closeEvent( QCloseEvent *event ) override;
 	bool event( QEvent *event ) override;
-
-	void showEvent( QShowEvent *event ) override;
-
-	void closeEvent( QCloseEvent *event ) override;
 };
 
 #endif // MAINWINDOW_H_H_HEAD__FILE__

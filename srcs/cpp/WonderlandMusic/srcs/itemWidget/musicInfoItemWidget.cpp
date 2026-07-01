@@ -10,8 +10,12 @@
 
 #include "../window/playerWindow.h"
 
+MusicInfoItemWidget::MusicInfoItemWidget( ) : MusicInfoItemWidget( nullptr ) {
+}
+
 MusicInfoItemWidget::MusicInfoItemWidget( PlayerWindow *parent ) :
 	QWidget( parent ), MusicInfoItem( parent ) {
+	hide( );
 	index = 0;
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	// 开启鼠标穿透

@@ -98,122 +98,13 @@ std::vector< MusicInfoItemWidget * > & PlayerListWidget::getSelectItemWidgetVect
 	return result_vector;
 }
 
-bool PlayerListWidget::appendItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, const qint64 &duration ) {
+void PlayerListWidget::setWidgetMusicInfoVector( std::vector< MusicInfoItemWidget * > &new_vector ) const {
 	musicInfoMutex->lock( );
-	QFileInfo fileInfo( music_file_path );
-	bool resultBool = true;
-	auto absFilePath = fileInfo.absoluteFilePath( );
-
-	size_t count = loadMusicFileHistory.size( );
-	if( count ) {
-		size_t index = 0;
-		auto data = loadMusicFileHistory.data( );
-		for( ; index < count; index += 1 )
-			if( data[ index ] == absFilePath ) {
-				musicInfoMutex->unlock( );
-				return false; // 已经在任务列表
-			}
-	}
-	// 在等待完成列表没找到，则在完成列表匹配
-	if( resultBool ) {
-		count = musicInfoVector->size( );
-		auto data = musicInfoVector->data( );
-		size_t index = 0;
-		for( ; index < count; index += 1 )
-			if( data[ index ]->isFile( absFilePath ) ) {
-				musicInfoMutex->unlock( );
-				return false;
-			}
-	}
-
-	auto musicInfoItemWidget = new MusicInfoItemWidget( this );
-	if( musicInfoItemWidget->init( music_file_path, music_name, music_singer, duration ) == false ) {
-		delete musicInfoItemWidget;
-		musicInfoMutex->unlock( );
-		return false;
-	}
-	musicInfoItemWidget->parentPlayListWidget = this;
-	musicInfoVector->emplace_back( musicInfoItemWidget );
+	*musicInfoVector = new_vector;
 	musicInfoMutex->unlock( );
-	return true;
 }
 
-bool PlayerListWidget::fromFileLoadItemInfo( const QString &music_file_path ) {
-	QFileInfo fileInfo( music_file_path );
-	bool resultBool = fileInfo.exists( );
-	if( resultBool == false )
-		return false; // 不存在
-	auto absFilePath = fileInfo.absoluteFilePath( );
-	musicInfoMutex->lock( );
-	size_t count = loadMusicFileHistory.size( );
-	if( count ) {
-		size_t index = 0;
-		auto data = loadMusicFileHistory.data( );
-		for( ; index < count; index += 1 )
-			if( data[ index ] == absFilePath ) {
-				resultBool = false;
-				break; // 存在
-			}
-	}
-	// 在等待完成列表没找到，则在完成列表匹配
-	if( resultBool ) {
-		count = musicInfoVector->size( );
-		if( count ) {
-			auto data = musicInfoVector->data( );
-			size_t index = 0;
-			for( ; index < count; index += 1 )
-				if( data[ index ]->isFile( absFilePath ) ) {
-					resultBool = false;
-					break; // 存在
-				}
-		}
-	}
-	// 都找不到，则加入等待列表
-	if( resultBool )
-		loadMusicFileHistory.append( absFilePath );
-	else {
-		musicInfoMutex->unlock( );
-		return false;
-	}
-	// 开始工作
-	QMediaPlayer *mediaPlayer = new QMediaPlayer;
-	mediaPlayer->setSource( QUrl::fromLocalFile( absFilePath ) );
-	connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, [mediaPlayer, this, absFilePath] ( QMediaPlayer::MediaStatus status ) {
-		musicInfoMutex->lock( );
-
-		if( status != QMediaPlayer::LoadedMedia ) {
-			musicInfoMutex->unlock( );
-			return; // 没加载完成，则跳过 
-		}
-
-		size_t count = loadMusicFileHistory.size( );
-		if( count ) {
-			size_t index = 0;
-			auto data = loadMusicFileHistory.data( );
-			for( ; index < count; index += 1 )
-				if( data[ index ] == absFilePath ) {
-					loadMusicFileHistory.erase( loadMusicFileHistory.begin( ) + index );
-					break; // 存在
-				}
-			count = loadMusicFileHistory.size( );
-		}
-		MusicInfoItemWidget *itemWidget = new MusicInfoItemWidget( this );
-		QMediaMetaData mediaMetaData = mediaPlayer->metaData( );
-		if( itemWidget->init( absFilePath, mediaMetaData ) == true ) {
-			itemWidget->parentPlayListWidget = this;
-			musicInfoVector->emplace_back( itemWidget );
-		} else
-			delete itemWidget;
-		mediaPlayer->deleteLater( );
-		musicInfoMutex->unlock( );
-		if( count == 0 )
-			updateItemWidget( );
-	} );
-	musicInfoMutex->unlock( );
-	return true;
-}
-
-std::vector< MusicInfoItemWidget * > & PlayerListWidget::getMusicInfoVector( std::vector< MusicInfoItemWidget * > &result_vector ) const {
+std::vector< MusicInfoItemWidget * > & PlayerListWidget::getWidgetMusicInfoVector( std::vector< MusicInfoItemWidget * > &result_vector ) const {
 	musicInfoMutex->lock( );
 	result_vector = *musicInfoVector;
 	musicInfoMutex->unlock( );
@@ -274,6 +165,12 @@ bool PlayerListWidget::init( ) {
 	updateItemWidget( );
 
 	return true;
+}
+
+void PlayerListWidget::clear( ) {
+	musicInfoMutex->lock( );
+	musicInfoVector->clear( );
+	musicInfoMutex->unlock( );
 }
 
 void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier ) {
@@ -590,102 +487,4 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		}
 		break;
 	}
-}
-
-bool PlayerListWidget::removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target ) {
-	std::vector< MusicInfoItemWidget * > unionSetVector;
-
-	VectorTools::unionSetVector( unionSetVector, *musicInfoVector, remove_source_target );
-	size_t count = unionSetVector.size( );
-	if( count == 0 )
-		return false;
-	VectorTools::differenceSetVector( result_move_target, *musicInfoVector, unionSetVector );
-	*musicInfoVector = result_move_target;
-	result_move_target = unionSetVector;
-	return true;
-}
-
-bool PlayerListWidget::deleteDiskMusicFileList( ) {
-	std::vector< MusicInfoItemWidget * > deleteSetVector;
-	musicInfoMutex->lock( );
-
-	if( removeMusicInfoVector( *selectItemWidgetVector, deleteSetVector ) == false ) {
-		musicInfoMutex->unlock( );
-		return false;
-	}
-	selectItemWidgetVector->clear( );
-	selectLeftItemWidget = nullptr;
-	activeLeftItemWidget = nullptr;
-	musicInfoMutex->unlock( );
-
-	updateItemWidget( );
-	update( );
-	auto deleteFileData = deleteSetVector.data( );
-	size_t deleteFileCount = deleteSetVector.size( );
-	size_t deleteFileIndex;
-	QFile file;
-	PlayerListWidgetTranslate *playerListWidget = AppInstance::getAppInstance( )->getAppDataManage( )->getTranslate( )->getPlayerListWidget( );
-
-	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 ) {
-		QString musicFilePath = deleteFileData[ deleteFileIndex ]->musicFilePath;
-		file.setFileName( musicFilePath );
-		bool moveToTrash = file.moveToTrash( );
-		delete deleteFileData[ deleteFileIndex ];
-		if( moveToTrash )
-			continue;
-		Message_Error_Out << playerListWidget->getRemoveDiskFileError( ) + " : " + musicFilePath;
-	}
-	return true;
-}
-
-bool PlayerListWidget::removeListMusicFileList( ) {
-	std::vector< MusicInfoItemWidget * > deleteSetVector;
-	musicInfoMutex->lock( );
-	if( removeMusicInfoVector( *selectItemWidgetVector, deleteSetVector ) == false ) {
-		musicInfoMutex->unlock( );
-		return false;
-	}
-	selectItemWidgetVector->clear( );
-	selectLeftItemWidget = nullptr;
-	activeLeftItemWidget = nullptr;
-	musicInfoMutex->unlock( );
-	updateItemWidget( );
-	update( );
-	auto deleteFileData = deleteSetVector.data( );
-	size_t deleteFileCount = deleteSetVector.size( );
-	size_t deleteFileIndex;
-	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 ) {
-		delete deleteFileData[ deleteFileIndex ];
-	}
-	return true;
-}
-
-bool PlayerListWidget::loadDiskMusicFileList( const std::vector< QString > &load_vector ) {
-	QStringList superMusicList;
-	if( PathTools::filterMusicFile( superMusicList, load_vector ) == 0 )
-		return false;
-	qsizetype count = superMusicList.size( );
-	qsizetype index;
-	auto selectFileData = superMusicList.data( );
-	for( index = 0; index < count; index += 1 )
-		fromFileLoadItemInfo( selectFileData[ index ] );
-	return true;
-}
-
-bool PlayerListWidget::loadDiskMusicDirList( const std::vector< QString > &load_vector ) {
-	QStringList result;
-
-	bool entryList = PathTools::entryFilePath( result, load_vector );
-	if( entryList == false )
-		return false;
-
-	QStringList superMusicList;
-	if( PathTools::filterMusicFile( superMusicList, result ) == 0 )
-		return false;
-	qsizetype count = superMusicList.size( );
-	qsizetype index;
-	auto selectFileData = superMusicList.data( );
-	for( index = 0; index < count; index += 1 )
-		fromFileLoadItemInfo( selectFileData[ index ] );
-	return true;
 }

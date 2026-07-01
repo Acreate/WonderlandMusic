@@ -62,8 +62,6 @@ protected:
 
 	bool deleteResource( ) override;
 
-	virtual bool removeMusicInfoVector( const std::vector< MusicInfoItemWidget * > &remove_source_target, std::vector< MusicInfoItemWidget * > &result_move_target );
-
 	virtual void removeRepetition( );
 
 public:
@@ -91,7 +89,9 @@ public:
 
 	virtual std::vector< MusicInfoItemWidget * > & getSelectItemWidgetVector( std::vector< MusicInfoItemWidget * > &result_vector ) const;
 
-	virtual std::vector< MusicInfoItemWidget * > & getMusicInfoVector( std::vector< MusicInfoItemWidget * > &result_vector ) const;
+	virtual void setWidgetMusicInfoVector( std::vector< MusicInfoItemWidget * > &new_vector ) const;
+
+	virtual std::vector< MusicInfoItemWidget * > & getWidgetMusicInfoVector( std::vector< MusicInfoItemWidget * > &result_vector ) const;
 
 	virtual std::vector< QString > & getListMusicFile( std::vector< QString > &result_vector ) const;
 
@@ -103,17 +103,9 @@ public:
 
 	virtual void clearMusicInfoVector( );
 
-	virtual bool appendItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, const qint64 &duration );
-
-	virtual bool fromFileLoadItemInfo( const QString &music_file_path );
-
 	bool init( ) override;
 
-	/// @brief 从磁盘路径加载文件
-	virtual bool loadDiskMusicFileList( const std::vector< QString > &load_vector );
-
-	/// @brief 从磁盘目录加载文件
-	virtual bool loadDiskMusicDirList( const std::vector< QString > &load_vector );
+	virtual void clear( );
 
 	// 重载
 protected:
@@ -124,13 +116,6 @@ protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 
 	void mouseReleaseEvent( QMouseEvent *event ) override;
-
-protected:
-	/// @brief 从磁盘删除文件
-	virtual bool deleteDiskMusicFileList( );
-
-	/// @brief 从列表删除文件
-	virtual bool removeListMusicFileList( );
 
 Q_SIGNALS:
 	void itemSelect( );

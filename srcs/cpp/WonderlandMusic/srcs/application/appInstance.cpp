@@ -57,18 +57,6 @@ AppInstance::~AppInstance( ) {
 }
 
 bool AppInstance::notify( QObject *object, QEvent *event ) {
-	auto mainWindow = appUserInterfaceManage->getMainWindow( );
-	if( object == mainWindow ) {
-		auto type = event->type( );
-		switch( type ) {
-			case QEvent::Close :
-				event->ignore( );
-				mainWindow->hide( );
-				if( QSystemTrayIcon::isSystemTrayAvailable( ) == false )
-					quit( );
-				return true;
-		}
-	}
 	return QApplication::notify( object, event );
 }
 

@@ -4,6 +4,7 @@
 #include <QDockWidget>
 #include <QPushButton>
 #include <QJsonObject>
+#include <QSystemTrayIcon>
 #include <qboxlayout.h>
 
 #include "playerWindow.h"
@@ -156,20 +157,15 @@ bool MainWindow::event( QEvent *event ) {
 	auto type = event->type( );
 	switch( type ) {
 		case QEvent::Close :
-			hide( );
-			event->ignore( );
-			return true;
+			writeJsonData( );
+			//if( QSystemTrayIcon::isSystemTrayAvailable( ) ) {
+			//	hide( );
+			//	event->ignore( );
+			//	return true;
+			//}
+			appInstance->quit( );
 	}
 	return QMainWindow::event( event );
-}
-
-void MainWindow::showEvent( QShowEvent *event ) {
-	QMainWindow::showEvent( event );
-}
-
-void MainWindow::closeEvent( QCloseEvent *event ) {
-	writeJsonData( );
-	QMainWindow::closeEvent( event );
 }
 
 bool MainWindow::initApp( ) {

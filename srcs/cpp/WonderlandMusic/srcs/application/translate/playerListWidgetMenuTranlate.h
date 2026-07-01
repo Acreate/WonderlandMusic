@@ -1,8 +1,9 @@
-﻿#ifndef PLAYERLISTMENUTRANSLATE_H_H_HEAD__FILE__
-#define PLAYERLISTMENUTRANSLATE_H_H_HEAD__FILE__
+﻿#ifndef PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
+#define PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
+
 #include "iTranslate.h"
 
-class PlayerListMenuTranslate : public ITranslate {
+class PlayerListWidgetMenuTranlate : public ITranslate {
 	QString playerListMenuFileLoadMenu;
 	QString playerListAddMultiMusicFileToCollectionAction;
 	QString playerListAddMultiMusicDirToCollectionAction;
@@ -48,4 +49,4 @@ public:
 	virtual const QString & getPlayerListMenuControlMenuMoveBottomMusicAction( ) const;
 };
 
-#endif // PLAYERLISTMENUTRANSLATE_H_H_HEAD__FILE__
+#endif // PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__

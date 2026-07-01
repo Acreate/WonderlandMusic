@@ -50,8 +50,6 @@ public:
 
 	static bool forJsonObject( MusicInfoItem &result_music_info, const QJsonObject &for_json_object );
 
-	virtual bool renderImage( QImage &result_render_image ) const;
-
 	virtual size_t getIndex( ) const;
 
 	virtual void setIndex( const size_t index );

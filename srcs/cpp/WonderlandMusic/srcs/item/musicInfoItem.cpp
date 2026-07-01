@@ -45,7 +45,7 @@ bool MusicInfoItem::init( const QString &file_path, const QMediaMetaData &mediaM
 	if( musicSinger.isEmpty( ) )
 		musicSinger = mediaMetaData.stringValue( QMediaMetaData::Author );
 	if( musicSinger.isEmpty( ) ) {
-		auto beingNameNone = AppInstance::getAppInstance( )->getAppDataManage(  )->getTranslate( )->getMusicInfoItem( )->getMusichumanBeingNameNone( );
+		auto beingNameNone = AppInstance::getAppInstance( )->getAppDataManage( )->getTranslate( )->getMusicInfoItem( )->getMusichumanBeingNameNone( );
 		musicSinger = beingNameNone; // 使用匿名
 	}
 	duration = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
@@ -88,12 +88,6 @@ const QString & MusicInfoItem::getFormatStringDuration( ) const {
 	return formatStringDuration;
 }
 
-bool MusicInfoItem::renderImage( QImage &result_render_image ) const {
-	if( parentPlayListWidget == nullptr )
-		return false;
-	return parentPlayListWidget->renderMusicInfoItem( result_render_image, this );
-}
-
 size_t MusicInfoItem::getIndex( ) const {
 	return index;
 }
@@ -109,7 +103,7 @@ const QString & MusicInfoItem::getFormatStringIndex( ) const {
 
 bool MusicInfoItem::toJsonObect( QJsonObject &result_json_object, const MusicInfoItem &music_info ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage(  )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
 	auto musicInfoItemJsonKey = jsonFileKey->getMusicInfoItem( );
 	result_json_object.insert( musicInfoItemJsonKey->getMusicInfoFile( ), music_info.musicFilePath );
 	result_json_object.insert( musicInfoItemJsonKey->getMusicInfoName( ), music_info.musicName );
@@ -120,7 +114,7 @@ bool MusicInfoItem::toJsonObect( QJsonObject &result_json_object, const MusicInf
 
 bool MusicInfoItem::forJsonObject( MusicInfoItem &result_music_info, const QJsonObject &for_json_object ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage(  )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
 
 	auto musicInfoItemJsonKey = jsonFileKey->getMusicInfoItem( );
 	auto end = for_json_object.end( );

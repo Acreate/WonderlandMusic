@@ -1,14 +1,11 @@
 ﻿#include "playerListWidget.h"
 
-#include <QFileDialog>
 #include <QPaintEvent>
-#include <QJsonObject>
 #include <QMediaPlayer>
 #include <QMediaMetaData>
 #include <QUrl>
 #include <QPainter>
 #include <mutex>
-#include <qdialog.h>
 
 #include "playerListTopWidget.h"
 
@@ -16,47 +13,32 @@
 #include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
-#include "../application/jsonFileKey.h"
 #include "../application/musicDecoder.h"
-#include "../application/musicManage.h"
 #include "../application/renderImage.h"
-#include "../application/jsonKey/playerListJsonKey.h"
 #include "../application/translate/playerListWidgetTranslate.h"
 
 #include "../item/musicInfoItem.h"
 
 #include "../itemWidget/musicInfoItemWidget.h"
 
-#include "../menu/playerWidgetMenu.h"
-
 #include "../msgInfo/messageErrorOut.h"
-
-#include "../musicPlayer/musicPlayer.h"
 
 #include "../mutex/userMutex.h"
 
 #include "../tools/arrayTools.h"
 #include "../tools/pathTools.h"
 #include "../tools/vectorTools.h"
-#include "../tools/widgetTools.h"
 
 #include "../window/playerWindow.h"
 
 void PlayerListWidget::clearMusicInfoVector( ) {
 	musicInfoMutex->lock( );
-	auto count = musicInfoVector->size( );
-	if( count ) {
-		auto data = musicInfoVector->data( );
-		decltype(count) index = 0;
-		for( ; index < count; index += 1 )
-			delete data[ index ];
-		musicInfoVector->clear( );
-	}
+	musicInfoVector->clear( );
 	musicInfoMutex->unlock( );
 }
 
 PlayerListWidget::~PlayerListWidget( ) {
-	releaseResource( );
+	deleteResource( );
 }
 
 PlayerListWidget::PlayerListWidget( PlayerWindow *parent ) : QWidget( parent ), parentContent( parent ) {
@@ -114,139 +96,6 @@ std::vector< MusicInfoItemWidget * > & PlayerListWidget::getSelectItemWidgetVect
 	result_vector = *selectItemWidgetVector;
 	musicInfoMutex->unlock( );
 	return result_vector;
-}
-
-bool PlayerListWidget::loadJsonPathInfo( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
-	auto playerListJsonKey = jsonFileKey->getPlayerList( );
-	auto fileJsonPath = playerListJsonKey->getMusicPlayerListInfoFileJsonPath( );
-	QJsonObject fileJsonObject;
-	if( PathTools::readJsonObject( fileJsonObject, fileJsonPath ) == false )
-		return true;
-	auto end = fileJsonObject.end( );
-	QJsonObject::iterator find;
-
-	find = fileJsonObject.find( playerListJsonKey->getFileSelectWorkPath( ) );
-	if( find != end )
-		fileSelectWorkPath = find.value( ).toString( fileSelectWorkPath );
-	find = fileJsonObject.find( playerListJsonKey->getDirSelectWorkPath( ) );
-	if( find != end )
-		dirSelectWorkPath = find.value( ).toString( dirSelectWorkPath );
-
-	find = fileJsonObject.find( playerListJsonKey->getMusicInfoListCount( ) );
-	if( end == find )
-		return true;
-	auto valueRef = find.value( );
-	QString error = "none";
-	auto string = valueRef.toString( error );
-
-	qulonglong count;
-	if( error == string )
-		count = valueRef.toInteger( 0 );
-	else {
-		bool conver;
-		count = string.toULongLong( &conver );
-		if( conver == false )
-			return true;
-	}
-	if( count == 0 )
-		return true;
-	find = fileJsonObject.find( playerListJsonKey->getMusicInfoListName( ) );
-	if( end == find )
-		return true;
-
-	QJsonObject subJsonObject;
-	subJsonObject = find.value( ).toObject( );
-	auto foreachIterator = subJsonObject.begin( );
-	auto foreachEnd = subJsonObject.end( );
-
-	std::vector< MusicInfoItemWidget * > buff( count, nullptr );
-	auto maxIndex = count - 1;
-	auto data = buff.data( );
-	size_t validCount = 0; // 有效个数
-	for( ; foreachIterator != foreachEnd; ++foreachIterator ) {
-		auto indexJsonKey = foreachIterator.key( );
-		bool isConverOk;
-		auto converResultIndex = indexJsonKey.toULongLong( &isConverOk );
-		if( isConverOk == false )
-			continue;
-		if( converResultIndex > maxIndex )
-			continue;
-		auto musicInfoJsonObject = foreachIterator.value( ).toObject( );
-		auto ctreaItem = new MusicInfoItemWidget( this );
-		if( MusicInfoItem::forJsonObject( *ctreaItem, musicInfoJsonObject ) == false ) {
-			delete ctreaItem;
-			continue;
-		}
-		ctreaItem->parentPlayListWidget = this;
-		data[ converResultIndex ] = ctreaItem;
-		validCount += 1;
-	}
-	musicInfoMutex->lock( );
-
-	// 以前大小
-	auto oldCount = musicInfoVector->size( );
-
-	std::vector< MusicInfoItemWidget * > releaseVector( oldCount, nullptr );
-	auto buffToData = releaseVector.data( );
-	auto copyToData = musicInfoVector->data( );
-	for( maxIndex = 0; maxIndex < oldCount; maxIndex += 1 )
-		buffToData[ maxIndex ] = copyToData[ maxIndex ];
-	// 拷贝新的目标
-	musicInfoVector->resize( validCount );
-	// 充当下标
-	validCount = 0;
-	copyToData = musicInfoVector->data( );
-	for( maxIndex = 0; maxIndex < count; maxIndex += 1 )
-		if( data[ maxIndex ] ) {
-			copyToData[ validCount ] = data[ maxIndex ];
-			validCount += 1;
-		}
-	selectItemWidgetVector->clear( );
-	activeLeftItemWidget = nullptr;
-	selectLeftItemWidget = nullptr;
-	// 释放以前的目标
-	for( maxIndex = 0; maxIndex < oldCount; maxIndex += 1 )
-		delete buffToData[ maxIndex ];
-	musicInfoMutex->unlock( );
-	return true;
-}
-
-bool PlayerListWidget::writeJsonPathInfo( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
-
-	QJsonObject fileJsonObject;
-	size_t count = musicInfoVector->size( );
-
-	auto musicPlayerListJsonKey = jsonFileKey->getPlayerList( );
-	if( count ) {
-		fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListCount( ), QString::number( count ) );
-		auto sourceData = musicInfoVector->data( );
-		std::vector< MusicInfoItemWidget * > buff( count );
-		MusicInfoItemWidget **destData = buff.data( );
-		size_t index = 0;
-		for( ; index < count; index += 1 )
-			destData[ index ] = sourceData[ index ];
-		QJsonObject arrayJsonObject;
-
-		for( index = 0; index < count; index += 1 ) {
-			QJsonObject subJsonObject;
-			if( MusicInfoItem::toJsonObect( subJsonObject, *destData[ index ] ) == false )
-				continue;
-			arrayJsonObject.insert( QString::number( index ), subJsonObject );
-		}
-		fileJsonObject.insert( musicPlayerListJsonKey->getMusicInfoListName( ), arrayJsonObject );
-	}
-
-	auto fileJsonPath = musicPlayerListJsonKey->getMusicPlayerListInfoFileJsonPath( );
-
-	fileJsonObject.insert( musicPlayerListJsonKey->getFileSelectWorkPath( ), PathTools::getAutoShortenPathName( fileSelectWorkPath ) );
-	fileJsonObject.insert( musicPlayerListJsonKey->getDirSelectWorkPath( ), PathTools::getAutoShortenPathName( dirSelectWorkPath ) );
-
-	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
-	return true;
 }
 
 bool PlayerListWidget::appendItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, const qint64 &duration ) {
@@ -403,41 +252,15 @@ qint64 PlayerListWidget::getMusicDuratction( ) const {
 	return 0;
 }
 
-bool PlayerListWidget::renderMusicInfoItem( QImage &result_render_image, const MusicInfoItem *render_target ) const {
-	musicInfoMutex->lock( );
-
-	size_t count = musicInfoVector->size( );
-	if( count == 0 ) {
-		musicInfoMutex->unlock( );
-		return false;
-	}
-
-	auto data = musicInfoVector->data( );
-	size_t index;
-	for( index = 0; index < count; index += 1 )
-		if( render_target == data[ index ] ) {
-			musicInfoMutex->unlock( );
-			return false;
-		}
-
-	auto renderTarget = data[ index ];
-	musicInfoMutex->unlock( );
-	return renderAtMusicInfoItem( result_render_image, renderTarget );
-}
-
 bool PlayerListWidget::init( ) {
-	releaseResource( );
+	deleteResource( );
 
-	fileSelectWorkPath = QDir::currentPath( );
-	dirSelectWorkPath = QDir::currentPath( );
 	musicInfoMutex = new UserMutex;
-	playerMutex = new UserMutex;
 	doubleClickIntervalTimeMilliSecond = 300;
 	activeLeftItemWidget = nullptr;
 	selectLeftItemWidget = nullptr;
 	beforeClickTime = new QDateTime;
 	pen = new QPen;
-	musicPlayer = new MusicPlayer;
 	selectItemWidgetVector = new std::vector< MusicInfoItemWidget * >;
 	musicInfoVector = new std::vector< MusicInfoItemWidget * >;
 	indexWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
@@ -447,150 +270,10 @@ bool PlayerListWidget::init( ) {
 	drawFillColor.setAlpha( 100 );
 	pen->setWidth( drawPenWidth );
 	pen->setColor( drawPenColor );
-	if( musicPlayer->init( ) == false )
-		return false;
-	loadJsonPathInfo( );
+
 	updateItemWidget( );
 
-	connect( musicPlayer, &MusicPlayer::playerOver, this, [this]( ) {
-		playerOver_slot( musicPlayer->getMusicFilePath( ) );
-	} );
-	connect( musicPlayer, &MusicPlayer::playerOver, this, [this]( ) {
-		playerStart_slot( musicPlayer->getMusicFilePath( ) );
-	} );
-
-	auto playerWidgetMenu = parentContent->getPlayerWidgetMenu( );
-	connect( playerWidgetMenu, &PlayerWidgetMenu::loadDiskFile, this, [this]( ) {
-		QFileInfo fileInfo;
-		QFileDialog dialog( this );
-		auto appInstance = AppInstance::getAppInstance( );
-		auto appDataManage = appInstance->getAppDataManage( );
-		auto appTranslate = appDataManage->getTranslate( );
-		auto playerListWidgetTranslate = appTranslate->getPlayerListWidget( );
-		dialog.setWindowTitle( playerListWidgetTranslate->getLoadDiskDirTitle( ) );
-		fileInfo.setFile( fileSelectWorkPath );
-		auto openDirPath = fileInfo.absoluteFilePath( );
-		dialog.setDirectory( openDirPath );
-		dialog.setFileMode( QFileDialog::ExistingFiles );
-		auto musicManage = appInstance->getMusicManage( );
-		auto musicDecoder = musicManage->getMusicDecoder( );
-		auto decodeFileSuffix = musicDecoder->getSupperDecodeFileSuffix( );
-		QStringList filterSuffixList;
-		size_t count = decodeFileSuffix.size( );
-		auto data = decodeFileSuffix.data( );
-		size_t index = 0;
-		for( ; index < count; index += 1 )
-			filterSuffixList.append( "*." + data[ index ] );
-		auto musicTypeName = playerListWidgetTranslate->getMusicTypeName( );
-		auto filterSuffix = filterSuffixList.join( " " );
-		auto filterName = musicTypeName + "(" + filterSuffix + ");;" + playerListWidgetTranslate->getAnyTypeName( ) + "(*.*)";
-		dialog.setNameFilter( filterName );
-		QRect geometry = this->geometry( );
-		auto curentWindowSize = geometry.size( );
-		dialog.resize( curentWindowSize );
-		auto center = geometry.center( );
-		center = mapToGlobal( center );
-		WidgetTools::moveWidgetToCenterPos( center, &dialog );
-		if( dialog.exec( ) != QDialog::Accepted )
-			return;
-		QStringList files = dialog.selectedFiles( );
-		count = files.size( );
-		auto selectFileData = files.data( );
-		fileInfo.setFile( selectFileData[ 0 ] );
-		auto dir = fileInfo.dir( );
-		fileSelectWorkPath = PathTools::getAutoShortenPathName( dir.absolutePath( ) );
-		writeJsonPathInfo( );
-		std::vector< QString > loadVector( count );
-		auto dataPtr = loadVector.data( );
-		for( index = 0; index < count; index += 1 )
-			dataPtr[ index ] = selectFileData[ index ];
-		loadDiskMusicFileList( loadVector );
-	} );
-	connect( playerWidgetMenu, &PlayerWidgetMenu::loadDiskDir, this, [this]( ) {
-		QFileInfo fileInfo;
-
-		QFileDialog dialog( this );
-		auto appInstance = AppInstance::getAppInstance( );
-		auto appDataManage = appInstance->getAppDataManage( );
-		auto appTranslate = appDataManage->getTranslate( );
-		auto playerListWidgetTranslate = appTranslate->getPlayerListWidget( );
-		dialog.setWindowTitle( playerListWidgetTranslate->getLoadDiskDirTitle( ) );
-		fileInfo.setFile( dirSelectWorkPath );
-		auto openDirPath = fileInfo.absoluteFilePath( );
-		dialog.setDirectory( openDirPath );
-		dialog.setFileMode( QFileDialog::Directory );
-
-		QRect geometry = this->geometry( );
-		auto curentWindowSize = geometry.size( );
-		dialog.resize( curentWindowSize );
-		auto center = geometry.center( );
-		center = mapToGlobal( center );
-		WidgetTools::moveWidgetToCenterPos( center, &dialog );
-		if( dialog.exec( ) != QDialog::Accepted )
-			return;
-
-		QStringList files = dialog.selectedFiles( );
-		qsizetype count = files.size( );
-		auto data = files.data( );
-		dirSelectWorkPath = PathTools::getAutoShortenPathName( data[ 0 ] );
-		writeJsonPathInfo( );
-		size_t index;
-		std::vector< QString > loadVector( count );
-		auto dataPtr = loadVector.data( );
-		for( index = 0; index < count; index += 1 )
-			dataPtr[ index ] = data[ index ];
-		loadDiskMusicDirList( loadVector );
-	} );
-	connect( playerWidgetMenu, &PlayerWidgetMenu::setCurrentSelectPlay, this, [this]( ) {
-		setCurrentPlayerMusicList( );
-	} );
-	connect( playerWidgetMenu, &PlayerWidgetMenu::insterCurrentSelectPlay, this, [this]( ) {
-		setInsertPlayerMusicList( );
-	} );
-	connect( playerWidgetMenu, &PlayerWidgetMenu::removePlayListSelectInfo, this, [this]( ) {
-		removeListMusicFileList( );
-	} );
-	connect( playerWidgetMenu, &PlayerWidgetMenu::deletePlayListSelectFile, this, [this]( ) {
-		deleteDiskMusicFileList( );
-	} );
-	connect( playerWidgetMenu, &PlayerWidgetMenu::selectListMoveTop, this, [this]( ) {
-		moveMusicToListTop( );
-	} );
-	connect( playerWidgetMenu, &PlayerWidgetMenu::selectListMoveBottom, this, [this]( ) {
-		moveMusicToListBottom( );
-	} );
-
 	return true;
-}
-
-bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target ) const {
-	return renderAtMusicInfoItem( result_render_image, render_target, splitWidth );
-}
-
-bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int split_width ) const {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto renderImage = appInstance->getAppDrawManage( )->getRenderImage( );
-	auto font = renderImage->getFont( );
-	auto fontMetrics = renderImage->getFontMetrics( );
-	int itemHeight = fontMetrics->height( );
-	auto musicName = render_target->getMusicName( );
-	auto musicSinger = render_target->getMusicSinger( );
-	auto formatStringDuration = render_target->getFormatStringDuration( );
-	int musicNameWidth = fontMetrics->horizontalAdvance( musicName );
-	int musicSingerWidth = fontMetrics->horizontalAdvance( musicSinger );
-	int formatStringDurationeWidth = fontMetrics->horizontalAdvance( formatStringDuration );
-	return renderAtMusicInfoItem( result_render_image, render_target, itemHeight, split_width, musicNameWidth, musicSingerWidth, formatStringDurationeWidth, font );
-}
-
-void PlayerListWidget::doubleClickMusicItemWidget( MusicInfoItemWidget *double_target ) {
-	if( widgetState != PlayerListWidgetState::None )
-		return; // 如果不是被设置成任意状态，则返回，不处理事件
-	widgetState = PlayerListWidgetState::Set_Player_Run;
-	QString musicFilePath = double_target->getMusicFilePath( );
-	bool playerMusic = musicPlayer->playerMusic( musicFilePath );
-	widgetState = PlayerListWidgetState::None;
-	if( playerMusic == false )
-		return; // 播放失败，则返回
 }
 
 void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier ) {
@@ -614,37 +297,6 @@ void PlayerListWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_s
 				musicInfoItemWidget[ 0 ] = selectLeftItemWidget;
 			}
 		}
-	}
-}
-
-void PlayerListWidget::releaseResource( ) {
-	#define r_d(ptr) if(ptr)  (delete ptr,ptr = nullptr)
-	disconnect( );
-	if( playerMutex ) {
-		playerMutex->lock( );
-		widgetState = PlayerListWidgetState::Set_Player_Run;
-		musicPlayer->playerStop( );
-		playerItemWidget = nullptr;
-		widgetState = PlayerListWidgetState::None;
-		playerMutex->unlock( );
-		musicInfoMutex->lock( );
-		if( selectItemWidgetVector )
-			r_d( selectItemWidgetVector );
-		r_d( selectItemWidgetVector );
-
-		selectLeftItemWidget = nullptr;
-		activeLeftItemWidget = nullptr;
-
-		musicInfoMutex->unlock( );
-		clearMusicInfoVector( );
-		if( musicInfoVector ) {
-			r_d( musicInfoVector );
-		}
-		r_d( musicInfoMutex );
-
-		r_d( beforeClickTime );
-		r_d( pen );
-		r_d( musicPlayer );
 	}
 }
 
@@ -720,6 +372,30 @@ bool PlayerListWidget::selectKeyControlModifier( ) {
 	return true;
 }
 
+bool PlayerListWidget::deleteResource( ) {
+	disconnect( );
+	if( musicInfoMutex ) {
+		musicInfoMutex->lock( );
+		if( selectItemWidgetVector )
+			Delete_Resource_App_Core_Ptr( selectItemWidgetVector );
+		Delete_Resource_App_Core_Ptr( selectItemWidgetVector );
+
+		selectLeftItemWidget = nullptr;
+		activeLeftItemWidget = nullptr;
+
+		musicInfoMutex->unlock( );
+		clearMusicInfoVector( );
+		if( musicInfoVector ) {
+			Delete_Resource_App_Core_Ptr( musicInfoVector );
+		}
+		Delete_Resource_App_Core_Ptr( musicInfoMutex );
+
+		Delete_Resource_App_Core_Ptr( beforeClickTime );
+		Delete_Resource_App_Core_Ptr( pen );
+	}
+	return true;
+}
+
 void PlayerListWidget::removeRepetition( ) {
 	using compUnity = MusicInfoItemWidget *;
 	VectorTools::compIdenticalTypeFinction< compUnity > compFunction = [] ( const compUnity &left, const compUnity &right ) ->bool {
@@ -732,66 +408,6 @@ void PlayerListWidget::removeRepetition( ) {
 	VectorTools::getRepetition( buff, release, *musicInfoVector, compFunction );
 	VectorTools::deleteVectorPtr( release );
 	*musicInfoVector = buff;
-}
-
-void PlayerListWidget::playerStart_slot( const QString &player_music_file ) {
-	if( this == nullptr )
-		return;
-	if( musicInfoMutex == nullptr )
-		return;
-	size_t index;
-	size_t count;
-	musicInfoMutex->lock( );
-	count = musicInfoVector->size( );
-	if( count == 0 ) {
-		playerItemWidget = nullptr;
-		musicInfoMutex->unlock( );
-		return;
-	}
-	auto data = musicInfoVector->data( );
-	index = 0;
-	for( ; index < count; index += 1 )
-		if( data[ index ]->isFile( player_music_file ) ) {
-			playerItemWidget = musicInfoVector->data( )[ index ];
-			musicInfoMutex->unlock( );
-			return;
-		}
-	playerItemWidget = nullptr;
-	musicInfoMutex->unlock( );
-}
-
-void PlayerListWidget::playerOver_slot( const QString &player_music_file ) {
-	if( this == nullptr )
-		return;
-	if( musicInfoMutex == nullptr )
-		return;
-	if( widgetState != PlayerListWidgetState::None )
-		return;
-	size_t index;
-	size_t count;
-	QString nextPlayerFile;
-	musicInfoMutex->lock( );
-	count = musicInfoVector->size( );
-	if( count == 0 ) {
-		musicInfoMutex->unlock( );
-		return;
-	}
-	auto data = musicInfoVector->data( );
-	index = 0;
-	for( ; index < count; index += 1 )
-		if( data[ index ]->isFile( player_music_file ) ) {
-			playerItemWidget = nullptr;
-			index += 1;
-			if( index == count )
-				nextPlayerFile = data[ 0 ]->getMusicFilePath( );
-			else
-				nextPlayerFile = data[ index ]->getMusicFilePath( );
-			break;
-		}
-	musicInfoMutex->unlock( );
-	widgetState = PlayerListWidgetState::Set_Player_Next;
-	musicPlayer->playerMusic( nextPlayerFile );
-	widgetState = PlayerListWidgetState::None;
 }
 
 void PlayerListWidget::updateItemWidget( ) {
@@ -844,53 +460,7 @@ void PlayerListWidget::updateItemWidget( ) {
 	musicInfoMutex->unlock( );
 }
 
-bool PlayerListWidget::renderAtMusicInfoItem( QImage &result_render_image, MusicInfoItem *render_target, int item_height, int split_width, int name_item_width, int singer_item_width, int duration_item_width, const QFont *item_font ) const {
-	if( item_font == nullptr )
-		return false;
-	int imageWidth = split_width * 4 + name_item_width + singer_item_width + duration_item_width;
-	QImage buff = QImage( imageWidth, item_height, QImage::Format_RGBA8888 );
-	if( buff.isNull( ) )
-		return false;
-	buff.fill( 0 );
-	int offsetSplitX = split_width / 2;
-	QPainter painter;
-	painter.begin( &buff );
-	auto pen = painter.pen( );
-	pen.setWidth( split_width );
-	painter.setPen( pen );
-	painter.setFont( *item_font );
-
-	int drawOffsetX = offsetSplitX;
-	QRect drawRect;
-
-	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
-	drawOffsetX += offsetSplitX;
-	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( name_item_width, item_height ) );
-	painter.drawText( drawRect, render_target->musicName );
-	drawOffsetX += name_item_width + offsetSplitX;
-
-	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
-	drawOffsetX += offsetSplitX;
-	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( musicSingerWidth, item_height ) );
-	painter.drawText( drawRect, render_target->musicSinger );
-	drawOffsetX += singer_item_width + offsetSplitX;
-
-	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
-	drawOffsetX += offsetSplitX;
-	drawRect = QRect( QPoint( drawOffsetX, 0 ), QSize( duration_item_width, item_height ) );
-	painter.drawText( drawRect, render_target->formatStringDuration );
-	drawOffsetX += duration_item_width + offsetSplitX;
-
-	painter.drawLine( drawOffsetX, 0, drawOffsetX, item_height );
-
-	painter.end( );
-	result_render_image = buff;
-	return true;
-}
-
 void PlayerListWidget::paintEvent( QPaintEvent *event ) {
-	if( widgetState != PlayerListWidgetState::None )
-		return; // 如果不是被设置成任意状态，则返回，不处理事件
 	if( musicInfoMutex->tryLock( ) == false )
 		return;
 	QPainter painter;
@@ -925,8 +495,6 @@ void PlayerListWidget::resizeEvent( QResizeEvent *event ) {
 }
 
 void PlayerListWidget::mouseMoveEvent( QMouseEvent *event ) {
-	if( widgetState != PlayerListWidgetState::None )
-		return; // 如果不是被设置成任意状态，则返回，不处理事件
 	if( musicInfoMutex->tryLock( ) == false )
 		return;
 	size_t count = musicInfoVector->size( );
@@ -947,16 +515,7 @@ void PlayerListWidget::mouseMoveEvent( QMouseEvent *event ) {
 	update( );
 }
 
-void PlayerListWidget::hideEvent( QHideEvent *event ) {
-	musicInfoMutex->lock( );
-	writeJsonPathInfo( );
-	musicInfoMutex->unlock( );
-	QWidget::hideEvent( event );
-}
-
 void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	if( widgetState != PlayerListWidgetState::None )
-		return; // 如果不是被设置成任意状态，则返回，不处理事件
 	Qt::MouseButton mouseButton = event->button( );
 	switch( mouseButton ) {
 		case Qt::MouseButton::LeftButton : {
@@ -986,7 +545,6 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 			musicInfoMutex->unlock( );
 			// 双击或单击，二选一
 			if( isDoubleClick ) {
-				doubleClickMusicItemWidget( selectItem );
 				// 触发信号
 				emit itemDouble_Select( );
 			} else if( selectItem ) { // 单击
@@ -995,7 +553,6 @@ void PlayerListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				apendSelectMusicItemWidget( selectItem, true );
 				resultVector = *selectItemWidgetVector;
 				musicInfoMutex->unlock( );
-
 				// 触发信号
 				emit itemSelect( );
 				update( );
@@ -1073,14 +630,6 @@ bool PlayerListWidget::deleteDiskMusicFileList( ) {
 		QString musicFilePath = deleteFileData[ deleteFileIndex ]->musicFilePath;
 		file.setFileName( musicFilePath );
 		bool moveToTrash = file.moveToTrash( );
-		if( deleteFileData[ deleteFileIndex ] == playerItemWidget ) {
-			musicInfoMutex->lock( );
-			playerItemWidget = nullptr;
-			musicInfoMutex->unlock( );
-			widgetState = PlayerListWidgetState::Set_Player_Run;
-			musicPlayer->playerStop( );
-			widgetState = PlayerListWidgetState::None;
-		}
 		delete deleteFileData[ deleteFileIndex ];
 		if( moveToTrash )
 			continue;
@@ -1106,15 +655,6 @@ bool PlayerListWidget::removeListMusicFileList( ) {
 	size_t deleteFileCount = deleteSetVector.size( );
 	size_t deleteFileIndex;
 	for( deleteFileIndex = 0; deleteFileIndex < deleteFileCount; deleteFileIndex += 1 ) {
-		if( deleteFileData[ deleteFileIndex ] == playerItemWidget ) {
-			musicInfoMutex->lock( );
-			playerItemWidget = nullptr;
-			musicInfoMutex->unlock( );
-
-			widgetState = PlayerListWidgetState::Set_Player_Run;
-			musicPlayer->playerStop( );
-			widgetState = PlayerListWidgetState::None;
-		}
 		delete deleteFileData[ deleteFileIndex ];
 	}
 	return true;
@@ -1147,285 +687,5 @@ bool PlayerListWidget::loadDiskMusicDirList( const std::vector< QString > &load_
 	auto selectFileData = superMusicList.data( );
 	for( index = 0; index < count; index += 1 )
 		fromFileLoadItemInfo( selectFileData[ index ] );
-	return true;
-}
-
-bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {// 列表当中是否存在播放项
-	size_t translCount = translation_vector_source.size( );
-	if( translCount == 0 )
-		return false;
-	auto translData = translation_vector_source.data( );
-	size_t translIndex;
-
-	size_t playerListCount = musicInfoVector->size( ); // 原始列表个数
-	auto playerListData = musicInfoVector->data( ); // 原始列表起始指针
-	size_t playerListIndex;
-	translCount -= 1;
-	auto selectLastItem = translData[ translCount ];
-	std::vector< MusicInfoItemWidget * > cloneOrgVector( playerListCount ); // 克隆数据放置序列
-	auto cloneOrgData = cloneOrgVector.data( ); // 克隆数据列表起始指针
-	size_t cloneOrgIndex = 0; // 克隆数据的放置下标
-	for( playerListIndex = 0; playerListIndex < playerListCount; playerListIndex += 1 ) {
-		auto cmpItem = playerListData[ playerListIndex ];
-		if( selectLastItem == cmpItem ) {
-			// 偏移指针到起始克隆数据放置位置
-			auto offsetClonePtr = cloneOrgData + cloneOrgIndex;
-			// 拷贝移动列表到克隆序列
-			for( translIndex = 0; translIndex < translCount; translIndex += 1 )
-				offsetClonePtr[ translIndex ] = translData[ translIndex ];
-			offsetClonePtr[ translIndex ] = translData[ translIndex ]; // 拷贝末尾
-			cloneOrgIndex += translIndex;// 增加扩张数据
-			// 接手循环
-			for( ; playerListIndex < playerListCount; playerListIndex += 1 ) {
-				cmpItem = playerListData[ playerListIndex ];
-				for( translIndex = 0; translIndex < translCount; translIndex += 1 )
-					if( cmpItem == translData[ translIndex ] )
-						break;
-				if( translIndex < translCount )
-					continue;
-				cloneOrgData[ cloneOrgIndex ] = cmpItem;
-				cloneOrgIndex += 1;
-			}
-			break; // 已经实现循环
-		}
-		for( translIndex = 0; translIndex < translCount; translIndex += 1 )
-			if( cmpItem == translData[ translIndex ] )
-				break;
-		if( translIndex < translCount )
-			continue;
-		cloneOrgData[ cloneOrgIndex ] = cmpItem;
-		cloneOrgIndex += 1;
-	}
-	*musicInfoVector = cloneOrgVector;
-	*selectItemWidgetVector = translation_vector_source;
-	selectLeftItemWidget = activeLeftItemWidget = selectLastItem;
-	return true;
-}
-
-bool PlayerListWidget::playerStatusTranslationMoveCurrentPlayer( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
-	// 列表当中是否存在播放项
-	size_t translCount = translation_vector_source.size( );
-	if( translCount == 0 )
-		return false;
-	// 移动的序列
-	std::vector< MusicInfoItemWidget * > moveVector( translCount );
-	auto moveData = moveVector.data( );
-	size_t moveIndex;
-	auto translData = translation_vector_source.data( );
-	size_t translIndex = 0;
-	// 排序移动序列
-	for( ; translIndex < translCount; translIndex += 1 )
-		if( translData[ translIndex ] == playerItemWidget ) {
-			moveIndex = translIndex;
-			for( ; moveIndex > 0; moveIndex -= 1 )
-				moveData[ moveIndex ] = moveData[ moveIndex - 1 ];
-			moveData[ 0 ] = playerItemWidget;
-		} else
-			moveData[ translIndex ] = translData[ translIndex ];
-	// 找到选择列表的末尾项
-
-	translCount -= 1; // 排除末尾
-	auto moveLastItem = moveData[ translCount ]; // 获取末尾项
-	size_t playerListCount = musicInfoVector->size( ); // 原始列表个数
-	auto playerListData = musicInfoVector->data( ); // 原始列表起始指针
-	std::vector< MusicInfoItemWidget * > cloneOrgVector( playerListCount ); // 克隆数据放置序列
-	auto cloneOrgData = cloneOrgVector.data( ); // 克隆数据列表起始指针
-	size_t cloneOrgIndex = 0; // 克隆数据的放置下标
-	for( translIndex = 0; translIndex < playerListCount; translIndex += 1 ) {
-		auto cmpItem = playerListData[ translIndex ];
-		if( cmpItem == moveLastItem ) /* 如果匹配到末尾项，则把移动序列拷贝到克隆序列 */ {
-			// 偏移指针到起始克隆数据放置位置
-			auto offsetClonePtr = cloneOrgData + cloneOrgIndex;
-			// 拷贝移动列表到克隆序列
-			for( moveIndex = 0; moveIndex < translCount; moveIndex += 1 )
-				offsetClonePtr[ moveIndex ] = moveData[ moveIndex ];
-			offsetClonePtr[ moveIndex ] = moveData[ moveIndex ]; // 拷贝末尾
-			cloneOrgIndex += moveIndex + 1;// 增加扩张数据
-			translIndex += 1;
-			// 接手循环
-			for( ; translIndex < playerListCount; translIndex += 1 ) {
-				cmpItem = playerListData[ translIndex ];
-				for( moveIndex = 0; moveIndex < translCount; moveIndex += 1 )
-					if( cmpItem == moveData[ moveIndex ] )
-						break;
-				if( moveIndex < translCount )
-					continue; // 在移动列表当中时，不拷贝到克隆序列
-				cloneOrgData[ cloneOrgIndex ] = cmpItem;
-				cloneOrgIndex += 1;
-			}
-			break; // 已经实现循环
-		}
-		for( moveIndex = 0; moveIndex < translCount; moveIndex += 1 )
-			if( cmpItem == moveData[ moveIndex ] )
-				break;
-		if( moveIndex < translCount )
-			continue; // 在移动列表当中时，不拷贝到克隆序列
-		cloneOrgData[ cloneOrgIndex ] = cmpItem;
-		cloneOrgIndex += 1;
-	}
-	*musicInfoVector = cloneOrgVector;
-	*selectItemWidgetVector = moveVector;
-	selectLeftItemWidget = activeLeftItemWidget = moveLastItem;
-	return true;
-}
-
-bool PlayerListWidget::setCurrentPlayerMusicList( ) {
-	bool result;
-	// 如果存在播放
-	musicInfoMutex->lock( );
-	if( playerItemWidget )
-		/* 正在播放音乐 */
-		result = playerStatusTranslationMoveCurrentPlayer( *selectItemWidgetVector );
-	else
-		/* 不在播放音乐 */
-		result = setoutStatusTranslationMoveCurrentPlayer( *selectItemWidgetVector );
-	musicInfoMutex->unlock( );
-	if( result ) {
-		updateItemWidget( );
-		if( playerItemWidget ) {
-			widgetState = PlayerListWidgetState::Set_Player_Run;
-			musicPlayer->playerStop( );
-			widgetState = PlayerListWidgetState::None;
-			auto appInstance = AppInstance::getAppInstance( );
-			while( widgetState != PlayerListWidgetState::None )
-				appInstance->processEvents( );
-		}
-		widgetState = PlayerListWidgetState::Set_Player_Run;
-		result = musicPlayer->playerMusic( selectItemWidgetVector->data( )[ 0 ]->getMusicFilePath( ) );
-		widgetState = PlayerListWidgetState::None;
-		return result;
-	}
-	return result;
-}
-
-bool PlayerListWidget::playerStatusTranslationMoveCurrentPlayerNext( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
-	size_t translationCount = translation_vector_source.size( );
-	auto translationData = translation_vector_source.data( );
-	size_t translationIndex = 0;
-	for( ; translationIndex < translationCount; translationIndex += 1 )
-		if( translationData[ translationIndex ] == playerItemWidget ) // 如果选择在内
-			return playerStatusTranslationMoveCurrentPlayer( translation_vector_source );
-
-	size_t count = musicInfoVector->size( );
-	auto data = musicInfoVector->data( );
-	std::vector< MusicInfoItemWidget * > clone( count );
-	auto cloneData = clone.data( );
-	size_t cloneIndex = 0;
-	size_t index = 0;
-	for( ; index < count; index += 1 ) {
-		auto comp = data[ index ];
-
-		// 如果当前放置项为播放，则接管循环
-		if( comp == playerItemWidget ) {
-			cloneData[ cloneIndex ] = comp;
-			cloneIndex += 1;
-			auto offsetCloneData = cloneData + cloneIndex;
-			for( translationIndex = 0; translationIndex < translationCount; translationIndex += 1 )
-				offsetCloneData[ translationIndex ] = translationData[ translationIndex ];
-			cloneIndex += translationCount;
-			for( index += 1; index < count; index += 1 ) {
-				comp = data[ index ]; // 跳过 playerItemWidget 项
-				for( translationIndex = 0; translationIndex < translationCount; translationIndex += 1 )
-					if( comp == translationData[ translationIndex ] )
-						break;
-				if( translationIndex < translationCount )
-					continue;
-				if( cloneIndex >= count )
-					break;
-				cloneData[ cloneIndex ] = comp;
-				cloneIndex += 1;
-			}
-			break;
-		}
-
-		for( translationIndex = 0; translationIndex < translationCount; translationIndex += 1 )
-			if( comp == translationData[ translationIndex ] )
-				break;
-		if( translationIndex < translationCount )
-			continue;
-		cloneData[ cloneIndex ] = comp;
-		cloneIndex += 1;
-	}
-	*musicInfoVector = clone;
-	return true;
-}
-
-bool PlayerListWidget::setoutStatusTranslationMoveCurrentPlayerNext( const std::vector< MusicInfoItemWidget * > &translation_vector_source ) {
-	return setoutStatusTranslationMoveCurrentPlayer( translation_vector_source );;
-}
-
-bool PlayerListWidget::setInsertPlayerMusicList( ) {
-	bool result;
-	// 如果存在播放
-	musicInfoMutex->lock( );
-	if( playerItemWidget )
-		/* 正在播放音乐 */
-		result = playerStatusTranslationMoveCurrentPlayerNext( *selectItemWidgetVector );
-	else
-		/* 不在播放音乐 */
-		result = setoutStatusTranslationMoveCurrentPlayerNext( *selectItemWidgetVector );
-	musicInfoMutex->unlock( );
-	if( result )
-		updateItemWidget( );
-	return result;
-}
-
-bool PlayerListWidget::moveMusicToListTop( ) {
-	musicInfoMutex->lock( );
-	size_t count = musicInfoVector->size( );
-	auto data = musicInfoVector->data( );
-	size_t index = 0;
-	auto checkCount = selectItemWidgetVector->size( );
-	auto checkData = selectItemWidgetVector->data( );
-	std::vector< MusicInfoItemWidget * > clone( count );
-	auto cloneData = clone.data( );
-	size_t cloneIndex = 0;
-	size_t checkIndex;
-
-	for( checkIndex = 0; checkIndex < checkCount; checkIndex += 1, cloneIndex += 1 )
-		cloneData[ cloneIndex ] = checkData[ checkIndex ];
-	for( ; index < count; index += 1 ) {
-		auto comp = data[ index ];
-		for( checkIndex = 0; checkIndex < checkCount; checkIndex += 1 )
-			if( comp == checkData[ checkIndex ] )
-				break;
-		if( checkIndex < checkCount )
-			continue;
-		cloneData[ cloneIndex ] = comp;
-		cloneIndex += 1;
-	}
-	*musicInfoVector = clone;
-	musicInfoMutex->unlock( );
-	updateItemWidget( );
-	return true;
-}
-
-bool PlayerListWidget::moveMusicToListBottom( ) {
-	musicInfoMutex->lock( );
-	size_t count = musicInfoVector->size( );
-	auto data = musicInfoVector->data( );
-	size_t index = 0;
-	size_t checkCount = selectItemWidgetVector->size( );
-	auto checkData = selectItemWidgetVector->data( );
-	std::vector< MusicInfoItemWidget * > clone( count );
-	auto cloneData = clone.data( );
-	size_t cloneIndex = 0;
-	size_t checkIndex;
-
-	for( ; index < count; index += 1 ) {
-		auto comp = data[ index ];
-		for( checkIndex = 0; checkIndex < checkCount; checkIndex += 1 )
-			if( comp == checkData[ checkIndex ] )
-				break;
-		if( checkIndex < checkCount )
-			continue;
-		cloneData[ cloneIndex ] = comp;
-		cloneIndex += 1;
-	}
-	for( checkIndex = 0; checkIndex < checkCount; checkIndex += 1, cloneIndex += 1 )
-		cloneData[ cloneIndex ] = checkData[ checkIndex ];
-	*musicInfoVector = clone;
-	musicInfoMutex->unlock( );
-	updateItemWidget( );
 	return true;
 }

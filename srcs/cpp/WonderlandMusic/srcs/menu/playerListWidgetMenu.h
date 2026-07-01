@@ -1,28 +1,27 @@
-﻿#ifndef PLAYERWIDGETMENU_H_H_HEAD__FILE__
-#define PLAYERWIDGETMENU_H_H_HEAD__FILE__
+﻿#ifndef PLAYERLISTWIDGETMENU_H_H_HEAD__FILE__
+#define PLAYERLISTWIDGETMENU_H_H_HEAD__FILE__
 
 #include <QMenu>
 
 #include "../application/appCore.h"
+class PlayerListWidgetMenuTranlate;
 class JsonFileKey;
 class PlayerListMenuJsonKey;
-class PlayerListMenuTranslate;
 class MusicDecoder;
 class AppTranslate;
 class AppInstance;
 class MusicInfoItemWidget;
 class PlayerListWidget;
 
-class PlayerWidgetMenu : public QMenu, public AppCore {
+class PlayerListWidgetMenu : public QMenu, public AppCore {
 	Q_OBJECT;
 
 protected:
 	AppInstance *appInstance;
 	const AppTranslate *appTranslate;
-	PlayerListMenuTranslate *playerListMenuTranslate;
+	PlayerListWidgetMenuTranlate *playerListWidgetMenuTranlate;
 	MusicDecoder *musicDecoder;
 	const JsonFileKey *jsonFileKey;
-	PlayerListMenuJsonKey *playerListMenuJsonKey;
 	PlayerListWidget *playerListWidget;
 	QVector< MusicInfoItemWidget * > musicInfoItemWidgetVector;
 	/// @brief 删除菜单
@@ -52,7 +51,7 @@ protected:
 	bool deleteResource( ) override;
 
 public:
-	PlayerWidgetMenu( PlayerListWidget *player_list_widget );
+	PlayerListWidgetMenu( PlayerListWidget *player_list_widget );
 
 	bool init( ) override;
 
@@ -82,5 +81,4 @@ Q_SIGNALS:
 
 	void selectListMoveBottom( );
 };
-
-#endif // PLAYERWIDGETMENU_H_H_HEAD__FILE__
+#endif // PLAYERLISTWIDGETMENU_H_H_HEAD__FILE__

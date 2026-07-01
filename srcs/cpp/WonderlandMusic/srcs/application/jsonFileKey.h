@@ -5,7 +5,6 @@
 class SystemTrayIconJsonKey;
 class PlayerListMenuJsonKey;
 class PlayerWindowJsonKey;
-class PlayerListJsonKey;
 class MainWindowJsonKey;
 class MusicInfoItemJsonKey;
 class PlayerListTopWidgetJsonKey;
@@ -19,9 +18,7 @@ protected:
 	PlayerListTopWidgetJsonKey *playerListTopWidget = nullptr;
 	PlayerWindowJsonKey *playerWindow = nullptr;
 	MusicInfoItemJsonKey *musicInfoItem = nullptr;
-	PlayerListJsonKey *playerList = nullptr;
 	MainWindowJsonKey *mainWindow = nullptr;
-	PlayerListMenuJsonKey *playerListMenu = nullptr;
 	SystemTrayIconJsonKey *systemTrayIcon = nullptr;
 
 protected:
@@ -44,11 +41,7 @@ public:
 
 	virtual MusicInfoItemJsonKey * getMusicInfoItem( ) const;
 
-	virtual PlayerListJsonKey * getPlayerList( ) const;
-
 	virtual MainWindowJsonKey * getMainWindow( ) const;
-
-	virtual PlayerListMenuJsonKey * getPlayerListMenu( ) const;
 
 	virtual SystemTrayIconJsonKey * getSystemTrayIcon( ) const;
 };

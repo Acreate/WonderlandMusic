@@ -3,6 +3,7 @@
 
 #include "../appCore.h"
 #include <QString>
+#include <QObject>
 
 class ITranslate : public AppCore {
 protected:

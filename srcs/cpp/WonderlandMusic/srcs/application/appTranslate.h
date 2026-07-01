@@ -2,19 +2,18 @@
 #define APPTRANSLATE_H_H_HEAD__FILE__
 #include "appCore.h"
 
+class PlayerListWidgetMenuTranlate;
 class SystemTrayIconTranslate;
 class SystemTrayIconMenuTranslate;
 class MusicInfoItemTranslate;
 class PlayerListWidgetTranslate;
 class MessageTranslate;
 class MainWindowTranslate;
-class PlayerWidgetTranslate;
 class AboutWidgetTranslate;
 class DateTimeFormatTranslate;
 class JsonTranslate;
 class PlayerWindowTranslate;
 class PlayerTopWidgetTranslate;
-class PlayerListMenuTranslate;
 class PlayerToolsWidgetTranslate;
 class SettingWidgetTranslate;
 class UserMutexTranslate;
@@ -24,13 +23,12 @@ class AppTranslate : public AppCore {
 protected:
 	SettingWidgetTranslate *settingWidget = nullptr;
 	PlayerToolsWidgetTranslate *playerToolsWidget = nullptr;
-	PlayerListMenuTranslate *playerListMenu = nullptr;
+	PlayerListWidgetMenuTranlate *playerListWidgetMenu = nullptr;
 	PlayerTopWidgetTranslate *playerTopWidget = nullptr;
 	PlayerWindowTranslate *playerWindow = nullptr;
 	JsonTranslate *json = nullptr;
 	DateTimeFormatTranslate *dateTimeFormat = nullptr;
 	AboutWidgetTranslate *aboutWidget = nullptr;
-	PlayerWidgetTranslate *playerWidget = nullptr;
 	MainWindowTranslate *mainWindow = nullptr;
 	MessageTranslate *message = nullptr;
 	PlayerListWidgetTranslate *playerListWidget = nullptr;
@@ -59,7 +57,7 @@ public:
 
 	virtual PlayerToolsWidgetTranslate * getPlayerToolsWidget( ) const;
 
-	virtual PlayerListMenuTranslate * getPlayerListMenu( ) const;
+	virtual PlayerListWidgetMenuTranlate * getPlayerListWidgetMenu( ) const;
 
 	virtual PlayerTopWidgetTranslate * getPlayerTopWidget( ) const;
 
@@ -70,8 +68,6 @@ public:
 	virtual DateTimeFormatTranslate * getDateTimeFormat( ) const;
 
 	virtual AboutWidgetTranslate * getAboutWidget( ) const;
-
-	virtual PlayerWidgetTranslate * getPlayerWidget( ) const;
 
 	virtual MainWindowTranslate * getMainWindow( ) const;
 

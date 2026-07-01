@@ -1,8 +1,6 @@
-﻿#include "playerListMenuTranslate.h"
+﻿#include "playerListWidgetMenuTranlate.h"
 
-#include <QObject>
-
-bool PlayerListMenuTranslate::init( ) {
+bool PlayerListWidgetMenuTranlate::init( ) {
 	playerListMenuFileLoadMenu = QObject::tr( "加载菜单" );
 	playerListAddMultiMusicFileToCollectionAction = QObject::tr( "添加文件到列表" );
 	playerListAddMultiMusicDirToCollectionAction = QObject::tr( "添加目录到列表" );
@@ -22,50 +20,50 @@ bool PlayerListMenuTranslate::init( ) {
 	return true;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuFileLoadMenu( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuFileLoadMenu( ) const {
 	return playerListMenuFileLoadMenu;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListAddMultiMusicFileToCollectionAction( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListAddMultiMusicFileToCollectionAction( ) const {
 	return playerListAddMultiMusicFileToCollectionAction;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListAddMultiMusicDirToCollectionAction( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListAddMultiMusicDirToCollectionAction( ) const {
 	return playerListAddMultiMusicDirToCollectionAction;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuenuPlayerMenu( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuenuPlayerMenu( ) const {
 	return playerListMenuenuPlayerMenu;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) const {
 	return playerListMenuPlayerMenuSetCurrentPlayAction;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) const {
 	return playerListMenuPlayerMenuInsterCurrentPlayAction;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuControlMenu( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuControlMenu( ) const {
 	return playerListMenuControlMenu;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuControlMenuRemoveMusicAction( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuControlMenuRemoveMusicAction( ) const {
 	return playerListMenuControlMenuRemoveMusicAction;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuControlMenuDeleteMusicAction( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuControlMenuDeleteMusicAction( ) const {
 	return playerListMenuControlMenuDeleteMusicAction;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuMoveMenu( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuMoveMenu( ) const {
 	return playerListMenuMoveMenu;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuControlMenuMoveTopMusicAction( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuControlMenuMoveTopMusicAction( ) const {
 	return playerListMenuControlMenuMoveTopMusicAction;
 }
 
-const QString & PlayerListMenuTranslate::getPlayerListMenuControlMenuMoveBottomMusicAction( ) const {
+const QString & PlayerListWidgetMenuTranlate::getPlayerListMenuControlMenuMoveBottomMusicAction( ) const {
 	return playerListMenuControlMenuMoveBottomMusicAction;
 }

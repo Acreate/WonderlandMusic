@@ -5,19 +5,16 @@
 #include "appDataManage.h"
 #include "appInstance.h"
 
-#include "../tools/templateArgs.h"
-
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
 #include "translate/musicInfoItemTranslate.h"
-#include "translate/playerListMenuTranslate.h"
+#include "translate/playerListWidgetMenuTranlate.h"
 #include "translate/playerListWidgetTranslate.h"
 #include "translate/playerToolsWidgetTranslate.h"
 #include "translate/playerTopWidgetTranslate.h"
-#include "translate/playerWidgetTranslate.h"
 #include "translate/playerWindowTranslate.h"
 #include "translate/settingWidgetTranslate.h"
 #include "translate/systemTrayIconMenuTranslate.h"
@@ -35,13 +32,12 @@ void AppTranslate::setCodecForLocale( ) {
 bool AppTranslate::translateString( ) {
 	Init_Resource_App_Core_Ptr( settingWidget );
 	Init_Resource_App_Core_Ptr( playerToolsWidget );
-	Init_Resource_App_Core_Ptr( playerListMenu );
+	Init_Resource_App_Core_Ptr( playerListWidgetMenu );
 	Init_Resource_App_Core_Ptr( playerTopWidget );
 	Init_Resource_App_Core_Ptr( playerWindow );
 	Init_Resource_App_Core_Ptr( json );
 	Init_Resource_App_Core_Ptr( dateTimeFormat );
 	Init_Resource_App_Core_Ptr( aboutWidget );
-	Init_Resource_App_Core_Ptr( playerWidget );
 	Init_Resource_App_Core_Ptr( mainWindow );
 	Init_Resource_App_Core_Ptr( message );
 	Init_Resource_App_Core_Ptr( playerListWidget );
@@ -56,13 +52,12 @@ bool AppTranslate::translateString( ) {
 bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( settingWidget );
 	Delete_Resource_App_Core_Ptr( playerToolsWidget );
-	Delete_Resource_App_Core_Ptr( playerListMenu );
+	Delete_Resource_App_Core_Ptr( playerListWidgetMenu );
 	Delete_Resource_App_Core_Ptr( playerTopWidget );
 	Delete_Resource_App_Core_Ptr( playerWindow );
 	Delete_Resource_App_Core_Ptr( json );
 	Delete_Resource_App_Core_Ptr( dateTimeFormat );
 	Delete_Resource_App_Core_Ptr( aboutWidget );
-	Delete_Resource_App_Core_Ptr( playerWidget );
 	Delete_Resource_App_Core_Ptr( mainWindow );
 	Delete_Resource_App_Core_Ptr( message );
 	Delete_Resource_App_Core_Ptr( playerListWidget );
@@ -94,13 +89,12 @@ bool AppTranslate::init( ) {
 
 	settingWidget = new SettingWidgetTranslate;
 	playerToolsWidget = new PlayerToolsWidgetTranslate;
-	playerListMenu = new PlayerListMenuTranslate;
+	playerListWidgetMenu = new PlayerListWidgetMenuTranlate;
 	playerTopWidget = new PlayerTopWidgetTranslate;
 	playerWindow = new PlayerWindowTranslate;
 	json = new JsonTranslate;
 	dateTimeFormat = new DateTimeFormatTranslate;
 	aboutWidget = new AboutWidgetTranslate;
-	playerWidget = new PlayerWidgetTranslate;
 	mainWindow = new MainWindowTranslate;
 	message = new MessageTranslate;
 	playerListWidget = new PlayerListWidgetTranslate;
@@ -108,7 +102,6 @@ bool AppTranslate::init( ) {
 	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
 	systemTrayIcon = new SystemTrayIconTranslate;
 	userMutex = new UserMutexTranslate;
-
 	if( translateString( ) == false )
 		return false;
 	return true;
@@ -122,8 +115,8 @@ PlayerToolsWidgetTranslate * AppTranslate::getPlayerToolsWidget( ) const {
 	return playerToolsWidget;
 }
 
-PlayerListMenuTranslate * AppTranslate::getPlayerListMenu( ) const {
-	return playerListMenu;
+PlayerListWidgetMenuTranlate * AppTranslate::getPlayerListWidgetMenu( ) const {
+	return playerListWidgetMenu;
 }
 
 PlayerTopWidgetTranslate * AppTranslate::getPlayerTopWidget( ) const {
@@ -144,10 +137,6 @@ DateTimeFormatTranslate * AppTranslate::getDateTimeFormat( ) const {
 
 AboutWidgetTranslate * AppTranslate::getAboutWidget( ) const {
 	return aboutWidget;
-}
-
-PlayerWidgetTranslate * AppTranslate::getPlayerWidget( ) const {
-	return playerWidget;
 }
 
 MainWindowTranslate * AppTranslate::getMainWindow( ) const {

@@ -1,1 +1,0 @@
-﻿#include "calculateTools.h"

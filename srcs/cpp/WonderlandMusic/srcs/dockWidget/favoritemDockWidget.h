@@ -1,8 +1,0 @@
-﻿#ifndef FAVORITEMDOCKWIDGET_H_H_HEAD__FILE__
-#define FAVORITEMDOCKWIDGET_H_H_HEAD__FILE__
-
-
-class FavoritemDockWidget {
-};
-
-#endif // FAVORITEMDOCKWIDGET_H_H_HEAD__FILE__

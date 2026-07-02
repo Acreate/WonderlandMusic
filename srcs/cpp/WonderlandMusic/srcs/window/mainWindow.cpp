@@ -1,8 +1,5 @@
 ﻿#include "mainWindow.h"
 
-#include <QStackedWidget>
-#include <QDockWidget>
-#include <QPushButton>
 #include <QJsonObject>
 #include <QSystemTrayIcon>
 #include <qboxlayout.h>
@@ -16,13 +13,13 @@
 #include "../application/jsonKey/mainWindowJsonKey.h"
 #include "../application/translate/mainWindowTranslate.h"
 
+#include "../dockWidget/optionDockWidget.h"
+
 #include "../msgInfo/messageErrorOut.h"
 
-#include "../tools/pathTools.h"
-#include "../tools/templateArgs.h"
+#include "../stackedWidget/mainStackedWidget.h"
 
-#include "../widget/aboutWidget.h"
-#include "../widget/settingWidget.h"
+#include "../tools/pathTools.h"
 
 MainWindow::MainWindow( QWidget *parent ) : MainWindow( parent, Qt::WindowFlags( ) ) {
 }
@@ -105,16 +102,6 @@ bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }
 
-bool MainWindow::subCompomentInit( ) {
-	if( playerWindow->init( ) == false )
-		return false;
-	if( settingWidget->init( ) == false )
-		return false;
-	if( aboutWidget->init( ) == false )
-		return false;
-	return true;
-}
-
 MainWindow::~MainWindow( ) {
 	deleteResource( );
 }
@@ -123,33 +110,42 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 }
 
 bool MainWindow::init( ) {
-	if( initApp( ) == false )
-		return false;
-	if( initStackedWidget( ) == false )
-		return false;
-	if( initDockWidget( ) == false )
-		return false;
-	if( initMainWindowSetting( ) == false )
+	appInstance = AppInstance::getAppInstance( );
+	appTranslate = appInstance->getAppDataManage( )->getTranslate( );
+	jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	// 配置窗口顶部显示
+	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
+
+	mainStackedWidget = new MainStackedWidget( this );
+
+	leftOptionDockWidget = new OptionDockWidget( this );
+
+	if( readJsonData( ) == false )
 		return false;
 
-	if( initConnect( ) == false )
+	if( leftOptionDockWidget->init( ) == false )
+		return false;
+	if( mainStackedWidget->init( ) == false )
 		return false;
 
-	if( subCompomentInit( ) == false )
-		return false;
+	setCentralWidget( mainStackedWidget );
+
+	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_player_button, [this]( ) {
+		mainStackedWidget->slot_showPlayerWidget( );
+	} );
+	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_setting_button, [this]( ) {
+		mainStackedWidget->slot_showSettingWidget( );
+	} );
+	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_about_button, [this]( ) {
+		mainStackedWidget->slot_showAboutWidget( );
+	} );
 
 	return true;
 }
 
 bool MainWindow::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( showSettingWidgetBtn );
-	Delete_Resource_App_Core_Ptr( showAboutWidgetBtn );
-	Delete_Resource_App_Core_Ptr( showPlayListWidgetBtn );
-	Delete_Resource_App_Core_Ptr( leftOptionWidget );
 	Delete_Resource_App_Core_Ptr( leftOptionDockWidget );
-	Delete_Resource_App_Core_Ptr( aboutWidget );
-	Delete_Resource_App_Core_Ptr( playerWindow );
-	Delete_Resource_App_Core_Ptr( settingWidget );
+	Delete_Resource_App_Core_Ptr( mainStackedWidget );
 	return true;
 }
 
@@ -166,103 +162,4 @@ bool MainWindow::event( QEvent *event ) {
 			appInstance->quit( );
 	}
 	return QMainWindow::event( event );
-}
-
-bool MainWindow::initApp( ) {
-	appInstance = AppInstance::getAppInstance( );
-	appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-	jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
-	// 配置窗口顶部显示
-	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
-	return true;
-}
-
-bool MainWindow::initStackedWidget( ) {
-	mainStackedWidget = new QStackedWidget( this );
-	setCentralWidget( mainStackedWidget );
-
-	playerWindow = new PlayerWindow( mainStackedWidget );
-	mainStackedWidget->addWidget( playerWindow );
-	playerWindow->adjustSize( );
-
-	settingWidget = new SettingWidget( mainStackedWidget );
-	mainStackedWidget->addWidget( settingWidget );
-	settingWidget->adjustSize( );
-
-	aboutWidget = new AboutWidget( mainStackedWidget );
-	mainStackedWidget->addWidget( aboutWidget );
-	aboutWidget->adjustSize( );
-
-	return true;
-}
-
-bool MainWindow::initDockWidget( ) {
-	leftOptionDockWidget = new QDockWidget( this );
-	leftOptionDockWidget->setAllowedAreas( Qt::LeftDockWidgetArea );
-	addDockWidget( Qt::DockWidgetArea::LeftDockWidgetArea, leftOptionDockWidget );
-	leftOptionDockWidget->setTitleBarWidget( new QWidget( leftOptionDockWidget ) );
-	leftOptionDockWidget->setContentsMargins( 0, 0, 0, 0 );
-
-	leftOptionWidget = new QWidget( leftOptionDockWidget );
-	leftOptionDockWidget->setWidget( leftOptionWidget );
-	// 创建左侧容器组件布局
-	auto *optionLayout = new QVBoxLayout( leftOptionWidget );
-	optionLayout->setContentsMargins( 0, 0, 0, 0 );
-	optionLayout->setSpacing( 0 );
-	auto mainWindowTranslate = appTranslate->getMainWindow( );
-	showPlayListWidgetBtn = new QPushButton( mainWindowTranslate->getMusicTypeName( ), leftOptionWidget );
-	optionLayout->addWidget( showPlayListWidgetBtn, 0, Qt::AlignTop );
-
-	showSettingWidgetBtn = new QPushButton( mainWindowTranslate->getSettingWidget( ), leftOptionWidget );
-	optionLayout->addWidget( showSettingWidgetBtn, 0, Qt::AlignTop );
-
-	showAboutWidgetBtn = new QPushButton( mainWindowTranslate->getAboutWidget( ), leftOptionWidget );
-	optionLayout->addWidget( showAboutWidgetBtn, 0, Qt::AlignTop );
-
-	// 底部弹顶
-	QSpacerItem *spacerItem = new QSpacerItem( 1, 1, QSizePolicy::Ignored, QSizePolicy::Expanding );
-	optionLayout->addSpacerItem( spacerItem );
-	// 强制宽度
-	leftOptionWidget->adjustSize( );
-	leftOptionWidget->setFixedWidth( leftOptionWidget->width( ) );
-
-	return true;
-}
-
-bool MainWindow::initMainWindowSetting( ) {
-	readJsonData( );
-
-	return true;
-}
-
-bool MainWindow::initConnect( ) {
-	connect( showPlayListWidgetBtn, &QPushButton::clicked, [this]( ) {
-		mainStackedWidget->setCurrentWidget( playerWindow );
-	} );
-	connect( showSettingWidgetBtn, &QPushButton::clicked, [this]( ) {
-		mainStackedWidget->setCurrentWidget( settingWidget );
-	} );
-	connect( showAboutWidgetBtn, &QPushButton::clicked, [this]( ) {
-		mainStackedWidget->setCurrentWidget( aboutWidget );
-	} );
-	return true;
-}
-
-bool MainWindow::saveMainWindowSetting( ) {
-	QJsonObject wirteJsonObject;
-	auto geo = geometry( );
-	int windowX = geo.x( );
-	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
-	wirteJsonObject.insert( mainWindowJsonFileKey->getPointXPos( ), windowX );
-	int windowY = geo.y( );
-	wirteJsonObject.insert( mainWindowJsonFileKey->getPointYPos( ), windowY );
-	int windowWidth = geo.width( );
-	wirteJsonObject.insert( mainWindowJsonFileKey->getSizeWidth( ), windowWidth );
-	int windowHeight = geo.height( );
-	wirteJsonObject.insert( mainWindowJsonFileKey->getSizeHeight( ), windowHeight );
-
-	// 获取 json 路径
-	auto mainWindowJsonFile = mainWindowJsonFileKey->getSettingJsonPath( );
-	PathTools::writeJsonObject( wirteJsonObject, mainWindowJsonFile );
-	return true;
 }

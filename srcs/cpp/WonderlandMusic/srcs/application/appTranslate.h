@@ -2,6 +2,8 @@
 #define APPTRANSLATE_H_H_HEAD__FILE__
 #include "appCore.h"
 
+class OptionDockWidgetTranslate;
+class FavoriteWidgetTranslate;
 class PlayerListWidgetMenuTranlate;
 class SystemTrayIconTranslate;
 class SystemTrayIconMenuTranslate;
@@ -36,15 +38,19 @@ protected:
 	SystemTrayIconMenuTranslate *systemTrayIconMenu = nullptr;
 	SystemTrayIconTranslate *systemTrayIcon = nullptr;
 	UserMutexTranslate *userMutex = nullptr;
+	FavoriteWidgetTranslate *favoriteWidget = nullptr;
+	OptionDockWidgetTranslate *optionDockWidget = nullptr;
 
 protected:
-	virtual void setCodecForLocale( );
+	virtual bool setCodecForLocale( );
 
 	virtual bool translateString( );
 
 	bool deleteResource( ) override;
 
-	virtual void loadTranslateQMFile( );
+	virtual bool loadTranslateQMFile( );
+
+	virtual bool createTranlate( );
 
 public:
 	~AppTranslate( ) override;
@@ -82,6 +88,10 @@ public:
 	virtual SystemTrayIconTranslate * getSystemTrayIcon( ) const;
 
 	virtual UserMutexTranslate * getUserMutex( ) const;
+
+	virtual FavoriteWidgetTranslate * getFavoriteWidget( ) const;
+
+	virtual OptionDockWidgetTranslate * getOptionDockWidget( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

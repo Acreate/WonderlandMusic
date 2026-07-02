@@ -13,7 +13,6 @@ class PlayerToolsWidget : public QWidget, public AppCore {
 	Q_OBJECT;
 
 protected:
-	PlayerWindow *playerWindow;
 	/// @brief 上一曲
 	QPushButton *thePreviousSong = nullptr;
 	/// @brief 播放控制
@@ -47,7 +46,7 @@ protected:
 	bool deleteResource( ) override;
 
 public:
-	PlayerToolsWidget( PlayerWindow *parent );
+	PlayerToolsWidget( QWidget *parent );
 
 	~PlayerToolsWidget( ) override;
 

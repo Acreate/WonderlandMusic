@@ -33,7 +33,7 @@ bool PlayerToolsWidget::deleteResource( ) {
 	return true;
 }
 
-PlayerToolsWidget::PlayerToolsWidget( PlayerWindow *parent ) : QWidget( parent ), playerWindow( parent ) {
+PlayerToolsWidget::PlayerToolsWidget( QWidget *parent ) : QWidget( parent ) {
 }
 
 PlayerToolsWidget::~PlayerToolsWidget( ) {
@@ -111,15 +111,6 @@ bool PlayerToolsWidget::init( ) {
 	connect( controlPlay, &QPushButton::clicked, this, []( ) {
 	} );
 	connect( theNextSong, &QPushButton::clicked, this, []( ) {
-	} );
-	auto playerListWidget = playerWindow->getPlayListWidget( );
-	connect( playerListWidget, &PlayerListWidget::playerMusic, this, [this]( ) {
-		auto appInstance = AppInstance::getAppInstance( );
-		auto appDataManage = appInstance->getAppDataManage( );
-		auto appTranslate = appDataManage->getTranslate( );
-		auto playerToolsWidgetTranslate = appTranslate->getPlayerToolsWidget( );
-		controlPlay->setText( playerToolsWidgetTranslate->getControlPlay( ) );
-		controlPlay->setIcon( *pauseIcon );
 	} );
 
 	// 子组件

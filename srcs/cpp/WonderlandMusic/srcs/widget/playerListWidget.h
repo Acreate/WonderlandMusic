@@ -30,7 +30,6 @@ public:
 	};
 
 protected:
-	PlayerWindow *parentContent;
 	int currentWidgetWidth;
 	int currentWidgetHeight;
 	int widgetBeforeWidth;
@@ -67,7 +66,7 @@ protected:
 public:
 	~PlayerListWidget( ) override;
 
-	PlayerListWidget( PlayerWindow *parent );
+	PlayerListWidget( QWidget *parent = nullptr );
 
 	// get+set
 public:

@@ -7,10 +7,6 @@ class AppJsonData {
 protected:
 	virtual ~AppJsonData( ) = default;
 
-	virtual bool readJsonData( ) = 0;
-
-	virtual bool writeJsonData( ) = 0;
-
 public:
 	virtual bool getJsonData( QJsonObject &get_json_object ) const = 0;
 

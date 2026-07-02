@@ -2,11 +2,11 @@
 #define JSONFILEKEY_H_H_HEAD__FILE__
 #include "appCore.h"
 
+class MusicInfoItemWidgetJsonKey;
 class SystemTrayIconJsonKey;
 class PlayerListMenuJsonKey;
 class PlayerWindowJsonKey;
 class MainWindowJsonKey;
-class MusicInfoItemJsonKey;
 class PlayerListTopWidgetJsonKey;
 class AboutWidgetJsonKey;
 class PlayerListToolWidgetJsonKey;
@@ -17,7 +17,7 @@ protected:
 	AboutWidgetJsonKey *aboutWidgetJsonFileKey = nullptr;
 	PlayerListTopWidgetJsonKey *playerListTopWidget = nullptr;
 	PlayerWindowJsonKey *playerWindow = nullptr;
-	MusicInfoItemJsonKey *musicInfoItem = nullptr;
+	MusicInfoItemWidgetJsonKey *musicInfoItemWidget = nullptr;
 	MainWindowJsonKey *mainWindow = nullptr;
 	SystemTrayIconJsonKey *systemTrayIcon = nullptr;
 
@@ -39,7 +39,7 @@ public:
 
 	virtual PlayerWindowJsonKey * getPlayerWindow( ) const;
 
-	virtual MusicInfoItemJsonKey * getMusicInfoItem( ) const;
+	virtual MusicInfoItemWidgetJsonKey * getMusicInfoItemWidget( ) const;
 
 	virtual MainWindowJsonKey * getMainWindow( ) const;
 

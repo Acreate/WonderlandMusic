@@ -7,10 +7,12 @@
 
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
+#include "translate/favoriteWidgetTranslate.h"
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
 #include "translate/musicInfoItemTranslate.h"
+#include "translate/optionDockWidgetTranslate.h"
 #include "translate/playerListWidgetMenuTranlate.h"
 #include "translate/playerListWidgetTranslate.h"
 #include "translate/playerToolsWidgetTranslate.h"
@@ -24,9 +26,12 @@
 AppTranslate::AppTranslate( ) {
 }
 
-void AppTranslate::setCodecForLocale( ) {
+bool AppTranslate::setCodecForLocale( ) {
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
+	if( utf8 == nullptr )
+		return false;
 	QTextCodec::setCodecForLocale( utf8 );
+	return true;
 }
 
 bool AppTranslate::translateString( ) {
@@ -45,6 +50,8 @@ bool AppTranslate::translateString( ) {
 	Init_Resource_App_Core_Ptr( systemTrayIconMenu );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
 	Init_Resource_App_Core_Ptr( userMutex );
+	Init_Resource_App_Core_Ptr( favoriteWidget );
+	Init_Resource_App_Core_Ptr( optionDockWidget );
 
 	return true;
 }
@@ -65,28 +72,25 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( systemTrayIconMenu );
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 	Delete_Resource_App_Core_Ptr( userMutex );
+	Delete_Resource_App_Core_Ptr( favoriteWidget );
+	Delete_Resource_App_Core_Ptr( optionDockWidget );
 	return true;
 }
 
-void AppTranslate::loadTranslateQMFile( ) {
+bool AppTranslate::loadTranslateQMFile( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	AppDataManage *appDataManage = appInstance->getAppDataManage( );
 	auto appSettingPath = appDataManage->getAppSettingPath( );
 	auto currentQMFile = appSettingPath + QObject::tr( "/translations/WonderlandMusic_zh_CN.qm" );
 	appDataManage->setAppStringTranslate( currentQMFile );
+	return true;
 }
 
 AppTranslate::~AppTranslate( ) {
 	deleteResource( );
 }
 
-bool AppTranslate::init( ) {
-	deleteResource( );
-
-	setCodecForLocale( );
-
-	loadTranslateQMFile( );
-
+bool AppTranslate::createTranlate( ) {
 	settingWidget = new SettingWidgetTranslate;
 	playerToolsWidget = new PlayerToolsWidgetTranslate;
 	playerListWidgetMenu = new PlayerListWidgetMenuTranlate;
@@ -102,6 +106,21 @@ bool AppTranslate::init( ) {
 	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
 	systemTrayIcon = new SystemTrayIconTranslate;
 	userMutex = new UserMutexTranslate;
+	favoriteWidget = new FavoriteWidgetTranslate;
+	optionDockWidget = new OptionDockWidgetTranslate;
+
+	return true;
+}
+
+bool AppTranslate::init( ) {
+	deleteResource( );
+
+	if( setCodecForLocale( ) == false )
+		return false;
+	if( loadTranslateQMFile( ) == false )
+		return false;
+	if( createTranlate( ) == false )
+		return false;
 	if( translateString( ) == false )
 		return false;
 	return true;
@@ -165,4 +184,12 @@ SystemTrayIconTranslate * AppTranslate::getSystemTrayIcon( ) const {
 
 UserMutexTranslate * AppTranslate::getUserMutex( ) const {
 	return userMutex;
+}
+
+FavoriteWidgetTranslate * AppTranslate::getFavoriteWidget( ) const {
+	return favoriteWidget;
+}
+
+OptionDockWidgetTranslate * AppTranslate::getOptionDockWidget( ) const {
+	return optionDockWidget;
 }

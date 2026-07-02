@@ -1,8 +1,8 @@
-﻿#ifndef MUSICINFOITEMJSONKEY_H_H_HEAD__FILE__
-#define MUSICINFOITEMJSONKEY_H_H_HEAD__FILE__
+﻿#ifndef MUSICINFOITEMWIDGETJSONKEY_H_H_HEAD__FILE__
+#define MUSICINFOITEMWIDGETJSONKEY_H_H_HEAD__FILE__
 #include "iJsonKey.h"
 
-class MusicInfoItemJsonKey : public IJsonKey {
+class MusicInfoItemWidgetJsonKey : public IJsonKey {
 	QString musicInfoFile;
 	QString musicInfoName;
 	QString musicInfoSinger;
@@ -21,4 +21,4 @@ public:
 	virtual const QString & getMusicInfoDuration( ) const;
 };
 
-#endif // MUSICINFOITEMJSONKEY_H_H_HEAD__FILE__
+#endif // MUSICINFOITEMWIDGETJSONKEY_H_H_HEAD__FILE__

@@ -22,7 +22,6 @@ protected:
 	PlayerListWidgetMenuTranlate *playerListWidgetMenuTranlate;
 	MusicDecoder *musicDecoder;
 	const JsonFileKey *jsonFileKey;
-	PlayerListWidget *playerListWidget;
 	QVector< MusicInfoItemWidget * > musicInfoItemWidgetVector;
 	/// @brief 删除菜单
 	QMenu *removeMenu;
@@ -51,7 +50,7 @@ protected:
 	bool deleteResource( ) override;
 
 public:
-	PlayerListWidgetMenu( PlayerListWidget *player_list_widget );
+	PlayerListWidgetMenu( );
 
 	bool init( ) override;
 

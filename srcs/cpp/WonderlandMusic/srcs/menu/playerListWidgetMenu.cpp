@@ -8,12 +8,10 @@
 
 #include "../widget/playerListWidget.h"
 
-PlayerListWidgetMenu::PlayerListWidgetMenu( PlayerListWidget *player_list_widget ) : QMenu( player_list_widget ), playerListWidget( player_list_widget ) {
+PlayerListWidgetMenu::PlayerListWidgetMenu( ) : QMenu( ) {
 }
 
 bool PlayerListWidgetMenu::initVar( ) {
-	if( playerListWidget == nullptr )
-		return false;
 	appInstance = AppInstance::getAppInstance( );
 	if( appInstance == nullptr )
 		return false;

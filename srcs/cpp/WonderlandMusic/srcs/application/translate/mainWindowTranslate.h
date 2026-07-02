@@ -5,10 +5,6 @@
 class MainWindowTranslate : public ITranslate {
 	QString appWindowTitleName;
 
-	QString settingWidget;
-
-	QString aboutWidget;
-	QString musicTypeName;
 
 public:
 	bool init( ) override;

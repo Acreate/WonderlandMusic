@@ -6,7 +6,7 @@
 
 #include "jsonKey/aboutWidgetJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
-#include "jsonKey/musicInfoItemJsonKey.h"
+#include "jsonKey/musicInfoItemWidgetJsonKey.h"
 #include "jsonKey/playerListToolWidgetJsonKey.h"
 #include "jsonKey/playerListTopWidgetJsonKey.h"
 #include "jsonKey/playerWindowJsonKey.h"
@@ -18,7 +18,7 @@ bool JsonFileKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( playerListTopWidget );
 	Delete_Resource_App_Core_Ptr( playerWindow );
 	Delete_Resource_App_Core_Ptr( mainWindow );
-	Delete_Resource_App_Core_Ptr( musicInfoItem );
+	Delete_Resource_App_Core_Ptr( musicInfoItemWidget );
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 
 	return true;
@@ -38,7 +38,7 @@ bool JsonFileKey::init( ) {
 	playerListTopWidget = new PlayerListTopWidgetJsonKey;
 	playerWindow = new PlayerWindowJsonKey;
 	mainWindow = new MainWindowJsonKey;
-	musicInfoItem = new MusicInfoItemJsonKey;
+	musicInfoItemWidget = new MusicInfoItemWidgetJsonKey;
 	systemTrayIcon = new SystemTrayIconJsonKey;
 
 	Init_Resource_App_Core_Ptr( playerListToolWidget );
@@ -46,7 +46,7 @@ bool JsonFileKey::init( ) {
 	Init_Resource_App_Core_Ptr( playerListTopWidget );
 	Init_Resource_App_Core_Ptr( playerWindow );
 	Init_Resource_App_Core_Ptr( mainWindow );
-	Init_Resource_App_Core_Ptr( musicInfoItem );
+	Init_Resource_App_Core_Ptr( musicInfoItemWidget );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
 
 	return true;
@@ -68,8 +68,8 @@ PlayerWindowJsonKey * JsonFileKey::getPlayerWindow( ) const {
 	return playerWindow;
 }
 
-MusicInfoItemJsonKey * JsonFileKey::getMusicInfoItem( ) const {
-	return musicInfoItem;
+MusicInfoItemWidgetJsonKey * JsonFileKey::getMusicInfoItemWidget( ) const {
+	return musicInfoItemWidget;
 }
 
 MainWindowJsonKey * JsonFileKey::getMainWindow( ) const {

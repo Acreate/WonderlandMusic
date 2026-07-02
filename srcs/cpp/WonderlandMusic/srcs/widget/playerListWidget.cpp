@@ -12,10 +12,8 @@
 #include "../application/appDataManage.h"
 #include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
-#include "../application/appTranslate.h"
 #include "../application/musicDecoder.h"
 #include "../application/renderImage.h"
-#include "../application/translate/playerListWidgetTranslate.h"
 
 #include "../item/musicInfoItem.h"
 
@@ -29,8 +27,6 @@
 #include "../tools/pathTools.h"
 #include "../tools/vectorTools.h"
 
-#include "../window/playerWindow.h"
-
 void PlayerListWidget::clearMusicInfoVector( ) {
 	musicInfoMutex->lock( );
 	musicInfoVector->clear( );
@@ -41,7 +37,7 @@ PlayerListWidget::~PlayerListWidget( ) {
 	deleteResource( );
 }
 
-PlayerListWidget::PlayerListWidget( PlayerWindow *parent ) : QWidget( parent ), parentContent( parent ) {
+PlayerListWidget::PlayerListWidget( QWidget *parent ) : QWidget( parent ) {
 	setMouseTracking( true );
 }
 

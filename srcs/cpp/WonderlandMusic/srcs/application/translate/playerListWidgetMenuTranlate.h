@@ -1,0 +1,52 @@
+﻿#ifndef PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
+#define PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
+
+#include "iTranslate.h"
+
+class PlayerListWidgetMenuTranlate : public ITranslate {
+	QString playerListMenuFileLoadMenu;
+	QString playerListAddMultiMusicFileToCollectionAction;
+	QString playerListAddMultiMusicDirToCollectionAction;
+
+	QString playerListMenuenuPlayerMenu;
+	QString playerListMenuPlayerMenuSetCurrentPlayAction;
+	QString playerListMenuPlayerMenuInsterCurrentPlayAction;
+
+	QString playerListMenuControlMenu;
+	QString playerListMenuControlMenuRemoveMusicAction;
+	QString playerListMenuControlMenuDeleteMusicAction;
+
+	QString playerListMenuMoveMenu;
+	QString playerListMenuControlMenuMoveTopMusicAction;
+	QString playerListMenuControlMenuMoveBottomMusicAction;
+
+public:
+	bool init( ) override;
+
+public:
+	virtual const QString & getPlayerListMenuFileLoadMenu( ) const;
+
+	virtual const QString & getPlayerListAddMultiMusicFileToCollectionAction( ) const;
+
+	virtual const QString & getPlayerListAddMultiMusicDirToCollectionAction( ) const;
+
+	virtual const QString & getPlayerListMenuenuPlayerMenu( ) const;
+
+	virtual const QString & getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) const;
+
+	virtual const QString & getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenu( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenuRemoveMusicAction( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenuDeleteMusicAction( ) const;
+
+	virtual const QString & getPlayerListMenuMoveMenu( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenuMoveTopMusicAction( ) const;
+
+	virtual const QString & getPlayerListMenuControlMenuMoveBottomMusicAction( ) const;
+};
+
+#endif // PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__

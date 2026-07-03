@@ -41,3 +41,7 @@ bool AppUserInterfaceManage::hideMainWindow( ) const {
 MainWindow * AppUserInterfaceManage::getMainWindow( ) const {
 	return mainWindow;
 }
+
+PlayerListTopWidget * AppUserInterfaceManage::getPlayerListTopWidget( ) const {
+	return mainWindow->getPlayerListTopWidget( );
+}

@@ -6,6 +6,7 @@
 #include "../interface/iAppCore.h"
 #include "../interface/iAppDiskJsonData.h"
 
+class PlayerListTopWidget;
 class MainStackedWidget;
 class OptionDockWidget;
 class PlayerWindow;
@@ -38,6 +39,8 @@ public:
 	MainWindow( Qt::WindowFlags flags );
 
 	MainWindow( );
+
+	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 
 protected:
 	bool readJsonData( ) override;

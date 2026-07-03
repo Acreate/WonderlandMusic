@@ -5,12 +5,14 @@
 #include "../interface/iAppJsonData.h"
 #include "../interface/iAppRenderBuff.h"
 
+class MusicItem;
 class QMediaMetaData;
 
 class MusicInfoItemWidget : public QWidget, public IAppJsonData, public IAppRenderBuff {
 	Q_OBJECT;
 
 protected:
+	size_t index;
 	bool equFilePath;
 	QString absFilePath;
 	QString musicFilePath;
@@ -18,7 +20,6 @@ protected:
 	QString musicSinger;
 	qint64 duration;
 	QString formatStringDuration;
-	size_t index;
 	QString formatStringIndex;
 
 	int widgetBeforeWidth;
@@ -56,6 +57,8 @@ public:
 
 public:
 	MusicInfoItemWidget( );
+
+	MusicInfoItemWidget( const MusicItem &music_item );
 
 	MusicInfoItemWidget( QWidget *parent );
 

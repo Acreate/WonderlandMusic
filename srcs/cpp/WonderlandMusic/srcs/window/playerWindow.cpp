@@ -2,13 +2,14 @@
 #include <QJsonObject>
 #include <qevent.h>
 
+#include "musicListWindow.h"
+
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/jsonKey/playerWindowJsonKey.h"
 #include "../dockWidget/favoritemDockWidget.h"
 #include "../dockWidget/musicControlDocWidget.h"
-#include "../dockWidget/musicItemSizeInfoDockWidget.h"
 #include "../mutex/userMutex.h"
 
 #include "../tools/pathTools.h"
@@ -20,23 +21,24 @@ PlayerWindow::~PlayerWindow( ) {
 }
 
 PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
-	setWindowFlags( Qt::WindowType::Widget );
+}
+
+PlayerListTopWidget * PlayerWindow::getPlayerListTopWidget( ) const {
+	return musicListWindow->getPlayerListTopWidget( );
 }
 
 bool PlayerWindow::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
+	Delete_Resource_App_Core_Ptr( musicListWindow );
 	Delete_Resource_App_Core_Ptr( musicControlDocWidget );
 	Delete_Resource_App_Core_Ptr( favoritemDockWidget );
-	Delete_Resource_App_Core_Ptr( musicContreWidget );
 	disconnect( );
 	return true;
 }
 
 bool PlayerWindow::initWidget( ) {
 	favoritemDockWidget = new FavoritemDockWidget( this );
-	musicItemSizeInfoDockWidget = new MusicItemSizeInfoDockWidget( this );
+	musicListWindow = new MusicListWindow( this );
 	musicControlDocWidget = new MusicControlDocWidget( this );
-	musicContreWidget = new MusicContreWidget( this );
 	return true;
 }
 
@@ -51,12 +53,9 @@ bool PlayerWindow::initConnect( ) {
 bool PlayerWindow::updateSubCompoment( ) {
 	if( favoritemDockWidget->init( ) == false )
 		return false;
-	if( musicItemSizeInfoDockWidget->init( ) == false )
+	if( musicListWindow->init( ) == false )
 		return false;
 	if( musicControlDocWidget->init( ) == false )
-		return false;
-
-	if( musicContreWidget->init( ) == false )
 		return false;
 	return true;
 }
@@ -64,6 +63,7 @@ bool PlayerWindow::updateSubCompoment( ) {
 bool PlayerWindow::init( ) {
 	deleteResource( );
 
+	setWindowFlags( Qt::WindowType::Widget );
 	if( initWidget( ) == false )
 		return false;
 	if( initMenu( ) == false )
@@ -73,7 +73,7 @@ bool PlayerWindow::init( ) {
 	if( updateSubCompoment( ) == false )
 		return false;
 
-	setCentralWidget( musicContreWidget );
+	setCentralWidget( musicListWindow );
 	return true;
 }
 

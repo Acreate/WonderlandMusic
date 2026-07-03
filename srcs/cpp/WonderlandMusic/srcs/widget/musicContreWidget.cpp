@@ -10,6 +10,8 @@
 #include "../application/appInstance.h"
 #include "../application/appRenderImage.h"
 
+#include "../item/musicItem.h"
+
 #include "../itemWidget/musicInfoItemWidget.h"
 
 #include "../mutex/userMutex.h"
@@ -17,6 +19,36 @@
 #include "../tools/vectorTools.h"
 
 MusicContreWidget::MusicContreWidget( QWidget *parent ) : QWidget( parent ) {
+}
+
+void MusicContreWidget::setItemVector( const std::vector< MusicItem * > &load_music_items ) {
+	size_t count = load_music_items.size( );
+	auto data = load_music_items.data( );
+	size_t index;
+	musicInfoMutex->lock( );
+	size_t oldSize = musicInfoVector.size( );
+	size_t newsize = count + oldSize;
+	musicInfoVector.resize( newsize );
+	auto saveInfoData = musicInfoVector.data( );
+	auto offsetPtr = saveInfoData + oldSize;
+	size_t findIndex;
+
+	for( index = 0; index < count; index += 1 ) {
+		auto musicItem = data[ index ];
+		auto absfile = musicItem->getAbsFilePath( );
+		for( findIndex = 0; findIndex < oldSize; findIndex += 1 )
+			if( saveInfoData[ findIndex ]->isFile( absfile ) )
+				break;
+		if( findIndex < oldSize )
+			continue;
+		auto musicInfoItemWidget = new MusicInfoItemWidget( *musicItem );
+		offsetPtr[ index ] = musicInfoItemWidget;
+		oldSize += 1;
+	}
+	if( oldSize != newsize )
+		musicInfoVector.resize( oldSize );
+	musicInfoMutex->unlock( );
+	updateItemWidget( );
 }
 
 void MusicContreWidget::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {
@@ -204,6 +236,14 @@ bool MusicContreWidget::init( ) {
 	deleteResource( );
 
 	return true;
+}
+
+bool MusicContreWidget::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+
+bool MusicContreWidget::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
 }
 
 void MusicContreWidget::paintEvent( QPaintEvent *event ) {

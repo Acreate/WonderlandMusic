@@ -7,12 +7,12 @@
 
 #include "../window/playerWindow.h"
 
-MusicItemSizeInfoDockWidget::MusicItemSizeInfoDockWidget( PlayerWindow *player_window ) : QDockWidget( player_window ), playerWindow( player_window ) {
+MusicItemSizeInfoDockWidget::MusicItemSizeInfoDockWidget( QMainWindow *main_window ) : QDockWidget( main_window ), mainWindow( main_window ) {
 }
 
 bool MusicItemSizeInfoDockWidget::deleteResource( ) {
 	disconnect( );
-	playerWindow->removeDockWidget( this );
+	mainWindow->removeDockWidget( this );
 	Delete_Resource_App_Core_Ptr( titleBarWidget );
 	Delete_Resource_App_Core_Ptr( playerListTopWidget );
 	Delete_Resource_App_Core_Ptr( playerListTopWidgetScrollArea );
@@ -42,9 +42,21 @@ bool MusicItemSizeInfoDockWidget::init( ) {
 	playerListTopWidget->setParent( playerListTopWidget );
 	playerListTopWidgetScrollArea->setWidget( playerListTopWidget );
 
-	playerWindow->addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, this );
+	mainWindow->addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, this );
 	setFixedHeight( playerListTopWidget->height( ) );
 	connect( playerListTopWidget, &PlayerListTopWidget::signal_changed_width, this, &MusicItemSizeInfoDockWidget::signal_changed_width );
 
 	return true;
+}
+
+QScrollArea * MusicItemSizeInfoDockWidget::getPlayerListTopWidgetScrollArea( ) const {
+	return playerListTopWidgetScrollArea;
+}
+
+PlayerListTopWidget * MusicItemSizeInfoDockWidget::getPlayerListTopWidget( ) const {
+	return playerListTopWidget;
+}
+
+QWidget * MusicItemSizeInfoDockWidget::getTitleBarWidget( ) const {
+	return titleBarWidget;
 }

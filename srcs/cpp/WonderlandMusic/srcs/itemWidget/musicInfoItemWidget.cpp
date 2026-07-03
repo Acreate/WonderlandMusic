@@ -14,6 +14,8 @@
 
 #include "../dateTimeFormat/dateTimeFormat.h"
 
+#include "../item/musicItem.h"
+
 #include "../tools/pathTools.h"
 
 #include "../window/playerWindow.h"
@@ -57,6 +59,16 @@ int MusicInfoItemWidget::getMusicDurationWidth( ) const {
 }
 
 MusicInfoItemWidget::MusicInfoItemWidget( ) : MusicInfoItemWidget( nullptr ) {
+}
+
+MusicInfoItemWidget::MusicInfoItemWidget( const MusicItem &music_item ) {
+	absFilePath = music_item.getAbsFilePath( );
+	musicFilePath = music_item.getMusicFilePath( );
+	musicName = music_item.getMusicName( );
+	musicSinger = music_item.getMusicSinger( );
+	duration = music_item.getDuration( );
+	formatStringDuration = music_item.getFormatStringDuration( );
+	equFilePath = absFilePath == musicFilePath;
 }
 
 MusicInfoItemWidget::MusicInfoItemWidget( QWidget *parent ) :

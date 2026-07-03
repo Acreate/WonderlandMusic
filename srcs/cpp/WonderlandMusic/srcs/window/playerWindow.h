@@ -6,6 +6,7 @@
 #include "../application/appTranslate.h"
 
 #include "../interface/iAppDiskJsonData.h"
+class MusicListWindow;
 class FavoritemDockWidget;
 class MusicContreWidget;
 class MusicControlDocWidget;
@@ -26,12 +27,10 @@ class PlayerWindow : public QMainWindow, public IAppCore, public IAppDiskJsonDat
 protected:
 	/// @brief 收藏夹组件容器
 	FavoritemDockWidget *favoritemDockWidget = nullptr;
-	/// @brief 列表选项宽度组件容器
-	MusicItemSizeInfoDockWidget *musicItemSizeInfoDockWidget = nullptr;
+	/// @brief 音乐列表组件
+	MusicListWindow *musicListWindow = nullptr;
 	/// @brief 音频播放选项组件容器
 	MusicControlDocWidget *musicControlDocWidget = nullptr;
-	/// @brief 音频列表枚举组件容器
-	MusicContreWidget *musicContreWidget = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -56,6 +55,8 @@ public:
 	~PlayerWindow( ) override;
 
 	PlayerWindow( QWidget *parent );
+
+	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 
 	bool init( ) override;
 };

@@ -35,6 +35,10 @@ bool MainStackedWidget::init( ) {
 	return true;
 }
 
+PlayerListTopWidget * MainStackedWidget::getPlayerListTopWidget( ) const {
+	return playerWindow->getPlayerListTopWidget( );
+}
+
 void MainStackedWidget::slot_showPlayerWidget( ) {
 	setCurrentWidget( playerWindow );
 }

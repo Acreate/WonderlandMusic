@@ -16,6 +16,7 @@ AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplicatio
 }
 
 bool AppInstance::deleteResource( ) {
+	disconnect( );
 	Delete_Resource_App_Core_Ptr( appUserInterfaceManage );
 	Delete_Resource_App_Core_Ptr( appDrawManage );
 	Delete_Resource_App_Core_Ptr( appDataManage );

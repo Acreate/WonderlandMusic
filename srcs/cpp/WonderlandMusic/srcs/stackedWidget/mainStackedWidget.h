@@ -5,6 +5,7 @@
 
 #include "../interface/iAppCore.h"
 
+class PlayerListTopWidget;
 class AboutWidget;
 class SettingWidget;
 class PlayerWindow;
@@ -28,6 +29,8 @@ protected:
 
 public:
 	bool init( ) override;
+
+	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 
 public Q_SLOTS:
 	void slot_showPlayerWidget( );

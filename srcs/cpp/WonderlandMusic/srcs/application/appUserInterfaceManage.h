@@ -3,6 +3,7 @@
 
 #include "../interface/iAppCore.h"
 
+class PlayerListTopWidget;
 class MainWindow;
 class SystemTrayIcon;
 
@@ -26,6 +27,8 @@ public:
 	virtual bool hideMainWindow( ) const;
 
 	virtual MainWindow * getMainWindow( ) const;
+
+	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 };
 
 #endif // APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__

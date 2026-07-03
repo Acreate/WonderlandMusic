@@ -5,6 +5,26 @@
 MusicContreScrollArea::MusicContreScrollArea( QWidget *parent ) : QScrollArea( parent ) {
 }
 
+QString MusicContreScrollArea::getWidgetName( ) const {
+	return musicContreWidget->windowTitle( );
+}
+
+void MusicContreScrollArea::setWidgetName( const QString &widget_name ) {
+	musicContreWidget->setWindowTitle( widget_name );
+}
+
+void MusicContreScrollArea::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {
+	musicContreWidget->setItemWidth( player_list_top_widget );
+}
+
+void MusicContreScrollArea::setItemVector( const std::vector< MusicItem * > &load_music_items ) {
+	musicContreWidget->setItemVector( load_music_items );
+}
+
+void MusicContreScrollArea::setItemWidth( int widget_before_width, int splite_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width ) {
+	musicContreWidget->setItemWidth( widget_before_width, splite_width, index_width, music_name_width, music_singer_width, music_duration_width, widget_after_width );
+}
+
 bool MusicContreScrollArea::deleteResource( ) {
 	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicContreWidget );
@@ -15,4 +35,12 @@ bool MusicContreScrollArea::init( ) {
 	deleteResource( );
 	musicContreWidget = new MusicContreWidget( this );
 	return true;
+}
+
+bool MusicContreScrollArea::getJsonData( QJsonObject &get_json_object ) const {
+	return musicContreWidget->getJsonData( get_json_object );
+}
+
+bool MusicContreScrollArea::setJsonData( const QJsonObject &set_json_object ) {
+	return musicContreWidget->setJsonData( set_json_object );
 }

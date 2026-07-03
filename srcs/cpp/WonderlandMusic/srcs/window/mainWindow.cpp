@@ -30,6 +30,10 @@ MainWindow::MainWindow( Qt::WindowFlags flags ) : MainWindow( nullptr, flags ) {
 MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) {
 }
 
+PlayerListTopWidget * MainWindow::getPlayerListTopWidget( ) const {
+	return mainStackedWidget->getPlayerListTopWidget( );
+}
+
 bool MainWindow::readJsonData( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );

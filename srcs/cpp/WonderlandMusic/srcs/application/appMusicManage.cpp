@@ -1,9 +1,10 @@
 ﻿#include "appMusicManage.h"
 
-#include <QFileInfo>
 #include <QMediaPlayer>
 
 #include "appMusicDecoder.h"
+
+#include "../item/musicItem.h"
 
 #include "../mutex/userMutex.h"
 
@@ -12,11 +13,18 @@
 bool AppMusicManage::deleteResource( ) {
 	if( loadMutex ) {
 		loadMutex->lock( );
-		size_t count = loadMediaVector.size( );
+		size_t index;
+		size_t count;
+		count = loadMediaVector.size( );
 		if( count ) {
 			auto data = loadMediaVector.data( );
-			size_t index = 0;
-			for( ; index < count; index += 1 )
+			for( index = 0; index < count; index += 1 )
+				delete data[ index ];
+		}
+		count = musicItemvVector.size( );
+		if( count ) {
+			auto data = musicItemvVector.data( );
+			for( index = 0; index < count; index += 1 )
 				delete data[ index ];
 		}
 		Delete_Resource_App_Core_Ptr( appMusicDecoder );
@@ -35,11 +43,12 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 	auto loadMusicFile = new QMediaPlayer;
 	// 链接信号
 	loadMusicFile->connect( loadMusicFile, &QMediaPlayer::mediaStatusChanged, this, [this, loadMusicFile] ( QMediaPlayer::MediaStatus status ) {
+		MusicItem *musicItem = new MusicItem( *loadMusicFile );
 		switch( status ) {
 			case QMediaPlayer::EndOfMedia :
 			case QMediaPlayer::InvalidMedia :
 			case QMediaPlayer::NoMedia :
-				emit signal_load_error( *loadMusicFile );
+				emit signal_load_error( musicItem->getAbsFilePath( ) );
 			case QMediaPlayer::LoadingMedia :
 			case QMediaPlayer::StalledMedia :
 			case QMediaPlayer::BufferingMedia :
@@ -52,16 +61,25 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 		loadMusicFile->disconnect( );
 		loadCount += 1;
 		size_t loadOverCount = loadMediaVector.size( );
+		musicItemvVector.emplace_back( musicItem );
 		loadMutex->unlock( );
-		emit signal_load_unity( *loadMusicFile );
+		emit signal_load_unity( *musicItem );
 		if( loadOverCount == loadCount ) {
-			emit signal_load_over( loadMediaVector );
 			loadMutex->lock( );
 			auto mediaPlayer = loadMediaVector.data( );
 			for( loadOverCount = 0; loadOverCount < loadCount; loadOverCount += 1 )
 				delete mediaPlayer[ loadOverCount ];
 			loadMediaVector.clear( );
+			// 拷贝序列
+			loadCount = musicItemvVector.size( );
+			std::vector< const MusicItem * > buff( loadCount );
+			auto buffData = buff.data( );
+			auto sourceData = musicItemvVector.data( );
+			for( loadOverCount = 0; loadOverCount < loadCount; loadOverCount += 1 )
+				buffData[ loadOverCount ] = sourceData[ loadOverCount ];
 			loadMutex->unlock( );
+			// 触发信号
+			emit signal_load_over( musicItemvVector );
 		}
 	} );
 
@@ -191,6 +209,13 @@ void AppMusicManage::loadMusciFromDir( const std::vector< QString > &music_dir )
 			resultFile.clear( ); // 清空拷贝完成的目标
 		}
 	loadMusciFromFileVector( fileVector );
+}
+
+std::vector< MusicItem * > & AppMusicManage::getMusicItem( std::vector< MusicItem * > &result_vector ) const {
+	loadMutex->lock( );
+	result_vector = musicItemvVector;
+	loadMutex->unlock( );
+	return result_vector;
 }
 
 bool AppMusicManage::init( ) {

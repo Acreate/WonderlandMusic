@@ -24,11 +24,11 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 }
 
 bool PlayerWindow::deleteResource( ) {
-	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
 	Delete_Resource_App_Core_Ptr( musicControlDocWidget );
 	Delete_Resource_App_Core_Ptr( favoritemDockWidget );
 	Delete_Resource_App_Core_Ptr( musicContreWidget );
+	disconnect( );
 	return true;
 }
 

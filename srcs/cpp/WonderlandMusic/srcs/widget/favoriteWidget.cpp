@@ -109,9 +109,6 @@ bool FavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 }
 
 bool FavoriteWidget::readJsonData( ) {
-	
-	
-	
 	return false;
 }
 

@@ -2,7 +2,7 @@
 #define MUSICCONTREWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
 
 class PlayerListTopWidget;
 class UserMutex;
@@ -10,7 +10,7 @@ class MusicInfoItemWidget;
 class PlayerListWidgetMenu;
 class PlayerWindow;
 
-class MusicContreWidget : public QWidget, public AppCore {
+class MusicContreWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
 
 protected:

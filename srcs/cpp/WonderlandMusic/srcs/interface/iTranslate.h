@@ -1,11 +1,10 @@
 ﻿#ifndef ITRANSLATE_H_H_HEAD__FILE__
 #define ITRANSLATE_H_H_HEAD__FILE__
 
-#include "../appCore.h"
-#include <QString>
-#include <QObject>
+#include "iAppCore.h"
 
-class ITranslate : public AppCore {
+
+class ITranslate : public IAppCore {
 protected:
 	bool deleteResource( ) override;
 };

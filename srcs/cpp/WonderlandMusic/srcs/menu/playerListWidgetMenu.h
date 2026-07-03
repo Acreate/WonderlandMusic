@@ -3,25 +3,26 @@
 
 #include <QMenu>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
+
+class AppDataJsonKey;
+class AppMusicDecoder;
 class PlayerListWidgetMenuTranlate;
-class JsonFileKey;
 class PlayerListMenuJsonKey;
-class MusicDecoder;
 class AppTranslate;
 class AppInstance;
 class MusicInfoItemWidget;
 class PlayerListWidget;
 
-class PlayerListWidgetMenu : public QMenu, public AppCore {
+class PlayerListWidgetMenu : public QMenu, public IAppCore {
 	Q_OBJECT;
 
 protected:
 	AppInstance *appInstance;
 	const AppTranslate *appTranslate;
 	PlayerListWidgetMenuTranlate *playerListWidgetMenuTranlate;
-	MusicDecoder *musicDecoder;
-	const JsonFileKey *jsonFileKey;
+	AppMusicDecoder *musicDecoder;
+	const AppDataJsonKey *jsonFileKey;
 	QVector< MusicInfoItemWidget * > musicInfoItemWidgetVector;
 	/// @brief 删除菜单
 	QMenu *removeMenu;

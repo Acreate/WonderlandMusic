@@ -20,7 +20,7 @@ protected:
 
 	FavoriteItemWidget( FavoriteWidget *parent, PlayerListWidget *bind_player_list_widget, const QString &name );
 
-public:
+
 };
 
 #endif // FAVORITEITEMWIDGET_H_H_HEAD__FILE__

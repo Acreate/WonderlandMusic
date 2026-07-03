@@ -1,8 +1,7 @@
 ﻿#ifndef MUSICPLAYER_H_H_HEAD__FILE__
 #define MUSICPLAYER_H_H_HEAD__FILE__
-#include <QObject>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
 
 class QAudioDevice;
 class QAudioBuffer;
@@ -14,7 +13,7 @@ class QAudioFormat;
 class QAudioDecoder;
 class QAudioSink;
 
-class MusicPlayer : public QObject, public AppCore {
+class MusicPlayer : public QObject, public IAppCore {
 	Q_OBJECT;
 
 protected:

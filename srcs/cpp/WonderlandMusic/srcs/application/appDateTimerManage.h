@@ -1,10 +1,9 @@
 ﻿#ifndef APPDATETIMERMANAGE_H_H_HEAD__FILE__
 #define APPDATETIMERMANAGE_H_H_HEAD__FILE__
-#include <QObject>
 
-#include "appCore.h"
+#include "../interface/iAppCore.h"
 
-class AppDateTimerManage : public QObject, public AppCore {
+class AppDateTimerManage : public QObject, public IAppCore {
 protected:
 	/// @brief 起始时间
 	QDateTime *startDateTime = nullptr;

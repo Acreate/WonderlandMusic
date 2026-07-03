@@ -1,18 +1,12 @@
-﻿#ifndef MUSICDECODER_H_H_HEAD__FILE__
-#define MUSICDECODER_H_H_HEAD__FILE__
+﻿#ifndef APPMUSICDECODER_H_H_HEAD__FILE__
+#define APPMUSICDECODER_H_H_HEAD__FILE__
 
-#include <iostream>
 #include <qcontainerfwd.h>
 #include <vector>
 
-#include "appCore.h"
+#include "../interface/iAppCore.h"
 
-class PlayerListWidget;
-class MusicInfoItemWidget;
-class QMediaPlayer;
-class QString;
-
-class MusicDecoder : public AppCore{
+class AppMusicDecoder : public IAppCore {
 protected:
 	class StringOperator {
 		QStringList *stringList;
@@ -45,9 +39,9 @@ protected:
 	}
 
 public:
-	~MusicDecoder( ) override;
+	~AppMusicDecoder( ) override;
 
-	MusicDecoder( );
+	AppMusicDecoder( );
 
 	virtual bool musicFileNmaeSupperDecoder( const QString &music_file_path ) const;
 
@@ -60,4 +54,4 @@ public:
 	virtual std::vector< QString > getSupperDecodeFileSuffix( ) const;
 };
 
-#endif // MUSICDECODER_H_H_HEAD__FILE__
+#endif // APPMUSICDECODER_H_H_HEAD__FILE__

@@ -8,7 +8,7 @@
 
 #include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
-#include "../application/renderImage.h"
+#include "../application/appRenderImage.h"
 
 #include "../itemWidget/musicInfoItemWidget.h"
 
@@ -47,7 +47,7 @@ void MusicContreWidget::updateItemWidget( ) {
 	int offsetY = 0;
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appDrawManage = appInstance->getAppDrawManage( );
-	auto renderImage = appDrawManage->getRenderImage( );
+	auto renderImage = appDrawManage->getAppRenderImage( );
 	auto fontMetrics = renderImage->getFontMetrics( );
 	int height = fontMetrics->height( );
 	auto newWidth = this->widgetBeforeWidth + this->widgetAfterWidth + this->splitWidth * 5 + this->musicNameWidth + this->musicSingerWidth + this->musicDurationWidth + this->indexWidth;
@@ -70,16 +70,9 @@ void MusicContreWidget::updateItemWidget( ) {
 	size_t index;
 	for( index = 0; index < count; index += 1 ) {
 		auto itemWidget = data[ index ];
-		itemWidget->widgetBeforeWidth = this->widgetBeforeWidth;
-		itemWidget->widgetAfterWidth = this->widgetAfterWidth;
-		itemWidget->splitWidth = this->splitWidth;
-		itemWidget->musicNameWidth = this->musicNameWidth;
-		itemWidget->musicSingerWidth = this->musicSingerWidth;
-		itemWidget->musicDurationWidth = this->musicDurationWidth;
-		itemWidget->indexWidth = this->indexWidth;
+		itemWidget->setItemWidth( widgetBeforeWidth, widgetAfterWidth, splitWidth, indexWidth, musicNameWidth, musicSingerWidth, musicDurationWidth );
 		itemWidget->setIndex( index + 1 );
 		itemWidget->update( );
-		itemWidget->show( );
 		itemWidget->setGeometry( 0, offsetY, newWidth, height );
 		offsetY += height;
 	}
@@ -95,7 +88,7 @@ void MusicContreWidget::updateItemWidget( ) {
 void MusicContreWidget::removeRepetition( ) {
 	using compUnity = MusicInfoItemWidget *;
 	VectorTools::compIdenticalTypeFinction< compUnity > compFunction = [] ( const compUnity &left, const compUnity &right ) ->bool {
-		if( left->musicFilePath == right->musicFilePath )
+		if( left->isFile( right ) )
 			return true;
 		return false;
 	};

@@ -4,11 +4,11 @@
 #include <QMediaMetaData>
 #include <QPainter>
 
+#include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
-#include "../application/jsonFileKey.h"
-#include "../application/renderImage.h"
+#include "../application/appRenderImage.h"
 #include "../application/jsonKey/musicInfoItemWidgetJsonKey.h"
 #include "../application/translate/musicInfoItemTranslate.h"
 
@@ -17,6 +17,44 @@
 #include "../tools/pathTools.h"
 
 #include "../window/playerWindow.h"
+
+void MusicInfoItemWidget::setItemWidth( int brfore, int after, int split, int index, int name, int singer, int duation ) {
+	widgetBeforeWidth = brfore;
+	widgetAfterWidth = after;
+	splitWidth = split;
+	indexWidth = index;
+	musicNameWidth = name;
+	musicSingerWidth = singer;
+	musicDurationWidth = duation;
+}
+
+int MusicInfoItemWidget::getWidgetBeforeWidth( ) const {
+	return widgetBeforeWidth;
+}
+
+int MusicInfoItemWidget::getWidgetAfterWidth( ) const {
+	return widgetAfterWidth;
+}
+
+int MusicInfoItemWidget::getSplitWidth( ) const {
+	return splitWidth;
+}
+
+int MusicInfoItemWidget::getIndexWidth( ) const {
+	return indexWidth;
+}
+
+int MusicInfoItemWidget::getMusicNameWidth( ) const {
+	return musicNameWidth;
+}
+
+int MusicInfoItemWidget::getMusicSingerWidth( ) const {
+	return musicSingerWidth;
+}
+
+int MusicInfoItemWidget::getMusicDurationWidth( ) const {
+	return musicDurationWidth;
+}
 
 MusicInfoItemWidget::MusicInfoItemWidget( ) : MusicInfoItemWidget( nullptr ) {
 }
@@ -33,7 +71,7 @@ MusicInfoItemWidget::MusicInfoItemWidget( QWidget *parent ) :
 bool MusicInfoItemWidget::renderToBuff( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appDrawManage = appInstance->getAppDrawManage( );
-	auto renderImage = appDrawManage->getRenderImage( );
+	auto renderImage = appDrawManage->getAppRenderImage( );
 	auto font = renderImage->getFont( );
 
 	int offsetSplitX = splitWidth / 2;
@@ -84,7 +122,7 @@ bool MusicInfoItemWidget::renderToBuff( ) {
 
 bool MusicInfoItemWidget::getJsonData( QJsonObject &get_json_object ) const {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	auto musicInfoItemJsonKey = jsonFileKey->getMusicInfoItemWidget( );
 	get_json_object.insert( musicInfoItemJsonKey->getMusicInfoFile( ), musicFilePath );
 	get_json_object.insert( musicInfoItemJsonKey->getMusicInfoName( ), musicName );
@@ -95,7 +133,7 @@ bool MusicInfoItemWidget::getJsonData( QJsonObject &get_json_object ) const {
 
 bool MusicInfoItemWidget::setJsonData( const QJsonObject &set_json_object ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 
 	auto musicInfoItemJsonKey = jsonFileKey->getMusicInfoItemWidget( );
 	auto end = set_json_object.end( );
@@ -177,6 +215,13 @@ bool MusicInfoItemWidget::isFile( const QString &comp_file ) const {
 	if( equFilePath == false )
 		return musicFilePath == comp_file || absFilePath == comp_file;
 	return musicFilePath == comp_file;
+}
+
+bool MusicInfoItemWidget::isFile( const MusicInfoItemWidget *comp_file ) const {
+	if( comp_file == this )
+		return true;
+	this->isFile( comp_file->absFilePath );
+	return false;
 }
 
 const QString & MusicInfoItemWidget::getMusicFilePath( ) const {

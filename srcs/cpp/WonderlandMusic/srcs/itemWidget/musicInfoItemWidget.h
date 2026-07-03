@@ -2,15 +2,13 @@
 #define MUSICINFOITEMWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../application/appJsonData.h"
-#include "../application/appRenderBuff.h"
+#include "../interface/iAppJsonData.h"
+#include "../interface/iAppRenderBuff.h"
 
 class QMediaMetaData;
 
-class MusicInfoItemWidget : public QWidget, public AppJsonData, public AppRenderBuff {
+class MusicInfoItemWidget : public QWidget, public IAppJsonData, public IAppRenderBuff {
 	Q_OBJECT;
-	friend class PlayerWindow;
-	friend class MusicContreWidget;
 
 protected:
 	bool equFilePath;
@@ -32,6 +30,31 @@ protected:
 	int musicDurationWidth;
 
 public:
+	/// @brief 设置选项的空间
+	/// @param brfore 项前
+	/// @param after 项后
+	/// @param split 项之间
+	/// @param index 编号
+	/// @param name 名称
+	/// @param singer 歌手
+	/// @param duation 时长
+	virtual void setItemWidth( int brfore, int after, int split, int index, int name, int singer, int duation );
+
+	virtual int getWidgetBeforeWidth( ) const;
+
+	virtual int getWidgetAfterWidth( ) const;
+
+	virtual int getSplitWidth( ) const;
+
+	virtual int getIndexWidth( ) const;
+
+	virtual int getMusicNameWidth( ) const;
+
+	virtual int getMusicSingerWidth( ) const;
+
+	virtual int getMusicDurationWidth( ) const;
+
+public:
 	MusicInfoItemWidget( );
 
 	MusicInfoItemWidget( QWidget *parent );
@@ -47,6 +70,12 @@ public:
 	virtual bool init( const QString &file_path, const QMediaMetaData &mediaMetaData );
 
 	virtual bool isFile( const QString &comp_file ) const;
+
+	virtual bool isFile( const MusicInfoItemWidget *comp_file ) const;
+
+	virtual bool isFile( const MusicInfoItemWidget &comp_file ) const {
+		return isFile( &comp_file );
+	}
 
 	virtual const QString & getMusicFilePath( ) const;
 

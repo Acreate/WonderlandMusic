@@ -6,10 +6,10 @@
 
 #include "playerWindow.h"
 
+#include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
-#include "../application/jsonFileKey.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
 #include "../application/translate/mainWindowTranslate.h"
 
@@ -32,7 +32,7 @@ MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) {
 
 bool MainWindow::readJsonData( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	// 获取 json 路径
 	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
 	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
@@ -47,7 +47,7 @@ bool MainWindow::writeJsonData( ) {
 	if( getJsonData( jsonObject ) == false )
 		return false;
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	// 获取 json 路径
 	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
 	auto mainWindowJsonFile = mainWindowJsonFileKey->getSettingJsonPath( );
@@ -57,7 +57,7 @@ bool MainWindow::writeJsonData( ) {
 
 bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	auto geo = geometry( );
 	int windowX = geo.x( );
 	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
@@ -74,7 +74,7 @@ bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 
 bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 
 	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
 	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );

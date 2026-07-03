@@ -1,7 +1,7 @@
 ﻿#ifndef MAINWINDOWJSONKEY_H_H_HEAD__FILE__
 #define MAINWINDOWJSONKEY_H_H_HEAD__FILE__
 
-#include "iJsonKey.h"
+#include <interface/iJsonKey.h>
 
 class MainWindowJsonKey : public IJsonKey {
 	QString settingJsonPath;

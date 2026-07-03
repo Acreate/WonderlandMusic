@@ -1,6 +1,7 @@
 ﻿#ifndef PLAYERWINDOWTRANSLATE_H_H_HEAD__FILE__
 #define PLAYERWINDOWTRANSLATE_H_H_HEAD__FILE__
-#include "iTranslate.h"
+
+#include <interface/iTranslate.h>
 
 class PlayerWindowTranslate : public ITranslate {
 	QString loadDiskFileTitle;

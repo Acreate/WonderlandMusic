@@ -1,6 +1,7 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
-#include "appCore.h"
+
+#include "../interface/iAppCore.h"
 
 class OptionDockWidgetTranslate;
 class FavoriteWidgetTranslate;
@@ -21,7 +22,7 @@ class SettingWidgetTranslate;
 class UserMutexTranslate;
 class ISelectDirWidgetTranslate;
 
-class AppTranslate : public AppCore {
+class AppTranslate : public IAppCore {
 protected:
 	SettingWidgetTranslate *settingWidget = nullptr;
 	PlayerToolsWidgetTranslate *playerToolsWidget = nullptr;

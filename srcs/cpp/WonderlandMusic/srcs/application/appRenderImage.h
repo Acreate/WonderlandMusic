@@ -1,6 +1,6 @@
-﻿#ifndef RENDERIMAGE_H_H_HEAD__FILE__
-#define RENDERIMAGE_H_H_HEAD__FILE__
-#include "appCore.h"
+﻿#ifndef APPRENDERIMAGE_H_H_HEAD__FILE__
+#define APPRENDERIMAGE_H_H_HEAD__FILE__
+#include "../interface/iAppCore.h"
 
 class QWidget;
 class QPen;
@@ -10,7 +10,7 @@ class QImage;
 class QFontMetrics;
 class QFont;
 
-class RenderImage : public AppCore {
+class AppRenderImage : public IAppCore {
 protected:
 	QFont *font = nullptr;
 	QFontMetrics *fontMetrics = nullptr;
@@ -24,9 +24,9 @@ protected:
 	bool deleteResource( ) override;
 
 public:
-	RenderImage( );
+	AppRenderImage( );
 
-	~RenderImage( ) override;
+	~AppRenderImage( ) override;
 
 	bool init( ) override;
 
@@ -38,5 +38,4 @@ public:
 
 	virtual bool renderWidget( QImage &result_render_image, QWidget *render_widget ) const;
 };
-
-#endif // RENDERIMAGE_H_H_HEAD__FILE__
+#endif // APPRENDERIMAGE_H_H_HEAD__FILE__

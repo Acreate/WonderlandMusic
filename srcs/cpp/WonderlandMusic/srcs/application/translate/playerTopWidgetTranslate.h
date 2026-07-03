@@ -1,6 +1,7 @@
 ﻿#ifndef PLAYERTOPWIDGETTRANSLATE_H_H_HEAD__FILE__
 #define PLAYERTOPWIDGETTRANSLATE_H_H_HEAD__FILE__
-#include "iTranslate.h"
+
+#include <interface/iTranslate.h>
 
 class PlayerTopWidgetTranslate : public ITranslate {
 	QString musicIndex;

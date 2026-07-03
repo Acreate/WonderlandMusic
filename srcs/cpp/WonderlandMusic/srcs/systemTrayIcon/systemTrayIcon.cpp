@@ -1,13 +1,12 @@
 ﻿#include "systemTrayIcon.h"
 
 #include <QFileInfo>
-#include <QMenu>
 
+#include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/appUserInterfaceManage.h"
-#include "../application/jsonFileKey.h"
 #include "../application/jsonKey/systemTrayIconJsonKey.h"
 #include "../application/translate/systemTrayIconTranslate.h"
 
@@ -63,7 +62,7 @@ bool SystemTrayIcon::init( ) {
 	auto appDataManage = applicationInstance->getAppDataManage( );
 	auto systemTrayIconTranslate = appDataManage->getTranslate( )->getSystemTrayIcon( );
 	if( icon( ).isNull( ) ) {
-		auto jsonFileKey = appDataManage->getJsonFileKey( );
+		auto jsonFileKey = appDataManage->getAppDataJsonKey( );
 		auto systemTrayIconJsonKey = jsonFileKey->getSystemTrayIcon( );
 		auto logoIconPath = systemTrayIconJsonKey->getIconFilePath( );
 		QFileInfo fileInfo( logoIconPath );

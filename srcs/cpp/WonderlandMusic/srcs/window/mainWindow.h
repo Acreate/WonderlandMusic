@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 
-#include "../application/appCore.h"
-#include "../application/appDiskJsonData.h"
+#include "../interface/iAppCore.h"
+#include "../interface/iAppDiskJsonData.h"
+
 class MainStackedWidget;
 class OptionDockWidget;
 class PlayerWindow;
@@ -18,7 +19,7 @@ class AboutWidget;
 class AppTranslate;
 class AppInstance;
 
-class MainWindow : public QMainWindow, public AppCore, public AppDiskJsonData {
+class MainWindow : public QMainWindow, public IAppCore, public IAppDiskJsonData {
 	Q_OBJECT;
 
 protected:

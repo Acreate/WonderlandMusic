@@ -1,11 +1,12 @@
 ﻿#ifndef APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__
 #define APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__
-#include "appCore.h"
+
+#include "../interface/iAppCore.h"
 
 class MainWindow;
 class SystemTrayIcon;
 
-class AppUserInterfaceManage : public AppCore {
+class AppUserInterfaceManage : public IAppCore {
 protected:
 	/// @brief 主要执行窗口
 	MainWindow *mainWindow = nullptr;

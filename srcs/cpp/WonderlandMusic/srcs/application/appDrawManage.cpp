@@ -1,25 +1,23 @@
 ﻿#include "appDrawManage.h"
 
-#include "renderImage.h"
-
-#include "../tools/templateArgs.h"
+#include "appRenderImage.h"
 
 AppDrawManage::~AppDrawManage( ) {
 	deleteResource( );
 }
 
 bool AppDrawManage::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( renderImage );
+	Delete_Resource_App_Core_Ptr( appRenderImage );
 	return true;
 }
 
 bool AppDrawManage::init( ) {
 	deleteResource( );
-	renderImage = new RenderImage;
-	Init_Resource_App_Core_Ptr( renderImage );
+	appRenderImage = new AppRenderImage;
+	Init_Resource_App_Core_Ptr( appRenderImage );
 	return true;
 }
 
-RenderImage * AppDrawManage::getRenderImage( ) const {
-	return renderImage;
+AppRenderImage * AppDrawManage::getAppRenderImage( ) const {
+	return appRenderImage;
 }

@@ -1,6 +1,7 @@
 ﻿#ifndef MESSAGETRANSLATE_H_H_HEAD__FILE__
 #define MESSAGETRANSLATE_H_H_HEAD__FILE__
-#include "iTranslate.h"
+
+#include <interface/iTranslate.h>
 
 class MessageTranslate : public ITranslate {
 	QString sourceFile;

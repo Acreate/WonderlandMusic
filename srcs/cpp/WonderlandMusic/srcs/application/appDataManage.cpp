@@ -3,12 +3,11 @@
 #include <QJsonObject>
 #include <qtranslator.h>
 
+#include "appDataJsonKey.h"
 #include "appInstance.h"
 #include "appTranslate.h"
-#include "jsonFileKey.h"
 
 #include "../tools/pathTools.h"
-#include "../tools/templateArgs.h"
 
 bool AppDataManage::init( ) {
 	deleteResource( );
@@ -23,10 +22,10 @@ bool AppDataManage::init( ) {
 	setAppStringTranslate( constAppDefaultTranslatePath );
 
 	translate = new AppTranslate;
-	jsonFileKey = new JsonFileKey;
+	appDataJsonKey = new AppDataJsonKey;
 
 	Init_Resource_App_Core_Ptr( translate );
-	Init_Resource_App_Core_Ptr( jsonFileKey );
+	Init_Resource_App_Core_Ptr( appDataJsonKey );
 	return true;
 }
 
@@ -36,7 +35,7 @@ AppDataManage::~AppDataManage( ) {
 
 bool AppDataManage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( translate );
-	Delete_Resource_App_Core_Ptr( jsonFileKey );
+	Delete_Resource_App_Core_Ptr( appDataJsonKey );
 	return true;
 }
 
@@ -44,8 +43,8 @@ AppTranslate * AppDataManage::getTranslate( ) const {
 	return translate;
 }
 
-JsonFileKey * AppDataManage::getJsonFileKey( ) const {
-	return jsonFileKey;
+AppDataJsonKey * AppDataManage::getAppDataJsonKey( ) const {
+	return appDataJsonKey;
 }
 
 QString AppDataManage::getAppSettingPath( ) const {

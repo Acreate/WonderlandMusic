@@ -1,10 +1,9 @@
 ﻿#ifndef IJSONKEY_H_H_HEAD__FILE__
 #define IJSONKEY_H_H_HEAD__FILE__
-#include <QString>
 
-#include <application/appCore.h>
+#include "iAppCore.h"
 
-class IJsonKey : public AppCore {
+class IJsonKey : public IAppCore {
 protected:
 	bool deleteResource( ) override;
 };

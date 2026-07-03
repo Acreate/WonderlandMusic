@@ -1,6 +1,7 @@
 ﻿#ifndef FAVORITEWIDGETTRANSLATE_H_H_HEAD__FILE__
 #define FAVORITEWIDGETTRANSLATE_H_H_HEAD__FILE__
-#include "iTranslate.h"
+
+#include <interface/iTranslate.h>
 
 class FavoriteWidgetTranslate : public ITranslate {
 	QString defautFavoriteName;

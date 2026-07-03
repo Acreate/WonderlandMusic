@@ -1,7 +1,7 @@
 ﻿#ifndef DATETIMEFORMATTRANSLATE_H_H_HEAD__FILE__
 #define DATETIMEFORMATTRANSLATE_H_H_HEAD__FILE__
 
-#include "iTranslate.h"
+#include <interface/iTranslate.h>
 
 class DateTimeFormatTranslate : public ITranslate {
 	/// @brief 年

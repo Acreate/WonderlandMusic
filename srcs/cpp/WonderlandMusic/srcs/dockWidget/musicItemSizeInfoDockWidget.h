@@ -2,13 +2,13 @@
 #define MUSICITEMSIZEINFODOCKWIDGET_H_H_HEAD__FILE__
 #include <QDockWidget>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
 
 class PlayerListTopWidget;
 class QScrollArea;
 class PlayerWindow;
 
-class MusicItemSizeInfoDockWidget : public QDockWidget, public AppCore {
+class MusicItemSizeInfoDockWidget : public QDockWidget, public IAppCore {
 	Q_OBJECT;
 
 protected:

@@ -1,22 +1,21 @@
 ﻿#ifndef APPDATAMANAGE_H_H_HEAD__FILE__
 #define APPDATAMANAGE_H_H_HEAD__FILE__
-#include <QObject>
 
-#include "appCore.h"
-#include "appDiskJsonData.h"
+#include "../interface/iAppCore.h"
+#include "../interface/iAppDiskJsonData.h"
 
+class AppDataJsonKey;
 class QTranslator;
 class AppTranslate;
-class JsonFileKey;
 
-class AppDataManage : public QObject, public AppCore, public AppDiskJsonData {
+class AppDataManage : public QObject, public IAppDiskJsonData, public IAppCore {
 	Q_OBJECT;
 
 protected:
 	/// @brief 翻译
 	AppTranslate *translate = nullptr;
 	/// @brief json 关联的 key
-	JsonFileKey *jsonFileKey = nullptr;
+	AppDataJsonKey *appDataJsonKey = nullptr;
 
 	/// @brief 应用配置路径
 	QString appSettingPath;
@@ -42,7 +41,7 @@ protected:
 public:
 	virtual AppTranslate * getTranslate( ) const;
 
-	virtual JsonFileKey * getJsonFileKey( ) const;
+	virtual AppDataJsonKey * getAppDataJsonKey( ) const;
 
 	virtual QString getAppSettingPath( ) const;
 

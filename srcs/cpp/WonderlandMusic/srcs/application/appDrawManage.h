@@ -1,13 +1,14 @@
 ﻿#ifndef APPDRAWMANAGE_H_H_HEAD__FILE__
 #define APPDRAWMANAGE_H_H_HEAD__FILE__
-#include "appCore.h"
 
-class RenderImage;
+#include "../interface/iAppCore.h"
 
-class AppDrawManage : public AppCore {
+class AppRenderImage;
+
+class AppDrawManage : public IAppCore {
 protected:
 	/// @brief 渲染对象
-	RenderImage *renderImage = nullptr;
+	AppRenderImage *appRenderImage = nullptr;
 
 public:
 	~AppDrawManage( ) override;
@@ -18,7 +19,7 @@ protected:
 public:
 	bool init( ) override;
 
-	virtual RenderImage * getRenderImage( ) const;
+	virtual AppRenderImage * getAppRenderImage( ) const;
 };
 
 #endif // APPDRAWMANAGE_H_H_HEAD__FILE__

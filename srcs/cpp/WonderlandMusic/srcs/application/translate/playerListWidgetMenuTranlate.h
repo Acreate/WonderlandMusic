@@ -1,7 +1,7 @@
 ﻿#ifndef PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
 #define PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
 
-#include "iTranslate.h"
+#include <interface/iTranslate.h>
 
 class PlayerListWidgetMenuTranlate : public ITranslate {
 	QString playerListMenuFileLoadMenu;

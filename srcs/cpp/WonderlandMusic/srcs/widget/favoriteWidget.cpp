@@ -99,3 +99,22 @@ FavoriteItemWidget * FavoriteWidget::getRootFavoriteItemWidget( ) const {
 const std::vector< FavoriteItemWidget * > & FavoriteWidget::getFavoriteItemWidgetVector( ) const {
 	return favoriteItemWidgetVector;
 }
+
+bool FavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+
+bool FavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}
+
+bool FavoriteWidget::readJsonData( ) {
+	
+	
+	
+	return false;
+}
+
+bool FavoriteWidget::writeJsonData( ) {
+	return false;
+}

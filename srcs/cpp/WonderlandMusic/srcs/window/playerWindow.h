@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 
-#include "../application/appDiskJsonData.h"
 #include "../application/appTranslate.h"
+
+#include "../interface/iAppDiskJsonData.h"
 class FavoritemDockWidget;
 class MusicContreWidget;
 class MusicControlDocWidget;
@@ -19,7 +20,7 @@ class PlayerListTopWidget;
 class QScrollArea;
 class PlayerListWidget;
 
-class PlayerWindow : public QMainWindow, public AppCore, public AppDiskJsonData {
+class PlayerWindow : public QMainWindow, public IAppCore, public IAppDiskJsonData {
 	Q_OBJECT;
 
 protected:

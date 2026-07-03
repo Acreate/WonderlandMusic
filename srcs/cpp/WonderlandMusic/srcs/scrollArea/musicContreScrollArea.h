@@ -2,14 +2,16 @@
 #define MUSICCONTRESCROLLAREA_H_H_HEAD__FILE__
 #include <QScrollArea>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
 
 class MusicContreWidget;
 
-class MusicContreScrollArea : public QScrollArea, public AppCore{
+class MusicContreScrollArea : public QScrollArea, public IAppCore {
 	Q_OBJECT;
+
 protected:
-	MusicContreWidget* musicContreWidget = nullptr;
+	MusicContreWidget *musicContreWidget = nullptr;
+
 public:
 	MusicContreScrollArea( QWidget *parent );
 

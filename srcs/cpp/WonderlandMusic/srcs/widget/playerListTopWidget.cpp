@@ -4,12 +4,12 @@
 #include <QMouseEvent>
 #include <QPainter>
 
+#include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
+#include "../application/appRenderImage.h"
 #include "../application/appTranslate.h"
-#include "../application/jsonFileKey.h"
-#include "../application/renderImage.h"
 #include "../application/jsonKey/playerListTopWidgetJsonKey.h"
 #include "../application/translate/playerTopWidgetTranslate.h"
 
@@ -18,7 +18,7 @@
 void PlayerListTopWidget::updateCurrentWidgetSize( ) {
 	int newWidth = widgetBeforeWidth + widgetAfterWidth + splitWidth * 5 + musicNameWidth + musicSingerWidth + musicDurationWidth + indexWidth;
 	AppInstance *appInstance = AppInstance::getAppInstance( );
-	auto fontMetrics = appInstance->getAppDrawManage( )->getRenderImage( )->getFontMetrics( );
+	auto fontMetrics = appInstance->getAppDrawManage( )->getAppRenderImage( )->getFontMetrics( );
 	int currentHeight = fontMetrics->height( );
 	setFixedSize( newWidth, currentHeight );
 }
@@ -32,7 +32,7 @@ PlayerListTopWidget::~PlayerListTopWidget( ) {
 
 bool PlayerListTopWidget::loadJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
 	auto fileJsonPath = listTopWidgetJsonKey->getTopJsonPath( );
 	QJsonObject fileJsonObject;
@@ -77,7 +77,7 @@ bool PlayerListTopWidget::loadJsonPathInfo( ) {
 
 bool PlayerListTopWidget::writeJsonPathInfo( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 
 	QJsonObject fileJsonObject;
 	int width = contentsRect( ).width( );
@@ -138,7 +138,7 @@ bool PlayerListTopWidget::getMinSize( QSize &result_min_size ) {
 	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
 	if( appTranslate == nullptr )
 		return false;
-	auto renderImage = appInstance->getAppDrawManage( )->getRenderImage( );
+	auto renderImage = appInstance->getAppDrawManage( )->getAppRenderImage( );
 	if( renderImage == nullptr )
 		return false;
 	auto fontMetrics = renderImage->getFontMetrics( );
@@ -207,7 +207,7 @@ void PlayerListTopWidget::suggestWidth( int suggest_width ) {
 bool PlayerListTopWidget::averageItem( ) {// 获取字符串最小宽度
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-	auto renderImage = appInstance->getAppDrawManage( )->getRenderImage( );
+	auto renderImage = appInstance->getAppDrawManage( )->getAppRenderImage( );
 	auto fontMetrics = renderImage->getFontMetrics( );
 	auto playerTopWidgetTranslate = appTranslate->getPlayerTopWidget( );
 	auto indexWidth = fontMetrics->horizontalAdvance( "0000" );
@@ -322,7 +322,7 @@ void PlayerListTopWidget::hideEvent( QHideEvent *event ) {
 void PlayerListTopWidget::paintEvent( QPaintEvent *event ) {
 	AppInstance *appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-	auto font = appInstance->getAppDrawManage( )->getRenderImage( )->getFont( );
+	auto font = appInstance->getAppDrawManage( )->getAppRenderImage( )->getFont( );
 
 	int offsetSplitX = splitWidth / 2;
 	QPainter painter;

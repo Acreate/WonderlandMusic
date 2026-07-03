@@ -1,4 +1,4 @@
-﻿#include "musicDecoder.h"
+﻿#include "appMusicDecoder.h"
 
 #include <QFileInfo>
 #include <QMetaEnum>
@@ -10,14 +10,14 @@
 #include "../tools/stringTools.h"
 #include "../tools/vectorTools.h"
 
-MusicDecoder::~MusicDecoder( ) {
+AppMusicDecoder::~AppMusicDecoder( ) {
 	deleteResource( );
 }
 
-MusicDecoder::MusicDecoder( ) {
+AppMusicDecoder::AppMusicDecoder( ) {
 }
 
-bool MusicDecoder::musicFileNmaeSupperDecoder( const QString &music_file_path ) const {
+bool AppMusicDecoder::musicFileNmaeSupperDecoder( const QString &music_file_path ) const {
 	size_t count = supperDecodeFileSuffix.size( );
 	if( count == 0 )
 		return false; // 没有正确解析后缀
@@ -34,27 +34,27 @@ bool MusicDecoder::musicFileNmaeSupperDecoder( const QString &music_file_path ) 
 	return false;
 }
 
-MusicDecoder::StringOperator::StringOperator( ) {
+AppMusicDecoder::StringOperator::StringOperator( ) {
 	this->stringList = new QStringList;
 }
 
-MusicDecoder::StringOperator::~StringOperator( ) {
+AppMusicDecoder::StringOperator::~StringOperator( ) {
 	delete stringList;
 }
 
-MusicDecoder::StringOperator & MusicDecoder::StringOperator::operator<<( const QString &append ) {
+AppMusicDecoder::StringOperator & AppMusicDecoder::StringOperator::operator<<( const QString &append ) {
 	*stringList << append;
 	return *this;
 }
 
-void MusicDecoder::appendDecodeFileSuffix( const QString &decode_file_suffix ) {
+void AppMusicDecoder::appendDecodeFileSuffix( const QString &decode_file_suffix ) {
 	QString *newItemSuffixes = new QString( StringTools::getFileSuffix( decode_file_suffix ).toUpper( ) );
 	*newItemSuffixes = newItemSuffixes->toUpper( );
 
 	supperDecodeFileSuffix.emplace_back( newItemSuffixes );
 }
 
-void MusicDecoder::appendDecodeFileSuffix( const QStringList &decode_file_suffix ) {
+void AppMusicDecoder::appendDecodeFileSuffix( const QStringList &decode_file_suffix ) {
 	auto count = decode_file_suffix.size( );
 	if( count == 0 )
 		return;
@@ -64,7 +64,7 @@ void MusicDecoder::appendDecodeFileSuffix( const QStringList &decode_file_suffix
 		appendDecodeFileSuffix( data[ index ] );
 }
 
-bool MusicDecoder::init( ) {
+bool AppMusicDecoder::init( ) {
 	deleteResource( );
 	// 自定义添加
 	appendAnyDecodeFileSuffix( "wav", "wma", "flac", "m4a", "aac", "ogg" );
@@ -99,13 +99,13 @@ bool MusicDecoder::init( ) {
 	return true;
 }
 
-bool MusicDecoder::deleteResource( ) {
+bool AppMusicDecoder::deleteResource( ) {
 	VectorTools::deleteVectorPtr( supperDecodeFileSuffix );
 	supperDecodeFileSuffix.clear( );
 	return true;
 }
 
-std::vector< QString > MusicDecoder::getSupperDecodeFileSuffix( ) const {
+std::vector< QString > AppMusicDecoder::getSupperDecodeFileSuffix( ) const {
 	size_t count = supperDecodeFileSuffix.size( );
 	std::vector< QString > result( count );
 	auto data = supperDecodeFileSuffix.data( );

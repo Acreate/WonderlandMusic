@@ -2,10 +2,9 @@
 #include <QJsonObject>
 #include <qevent.h>
 
+#include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
-#include "../application/jsonFileKey.h"
-#include "../application/musicDecoder.h"
 #include "../application/jsonKey/playerWindowJsonKey.h"
 #include "../dockWidget/favoritemDockWidget.h"
 #include "../dockWidget/musicControlDocWidget.h"
@@ -80,8 +79,8 @@ bool PlayerWindow::init( ) {
 
 bool PlayerWindow::readJsonData( ) {
 	AppInstance *appInstance = AppInstance::getAppInstance( );
-	AppDataManage *appDataManage = appInstance->getAppDataManage( );
-	JsonFileKey *jsonFileKey = appDataManage->getJsonFileKey( );
+	auto appDataManage = appInstance->getAppDataManage( );
+	auto jsonFileKey = appDataManage->getAppDataJsonKey( );
 	auto playerWindowJsonKey = jsonFileKey->getPlayerWindow( );
 	QJsonObject readResultJsonObject;
 	if( PathTools::readJsonObject( readResultJsonObject, playerWindowJsonKey->getFileSelect( ) ) == false )
@@ -94,8 +93,8 @@ bool PlayerWindow::writeJsonData( ) {
 	if( getJsonData( saveResultJsonObject ) == false )
 		return false;
 	AppInstance *appInstance = AppInstance::getAppInstance( );
-	AppDataManage *appDataManage = appInstance->getAppDataManage( );
-	JsonFileKey *jsonFileKey = appDataManage->getJsonFileKey( );
+	auto appDataManage = appInstance->getAppDataManage( );
+	auto jsonFileKey = appDataManage->getAppDataJsonKey( );
 	auto playerWindowJsonKey = jsonFileKey->getPlayerWindow( );
 	return PathTools::writeJsonObject( saveResultJsonObject, playerWindowJsonKey->getFileSelect( ) );
 }

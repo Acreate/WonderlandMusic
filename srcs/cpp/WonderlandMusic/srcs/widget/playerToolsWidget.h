@@ -3,13 +3,13 @@
 
 #include <QWidget>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
 
 class PlayerWindow;
 class QPushButton;
 class QProgressBar;
 
-class PlayerToolsWidget : public QWidget, public AppCore {
+class PlayerToolsWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
 
 protected:

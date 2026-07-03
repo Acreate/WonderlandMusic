@@ -5,10 +5,10 @@
 #include <QProgressBar>
 #include <qevent.h>
 
+#include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
-#include "../application/jsonFileKey.h"
 #include "../application/jsonKey/playerListToolWidgetJsonKey.h"
 #include "../application/translate/playerToolsWidgetTranslate.h"
 
@@ -66,7 +66,7 @@ bool PlayerToolsWidget::init( ) {
 	theNextSong->setText( playerToolsWidgetTranslate->getTheNextSong( ) );
 	controlPlay->setText( playerToolsWidgetTranslate->getControlPlay( ) );
 
-	auto jsonFileKey = appDataManage->getJsonFileKey( );
+	auto jsonFileKey = appDataManage->getAppDataJsonKey( );
 	auto musicPlayerListToolWidgetJsonFileKey = jsonFileKey->getPlayerListToolWidget( );
 	playIcon->addFile( musicPlayerListToolWidgetJsonFileKey->getControlPlayIconPath( ) );
 	pauseIcon->addFile( musicPlayerListToolWidgetJsonFileKey->getControlPauseIconPath( ) );

@@ -2,13 +2,14 @@
 #define FAVORITEWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
+#include "../interface/iAppDiskJsonData.h"
 
 class PlayerListWidget;
 class FavoriteItemWidget;
 class PlayerWindow;
 
-class FavoriteWidget : public QWidget, public AppCore {
+class FavoriteWidget : public QWidget, public IAppCore, public IAppDiskJsonData {
 	Q_OBJECT;
 
 protected:
@@ -37,6 +38,15 @@ public:
 	virtual FavoriteItemWidget * getRootFavoriteItemWidget( ) const;
 
 	virtual const std::vector< FavoriteItemWidget * > & getFavoriteItemWidgetVector( ) const;
+
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+
+	bool setJsonData( const QJsonObject &set_json_object ) override;
+
+protected:
+	bool readJsonData( ) override;
+
+	bool writeJsonData( ) override;
 
 Q_SIGNALS:
 	void clickFavoriteItem( const FavoriteItemWidget *item );

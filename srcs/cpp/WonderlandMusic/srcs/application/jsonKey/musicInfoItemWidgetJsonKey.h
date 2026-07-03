@@ -1,6 +1,7 @@
 ﻿#ifndef MUSICINFOITEMWIDGETJSONKEY_H_H_HEAD__FILE__
 #define MUSICINFOITEMWIDGETJSONKEY_H_H_HEAD__FILE__
-#include "iJsonKey.h"
+
+#include <interface/iJsonKey.h>
 
 class MusicInfoItemWidgetJsonKey : public IJsonKey {
 	QString musicInfoFile;

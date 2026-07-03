@@ -3,11 +3,11 @@
 
 #include <QSystemTrayIcon>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
 
 class SystemTrayIconMenu;
 
-class SystemTrayIcon : public QSystemTrayIcon, public AppCore {
+class SystemTrayIcon : public QSystemTrayIcon, public IAppCore {
 	Q_OBJECT;
 
 protected:

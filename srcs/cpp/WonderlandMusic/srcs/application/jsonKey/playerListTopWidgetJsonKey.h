@@ -1,6 +1,7 @@
 ﻿#ifndef PLAYERLISTTOPWIDGETJSONKEY_H_H_HEAD__FILE__
 #define PLAYERLISTTOPWIDGETJSONKEY_H_H_HEAD__FILE__
-#include "iJsonKey.h"
+
+#include <interface/iJsonKey.h>
 
 class PlayerListTopWidgetJsonKey : public IJsonKey {
 	QString topJsonPath;

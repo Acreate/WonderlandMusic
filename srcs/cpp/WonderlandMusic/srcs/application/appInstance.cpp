@@ -1,17 +1,10 @@
 ﻿#include "appInstance.h"
 
-#include <QSystemTrayIcon>
 #include "appDataManage.h"
 #include "appDateTimerManage.h"
 #include "appDrawManage.h"
+#include "appMusicManage.h"
 #include "appUserInterfaceManage.h"
-#include "musicManage.h"
-
-#include "../systemTrayIcon/systemTrayIcon.h"
-
-#include "../tools/templateArgs.h"
-
-#include "../window/mainWindow.h"
 
 AppInstance *AppInstance::instance = nullptr;
 
@@ -25,8 +18,8 @@ AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplicatio
 bool AppInstance::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( appUserInterfaceManage );
 	Delete_Resource_App_Core_Ptr( appDrawManage );
-	Delete_Resource_App_Core_Ptr( musicManage );
 	Delete_Resource_App_Core_Ptr( appDataManage );
+	Delete_Resource_App_Core_Ptr( appMusicManage );
 	Delete_Resource_App_Core_Ptr( appDateTimerManage );
 	instance = nullptr;
 	return true;
@@ -48,8 +41,8 @@ AppDateTimerManage * AppInstance::getAppDateTimerManage( ) const {
 	return appDateTimerManage;
 }
 
-MusicManage * AppInstance::getMusicManage( ) const {
-	return musicManage;
+AppMusicManage * AppInstance::getAppMusicManage( ) const {
+	return appMusicManage;
 }
 
 AppInstance::~AppInstance( ) {
@@ -65,13 +58,13 @@ bool AppInstance::init( ) {
 	instance = this;
 	appDateTimerManage = new AppDateTimerManage;
 	appDataManage = new AppDataManage;
-	musicManage = new MusicManage;
+	appMusicManage = new AppMusicManage;
 	appDrawManage = new AppDrawManage;
 	appUserInterfaceManage = new AppUserInterfaceManage;
 
 	Init_Resource_App_Core_Ptr( appDateTimerManage );
 	Init_Resource_App_Core_Ptr( appDataManage );
-	Init_Resource_App_Core_Ptr( musicManage );
+	Init_Resource_App_Core_Ptr( appMusicManage );
 	Init_Resource_App_Core_Ptr( appDrawManage );
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 

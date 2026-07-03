@@ -2,8 +2,8 @@
 
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
+#include "../application/appMusicManage.h"
 #include "../application/appTranslate.h"
-#include "../application/musicManage.h"
 #include "../application/translate/playerListWidgetMenuTranlate.h"
 
 PlayerListWidgetMenu::PlayerListWidgetMenu( ) : QMenu( ) {
@@ -20,10 +20,10 @@ bool PlayerListWidgetMenu::initVar( ) {
 	playerListWidgetMenuTranlate = appTranslate->getPlayerListWidgetMenu( );
 	if( playerListWidgetMenuTranlate == nullptr )
 		return false;
-	musicDecoder = appInstance->getMusicManage( )->getMusicDecoder( );
+	musicDecoder = appInstance->getAppMusicManage( )->getAppMusicDecoder( );
 	if( musicDecoder == nullptr )
 		return false;
-	jsonFileKey = appDataManage->getJsonFileKey( );
+	jsonFileKey = appDataManage->getAppDataJsonKey( );
 	if( jsonFileKey == nullptr )
 		return false;
 	return true;

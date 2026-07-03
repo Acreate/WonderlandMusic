@@ -1,7 +1,7 @@
 ﻿#ifndef USERMUTEXTRANSLATE_H_H_HEAD__FILE__
 #define USERMUTEXTRANSLATE_H_H_HEAD__FILE__
 
-#include "iTranslate.h"
+#include <interface/iTranslate.h>
 
 class UserMutexTranslate : public ITranslate {
 	QString nodeSetUnlockError;

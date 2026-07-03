@@ -1,6 +1,7 @@
 ﻿#ifndef MUSICINFOITEMTRANSLATE_H_H_HEAD__FILE__
 #define MUSICINFOITEMTRANSLATE_H_H_HEAD__FILE__
-#include "iTranslate.h"
+
+#include <interface/iTranslate.h>
 
 class MusicInfoItemTranslate : public ITranslate {
 	QString musichumanBeingNameNone;

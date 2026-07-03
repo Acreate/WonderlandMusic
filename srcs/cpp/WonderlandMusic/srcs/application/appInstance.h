@@ -3,8 +3,9 @@
 
 #include <QApplication>
 
-#include "appCore.h"
+#include "../interface/iAppCore.h"
 
+class AppMusicManage;
 class MusicManage;
 class AppDateTimerManage;
 class AppUserInterfaceManage;
@@ -18,7 +19,7 @@ class MusicDecoder;
 class AppTranslate;
 class MessageErrorOut;
 
-class AppInstance : public QApplication, public AppCore {
+class AppInstance : public QApplication, public IAppCore {
 	Q_OBJECT;
 
 private:
@@ -34,7 +35,7 @@ protected:
 	/// @brief 时间管理
 	AppDateTimerManage *appDateTimerManage = nullptr;
 	/// @brief 音频管理
-	MusicManage *musicManage = nullptr;
+	AppMusicManage *appMusicManage = nullptr;
 
 public:
 	static AppInstance * getAppInstance( );
@@ -59,6 +60,6 @@ public:
 
 	virtual AppDateTimerManage * getAppDateTimerManage( ) const;
 
-	virtual MusicManage * getMusicManage( ) const;
+	virtual AppMusicManage * getAppMusicManage( ) const;
 };
 #endif // APPINSTANCE_H_H_HEAD__FILE__

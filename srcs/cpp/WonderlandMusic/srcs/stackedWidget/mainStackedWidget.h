@@ -3,13 +3,13 @@
 
 #include <QStackedWidget>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
 
 class AboutWidget;
 class SettingWidget;
 class PlayerWindow;
 
-class MainStackedWidget : public QStackedWidget, public AppCore {
+class MainStackedWidget : public QStackedWidget, public IAppCore {
 	Q_OBJECT;
 
 protected:

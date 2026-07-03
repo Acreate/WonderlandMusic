@@ -1,10 +1,11 @@
-﻿#include "jsonFileKey.h"
+﻿#include "appDataJsonKey.h"
 
 #include "appInstance.h"
 
 #include "../tools/templateArgs.h"
 
 #include "jsonKey/aboutWidgetJsonKey.h"
+#include "jsonKey/favoriteWidgetJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
 #include "jsonKey/musicInfoItemWidgetJsonKey.h"
 #include "jsonKey/playerListToolWidgetJsonKey.h"
@@ -12,7 +13,7 @@
 #include "jsonKey/playerWindowJsonKey.h"
 #include "jsonKey/systemTrayIconJsonKey.h"
 
-bool JsonFileKey::deleteResource( ) {
+bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( playerListToolWidget );
 	Delete_Resource_App_Core_Ptr( aboutWidgetJsonFileKey );
 	Delete_Resource_App_Core_Ptr( playerListTopWidget );
@@ -20,18 +21,19 @@ bool JsonFileKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( mainWindow );
 	Delete_Resource_App_Core_Ptr( musicInfoItemWidget );
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
+	Delete_Resource_App_Core_Ptr( favoriteWidget );
 
 	return true;
 }
 
-JsonFileKey::~JsonFileKey( ) {
+AppDataJsonKey::~AppDataJsonKey( ) {
 	deleteResource( );
 }
 
-JsonFileKey::JsonFileKey( ) {
+AppDataJsonKey::AppDataJsonKey( ) {
 }
 
-bool JsonFileKey::init( ) {
+bool AppDataJsonKey::init( ) {
 	deleteResource( );
 	playerListToolWidget = new PlayerListToolWidgetJsonKey;
 	aboutWidgetJsonFileKey = new AboutWidgetJsonKey;
@@ -40,7 +42,7 @@ bool JsonFileKey::init( ) {
 	mainWindow = new MainWindowJsonKey;
 	musicInfoItemWidget = new MusicInfoItemWidgetJsonKey;
 	systemTrayIcon = new SystemTrayIconJsonKey;
-
+	favoriteWidget = new FavoriteWidgetJsonKey;
 	Init_Resource_App_Core_Ptr( playerListToolWidget );
 	Init_Resource_App_Core_Ptr( aboutWidgetJsonFileKey );
 	Init_Resource_App_Core_Ptr( playerListTopWidget );
@@ -48,34 +50,39 @@ bool JsonFileKey::init( ) {
 	Init_Resource_App_Core_Ptr( mainWindow );
 	Init_Resource_App_Core_Ptr( musicInfoItemWidget );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
+	Init_Resource_App_Core_Ptr( favoriteWidget );
 
 	return true;
 }
 
-PlayerListToolWidgetJsonKey * JsonFileKey::getPlayerListToolWidget( ) const {
+PlayerListToolWidgetJsonKey * AppDataJsonKey::getPlayerListToolWidget( ) const {
 	return playerListToolWidget;
 }
 
-AboutWidgetJsonKey * JsonFileKey::getAboutWidgetJsonFileKey( ) const {
+AboutWidgetJsonKey * AppDataJsonKey::getAboutWidgetJsonFileKey( ) const {
 	return aboutWidgetJsonFileKey;
 }
 
-PlayerListTopWidgetJsonKey * JsonFileKey::getPlayerListTopWidget( ) const {
+PlayerListTopWidgetJsonKey * AppDataJsonKey::getPlayerListTopWidget( ) const {
 	return playerListTopWidget;
 }
 
-PlayerWindowJsonKey * JsonFileKey::getPlayerWindow( ) const {
+PlayerWindowJsonKey * AppDataJsonKey::getPlayerWindow( ) const {
 	return playerWindow;
 }
 
-MusicInfoItemWidgetJsonKey * JsonFileKey::getMusicInfoItemWidget( ) const {
+MusicInfoItemWidgetJsonKey * AppDataJsonKey::getMusicInfoItemWidget( ) const {
 	return musicInfoItemWidget;
 }
 
-MainWindowJsonKey * JsonFileKey::getMainWindow( ) const {
+MainWindowJsonKey * AppDataJsonKey::getMainWindow( ) const {
 	return mainWindow;
 }
 
-SystemTrayIconJsonKey * JsonFileKey::getSystemTrayIcon( ) const {
+SystemTrayIconJsonKey * AppDataJsonKey::getSystemTrayIcon( ) const {
 	return systemTrayIcon;
+}
+
+FavoriteWidgetJsonKey * AppDataJsonKey::getFavoriteWidget( ) const {
+	return favoriteWidget;
 }

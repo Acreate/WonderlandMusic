@@ -2,12 +2,12 @@
 #define MUSICCONTROLDOCWIDGET_H_H_HEAD__FILE__
 #include <QDockWidget>
 
-#include "../application/appCore.h"
+#include "../interface/iAppCore.h"
 
 class PlayerToolsWidget;
 class PlayerWindow;
 
-class MusicControlDocWidget : public QDockWidget, public AppCore {
+class MusicControlDocWidget : public QDockWidget, public IAppCore {
 	Q_OBJECT;
 
 protected:

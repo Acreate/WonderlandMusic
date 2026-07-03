@@ -1,6 +1,7 @@
 ﻿#ifndef PLAYERLISTTOOLWIDGETJSONKEY_H_H_HEAD__FILE__
 #define PLAYERLISTTOOLWIDGETJSONKEY_H_H_HEAD__FILE__
-#include "iJsonKey.h"
+
+#include <interface/iJsonKey.h>
 
 class PlayerListToolWidgetJsonKey : public IJsonKey {
 	/// @brief 上一曲图标

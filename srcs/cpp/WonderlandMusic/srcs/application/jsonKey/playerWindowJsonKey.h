@@ -1,7 +1,7 @@
 ﻿#ifndef PLAYERWINDOWJSONKEY_H_H_HEAD__FILE__
 #define PLAYERWINDOWJSONKEY_H_H_HEAD__FILE__
 
-#include "iJsonKey.h"
+#include <interface/iJsonKey.h>
 
 class PlayerWindowJsonKey : public IJsonKey {
 	QString jsonFilePath;

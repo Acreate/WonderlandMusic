@@ -1,6 +1,7 @@
 ﻿#ifndef SETTINGWIDGETTRANSLATE_H_H_HEAD__FILE__
 #define SETTINGWIDGETTRANSLATE_H_H_HEAD__FILE__
-#include "iTranslate.h"
+
+#include <interface/iTranslate.h>
 
 class SettingWidgetTranslate : public ITranslate {
 	QString okBtnTxt;

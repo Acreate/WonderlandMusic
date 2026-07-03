@@ -1,12 +1,10 @@
-﻿#include "renderImage.h"
+﻿#include "appRenderImage.h"
 
 #include <QFontDatabase>
 #include <QPainter>
 #include <QWidget>
 
-#include "../tools/templateArgs.h"
-
-bool RenderImage::deleteResource( ) {
+bool AppRenderImage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( brackGroundColor );
 	Delete_Resource_App_Core_Ptr( drawPenColor );
 	Delete_Resource_App_Core_Ptr( drawPen );
@@ -15,13 +13,13 @@ bool RenderImage::deleteResource( ) {
 	return true;
 }
 
-RenderImage::RenderImage( ) {
+AppRenderImage::AppRenderImage( ) {
 }
 
-RenderImage::~RenderImage( ) {
+AppRenderImage::~AppRenderImage( ) {
 }
 
-bool RenderImage::init( ) {
+bool AppRenderImage::init( ) {
 	brackGroundColor = new QColor( 0, 0, 0, 0 );
 	drawPenColor = new QColor( 0, 0, 0, 255 );
 	drawPen = new QPen( *drawPenColor );
@@ -49,15 +47,15 @@ bool RenderImage::init( ) {
 	return true;
 }
 
-const QFont * RenderImage::getFont( ) const {
+const QFont * AppRenderImage::getFont( ) const {
 	return font;
 }
 
-const QFontMetrics * RenderImage::getFontMetrics( ) const {
+const QFontMetrics * AppRenderImage::getFontMetrics( ) const {
 	return fontMetrics;
 }
 
-bool RenderImage::renderTxt( QImage &result_render_image, const QString &render_txt ) const {
+bool AppRenderImage::renderTxt( QImage &result_render_image, const QString &render_txt ) const {
 	int renderWidth = fontMetrics->horizontalAdvance( render_txt );
 	auto buffImage = QImage( renderWidth, fontMetricsHeight, QImage::Format_RGBA8888 );
 	if( buffImage.isNull( ) )
@@ -73,7 +71,7 @@ bool RenderImage::renderTxt( QImage &result_render_image, const QString &render_
 	return true;
 }
 
-bool RenderImage::renderWidget( QImage &result_render_image, QWidget *render_widget ) const {
+bool AppRenderImage::renderWidget( QImage &result_render_image, QWidget *render_widget ) const {
 	if( render_widget == nullptr )
 		return false;
 

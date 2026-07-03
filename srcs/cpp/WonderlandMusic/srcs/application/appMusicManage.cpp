@@ -1,23 +1,80 @@
 ﻿#include "appMusicManage.h"
 
 #include <QFileInfo>
+#include <QMediaPlayer>
 
 #include "appMusicDecoder.h"
+
+#include "../mutex/userMutex.h"
 
 #include "../tools/pathTools.h"
 
 bool AppMusicManage::deleteResource( ) {
-	disconnect( );
-	loadMediaVector.clear( );
-	loadFileVector.clear( );
-	Delete_Resource_App_Core_Ptr( appMusicDecoder );
+	if( loadMutex ) {
+		loadMutex->lock( );
+		size_t count = loadMediaVector.size( );
+		if( count ) {
+			auto data = loadMediaVector.data( );
+			size_t index = 0;
+			for( ; index < count; index += 1 )
+				delete data[ index ];
+		}
+		Delete_Resource_App_Core_Ptr( appMusicDecoder );
+		disconnect( );
+		loadMediaVector.clear( );
+		loadFileVector.clear( );
+		loadCount = 0;
+		loadMutex->unlock( );
+		Delete_Resource_App_Core_Ptr( loadMutex );
+	}
 	return true;
 }
 
 void AppMusicManage::loadFile( const QString &music_file ) {
+	// 构建对象
+	auto loadMusicFile = new QMediaPlayer;
+	// 链接信号
+	loadMusicFile->connect( loadMusicFile, &QMediaPlayer::mediaStatusChanged, this, [this, loadMusicFile] ( QMediaPlayer::MediaStatus status ) {
+		switch( status ) {
+			case QMediaPlayer::EndOfMedia :
+			case QMediaPlayer::InvalidMedia :
+			case QMediaPlayer::NoMedia :
+				emit signal_load_error( *loadMusicFile );
+			case QMediaPlayer::LoadingMedia :
+			case QMediaPlayer::StalledMedia :
+			case QMediaPlayer::BufferingMedia :
+			case QMediaPlayer::BufferedMedia :
+				return; // 不是加载完成，则无法运行该功能
+			case QMediaPlayer::LoadedMedia :
+				break;
+		}
+		loadMutex->lock( );
+		loadMusicFile->disconnect( );
+		loadCount += 1;
+		size_t loadOverCount = loadMediaVector.size( );
+		loadMutex->unlock( );
+		emit signal_load_unity( *loadMusicFile );
+		if( loadOverCount == loadCount ) {
+			emit signal_load_over( loadMediaVector );
+			loadMutex->lock( );
+			auto mediaPlayer = loadMediaVector.data( );
+			for( loadOverCount = 0; loadOverCount < loadCount; loadOverCount += 1 )
+				delete mediaPlayer[ loadOverCount ];
+			loadMediaVector.clear( );
+			loadMutex->unlock( );
+		}
+	} );
+
+	// 存储
+	loadMutex->lock( );
+	loadMediaVector.emplace_back( loadMusicFile );
+	loadMutex->unlock( );
+	// 开始配置
+	loadMusicFile->setSource( QUrl::fromLocalFile( music_file ) );
 }
 
 void AppMusicManage::loadMusciFromFileVector( const std::vector< QString > &music_file ) {
+	loadMutex->lock( );
 	size_t count = loadFileVector.size( );
 
 	size_t compCount = music_file.size( );
@@ -34,6 +91,8 @@ void AppMusicManage::loadMusciFromFileVector( const std::vector< QString > &musi
 		auto data = loadFileVector.data( );
 		for( loadIndex = 0; loadIndex < compCount; loadIndex += 1 ) {
 			fileInfo.setFile( loadArray[ loadIndex ] );
+			if( fileInfo.exists( ) == false )
+				continue;
 			compItem = fileInfo.absoluteFilePath( );
 			if( fileInfo.isDir( ) ) {
 				dirVector.emplace_back( compItem );
@@ -58,6 +117,8 @@ void AppMusicManage::loadMusciFromFileVector( const std::vector< QString > &musi
 	} else {
 		for( loadIndex = 0; loadIndex < compCount; loadIndex += 1 ) {
 			fileInfo.setFile( loadArray[ loadIndex ] );
+			if( fileInfo.exists( ) == false )
+				continue;
 			compItem = fileInfo.absoluteFilePath( );
 			if( fileInfo.isDir( ) ) {
 				dirVector.emplace_back( compItem );
@@ -76,6 +137,7 @@ void AppMusicManage::loadMusciFromFileVector( const std::vector< QString > &musi
 			loadBuff.resize( loadBuffCount );
 		loadFileVector.append_range( loadBuff );
 	}
+	loadMutex->unlock( );
 	for( index = 0; index < loadBuffCount; index += 1 )
 		loadFile( loadBuffData[ index ] );
 }
@@ -93,6 +155,8 @@ void AppMusicManage::loadMusciFromDir( const std::vector< QString > &music_dir )
 	size_t loadDirIndex;
 	for( countIndex = 0; countIndex < compCount; countIndex += 1 ) {
 		fileInfo.setFile( compData[ countIndex ] );
+		if( fileInfo.exists( ) == false )
+			continue;
 		compItem = fileInfo.absoluteFilePath( );
 		if( fileInfo.isFile( ) ) {
 			fileVector.emplace_back( compItem );
@@ -131,9 +195,14 @@ void AppMusicManage::loadMusciFromDir( const std::vector< QString > &music_dir )
 
 bool AppMusicManage::init( ) {
 	deleteResource( );
+	loadMutex = new UserMutex;
 	appMusicDecoder = new AppMusicDecoder;
 	Init_Resource_App_Core_Ptr( appMusicDecoder );
 	return true;
+}
+
+AppMusicManage::~AppMusicManage( ) {
+	deleteResource( );
 }
 
 AppMusicDecoder * AppMusicManage::getAppMusicDecoder( ) const {

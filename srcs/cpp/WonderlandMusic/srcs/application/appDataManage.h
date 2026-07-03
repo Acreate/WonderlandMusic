@@ -3,13 +3,13 @@
 #include <QObject>
 
 #include "appCore.h"
-#include "appJsonData.h"
+#include "appDiskJsonData.h"
 
 class QTranslator;
 class AppTranslate;
 class JsonFileKey;
 
-class AppDataManage : public QObject, public AppCore, public AppJsonData {
+class AppDataManage : public QObject, public AppCore, public AppDiskJsonData {
 	Q_OBJECT;
 
 protected:

@@ -5,16 +5,9 @@
 class MainWindowTranslate : public ITranslate {
 	QString appWindowTitleName;
 
-
 public:
 	bool init( ) override;
 
 	virtual const QString & getAppWindowTitleName( ) const;
-
-	virtual const QString & getSettingWidget( ) const;
-
-	virtual const QString & getAboutWidget( ) const;
-
-	virtual const QString & getMusicTypeName( ) const;
 };
 #endif // MAINWINDOWTRANSLATE_H_H_HEAD__FILE__

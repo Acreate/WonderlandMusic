@@ -1,8 +1,28 @@
 ﻿#ifndef FAVORITEMDOCKWIDGET_H_H_HEAD__FILE__
 #define FAVORITEMDOCKWIDGET_H_H_HEAD__FILE__
+#include <QDockWidget>
 
+#include "../application/appCore.h"
 
-class FavoritemDockWidget {
+class FavoriteWidget;
+class PlayerWindow;
+
+class FavoritemDockWidget : public QDockWidget, public AppCore {
+	Q_OBJECT;
+
+protected:
+	PlayerWindow *playerWindow;
+	QWidget *titleBarWidget = nullptr;
+	FavoriteWidget *favoriteWidget = nullptr;
+
+public:
+	FavoritemDockWidget( PlayerWindow *player_window );
+
+protected:
+	bool deleteResource( ) override;
+
+public:
+	bool init( ) override;
 };
 
 #endif // FAVORITEMDOCKWIDGET_H_H_HEAD__FILE__

@@ -31,6 +31,8 @@ MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) {
 }
 
 bool MainWindow::readJsonData( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
 	// 获取 json 路径
 	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
 	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
@@ -44,6 +46,8 @@ bool MainWindow::writeJsonData( ) {
 	QJsonObject jsonObject;
 	if( getJsonData( jsonObject ) == false )
 		return false;
+	auto appInstance = AppInstance::getAppInstance( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
 	// 获取 json 路径
 	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
 	auto mainWindowJsonFile = mainWindowJsonFileKey->getSettingJsonPath( );
@@ -52,6 +56,8 @@ bool MainWindow::writeJsonData( ) {
 }
 
 bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
 	auto geo = geometry( );
 	int windowX = geo.x( );
 	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
@@ -67,6 +73,9 @@ bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 }
 
 bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+
 	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
 	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
 	// 匹配 x
@@ -106,13 +115,13 @@ MainWindow::~MainWindow( ) {
 	deleteResource( );
 }
 
-MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ), isLoadJsonFile( false ) {
+MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
 }
 
 bool MainWindow::init( ) {
-	appInstance = AppInstance::getAppInstance( );
-	appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-	jsonFileKey = appInstance->getAppDataManage( )->getJsonFileKey( );
+	deleteResource( );
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
 	// 配置窗口顶部显示
 	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
 
@@ -144,6 +153,7 @@ bool MainWindow::init( ) {
 }
 
 bool MainWindow::deleteResource( ) {
+	disconnect( );
 	Delete_Resource_App_Core_Ptr( leftOptionDockWidget );
 	Delete_Resource_App_Core_Ptr( mainStackedWidget );
 	return true;
@@ -154,6 +164,7 @@ bool MainWindow::event( QEvent *event ) {
 	switch( type ) {
 		case QEvent::Close :
 			writeJsonData( );
+			auto appInstance = AppInstance::getAppInstance( );
 			//if( QSystemTrayIcon::isSystemTrayAvailable( ) ) {
 			//	hide( );
 			//	event->ignore( );

@@ -6,8 +6,6 @@
 #include "../application/musicManage.h"
 #include "../application/translate/playerListWidgetMenuTranlate.h"
 
-#include "../widget/playerListWidget.h"
-
 PlayerListWidgetMenu::PlayerListWidgetMenu( ) : QMenu( ) {
 }
 

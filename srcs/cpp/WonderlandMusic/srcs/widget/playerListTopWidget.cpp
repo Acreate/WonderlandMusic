@@ -182,7 +182,7 @@ bool PlayerListTopWidget::getMinSize( ) {
 }
 
 void PlayerListTopWidget::emitChangedWidth( ) {
-	emit changedWidth( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
+	emit signal_changed_width( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
 }
 
 bool PlayerListTopWidget::init( ) {
@@ -306,7 +306,7 @@ void PlayerListTopWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		setCursor( cursorShape );
 		isReadyDrag = isDrag = false;
 		updateCurrentWidgetSize( );
-		emit changedWidth( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
+		emit signal_changed_width( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
 	}
 }
 
@@ -375,6 +375,6 @@ void PlayerListTopWidget::leaveEvent( QEvent *event ) {
 		setCursor( cursorShape );
 		isReadyDrag = isDrag = false;
 		updateCurrentWidgetSize( );
-		emit changedWidth( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
+		emit signal_changed_width( splitWidth, widgetBeforeWidth, this->indexWidth, this->musicNameWidth, this->musicSingerWidth, this->musicDurationWidth, this->widgetAfterWidth );
 	}
 }

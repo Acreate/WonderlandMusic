@@ -1,38 +1,22 @@
 ﻿#include "playerWindow.h"
-
-#include <QDockWidget>
-#include <QScrollBar>
-#include <QFileDialog>
 #include <QJsonObject>
-#include <QScrollArea>
-#include <QStackedWidget>
 #include <qevent.h>
-#include <qjsonarray.h>
 
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/jsonFileKey.h"
 #include "../application/musicDecoder.h"
-#include "../application/musicManage.h"
 #include "../application/jsonKey/playerWindowJsonKey.h"
-#include "../application/translate/playerWindowTranslate.h"
-
+#include "../dockWidget/favoritemDockWidget.h"
 #include "../dockWidget/musicControlDocWidget.h"
 #include "../dockWidget/musicItemSizeInfoDockWidget.h"
-
-#include "../itemWidget/musicInfoItemWidget.h"
-
-#include "../menu/playerListWidgetMenu.h"
-
 #include "../mutex/userMutex.h"
 
 #include "../tools/pathTools.h"
-#include "../tools/widgetTools.h"
-
-#include "../widget/favoriteWidget.h"
 #include "../widget/musicContreWidget.h"
 
 PlayerWindow::~PlayerWindow( ) {
+	writeJsonData( );
 	deleteResource( );
 }
 
@@ -41,18 +25,17 @@ PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 }
 
 bool PlayerWindow::deleteResource( ) {
-	this->disconnect( );
-	writeJsonData( );
+	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
 	Delete_Resource_App_Core_Ptr( musicControlDocWidget );
-	Delete_Resource_App_Core_Ptr( favoriteWidget );
+	Delete_Resource_App_Core_Ptr( favoritemDockWidget );
 	Delete_Resource_App_Core_Ptr( musicContreWidget );
 	return true;
 }
 
 bool PlayerWindow::initWidget( ) {
+	favoritemDockWidget = new FavoritemDockWidget( this );
 	musicItemSizeInfoDockWidget = new MusicItemSizeInfoDockWidget( this );
-
 	musicControlDocWidget = new MusicControlDocWidget( this );
 	musicContreWidget = new MusicContreWidget( this );
 	return true;
@@ -67,12 +50,13 @@ bool PlayerWindow::initConnect( ) {
 }
 
 bool PlayerWindow::updateSubCompoment( ) {
+	if( favoritemDockWidget->init( ) == false )
+		return false;
 	if( musicItemSizeInfoDockWidget->init( ) == false )
 		return false;
 	if( musicControlDocWidget->init( ) == false )
 		return false;
-	if( favoriteWidget->init( ) == false )
-		return false;
+
 	if( musicContreWidget->init( ) == false )
 		return false;
 	return true;

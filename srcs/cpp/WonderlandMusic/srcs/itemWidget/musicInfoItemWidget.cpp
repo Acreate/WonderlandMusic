@@ -16,8 +16,6 @@
 
 #include "../tools/pathTools.h"
 
-#include "../widget/playerListWidget.h"
-
 #include "../window/playerWindow.h"
 
 MusicInfoItemWidget::MusicInfoItemWidget( ) : MusicInfoItemWidget( nullptr ) {

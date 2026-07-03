@@ -8,10 +8,11 @@
 
 #include "../window/playerWindow.h"
 
-FavoriteWidget::FavoriteWidget( PlayerWindow *player_window ) : QWidget( player_window ), playerWindow( player_window ) {
+FavoriteWidget::FavoriteWidget( QWidget *parent ) : QWidget( parent ) {
 }
 
 bool FavoriteWidget::deleteResource( ) {
+	disconnect( );
 	Delete_Resource_App_Core_Ptr( rootFavoriteItemWidget );
 	return true;
 }

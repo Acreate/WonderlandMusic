@@ -12,12 +12,11 @@ class FavoriteWidget : public QWidget, public AppCore {
 	Q_OBJECT;
 
 protected:
-	PlayerWindow *playerWindow;
 	FavoriteItemWidget *rootFavoriteItemWidget = nullptr;
 	std::vector< FavoriteItemWidget * > favoriteItemWidgetVector;
 
 public:
-	FavoriteWidget( PlayerWindow *player_window );
+	FavoriteWidget( QWidget *parent );
 
 protected:
 	bool deleteResource( ) override;
@@ -37,7 +36,7 @@ public:
 
 	virtual FavoriteItemWidget * getRootFavoriteItemWidget( ) const;
 
-	virtual const std::vector<FavoriteItemWidget *> & getFavoriteItemWidgetVector( ) const;
+	virtual const std::vector< FavoriteItemWidget * > & getFavoriteItemWidgetVector( ) const;
 
 Q_SIGNALS:
 	void clickFavoriteItem( const FavoriteItemWidget *item );

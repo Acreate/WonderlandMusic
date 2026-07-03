@@ -10,7 +10,7 @@ class QMediaMetaData;
 class MusicInfoItemWidget : public QWidget, public AppJsonData, public AppRenderBuff {
 	Q_OBJECT;
 	friend class PlayerWindow;
-	friend class PlayerListWidget;
+	friend class MusicContreWidget;
 
 protected:
 	bool equFilePath;
@@ -57,10 +57,6 @@ public:
 	virtual qint64 getDuration( ) const;
 
 	virtual const QString & getFormatStringDuration( ) const;
-
-	static bool toJsonObect( QJsonObject &result_json_object, const MusicInfoItemWidget &music_info );
-
-	static bool forJsonObject( MusicInfoItemWidget &result_music_info, const QJsonObject &for_json_object );
 
 	virtual size_t getIndex( ) const;
 

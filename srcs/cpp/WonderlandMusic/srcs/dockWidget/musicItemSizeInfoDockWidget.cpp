@@ -11,6 +11,7 @@ MusicItemSizeInfoDockWidget::MusicItemSizeInfoDockWidget( PlayerWindow *player_w
 }
 
 bool MusicItemSizeInfoDockWidget::deleteResource( ) {
+	disconnect( );
 	playerWindow->removeDockWidget( this );
 	Delete_Resource_App_Core_Ptr( titleBarWidget );
 	Delete_Resource_App_Core_Ptr( playerListTopWidget );
@@ -42,13 +43,8 @@ bool MusicItemSizeInfoDockWidget::init( ) {
 	playerListTopWidgetScrollArea->setWidget( playerListTopWidget );
 
 	playerWindow->addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, this );
-
-	auto horizontalScrollBar = playerListTopWidgetScrollArea->horizontalScrollBar( );
-	auto verticalScrollBar = playerListTopWidgetScrollArea->verticalScrollBar( );
-
 	setFixedHeight( playerListTopWidget->height( ) );
+	connect( playerListTopWidget, &PlayerListTopWidget::signal_changed_width, this, &MusicItemSizeInfoDockWidget::signal_changed_width );
 
-	connect( horizontalScrollBar, &QScrollBar::valueChanged, this, &MusicItemSizeInfoDockWidget::horizontalScroll );
-	connect( verticalScrollBar, &QScrollBar::valueChanged, this, &MusicItemSizeInfoDockWidget::verticalScroll );
 	return true;
 }

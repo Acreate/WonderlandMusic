@@ -5,8 +5,6 @@
 #include <QProgressBar>
 #include <qevent.h>
 
-#include "playerListWidget.h"
-
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
@@ -18,9 +16,8 @@
 
 #include "../msgInfo/messageErrorOut.h"
 
-#include "../window/playerWindow.h"
-
 bool PlayerToolsWidget::deleteResource( ) {
+	disconnect( );
 	Delete_Resource_App_Core_Ptr( thePreviousSong );
 	Delete_Resource_App_Core_Ptr( theNextSong );
 	Delete_Resource_App_Core_Ptr( controlPlay );

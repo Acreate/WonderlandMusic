@@ -22,18 +22,10 @@ class MainWindow : public QMainWindow, public AppCore, public AppDiskJsonData {
 	Q_OBJECT;
 
 protected:
-	/// @brief 获取 app 实例
-	AppInstance *appInstance;
-	/// @brief 获取软件翻译
-	const AppTranslate *appTranslate;
-	/// @brief 获取 Json 关键字信息
-	const JsonFileKey *jsonFileKey;
 	/// @brief 配置主显示组件-层叠
 	MainStackedWidget *mainStackedWidget = nullptr;
 	/// @brief 在主窗口配置左侧容器窗口
 	OptionDockWidget *leftOptionDockWidget = nullptr;
-	/// @brief 是否初始化
-	bool isLoadJsonFile;
 
 public:
 	~MainWindow( ) override;

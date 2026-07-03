@@ -40,9 +40,7 @@ public:
 	}
 
 Q_SIGNALS:
-	void horizontalScroll( int new_point );
-
-	void verticalScroll( int new_point );
+	void signal_changed_width( int split_width, int widget_before_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
 };
 
 #endif // MUSICITEMSIZEINFODOCKWIDGET_H_H_HEAD__FILE__

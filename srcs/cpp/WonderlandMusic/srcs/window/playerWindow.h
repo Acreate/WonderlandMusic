@@ -5,6 +5,7 @@
 
 #include "../application/appDiskJsonData.h"
 #include "../application/appTranslate.h"
+class FavoritemDockWidget;
 class MusicContreWidget;
 class MusicControlDocWidget;
 class MusicItemSizeInfoDockWidget;
@@ -22,15 +23,13 @@ class PlayerWindow : public QMainWindow, public AppCore, public AppDiskJsonData 
 	Q_OBJECT;
 
 protected:
-	/// @brief 收藏夹窗口
-	FavoriteWidget *favoriteWidget;
-	/// @brief 左侧容器
-	QDockWidget *leftDocWidget = nullptr;
-	/// @brief 顶部容器
+	/// @brief 收藏夹组件容器
+	FavoritemDockWidget *favoritemDockWidget = nullptr;
+	/// @brief 列表选项宽度组件容器
 	MusicItemSizeInfoDockWidget *musicItemSizeInfoDockWidget = nullptr;
-	/// @brief 底部容器
+	/// @brief 音频播放选项组件容器
 	MusicControlDocWidget *musicControlDocWidget = nullptr;
-	/// @brief 音频中心
+	/// @brief 音频列表枚举组件容器
 	MusicContreWidget *musicContreWidget = nullptr;
 
 protected:

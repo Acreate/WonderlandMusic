@@ -20,7 +20,7 @@ bool PlayerListWidgetMenu::initVar( ) {
 	playerListWidgetMenuTranlate = appTranslate->getPlayerListWidgetMenu( );
 	if( playerListWidgetMenuTranlate == nullptr )
 		return false;
-	musicDecoder = appInstance->getAppMusicManage( )->getAppMusicDecoder( );
+	musicDecoder = appInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
 	if( musicDecoder == nullptr )
 		return false;
 	jsonFileKey = appDataManage->getAppDataJsonKey( );

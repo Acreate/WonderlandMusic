@@ -4,10 +4,12 @@
 #include "../interface/iAppCore.h"
 #include "../interface/iAppDiskJsonData.h"
 
+class AppMusicManage;
 class AppDataJsonKey;
 class QTranslator;
 class AppTranslate;
 
+/// @brief 数据管理，IAppDiskJsonData，其成员函数应当由创建者调用
 class AppDataManage : public QObject, public IAppDiskJsonData, public IAppCore {
 	Q_OBJECT;
 
@@ -19,16 +21,12 @@ protected:
 
 	/// @brief 应用配置路径
 	QString appSettingPath;
-	/// @brief 固定的配置路径
-	QString constAppSettingPath;
 	/// @brief 默认的翻译文件
 	QString constAppDefaultTranslatePath;
-	/// @brief 获取 json 中的关键 key
-	QString constAppIniDirHomePathJsonKey;
 	/// @brief 翻译
 	QTranslator *appTranslator = nullptr;
-	/// @brief 注册的配置文件
-	std::vector< QString > regSettingFilePtahVector;
+	/// @brief 音频管理
+	AppMusicManage *appMusicManage = nullptr;
 
 public:
 	bool init( ) override;
@@ -45,15 +43,12 @@ public:
 
 	virtual QString getAppSettingPath( ) const;
 
-	virtual void setAppSettingPath( const QString &app_setting_dir_home_path, bool is_move_old_files );
+	virtual void setAppSettingPath( const QString &new_set_path, bool is_move_file );
 
 	virtual bool setAppStringTranslate( const QString &translate_file_path );
 
-	virtual bool hasRegSettingFilePath( const QString &check_file_path ) const;
+	virtual AppMusicManage * getAppMusicManage( ) const;
 
-	virtual size_t regSettingFilePath( const QString &check_file_path );
-
-protected:
 	bool readJsonData( ) override;
 
 	bool writeJsonData( ) override;

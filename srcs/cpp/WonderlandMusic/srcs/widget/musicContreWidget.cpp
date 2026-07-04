@@ -9,6 +9,7 @@
 #include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
 #include "../application/appRenderImage.h"
+#include "../application/appUserInterfaceManage.h"
 
 #include "../item/musicItem.h"
 
@@ -82,7 +83,7 @@ void MusicContreWidget::updateItemWidget( ) {
 
 	int offsetY = 0;
 	auto appInstance = AppInstance::getAppInstance( );
-	auto appDrawManage = appInstance->getAppDrawManage( );
+	auto appDrawManage = appInstance->getAppUserInterfaceManage( )->getAppDrawManage( );
 	auto renderImage = appDrawManage->getAppRenderImage( );
 	auto fontMetrics = renderImage->getFontMetrics( );
 	int height = fontMetrics->height( );
@@ -251,7 +252,7 @@ bool MusicContreWidget::setJsonData( const QJsonObject &set_json_object ) {
 }
 
 void MusicContreWidget::paintEvent( QPaintEvent *event ) {
-	if( musicInfoMutex->tryLock( ) == false )
+	if( musicInfoMutex == nullptr || musicInfoMutex->tryLock( ) == false )
 		return;
 	QPainter painter;
 	painter.begin( this );

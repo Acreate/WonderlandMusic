@@ -3,6 +3,7 @@
 
 #include "../interface/iAppCore.h"
 
+class AppDataManageJsonKey;
 class FavoriteWidgetJsonKey;
 class MusicInfoItemWidgetJsonKey;
 class SystemTrayIconJsonKey;
@@ -23,6 +24,7 @@ protected:
 	MainWindowJsonKey *mainWindow = nullptr;
 	SystemTrayIconJsonKey *systemTrayIcon = nullptr;
 	FavoriteWidgetJsonKey *favoriteWidget = nullptr;
+	AppDataManageJsonKey *appDataManage = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -49,5 +51,7 @@ public:
 	virtual SystemTrayIconJsonKey * getSystemTrayIcon( ) const;
 
 	virtual FavoriteWidgetJsonKey * getFavoriteWidget( ) const;
+
+	virtual AppDataManageJsonKey * getAppDataManage( ) const;
 };
 #endif // APPDATAJSONKEY_H_H_HEAD__FILE__

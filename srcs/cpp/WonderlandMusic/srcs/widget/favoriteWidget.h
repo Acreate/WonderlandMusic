@@ -3,13 +3,13 @@
 #include <QWidget>
 
 #include "../interface/iAppCore.h"
-#include "../interface/iAppDiskJsonData.h"
+#include "../interface/iAppJsonData.h"
 
 class PlayerListWidget;
 class FavoriteItemWidget;
 class PlayerWindow;
 
-class FavoriteWidget : public QWidget, public IAppCore, public IAppDiskJsonData {
+class FavoriteWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 public:
@@ -28,11 +28,6 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;
-
-protected:
-	bool readJsonData( ) override;
-
-	bool writeJsonData( ) override;
 
 Q_SIGNALS:
 	void clickFavoriteItem( const FavoriteItemWidget *item );

@@ -1,16 +1,18 @@
 ﻿#ifndef APPMUSICMANAGE_H_H_HEAD__FILE__
 #define APPMUSICMANAGE_H_H_HEAD__FILE__
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class MusicItem;
 class UserMutex;
 class QMediaPlayer;
 class AppMusicDecoder;
 
-class AppMusicManage : public QObject, public IAppCore {
+class AppMusicManage : public QObject, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
+
 protected:
-	
+
 protected:
 	UserMutex *loadMutex = nullptr;
 	AppMusicDecoder *appMusicDecoder = nullptr;
@@ -26,6 +28,10 @@ protected:
 
 public:
 	bool init( ) override;
+
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 	~AppMusicManage( ) override;
 

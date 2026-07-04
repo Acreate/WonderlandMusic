@@ -10,6 +10,7 @@
 #include "../application/appInstance.h"
 #include "../application/appRenderImage.h"
 #include "../application/appTranslate.h"
+#include "../application/appUserInterfaceManage.h"
 #include "../application/jsonKey/playerListTopWidgetJsonKey.h"
 #include "../application/translate/playerTopWidgetTranslate.h"
 
@@ -18,7 +19,7 @@
 void PlayerListTopWidget::updateCurrentWidgetSize( ) {
 	int newWidth = widgetBeforeWidth + widgetAfterWidth + splitWidth * 5 + musicNameWidth + musicSingerWidth + musicDurationWidth + indexWidth;
 	AppInstance *appInstance = AppInstance::getAppInstance( );
-	auto fontMetrics = appInstance->getAppDrawManage( )->getAppRenderImage( )->getFontMetrics( );
+	auto fontMetrics = appInstance->getAppUserInterfaceManage( )->getAppDrawManage( )->getAppRenderImage( )->getFontMetrics( );
 	int currentHeight = fontMetrics->height( );
 	setFixedSize( newWidth, currentHeight );
 }
@@ -138,7 +139,7 @@ bool PlayerListTopWidget::getMinSize( QSize &result_min_size ) {
 	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
 	if( appTranslate == nullptr )
 		return false;
-	auto renderImage = appInstance->getAppDrawManage( )->getAppRenderImage( );
+	auto renderImage = appInstance->getAppUserInterfaceManage( )->getAppDrawManage( )->getAppRenderImage( );
 	if( renderImage == nullptr )
 		return false;
 	auto fontMetrics = renderImage->getFontMetrics( );
@@ -207,7 +208,9 @@ void PlayerListTopWidget::suggestWidth( int suggest_width ) {
 bool PlayerListTopWidget::averageItem( ) {// 获取字符串最小宽度
 	auto appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-	auto renderImage = appInstance->getAppDrawManage( )->getAppRenderImage( );
+	auto interfaceManage = appInstance->getAppUserInterfaceManage( );
+	auto appDrawManage = interfaceManage->getAppDrawManage( );
+	auto renderImage = appDrawManage->getAppRenderImage( );
 	auto fontMetrics = renderImage->getFontMetrics( );
 	auto playerTopWidgetTranslate = appTranslate->getPlayerTopWidget( );
 	auto indexWidth = fontMetrics->horizontalAdvance( "0000" );
@@ -322,7 +325,10 @@ void PlayerListTopWidget::hideEvent( QHideEvent *event ) {
 void PlayerListTopWidget::paintEvent( QPaintEvent *event ) {
 	AppInstance *appInstance = AppInstance::getAppInstance( );
 	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-	auto font = appInstance->getAppDrawManage( )->getAppRenderImage( )->getFont( );
+	auto interfaceManage = appInstance->getAppUserInterfaceManage( );
+	auto appDrawManage = interfaceManage->getAppDrawManage( );
+	auto appRenderImage = appDrawManage->getAppRenderImage( );
+	auto font = appRenderImage->getFont( );
 
 	int offsetSplitX = splitWidth / 2;
 	QPainter painter;

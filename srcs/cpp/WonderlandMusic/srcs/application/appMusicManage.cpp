@@ -226,6 +226,14 @@ bool AppMusicManage::init( ) {
 	return true;
 }
 
+bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+
+bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}
+
 AppMusicManage::~AppMusicManage( ) {
 	deleteResource( );
 }

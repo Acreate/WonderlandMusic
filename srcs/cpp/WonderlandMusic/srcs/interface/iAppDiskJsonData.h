@@ -3,12 +3,10 @@
 #include "iAppJsonData.h"
 
 class IAppDiskJsonData : public IAppJsonData {
-protected:
+public:
 	virtual bool readJsonData( ) = 0;
 
 	virtual bool writeJsonData( ) = 0;
-
-public:
 };
 
 #endif // IAPPDISKJSONDATA_H_H_HEAD__FILE__

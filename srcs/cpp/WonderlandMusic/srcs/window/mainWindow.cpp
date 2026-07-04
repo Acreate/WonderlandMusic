@@ -34,31 +34,6 @@ PlayerListTopWidget * MainWindow::getPlayerListTopWidget( ) const {
 	return mainStackedWidget->getPlayerListTopWidget( );
 }
 
-bool MainWindow::readJsonData( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
-	// 获取 json 路径
-	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
-	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
-	QJsonObject mainWindowSettingJsonObject;
-	if( PathTools::readJsonObject( mainWindowSettingJsonObject, mainWindowJsonFile ) == false )
-		return true;
-	return setJsonData( mainWindowSettingJsonObject );
-}
-
-bool MainWindow::writeJsonData( ) {
-	QJsonObject jsonObject;
-	if( getJsonData( jsonObject ) == false )
-		return false;
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
-	// 获取 json 路径
-	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
-	auto mainWindowJsonFile = mainWindowJsonFileKey->getSettingJsonPath( );
-	PathTools::writeJsonObject( jsonObject, mainWindowJsonFile );
-	return true;
-}
-
 bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
@@ -133,9 +108,6 @@ bool MainWindow::init( ) {
 
 	leftOptionDockWidget = new OptionDockWidget( this );
 
-	if( readJsonData( ) == false )
-		return false;
-
 	if( leftOptionDockWidget->init( ) == false )
 		return false;
 	if( mainStackedWidget->init( ) == false )
@@ -167,13 +139,12 @@ bool MainWindow::event( QEvent *event ) {
 	auto type = event->type( );
 	switch( type ) {
 		case QEvent::Close :
-			writeJsonData( );
-			auto appInstance = AppInstance::getAppInstance( );
 			//if( QSystemTrayIcon::isSystemTrayAvailable( ) ) {
 			//	hide( );
 			//	event->ignore( );
 			//	return true;
 			//}
+			auto appInstance = AppInstance::getAppInstance( );
 			appInstance->quit( );
 	}
 	return QMainWindow::event( event );

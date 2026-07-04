@@ -6,6 +6,7 @@
 
 #include "vectorTools.h"
 
+#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appMusicDecoder.h"
 #include "../application/appMusicManage.h"
@@ -68,7 +69,7 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::v
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
 	auto applicationInstance = AppInstance::getAppInstance( );
-	auto musicDecoder = applicationInstance->getAppMusicManage( )->getAppMusicDecoder( );
+	auto musicDecoder = applicationInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
 	for( index = 0; index < count; ++index )
 		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];
@@ -120,7 +121,7 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStrin
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
 	auto applicationInstance = AppInstance::getAppInstance( );
-	auto musicDecoder = applicationInstance->getAppMusicManage( )->getAppMusicDecoder( );
+	auto musicDecoder = applicationInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
 	for( index = 0; index < count; ++index )
 		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];

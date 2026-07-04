@@ -5,7 +5,8 @@
 
 #include "../application/appTranslate.h"
 
-#include "../interface/iAppDiskJsonData.h"
+#include "../interface/iAppJsonData.h"
+
 class MusicListWindow;
 class FavoritemDockWidget;
 class MusicContreWidget;
@@ -21,7 +22,7 @@ class PlayerListTopWidget;
 class QScrollArea;
 class PlayerListWidget;
 
-class PlayerWindow : public QMainWindow, public IAppCore, public IAppDiskJsonData {
+class PlayerWindow : public QMainWindow, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -42,10 +43,6 @@ protected:
 	virtual bool initConnect( );
 
 	virtual bool updateSubCompoment( );
-
-	bool readJsonData( ) override;
-
-	bool writeJsonData( ) override;
 
 public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;

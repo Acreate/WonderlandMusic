@@ -2,9 +2,8 @@
 
 #include "appInstance.h"
 
-#include "../tools/templateArgs.h"
-
 #include "jsonKey/aboutWidgetJsonKey.h"
+#include "jsonKey/appDataManageJsonKey.h"
 #include "jsonKey/favoriteWidgetJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
 #include "jsonKey/musicInfoItemWidgetJsonKey.h"
@@ -22,6 +21,7 @@ bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicInfoItemWidget );
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 	Delete_Resource_App_Core_Ptr( favoriteWidget );
+	Delete_Resource_App_Core_Ptr( appDataManage );
 
 	return true;
 }
@@ -43,6 +43,7 @@ bool AppDataJsonKey::init( ) {
 	musicInfoItemWidget = new MusicInfoItemWidgetJsonKey;
 	systemTrayIcon = new SystemTrayIconJsonKey;
 	favoriteWidget = new FavoriteWidgetJsonKey;
+	appDataManage = new AppDataManageJsonKey;
 	Init_Resource_App_Core_Ptr( playerListToolWidget );
 	Init_Resource_App_Core_Ptr( aboutWidgetJsonFileKey );
 	Init_Resource_App_Core_Ptr( playerListTopWidget );
@@ -51,7 +52,7 @@ bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( musicInfoItemWidget );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
 	Init_Resource_App_Core_Ptr( favoriteWidget );
-
+	Init_Resource_App_Core_Ptr( appDataManage );
 	return true;
 }
 
@@ -85,4 +86,8 @@ SystemTrayIconJsonKey * AppDataJsonKey::getSystemTrayIcon( ) const {
 
 FavoriteWidgetJsonKey * AppDataJsonKey::getFavoriteWidget( ) const {
 	return favoriteWidget;
+}
+
+AppDataManageJsonKey * AppDataJsonKey::getAppDataManage( ) const {
+	return appDataManage;
 }

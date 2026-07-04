@@ -4,10 +4,6 @@
 
 #include "musicListWindow.h"
 
-#include "../application/appDataJsonKey.h"
-#include "../application/appDataManage.h"
-#include "../application/appInstance.h"
-#include "../application/jsonKey/playerWindowJsonKey.h"
 #include "../dockWidget/favoritemDockWidget.h"
 #include "../dockWidget/musicControlDocWidget.h"
 #include "../mutex/userMutex.h"
@@ -16,7 +12,6 @@
 #include "../widget/musicContreWidget.h"
 
 PlayerWindow::~PlayerWindow( ) {
-	writeJsonData( );
 	deleteResource( );
 }
 
@@ -75,28 +70,6 @@ bool PlayerWindow::init( ) {
 
 	setCentralWidget( musicListWindow );
 	return true;
-}
-
-bool PlayerWindow::readJsonData( ) {
-	AppInstance *appInstance = AppInstance::getAppInstance( );
-	auto appDataManage = appInstance->getAppDataManage( );
-	auto jsonFileKey = appDataManage->getAppDataJsonKey( );
-	auto playerWindowJsonKey = jsonFileKey->getPlayerWindow( );
-	QJsonObject readResultJsonObject;
-	if( PathTools::readJsonObject( readResultJsonObject, playerWindowJsonKey->getFileSelect( ) ) == false )
-		return false;
-	return setJsonData( readResultJsonObject );
-}
-
-bool PlayerWindow::writeJsonData( ) {
-	QJsonObject saveResultJsonObject;
-	if( getJsonData( saveResultJsonObject ) == false )
-		return false;
-	AppInstance *appInstance = AppInstance::getAppInstance( );
-	auto appDataManage = appInstance->getAppDataManage( );
-	auto jsonFileKey = appDataManage->getAppDataJsonKey( );
-	auto playerWindowJsonKey = jsonFileKey->getPlayerWindow( );
-	return PathTools::writeJsonObject( saveResultJsonObject, playerWindowJsonKey->getFileSelect( ) );
 }
 
 bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {

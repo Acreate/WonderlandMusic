@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 #include "../interface/iAppCore.h"
-#include "../interface/iAppDiskJsonData.h"
+#include "../interface/iAppJsonData.h"
 
 class PlayerListTopWidget;
 class MainStackedWidget;
@@ -20,7 +20,7 @@ class AboutWidget;
 class AppTranslate;
 class AppInstance;
 
-class MainWindow : public QMainWindow, public IAppCore, public IAppDiskJsonData {
+class MainWindow : public QMainWindow, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -41,11 +41,6 @@ public:
 	MainWindow( );
 
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
-
-protected:
-	bool readJsonData( ) override;
-
-	bool writeJsonData( ) override;
 
 public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;

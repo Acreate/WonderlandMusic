@@ -39,7 +39,7 @@ bool MusicItemSizeInfoDockWidget::init( ) {
 	playerListTopWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
 	playerListTopWidgetScrollArea->verticalScrollBar( )->setEnabled( false );
 	setWidget( playerListTopWidgetScrollArea );
-	playerListTopWidget->setParent( playerListTopWidget );
+	playerListTopWidget->setParent( playerListTopWidgetScrollArea );
 	playerListTopWidgetScrollArea->setWidget( playerListTopWidget );
 
 	mainWindow->addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, this );

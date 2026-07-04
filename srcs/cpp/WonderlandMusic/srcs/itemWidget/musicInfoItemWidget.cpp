@@ -9,6 +9,7 @@
 #include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
 #include "../application/appRenderImage.h"
+#include "../application/appUserInterfaceManage.h"
 #include "../application/jsonKey/musicInfoItemWidgetJsonKey.h"
 #include "../application/translate/musicInfoItemTranslate.h"
 
@@ -82,7 +83,7 @@ MusicInfoItemWidget::MusicInfoItemWidget( QWidget *parent ) :
 
 bool MusicInfoItemWidget::renderToBuff( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto appDrawManage = appInstance->getAppDrawManage( );
+	auto appDrawManage = appInstance->getAppUserInterfaceManage( )->getAppDrawManage(  );
 	auto renderImage = appDrawManage->getAppRenderImage( );
 	auto font = renderImage->getFont( );
 

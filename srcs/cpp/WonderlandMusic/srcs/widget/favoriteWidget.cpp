@@ -2,7 +2,6 @@
 
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
-#include "../application/translate/favoriteWidgetTranslate.h"
 
 #include "../window/playerWindow.h"
 
@@ -20,11 +19,7 @@ FavoriteWidget::~FavoriteWidget( ) {
 
 bool FavoriteWidget::init( ) {
 	deleteResource( );
-	auto appInstance = AppInstance::getAppInstance( );
-	auto appDataManage = appInstance->getAppDataManage( );
-	auto appTranslate = appDataManage->getTranslate( );
-	auto favoriteWidgetTranslate = appTranslate->getFavoriteWidget( );
-	auto &defautFavoriteName = favoriteWidgetTranslate->getDefautFavoriteName( );
+
 	return true;
 }
 
@@ -36,13 +31,5 @@ bool FavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
 }
 
 bool FavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
-}
-
-bool FavoriteWidget::readJsonData( ) {
-	return false;
-}
-
-bool FavoriteWidget::writeJsonData( ) {
 	return false;
 }

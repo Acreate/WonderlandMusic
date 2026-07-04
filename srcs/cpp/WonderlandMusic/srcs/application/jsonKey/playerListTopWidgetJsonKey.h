@@ -17,7 +17,7 @@ class PlayerListTopWidgetJsonKey : public IJsonKey {
 public:
 	bool init( ) override;
 
-	virtual const QString & getTopJsonPath( ) const;
+	virtual QString getTopJsonPath( ) const;
 
 	virtual const QString & getItemWidth( ) const;
 

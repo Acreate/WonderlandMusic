@@ -32,6 +32,10 @@ protected:
 public:
 	bool init( ) override;
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;

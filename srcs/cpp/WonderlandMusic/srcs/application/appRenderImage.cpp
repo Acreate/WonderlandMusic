@@ -19,6 +19,14 @@ AppRenderImage::AppRenderImage( ) {
 AppRenderImage::~AppRenderImage( ) {
 }
 
+bool AppRenderImage::initBefore( ) {
+	return true;
+}
+
+bool AppRenderImage::initAfter( ) {
+	return true;
+}
+
 bool AppRenderImage::init( ) {
 	brackGroundColor = new QColor( 0, 0, 0, 0 );
 	drawPenColor = new QColor( 0, 0, 0, 255 );

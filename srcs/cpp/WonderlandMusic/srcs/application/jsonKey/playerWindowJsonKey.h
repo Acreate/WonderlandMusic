@@ -19,7 +19,7 @@ class PlayerWindowJsonKey : public IJsonKey {
 public:
 	bool init( ) override;
 
-	virtual const QString & getJsonFilePath( ) const;
+	virtual QString getJsonFilePath( ) const;
 
 	virtual const QString & getFavoriteArrayObjName( ) const;
 

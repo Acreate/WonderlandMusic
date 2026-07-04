@@ -243,6 +243,14 @@ bool MusicContreWidget::init( ) {
 	return true;
 }
 
+bool MusicContreWidget::initBefore( ) {
+	return true;
+}
+
+bool MusicContreWidget::initAfter( ) {
+	return true;
+}
+
 bool MusicContreWidget::getJsonData( QJsonObject &get_json_object ) const {
 	return false;
 }

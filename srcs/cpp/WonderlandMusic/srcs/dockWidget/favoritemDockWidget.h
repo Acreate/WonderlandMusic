@@ -23,6 +23,10 @@ protected:
 
 public:
 	bool init( ) override;
+
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 };
 
 #endif // FAVORITEMDOCKWIDGET_H_H_HEAD__FILE__

@@ -2,12 +2,17 @@
 
 #include <QDateTime>
 
-#include "../tools/templateArgs.h"
-
 bool AppDateTimerManage::init( ) {
+	return true;
+}
+
+bool AppDateTimerManage::initBefore( ) {
 	deleteResource( );
-	if( TemplateArgs::make_args_ptr( startDateTime, QDateTime::currentDateTime( ) ) == nullptr )
-		return false;
+	startDateTime = new QDateTime( QDateTime::currentDateTime( ) );
+	return true;
+}
+
+bool AppDateTimerManage::initAfter( ) {
 	return true;
 }
 

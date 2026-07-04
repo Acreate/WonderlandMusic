@@ -34,10 +34,21 @@ bool MusicListWindow::init( ) {
 	musicItemSizeInfoDockWidget = new MusicItemSizeInfoDockWidget( this );
 	musicContreScrollArea = new MusicContreScrollArea( this );
 
-	if( musicItemSizeInfoDockWidget->init( ) == false )
-		return false;
-	if( musicContreScrollArea->init( ) == false )
-		return false;
+	Before_Init_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
+	Before_Init_Resource_App_Core_Ptr( musicContreScrollArea );
+	Init_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
+	Init_Resource_App_Core_Ptr( musicContreScrollArea );
+	After_Init_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
+	After_Init_Resource_App_Core_Ptr( musicContreScrollArea );
+
 	setCentralWidget( musicContreScrollArea );
+	return true;
+}
+
+bool MusicListWindow::initBefore( ) {
+	return true;
+}
+
+bool MusicListWindow::initAfter( ) {
 	return true;
 }

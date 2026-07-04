@@ -9,7 +9,7 @@ class PlayerListWidget;
 class FavoriteItemWidget;
 class PlayerWindow;
 
-class FavoriteWidget : public QWidget, public IAppCore, public IAppJsonData {
+class FavoriteWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
 
 public:
@@ -23,11 +23,11 @@ public:
 
 	bool init( ) override;
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 	virtual void updateLayout( );
-
-	bool getJsonData( QJsonObject &get_json_object ) const override;
-
-	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 Q_SIGNALS:
 	void clickFavoriteItem( const FavoriteItemWidget *item );

@@ -3,11 +3,13 @@
 
 #include <QWidget>
 
+#include "../interface/iAppCore.h"
+
 class QPushButton;
 class QLineEdit;
 class QScrollArea;
 
-class SettingWidget : public QWidget {
+class SettingWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
 
 protected:
@@ -15,7 +17,7 @@ protected:
 	QWidget *mainSettingWdiget = nullptr;
 
 protected:
-	virtual void deleteResource( );
+	bool deleteResource( ) override;
 
 protected Q_SLOTS:
 	/// @brief 点击了软件配置选择路径
@@ -44,13 +46,15 @@ protected:
 public:
 	SettingWidget( QWidget *parent );
 
-	virtual bool loadJsonPathInfo( );
-
-	virtual bool writeJsonPathInfo( );
+	~SettingWidget( ) override;
 
 	bool initWidget( );
 
-	virtual bool init( );
+	bool init( ) override;
+
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 
 protected:
 	void hideEvent( QHideEvent *event ) override;

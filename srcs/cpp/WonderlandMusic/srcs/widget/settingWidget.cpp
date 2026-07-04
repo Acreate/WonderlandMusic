@@ -16,8 +16,10 @@
 #include "../tools/pathTools.h"
 #include "../tools/widgetTools.h"
 
-void SettingWidget::deleteResource( ) {
+bool SettingWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( mainSettingWdiget );
+	disconnect( );
+	return true;
 }
 
 void SettingWidget::clickSelectAppSettingPathBtn( ) {
@@ -170,18 +172,18 @@ QWidget * SettingWidget::initAppSettingPathWdiget( ) {
 	selectDirPathBtn->setText( settingWidgetTranslate->getSelectDirBtnTxt( ) );
 	seleceLayout->addWidget( selectDirPathBtn );
 	connect( selectDirPathBtn, &QPushButton::clicked, this, &SettingWidget::clickSelectAppSettingPathBtn );
+
+	connect( appDataManage, &AppDataManage::signal_change_setting_path, this, [this] ( const QString &home_path ) {
+		selectDirPathLineEdit->setText( home_path );
+	} );
 	return selectWidget;
 }
 
 SettingWidget::SettingWidget( QWidget *parent ) : QWidget( parent ) {
 }
 
-bool SettingWidget::loadJsonPathInfo( ) {
-	return true;
-}
-
-bool SettingWidget::writeJsonPathInfo( ) {
-	return true;
+SettingWidget::~SettingWidget( ) {
+	deleteResource( );
 }
 
 bool SettingWidget::initWidget( ) {
@@ -192,6 +194,7 @@ bool SettingWidget::initWidget( ) {
 	vBoxLayout->addWidget( mainSettingWdiget );
 	vBoxLayout->setContentsMargins( 10, 10, 20, 20 );
 	vBoxLayout->setSpacing( 10 );
+
 	return true;
 }
 
@@ -200,13 +203,19 @@ bool SettingWidget::init( ) {
 	if( initWidget( ) == false )
 		return false;
 	selectDirPathLineEdit->setText( AppInstance::getAppInstance( )->getAppDataManage( )->getAppSettingPath( ) );
-	if( loadJsonPathInfo( ) == false )
-		return false;
+
+	return true;
+}
+
+bool SettingWidget::initBefore( ) {
+	return true;
+}
+
+bool SettingWidget::initAfter( ) {
 	return true;
 }
 
 void SettingWidget::hideEvent( QHideEvent *event ) {
-	writeJsonPathInfo( );
 	QWidget::hideEvent( event );
 	clickCancelBtn( );
 }

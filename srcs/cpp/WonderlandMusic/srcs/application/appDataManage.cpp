@@ -7,16 +7,34 @@
 #include "appInstance.h"
 #include "appMusicManage.h"
 #include "appTranslate.h"
+#include "appUserInterfaceManage.h"
 
 #include "../tools/pathTools.h"
 
 #include "jsonKey/appDataManageJsonKey.h"
 
 bool AppDataManage::init( ) {
+	Before_Init_Resource_App_Core_Ptr( translate );
+	Before_Init_Resource_App_Core_Ptr( appDataJsonKey );
+	Before_Init_Resource_App_Core_Ptr( appMusicManage );
+
+	Init_Resource_App_Core_Ptr( translate );
+	Init_Resource_App_Core_Ptr( appDataJsonKey );
+	Init_Resource_App_Core_Ptr( appMusicManage );
+
+	After_Init_Resource_App_Core_Ptr( translate );
+	After_Init_Resource_App_Core_Ptr( appDataJsonKey );
+	After_Init_Resource_App_Core_Ptr( appMusicManage );
+
+	return true;
+}
+
+bool AppDataManage::initBefore( ) {
 	deleteResource( );
 	auto appInstance = AppInstance::getAppInstance( );
 	QString dirPath = appInstance->applicationDirPath( );
 	appSettingPath = dirPath + "/program/";
+	emit signal_change_setting_path( appSettingPath );
 	constAppDefaultTranslatePath = appSettingPath + "/translations/WonderlandMusic.qm";
 	appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
 	setAppStringTranslate( constAppDefaultTranslatePath );
@@ -25,10 +43,11 @@ bool AppDataManage::init( ) {
 	appDataJsonKey = new AppDataJsonKey;
 	appMusicManage = new AppMusicManage;
 
-	Init_Resource_App_Core_Ptr( translate );
-	Init_Resource_App_Core_Ptr( appDataJsonKey );
-	Init_Resource_App_Core_Ptr( appMusicManage );
+	return true;
+}
 
+bool AppDataManage::initAfter( ) {
+	readJsonData( );
 	return true;
 }
 
@@ -69,6 +88,7 @@ void AppDataManage::setAppSettingPath( const QString &new_set_path, bool is_move
 		PathTools::copyPath( oldFileAbsoluteFilePath, newFileAbsoluteFilePath );
 	// 赋值
 	appSettingPath = PathTools::getAutoShortenPathName( new_set_path );
+	emit signal_change_setting_path( appSettingPath );
 }
 
 AppMusicManage * AppDataManage::getAppMusicManage( ) const {
@@ -76,32 +96,41 @@ AppMusicManage * AppDataManage::getAppMusicManage( ) const {
 }
 
 bool AppDataManage::readJsonData( ) {
+	// 从磁盘获取 json 数据
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	auto jsonFilePath = appDataManage->getJsonFilePath( );
 	QJsonObject appJsonObject;
 	if( PathTools::readJsonObject( appJsonObject, jsonFilePath ) == false )
 		return false;
-
-	return setJsonData( appJsonObject );
+	// 把 json 数据加载到 AppDataManage
+	if( setJsonData( appJsonObject ) == false )
+		return false;
+	appMusicManage->readJsonData( );
+	auto appUserInterfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
+	appUserInterfaceManage->readJsonData( );
+	return true;
 }
 
 bool AppDataManage::writeJsonData( ) {
+	// 转换 AppDataManage 到 json 数据
 	QJsonObject appJsonObject;
 	if( getJsonData( appJsonObject ) == false )
 		return false;
 
+	// 写入 json 数据到磁盘
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	auto jsonFilePath = appDataManage->getJsonFilePath( );
 	PathTools::writeJsonObject( appJsonObject, jsonFilePath );
+	appMusicManage->writeJsonData( );
+	auto appUserInterfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
+	appUserInterfaceManage->writeJsonData( );
 	return true;
 }
 
 bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {
-	QJsonObject appMusicManageJsonObject;
-	if( appMusicManage->getJsonData( appMusicManageJsonObject ) == false )
-		return false;
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
-	get_json_object.insert( appDataManage->getIniDirHomePath( ), PathTools::getAutoShortenPathName( appSettingPath ) );
+	auto writePath = PathTools::getAutoShortenPathName( appSettingPath );
+	get_json_object.insert( appDataManage->getIniDirHomePath( ), writePath );
 	return true;
 }
 
@@ -110,16 +139,13 @@ bool AppDataManage::setJsonData( const QJsonObject &set_json_object ) {
 	auto end = set_json_object.end( );
 
 	auto find = set_json_object.find( appDataManage->getIniDirHomePath( ) );
-	if( end != find )
-		appSettingPath = PathTools::getAutoShortenPathName( find.value( ).toString( appSettingPath ) );
+	if( end != find ) {
+		appSettingPath = find.value( ).toString( appSettingPath );
+		appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
+		emit signal_change_setting_path( appSettingPath );
+	}
 
-	QJsonObject json;
-	if( PathTools::readJsonObject( json, appSettingPath ) == false )
-		return true;
-	find = json.find( appDataManage->getAppMusicManage( ) );
-	if( end != find )
-		appMusicManage->setJsonData( find.value( ).toObject( ) );
-	return false;
+	return true;
 }
 
 bool AppDataManage::setAppStringTranslate( const QString &translate_file_path ) {

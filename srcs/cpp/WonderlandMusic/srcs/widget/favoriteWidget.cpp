@@ -1,7 +1,6 @@
 ﻿#include "favoriteWidget.h"
 
 #include "../application/appDataManage.h"
-#include "../application/appInstance.h"
 
 #include "../window/playerWindow.h"
 
@@ -23,13 +22,13 @@ bool FavoriteWidget::init( ) {
 	return true;
 }
 
+bool FavoriteWidget::initBefore( ) {
+	return true;
+}
+
+bool FavoriteWidget::initAfter( ) {
+	return true;
+}
+
 void FavoriteWidget::updateLayout( ) {
-}
-
-bool FavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
-}
-
-bool FavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
 }

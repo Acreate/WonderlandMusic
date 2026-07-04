@@ -30,6 +30,10 @@ protected:
 public:
 	bool init( ) override;
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 
 public Q_SLOTS:

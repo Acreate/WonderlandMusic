@@ -58,6 +58,10 @@ public:
 
 	AppTranslate( );
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 	bool init( ) override;
 
 	virtual SettingWidgetTranslate * getSettingWidget( ) const;

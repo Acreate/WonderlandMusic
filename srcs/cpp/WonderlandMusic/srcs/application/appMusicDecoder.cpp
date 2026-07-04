@@ -99,6 +99,14 @@ bool AppMusicDecoder::init( ) {
 	return true;
 }
 
+bool AppMusicDecoder::initBefore( ) {
+	return true;
+}
+
+bool AppMusicDecoder::initAfter( ) {
+	return true;
+}
+
 bool AppMusicDecoder::deleteResource( ) {
 	VectorTools::deleteVectorPtr( supperDecodeFileSuffix );
 	supperDecodeFileSuffix.clear( );

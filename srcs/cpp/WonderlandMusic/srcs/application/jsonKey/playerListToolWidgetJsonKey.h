@@ -19,15 +19,15 @@ class PlayerListToolWidgetJsonKey : public IJsonKey {
 public:
 	bool init( ) override;
 
-	virtual const QString & getThePreviousSongIconPath( ) const;
+	virtual QString getThePreviousSongIconPath( ) const;
 
-	virtual const QString & getControlPlayIconPath( ) const;
+	virtual QString getControlPlayIconPath( ) const;
 
-	virtual const QString & getControlPauseIconPath( ) const;
+	virtual QString getControlPauseIconPath( ) const;
 
-	virtual const QString & getTheNextSongIconPath( ) const;
+	virtual QString getTheNextSongIconPath( ) const;
 
-	virtual const QString & getCurrentSongPlayListIconPath( ) const;
+	virtual QString getCurrentSongPlayListIconPath( ) const;
 };
 
 #endif // PLAYERLISTTOOLWIDGETJSONKEY_H_H_HEAD__FILE__

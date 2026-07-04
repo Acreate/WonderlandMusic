@@ -6,17 +6,17 @@
 #include "../appInstance.h"
 
 bool FavoriteWidgetJsonKey::init( ) {
-	auto appDataManage = AppInstance::getAppInstance( )->getAppDataManage( );
-	auto appSettingPath = appDataManage->getAppSettingPath( );
-	jsonFilePath = appSettingPath + "/app.favorte.json";
+	jsonFilePath = "/app.favorte.json";
 	favoriteArrayCount = "favorte.array.count";
 	favoriteArrayData = "favorte.array.data";
 	favoriteArrayIndex = "favorte.array.index";
 	return true;
 }
 
-const QString & FavoriteWidgetJsonKey::getJsonFilePath( ) const {
-	return jsonFilePath;
+QString FavoriteWidgetJsonKey::getJsonFilePath( ) const {
+	auto appDataManage = AppInstance::getAppInstance( )->getAppDataManage( );
+	auto appSettingPath = appDataManage->getAppSettingPath( );
+	return appSettingPath + jsonFilePath;
 }
 
 const QString & FavoriteWidgetJsonKey::getFavoriteArrayCount( ) const {

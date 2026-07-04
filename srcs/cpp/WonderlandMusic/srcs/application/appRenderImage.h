@@ -28,6 +28,10 @@ public:
 
 	~AppRenderImage( ) override;
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 	bool init( ) override;
 
 	virtual const QFont * getFont( ) const;

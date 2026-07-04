@@ -115,6 +115,14 @@ bool PlayerToolsWidget::init( ) {
 	return true;
 }
 
+bool PlayerToolsWidget::initBefore( ) {
+	return true;
+}
+
+bool PlayerToolsWidget::initAfter( ) {
+	return true;
+}
+
 bool PlayerToolsWidget::compLayout( ) {
 	auto contentsRect = this->contentsRect( );
 	int width = contentsRect.width( );

@@ -9,7 +9,7 @@ class SystemTrayIconJsonKey : public IJsonKey {
 public:
 	bool init( ) override;
 
-	virtual const QString & getIconFilePath( ) const;
+	virtual QString getIconFilePath( ) const;
 };
 
 #endif // SYSTEMTRAYICONJSONKEY_H_H_HEAD__FILE__

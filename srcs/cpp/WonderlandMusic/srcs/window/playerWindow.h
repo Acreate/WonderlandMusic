@@ -36,14 +36,6 @@ protected:
 protected:
 	bool deleteResource( ) override;
 
-	virtual bool initWidget( );
-
-	virtual bool initMenu( );
-
-	virtual bool initConnect( );
-
-	virtual bool updateSubCompoment( );
-
 public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 
@@ -56,6 +48,10 @@ public:
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 
 	bool init( ) override;
+
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 };
 
 #endif // PLAYERWINDOW_H_H_HEAD__FILE__

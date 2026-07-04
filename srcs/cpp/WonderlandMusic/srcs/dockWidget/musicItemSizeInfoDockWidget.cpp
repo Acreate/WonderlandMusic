@@ -49,6 +49,14 @@ bool MusicItemSizeInfoDockWidget::init( ) {
 	return true;
 }
 
+bool MusicItemSizeInfoDockWidget::initBefore( ) {
+	return true;
+}
+
+bool MusicItemSizeInfoDockWidget::initAfter( ) {
+	return true;
+}
+
 QScrollArea * MusicItemSizeInfoDockWidget::getPlayerListTopWidgetScrollArea( ) const {
 	return playerListTopWidgetScrollArea;
 }

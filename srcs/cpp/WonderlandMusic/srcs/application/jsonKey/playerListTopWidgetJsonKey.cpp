@@ -4,9 +4,7 @@
 #include "../appInstance.h"
 
 bool PlayerListTopWidgetJsonKey::init( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppDataManage(  )->getAppSettingPath( );
-	topJsonPath = applicationDirPath + "/json/app.window.player.top.info.json";
+	topJsonPath = "/json/app.window.player.top.info.json";
 	itemWidth = "window.player.list.item.width.content.width";
 	itemSplitWidth = "window.player.list.item.width.split";
 	itemIndexWidth = "window.player.list.item.width.index";
@@ -18,8 +16,10 @@ bool PlayerListTopWidgetJsonKey::init( ) {
 	return true;
 }
 
-const QString & PlayerListTopWidgetJsonKey::getTopJsonPath( ) const {
-	return topJsonPath;
+QString PlayerListTopWidgetJsonKey::getTopJsonPath( ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	return applicationDirPath + topJsonPath;
 }
 
 const QString & PlayerListTopWidgetJsonKey::getItemWidth( ) const {

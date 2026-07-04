@@ -18,13 +18,23 @@ bool FavoritemDockWidget::deleteResource( ) {
 bool FavoritemDockWidget::init( ) {
 	deleteResource( );
 	favoriteWidget = new FavoriteWidget( this );
-	if( favoriteWidget->init( ) == false )
-		return false;
+
+	Before_Init_Resource_App_Core_Ptr( favoriteWidget );
+	Init_Resource_App_Core_Ptr( favoriteWidget );
+	After_Init_Resource_App_Core_Ptr( favoriteWidget );
 	setAllowedAreas( Qt::LeftDockWidgetArea );
 	setContentsMargins( 0, 0, 0, 0 );
 	titleBarWidget = new QWidget( this );
 	setTitleBarWidget( titleBarWidget );
 
 	playerWindow->addDockWidget( Qt::LeftDockWidgetArea, this );
+	return true;
+}
+
+bool FavoritemDockWidget::initBefore( ) {
+	return true;
+}
+
+bool FavoritemDockWidget::initAfter( ) {
 	return true;
 }

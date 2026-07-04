@@ -30,45 +30,36 @@ bool PlayerWindow::deleteResource( ) {
 	return true;
 }
 
-bool PlayerWindow::initWidget( ) {
-	favoritemDockWidget = new FavoritemDockWidget( this );
-	musicListWindow = new MusicListWindow( this );
-	musicControlDocWidget = new MusicControlDocWidget( this );
-	return true;
-}
-
-bool PlayerWindow::initMenu( ) {
-	return true;
-}
-
-bool PlayerWindow::initConnect( ) {
-	return true;
-}
-
-bool PlayerWindow::updateSubCompoment( ) {
-	if( favoritemDockWidget->init( ) == false )
-		return false;
-	if( musicListWindow->init( ) == false )
-		return false;
-	if( musicControlDocWidget->init( ) == false )
-		return false;
-	return true;
-}
-
 bool PlayerWindow::init( ) {
 	deleteResource( );
 
 	setWindowFlags( Qt::WindowType::Widget );
-	if( initWidget( ) == false )
-		return false;
-	if( initMenu( ) == false )
-		return false;
-	if( initConnect( ) == false )
-		return false;
-	if( updateSubCompoment( ) == false )
-		return false;
+
+	favoritemDockWidget = new FavoritemDockWidget( this );
+	musicListWindow = new MusicListWindow( this );
+	musicControlDocWidget = new MusicControlDocWidget( this );
+
+	Before_Init_Resource_App_Core_Ptr( favoritemDockWidget );
+	Before_Init_Resource_App_Core_Ptr( musicListWindow );
+	Before_Init_Resource_App_Core_Ptr( musicControlDocWidget );
+
+	Init_Resource_App_Core_Ptr( favoritemDockWidget );
+	Init_Resource_App_Core_Ptr( musicListWindow );
+	Init_Resource_App_Core_Ptr( musicControlDocWidget );
+
+	After_Init_Resource_App_Core_Ptr( favoritemDockWidget );
+	After_Init_Resource_App_Core_Ptr( musicListWindow );
+	After_Init_Resource_App_Core_Ptr( musicControlDocWidget );
 
 	setCentralWidget( musicListWindow );
+	return true;
+}
+
+bool PlayerWindow::initBefore( ) {
+	return true;
+}
+
+bool PlayerWindow::initAfter( ) {
 	return true;
 }
 

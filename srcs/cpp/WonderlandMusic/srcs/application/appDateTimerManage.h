@@ -11,6 +11,10 @@ protected:
 public:
 	bool init( ) override;
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 protected:
 	bool deleteResource( ) override;
 

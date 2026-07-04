@@ -30,6 +30,19 @@ bool MusicContreScrollArea::deleteResource( ) {
 bool MusicContreScrollArea::init( ) {
 	deleteResource( );
 	musicContreWidget = new MusicContreWidget( this );
+
+	Before_Init_Resource_App_Core_Ptr( musicContreWidget );
+	Init_Resource_App_Core_Ptr( musicContreWidget );
+	After_Init_Resource_App_Core_Ptr( musicContreWidget );
+
+	return true;
+}
+
+bool MusicContreScrollArea::initBefore( ) {
+	return true;
+}
+
+bool MusicContreScrollArea::initAfter( ) {
 	return true;
 }
 

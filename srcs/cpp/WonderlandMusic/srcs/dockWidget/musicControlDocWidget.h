@@ -24,6 +24,10 @@ protected:
 
 public:
 	bool init( ) override;
+
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 };
 
 #endif // MUSICCONTROLDOCWIDGET_H_H_HEAD__FILE__

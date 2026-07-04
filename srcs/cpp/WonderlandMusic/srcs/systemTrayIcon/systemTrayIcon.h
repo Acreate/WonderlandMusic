@@ -23,6 +23,10 @@ public:
 
 	SystemTrayIcon( const QIcon &icon, QObject *parent );
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 	bool init( ) override;
 
 	~SystemTrayIcon( ) override;

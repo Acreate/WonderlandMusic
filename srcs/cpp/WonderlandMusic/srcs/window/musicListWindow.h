@@ -35,6 +35,10 @@ protected:
 
 public:
 	bool init( ) override;
+
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 };
 
 #endif // MUSICLISTWINDOW_H_H_HEAD__FILE__

@@ -4,16 +4,16 @@
 #include "../appInstance.h"
 
 bool AppDataManageJsonKey::init( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
-	jsonFilePath = applicationDirPath + "/json/app.data.manage.json";
+	jsonFilePath = "/json/app.data.manage.json";
 	iniDirHomePath = "app.ini.dir.home.path";
 	appMusicManage = "app.music.manage";
 	return true;
 }
 
-const QString & AppDataManageJsonKey::getJsonFilePath( ) const {
-	return jsonFilePath;
+QString AppDataManageJsonKey::getJsonFilePath( ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	return applicationDirPath + jsonFilePath;
 }
 
 const QString & AppDataManageJsonKey::getAppMusicManage( ) const {

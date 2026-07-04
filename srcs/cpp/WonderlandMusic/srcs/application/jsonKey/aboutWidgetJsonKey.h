@@ -11,6 +11,6 @@ public:
 	bool init( ) override;
 
 public:
-	virtual const QString & getQtLogoIconPath( ) const;
+	virtual QString getQtLogoIconPath( ) const;
 };
 #endif // ABOUTWIDGETJSONKEY_H_H_HEAD__FILE__

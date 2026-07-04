@@ -68,3 +68,11 @@ bool OptionDockWidget::init( ) {
 	mainWindow->addDockWidget( Qt::DockWidgetArea::LeftDockWidgetArea, this );
 	return true;
 }
+
+bool OptionDockWidget::initBefore( ) {
+	return true;
+}
+
+bool OptionDockWidget::initAfter( ) {
+	return true;
+}

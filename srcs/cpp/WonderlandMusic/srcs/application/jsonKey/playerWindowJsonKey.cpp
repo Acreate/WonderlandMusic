@@ -4,9 +4,7 @@
 #include "../appInstance.h"
 
 bool PlayerWindowJsonKey::init( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
-	jsonFilePath = applicationDirPath + "/json/app.window.player.window.info.json";
+	jsonFilePath = "/json/app.window.player.window.info.json";
 
 	fileSelect = "file.select.path";
 	dirSelect = "dir.select.path";
@@ -23,8 +21,10 @@ bool PlayerWindowJsonKey::init( ) {
 	return true;
 }
 
-const QString & PlayerWindowJsonKey::getJsonFilePath( ) const {
-	return jsonFilePath;
+QString PlayerWindowJsonKey::getJsonFilePath( ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	return applicationDirPath + jsonFilePath;
 }
 
 const QString & PlayerWindowJsonKey::getFavoriteArrayObjName( ) const {

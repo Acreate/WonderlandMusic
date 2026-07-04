@@ -4,32 +4,40 @@
 #include "../appInstance.h"
 
 bool PlayerListToolWidgetJsonKey::init( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
-	thePreviousSongIconPath = applicationDirPath + "/png/上一曲.png";
-	controlPlayIconPath = applicationDirPath + "/png/播放.png";
-	controlPauseIconPath = applicationDirPath + "/png/暂停.png";
-	theNextSongIconPath = applicationDirPath + "/png/下一曲.png";
-	currentSongPlayListIconPath = applicationDirPath + "/png/列表.png";
+	thePreviousSongIconPath = "/png/上一曲.png";
+	controlPlayIconPath = "/png/播放.png";
+	controlPauseIconPath = "/png/暂停.png";
+	theNextSongIconPath = "/png/下一曲.png";
+	currentSongPlayListIconPath = "/png/列表.png";
 	return true;
 }
 
-const QString & PlayerListToolWidgetJsonKey::getThePreviousSongIconPath( ) const {
-	return thePreviousSongIconPath;
+QString PlayerListToolWidgetJsonKey::getThePreviousSongIconPath( ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	return applicationDirPath + thePreviousSongIconPath;
 }
 
-const QString & PlayerListToolWidgetJsonKey::getControlPlayIconPath( ) const {
-	return controlPlayIconPath;
+QString PlayerListToolWidgetJsonKey::getControlPlayIconPath( ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	return applicationDirPath + controlPlayIconPath;
 }
 
-const QString & PlayerListToolWidgetJsonKey::getControlPauseIconPath( ) const {
-	return controlPauseIconPath;
+QString PlayerListToolWidgetJsonKey::getControlPauseIconPath( ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	return applicationDirPath + controlPauseIconPath;
 }
 
-const QString & PlayerListToolWidgetJsonKey::getTheNextSongIconPath( ) const {
-	return theNextSongIconPath;
+QString PlayerListToolWidgetJsonKey::getTheNextSongIconPath( ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	return applicationDirPath + theNextSongIconPath;
 }
 
-const QString & PlayerListToolWidgetJsonKey::getCurrentSongPlayListIconPath( ) const {
-	return currentSongPlayListIconPath;
+QString PlayerListToolWidgetJsonKey::getCurrentSongPlayListIconPath( ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	return applicationDirPath + currentSongPlayListIconPath;
 }

@@ -32,6 +32,10 @@ protected:
 public:
 	bool init( ) override;
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 Q_SIGNALS:
 	void signal_click_player_button( );
 

@@ -52,6 +52,10 @@ public:
 
 	bool init( ) override;
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 	virtual bool compLayout( );
 
 	virtual int getMinHeight( );

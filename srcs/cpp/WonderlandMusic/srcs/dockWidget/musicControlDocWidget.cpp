@@ -22,9 +22,23 @@ bool MusicControlDocWidget::init( ) {
 
 	titleBarWidget = new QWidget( this );
 	setTitleBarWidget( titleBarWidget );
+
 	playerToolsWidget = new PlayerToolsWidget( this );
+
+	Before_Init_Resource_App_Core_Ptr( playerToolsWidget );
+	Init_Resource_App_Core_Ptr( playerToolsWidget );
+	After_Init_Resource_App_Core_Ptr( playerToolsWidget );
+
 	setWidget( playerToolsWidget );
 
 	playerWindow->addDockWidget( Qt::DockWidgetArea::BottomDockWidgetArea, this );
+	return true;
+}
+
+bool MusicControlDocWidget::initBefore( ) {
+	return true;
+}
+
+bool MusicControlDocWidget::initAfter( ) {
 	return true;
 }

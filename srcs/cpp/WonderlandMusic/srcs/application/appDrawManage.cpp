@@ -14,7 +14,20 @@ bool AppDrawManage::deleteResource( ) {
 bool AppDrawManage::init( ) {
 	deleteResource( );
 	appRenderImage = new AppRenderImage;
+
+	Before_Init_Resource_App_Core_Ptr( appRenderImage );
+
 	Init_Resource_App_Core_Ptr( appRenderImage );
+
+	After_Init_Resource_App_Core_Ptr( appRenderImage );
+	return true;
+}
+
+bool AppDrawManage::initBefore( ) {
+	return true;
+}
+
+bool AppDrawManage::initAfter( ) {
 	return true;
 }
 

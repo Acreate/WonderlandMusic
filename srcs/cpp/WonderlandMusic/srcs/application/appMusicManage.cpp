@@ -2,6 +2,8 @@
 
 #include <QMediaPlayer>
 
+#include "appDataManage.h"
+#include "appInstance.h"
 #include "appMusicDecoder.h"
 
 #include "../item/musicItem.h"
@@ -43,12 +45,13 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 	auto loadMusicFile = new QMediaPlayer;
 	// 链接信号
 	loadMusicFile->connect( loadMusicFile, &QMediaPlayer::mediaStatusChanged, this, [this, loadMusicFile] ( QMediaPlayer::MediaStatus status ) {
+		AppDataManage *dataManage = AppInstance::getAppInstance( )->getAppDataManage( );
 		MusicItem *musicItem = new MusicItem( *loadMusicFile );
 		switch( status ) {
 			case QMediaPlayer::EndOfMedia :
 			case QMediaPlayer::InvalidMedia :
 			case QMediaPlayer::NoMedia :
-				emit signal_load_error( musicItem->getAbsFilePath( ) );
+				emit dataManage->signal_load_error( musicItem->getAbsFilePath( ) );
 			case QMediaPlayer::LoadingMedia :
 			case QMediaPlayer::StalledMedia :
 			case QMediaPlayer::BufferingMedia :
@@ -63,7 +66,7 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 		size_t loadOverCount = loadMediaVector.size( );
 		musicItemvVector.emplace_back( musicItem );
 		loadMutex->unlock( );
-		emit signal_load_unity( *musicItem );
+		emit dataManage->signal_load_unity( *musicItem );
 		if( loadOverCount == loadCount ) {
 			loadMutex->lock( );
 			auto mediaPlayer = loadMediaVector.data( );
@@ -79,7 +82,7 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 				buffData[ loadOverCount ] = sourceData[ loadOverCount ];
 			loadMutex->unlock( );
 			// 触发信号
-			emit signal_load_over( musicItemvVector );
+			emit dataManage->signal_load_over( musicItemvVector );
 		}
 	} );
 
@@ -89,6 +92,14 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 	loadMutex->unlock( );
 	// 开始配置
 	loadMusicFile->setSource( QUrl::fromLocalFile( music_file ) );
+}
+
+bool AppMusicManage::readJsonData( ) {
+	return false;
+}
+
+bool AppMusicManage::writeJsonData( ) {
+	return false;
 }
 
 void AppMusicManage::loadMusciFromFileVector( const std::vector< QString > &music_file ) {
@@ -222,7 +233,17 @@ bool AppMusicManage::init( ) {
 	deleteResource( );
 	loadMutex = new UserMutex;
 	appMusicDecoder = new AppMusicDecoder;
+	Before_Init_Resource_App_Core_Ptr( appMusicDecoder );
 	Init_Resource_App_Core_Ptr( appMusicDecoder );
+	After_Init_Resource_App_Core_Ptr( appMusicDecoder );
+	return true;
+}
+
+bool AppMusicManage::initBefore( ) {
+	return true;
+}
+
+bool AppMusicManage::initAfter( ) {
 	return true;
 }
 

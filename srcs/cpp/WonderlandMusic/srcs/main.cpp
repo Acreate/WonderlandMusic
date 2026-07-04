@@ -76,18 +76,40 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 
 	AppInstance *application = new AppInstance( argc, argv );
 
+	int exec = -1;
 	QString resultString = QObject::tr( "返回值" );
+	if( application->initBefore( ) == false ) {
+		if( messageErrorOut ) {
+			*messageErrorOut << "----------------------"
+				<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
+				<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
+				+ QString::number( exec ).toUpper( ) + " }";
+			delete messageErrorOut;
+		}
+		return exec;
+	}
+	exec = -2;
 	if( application->init( ) == false ) {
 		if( messageErrorOut ) {
 			*messageErrorOut << "----------------------"
 				<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
-				<< "\t:\t" + resultString + "{ 0x" + QString::number( -1, 16 ).toUpper( ) + ", "
-				+ QString::number( -1 ).toUpper( ) + " }";
+				<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
+				+ QString::number( exec ).toUpper( ) + " }";
 			delete messageErrorOut;
 		}
-		return -1;
+		return exec;
 	}
-	int exec = -1;
+	exec = -3;
+	if( application->initAfter( ) == false ) {
+		if( messageErrorOut ) {
+			*messageErrorOut << "----------------------"
+				<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
+				<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
+				+ QString::number( exec ).toUpper( ) + " }";
+			delete messageErrorOut;
+		}
+		return exec;
+	}
 	if( application->getAppUserInterfaceManage( )->showMainWindow( ) )
 		exec = application->exec( );
 	if( messageErrorOut ) {

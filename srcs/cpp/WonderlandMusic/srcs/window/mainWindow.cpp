@@ -108,10 +108,14 @@ bool MainWindow::init( ) {
 
 	leftOptionDockWidget = new OptionDockWidget( this );
 
-	if( leftOptionDockWidget->init( ) == false )
-		return false;
-	if( mainStackedWidget->init( ) == false )
-		return false;
+	Before_Init_Resource_App_Core_Ptr( mainStackedWidget );
+	Before_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
+
+	Init_Resource_App_Core_Ptr( mainStackedWidget );
+	Init_Resource_App_Core_Ptr( leftOptionDockWidget );
+
+	After_Init_Resource_App_Core_Ptr( mainStackedWidget );
+	After_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
 
 	setCentralWidget( mainStackedWidget );
 
@@ -125,6 +129,14 @@ bool MainWindow::init( ) {
 		mainStackedWidget->slot_showAboutWidget( );
 	} );
 
+	return true;
+}
+
+bool MainWindow::initBefore( ) {
+	return true;
+}
+
+bool MainWindow::initAfter( ) {
 	return true;
 }
 

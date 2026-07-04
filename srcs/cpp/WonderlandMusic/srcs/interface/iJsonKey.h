@@ -6,6 +6,11 @@
 class IJsonKey : public IAppCore {
 protected:
 	bool deleteResource( ) override;
+
+public:
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 };
 
 #endif // IJSONKEY_H_H_HEAD__FILE__

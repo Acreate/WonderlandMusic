@@ -21,17 +21,28 @@ bool MainStackedWidget::init( ) {
 	settingWidget = new SettingWidget( this );
 	aboutWidget = new AboutWidget( this );
 
-	if( playerWindow->init( ) == false )
-		return false;
-	if( settingWidget->init( ) == false )
-		return false;
-	if( aboutWidget->init( ) == false )
-		return false;
+	Before_Init_Resource_App_Core_Ptr( playerWindow );
+	Before_Init_Resource_App_Core_Ptr( settingWidget );
+
+	Init_Resource_App_Core_Ptr( playerWindow );
+	Init_Resource_App_Core_Ptr( settingWidget );
+	Init_Resource_App_Core_Ptr( aboutWidget );
+
+	After_Init_Resource_App_Core_Ptr( playerWindow );
+	After_Init_Resource_App_Core_Ptr( settingWidget );
 
 	addWidget( playerWindow );
 	addWidget( settingWidget );
 	addWidget( aboutWidget );
 
+	return true;
+}
+
+bool MainStackedWidget::initBefore( ) {
+	return true;
+}
+
+bool MainStackedWidget::initAfter( ) {
 	return true;
 }
 

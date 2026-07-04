@@ -27,6 +27,10 @@ protected:
 public:
 	bool init( ) override;
 
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
+
 	virtual QScrollArea * getPlayerListTopWidgetScrollArea( ) const;
 
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;

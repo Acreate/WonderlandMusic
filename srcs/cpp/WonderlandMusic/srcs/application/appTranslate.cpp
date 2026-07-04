@@ -26,6 +26,14 @@
 AppTranslate::AppTranslate( ) {
 }
 
+bool AppTranslate::initBefore( ) {
+	return true;
+}
+
+bool AppTranslate::initAfter( ) {
+	return true;
+}
+
 bool AppTranslate::setCodecForLocale( ) {
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
 	if( utf8 == nullptr )

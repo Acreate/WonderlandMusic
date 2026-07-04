@@ -51,15 +51,29 @@ bool AppInstance::notify( QObject *object, QEvent *event ) {
 }
 
 bool AppInstance::init( ) {
+	Before_Init_Resource_App_Core_Ptr( appDateTimerManage );
+	Before_Init_Resource_App_Core_Ptr( appDataManage );
+	Before_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+
+	Init_Resource_App_Core_Ptr( appDateTimerManage );
+	Init_Resource_App_Core_Ptr( appDataManage );
+	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+
+	After_Init_Resource_App_Core_Ptr( appDateTimerManage );
+	After_Init_Resource_App_Core_Ptr( appDataManage );
+	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+	return true;
+}
+
+bool AppInstance::initBefore( ) {
 	deleteResource( );
 	instance = this;
 	appDateTimerManage = new AppDateTimerManage;
 	appDataManage = new AppDataManage;
 	appUserInterfaceManage = new AppUserInterfaceManage;
+	return true;
+}
 
-	Init_Resource_App_Core_Ptr( appDateTimerManage );
-	Init_Resource_App_Core_Ptr( appDataManage );
-	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
-	appDataManage->readJsonData( );
+bool AppInstance::initAfter( ) {
 	return true;
 }

@@ -4,12 +4,13 @@
 #include "../interface/iAppCore.h"
 #include "../interface/iAppDiskJsonData.h"
 
+class MusicItem;
 class AppMusicManage;
 class AppDataJsonKey;
 class QTranslator;
 class AppTranslate;
 
-/// @brief 数据管理，IAppDiskJsonData，其成员函数应当由创建者调用
+/// @brief 数据管理
 class AppDataManage : public QObject, public IAppDiskJsonData, public IAppCore {
 	Q_OBJECT;
 
@@ -30,6 +31,10 @@ protected:
 
 public:
 	bool init( ) override;
+
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 
 	~AppDataManage( ) override;
 
@@ -57,6 +62,17 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;
+
+Q_SIGNALS:
+	void signal_change_setting_path( const QString &new_setting_home_path );
+
+	void signal_load_error( const QString &music_file_path );
+
+	void signal_load_over( const std::vector< MusicItem * > &music_item_vector );
+
+	void signal_load_star( const QString &music_file_path );
+
+	void signal_load_unity( const MusicItem &music_item );
 };
 
 #endif // APPDATAMANAGE_H_H_HEAD__FILE__

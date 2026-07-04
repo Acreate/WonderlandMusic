@@ -53,6 +53,14 @@ SystemTrayIcon::SystemTrayIcon( QObject *parent ) : SystemTrayIcon( QIcon( ), pa
 SystemTrayIcon::SystemTrayIcon( const QIcon &icon, QObject *parent ) : QSystemTrayIcon( icon, parent ) {
 }
 
+bool SystemTrayIcon::initBefore( ) {
+	return true;
+}
+
+bool SystemTrayIcon::initAfter( ) {
+	return true;
+}
+
 bool SystemTrayIcon::init( ) {
 	if( QSystemTrayIcon::isSystemTrayAvailable( ) == false )
 		return false;

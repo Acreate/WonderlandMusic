@@ -14,7 +14,7 @@ public:
 	bool init( ) override;
 
 public:
-	virtual const QString & getSettingJsonPath( ) const;
+	virtual QString getSettingJsonPath( ) const;
 
 	virtual const QString & getPointXPos( ) const;
 

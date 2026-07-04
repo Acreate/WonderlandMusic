@@ -53,6 +53,10 @@ public:
 
 Q_SIGNALS:
 	void signal_change_setting_path( const QString &new_setting_home_path );
+
+	void signal_changed_width( int split_width, int widget_before_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
+
+	void signal_horizontal_scroll_set_value( int value );
 };
 
 #endif // APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__

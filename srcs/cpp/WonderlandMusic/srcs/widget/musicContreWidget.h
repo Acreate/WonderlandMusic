@@ -3,16 +3,13 @@
 #include <QWidget>
 
 #include "../interface/iAppCore.h"
-#include "../interface/iAppJsonData.h"
 
 class MusicItem;
 class PlayerListTopWidget;
 class UserMutex;
 class MusicInfoItemWidget;
-class PlayerListWidgetMenu;
-class PlayerWindow;
 
-class MusicContreWidget : public QWidget, public IAppCore, public IAppJsonData {
+class MusicContreWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
 
 protected:
@@ -44,7 +41,7 @@ public:
 
 	virtual void setItemVector( const std::vector< MusicItem * > &load_music_items );
 
-	virtual void setItemWidth( const PlayerListTopWidget *player_list_top_widget );
+	virtual void setItemPlayerListTopWidgetWidth( const PlayerListTopWidget *player_list_top_widget );
 
 	virtual void setItemWidth( int widget_before_width, int splite_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
 
@@ -68,10 +65,6 @@ public:
 	bool initBefore( ) override;
 
 	bool initAfter( ) override;
-
-	bool getJsonData( QJsonObject &get_json_object ) const override;
-
-	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 	// 重载
 protected:

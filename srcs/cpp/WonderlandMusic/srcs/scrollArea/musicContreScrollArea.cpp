@@ -1,5 +1,10 @@
 ﻿#include "musicContreScrollArea.h"
 
+#include <QScrollBar>
+
+#include "../application/appInstance.h"
+#include "../application/appUserInterfaceManage.h"
+
 #include "../widget/musicContreWidget.h"
 
 MusicContreScrollArea::MusicContreScrollArea( QWidget *parent ) : QScrollArea( parent ) {
@@ -10,7 +15,7 @@ bool MusicContreScrollArea::showFavorteMusicContreList( const QString &music_fav
 }
 
 void MusicContreScrollArea::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {
-	musicContreWidget->setItemWidth( player_list_top_widget );
+	musicContreWidget->setItemPlayerListTopWidgetWidth( player_list_top_widget );
 }
 
 void MusicContreScrollArea::setItemVector( const std::vector< MusicItem * > &load_music_items ) {
@@ -28,9 +33,6 @@ bool MusicContreScrollArea::deleteResource( ) {
 }
 
 bool MusicContreScrollArea::init( ) {
-	deleteResource( );
-	musicContreWidget = new MusicContreWidget( this );
-
 	Before_Init_Resource_App_Core_Ptr( musicContreWidget );
 	Init_Resource_App_Core_Ptr( musicContreWidget );
 	After_Init_Resource_App_Core_Ptr( musicContreWidget );
@@ -39,17 +41,20 @@ bool MusicContreScrollArea::init( ) {
 }
 
 bool MusicContreScrollArea::initBefore( ) {
+	deleteResource( );
+	musicContreWidget = new MusicContreWidget( this );
+	setWidgetResizable( true );
+	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+	setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 	return true;
 }
 
 bool MusicContreScrollArea::initAfter( ) {
+	setWidget( musicContreWidget );
+
+	auto scrollBar = horizontalScrollBar( );
+	auto uiManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
+	connect( scrollBar, &QScrollBar::valueChanged, uiManage, &AppUserInterfaceManage::signal_horizontal_scroll_set_value );
+
 	return true;
-}
-
-bool MusicContreScrollArea::getJsonData( QJsonObject &get_json_object ) const {
-	return musicContreWidget->getJsonData( get_json_object );
-}
-
-bool MusicContreScrollArea::setJsonData( const QJsonObject &set_json_object ) {
-	return musicContreWidget->setJsonData( set_json_object );
 }

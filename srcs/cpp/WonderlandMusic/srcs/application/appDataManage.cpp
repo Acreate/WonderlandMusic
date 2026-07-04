@@ -105,8 +105,10 @@ bool AppDataManage::readJsonData( ) {
 	// 把 json 数据加载到 AppDataManage
 	if( setJsonData( appJsonObject ) == false )
 		return false;
+	// 把 json 数据加载到 AppMusicManage
 	appMusicManage->readJsonData( );
 	auto appUserInterfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
+	// 把 json 数据加载到 AppUserInterfaceManage
 	appUserInterfaceManage->readJsonData( );
 	return true;
 }
@@ -121,8 +123,11 @@ bool AppDataManage::writeJsonData( ) {
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	auto jsonFilePath = appDataManage->getJsonFilePath( );
 	PathTools::writeJsonObject( appJsonObject, jsonFilePath );
+	// 写入音频 json 到磁盘
 	appMusicManage->writeJsonData( );
+
 	auto appUserInterfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
+	// 写入界面 json 到磁盘
 	appUserInterfaceManage->writeJsonData( );
 
 	return true;

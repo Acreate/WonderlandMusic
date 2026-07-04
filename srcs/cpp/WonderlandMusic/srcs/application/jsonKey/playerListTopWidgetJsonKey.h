@@ -4,7 +4,6 @@
 #include <interface/iJsonKey.h>
 
 class PlayerListTopWidgetJsonKey : public IJsonKey {
-	QString topJsonPath;
 	QString itemWidth;
 	QString itemSplitWidth;
 	QString itemIndexWidth;
@@ -16,8 +15,6 @@ class PlayerListTopWidgetJsonKey : public IJsonKey {
 
 public:
 	bool init( ) override;
-
-	virtual QString getTopJsonPath( ) const;
 
 	virtual const QString & getItemWidth( ) const;
 

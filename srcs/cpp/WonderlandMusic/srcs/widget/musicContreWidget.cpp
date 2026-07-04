@@ -56,7 +56,7 @@ void MusicContreWidget::setItemVector( const std::vector< MusicItem * > &load_mu
 	updateItemWidget( );
 }
 
-void MusicContreWidget::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {
+void MusicContreWidget::setItemPlayerListTopWidgetWidth( const PlayerListTopWidget *player_list_top_widget ) {
 	int widgetBeforeWidth = player_list_top_widget->getWidgetBeforeWidth( );
 	int splitWidth = player_list_top_widget->getSplitWidth( );
 	int musicNameWidth = player_list_top_widget->getMusicNameWidth( );
@@ -79,6 +79,8 @@ void MusicContreWidget::setItemWidth( int widget_before_width, int splite_width,
 }
 
 void MusicContreWidget::updateItemWidget( ) {
+	if( musicInfoMutex == nullptr )
+		return;
 	musicInfoMutex->lock( );
 
 	int offsetY = 0;
@@ -238,25 +240,32 @@ bool MusicContreWidget::deleteResource( ) {
 }
 
 bool MusicContreWidget::init( ) {
-	deleteResource( );
-
 	return true;
 }
 
 bool MusicContreWidget::initBefore( ) {
+	deleteResource( );
+	doubleClickIntervalTimeMilliSecond = 300;
+	activeLeftItemWidget = nullptr;
+	selectLeftItemWidget = nullptr;
+	musicInfoMutex = new UserMutex;
+	beforeClickTime = new QDateTime;
+	pen = new QPen;
+	drawPenWidth = 4;
+	drawPenColor = QColor( "#7bffa1" );
+	drawFillColor = QColor( "#50a2ff" );
+	drawFillColor.setAlpha( 100 );
+	pen->setWidth( drawPenWidth );
+	pen->setColor( drawPenColor );
+	indexWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
 	return true;
 }
 
 bool MusicContreWidget::initAfter( ) {
+	auto interfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
+	connect( interfaceManage, &AppUserInterfaceManage::signal_changed_width, this, &MusicContreWidget::setItemWidth );
+	updateItemWidget( );
 	return true;
-}
-
-bool MusicContreWidget::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
-}
-
-bool MusicContreWidget::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
 }
 
 void MusicContreWidget::paintEvent( QPaintEvent *event ) {

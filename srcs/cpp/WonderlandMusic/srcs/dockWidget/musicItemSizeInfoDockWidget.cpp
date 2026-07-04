@@ -3,6 +3,9 @@
 #include <QScrollArea>
 #include <QScrollBar>
 
+#include "../application/appInstance.h"
+#include "../application/appUserInterfaceManage.h"
+
 #include "../widget/playerListTopWidget.h"
 
 #include "../window/playerWindow.h"
@@ -46,8 +49,12 @@ bool MusicItemSizeInfoDockWidget::initAfter( ) {
 	setTitleBarWidget( titleBarWidget );
 	setWidget( playerListTopWidgetScrollArea );
 	setFixedHeight( playerListTopWidget->height( ) );
-	connect( playerListTopWidget, &PlayerListTopWidget::signal_changed_width, this, &MusicItemSizeInfoDockWidget::signal_changed_width );
 	mainWindow->addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, this );
+
+	auto scrollBar = playerListTopWidgetScrollArea->horizontalScrollBar( );
+	auto uiManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
+	connect( uiManage, &AppUserInterfaceManage::signal_horizontal_scroll_set_value, scrollBar, &QScrollBar::setValue );
+
 	return true;
 }
 

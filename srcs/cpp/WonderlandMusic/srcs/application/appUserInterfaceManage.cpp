@@ -32,6 +32,7 @@ bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
 	if( jsonData ) {
 		get_json_object.insert( interfaceManage->getMainWindow( ), mainWindowJsonObject );
 	}
+	mainWindowJsonObject = QJsonObject( );
 	jsonData = mainWindow->getPlayerListTopWidget( )->getJsonData( mainWindowJsonObject );
 	if( jsonData ) {
 		get_json_object.insert( interfaceManage->getMusicListTopDockWidget( ), mainWindowJsonObject );

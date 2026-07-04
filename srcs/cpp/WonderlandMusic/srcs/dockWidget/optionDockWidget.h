@@ -4,6 +4,8 @@
 
 #include "../interface/iAppCore.h"
 
+class QVBoxLayout;
+class QSpacerItem;
 class QPushButton;
 class MainWindow;
 
@@ -22,6 +24,10 @@ protected:
 	QPushButton *showSettingWidgetBtn = nullptr;
 	/// @brief 显示关于面板按钮
 	QPushButton *showAboutWidgetBtn = nullptr;
+	/// @brief 底部弹顶
+	QSpacerItem *spacerItem;
+	// 按钮布局
+	QVBoxLayout *optionLayout;
 
 public:
 	OptionDockWidget( MainWindow *parent );

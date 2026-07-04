@@ -98,16 +98,6 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 }
 
 bool MainWindow::init( ) {
-	deleteResource( );
-	auto appInstance = AppInstance::getAppInstance( );
-	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-	// 配置窗口顶部显示
-	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
-
-	mainStackedWidget = new MainStackedWidget( this );
-
-	leftOptionDockWidget = new OptionDockWidget( this );
-
 	Before_Init_Resource_App_Core_Ptr( mainStackedWidget );
 	Before_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
 
@@ -117,6 +107,23 @@ bool MainWindow::init( ) {
 	After_Init_Resource_App_Core_Ptr( mainStackedWidget );
 	After_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
 
+	return true;
+}
+
+bool MainWindow::initBefore( ) {
+	deleteResource( );
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
+	// 配置窗口顶部显示
+	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
+
+	mainStackedWidget = new MainStackedWidget( this );
+
+	leftOptionDockWidget = new OptionDockWidget( this );
+	return true;
+}
+
+bool MainWindow::initAfter( ) {
 	setCentralWidget( mainStackedWidget );
 
 	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_player_button, [this]( ) {
@@ -128,15 +135,7 @@ bool MainWindow::init( ) {
 	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_about_button, [this]( ) {
 		mainStackedWidget->slot_showAboutWidget( );
 	} );
-
-	return true;
-}
-
-bool MainWindow::initBefore( ) {
-	return true;
-}
-
-bool MainWindow::initAfter( ) {
+	leftOptionDockWidget->show( );
 	return true;
 }
 

@@ -12,15 +12,11 @@ bool MainStackedWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( playerWindow );
 	Delete_Resource_App_Core_Ptr( settingWidget );
 	Delete_Resource_App_Core_Ptr( aboutWidget );
+	disconnect( );
 	return true;
 }
 
 bool MainStackedWidget::init( ) {
-	deleteResource( );
-	playerWindow = new PlayerWindow( this );
-	settingWidget = new SettingWidget( this );
-	aboutWidget = new AboutWidget( this );
-
 	Before_Init_Resource_App_Core_Ptr( playerWindow );
 	Before_Init_Resource_App_Core_Ptr( settingWidget );
 
@@ -31,18 +27,21 @@ bool MainStackedWidget::init( ) {
 	After_Init_Resource_App_Core_Ptr( playerWindow );
 	After_Init_Resource_App_Core_Ptr( settingWidget );
 
-	addWidget( playerWindow );
-	addWidget( settingWidget );
-	addWidget( aboutWidget );
-
 	return true;
 }
 
 bool MainStackedWidget::initBefore( ) {
+	deleteResource( );
+	playerWindow = new PlayerWindow( this );
+	settingWidget = new SettingWidget( this );
+	aboutWidget = new AboutWidget( this );
 	return true;
 }
 
 bool MainStackedWidget::initAfter( ) {
+	addWidget( playerWindow );
+	addWidget( settingWidget );
+	addWidget( aboutWidget );
 	return true;
 }
 

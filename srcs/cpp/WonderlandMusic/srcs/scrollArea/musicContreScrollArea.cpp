@@ -5,12 +5,8 @@
 MusicContreScrollArea::MusicContreScrollArea( QWidget *parent ) : QScrollArea( parent ) {
 }
 
-QString MusicContreScrollArea::getWidgetName( ) const {
-	return musicContreWidget->windowTitle( );
-}
-
-void MusicContreScrollArea::setWidgetName( const QString &widget_name ) {
-	musicContreWidget->setWindowTitle( widget_name );
+bool MusicContreScrollArea::showFavorteMusicContreList( const QString &music_favorte_widget ) {
+	return musicContreWidget->showFavorteMusicContreList( music_favorte_widget );
 }
 
 void MusicContreScrollArea::setItemWidth( const PlayerListTopWidget *player_list_top_widget ) {

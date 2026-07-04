@@ -9,7 +9,8 @@ class AppMusicDecoder;
 
 class AppMusicManage : public QObject, public IAppCore {
 	Q_OBJECT;
-
+protected:
+	
 protected:
 	UserMutex *loadMutex = nullptr;
 	AppMusicDecoder *appMusicDecoder = nullptr;

@@ -18,22 +18,15 @@ protected:
 	/// @brief 列表选项宽度组件容器
 	MusicItemSizeInfoDockWidget *musicItemSizeInfoDockWidget = nullptr;
 
-	/// @brief 音频列表枚举组件容器
-	MusicListStackedWidget *musicListStackedWidget = nullptr;
-	/// @brief 滚动视图序列
-	std::vector< MusicContreScrollArea * > musicContreScrollAreaVector;
-
-protected:
-	virtual MusicContreScrollArea * findWidgetName( const QString &widget_name ) const;
+	/// @brief 滚动音频列表组件容器
+	MusicContreScrollArea *musicContreScrollArea = nullptr;
 
 public:
 	MusicListWindow( QWidget *parent );
 
 	~MusicListWindow( ) override;
 
-	virtual bool showWidget( const QString &widget_name );
-
-	virtual bool createWidget( const QString &widget_name, const std::vector< MusicItem * > &load_music_items );
+	virtual bool showFavorteMusicContreList( const QString &music_favorte_widget );
 
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 

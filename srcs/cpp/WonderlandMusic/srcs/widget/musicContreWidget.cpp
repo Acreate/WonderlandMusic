@@ -21,6 +21,10 @@
 MusicContreWidget::MusicContreWidget( QWidget *parent ) : QWidget( parent ) {
 }
 
+bool MusicContreWidget::showFavorteMusicContreList( const QString &music_favorte_widget ) {
+	return false;
+}
+
 void MusicContreWidget::setItemVector( const std::vector< MusicItem * > &load_music_items ) {
 	size_t count = load_music_items.size( );
 	auto data = load_music_items.data( );

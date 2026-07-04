@@ -18,9 +18,7 @@ protected:
 public:
 	MusicContreScrollArea( QWidget *parent );
 
-	virtual QString getWidgetName( ) const;
-
-	virtual void setWidgetName( const QString &widget_name );
+	virtual bool showFavorteMusicContreList( const QString &music_favorte_widget );
 
 	virtual void setItemWidth( const PlayerListTopWidget *player_list_top_widget );
 

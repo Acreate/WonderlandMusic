@@ -40,6 +40,8 @@ protected:
 public:
 	MusicContreWidget( QWidget *parent );
 
+	virtual bool showFavorteMusicContreList( const QString &music_favorte_widget );
+
 	virtual void setItemVector( const std::vector< MusicItem * > &load_music_items );
 
 	virtual void setItemWidth( const PlayerListTopWidget *player_list_top_widget );

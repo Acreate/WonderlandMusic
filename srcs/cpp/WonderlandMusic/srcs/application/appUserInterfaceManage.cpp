@@ -11,6 +11,8 @@
 
 #include "../tools/pathTools.h"
 
+#include "../widget/playerListTopWidget.h"
+
 #include "../window/mainWindow.h"
 
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
@@ -24,13 +26,16 @@ bool AppUserInterfaceManage::deleteResource( ) {
 }
 
 bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
+	auto interfaceManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppUserInterfaceManage( );
 	QJsonObject mainWindowJsonObject;
 	bool jsonData = mainWindow->getJsonData( mainWindowJsonObject );
 	if( jsonData ) {
-		auto interfaceManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppUserInterfaceManage( );
 		get_json_object.insert( interfaceManage->getMainWindow( ), mainWindowJsonObject );
 	}
-
+	jsonData = mainWindow->getPlayerListTopWidget( )->getJsonData( mainWindowJsonObject );
+	if( jsonData ) {
+		get_json_object.insert( interfaceManage->getMusicListTopDockWidget( ), mainWindowJsonObject );
+	}
 	return true;
 }
 
@@ -42,7 +47,12 @@ bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 		auto jsonValueRefs = find.value( ).toObject( );
 		mainWindow->setJsonData( jsonValueRefs );
 	}
-
+	find = set_json_object.find( interfaceManage->getMusicListTopDockWidget( ) );
+	if( find != end ) {
+		auto jsonValueRefs = find.value( ).toObject( );
+		auto playerListTopWidget = mainWindow->getPlayerListTopWidget( );
+		playerListTopWidget->setJsonData( jsonValueRefs );
+	}
 	return true;
 }
 
@@ -59,7 +69,6 @@ bool AppUserInterfaceManage::writeJsonData( ) {
 	QJsonObject writeJsonObject;
 	if( getJsonData( writeJsonObject ) ) {
 		auto interfaceManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppUserInterfaceManage( );
-
 		PathTools::writeJsonObject( writeJsonObject, interfaceManage->getFilePath( ) );
 	}
 	return true;

@@ -28,12 +28,16 @@ bool MusicListWindow::deleteResource( ) {
 	return true;
 }
 
-bool MusicListWindow::init( ) {
-	deleteResource( );
-	setWindowFlags( Qt::WindowType::Widget );
-	musicItemSizeInfoDockWidget = new MusicItemSizeInfoDockWidget( this );
-	musicContreScrollArea = new MusicContreScrollArea( this );
+bool MusicListWindow::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
 
+bool MusicListWindow::setJsonData( const QJsonObject &set_json_object ) {
+	
+	return false;
+}
+
+bool MusicListWindow::init( ) {
 	Before_Init_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
 	Before_Init_Resource_App_Core_Ptr( musicContreScrollArea );
 	Init_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
@@ -41,14 +45,19 @@ bool MusicListWindow::init( ) {
 	After_Init_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
 	After_Init_Resource_App_Core_Ptr( musicContreScrollArea );
 
-	setCentralWidget( musicContreScrollArea );
 	return true;
 }
 
 bool MusicListWindow::initBefore( ) {
+	deleteResource( );
+	setWindowFlags( Qt::WindowType::Widget );
+	musicItemSizeInfoDockWidget = new MusicItemSizeInfoDockWidget( this );
+	musicContreScrollArea = new MusicContreScrollArea( this );
 	return true;
 }
 
 bool MusicListWindow::initAfter( ) {
+	musicItemSizeInfoDockWidget->show( );
+	setCentralWidget( musicContreScrollArea );
 	return true;
 }

@@ -20,40 +20,34 @@ bool MusicItemSizeInfoDockWidget::deleteResource( ) {
 }
 
 bool MusicItemSizeInfoDockWidget::init( ) {
-	deleteResource( );
-
-	playerListTopWidget = new PlayerListTopWidget( nullptr );
-	if( playerListTopWidget->init( ) == false )
-		return false;
-
-	setAllowedAreas( Qt::TopDockWidgetArea );
-
-	titleBarWidget = new QWidget( this );
-	setTitleBarWidget( titleBarWidget );
-	setContentsMargins( 0, 0, 0, 0 );
-
-	playerListTopWidgetScrollArea = new QScrollArea( this );
-	playerListTopWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	playerListTopWidgetScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	playerListTopWidgetScrollArea->setWidgetResizable( true );
-	playerListTopWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
-	playerListTopWidgetScrollArea->verticalScrollBar( )->setEnabled( false );
-	setWidget( playerListTopWidgetScrollArea );
-	playerListTopWidget->setParent( playerListTopWidgetScrollArea );
-	playerListTopWidgetScrollArea->setWidget( playerListTopWidget );
-
-	mainWindow->addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, this );
-	setFixedHeight( playerListTopWidget->height( ) );
-	connect( playerListTopWidget, &PlayerListTopWidget::signal_changed_width, this, &MusicItemSizeInfoDockWidget::signal_changed_width );
+	Init_Resource_App_Core_Ptr( playerListTopWidget );
 
 	return true;
 }
 
 bool MusicItemSizeInfoDockWidget::initBefore( ) {
+	deleteResource( );
+
+	playerListTopWidgetScrollArea = new QScrollArea( this );
+	playerListTopWidget = new PlayerListTopWidget( playerListTopWidgetScrollArea );
+	titleBarWidget = new QWidget( this );
+	playerListTopWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	playerListTopWidgetScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+	playerListTopWidgetScrollArea->setWidgetResizable( true );
+	playerListTopWidgetScrollArea->setWindowFlags( Qt::WindowType::Widget );
+	playerListTopWidgetScrollArea->verticalScrollBar( )->setEnabled( false );
+	setAllowedAreas( Qt::TopDockWidgetArea );
+	setContentsMargins( 0, 0, 0, 0 );
 	return true;
 }
 
 bool MusicItemSizeInfoDockWidget::initAfter( ) {
+	playerListTopWidgetScrollArea->setWidget( playerListTopWidget );
+	setTitleBarWidget( titleBarWidget );
+	setWidget( playerListTopWidgetScrollArea );
+	setFixedHeight( playerListTopWidget->height( ) );
+	connect( playerListTopWidget, &PlayerListTopWidget::signal_changed_width, this, &MusicItemSizeInfoDockWidget::signal_changed_width );
+	mainWindow->addDockWidget( Qt::DockWidgetArea::TopDockWidgetArea, this );
 	return true;
 }
 

@@ -3,6 +3,7 @@
 #include <QMainWindow>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class MusicItem;
 class MusicContreScrollArea;
@@ -11,7 +12,7 @@ class PlayerListTopWidget;
 class MusicContreWidget;
 class MusicItemSizeInfoDockWidget;
 
-class MusicListWindow : public QMainWindow, public IAppCore {
+class MusicListWindow : public QMainWindow, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -34,6 +35,10 @@ protected:
 	bool deleteResource( ) override;
 
 public:
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+
+	bool setJsonData( const QJsonObject &set_json_object ) override;
+
 	bool init( ) override;
 
 	bool initBefore( ) override;

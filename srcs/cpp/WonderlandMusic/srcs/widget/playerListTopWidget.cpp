@@ -14,8 +14,6 @@
 #include "../application/jsonKey/playerListTopWidgetJsonKey.h"
 #include "../application/translate/playerTopWidgetTranslate.h"
 
-#include "../tools/pathTools.h"
-
 void PlayerListTopWidget::updateCurrentWidgetSize( ) {
 	int newWidth = widgetBeforeWidth + widgetAfterWidth + splitWidth * 5 + musicNameWidth + musicSingerWidth + musicDurationWidth + indexWidth;
 	AppInstance *appInstance = AppInstance::getAppInstance( );
@@ -31,68 +29,60 @@ PlayerListTopWidget::PlayerListTopWidget( QWidget *parent ) : QWidget( parent ),
 PlayerListTopWidget::~PlayerListTopWidget( ) {
 }
 
-bool PlayerListTopWidget::loadJsonPathInfo( ) {
+bool PlayerListTopWidget::getJsonData( QJsonObject &get_json_object ) const {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
+	int width = contentsRect( ).width( );
+	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
+	get_json_object.insert( listTopWidgetJsonKey->getItemWidth( ), width );
+	get_json_object.insert( listTopWidgetJsonKey->getItemSplitWidth( ), splitWidth );
+	get_json_object.insert( listTopWidgetJsonKey->getItemMusicNameWidth( ), musicNameWidth );
+	get_json_object.insert( listTopWidgetJsonKey->getItemMusicSingerWidth( ), musicSingerWidth );
+	get_json_object.insert( listTopWidgetJsonKey->getItemMusicDurationWidth( ), musicDurationWidth );
+	get_json_object.insert( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ), widgetBeforeWidth );
+	get_json_object.insert( listTopWidgetJsonKey->getItemWidgetAfterWidth( ), widgetAfterWidth );
+	get_json_object.insert( listTopWidgetJsonKey->getItemIndexWidth( ), indexWidth );
+	return true;
+}
+
+bool PlayerListTopWidget::setJsonData( const QJsonObject &set_json_object ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
-	auto fileJsonPath = listTopWidgetJsonKey->getTopJsonPath( );
-	QJsonObject fileJsonObject;
-	if( PathTools::readJsonObject( fileJsonObject, fileJsonPath ) == false )
-		return true;
-	auto end = fileJsonObject.end( );
-	QJsonObject::iterator find;
 
-	find = fileJsonObject.find( listTopWidgetJsonKey->getItemSplitWidth( ) );
+	auto end = set_json_object.end( );
+
+	auto find = set_json_object.find( listTopWidgetJsonKey->getItemSplitWidth( ) );
 	if( find != end )
 		splitWidth = find.value( ).toInt( splitWidth );
-	find = fileJsonObject.find( listTopWidgetJsonKey->getItemMusicNameWidth( ) );
+	find = set_json_object.find( listTopWidgetJsonKey->getItemMusicNameWidth( ) );
 	if( find != end )
 		musicNameWidth = find.value( ).toInt( musicNameWidth );
-	find = fileJsonObject.find( listTopWidgetJsonKey->getItemMusicSingerWidth( ) );
+	find = set_json_object.find( listTopWidgetJsonKey->getItemMusicSingerWidth( ) );
 	if( find != end )
 		musicSingerWidth = find.value( ).toInt( musicSingerWidth );
-	find = fileJsonObject.find( listTopWidgetJsonKey->getItemMusicDurationWidth( ) );
+	find = set_json_object.find( listTopWidgetJsonKey->getItemMusicDurationWidth( ) );
 	if( find != end )
 		musicDurationWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ) );
+	find = set_json_object.find( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ) );
 	if( find != end )
 		widgetBeforeWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( listTopWidgetJsonKey->getItemWidgetAfterWidth( ) );
+	find = set_json_object.find( listTopWidgetJsonKey->getItemWidgetAfterWidth( ) );
 	if( find != end )
 		widgetAfterWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = fileJsonObject.find( listTopWidgetJsonKey->getItemIndexWidth( ) );
+	find = set_json_object.find( listTopWidgetJsonKey->getItemIndexWidth( ) );
 	if( find != end )
 		indexWidth = find.value( ).toInt( musicDurationWidth );
-	find = fileJsonObject.find( listTopWidgetJsonKey->getItemWidth( ) );
+	find = set_json_object.find( listTopWidgetJsonKey->getItemWidth( ) );
 	if( find != end ) {
 		QRect rect = contentsRect( );
 		int w = find.value( ).toInt( rect.width( ) );
 		setFixedSize( w, rect.height( ) );
 	}
-
-	return true;
-}
-
-bool PlayerListTopWidget::writeJsonPathInfo( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
-
-	QJsonObject fileJsonObject;
-	int width = contentsRect( ).width( );
-	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
-	fileJsonObject.insert( listTopWidgetJsonKey->getItemWidth( ), width );
-	fileJsonObject.insert( listTopWidgetJsonKey->getItemSplitWidth( ), splitWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getItemMusicNameWidth( ), musicNameWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getItemMusicSingerWidth( ), musicSingerWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getItemMusicDurationWidth( ), musicDurationWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ), widgetBeforeWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getItemWidgetAfterWidth( ), widgetAfterWidth );
-	fileJsonObject.insert( listTopWidgetJsonKey->getItemIndexWidth( ), indexWidth );
-	auto fileJsonPath = listTopWidgetJsonKey->getTopJsonPath( );
-	PathTools::writeJsonObject( fileJsonObject, fileJsonPath );
+	autoSetItemSize( );
 	return true;
 }
 
@@ -194,8 +184,6 @@ bool PlayerListTopWidget::init( ) {
 		return false;
 	setFixedSize( minSize );
 	if( averageItem( ) == false )
-		return false;
-	if( loadJsonPathInfo( ) == false )
 		return false;
 	repaint( );
 	emitChangedWidth( );
@@ -318,7 +306,6 @@ void PlayerListTopWidget::closeEvent( QCloseEvent *event ) {
 }
 
 void PlayerListTopWidget::hideEvent( QHideEvent *event ) {
-	writeJsonPathInfo( );
 	QWidget::hideEvent( event );
 }
 

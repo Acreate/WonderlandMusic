@@ -3,7 +3,9 @@
 
 #include <QWidget>
 
-class PlayerListTopWidget : public QWidget {
+#include "../interface/iAppJsonData.h"
+
+class PlayerListTopWidget : public QWidget, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -30,9 +32,9 @@ public:
 
 	~PlayerListTopWidget( ) override;
 
-	virtual bool loadJsonPathInfo( );
+	bool getJsonData( QJsonObject &get_json_object ) const override;
 
-	virtual bool writeJsonPathInfo( );
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 	virtual int getSplitWidth( ) const;
 

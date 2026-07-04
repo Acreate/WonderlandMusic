@@ -124,6 +124,7 @@ bool AppDataManage::writeJsonData( ) {
 	appMusicManage->writeJsonData( );
 	auto appUserInterfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
 	appUserInterfaceManage->writeJsonData( );
+
 	return true;
 }
 

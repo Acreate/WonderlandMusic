@@ -42,6 +42,8 @@ bool MainStackedWidget::initAfter( ) {
 	addWidget( playerWindow );
 	addWidget( settingWidget );
 	addWidget( aboutWidget );
+
+	setCurrentIndex( 0 );
 	return true;
 }
 

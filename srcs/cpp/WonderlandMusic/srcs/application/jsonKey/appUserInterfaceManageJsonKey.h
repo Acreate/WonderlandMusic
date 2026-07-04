@@ -4,6 +4,7 @@
 
 class AppUserInterfaceManageJsonKey : public IJsonKey {
 	QString mainWindow;
+	QString musicListTopDockWidget;
 	QString filePath;
 
 public:
@@ -12,6 +13,8 @@ public:
 	virtual const QString & getMainWindow( ) const;
 
 	virtual QString getFilePath( ) const;
+
+	virtual const QString & getMusicListTopDockWidget( ) const;
 };
 
 #endif // APPUSERINTERFACEMANAGEJSONKEY_H_H_HEAD__FILE__

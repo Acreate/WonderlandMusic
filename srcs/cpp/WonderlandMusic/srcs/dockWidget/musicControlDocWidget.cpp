@@ -16,29 +16,26 @@ bool MusicControlDocWidget::deleteResource( ) {
 }
 
 bool MusicControlDocWidget::init( ) {
+	Before_Init_Resource_App_Core_Ptr( playerToolsWidget );
+	Init_Resource_App_Core_Ptr( playerToolsWidget );
+	After_Init_Resource_App_Core_Ptr( playerToolsWidget );
+
+	return true;
+}
+
+bool MusicControlDocWidget::initBefore( ) {
 	deleteResource( );
 	setAllowedAreas( Qt::BottomDockWidgetArea );
 	setContentsMargins( 0, 0, 0, 0 );
 
 	titleBarWidget = new QWidget( this );
-	setTitleBarWidget( titleBarWidget );
-
 	playerToolsWidget = new PlayerToolsWidget( this );
-
-	Before_Init_Resource_App_Core_Ptr( playerToolsWidget );
-	Init_Resource_App_Core_Ptr( playerToolsWidget );
-	After_Init_Resource_App_Core_Ptr( playerToolsWidget );
-
-	setWidget( playerToolsWidget );
-
-	playerWindow->addDockWidget( Qt::DockWidgetArea::BottomDockWidgetArea, this );
-	return true;
-}
-
-bool MusicControlDocWidget::initBefore( ) {
 	return true;
 }
 
 bool MusicControlDocWidget::initAfter( ) {
+	setTitleBarWidget( titleBarWidget );
+	setWidget( playerToolsWidget );
+	playerWindow->addDockWidget( Qt::DockWidgetArea::BottomDockWidgetArea, this );
 	return true;
 }

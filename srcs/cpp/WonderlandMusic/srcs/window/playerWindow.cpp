@@ -31,14 +31,6 @@ bool PlayerWindow::deleteResource( ) {
 }
 
 bool PlayerWindow::init( ) {
-	deleteResource( );
-
-	setWindowFlags( Qt::WindowType::Widget );
-
-	favoritemDockWidget = new FavoritemDockWidget( this );
-	musicListWindow = new MusicListWindow( this );
-	musicControlDocWidget = new MusicControlDocWidget( this );
-
 	Before_Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	Before_Init_Resource_App_Core_Ptr( musicListWindow );
 	Before_Init_Resource_App_Core_Ptr( musicControlDocWidget );
@@ -56,6 +48,15 @@ bool PlayerWindow::init( ) {
 }
 
 bool PlayerWindow::initBefore( ) {
+	deleteResource( );
+
+	setWindowFlags( Qt::WindowType::Widget );
+
+	favoritemDockWidget = new FavoritemDockWidget( this );
+	musicListWindow = new MusicListWindow( this );
+	musicControlDocWidget = new MusicControlDocWidget( this );
+	favoritemDockWidget->show( );
+	musicControlDocWidget->show( );
 	return true;
 }
 

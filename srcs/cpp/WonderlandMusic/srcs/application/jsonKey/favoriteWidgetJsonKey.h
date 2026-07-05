@@ -4,21 +4,18 @@
 #include <interface/iJsonKey.h>
 
 class FavoriteWidgetJsonKey : public IJsonKey {
-	QString jsonFilePath;
-	QString favoriteArrayCount;
-	QString favoriteArrayData;
-	QString favoriteArrayIndex;
+	QString currentName;
+	QString width;
+	QString height;
 
 public:
 	bool init( ) override;
 
-	virtual QString getJsonFilePath( ) const;
+	virtual const QString & getCurrentName( ) const;
 
-	virtual const QString & getFavoriteArrayCount( ) const;
+	virtual const QString & getWidth( ) const;
 
-	virtual const QString & getFavoriteArrayData( ) const;
-
-	virtual const QString & getFavoriteArrayIndex( ) const;
+	virtual const QString & getHeight( ) const;
 };
 
 #endif // FAVORITEWIDGETJSONKEY_H_H_HEAD__FILE__

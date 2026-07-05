@@ -1,10 +1,14 @@
 ﻿#include "favoriteWidget.h"
-#include "favoriteWidget.h"
+
+#include <QJsonObject>
+#include <QMouseEvent>
 
 #include "labelWidget.h"
 
+#include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
+#include "../application/jsonKey/favoriteWidgetJsonKey.h"
 #include "../application/translate/favoriteWidgetTranslate.h"
 
 #include "../mutex/userMutex.h"
@@ -24,6 +28,47 @@ void FavoriteWidget::deleteFavoriteItem( ) {
 			delete data[ index ];
 		favoriteVector.clear( );
 	}
+}
+
+bool FavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
+	auto appDataJsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( );
+	auto favoriteWidgetJsonKey = appDataJsonKey->getFavoriteWidget( );
+	if( selectFavorite )
+		get_json_object.insert( favoriteWidgetJsonKey->getCurrentName( ), selectFavorite->text( ) );
+	else
+		get_json_object.insert( favoriteWidgetJsonKey->getCurrentName( ), rootFavorite->text( ) );
+	get_json_object.insert( favoriteWidgetJsonKey->getWidth( ), width( ) );
+	get_json_object.insert( favoriteWidgetJsonKey->getHeight( ), height( ) );
+
+	return true;
+}
+
+bool FavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
+	if( set_json_object.empty( ) )
+		return false;
+	auto appDataJsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( );
+	auto favoriteWidgetJsonKey = appDataJsonKey->getFavoriteWidget( );
+
+	QJsonObject::const_iterator find;
+	auto end = set_json_object.end( );
+	int width = this->width( );
+	int height = this->height( );
+	find = set_json_object.find( favoriteWidgetJsonKey->getWidth( ) );
+	if( find != end )
+		width = find.value( ).toInteger( );
+
+	find = set_json_object.find( favoriteWidgetJsonKey->getHeight( ) );
+	if( find != end )
+		height = find.value( ).toInteger( );
+	setFixedSize( width, height );
+
+	find = set_json_object.find( favoriteWidgetJsonKey->getCurrentName( ) );
+	if( find != end ) {
+		selectFavorite = getSelectItem( find.value( ).toString( ) );
+		emit signal_click_favorite_Item( selectFavorite );
+	}
+
+	return true;
 }
 
 bool FavoriteWidget::deleteResource( ) {
@@ -122,6 +167,30 @@ bool FavoriteWidget::resetFavoriteItem( const std::vector< QString > &create_fav
 	return true;
 }
 
+LabelWidget * FavoriteWidget::getSelectItem( const QString &name ) const {
+	size_t count = favoriteVector.size( );
+	if( count ) {
+		auto data = favoriteVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			if( data[ index ]->text( ) == name )
+				return data[ index ];
+	}
+	return nullptr;
+}
+
+LabelWidget * FavoriteWidget::getSelectItem( const QPoint &pos ) const {
+	size_t count = favoriteVector.size( );
+	if( count ) {
+		auto data = favoriteVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			if( data[ index ]->geometry( ).contains( pos ) )
+				return data[ index ];
+	}
+	return nullptr;
+}
+
 void FavoriteWidget::mouseMoveEvent( QMouseEvent *event ) {
 	QWidget::mouseMoveEvent( event );
 }
@@ -131,5 +200,15 @@ void FavoriteWidget::mousePressEvent( QMouseEvent *event ) {
 }
 
 void FavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	QWidget::mouseReleaseEvent( event );
+	auto mouseButton = event->button( );
+	switch( mouseButton ) {
+		case Qt::LeftButton :
+			selectFavorite = getSelectItem( event->pos( ) );
+			emit signal_click_favorite_Item( selectFavorite );
+			break;
+		case Qt::RightButton :
+			selectFavorite = getSelectItem( event->pos( ) );
+			emit signal_favorite_Item_pop_menu( selectFavorite );
+			break;
+	}
 }

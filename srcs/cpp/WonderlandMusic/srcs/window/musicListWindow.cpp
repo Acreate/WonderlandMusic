@@ -17,12 +17,12 @@ bool MusicListWindow::showFavorteMusicContreList( const QString &music_favorte_w
 	return musicContreScrollArea->showFavorteMusicContreList( music_favorte_widget );
 }
 
-PlayerListTopWidget * MusicListWindow::getPlayerListTopWidget( ) const {
-	return musicItemSizeInfoDockWidget->getPlayerListTopWidget( );
+MusicItemSizeInfoDockWidget * MusicListWindow::getMusicItemSizeInfoDockWidget( ) const {
+	return musicItemSizeInfoDockWidget;
 }
 
-MusicContreWidget * MusicListWindow::getMusicContreWidget( ) const {
-	return musicContreScrollArea->getMusicContreWidget( );
+MusicContreScrollArea * MusicListWindow::getMusicContreScrollArea( ) const {
+	return musicContreScrollArea;
 }
 
 bool MusicListWindow::deleteResource( ) {

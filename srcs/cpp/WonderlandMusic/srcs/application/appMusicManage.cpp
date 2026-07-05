@@ -269,6 +269,10 @@ bool AppMusicManage::selectMusicItemAggregateToPlayItemAfter( ) {
 	return false;
 }
 
+bool AppMusicManage::selectFavorite( ) {
+	return false;
+}
+
 bool AppMusicManage::init( ) {
 	deleteResource( );
 	loadMutex = new UserMutex;

@@ -21,6 +21,8 @@ protected:
 public:
 	MusicItemSizeInfoDockWidget( QMainWindow *main_window );
 
+	~MusicItemSizeInfoDockWidget( ) override;
+
 protected:
 	bool deleteResource( ) override;
 

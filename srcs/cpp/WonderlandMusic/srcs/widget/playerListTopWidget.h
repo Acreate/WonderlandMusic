@@ -80,7 +80,8 @@ protected:
 	void resizeEvent( QResizeEvent *event ) override;
 
 	void leaveEvent( QEvent *event ) override;
-
+Q_SIGNALS:
+	void signal_changed_width( int split_width, int widget_before_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width );
 };
 
 #endif // PLAYERLISTTOPWIDGET_H_H_HEAD__FILE__

@@ -18,57 +18,55 @@ PlayerWindow::~PlayerWindow( ) {
 PlayerWindow::PlayerWindow( QWidget *parent ) : QMainWindow( parent ) {
 }
 
-PlayerListTopWidget * PlayerWindow::getPlayerListTopWidget( ) const {
-	return musicListWindow->getPlayerListTopWidget( );
+FavoritemDockWidget * PlayerWindow::getFavoritemDockWidget( ) const {
+	return favoritemDockWidget;
 }
 
-FavoriteWidget * PlayerWindow::getFavoriteWidget( ) const {
-	return favoritemDockWidget->getFavoriteWidget( );
+MusicListWindow * PlayerWindow::getMusicListWindow( ) const {
+	return musicListWindow;
 }
 
-MusicContreWidget * PlayerWindow::getMusicContreWidget( ) const {
-	return musicListWindow->getMusicContreWidget( );
+MusicControlDocWidget * PlayerWindow::getMusicControlDocWidget( ) const {
+	return musicControlDocWidget;
 }
 
 bool PlayerWindow::deleteResource( ) {
+	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicListWindow );
 	Delete_Resource_App_Core_Ptr( musicControlDocWidget );
 	Delete_Resource_App_Core_Ptr( favoritemDockWidget );
-	disconnect( );
 	return true;
 }
 
 bool PlayerWindow::init( ) {
-	Before_Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	Before_Init_Resource_App_Core_Ptr( musicListWindow );
+	Before_Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	Before_Init_Resource_App_Core_Ptr( musicControlDocWidget );
 
-	Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	Init_Resource_App_Core_Ptr( musicListWindow );
+	Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	Init_Resource_App_Core_Ptr( musicControlDocWidget );
 
-	After_Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	After_Init_Resource_App_Core_Ptr( musicListWindow );
+	After_Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	After_Init_Resource_App_Core_Ptr( musicControlDocWidget );
 
-	setCentralWidget( musicListWindow );
 	return true;
 }
 
 bool PlayerWindow::initBefore( ) {
 	deleteResource( );
-
 	setWindowFlags( Qt::WindowType::Widget );
-
 	favoritemDockWidget = new FavoritemDockWidget( this );
 	musicListWindow = new MusicListWindow( this );
 	musicControlDocWidget = new MusicControlDocWidget( this );
-	favoritemDockWidget->show( );
-	musicControlDocWidget->show( );
 	return true;
 }
 
 bool PlayerWindow::initAfter( ) {
+	favoritemDockWidget->show( );
+	musicControlDocWidget->show( );
+	setCentralWidget( musicListWindow );
 	return true;
 }
 

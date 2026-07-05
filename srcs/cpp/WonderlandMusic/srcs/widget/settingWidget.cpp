@@ -17,8 +17,8 @@
 #include "../tools/widgetTools.h"
 
 bool SettingWidget::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( mainSettingWdiget );
 	disconnect( );
+	Delete_Resource_App_Core_Ptr( mainSettingWdiget );
 	return true;
 }
 
@@ -57,7 +57,7 @@ void SettingWidget::changedSelectAppSettingPathEditor( ) {
 }
 
 void SettingWidget::clickOkBtn( ) {
-	AppInstance::getAppInstance( )->getAppDataManage( )->setAppSettingPath( selectDirPathLineEdit->text( ), true );
+	emit signal_change_setting_path( selectDirPathLineEdit->text( ) );
 }
 
 void SettingWidget::clickCancelBtn( ) {

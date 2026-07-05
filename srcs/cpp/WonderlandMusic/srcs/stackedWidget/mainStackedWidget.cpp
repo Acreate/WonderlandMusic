@@ -47,16 +47,16 @@ bool MainStackedWidget::initAfter( ) {
 	return true;
 }
 
-PlayerListTopWidget * MainStackedWidget::getPlayerListTopWidget( ) const {
-	return playerWindow->getPlayerListTopWidget( );
+PlayerWindow * MainStackedWidget::getPlayerWindow( ) const {
+	return playerWindow;
 }
 
-FavoriteWidget * MainStackedWidget::getFavoriteWidget( ) const {
-	return playerWindow->getFavoriteWidget( );
+SettingWidget * MainStackedWidget::getSettingWidget( ) const {
+	return settingWidget;
 }
 
-MusicContreWidget * MainStackedWidget::getMusicContreWidget( ) const {
-	return playerWindow->getMusicContreWidget( );
+AboutWidget * MainStackedWidget::getAboutWidget( ) const {
+	return aboutWidget;
 }
 
 void MainStackedWidget::slot_showPlayerWidget( ) {

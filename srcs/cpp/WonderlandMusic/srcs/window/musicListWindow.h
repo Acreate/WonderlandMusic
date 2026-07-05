@@ -29,8 +29,9 @@ public:
 
 	virtual bool showFavorteMusicContreList( const QString &music_favorte_widget );
 
-	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
-	virtual MusicContreWidget * getMusicContreWidget( ) const;
+	virtual MusicItemSizeInfoDockWidget * getMusicItemSizeInfoDockWidget( ) const;
+
+	virtual MusicContreScrollArea * getMusicContreScrollArea( ) const;
 
 protected:
 	bool deleteResource( ) override;

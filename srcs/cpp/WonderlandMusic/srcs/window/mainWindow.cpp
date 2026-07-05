@@ -30,16 +30,12 @@ MainWindow::MainWindow( Qt::WindowFlags flags ) : MainWindow( nullptr, flags ) {
 MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) {
 }
 
-PlayerListTopWidget * MainWindow::getPlayerListTopWidget( ) const {
-	return mainStackedWidget->getPlayerListTopWidget( );
+MainStackedWidget * MainWindow::getMainStackedWidget( ) const {
+	return mainStackedWidget;
 }
 
-FavoriteWidget * MainWindow::getFavoriteWidget( ) const {
-	return mainStackedWidget->getFavoriteWidget( );
-}
-
-MusicContreWidget * MainWindow::getMusicContreWidget( ) const {
-	return mainStackedWidget->getMusicContreWidget( );
+OptionDockWidget * MainWindow::getLeftOptionDockWidget( ) const {
+	return leftOptionDockWidget;
 }
 
 bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {

@@ -62,6 +62,7 @@ public:
 	virtual bool selectMusicItemAggregateToSelectLast( );
 	virtual bool selectMusicItemAggregateToPlayItemBefore( );
 	virtual bool selectMusicItemAggregateToPlayItemAfter( );
+	virtual bool selectFavorite( );
 };
 
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

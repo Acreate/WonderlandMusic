@@ -13,6 +13,10 @@
 OptionDockWidget::OptionDockWidget( MainWindow *parent ) : QDockWidget( parent ), mainWindow( parent ) {
 }
 
+OptionDockWidget::~OptionDockWidget( ) {
+	deleteResource( );
+}
+
 bool OptionDockWidget::deleteResource( ) {
 	disconnect( );
 	Delete_Resource_App_Core_Ptr( showAboutWidgetBtn );

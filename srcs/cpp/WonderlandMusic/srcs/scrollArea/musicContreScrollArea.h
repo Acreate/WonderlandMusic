@@ -37,6 +37,8 @@ public:
 	bool initBefore( ) override;
 
 	bool initAfter( ) override;
+Q_SIGNALS:
+	void signal_horizontal_scroll_set_value( int value );
 };
 
 #endif // MUSICCONTRESCROLLAREA_H_H_HEAD__FILE__

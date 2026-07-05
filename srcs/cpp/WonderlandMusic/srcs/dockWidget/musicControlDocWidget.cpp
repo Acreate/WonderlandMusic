@@ -7,6 +7,14 @@
 MusicControlDocWidget::MusicControlDocWidget( PlayerWindow *player_window ) : playerWindow( player_window ) {
 }
 
+MusicControlDocWidget::~MusicControlDocWidget( ) {
+	deleteResource( );
+}
+
+PlayerToolsWidget * MusicControlDocWidget::getPlayerToolsWidget( ) const {
+	return playerToolsWidget;
+}
+
 bool MusicControlDocWidget::deleteResource( ) {
 	disconnect( );
 	playerWindow->removeDockWidget( this );

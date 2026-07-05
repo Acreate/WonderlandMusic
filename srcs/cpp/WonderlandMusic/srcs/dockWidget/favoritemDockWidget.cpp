@@ -1,5 +1,7 @@
 ﻿#include "favoritemDockWidget.h"
 
+#include "../scrollArea/favoriteSrollArea.h"
+
 #include "../widget/favoriteWidget.h"
 
 #include "../window/playerWindow.h"
@@ -7,22 +9,26 @@
 FavoritemDockWidget::FavoritemDockWidget( PlayerWindow *player_window ) : QDockWidget( player_window ), playerWindow( player_window ) {
 }
 
-FavoriteWidget * FavoritemDockWidget::getFavoriteWidget( ) const {
-	return favoriteWidget;
+FavoritemDockWidget::~FavoritemDockWidget( ) {
+	deleteResource( );
+}
+
+FavoriteSrollArea * FavoritemDockWidget::getFavoriteSrollArea( ) const {
+	return favoriteSrollArea;
 }
 
 bool FavoritemDockWidget::deleteResource( ) {
 	disconnect( );
 	playerWindow->removeDockWidget( this );
 	Delete_Resource_App_Core_Ptr( titleBarWidget );
-	Delete_Resource_App_Core_Ptr( favoriteWidget );
+	Delete_Resource_App_Core_Ptr( favoriteSrollArea );
 	return true;
 }
 
 bool FavoritemDockWidget::init( ) {
-	Before_Init_Resource_App_Core_Ptr( favoriteWidget );
-	Init_Resource_App_Core_Ptr( favoriteWidget );
-	After_Init_Resource_App_Core_Ptr( favoriteWidget );
+	Before_Init_Resource_App_Core_Ptr( favoriteSrollArea );
+	Init_Resource_App_Core_Ptr( favoriteSrollArea );
+	After_Init_Resource_App_Core_Ptr( favoriteSrollArea );
 
 	return true;
 }
@@ -32,13 +38,13 @@ bool FavoritemDockWidget::initBefore( ) {
 	setAllowedAreas( Qt::LeftDockWidgetArea );
 	setContentsMargins( 0, 0, 0, 0 );
 	titleBarWidget = new QWidget( this );
-	favoriteWidget = new FavoriteWidget( this );
-	setTitleBarWidget( titleBarWidget );
+	favoriteSrollArea = new FavoriteSrollArea( this );
 	return true;
 }
 
 bool FavoritemDockWidget::initAfter( ) {
-	setWidget( favoriteWidget );
+	setTitleBarWidget( titleBarWidget );
+	setWidget( favoriteSrollArea );
 	playerWindow->addDockWidget( Qt::LeftDockWidgetArea, this );
 	return true;
 }

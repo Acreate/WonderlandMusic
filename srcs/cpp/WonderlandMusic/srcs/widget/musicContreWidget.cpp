@@ -11,13 +11,21 @@
 #include "../application/appRenderImage.h"
 #include "../application/appUserInterfaceManage.h"
 
+#include "../dockWidget/musicItemSizeInfoDockWidget.h"
+
 #include "../item/musicItem.h"
 
 #include "../itemWidget/musicInfoItemWidget.h"
 
 #include "../mutex/userMutex.h"
 
+#include "../stackedWidget/mainStackedWidget.h"
+
 #include "../tools/vectorTools.h"
+
+#include "../window/mainWindow.h"
+#include "../window/musicListWindow.h"
+#include "../window/playerWindow.h"
 
 MusicContreWidget::MusicContreWidget( QWidget *parent ) : QWidget( parent ) {
 }
@@ -263,7 +271,8 @@ bool MusicContreWidget::initBefore( ) {
 
 bool MusicContreWidget::initAfter( ) {
 	auto interfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
-	connect( interfaceManage, &AppUserInterfaceManage::signal_changed_width, this, &MusicContreWidget::setItemWidth );
+	auto playerListTopWidget = interfaceManage->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
+	connect( playerListTopWidget, &PlayerListTopWidget::signal_changed_width, this, &MusicContreWidget::setItemWidth );
 	updateItemWidget( );
 	return true;
 }

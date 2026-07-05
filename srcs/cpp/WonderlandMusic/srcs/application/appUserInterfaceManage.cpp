@@ -8,15 +8,23 @@
 #include "appInstance.h"
 #include "appMenuManage.h"
 
+#include "../dockWidget/favoritemDockWidget.h"
+#include "../dockWidget/musicItemSizeInfoDockWidget.h"
+
+#include "../scrollArea/favoriteSrollArea.h"
+
+#include "../stackedWidget/mainStackedWidget.h"
+
 #include "../systemTrayIcon/systemTrayIcon.h"
 
 #include "../tools/pathTools.h"
 
 #include "../widget/favoriteWidget.h"
-#include "../widget/musicContreWidget.h"
 #include "../widget/playerListTopWidget.h"
 
 #include "../window/mainWindow.h"
+#include "../window/musicListWindow.h"
+#include "../window/playerWindow.h"
 
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
 
@@ -41,7 +49,8 @@ bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
 		get_json_object.insert( interfaceManage->getMainWindow( ), mainWindowJsonObject );
 	}
 	mainWindowJsonObject = QJsonObject( );
-	jsonData = mainWindow->getPlayerListTopWidget( )->getJsonData( mainWindowJsonObject );
+	auto playerListTopWidget = mainWindow->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
+	jsonData = playerListTopWidget->getJsonData( mainWindowJsonObject );
 	if( jsonData ) {
 		get_json_object.insert( interfaceManage->getMusicListTopDockWidget( ), mainWindowJsonObject );
 	}
@@ -59,7 +68,7 @@ bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 	find = set_json_object.find( interfaceManage->getMusicListTopDockWidget( ) );
 	if( find != end ) {
 		auto jsonValueRefs = find.value( ).toObject( );
-		auto playerListTopWidget = mainWindow->getPlayerListTopWidget( );
+		auto playerListTopWidget = mainWindow->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
 		playerListTopWidget->setJsonData( jsonValueRefs );
 	}
 	return true;
@@ -143,16 +152,16 @@ AppDrawManage * AppUserInterfaceManage::getAppDrawManage( ) const {
 }
 
 bool AppUserInterfaceManage::appendFavoriteItem( const QString &create_favorite_name ) {
-	auto favoriteWidget = mainWindow->getFavoriteWidget( );
+	auto favoriteWidget = mainWindow->getMainStackedWidget( )->getPlayerWindow( )->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
 	return favoriteWidget->appendFavoriteItem( create_favorite_name );
 }
 
 bool AppUserInterfaceManage::removeFavoriteItem( const QString &remove_favorite_name ) {
-	auto favoriteWidget = mainWindow->getFavoriteWidget( );
+	auto favoriteWidget = mainWindow->getMainStackedWidget( )->getPlayerWindow( )->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
 	return favoriteWidget->removeFavoriteItem( remove_favorite_name );
 }
 
 bool AppUserInterfaceManage::resetFavoriteItem( const std::vector< QString > &create_favorite_vector ) {
-	auto favoriteWidget = mainWindow->getFavoriteWidget( );
+	auto favoriteWidget = mainWindow->getMainStackedWidget( )->getPlayerWindow( )->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
 	return favoriteWidget->resetFavoriteItem( create_favorite_vector );
 }

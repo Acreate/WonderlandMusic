@@ -19,6 +19,10 @@ protected:
 public:
 	MusicControlDocWidget( PlayerWindow *player_window );
 
+	~MusicControlDocWidget( ) override;
+
+	virtual PlayerToolsWidget * getPlayerToolsWidget( ) const;
+
 protected:
 	bool deleteResource( ) override;
 

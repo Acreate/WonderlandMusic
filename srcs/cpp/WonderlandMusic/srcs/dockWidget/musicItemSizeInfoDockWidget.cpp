@@ -1,16 +1,25 @@
 ﻿#include "musicItemSizeInfoDockWidget.h"
 
-#include <QScrollArea>
 #include <QScrollBar>
 
 #include "../application/appInstance.h"
 #include "../application/appUserInterfaceManage.h"
 
+#include "../scrollArea/musicContreScrollArea.h"
+
+#include "../stackedWidget/mainStackedWidget.h"
+
 #include "../widget/playerListTopWidget.h"
 
+#include "../window/mainWindow.h"
+#include "../window/musicListWindow.h"
 #include "../window/playerWindow.h"
 
 MusicItemSizeInfoDockWidget::MusicItemSizeInfoDockWidget( QMainWindow *main_window ) : QDockWidget( main_window ), mainWindow( main_window ) {
+}
+
+MusicItemSizeInfoDockWidget::~MusicItemSizeInfoDockWidget( ) {
+	deleteResource( );
 }
 
 bool MusicItemSizeInfoDockWidget::deleteResource( ) {
@@ -53,7 +62,8 @@ bool MusicItemSizeInfoDockWidget::initAfter( ) {
 
 	auto scrollBar = playerListTopWidgetScrollArea->horizontalScrollBar( );
 	auto uiManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
-	connect( uiManage, &AppUserInterfaceManage::signal_horizontal_scroll_set_value, scrollBar, &QScrollBar::setValue );
+	auto listContre = uiManage->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( );
+	connect( listContre, &MusicContreScrollArea::signal_horizontal_scroll_set_value, scrollBar, &QScrollBar::setValue );
 
 	return true;
 }

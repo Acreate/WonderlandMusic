@@ -43,12 +43,10 @@ public:
 
 	MainWindow( );
 
-	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
+	virtual MainStackedWidget * getMainStackedWidget( ) const;
 
-	virtual FavoriteWidget * getFavoriteWidget( ) const;
-	virtual MusicContreWidget * getMusicContreWidget( ) const;
+	virtual OptionDockWidget * getLeftOptionDockWidget( ) const;
 
-public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;

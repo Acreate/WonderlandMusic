@@ -32,6 +32,8 @@ protected:
 public:
 	OptionDockWidget( MainWindow *parent );
 
+	~OptionDockWidget( ) override;
+
 protected:
 	bool deleteResource( ) override;
 

@@ -4,6 +4,7 @@
 
 #include "../interface/iAppCore.h"
 
+class FavoriteSrollArea;
 class FavoriteWidget;
 class PlayerWindow;
 
@@ -13,12 +14,15 @@ class FavoritemDockWidget : public QDockWidget, public IAppCore {
 protected:
 	PlayerWindow *playerWindow;
 	QWidget *titleBarWidget = nullptr;
-	FavoriteWidget *favoriteWidget = nullptr;
+	FavoriteSrollArea *favoriteSrollArea = nullptr;
 
 public:
 	FavoritemDockWidget( PlayerWindow *player_window );
-	
-	virtual FavoriteWidget * getFavoriteWidget( ) const;
+
+	~FavoritemDockWidget( ) override;
+
+	virtual FavoriteSrollArea * getFavoriteSrollArea( ) const;
+
 protected:
 	bool deleteResource( ) override;
 

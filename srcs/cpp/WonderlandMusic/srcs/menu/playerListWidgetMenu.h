@@ -49,5 +49,21 @@ public:
 	bool initBefore( ) override;
 
 	bool initAfter( ) override;
+Q_SIGNALS:
+	void signal_open_file_dialog( );
+	void signal_open_dir_dialog( );
+	void signal_select_move_top( );
+
+	void signal_select_move_bottom( );
+
+	void signal_select_aggregate_select_first( );
+
+	void signal_select_aggregate_select_last( );
+
+	void signal_select_aggregate_play_before( );
+
+	void signal_select_aggregate_play_after( );
+	void signal_select_music_remove_list( );
+	void signal_select_music_delete_file_list( );
 };
 #endif // PLAYERLISTWIDGETMENU_H_H_HEAD__FILE__

@@ -58,6 +58,8 @@ public:
 
 protected:
 	void hideEvent( QHideEvent *event ) override;
+Q_SIGNALS:
+	void signal_change_setting_path( const QString &new_setting_home_path );
 };
 
 #endif // SETTINGWIDGET_H_H_HEAD__FILE__

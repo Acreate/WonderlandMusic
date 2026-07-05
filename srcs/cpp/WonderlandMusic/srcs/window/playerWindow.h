@@ -45,10 +45,11 @@ public:
 
 	PlayerWindow( QWidget *parent );
 
-	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
+	virtual FavoritemDockWidget * getFavoritemDockWidget( ) const;
 
-	virtual FavoriteWidget * getFavoriteWidget( ) const;
-	virtual MusicContreWidget * getMusicContreWidget( ) const;
+	virtual MusicListWindow * getMusicListWindow( ) const;
+
+	virtual MusicControlDocWidget * getMusicControlDocWidget( ) const;
 
 	bool init( ) override;
 

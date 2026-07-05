@@ -37,10 +37,11 @@ public:
 
 	bool initAfter( ) override;
 
-	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
+	virtual PlayerWindow * getPlayerWindow( ) const;
 
-	virtual FavoriteWidget * getFavoriteWidget( ) const;
-	virtual MusicContreWidget * getMusicContreWidget( ) const;
+	virtual SettingWidget * getSettingWidget( ) const;
+
+	virtual AboutWidget * getAboutWidget( ) const;
 
 public Q_SLOTS:
 	void slot_showPlayerWidget( );

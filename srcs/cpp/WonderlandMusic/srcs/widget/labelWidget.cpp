@@ -33,10 +33,8 @@ void LabelWidget::mouseReleaseEvent( QMouseEvent *ev ) {
 		case Qt::NoButton :
 			break;
 		case Qt::LeftButton :
-			emit AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->signal_click_favorite_Item( this );
 			break;
 		case Qt::RightButton :
-			emit AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->signal_click_favorite_Item( this );
 			break;
 		case Qt::MiddleButton :
 			break;

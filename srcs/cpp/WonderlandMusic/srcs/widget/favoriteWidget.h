@@ -5,6 +5,8 @@
 #include "../interface/iAppCore.h"
 #include "../interface/iAppJsonData.h"
 
+class UserMutex;
+class LabelWidget;
 class PlayerListWidget;
 class FavoriteItemWidget;
 class PlayerWindow;
@@ -12,11 +14,18 @@ class PlayerWindow;
 class FavoriteWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
 
+protected:
+	LabelWidget *rootFavorite = nullptr;
+	LabelWidget *selectFavorite = nullptr;
+	std::vector< LabelWidget * > favoriteVector;
+
 public:
 	FavoriteWidget( QWidget *parent );
 
 protected:
 	bool deleteResource( ) override;
+
+	virtual void deleteFavoriteItem( );
 
 public:
 	~FavoriteWidget( ) override;
@@ -34,6 +43,17 @@ public:
 	virtual bool removeFavoriteItem( const QString &remove_favorite_name );
 
 	virtual bool resetFavoriteItem( const std::vector< QString > &create_favorite_vector );
+
+protected:
+	void mouseMoveEvent( QMouseEvent *event ) override;
+	void mousePressEvent( QMouseEvent *event ) override;
+	void mouseReleaseEvent( QMouseEvent *event ) override;
+Q_SIGNALS:
+	void signal_update_layout_over( );
+	
+	void signal_click_favorite_Item( LabelWidget *label_widget );
+
+	void signal_favorite_Item_pop_menu( LabelWidget *label_widget );
 };
 
 #endif // FAVORITEWIDGET_H_H_HEAD__FILE__

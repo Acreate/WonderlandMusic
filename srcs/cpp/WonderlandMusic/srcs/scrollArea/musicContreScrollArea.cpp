@@ -58,7 +58,7 @@ bool MusicContreScrollArea::initAfter( ) {
 
 	auto scrollBar = horizontalScrollBar( );
 	auto uiManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
-	connect( scrollBar, &QScrollBar::valueChanged, uiManage, &AppUserInterfaceManage::signal_horizontal_scroll_set_value );
+	connect( scrollBar, &QScrollBar::valueChanged, this, &MusicContreScrollArea::signal_horizontal_scroll_set_value );
 
 	return true;
 }

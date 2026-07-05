@@ -5,25 +5,10 @@
 
 #include "../interface/iAppCore.h"
 
-class AppDataJsonKey;
-class AppMusicDecoder;
-class PlayerListWidgetMenuTranlate;
-class PlayerListMenuJsonKey;
-class AppTranslate;
-class AppInstance;
-class MusicInfoItemWidget;
-class PlayerListWidget;
-
 class PlayerListWidgetMenu : public QMenu, public IAppCore {
 	Q_OBJECT;
 
 protected:
-	AppInstance *appInstance;
-	const AppTranslate *appTranslate;
-	PlayerListWidgetMenuTranlate *playerListWidgetMenuTranlate;
-	AppMusicDecoder *musicDecoder;
-	const AppDataJsonKey *jsonFileKey;
-	QVector< MusicInfoItemWidget * > musicInfoItemWidgetVector;
 	/// @brief 删除菜单
 	QMenu *removeMenu;
 	/// @brief 控制菜单
@@ -60,15 +45,6 @@ public:
 	bool initBefore( ) override;
 
 	bool initAfter( ) override;
-
-protected:
-	virtual bool initVar( );
-
-	virtual bool initSubMenu( );
-
-	virtual bool initSubMenuAcction( );
-
-	virtual bool initConnectAcction( );
 
 Q_SIGNALS:
 	void loadDiskFile( );

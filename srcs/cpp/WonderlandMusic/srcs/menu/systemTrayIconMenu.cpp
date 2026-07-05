@@ -12,28 +12,30 @@ bool SystemTrayIconMenu::deleteResource( ) {
 }
 
 bool SystemTrayIconMenu::init( ) {
-	if( deleteResource( ) == false )
-		return false;
-	AppInstance *instance = AppInstance::getAppInstance( );
-	auto systemTrayIconMenuTranslate = instance->getAppDataManage( )->getTranslate( )->getSystemTrayIconMenu( );
-	auto showMainWindowItem = addAction( systemTrayIconMenuTranslate->getShowMainMenu( ) );
-	connect( showMainWindowItem, &QAction::triggered, this, []( ) {
-		AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->showMainWindow( );
-	} );
-	addSeparator( );
-	auto quitApp = addAction( systemTrayIconMenuTranslate->getQuitApp( ) );
-	connect( quitApp, &QAction::triggered, this, []( ) {
-		AppInstance::getAppInstance( )->quit( );
-	} );
 	return true;
 }
 
 bool SystemTrayIconMenu::initBefore( ) {
-	return false;
+	if( deleteResource( ) == false )
+		return false;
+	AppInstance *instance = AppInstance::getAppInstance( );
+	auto systemTrayIconMenuTranslate = instance->getAppDataManage( )->getTranslate( )->getSystemTrayIconMenu( );
+
+	showMainWindowItem = addAction( systemTrayIconMenuTranslate->getShowMainMenu( ) );
+	addSeparator( );
+	quitApp = addAction( systemTrayIconMenuTranslate->getQuitApp( ) );
+	return true;
 }
 
 bool SystemTrayIconMenu::initAfter( ) {
-	return false;
+	connect( showMainWindowItem, &QAction::triggered, this, []( ) {
+		AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->showMainWindow( );
+	} );
+
+	connect( quitApp, &QAction::triggered, this, []( ) {
+		AppInstance::getAppInstance( )->quit( );
+	} );
+	return true;
 }
 
 SystemTrayIconMenu::~SystemTrayIconMenu( ) {

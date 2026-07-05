@@ -35,17 +35,6 @@ AppDataJsonKey::AppDataJsonKey( ) {
 }
 
 bool AppDataJsonKey::init( ) {
-	deleteResource( );
-	playerListToolWidget = new PlayerListToolWidgetJsonKey;
-	aboutWidgetJsonFileKey = new AboutWidgetJsonKey;
-	playerListTopWidget = new PlayerListTopWidgetJsonKey;
-	playerWindow = new PlayerWindowJsonKey;
-	mainWindow = new MainWindowJsonKey;
-	musicInfoItemWidget = new MusicInfoItemWidgetJsonKey;
-	systemTrayIcon = new SystemTrayIconJsonKey;
-	favoriteWidget = new FavoriteWidgetJsonKey;
-	appDataManage = new AppDataManageJsonKey;
-	appUserInterfaceManage = new AppUserInterfaceManageJsonKey;
 	Init_Resource_App_Core_Ptr( playerListToolWidget );
 	Init_Resource_App_Core_Ptr( aboutWidgetJsonFileKey );
 	Init_Resource_App_Core_Ptr( playerListTopWidget );
@@ -60,6 +49,17 @@ bool AppDataJsonKey::init( ) {
 }
 
 bool AppDataJsonKey::initBefore( ) {
+	deleteResource( );
+	playerListToolWidget = new PlayerListToolWidgetJsonKey;
+	aboutWidgetJsonFileKey = new AboutWidgetJsonKey;
+	playerListTopWidget = new PlayerListTopWidgetJsonKey;
+	playerWindow = new PlayerWindowJsonKey;
+	mainWindow = new MainWindowJsonKey;
+	musicInfoItemWidget = new MusicInfoItemWidgetJsonKey;
+	systemTrayIcon = new SystemTrayIconJsonKey;
+	favoriteWidget = new FavoriteWidgetJsonKey;
+	appDataManage = new AppDataManageJsonKey;
+	appUserInterfaceManage = new AppUserInterfaceManageJsonKey;
 	return true;
 }
 

@@ -97,6 +97,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 				+ QString::number( exec ).toUpper( ) + " }";
 			delete messageErrorOut;
 		}
+		
 		return exec;
 	}
 	exec = -3;

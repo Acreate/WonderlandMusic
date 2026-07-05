@@ -7,17 +7,17 @@ FavoriteWidgetMenu::~FavoriteWidgetMenu( ) {
 }
 
 bool FavoriteWidgetMenu::deleteResource( ) {
-	return false;
+	return true;
 }
 
 bool FavoriteWidgetMenu::initBefore( ) {
-	return false;
+	return true;
 }
 
 bool FavoriteWidgetMenu::init( ) {
-	return false;
+	return true;
 }
 
 bool FavoriteWidgetMenu::initAfter( ) {
-	return false;
+	return true;
 }

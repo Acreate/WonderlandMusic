@@ -2,6 +2,7 @@
 #define APPMENUMANAGE_H_H_HEAD__FILE__
 #include "../interface/iAppCore.h"
 
+class FavoriteWidgetMenu;
 class PlayerListWidgetMenu;
 class SystemTrayIconMenu;
 
@@ -11,7 +12,7 @@ class AppMenuManage : public QObject, public IAppCore {
 protected:
 	SystemTrayIconMenu *systemTrayIconMenu = nullptr;
 	PlayerListWidgetMenu *playerListWidgetMenu = nullptr;
-
+	FavoriteWidgetMenu* favoriteWidgetMenu = nullptr;
 public:
 	AppMenuManage( );
 

@@ -4,8 +4,12 @@
 
 #include "../interface/iAppCore.h"
 
-class SystemTrayIconMenu : public QMenu , public IAppCore{
+class SystemTrayIconMenu : public QMenu, public IAppCore {
 	Q_OBJECT;
+
+protected:
+	QAction *showMainWindowItem;
+	QAction *quitApp;
 
 protected:
 	bool deleteResource( ) override;
@@ -25,4 +29,3 @@ public:
 };
 
 #endif // SYSTEMTRAYICONMENU_H_H_HEAD__FILE__
-

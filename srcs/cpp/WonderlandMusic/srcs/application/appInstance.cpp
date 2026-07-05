@@ -5,6 +5,8 @@
 #include "appMenuManage.h"
 #include "appUserInterfaceManage.h"
 
+
+
 #include "../window/mainWindow.h"
 
 AppInstance *AppInstance::instance = nullptr;

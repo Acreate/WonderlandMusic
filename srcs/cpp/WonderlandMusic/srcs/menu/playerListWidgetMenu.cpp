@@ -13,35 +13,39 @@ PlayerListWidgetMenu::~PlayerListWidgetMenu( ) {
 	deleteResource( );
 }
 
-bool PlayerListWidgetMenu::initVar( ) {
-	appInstance = AppInstance::getAppInstance( );
-	if( appInstance == nullptr )
-		return false;
-	auto appDataManage = appInstance->getAppDataManage( );
-	appTranslate = appDataManage->getTranslate( );
-	if( appTranslate == nullptr )
-		return false;
-	playerListWidgetMenuTranlate = appTranslate->getPlayerListWidgetMenu( );
-	if( playerListWidgetMenuTranlate == nullptr )
-		return false;
-	musicDecoder = appInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
-	if( musicDecoder == nullptr )
-		return false;
-	jsonFileKey = appDataManage->getAppDataJsonKey( );
-	if( jsonFileKey == nullptr )
-		return false;
+bool PlayerListWidgetMenu::deleteResource( ) {
+	clear( );
 	return true;
 }
 
-bool PlayerListWidgetMenu::initSubMenu( ) {
+bool PlayerListWidgetMenu::init( ) {
+	return true;
+}
+
+bool PlayerListWidgetMenu::initBefore( ) {
+	deleteResource( );
+	auto appInstance = AppInstance::getAppInstance( );
+	if( appInstance == nullptr )
+		return false;
+	auto appDataManage = appInstance->getAppDataManage( );
+	auto appTranslate = appDataManage->getTranslate( );
+	if( appTranslate == nullptr )
+		return false;
+	auto playerListWidgetMenuTranlate = appTranslate->getPlayerListWidgetMenu( );
+	if( playerListWidgetMenuTranlate == nullptr )
+		return false;
+	auto musicDecoder = appInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
+	if( musicDecoder == nullptr )
+		return false;
+	auto jsonFileKey = appDataManage->getAppDataJsonKey( );
+	if( jsonFileKey == nullptr )
+		return false;
+
 	removeMenu = addMenu( playerListWidgetMenuTranlate->getPlayerListMenuMoveMenu( ) );
 	controlMenu = addMenu( playerListWidgetMenuTranlate->getPlayerListMenuControlMenu( ) );
 
 	loadMenu = addMenu( playerListWidgetMenuTranlate->getPlayerListMenuFileLoadMenu( ) );
-	return true;
-}
 
-bool PlayerListWidgetMenu::initSubMenuAcction( ) {
 	setplay = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
 	insterPlay = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
 
@@ -57,7 +61,7 @@ bool PlayerListWidgetMenu::initSubMenuAcction( ) {
 	return true;
 }
 
-bool PlayerListWidgetMenu::initConnectAcction( ) {
+bool PlayerListWidgetMenu::initAfter( ) {
 	connect( addMultiFileMusicToCollectionAction, &QAction::triggered, this, &PlayerListWidgetMenu::loadDiskFile );
 	connect( addMultiMusicDirToCollection, &QAction::triggered, this, &PlayerListWidgetMenu::loadDiskDir );
 
@@ -69,32 +73,5 @@ bool PlayerListWidgetMenu::initConnectAcction( ) {
 
 	connect( removeMusicAtList, &QAction::triggered, this, &PlayerListWidgetMenu::removePlayListSelectInfo );
 	connect( deleteMusicAtDiskFile, &QAction::triggered, this, &PlayerListWidgetMenu::deletePlayListSelectFile );
-
 	return true;
-}
-
-bool PlayerListWidgetMenu::deleteResource( ) {
-	clear( );
-	return true;
-}
-
-bool PlayerListWidgetMenu::init( ) {
-	deleteResource( );
-	if( initVar( ) == false )
-		return false;
-	if( initSubMenu( ) == false )
-		return false;
-	if( initSubMenuAcction( ) == false )
-		return false;
-	if( initConnectAcction( ) == false )
-		return false;
-	return true;
-}
-
-bool PlayerListWidgetMenu::initBefore( ) {
-	return false;
-}
-
-bool PlayerListWidgetMenu::initAfter( ) {
-	return false;
 }

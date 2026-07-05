@@ -3,6 +3,7 @@
 #include <QDockWidget>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class FavoriteSrollArea;
 class FavoriteWidget;

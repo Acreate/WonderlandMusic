@@ -5,8 +5,6 @@
 #include "appMenuManage.h"
 #include "appUserInterfaceManage.h"
 
-
-
 #include "../window/mainWindow.h"
 
 AppInstance *AppInstance::instance = nullptr;
@@ -49,6 +47,7 @@ bool AppInstance::notify( QObject *object, QEvent *event ) {
 	switch( type ) {
 		case QEvent::Quit :
 			appDataManage->writeJsonData( );
+			appUserInterfaceManage->writeJsonData( );
 			break;
 	}
 	return QApplication::notify( object, event );
@@ -83,5 +82,7 @@ bool AppInstance::initBefore( ) {
 }
 
 bool AppInstance::initAfter( ) {
+	appDataManage->readJsonData( );
+	appUserInterfaceManage->readJsonData( );
 	return true;
 }

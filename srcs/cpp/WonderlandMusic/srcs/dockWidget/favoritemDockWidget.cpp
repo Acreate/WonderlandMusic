@@ -1,5 +1,12 @@
 ﻿#include "favoritemDockWidget.h"
 
+#include <QJsonObject>
+
+#include "../application/appDataJsonKey.h"
+#include "../application/appDataManage.h"
+#include "../application/appInstance.h"
+#include "../application/jsonKey/favoritemDockWidgetJsonKey.h"
+
 #include "../scrollArea/favoriteSrollArea.h"
 
 #include "../widget/favoriteWidget.h"

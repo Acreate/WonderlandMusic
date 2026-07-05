@@ -3,6 +3,7 @@
 
 #include "../interface/iAppCore.h"
 
+class FavoriteWidgetMenuTranslate;
 class OptionDockWidgetTranslate;
 class FavoriteWidgetTranslate;
 class PlayerListWidgetMenuTranlate;
@@ -41,17 +42,10 @@ protected:
 	UserMutexTranslate *userMutex = nullptr;
 	FavoriteWidgetTranslate *favoriteWidget = nullptr;
 	OptionDockWidgetTranslate *optionDockWidget = nullptr;
+	FavoriteWidgetMenuTranslate *favoriteWidgetMenu = nullptr;
 
 protected:
-	virtual bool setCodecForLocale( );
-
-	virtual bool translateString( );
-
 	bool deleteResource( ) override;
-
-	virtual bool loadTranslateQMFile( );
-
-	virtual bool createTranlate( );
 
 public:
 	~AppTranslate( ) override;
@@ -97,6 +91,8 @@ public:
 	virtual FavoriteWidgetTranslate * getFavoriteWidget( ) const;
 
 	virtual OptionDockWidgetTranslate * getOptionDockWidget( ) const;
+
+	virtual FavoriteWidgetMenuTranslate * getFavoriteWidgetMenu( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

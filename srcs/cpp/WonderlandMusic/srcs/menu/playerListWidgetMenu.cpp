@@ -4,7 +4,20 @@
 #include "../application/appInstance.h"
 #include "../application/appMusicManage.h"
 #include "../application/appTranslate.h"
+#include "../application/appUserInterfaceManage.h"
 #include "../application/translate/playerListWidgetMenuTranlate.h"
+
+#include "../scrollArea/musicContreScrollArea.h"
+
+#include "../stackedWidget/mainStackedWidget.h"
+
+#include "../tools/widgetTools.h"
+
+#include "../widget/musicContreWidget.h"
+
+#include "../window/mainWindow.h"
+#include "../window/musicListWindow.h"
+#include "../window/playerWindow.h"
 
 PlayerListWidgetMenu::PlayerListWidgetMenu( ) : QMenu( ) {
 }
@@ -84,5 +97,14 @@ bool PlayerListWidgetMenu::initAfter( ) {
 	connect( removeMusicAtList, &QAction::triggered, this, &PlayerListWidgetMenu::signal_select_music_remove_list );
 
 	connect( deleteMusicAtDiskFile, &QAction::triggered, this, &PlayerListWidgetMenu::signal_select_music_delete_file_list );
+
+	auto musicContreWidget = AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
+	connect( musicContreWidget, &MusicContreWidget::signal_pop_menu, this, [this]( ) {
+		auto pos = QCursor::pos( );
+		QPoint suggPos;
+		bool menuSuggestionShowMenuPos = WidgetTools::getMenuSuggestionShowMenuPos( suggPos, pos, this );
+		if( menuSuggestionShowMenuPos )
+			exec( suggPos );
+	} );
 	return true;
 }

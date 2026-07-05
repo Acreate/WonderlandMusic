@@ -49,11 +49,13 @@ bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
 		get_json_object.insert( interfaceManage->getMainWindow( ), mainWindowJsonObject );
 	}
 	mainWindowJsonObject = QJsonObject( );
-	auto playerListTopWidget = mainWindow->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
+	auto playerWindow = mainWindow->getMainStackedWidget( )->getPlayerWindow( );
+	auto playerListTopWidget = playerWindow->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
 	jsonData = playerListTopWidget->getJsonData( mainWindowJsonObject );
 	if( jsonData ) {
 		get_json_object.insert( interfaceManage->getMusicListTopDockWidget( ), mainWindowJsonObject );
 	}
+
 	return true;
 }
 
@@ -71,6 +73,7 @@ bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 		auto playerListTopWidget = mainWindow->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
 		playerListTopWidget->setJsonData( jsonValueRefs );
 	}
+
 	return true;
 }
 
@@ -80,6 +83,7 @@ bool AppUserInterfaceManage::readJsonData( ) {
 	if( PathTools::readJsonObject( readJson, interfaceManage->getFilePath( ) ) ) {
 		setJsonData( readJson );
 	}
+
 	return true;
 }
 

@@ -3,9 +3,9 @@
 
 #include "../interface/iAppCore.h"
 
+class FavoritemDockWidgetJsonKey;
 class AppUserInterfaceManageJsonKey;
 class AppDataManageJsonKey;
-class FavoriteWidgetJsonKey;
 class MusicInfoItemWidgetJsonKey;
 class SystemTrayIconJsonKey;
 class PlayerListMenuJsonKey;
@@ -24,7 +24,7 @@ protected:
 	MusicInfoItemWidgetJsonKey *musicInfoItemWidget = nullptr;
 	MainWindowJsonKey *mainWindow = nullptr;
 	SystemTrayIconJsonKey *systemTrayIcon = nullptr;
-	FavoriteWidgetJsonKey *favoriteWidget = nullptr;
+	FavoritemDockWidgetJsonKey *favoritemDockWidget = nullptr;
 	AppDataManageJsonKey *appDataManage = nullptr;
 	AppUserInterfaceManageJsonKey *appUserInterfaceManage = nullptr;
 
@@ -56,7 +56,7 @@ public:
 
 	virtual SystemTrayIconJsonKey * getSystemTrayIcon( ) const;
 
-	virtual FavoriteWidgetJsonKey * getFavoriteWidget( ) const;
+	virtual FavoritemDockWidgetJsonKey * getFavoritemDockWidget( ) const;
 
 	virtual AppDataManageJsonKey * getAppDataManage( ) const;
 

@@ -80,6 +80,8 @@ Q_SIGNALS:
 	void signal_item_select( );
 
 	void signal_item_double_select( );
+
+	void signal_pop_menu( );
 };
 
 #endif // MUSICCONTREWIDGET_H_H_HEAD__FILE__

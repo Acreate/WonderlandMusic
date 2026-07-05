@@ -7,6 +7,7 @@
 
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
+#include "translate/favoriteWidgetMenuTranslate.h"
 #include "translate/favoriteWidgetTranslate.h"
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
@@ -27,40 +28,40 @@ AppTranslate::AppTranslate( ) {
 }
 
 bool AppTranslate::initBefore( ) {
-	return true;
-}
+	deleteResource( );
 
-bool AppTranslate::initAfter( ) {
-	return true;
-}
-
-bool AppTranslate::setCodecForLocale( ) {
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
 	if( utf8 == nullptr )
 		return false;
 	QTextCodec::setCodecForLocale( utf8 );
+	auto appInstance = AppInstance::getAppInstance( );
+	AppDataManage *appDataManage = appInstance->getAppDataManage( );
+	auto appSettingPath = appDataManage->getAppSettingPath( );
+	auto currentQMFile = appSettingPath + QObject::tr( "/translations/WonderlandMusic_zh_CN.qm" );
+	appDataManage->setAppStringTranslate( currentQMFile );
+
+	settingWidget = new SettingWidgetTranslate;
+	playerToolsWidget = new PlayerToolsWidgetTranslate;
+	playerListWidgetMenu = new PlayerListWidgetMenuTranlate;
+	playerTopWidget = new PlayerTopWidgetTranslate;
+	playerWindow = new PlayerWindowTranslate;
+	json = new JsonTranslate;
+	dateTimeFormat = new DateTimeFormatTranslate;
+	aboutWidget = new AboutWidgetTranslate;
+	mainWindow = new MainWindowTranslate;
+	message = new MessageTranslate;
+	playerListWidget = new PlayerListWidgetTranslate;
+	musicInfoItem = new MusicInfoItemTranslate;
+	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
+	systemTrayIcon = new SystemTrayIconTranslate;
+	userMutex = new UserMutexTranslate;
+	favoriteWidget = new FavoriteWidgetTranslate;
+	optionDockWidget = new OptionDockWidgetTranslate;
+	favoriteWidgetMenu = new FavoriteWidgetMenuTranslate;
 	return true;
 }
 
-bool AppTranslate::translateString( ) {
-	Init_Resource_App_Core_Ptr( settingWidget );
-	Init_Resource_App_Core_Ptr( playerToolsWidget );
-	Init_Resource_App_Core_Ptr( playerListWidgetMenu );
-	Init_Resource_App_Core_Ptr( playerTopWidget );
-	Init_Resource_App_Core_Ptr( playerWindow );
-	Init_Resource_App_Core_Ptr( json );
-	Init_Resource_App_Core_Ptr( dateTimeFormat );
-	Init_Resource_App_Core_Ptr( aboutWidget );
-	Init_Resource_App_Core_Ptr( mainWindow );
-	Init_Resource_App_Core_Ptr( message );
-	Init_Resource_App_Core_Ptr( playerListWidget );
-	Init_Resource_App_Core_Ptr( musicInfoItem );
-	Init_Resource_App_Core_Ptr( systemTrayIconMenu );
-	Init_Resource_App_Core_Ptr( systemTrayIcon );
-	Init_Resource_App_Core_Ptr( userMutex );
-	Init_Resource_App_Core_Ptr( favoriteWidget );
-	Init_Resource_App_Core_Ptr( optionDockWidget );
-
+bool AppTranslate::initAfter( ) {
 	return true;
 }
 
@@ -82,15 +83,7 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( userMutex );
 	Delete_Resource_App_Core_Ptr( favoriteWidget );
 	Delete_Resource_App_Core_Ptr( optionDockWidget );
-	return true;
-}
-
-bool AppTranslate::loadTranslateQMFile( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	AppDataManage *appDataManage = appInstance->getAppDataManage( );
-	auto appSettingPath = appDataManage->getAppSettingPath( );
-	auto currentQMFile = appSettingPath + QObject::tr( "/translations/WonderlandMusic_zh_CN.qm" );
-	appDataManage->setAppStringTranslate( currentQMFile );
+	Delete_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	return true;
 }
 
@@ -98,39 +91,26 @@ AppTranslate::~AppTranslate( ) {
 	deleteResource( );
 }
 
-bool AppTranslate::createTranlate( ) {
-	settingWidget = new SettingWidgetTranslate;
-	playerToolsWidget = new PlayerToolsWidgetTranslate;
-	playerListWidgetMenu = new PlayerListWidgetMenuTranlate;
-	playerTopWidget = new PlayerTopWidgetTranslate;
-	playerWindow = new PlayerWindowTranslate;
-	json = new JsonTranslate;
-	dateTimeFormat = new DateTimeFormatTranslate;
-	aboutWidget = new AboutWidgetTranslate;
-	mainWindow = new MainWindowTranslate;
-	message = new MessageTranslate;
-	playerListWidget = new PlayerListWidgetTranslate;
-	musicInfoItem = new MusicInfoItemTranslate;
-	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
-	systemTrayIcon = new SystemTrayIconTranslate;
-	userMutex = new UserMutexTranslate;
-	favoriteWidget = new FavoriteWidgetTranslate;
-	optionDockWidget = new OptionDockWidgetTranslate;
-
-	return true;
-}
-
 bool AppTranslate::init( ) {
-	deleteResource( );
+	Init_Resource_App_Core_Ptr( settingWidget );
+	Init_Resource_App_Core_Ptr( playerToolsWidget );
+	Init_Resource_App_Core_Ptr( playerListWidgetMenu );
+	Init_Resource_App_Core_Ptr( playerTopWidget );
+	Init_Resource_App_Core_Ptr( playerWindow );
+	Init_Resource_App_Core_Ptr( json );
+	Init_Resource_App_Core_Ptr( dateTimeFormat );
+	Init_Resource_App_Core_Ptr( aboutWidget );
+	Init_Resource_App_Core_Ptr( mainWindow );
+	Init_Resource_App_Core_Ptr( message );
+	Init_Resource_App_Core_Ptr( playerListWidget );
+	Init_Resource_App_Core_Ptr( musicInfoItem );
+	Init_Resource_App_Core_Ptr( systemTrayIconMenu );
+	Init_Resource_App_Core_Ptr( systemTrayIcon );
+	Init_Resource_App_Core_Ptr( userMutex );
+	Init_Resource_App_Core_Ptr( favoriteWidget );
+	Init_Resource_App_Core_Ptr( optionDockWidget );
+	Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
 
-	if( setCodecForLocale( ) == false )
-		return false;
-	if( loadTranslateQMFile( ) == false )
-		return false;
-	if( createTranlate( ) == false )
-		return false;
-	if( translateString( ) == false )
-		return false;
 	return true;
 }
 
@@ -200,4 +180,8 @@ FavoriteWidgetTranslate * AppTranslate::getFavoriteWidget( ) const {
 
 OptionDockWidgetTranslate * AppTranslate::getOptionDockWidget( ) const {
 	return optionDockWidget;
+}
+
+FavoriteWidgetMenuTranslate * AppTranslate::getFavoriteWidgetMenu( ) const {
+	return favoriteWidgetMenu;
 }

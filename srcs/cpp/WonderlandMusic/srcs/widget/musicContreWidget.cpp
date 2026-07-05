@@ -401,6 +401,7 @@ void MusicContreWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				// 触发信号
 				emit signal_item_select( );
 			}
+			emit signal_pop_menu( );
 		}
 		break;
 	}

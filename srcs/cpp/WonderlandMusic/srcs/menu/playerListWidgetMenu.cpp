@@ -9,6 +9,10 @@
 PlayerListWidgetMenu::PlayerListWidgetMenu( ) : QMenu( ) {
 }
 
+PlayerListWidgetMenu::~PlayerListWidgetMenu( ) {
+	deleteResource( );
+}
+
 bool PlayerListWidgetMenu::initVar( ) {
 	appInstance = AppInstance::getAppInstance( );
 	if( appInstance == nullptr )
@@ -85,4 +89,12 @@ bool PlayerListWidgetMenu::init( ) {
 	if( initConnectAcction( ) == false )
 		return false;
 	return true;
+}
+
+bool PlayerListWidgetMenu::initBefore( ) {
+	return false;
+}
+
+bool PlayerListWidgetMenu::initAfter( ) {
+	return false;
 }

@@ -6,6 +6,7 @@
 #include "../interface/iAppCore.h"
 #include "../interface/iAppJsonData.h"
 
+class FavoriteWidget;
 class PlayerListTopWidget;
 class MainStackedWidget;
 class OptionDockWidget;
@@ -41,6 +42,8 @@ public:
 	MainWindow( );
 
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
+
+	virtual FavoriteWidget * getFavoriteWidget( ) const;
 
 public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;

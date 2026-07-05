@@ -6,11 +6,13 @@
 #include "appDataManage.h"
 #include "appDrawManage.h"
 #include "appInstance.h"
+#include "appMenuManage.h"
 
 #include "../systemTrayIcon/systemTrayIcon.h"
 
 #include "../tools/pathTools.h"
 
+#include "../widget/favoriteWidget.h"
 #include "../widget/playerListTopWidget.h"
 
 #include "../window/mainWindow.h"
@@ -18,11 +20,16 @@
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
 
 bool AppUserInterfaceManage::deleteResource( ) {
+	Delete_Resource_App_Core_Ptr( appMenuManage );
 	Delete_Resource_App_Core_Ptr( mainWindow );
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 	Delete_Resource_App_Core_Ptr( appDrawManage );
 	disconnect( );
 	return true;
+}
+
+AppMenuManage * AppUserInterfaceManage::getAppMenuManage( ) const {
+	return appMenuManage;
 }
 
 bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
@@ -76,25 +83,29 @@ bool AppUserInterfaceManage::writeJsonData( ) {
 }
 
 bool AppUserInterfaceManage::init( ) {
-	deleteResource( );
-	appDrawManage = new AppDrawManage;
-	mainWindow = new MainWindow;
-	systemTrayIcon = new SystemTrayIcon;
 	Before_Init_Resource_App_Core_Ptr( appDrawManage );
 	Before_Init_Resource_App_Core_Ptr( mainWindow );
 	Before_Init_Resource_App_Core_Ptr( systemTrayIcon );
+	Before_Init_Resource_App_Core_Ptr( appMenuManage );
 
 	Init_Resource_App_Core_Ptr( appDrawManage );
 	Init_Resource_App_Core_Ptr( mainWindow );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
+	Init_Resource_App_Core_Ptr( appMenuManage );
 
 	After_Init_Resource_App_Core_Ptr( appDrawManage );
 	After_Init_Resource_App_Core_Ptr( mainWindow );
 	After_Init_Resource_App_Core_Ptr( systemTrayIcon );
+	After_Init_Resource_App_Core_Ptr( appMenuManage );
 	return true;
 }
 
 bool AppUserInterfaceManage::initBefore( ) {
+	deleteResource( );
+	appDrawManage = new AppDrawManage;
+	mainWindow = new MainWindow;
+	systemTrayIcon = new SystemTrayIcon;
+	appMenuManage = new AppMenuManage;
 	return true;
 }
 
@@ -126,10 +137,21 @@ MainWindow * AppUserInterfaceManage::getMainWindow( ) const {
 	return mainWindow;
 }
 
-PlayerListTopWidget * AppUserInterfaceManage::getPlayerListTopWidget( ) const {
-	return mainWindow->getPlayerListTopWidget( );
-}
-
 AppDrawManage * AppUserInterfaceManage::getAppDrawManage( ) const {
 	return appDrawManage;
+}
+
+bool AppUserInterfaceManage::appendFavoriteItem( const QString &create_favorite_name ) {
+	auto favoriteWidget = mainWindow->getFavoriteWidget( );
+	return favoriteWidget->appendFavoriteItem( create_favorite_name );
+}
+
+bool AppUserInterfaceManage::removeFavoriteItem( const QString &remove_favorite_name ) {
+	auto favoriteWidget = mainWindow->getFavoriteWidget( );
+	return favoriteWidget->removeFavoriteItem( remove_favorite_name );
+}
+
+bool AppUserInterfaceManage::resetFavoriteItem( const std::vector< QString > &create_favorite_vector ) {
+	auto favoriteWidget = mainWindow->getFavoriteWidget( );
+	return favoriteWidget->resetFavoriteItem( create_favorite_vector );
 }

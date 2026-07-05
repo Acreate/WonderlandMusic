@@ -5,6 +5,7 @@
 
 #include "../interface/iAppCore.h"
 
+class FavoriteWidget;
 class PlayerListTopWidget;
 class AboutWidget;
 class SettingWidget;
@@ -35,6 +36,8 @@ public:
 	bool initAfter( ) override;
 
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
+
+	virtual FavoriteWidget * getFavoriteWidget( ) const;
 
 public Q_SLOTS:
 	void slot_showPlayerWidget( );

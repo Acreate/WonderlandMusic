@@ -32,3 +32,15 @@ bool FavoriteWidget::initAfter( ) {
 
 void FavoriteWidget::updateLayout( ) {
 }
+
+bool FavoriteWidget::appendFavoriteItem( const QString &create_favorite_name ) {
+	return false;
+}
+
+bool FavoriteWidget::removeFavoriteItem( const QString &remove_favorite_name ) {
+	return false;
+}
+
+bool FavoriteWidget::resetFavoriteItem( const std::vector<QString> &create_favorite_vector ) {
+	return false;
+}

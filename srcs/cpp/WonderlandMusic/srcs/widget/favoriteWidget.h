@@ -29,8 +29,11 @@ public:
 
 	virtual void updateLayout( );
 
-Q_SIGNALS:
-	void clickFavoriteItem( const FavoriteItemWidget *item );
+	virtual bool appendFavoriteItem( const QString &create_favorite_name );
+
+	virtual bool removeFavoriteItem( const QString &remove_favorite_name );
+
+	virtual bool resetFavoriteItem( const std::vector< QString > &create_favorite_vector );
 };
 
 #endif // FAVORITEWIDGET_H_H_HEAD__FILE__

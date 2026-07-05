@@ -7,6 +7,10 @@
 FavoritemDockWidget::FavoritemDockWidget( PlayerWindow *player_window ) : QDockWidget( player_window ), playerWindow( player_window ) {
 }
 
+FavoriteWidget * FavoritemDockWidget::getFavoriteWidget( ) const {
+	return favoriteWidget;
+}
+
 bool FavoritemDockWidget::deleteResource( ) {
 	disconnect( );
 	playerWindow->removeDockWidget( this );

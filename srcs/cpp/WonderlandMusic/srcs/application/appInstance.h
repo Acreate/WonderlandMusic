@@ -5,6 +5,7 @@
 
 #include "../interface/iAppCore.h"
 
+class AppMenuManage;
 class AppDateTimerManage;
 class AppUserInterfaceManage;
 class AppDataManage;
@@ -22,6 +23,8 @@ protected:
 	AppUserInterfaceManage *appUserInterfaceManage = nullptr;
 	/// @brief 时间管理
 	AppDateTimerManage *appDateTimerManage = nullptr;
+	/// @brief 菜单管理
+	AppMenuManage *appMenuManage = nullptr;
 
 public:
 	static AppInstance * getAppInstance( );

@@ -2,6 +2,7 @@
 
 #include "appDataManage.h"
 #include "appDateTimerManage.h"
+#include "appMenuManage.h"
 #include "appUserInterfaceManage.h"
 
 #include "../window/mainWindow.h"
@@ -16,10 +17,11 @@ AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplicatio
 }
 
 bool AppInstance::deleteResource( ) {
+	disconnect( );
+	Delete_Resource_App_Core_Ptr( appMenuManage );
 	Delete_Resource_App_Core_Ptr( appUserInterfaceManage );
 	Delete_Resource_App_Core_Ptr( appDataManage );
 	Delete_Resource_App_Core_Ptr( appDateTimerManage );
-	disconnect( );
 	instance = nullptr;
 	return true;
 }
@@ -54,14 +56,17 @@ bool AppInstance::init( ) {
 	Before_Init_Resource_App_Core_Ptr( appDateTimerManage );
 	Before_Init_Resource_App_Core_Ptr( appDataManage );
 	Before_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+	Before_Init_Resource_App_Core_Ptr( appMenuManage );
 
 	Init_Resource_App_Core_Ptr( appDateTimerManage );
 	Init_Resource_App_Core_Ptr( appDataManage );
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+	Init_Resource_App_Core_Ptr( appMenuManage );
 
 	After_Init_Resource_App_Core_Ptr( appDateTimerManage );
 	After_Init_Resource_App_Core_Ptr( appDataManage );
 	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+	After_Init_Resource_App_Core_Ptr( appMenuManage );
 	return true;
 }
 
@@ -71,6 +76,7 @@ bool AppInstance::initBefore( ) {
 	appDateTimerManage = new AppDateTimerManage;
 	appDataManage = new AppDataManage;
 	appUserInterfaceManage = new AppUserInterfaceManage;
+	appMenuManage = new AppMenuManage;
 	return true;
 }
 

@@ -22,6 +22,10 @@ PlayerListTopWidget * PlayerWindow::getPlayerListTopWidget( ) const {
 	return musicListWindow->getPlayerListTopWidget( );
 }
 
+FavoriteWidget * PlayerWindow::getFavoriteWidget( ) const {
+	return favoritemDockWidget->getFavoriteWidget( );
+}
+
 bool PlayerWindow::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicListWindow );
 	Delete_Resource_App_Core_Ptr( musicControlDocWidget );

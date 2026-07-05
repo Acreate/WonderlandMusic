@@ -11,8 +11,6 @@ class SystemTrayIcon : public QSystemTrayIcon, public IAppCore {
 	Q_OBJECT;
 
 protected:
-	SystemTrayIconMenu *systemTrayIconMenu = nullptr;
-
 	bool deleteResource( ) override;
 
 protected Q_SLOTS:

@@ -51,6 +51,10 @@ PlayerListTopWidget * MainStackedWidget::getPlayerListTopWidget( ) const {
 	return playerWindow->getPlayerListTopWidget( );
 }
 
+FavoriteWidget * MainStackedWidget::getFavoriteWidget( ) const {
+	return playerWindow->getFavoriteWidget(  );
+}
+
 void MainStackedWidget::slot_showPlayerWidget( ) {
 	setCurrentWidget( playerWindow );
 }

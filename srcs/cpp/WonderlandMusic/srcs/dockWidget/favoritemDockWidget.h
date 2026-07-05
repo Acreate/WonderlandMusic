@@ -17,7 +17,8 @@ protected:
 
 public:
 	FavoritemDockWidget( PlayerWindow *player_window );
-
+	
+	virtual FavoriteWidget * getFavoriteWidget( ) const;
 protected:
 	bool deleteResource( ) override;
 

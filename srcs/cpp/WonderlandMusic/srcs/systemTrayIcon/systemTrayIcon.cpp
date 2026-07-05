@@ -5,6 +5,7 @@
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
+#include "../application/appMenuManage.h"
 #include "../application/appTranslate.h"
 #include "../application/appUserInterfaceManage.h"
 #include "../application/jsonKey/systemTrayIconJsonKey.h"
@@ -18,22 +19,15 @@
 
 bool SystemTrayIcon::deleteResource( ) {
 	hide( );
-	Delete_Resource_App_Core_Ptr( systemTrayIconMenu );
 	return true;
 }
 
 void SystemTrayIcon::activated_slot( QSystemTrayIcon::ActivationReason reason ) {
 	// 单击托盘图标显示/隐藏窗口
 	switch( reason ) {
-		case Context : {
-			auto point = QCursor::pos( );
-			systemTrayIconMenu->adjustSize( );
-			int height = systemTrayIconMenu->height( );
-			int width = systemTrayIconMenu->width( );
-			point = point - QPoint( width, height );
-			systemTrayIconMenu->exec( point );
+		case Context :
+			AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->getAppMenuManage( )->popSystemTratIconMenu( QCursor::pos( ) );
 			break;
-		}
 		case Trigger : {
 			AppInstance *appInstance;
 			appInstance = AppInstance::getAppInstance( );
@@ -54,18 +48,9 @@ SystemTrayIcon::SystemTrayIcon( const QIcon &icon, QObject *parent ) : QSystemTr
 }
 
 bool SystemTrayIcon::initBefore( ) {
-	return true;
-}
-
-bool SystemTrayIcon::initAfter( ) {
-	return true;
-}
-
-bool SystemTrayIcon::init( ) {
 	if( QSystemTrayIcon::isSystemTrayAvailable( ) == false )
 		return false;
-	if( deleteResource( ) == false )
-		return false;
+	deleteResource( );
 	auto applicationInstance = AppInstance::getAppInstance( );
 	auto appDataManage = applicationInstance->getAppDataManage( );
 	auto systemTrayIconTranslate = appDataManage->getTranslate( )->getSystemTrayIcon( );
@@ -87,12 +72,18 @@ bool SystemTrayIcon::init( ) {
 		QIcon systemTrayIcon( pixmap );
 		setIcon( systemTrayIcon );
 	}
-	systemTrayIconMenu = new SystemTrayIconMenu( );
-	if( systemTrayIconMenu->init( ) == false )
-		return false;
+
 	setToolTip( systemTrayIconTranslate->getAppName( ) );
+	return true;
+}
+
+bool SystemTrayIcon::initAfter( ) {
 	connect( this, &QSystemTrayIcon::activated, this, &SystemTrayIcon::activated_slot );
 	show( );
+	return true;
+}
+
+bool SystemTrayIcon::init( ) {
 	return true;
 }
 

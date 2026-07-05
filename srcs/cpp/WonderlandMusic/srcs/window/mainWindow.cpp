@@ -34,6 +34,10 @@ PlayerListTopWidget * MainWindow::getPlayerListTopWidget( ) const {
 	return mainStackedWidget->getPlayerListTopWidget( );
 }
 
+FavoriteWidget * MainWindow::getFavoriteWidget( ) const {
+	return mainStackedWidget->getFavoriteWidget(  );
+}
+
 bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );

@@ -2,20 +2,27 @@
 #define SYSTEMTRAYICONMENU_H_H_HEAD__FILE__
 #include <QMenu>
 
-class SystemTrayIconMenu : public QMenu {
+#include "../interface/iAppCore.h"
+
+class SystemTrayIconMenu : public QMenu , public IAppCore{
 	Q_OBJECT;
 
 protected:
-	virtual bool deleteResource( );
+	bool deleteResource( ) override;
 
 public:
 	SystemTrayIconMenu( QWidget *parent = nullptr );
 
 	SystemTrayIconMenu( const QString &title, QWidget *parent );
 
-	virtual bool init( );
+	bool init( ) override;
+
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 
 	~SystemTrayIconMenu( ) override;
 };
 
 #endif // SYSTEMTRAYICONMENU_H_H_HEAD__FILE__
+

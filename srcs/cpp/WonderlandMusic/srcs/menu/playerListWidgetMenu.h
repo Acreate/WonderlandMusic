@@ -53,7 +53,13 @@ protected:
 public:
 	PlayerListWidgetMenu( );
 
+	~PlayerListWidgetMenu( ) override;
+
 	bool init( ) override;
+
+	bool initBefore( ) override;
+
+	bool initAfter( ) override;
 
 protected:
 	virtual bool initVar( );

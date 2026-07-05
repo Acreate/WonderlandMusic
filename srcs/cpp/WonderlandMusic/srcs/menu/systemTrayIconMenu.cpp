@@ -28,6 +28,14 @@ bool SystemTrayIconMenu::init( ) {
 	return true;
 }
 
+bool SystemTrayIconMenu::initBefore( ) {
+	return false;
+}
+
+bool SystemTrayIconMenu::initAfter( ) {
+	return false;
+}
+
 SystemTrayIconMenu::~SystemTrayIconMenu( ) {
 	deleteResource( );
 }

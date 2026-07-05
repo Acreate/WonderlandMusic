@@ -47,6 +47,8 @@ public:
 
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 
+	virtual FavoriteWidget * getFavoriteWidget( ) const;
+
 	bool init( ) override;
 
 	bool initBefore( ) override;

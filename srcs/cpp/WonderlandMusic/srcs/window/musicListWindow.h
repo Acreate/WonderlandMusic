@@ -30,6 +30,7 @@ public:
 	virtual bool showFavorteMusicContreList( const QString &music_favorte_widget );
 
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
+	virtual MusicContreWidget * getMusicContreWidget( ) const;
 
 protected:
 	bool deleteResource( ) override;

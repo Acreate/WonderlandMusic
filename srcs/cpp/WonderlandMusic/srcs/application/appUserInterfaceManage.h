@@ -71,6 +71,18 @@ Q_SIGNALS:
 	void signal_click_favorite_Item( LabelWidget *label_widget );
 
 	void signal_favorite_Item_pop_menu( LabelWidget *label_widget );
+
+	void signal_select_music_Item_move_to_top( );
+
+	void signal_select_music_Item_move_to_bottom( );
+
+	void signal_select_music_Item_aggregate_to_select_first( );
+
+	void signal_select_music_Item_aggregate_to_select_last( );
+
+	void signal_select_music_Item_aggregate_to_play_item_top( );
+
+	void signal_select_music_Item_aggregate_to_play_item_bottom( );
 };
 
 #endif // APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__

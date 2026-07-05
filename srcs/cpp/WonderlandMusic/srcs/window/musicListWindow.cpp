@@ -21,6 +21,10 @@ PlayerListTopWidget * MusicListWindow::getPlayerListTopWidget( ) const {
 	return musicItemSizeInfoDockWidget->getPlayerListTopWidget( );
 }
 
+MusicContreWidget * MusicListWindow::getMusicContreWidget( ) const {
+	return musicContreScrollArea->getMusicContreWidget( );
+}
+
 bool MusicListWindow::deleteResource( ) {
 	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
@@ -33,7 +37,6 @@ bool MusicListWindow::getJsonData( QJsonObject &get_json_object ) const {
 }
 
 bool MusicListWindow::setJsonData( const QJsonObject &set_json_object ) {
-	
 	return false;
 }
 

@@ -51,6 +51,17 @@ public:
 	virtual void loadMusciFromDir( const std::vector< QString > &music_dir );
 
 	virtual std::vector< MusicItem * > & getMusicItem( std::vector< MusicItem * > &result_vector ) const;
+
+	virtual bool removeSelectMusicItem( );
+	virtual bool deleteSelectMusicItem( );
+	virtual bool openSelectMusicFileDialog( );
+	virtual bool openSelectMusicDirDialog( );
+	virtual bool selectMusicItemMoveToTop( );
+	virtual bool selectMusicItemMoveToBottom( );
+	virtual bool selectMusicItemAggregateToSelectFirst( );
+	virtual bool selectMusicItemAggregateToSelectLast( );
+	virtual bool selectMusicItemAggregateToPlayItemBefore( );
+	virtual bool selectMusicItemAggregateToPlayItemAfter( );
 };
 
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

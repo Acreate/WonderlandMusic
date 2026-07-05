@@ -41,37 +41,72 @@ bool PlayerListWidgetMenu::initBefore( ) {
 	if( jsonFileKey == nullptr )
 		return false;
 
-	removeMenu = addMenu( playerListWidgetMenuTranlate->getPlayerListMenuMoveMenu( ) );
-	controlMenu = addMenu( playerListWidgetMenuTranlate->getPlayerListMenuControlMenu( ) );
+	removeMenu = addMenu( playerListWidgetMenuTranlate->getRemoveMenu( ) );
+	controlMenu = addMenu( playerListWidgetMenuTranlate->getControlMenu( ) );
 
-	loadMenu = addMenu( playerListWidgetMenuTranlate->getPlayerListMenuFileLoadMenu( ) );
+	loadMenu = addMenu( playerListWidgetMenuTranlate->getFilePathLoadMenu( ) );
 
-	setplay = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) );
-	insterPlay = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) );
+	insterPlayBefore = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getAggregateToPlayerBefore( ) );
+	insterPlayAfter = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getAggregateToPlayerAfter( ) );
 
-	moveTop = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getPlayerListMenuControlMenuMoveTopMusicAction( ) );
-	moveBottom = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getPlayerListMenuControlMenuMoveBottomMusicAction( ) );
+	moveTop = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getMoveTopAction( ) );
+	moveBottom = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getMoveBottomAction( ) );
 
-	removeMusicAtList = removeMenu->QWidget::addAction( playerListWidgetMenuTranlate->getPlayerListMenuControlMenuRemoveMusicAction( ) );
-	deleteMusicAtDiskFile = removeMenu->QWidget::addAction( playerListWidgetMenuTranlate->getPlayerListMenuControlMenuDeleteMusicAction( ) );
+	aggregateToSelectFirst = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getAggregateToSelectFirst( ) );
+	aggregateToSelectLast = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getAggregateToSelectLast( ) );
 
-	addMultiFileMusicToCollectionAction = loadMenu->addAction( playerListWidgetMenuTranlate->getPlayerListAddMultiMusicFileToCollectionAction( ) );
-	addMultiMusicDirToCollection = loadMenu->addAction( playerListWidgetMenuTranlate->getPlayerListAddMultiMusicDirToCollectionAction( ) );
+	removeMusicAtList = removeMenu->QWidget::addAction( playerListWidgetMenuTranlate->getRemoveMusciItemAction( ) );
+	deleteMusicAtDiskFile = removeMenu->QWidget::addAction( playerListWidgetMenuTranlate->getDeleteMusicFileAction( ) );
+
+	opendSelectFileDialogAction = loadMenu->addAction( playerListWidgetMenuTranlate->getLoadFileAction( ) );
+	oopenSelectDirDialogAction = loadMenu->addAction( playerListWidgetMenuTranlate->getLoadDirAction( ) );
 
 	return true;
 }
 
 bool PlayerListWidgetMenu::initAfter( ) {
-	connect( addMultiFileMusicToCollectionAction, &QAction::triggered, this, &PlayerListWidgetMenu::loadDiskFile );
-	connect( addMultiMusicDirToCollection, &QAction::triggered, this, &PlayerListWidgetMenu::loadDiskDir );
+	connect( aggregateToSelectFirst, &QAction::triggered, []( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->selectMusicItemAggregateToSelectFirst( );
+	} );
+	connect( aggregateToSelectLast, &QAction::triggered, []( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->selectMusicItemAggregateToSelectLast( );
+	} );
+	connect( opendSelectFileDialogAction, &QAction::triggered, []( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->openSelectMusicFileDialog( );
+	} );
+	connect( oopenSelectDirDialogAction, &QAction::triggered, []( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->openSelectMusicDirDialog( );
+	} );
 
-	connect( moveTop, &QAction::triggered, this, &PlayerListWidgetMenu::selectListMoveTop );
-	connect( moveBottom, &QAction::triggered, this, &PlayerListWidgetMenu::selectListMoveBottom );
+	connect( moveTop, &QAction::triggered, []( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->selectMusicItemMoveToTop( );
+	} );
+	connect( moveBottom, &QAction::triggered, []( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->selectMusicItemMoveToBottom( );
+	} );
 
-	connect( setplay, &QAction::triggered, this, &PlayerListWidgetMenu::setCurrentSelectPlay );
-	connect( insterPlay, &QAction::triggered, this, &PlayerListWidgetMenu::insterCurrentSelectPlay );
+	connect( insterPlayBefore, &QAction::triggered, []( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->selectMusicItemAggregateToPlayItemBefore( );
+	} );
+	connect( insterPlayAfter, &QAction::triggered, []( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->selectMusicItemAggregateToPlayItemAfter( );
+	} );
 
-	connect( removeMusicAtList, &QAction::triggered, this, &PlayerListWidgetMenu::removePlayListSelectInfo );
-	connect( deleteMusicAtDiskFile, &QAction::triggered, this, &PlayerListWidgetMenu::deletePlayListSelectFile );
+	connect( removeMusicAtList, &QAction::triggered, [ ]( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->removeSelectMusicItem( );
+	} );
+	connect( deleteMusicAtDiskFile, &QAction::triggered, [ ]( ) {
+		auto manage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+		manage->deleteSelectMusicItem( );
+	} );
 	return true;
 }

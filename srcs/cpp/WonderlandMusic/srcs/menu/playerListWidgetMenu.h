@@ -14,9 +14,9 @@ protected:
 	/// @brief 控制菜单
 	QMenu *controlMenu;
 	/// @brief 插入当前播放列表
-	QAction *insterPlay;
+	QAction *insterPlayAfter;
 	/// @brief 播放当前列表
-	QAction *setplay;
+	QAction *insterPlayBefore;
 	/// @brief 移动到顶部
 	QAction *moveTop;
 	/// @brief 移动到底部
@@ -28,9 +28,13 @@ protected:
 	/// @brief 加载菜单
 	QMenu *loadMenu;
 	/// @brief 添加选择文件到集
-	QAction *addMultiFileMusicToCollectionAction;
+	QAction *opendSelectFileDialogAction;
 	/// @brief 添加选择目录到集
-	QAction *addMultiMusicDirToCollection;
+	QAction *oopenSelectDirDialogAction;
+	/// @brief 聚合到首选项
+	QAction *aggregateToSelectFirst;
+	/// @brief 聚合到末选项
+	QAction *aggregateToSelectLast;
 
 protected:
 	bool deleteResource( ) override;
@@ -45,22 +49,5 @@ public:
 	bool initBefore( ) override;
 
 	bool initAfter( ) override;
-
-Q_SIGNALS:
-	void loadDiskFile( );
-
-	void loadDiskDir( );
-
-	void setCurrentSelectPlay( );
-
-	void insterCurrentSelectPlay( );
-
-	void removePlayListSelectInfo( );
-
-	void deletePlayListSelectFile( );
-
-	void selectListMoveTop( );
-
-	void selectListMoveBottom( );
 };
 #endif // PLAYERLISTWIDGETMENU_H_H_HEAD__FILE__

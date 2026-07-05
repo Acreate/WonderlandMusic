@@ -48,6 +48,7 @@ public:
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 
 	virtual FavoriteWidget * getFavoriteWidget( ) const;
+	virtual MusicContreWidget * getMusicContreWidget( ) const;
 
 	bool init( ) override;
 

@@ -5,6 +5,8 @@
 
 #include "../interface/iAppCore.h"
 
+class MusicContreWidget;
+class PlayerToolsWidget;
 class FavoriteWidget;
 class PlayerListTopWidget;
 class AboutWidget;
@@ -38,6 +40,7 @@ public:
 	virtual PlayerListTopWidget * getPlayerListTopWidget( ) const;
 
 	virtual FavoriteWidget * getFavoriteWidget( ) const;
+	virtual MusicContreWidget * getMusicContreWidget( ) const;
 
 public Q_SLOTS:
 	void slot_showPlayerWidget( );

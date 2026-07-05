@@ -4,49 +4,55 @@
 #include <interface/iTranslate.h>
 
 class PlayerListWidgetMenuTranlate : public ITranslate {
-	QString playerListMenuFileLoadMenu;
-	QString playerListAddMultiMusicFileToCollectionAction;
-	QString playerListAddMultiMusicDirToCollectionAction;
+	QString filePathLoadMenu;
+	QString loadFileAction;
+	QString loadDirAction;
 
-	QString playerListMenuenuPlayerMenu;
-	QString playerListMenuPlayerMenuSetCurrentPlayAction;
-	QString playerListMenuPlayerMenuInsterCurrentPlayAction;
+	QString playerMusicMenu;
+	QString aggregateToPlayerAfter;
+	QString aggregateToPlayerBefore;
 
-	QString playerListMenuControlMenu;
-	QString playerListMenuControlMenuRemoveMusicAction;
-	QString playerListMenuControlMenuDeleteMusicAction;
+	QString controlMenu;
+	QString removeMusciItemAction;
+	QString deleteMusicFileAction;
 
-	QString playerListMenuMoveMenu;
-	QString playerListMenuControlMenuMoveTopMusicAction;
-	QString playerListMenuControlMenuMoveBottomMusicAction;
+	QString removeMenu;
+	QString moveTopAction;
+	QString moveBottomAction;
+	QString aggregateToSelectFirst;
+	QString aggregateToSelectLast;
 
 public:
 	bool init( ) override;
 
 public:
-	virtual const QString & getPlayerListMenuFileLoadMenu( ) const;
+	virtual const QString & getFilePathLoadMenu( ) const;
 
-	virtual const QString & getPlayerListAddMultiMusicFileToCollectionAction( ) const;
+	virtual const QString & getLoadFileAction( ) const;
 
-	virtual const QString & getPlayerListAddMultiMusicDirToCollectionAction( ) const;
+	virtual const QString & getLoadDirAction( ) const;
 
-	virtual const QString & getPlayerListMenuenuPlayerMenu( ) const;
+	virtual const QString & getPlayerMusicMenu( ) const;
 
-	virtual const QString & getPlayerListMenuPlayerMenuSetCurrentPlayAction( ) const;
+	virtual const QString & getAggregateToPlayerAfter( ) const;
 
-	virtual const QString & getPlayerListMenuPlayerMenuInsterCurrentPlayAction( ) const;
+	virtual const QString & getAggregateToPlayerBefore( ) const;
 
-	virtual const QString & getPlayerListMenuControlMenu( ) const;
+	virtual const QString & getControlMenu( ) const;
 
-	virtual const QString & getPlayerListMenuControlMenuRemoveMusicAction( ) const;
+	virtual const QString & getRemoveMusciItemAction( ) const;
 
-	virtual const QString & getPlayerListMenuControlMenuDeleteMusicAction( ) const;
+	virtual const QString & getDeleteMusicFileAction( ) const;
 
-	virtual const QString & getPlayerListMenuMoveMenu( ) const;
+	virtual const QString & getRemoveMenu( ) const;
 
-	virtual const QString & getPlayerListMenuControlMenuMoveTopMusicAction( ) const;
+	virtual const QString & getMoveTopAction( ) const;
 
-	virtual const QString & getPlayerListMenuControlMenuMoveBottomMusicAction( ) const;
+	virtual const QString & getMoveBottomAction( ) const;
+
+	virtual const QString & getAggregateToSelectFirst( ) const;
+
+	virtual const QString & getAggregateToSelectLast( ) const;
 };
 
 #endif // PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__

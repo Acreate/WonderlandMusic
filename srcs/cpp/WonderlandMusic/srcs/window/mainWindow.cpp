@@ -35,7 +35,11 @@ PlayerListTopWidget * MainWindow::getPlayerListTopWidget( ) const {
 }
 
 FavoriteWidget * MainWindow::getFavoriteWidget( ) const {
-	return mainStackedWidget->getFavoriteWidget(  );
+	return mainStackedWidget->getFavoriteWidget( );
+}
+
+MusicContreWidget * MainWindow::getMusicContreWidget( ) const {
+	return mainStackedWidget->getMusicContreWidget( );
 }
 
 bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {

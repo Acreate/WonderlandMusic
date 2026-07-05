@@ -229,6 +229,46 @@ std::vector< MusicItem * > & AppMusicManage::getMusicItem( std::vector< MusicIte
 	return result_vector;
 }
 
+bool AppMusicManage::removeSelectMusicItem( ) {
+	return false;
+}
+
+bool AppMusicManage::deleteSelectMusicItem( ) {
+	return false;
+}
+
+bool AppMusicManage::openSelectMusicFileDialog( ) {
+	return false;
+}
+
+bool AppMusicManage::openSelectMusicDirDialog( ) {
+	return false;
+}
+
+bool AppMusicManage::selectMusicItemMoveToTop( ) {
+	return false;
+}
+
+bool AppMusicManage::selectMusicItemMoveToBottom( ) {
+	return false;
+}
+
+bool AppMusicManage::selectMusicItemAggregateToSelectFirst( ) {
+	return false;
+}
+
+bool AppMusicManage::selectMusicItemAggregateToSelectLast( ) {
+	return false;
+}
+
+bool AppMusicManage::selectMusicItemAggregateToPlayItemBefore( ) {
+	return false;
+}
+
+bool AppMusicManage::selectMusicItemAggregateToPlayItemAfter( ) {
+	return false;
+}
+
 bool AppMusicManage::init( ) {
 	deleteResource( );
 	loadMutex = new UserMutex;

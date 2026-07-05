@@ -13,6 +13,7 @@
 #include "../tools/pathTools.h"
 
 #include "../widget/favoriteWidget.h"
+#include "../widget/musicContreWidget.h"
 #include "../widget/playerListTopWidget.h"
 
 #include "../window/mainWindow.h"

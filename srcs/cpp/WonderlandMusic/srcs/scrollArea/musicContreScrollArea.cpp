@@ -26,6 +26,10 @@ void MusicContreScrollArea::setItemWidth( int widget_before_width, int splite_wi
 	musicContreWidget->setItemWidth( widget_before_width, splite_width, index_width, music_name_width, music_singer_width, music_duration_width, widget_after_width );
 }
 
+MusicContreWidget * MusicContreScrollArea::getMusicContreWidget( ) const {
+	return musicContreWidget;
+}
+
 bool MusicContreScrollArea::deleteResource( ) {
 	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicContreWidget );

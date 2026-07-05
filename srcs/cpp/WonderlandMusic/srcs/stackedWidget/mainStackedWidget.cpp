@@ -52,7 +52,11 @@ PlayerListTopWidget * MainStackedWidget::getPlayerListTopWidget( ) const {
 }
 
 FavoriteWidget * MainStackedWidget::getFavoriteWidget( ) const {
-	return playerWindow->getFavoriteWidget(  );
+	return playerWindow->getFavoriteWidget( );
+}
+
+MusicContreWidget * MainStackedWidget::getMusicContreWidget( ) const {
+	return playerWindow->getMusicContreWidget( );
 }
 
 void MainStackedWidget::slot_showPlayerWidget( ) {

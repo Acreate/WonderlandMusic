@@ -35,15 +35,15 @@ FavoriteItemWidget * FavoriteWidgetMenu::getLabelWidget( ) const {
 
 bool FavoriteWidgetMenu::initBefore( ) {
 	deleteResource( );
-	auto translate = AppInstance::getAppInstance( )->getAppDataManage( )->getTranslate( )->getFavoriteWidgetMenu( );
-	addFavorite = addAction( translate->getAddFavorite( ) );
-	deleteFavorite = addAction( translate->getDeleteFavorite( ) );
-	changeFavorite = addAction( translate->getChangeFavorite( ) );
 
 	return true;
 }
 
 bool FavoriteWidgetMenu::init( ) {
+	auto translate = AppInstance::getAppInstance( )->getAppDataManage( )->getTranslate( )->getFavoriteWidgetMenu( );
+	addFavorite = addAction( translate->getAddFavorite( ) );
+	deleteFavorite = addAction( translate->getDeleteFavorite( ) );
+	changeFavorite = addAction( translate->getChangeFavorite( ) );
 	return true;
 }
 

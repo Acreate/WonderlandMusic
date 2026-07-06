@@ -32,11 +32,6 @@ bool PlayerListWidgetMenu::deleteResource( ) {
 }
 
 bool PlayerListWidgetMenu::init( ) {
-	return true;
-}
-
-bool PlayerListWidgetMenu::initBefore( ) {
-	deleteResource( );
 	auto appInstance = AppInstance::getAppInstance( );
 	if( appInstance == nullptr )
 		return false;
@@ -74,6 +69,11 @@ bool PlayerListWidgetMenu::initBefore( ) {
 	opendSelectFileDialogAction = loadMenu->addAction( playerListWidgetMenuTranlate->getLoadFileAction( ) );
 	oopenSelectDirDialogAction = loadMenu->addAction( playerListWidgetMenuTranlate->getLoadDirAction( ) );
 
+	return true;
+}
+
+bool PlayerListWidgetMenu::initBefore( ) {
+	deleteResource( );
 	return true;
 }
 

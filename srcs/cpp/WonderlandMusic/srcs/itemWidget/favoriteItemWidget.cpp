@@ -16,6 +16,7 @@ FavoriteItemWidget::FavoriteItemWidget( QWidget *parent ) : QWidget( parent ) {
 	} );
 	lineEdit->move( 0, 0 );
 	lineEdit->show( );
+	lineEdit->setEnabled( false );
 }
 
 QString FavoriteItemWidget::getFavoriteName( ) const {
@@ -30,4 +31,9 @@ void FavoriteItemWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
 	QWidget::mouseDoubleClickEvent( event );
 	lineEdit->setEnabled( true );
 	lineEdit->setFocus( );
+}
+
+void FavoriteItemWidget::focusOutEvent( QFocusEvent *event ) {
+	QWidget::focusOutEvent( event );
+	lineEdit->setEnabled( false );
 }

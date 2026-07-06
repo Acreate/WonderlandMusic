@@ -13,18 +13,18 @@ bool SystemTrayIconMenu::deleteResource( ) {
 }
 
 bool SystemTrayIconMenu::init( ) {
-	return true;
-}
-
-bool SystemTrayIconMenu::initBefore( ) {
-	if( deleteResource( ) == false )
-		return false;
 	AppInstance *instance = AppInstance::getAppInstance( );
 	auto systemTrayIconMenuTranslate = instance->getAppDataManage( )->getTranslate( )->getSystemTrayIconMenu( );
 
 	showMainWindowItem = addAction( systemTrayIconMenuTranslate->getShowMainMenu( ) );
 	addSeparator( );
 	quitApp = addAction( systemTrayIconMenuTranslate->getQuitApp( ) );
+	return true;
+}
+
+bool SystemTrayIconMenu::initBefore( ) {
+	deleteResource( );
+
 	return true;
 }
 

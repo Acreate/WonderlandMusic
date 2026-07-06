@@ -21,7 +21,7 @@ public:
 
 protected:
 	void mouseDoubleClickEvent( QMouseEvent *event ) override;
-
+	void focusOutEvent( QFocusEvent *event ) override;
 Q_SIGNALS:
 	void signal_change_name_finished( );
 };

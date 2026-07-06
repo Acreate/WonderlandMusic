@@ -9,23 +9,12 @@
 #include "appMenuManage.h"
 #include "applicationManage.h"
 
-#include "../dockWidget/favoritemDockWidget.h"
-#include "../dockWidget/musicItemSizeInfoDockWidget.h"
-
-#include "../scrollArea/favoriteSrollArea.h"
-
-#include "../stackedWidget/mainStackedWidget.h"
-
 #include "../systemTrayIcon/systemTrayIcon.h"
 
 #include "../tools/pathTools.h"
 
-#include "../widget/favoriteWidget.h"
-#include "../widget/playerListTopWidget.h"
-
 #include "../window/mainWindow.h"
 #include "../window/musicListWindow.h"
-#include "../window/playerWindow.h"
 
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
 
@@ -105,7 +94,6 @@ bool AppUserInterfaceManage::initAfter( ) {
 	if( showMainWindow( ) == false )
 		return false;
 	systemTrayIcon->show( );
-	AppInstance::getAppInstance( )->getApplicationManage( )->processEvents( QEventLoop::AllEvents );
 	return true;
 }
 

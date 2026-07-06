@@ -74,11 +74,11 @@ bool AppInstance::init( ) {
 	Init_Resource_App_Core_Ptr( appDateTimerManage );
 	Init_Resource_App_Core_Ptr( appDataManage );
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
-	
-	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+
 	After_Init_Resource_App_Core_Ptr( applicationManage );
 	After_Init_Resource_App_Core_Ptr( appDateTimerManage );
 	After_Init_Resource_App_Core_Ptr( appDataManage );
+	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 	return true;
 }
 

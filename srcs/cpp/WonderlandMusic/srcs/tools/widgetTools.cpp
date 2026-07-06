@@ -5,6 +5,7 @@
 #include <qscreen.h>
 
 #include "../application/appInstance.h"
+#include "../application/applicationManage.h"
 
 void WidgetTools::moveWidgetToCenterPos( const QPoint &target_pos, QWidget *move_source_widget ) {
 	move_source_widget->adjustSize( );
@@ -24,7 +25,7 @@ bool WidgetTools::getMenuSuggestionShowMenuPos( QPoint &suggestion_show_pos, con
 	calculation_menu->adjustSize( );
 	auto menuWidth = calculation_menu->width( );
 	auto menuHeight = calculation_menu->height( );
-	auto screens = AppInstance::getAppInstance( )->screens( );
+	auto screens = AppInstance::getAppInstance( )->getApplicationManage(  )->screens( );
 	qsizetype count = screens.size( );
 	auto data = screens.data( );
 	qsizetype index = 0;

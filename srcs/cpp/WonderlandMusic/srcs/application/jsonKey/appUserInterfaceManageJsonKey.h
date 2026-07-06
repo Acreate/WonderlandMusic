@@ -4,9 +4,9 @@
 
 class AppUserInterfaceManageJsonKey : public IJsonKey {
 	QString mainWindow;
-	QString musicListTopDockWidget;
-	QString musicFavoriteDockWidget;
 	QString filePath;
+	QString musicListTopWidget;
+	QString musicFavoriteWidget;
 
 public:
 	bool init( ) override;
@@ -15,9 +15,9 @@ public:
 
 	virtual QString getFilePath( ) const;
 
-	virtual const QString & getMusicListTopDockWidget( ) const;
+	virtual const QString & getMusicListTopWidget( ) const;
 
-	virtual const QString & getMusicFavoriteDockWidget( ) const;
+	virtual const QString & getMusicFavoriteWidget( ) const;
 };
 
 #endif // APPUSERINTERFACEMANAGEJSONKEY_H_H_HEAD__FILE__

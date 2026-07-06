@@ -1,5 +1,4 @@
-﻿#include <QDateTime>
-#include <QLoggingCategory>
+﻿#include <QLoggingCategory>
 #include <qfile.h>
 
 #include "application/appInstance.h"
@@ -97,7 +96,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 				+ QString::number( exec ).toUpper( ) + " }";
 			delete messageErrorOut;
 		}
-		
+
 		return exec;
 	}
 	exec = -3;
@@ -111,8 +110,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		}
 		return exec;
 	}
-	if( application->getAppUserInterfaceManage( )->showMainWindow( ) )
-		exec = application->exec( );
+	exec = application->exec( );
 	if( messageErrorOut ) {
 		permit->setJion( "\n" );
 		screening->setJion( "\n" );

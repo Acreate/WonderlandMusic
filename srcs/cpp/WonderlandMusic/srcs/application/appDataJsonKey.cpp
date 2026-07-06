@@ -5,7 +5,7 @@
 #include "jsonKey/aboutWidgetJsonKey.h"
 #include "jsonKey/appDataManageJsonKey.h"
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
-#include "jsonKey/favoritemDockWidgetJsonKey.h"
+#include "jsonKey/favoriteSrollAreaJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
 #include "jsonKey/musicInfoItemWidgetJsonKey.h"
 #include "jsonKey/playerListToolWidgetJsonKey.h"
@@ -21,7 +21,7 @@ bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( mainWindow );
 	Delete_Resource_App_Core_Ptr( musicInfoItemWidget );
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
-	Delete_Resource_App_Core_Ptr( favoritemDockWidget );
+	Delete_Resource_App_Core_Ptr( favoriteSrollArea );
 	Delete_Resource_App_Core_Ptr( appDataManage );
 	Delete_Resource_App_Core_Ptr( appUserInterfaceManage );
 	return true;
@@ -42,7 +42,7 @@ bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( mainWindow );
 	Init_Resource_App_Core_Ptr( musicInfoItemWidget );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
-	Init_Resource_App_Core_Ptr( favoritemDockWidget );
+	Init_Resource_App_Core_Ptr( favoriteSrollArea );
 	Init_Resource_App_Core_Ptr( appDataManage );
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 	return true;
@@ -57,7 +57,7 @@ bool AppDataJsonKey::initBefore( ) {
 	mainWindow = new MainWindowJsonKey;
 	musicInfoItemWidget = new MusicInfoItemWidgetJsonKey;
 	systemTrayIcon = new SystemTrayIconJsonKey;
-	favoritemDockWidget = new FavoritemDockWidgetJsonKey;
+	favoriteSrollArea = new FavoriteSrollAreaJsonKey;
 	appDataManage = new AppDataManageJsonKey;
 	appUserInterfaceManage = new AppUserInterfaceManageJsonKey;
 	return true;
@@ -95,14 +95,14 @@ SystemTrayIconJsonKey * AppDataJsonKey::getSystemTrayIcon( ) const {
 	return systemTrayIcon;
 }
 
-FavoritemDockWidgetJsonKey * AppDataJsonKey::getFavoritemDockWidget( ) const {
-	return favoritemDockWidget;
-}
-
 AppDataManageJsonKey * AppDataJsonKey::getAppDataManage( ) const {
 	return appDataManage;
 }
 
 AppUserInterfaceManageJsonKey * AppDataJsonKey::getAppUserInterfaceManage( ) const {
 	return appUserInterfaceManage;
+}
+
+FavoriteSrollAreaJsonKey * AppDataJsonKey::getFavoriteSrollArea( ) const {
+	return favoriteSrollArea;
 }

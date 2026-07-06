@@ -1,5 +1,13 @@
 ﻿#include "favoriteSrollArea.h"
 
+#include <QJsonObject>
+
+#include "../application/appDataJsonKey.h"
+#include "../application/appDataManage.h"
+#include "../application/appInstance.h"
+#include "../application/appTranslate.h"
+#include "../application/jsonKey/favoriteSrollAreaJsonKey.h"
+
 #include "../widget/favoriteWidget.h"
 
 FavoriteSrollArea::FavoriteSrollArea( QWidget *parent ) : QScrollArea( parent ) {
@@ -36,5 +44,26 @@ bool FavoriteSrollArea::init( ) {
 
 bool FavoriteSrollArea::initAfter( ) {
 	setWidget( favoriteWidget );
+	return true;
+}
+
+bool FavoriteSrollArea::getJsonData( QJsonObject &get_json_object ) const {
+	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getFavoriteSrollArea( );
+	int width = this->width( );
+	get_json_object.insert( jsonKey->getWidth( ), width );
+	return true;
+}
+
+bool FavoriteSrollArea::setJsonData( const QJsonObject &set_json_object ) {
+	if( set_json_object.empty( ) )
+		return false;
+
+	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getFavoriteSrollArea( );
+	auto find = set_json_object.find( jsonKey->getWidth( ) );
+	auto end = set_json_object.end( );
+	if( find != end ) {
+		qint64 width = find.value( ).toInteger( );
+		resize( width, this->height( ) );
+	}
 	return true;
 }

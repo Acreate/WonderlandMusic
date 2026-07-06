@@ -3,7 +3,7 @@
 
 #include "../interface/iAppCore.h"
 
-class FavoritemDockWidgetJsonKey;
+class FavoriteSrollAreaJsonKey;
 class AppUserInterfaceManageJsonKey;
 class AppDataManageJsonKey;
 class MusicInfoItemWidgetJsonKey;
@@ -24,9 +24,9 @@ protected:
 	MusicInfoItemWidgetJsonKey *musicInfoItemWidget = nullptr;
 	MainWindowJsonKey *mainWindow = nullptr;
 	SystemTrayIconJsonKey *systemTrayIcon = nullptr;
-	FavoritemDockWidgetJsonKey *favoritemDockWidget = nullptr;
 	AppDataManageJsonKey *appDataManage = nullptr;
 	AppUserInterfaceManageJsonKey *appUserInterfaceManage = nullptr;
+	FavoriteSrollAreaJsonKey *favoriteSrollArea = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -56,10 +56,10 @@ public:
 
 	virtual SystemTrayIconJsonKey * getSystemTrayIcon( ) const;
 
-	virtual FavoritemDockWidgetJsonKey * getFavoritemDockWidget( ) const;
-
 	virtual AppDataManageJsonKey * getAppDataManage( ) const;
 
 	virtual AppUserInterfaceManageJsonKey * getAppUserInterfaceManage( ) const;
+
+	virtual FavoriteSrollAreaJsonKey * getFavoriteSrollArea( ) const;
 };
 #endif // APPDATAJSONKEY_H_H_HEAD__FILE__

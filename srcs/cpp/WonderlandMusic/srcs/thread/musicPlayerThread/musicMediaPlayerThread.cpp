@@ -7,6 +7,7 @@
 #include <QMutex>
 
 #include "../../application/appInstance.h"
+#include "../../application/applicationManage.h"
 
 bool MusicMediaPlayerThread::startPlayerTread( ) {
 	isRunOver = false;
@@ -16,7 +17,7 @@ bool MusicMediaPlayerThread::startPlayerTread( ) {
 bool MusicMediaPlayerThread::stopPlayerMusic( ) {
 	if( mediaPlayer ) {
 		mediaPlayer->stop( );
-		auto appInstance = AppInstance::getAppInstance( );
+		auto appInstance = AppInstance::getAppInstance( )->getApplicationManage(  );
 		while( mediaPlayer->isPlaying( ) )
 			appInstance->processEvents( );
 		delete mediaPlayer;

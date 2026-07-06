@@ -70,10 +70,14 @@ bool PlayerWindow::initAfter( ) {
 	return true;
 }
 
+void PlayerWindow::resizeEvent( QResizeEvent *event ) {
+	QMainWindow::resizeEvent( event );
+}
+
 bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	return true;
 }
 
 bool PlayerWindow::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	return true;
 }

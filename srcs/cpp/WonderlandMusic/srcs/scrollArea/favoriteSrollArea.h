@@ -3,14 +3,16 @@
 #include <QScrollArea>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class FavoriteWidget;
 
-class FavoriteSrollArea : public QScrollArea, public IAppCore {
+class FavoriteSrollArea : public QScrollArea, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
+
 protected:
-	
 	FavoriteWidget *favoriteWidget = nullptr;
+
 public:
 	FavoriteSrollArea( QWidget *parent );
 
@@ -25,6 +27,8 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 };
 
 #endif // FAVORITESROLLAREA_H_H_HEAD__FILE__

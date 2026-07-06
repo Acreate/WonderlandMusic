@@ -4,6 +4,7 @@
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/appUserInterfaceManage.h"
+#include "../application/applicationManage.h"
 #include "../application/translate/systemTrayIconMenuTranslate.h"
 
 bool SystemTrayIconMenu::deleteResource( ) {
@@ -33,7 +34,7 @@ bool SystemTrayIconMenu::initAfter( ) {
 	} );
 
 	connect( quitApp, &QAction::triggered, this, []( ) {
-		AppInstance::getAppInstance( )->quit( );
+		AppInstance::getAppInstance( )->getApplicationManage( )->quit( );
 	} );
 	return true;
 }

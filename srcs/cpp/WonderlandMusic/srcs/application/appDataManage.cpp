@@ -8,6 +8,7 @@
 #include "appMusicManage.h"
 #include "appTranslate.h"
 #include "appUserInterfaceManage.h"
+#include "applicationManage.h"
 
 #include "../tools/pathTools.h"
 
@@ -32,7 +33,7 @@ bool AppDataManage::init( ) {
 bool AppDataManage::initBefore( ) {
 	deleteResource( );
 	auto appInstance = AppInstance::getAppInstance( );
-	QString dirPath = appInstance->applicationDirPath( );
+	QString dirPath = appInstance->getApplicationManage( )->applicationDirPath( );
 	appSettingPath = dirPath + "/program/";
 	emit signal_change_setting_path( appSettingPath );
 	constAppDefaultTranslatePath = appSettingPath + "/translations/WonderlandMusic.qm";
@@ -157,7 +158,7 @@ bool AppDataManage::setAppStringTranslate( const QString &translate_file_path ) 
 		delete newTranslator;
 		return false;
 	}
-	auto appInstance = AppInstance::getAppInstance( );
+	auto appInstance = AppInstance::getAppInstance( )->getApplicationManage( );
 	if( appTranslator ) {
 		appInstance->removeTranslator( appTranslator );
 		delete appTranslator;

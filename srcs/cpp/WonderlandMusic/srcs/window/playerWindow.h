@@ -56,6 +56,9 @@ public:
 	bool initBefore( ) override;
 
 	bool initAfter( ) override;
+
+protected:
+	void resizeEvent( QResizeEvent *event ) override;
 };
 
 #endif // PLAYERWINDOW_H_H_HEAD__FILE__

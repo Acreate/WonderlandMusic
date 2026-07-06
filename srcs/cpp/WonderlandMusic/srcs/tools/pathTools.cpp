@@ -10,6 +10,7 @@
 #include "../application/appInstance.h"
 #include "../application/appMusicDecoder.h"
 #include "../application/appMusicManage.h"
+#include "../application/applicationManage.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -47,7 +48,7 @@ qsizetype PathTools::filterDir( QStringList &result_get_path, const std::vector<
 
 QString PathTools::getAutoShortenPathName( const QString &org_file_path ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationFilePath = appInstance->applicationDirPath( );
+	auto applicationFilePath = appInstance->getApplicationManage(  )->applicationDirPath( );
 	QDir base( applicationFilePath );
 
 	QString result = base.relativeFilePath( org_file_path );

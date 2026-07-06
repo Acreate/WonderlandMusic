@@ -10,6 +10,7 @@
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
+#include "../application/applicationManage.h"
 #include "../application/jsonKey/aboutWidgetJsonKey.h"
 
 #include "../msgInfo/messageErrorOut.h"
@@ -27,7 +28,7 @@ AboutWidget::AboutWidget( QWidget *parent ) : QWidget( parent ) {
 
 bool AboutWidget::init( ) {
 	auto applicationInstance = AppInstance::getAppInstance( );
-	setWindowTitle( QString( applicationInstance->applicationName( ) + " " + tr( "关于" ) ) );
+	setWindowTitle( QString( applicationInstance->getApplicationManage( )->applicationName( ) + " " + tr( "关于" ) ) );
 	mainLayout->setContentsMargins( 0, 0, 0, 0 );
 	mainLayout->setSpacing( 0 );
 	QStyle *stylePtr = style( );

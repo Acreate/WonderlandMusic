@@ -10,6 +10,7 @@
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
+#include "../application/applicationManage.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
 #include "../application/translate/mainWindowTranslate.h"
 
@@ -44,23 +45,34 @@ bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 	auto geo = geometry( );
 	int windowX = geo.x( );
 	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
-	get_json_object.insert( mainWindowJsonFileKey->getPointXPos( ), windowX );
-	int windowY = geo.y( );
-	get_json_object.insert( mainWindowJsonFileKey->getPointYPos( ), windowY );
-	int windowWidth = geo.width( );
-	get_json_object.insert( mainWindowJsonFileKey->getSizeWidth( ), windowWidth );
-	int windowHeight = geo.height( );
-	get_json_object.insert( mainWindowJsonFileKey->getSizeHeight( ), windowHeight );
 
+	QJsonObject json;
+	json.insert( mainWindowJsonFileKey->getPointXPos( ), windowX );
+	int windowY = geo.y( );
+	json.insert( mainWindowJsonFileKey->getPointYPos( ), windowY );
+	int windowWidth = geo.width( );
+	json.insert( mainWindowJsonFileKey->getSizeWidth( ), windowWidth );
+	int windowHeight = geo.height( );
+	json.insert( mainWindowJsonFileKey->getSizeHeight( ), windowHeight );
+	get_json_object.insert( mainWindowJsonFileKey->getObjectName( ), json );
 	return true;
 }
 
 bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
+	if( set_json_object.empty( ) )
+		return false;
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 
 	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
-	auto mainWindowJsonFile = windowJsonFileKey->getSettingJsonPath( );
+
+	// 匹配终结符
+	auto end = set_json_object.end( );
+	// 查找返回
+	QJsonObject::const_iterator find = set_json_object.find( windowJsonFileKey->getObjectName( ) );
+	if( find == end )
+		return false;
+	auto jsonObject = find.value( ).toObject( );
 	// 匹配 x
 	int x = this->x( );
 	// 匹配 y
@@ -69,24 +81,22 @@ bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
 	int width = this->width( );
 	// 匹配 h
 	int height = this->height( );
-	// 匹配终结符
-	auto end = set_json_object.end( );
-	// 查找返回
-	QJsonObject::const_iterator find;
+
+	end = jsonObject.end( );
 	// 查找 x 坐标
-	find = set_json_object.find( windowJsonFileKey->getPointXPos( ) );
+	find = jsonObject.find( windowJsonFileKey->getPointXPos( ) );
 	if( find != end )
 		x = find.value( ).toInt( );
 	// 查找 y 坐标
-	find = set_json_object.find( windowJsonFileKey->getPointYPos( ) );
+	find = jsonObject.find( windowJsonFileKey->getPointYPos( ) );
 	if( find != end )
 		y = find.value( ).toInt( );
 	// 查找 w 宽度
-	find = set_json_object.find( windowJsonFileKey->getSizeWidth( ) );
+	find = jsonObject.find( windowJsonFileKey->getSizeWidth( ) );
 	if( find != end )
 		width = find.value( ).toInt( );
 	// 查找 h 高度
-	find = set_json_object.find( windowJsonFileKey->getSizeHeight( ) );
+	find = jsonObject.find( windowJsonFileKey->getSizeHeight( ) );
 	if( find != end )
 		height = find.value( ).toInt( );
 	// 设置坐标与宽高
@@ -159,7 +169,7 @@ bool MainWindow::event( QEvent *event ) {
 			//	event->ignore( );
 			//	return true;
 			//}
-			auto appInstance = AppInstance::getAppInstance( );
+			auto appInstance = AppInstance::getAppInstance( )->getApplicationManage( );
 			appInstance->quit( );
 	}
 	return QMainWindow::event( event );

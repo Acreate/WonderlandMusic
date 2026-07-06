@@ -6,8 +6,8 @@
 bool AppUserInterfaceManageJsonKey::init( ) {
 	filePath = "/json/app.ui.json";
 	mainWindow = "main.window.info";
-	musicListTopDockWidget = "music.window.list.top.info";
-	musicFavoriteDockWidget = "music.window.favorite.dock.info";
+	musicListTopWidget = "music.window.list.top.info";
+	musicFavoriteWidget = "music.window.favorite.info";
 	return true;
 }
 
@@ -21,10 +21,10 @@ QString AppUserInterfaceManageJsonKey::getFilePath( ) const {
 	return applicationDirPath + filePath;
 }
 
-const QString & AppUserInterfaceManageJsonKey::getMusicListTopDockWidget( ) const {
-	return musicListTopDockWidget;
+const QString & AppUserInterfaceManageJsonKey::getMusicListTopWidget( ) const {
+	return musicListTopWidget;
 }
 
-const QString & AppUserInterfaceManageJsonKey::getMusicFavoriteDockWidget( ) const {
-	return musicFavoriteDockWidget;
+const QString & AppUserInterfaceManageJsonKey::getMusicFavoriteWidget( ) const {
+	return musicFavoriteWidget;
 }

@@ -4,24 +4,42 @@
 #include "appDateTimerManage.h"
 #include "appMenuManage.h"
 #include "appUserInterfaceManage.h"
+#include "applicationManage.h"
 
 #include "../window/mainWindow.h"
 
 AppInstance *AppInstance::instance = nullptr;
 
+AppInstance::AppParam::~AppParam( ) {
+}
+
+AppInstance::AppParam::AppParam( int argc, char **argv, int app_flag_s ) : argc( argc ), argv( argv ), app_flag_s( app_flag_s ) {
+}
+
+int AppInstance::AppParam::getArgc( ) const {
+	return argc;
+}
+
+char ** AppInstance::AppParam::getArgv( ) const {
+	return argv;
+}
+
+int AppInstance::AppParam::getAppFlagS( ) const {
+	return app_flag_s;
+}
+
 AppInstance * AppInstance::getAppInstance( ) {
 	return instance;
 }
 
-AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : QApplication( argc, argv, app_flag_s ) {
+AppInstance::AppInstance( int &argc, char **argv, int app_flag_s ) : appParam( argc, argv, app_flag_s ) {
 }
 
 bool AppInstance::deleteResource( ) {
-	disconnect( );
-	Delete_Resource_App_Core_Ptr( appMenuManage );
 	Delete_Resource_App_Core_Ptr( appUserInterfaceManage );
 	Delete_Resource_App_Core_Ptr( appDataManage );
 	Delete_Resource_App_Core_Ptr( appDateTimerManage );
+	Delete_Resource_App_Core_Ptr( applicationManage );
 	instance = nullptr;
 	return true;
 }
@@ -38,46 +56,39 @@ AppDateTimerManage * AppInstance::getAppDateTimerManage( ) const {
 	return appDateTimerManage;
 }
 
+ApplicationManage * AppInstance::getApplicationManage( ) const {
+	return applicationManage;
+}
+
 AppInstance::~AppInstance( ) {
 	deleteResource( );
 }
 
-bool AppInstance::notify( QObject *object, QEvent *event ) {
-	auto type = event->type( );
-	switch( type ) {
-		case QEvent::Quit :
-			appDataManage->writeJsonData( );
-			appUserInterfaceManage->writeJsonData( );
-			break;
-	}
-	return QApplication::notify( object, event );
-}
-
 bool AppInstance::init( ) {
+	Before_Init_Resource_App_Core_Ptr( applicationManage );
 	Before_Init_Resource_App_Core_Ptr( appDateTimerManage );
 	Before_Init_Resource_App_Core_Ptr( appDataManage );
 	Before_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
-	Before_Init_Resource_App_Core_Ptr( appMenuManage );
 
+	Init_Resource_App_Core_Ptr( applicationManage );
 	Init_Resource_App_Core_Ptr( appDateTimerManage );
 	Init_Resource_App_Core_Ptr( appDataManage );
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
-	Init_Resource_App_Core_Ptr( appMenuManage );
-
+	
+	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+	After_Init_Resource_App_Core_Ptr( applicationManage );
 	After_Init_Resource_App_Core_Ptr( appDateTimerManage );
 	After_Init_Resource_App_Core_Ptr( appDataManage );
-	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
-	After_Init_Resource_App_Core_Ptr( appMenuManage );
 	return true;
 }
 
 bool AppInstance::initBefore( ) {
 	deleteResource( );
 	instance = this;
+	applicationManage = new ApplicationManage( appParam.argc, appParam.argv, appParam.app_flag_s );
 	appDateTimerManage = new AppDateTimerManage;
 	appDataManage = new AppDataManage;
 	appUserInterfaceManage = new AppUserInterfaceManage;
-	appMenuManage = new AppMenuManage;
 	return true;
 }
 
@@ -85,4 +96,8 @@ bool AppInstance::initAfter( ) {
 	appDataManage->readJsonData( );
 	appUserInterfaceManage->readJsonData( );
 	return true;
+}
+
+int AppInstance::exec( ) {
+	return applicationManage->exec( );
 }

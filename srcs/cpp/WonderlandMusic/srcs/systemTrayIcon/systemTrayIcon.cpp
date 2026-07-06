@@ -79,7 +79,6 @@ bool SystemTrayIcon::initBefore( ) {
 
 bool SystemTrayIcon::initAfter( ) {
 	connect( this, &QSystemTrayIcon::activated, this, &SystemTrayIcon::activated_slot );
-	show( );
 	return true;
 }
 

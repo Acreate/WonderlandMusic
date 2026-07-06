@@ -4,6 +4,7 @@
 #include "../appInstance.h"
 
 bool PlayerListTopWidgetJsonKey::init( ) {
+	objectName = "app.main.window.play.window.list.item.top";
 	itemWidth = "width";
 	itemSplitWidth = "split";
 	itemIndexWidth = "index";
@@ -45,4 +46,8 @@ const QString & PlayerListTopWidgetJsonKey::getItemWidgetBeforeWidth( ) const {
 
 const QString & PlayerListTopWidgetJsonKey::getItemWidgetAfterWidth( ) const {
 	return itemWidgetAfterWidth;
+}
+
+const QString & PlayerListTopWidgetJsonKey::getObjectName( ) const {
+	return objectName;
 }

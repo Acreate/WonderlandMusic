@@ -10,6 +10,7 @@
 #include "../application/appInstance.h"
 #include "../application/appRenderImage.h"
 #include "../application/appUserInterfaceManage.h"
+#include "../application/applicationManage.h"
 
 #include "../dockWidget/musicItemSizeInfoDockWidget.h"
 
@@ -152,7 +153,7 @@ void MusicContreWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_
 	if( check_key_board_modifier == false )
 		selectKeyControlModifier( );
 	else {
-		auto appInstance = AppInstance::getAppInstance( );
+		auto appInstance = AppInstance::getAppInstance( )->getApplicationManage( );
 		auto keyboardModifiers = ( Qt::KeyboardModifier ) appInstance->keyboardModifiers( ).toInt( );
 		switch( keyboardModifiers ) {
 			case Qt::KeyboardModifier::ControlModifier :

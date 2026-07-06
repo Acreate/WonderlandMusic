@@ -5,6 +5,7 @@
 #include <QIODevice>
 
 #include "../application/appInstance.h"
+#include "../application/applicationManage.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -65,7 +66,7 @@ bool MusicPlayer::getIsStop( ) const {
 bool MusicPlayer::playerStop( ) {
 	if( musicPlayerThread ) {
 		musicPlayerThread->stopPlayerMusic( );
-		auto appInstance = AppInstance::getAppInstance( );
+		auto appInstance = AppInstance::getAppInstance( )->getApplicationManage( );
 		while( musicPlayerThread != nullptr )
 			appInstance->processEvents( );
 	}

@@ -34,49 +34,62 @@ bool PlayerListTopWidget::getJsonData( QJsonObject &get_json_object ) const {
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	int width = contentsRect( ).width( );
 	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
-	get_json_object.insert( listTopWidgetJsonKey->getItemWidth( ), width );
-	get_json_object.insert( listTopWidgetJsonKey->getItemSplitWidth( ), splitWidth );
-	get_json_object.insert( listTopWidgetJsonKey->getItemMusicNameWidth( ), musicNameWidth );
-	get_json_object.insert( listTopWidgetJsonKey->getItemMusicSingerWidth( ), musicSingerWidth );
-	get_json_object.insert( listTopWidgetJsonKey->getItemMusicDurationWidth( ), musicDurationWidth );
-	get_json_object.insert( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ), widgetBeforeWidth );
-	get_json_object.insert( listTopWidgetJsonKey->getItemWidgetAfterWidth( ), widgetAfterWidth );
-	get_json_object.insert( listTopWidgetJsonKey->getItemIndexWidth( ), indexWidth );
+
+	QJsonObject jsonObject;
+
+	jsonObject.insert( listTopWidgetJsonKey->getItemWidth( ), width );
+	jsonObject.insert( listTopWidgetJsonKey->getItemSplitWidth( ), splitWidth );
+	jsonObject.insert( listTopWidgetJsonKey->getItemMusicNameWidth( ), musicNameWidth );
+	jsonObject.insert( listTopWidgetJsonKey->getItemMusicSingerWidth( ), musicSingerWidth );
+	jsonObject.insert( listTopWidgetJsonKey->getItemMusicDurationWidth( ), musicDurationWidth );
+	jsonObject.insert( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ), widgetBeforeWidth );
+	jsonObject.insert( listTopWidgetJsonKey->getItemWidgetAfterWidth( ), widgetAfterWidth );
+	jsonObject.insert( listTopWidgetJsonKey->getItemIndexWidth( ), indexWidth );
+	auto &objectName = listTopWidgetJsonKey->getObjectName( );
+	get_json_object.insert( objectName, jsonObject );
 	return true;
 }
 
 bool PlayerListTopWidget::setJsonData( const QJsonObject &set_json_object ) {
+	if( set_json_object.empty( ) )
+		return false;
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
+	auto &objectName = listTopWidgetJsonKey->getObjectName( );
 
 	auto end = set_json_object.end( );
 
-	auto find = set_json_object.find( listTopWidgetJsonKey->getItemSplitWidth( ) );
+	auto find = set_json_object.find( objectName );
+	if( find == end )
+		return false;
+	auto jsonObject = find.value( ).toObject( );
+	end = jsonObject.end( );
+	find = jsonObject.find( listTopWidgetJsonKey->getItemSplitWidth( ) );
 	if( find != end )
 		splitWidth = find.value( ).toInt( splitWidth );
-	find = set_json_object.find( listTopWidgetJsonKey->getItemMusicNameWidth( ) );
+	find = jsonObject.find( listTopWidgetJsonKey->getItemMusicNameWidth( ) );
 	if( find != end )
 		musicNameWidth = find.value( ).toInt( musicNameWidth );
-	find = set_json_object.find( listTopWidgetJsonKey->getItemMusicSingerWidth( ) );
+	find = jsonObject.find( listTopWidgetJsonKey->getItemMusicSingerWidth( ) );
 	if( find != end )
 		musicSingerWidth = find.value( ).toInt( musicSingerWidth );
-	find = set_json_object.find( listTopWidgetJsonKey->getItemMusicDurationWidth( ) );
+	find = jsonObject.find( listTopWidgetJsonKey->getItemMusicDurationWidth( ) );
 	if( find != end )
 		musicDurationWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = set_json_object.find( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ) );
+	find = jsonObject.find( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ) );
 	if( find != end )
 		widgetBeforeWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = set_json_object.find( listTopWidgetJsonKey->getItemWidgetAfterWidth( ) );
+	find = jsonObject.find( listTopWidgetJsonKey->getItemWidgetAfterWidth( ) );
 	if( find != end )
 		widgetAfterWidth = find.value( ).toInt( musicDurationWidth );
 
-	find = set_json_object.find( listTopWidgetJsonKey->getItemIndexWidth( ) );
+	find = jsonObject.find( listTopWidgetJsonKey->getItemIndexWidth( ) );
 	if( find != end )
 		indexWidth = find.value( ).toInt( musicDurationWidth );
-	find = set_json_object.find( listTopWidgetJsonKey->getItemWidth( ) );
+	find = jsonObject.find( listTopWidgetJsonKey->getItemWidth( ) );
 	if( find != end ) {
 		QRect rect = contentsRect( );
 		int w = find.value( ).toInt( rect.width( ) );

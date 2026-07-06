@@ -79,7 +79,7 @@ void FavoriteWidget::updateLayout( ) {
 				maxWidth = compWidth;
 		}
 	}
-	setFixedSize( maxWidth, maxHeight );
+	resize( maxWidth, maxHeight );
 	emit signal_update_layout_over( );
 }
 

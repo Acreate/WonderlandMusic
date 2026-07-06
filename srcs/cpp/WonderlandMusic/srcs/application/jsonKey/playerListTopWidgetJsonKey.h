@@ -4,6 +4,7 @@
 #include <interface/iJsonKey.h>
 
 class PlayerListTopWidgetJsonKey : public IJsonKey {
+	QString objectName;
 	QString itemWidth;
 	QString itemSplitWidth;
 	QString itemIndexWidth;
@@ -31,6 +32,8 @@ public:
 	virtual const QString & getItemWidgetBeforeWidth( ) const;
 
 	virtual const QString & getItemWidgetAfterWidth( ) const;
+
+	virtual const QString & getObjectName( ) const;
 };
 
 #endif // PLAYERLISTTOPWIDGETJSONKEY_H_H_HEAD__FILE__

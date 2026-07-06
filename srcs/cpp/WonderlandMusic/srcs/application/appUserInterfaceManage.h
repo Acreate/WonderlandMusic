@@ -29,8 +29,6 @@ protected:
 	bool deleteResource( ) override;
 
 public:
-	virtual AppMenuManage * getAppMenuManage( ) const;
-
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;
@@ -47,23 +45,16 @@ public:
 
 	~AppUserInterfaceManage( ) override;
 
+	virtual AppMenuManage * getAppMenuManage( ) const;
 	virtual bool showMainWindow( ) const;
 
 	virtual bool hideMainWindow( ) const;
 
 	virtual MainWindow * getMainWindow( ) const;
 
+	virtual SystemTrayIcon * getSystemTrayIcon( ) const;
+
 	virtual AppDrawManage * getAppDrawManage( ) const;
-
-	virtual bool appendFavoriteItem( const QString &create_favorite_name );
-
-	virtual bool removeFavoriteItem( const QString &remove_favorite_name );
-
-	virtual bool resetFavoriteItem( const std::vector< QString > &create_favorite_vector );
-
-Q_SIGNALS:
-
-
 };
 
 #endif // APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__

@@ -31,9 +31,20 @@ bool MusicItemSizeInfoDockWidget::deleteResource( ) {
 	return true;
 }
 
-bool MusicItemSizeInfoDockWidget::init( ) {
-	Init_Resource_App_Core_Ptr( playerListTopWidget );
+bool MusicItemSizeInfoDockWidget::getJsonData( QJsonObject &get_json_object ) const {
+	playerListTopWidget->getJsonData( get_json_object );
+	return true;
+}
 
+bool MusicItemSizeInfoDockWidget::setJsonData( const QJsonObject &set_json_object ) {
+	playerListTopWidget->setJsonData( set_json_object );
+	return true;
+}
+
+bool MusicItemSizeInfoDockWidget::init( ) {
+	Before_Init_Resource_App_Core_Ptr( playerListTopWidget );
+	Init_Resource_App_Core_Ptr( playerListTopWidget );
+	After_Init_Resource_App_Core_Ptr( playerListTopWidget );
 	return true;
 }
 

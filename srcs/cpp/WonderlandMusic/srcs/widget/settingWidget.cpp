@@ -186,6 +186,14 @@ SettingWidget::~SettingWidget( ) {
 	deleteResource( );
 }
 
+bool SettingWidget::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+
+bool SettingWidget::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}
+
 bool SettingWidget::initWidget( ) {
 	mainSettingWdiget = initMainSettingWdiget( );
 	if( mainSettingWdiget == nullptr )

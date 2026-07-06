@@ -3,13 +3,14 @@
 #include <QDockWidget>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class QVBoxLayout;
 class QSpacerItem;
 class QPushButton;
 class MainWindow;
 
-class OptionDockWidget : public QDockWidget, public IAppCore {
+class OptionDockWidget : public QDockWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -38,6 +39,8 @@ protected:
 	bool deleteResource( ) override;
 
 public:
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 	bool init( ) override;
 
 	bool initBefore( ) override;

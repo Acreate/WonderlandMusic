@@ -3,6 +3,7 @@
 #include <QWidget>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class UserMutex;
 class LabelWidget;
@@ -10,7 +11,7 @@ class PlayerListWidget;
 class FavoriteItemWidget;
 class PlayerWindow;
 
-class FavoriteWidget : public QWidget, public IAppCore {
+class FavoriteWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -28,7 +29,8 @@ protected:
 
 public:
 	~FavoriteWidget( ) override;
-
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 	bool init( ) override;
 
 	bool initBefore( ) override;

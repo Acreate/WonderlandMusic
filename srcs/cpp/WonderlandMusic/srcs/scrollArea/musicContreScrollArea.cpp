@@ -36,6 +36,14 @@ bool MusicContreScrollArea::deleteResource( ) {
 	return true;
 }
 
+bool MusicContreScrollArea::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+
+bool MusicContreScrollArea::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}
+
 bool MusicContreScrollArea::init( ) {
 	Before_Init_Resource_App_Core_Ptr( musicContreWidget );
 	Init_Resource_App_Core_Ptr( musicContreWidget );

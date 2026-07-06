@@ -5,7 +5,7 @@
 
 class PlayerListTopWidgetJsonKey : public IJsonKey {
 	QString objectName;
-	QString itemWidth;
+	QString width;
 	QString itemSplitWidth;
 	QString itemIndexWidth;
 	QString itemMusicNameWidth;
@@ -16,8 +16,6 @@ class PlayerListTopWidgetJsonKey : public IJsonKey {
 
 public:
 	bool init( ) override;
-
-	virtual const QString & getItemWidth( ) const;
 
 	virtual const QString & getItemSplitWidth( ) const;
 
@@ -34,6 +32,8 @@ public:
 	virtual const QString & getItemWidgetAfterWidth( ) const;
 
 	virtual const QString & getObjectName( ) const;
+
+	virtual const QString & getWidth( ) const;
 };
 
 #endif // PLAYERLISTTOPWIDGETJSONKEY_H_H_HEAD__FILE__

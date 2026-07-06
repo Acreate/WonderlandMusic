@@ -4,12 +4,13 @@
 #include <QWidget>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class QPushButton;
 class QLineEdit;
 class QScrollArea;
 
-class SettingWidget : public QWidget, public IAppCore {
+class SettingWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -47,7 +48,8 @@ public:
 	SettingWidget( QWidget *parent );
 
 	~SettingWidget( ) override;
-
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 	bool initWidget( );
 
 	bool init( ) override;

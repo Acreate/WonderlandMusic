@@ -9,7 +9,7 @@ class MusicItem;
 class PlayerListTopWidget;
 class MusicContreWidget;
 
-class MusicContreScrollArea : public QScrollArea, public IAppCore {
+class MusicContreScrollArea : public QScrollArea, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -32,6 +32,8 @@ protected:
 	bool deleteResource( ) override;
 
 public:
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 	bool init( ) override;
 
 	bool initBefore( ) override;

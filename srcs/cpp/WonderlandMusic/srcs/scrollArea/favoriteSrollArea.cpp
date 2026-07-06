@@ -48,22 +48,38 @@ bool FavoriteSrollArea::initAfter( ) {
 }
 
 bool FavoriteSrollArea::getJsonData( QJsonObject &get_json_object ) const {
+	//favoriteWidget->getJsonData( get_json_object );
 	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getFavoriteSrollArea( );
-	int width = this->width( );
-	get_json_object.insert( jsonKey->getWidth( ), width );
+	QJsonObject jsonObject;
+
+	jsonObject.insert( jsonKey->getWidth( ), this->width( ) );
+	jsonObject.insert( jsonKey->getHeight( ), this->height( ) );
+	get_json_object.insert( jsonKey->getObjectName( ), jsonObject );
 	return true;
 }
 
 bool FavoriteSrollArea::setJsonData( const QJsonObject &set_json_object ) {
+	//favoriteWidget->setJsonData( set_json_object );
 	if( set_json_object.empty( ) )
 		return false;
 
 	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getFavoriteSrollArea( );
-	auto find = set_json_object.find( jsonKey->getWidth( ) );
+	auto find = set_json_object.find( jsonKey->getObjectName( ) );
 	auto end = set_json_object.end( );
 	if( find != end ) {
-		qint64 width = find.value( ).toInteger( );
-		resize( width, this->height( ) );
+		auto jsonObject = find.value( ).toObject( );
+		if( jsonObject.empty( ) == false ) {
+			end = jsonObject.end( );
+			qint64 width = this->width( );
+			qint64 height = this->height( );
+			find = jsonObject.find( jsonKey->getWidth( ) );
+			if( find != end )
+				width = find.value( ).toInteger( );
+			find = jsonObject.find( jsonKey->getHeight( ) );
+			if( find != end )
+				height = find.value( ).toInteger( );
+			resize( width, height );
+		}
 	}
 	return true;
 }

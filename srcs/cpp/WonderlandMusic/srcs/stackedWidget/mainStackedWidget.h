@@ -4,6 +4,7 @@
 #include <QStackedWidget>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class MusicContreWidget;
 class PlayerToolsWidget;
@@ -13,7 +14,7 @@ class AboutWidget;
 class SettingWidget;
 class PlayerWindow;
 
-class MainStackedWidget : public QStackedWidget, public IAppCore {
+class MainStackedWidget : public QStackedWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -36,7 +37,8 @@ public:
 	bool initBefore( ) override;
 
 	bool initAfter( ) override;
-
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual PlayerWindow * getPlayerWindow( ) const;
 
 	virtual SettingWidget * getSettingWidget( ) const;

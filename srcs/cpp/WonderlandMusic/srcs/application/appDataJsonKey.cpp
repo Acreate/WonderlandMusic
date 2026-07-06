@@ -6,6 +6,8 @@
 #include "jsonKey/appDataManageJsonKey.h"
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
 #include "jsonKey/favoriteSrollAreaJsonKey.h"
+#include "jsonKey/favoriteWidgetJsonKey.h"
+#include "jsonKey/favoritemDockWidgetJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
 #include "jsonKey/musicInfoItemWidgetJsonKey.h"
 #include "jsonKey/playerListToolWidgetJsonKey.h"
@@ -24,6 +26,8 @@ bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( favoriteSrollArea );
 	Delete_Resource_App_Core_Ptr( appDataManage );
 	Delete_Resource_App_Core_Ptr( appUserInterfaceManage );
+	Delete_Resource_App_Core_Ptr( favoritemDockWidget );
+	Delete_Resource_App_Core_Ptr( favoriteWidget );
 	return true;
 }
 
@@ -45,6 +49,8 @@ bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( favoriteSrollArea );
 	Init_Resource_App_Core_Ptr( appDataManage );
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+	Init_Resource_App_Core_Ptr( favoritemDockWidget );
+	Init_Resource_App_Core_Ptr( favoriteWidget );
 	return true;
 }
 
@@ -60,6 +66,8 @@ bool AppDataJsonKey::initBefore( ) {
 	favoriteSrollArea = new FavoriteSrollAreaJsonKey;
 	appDataManage = new AppDataManageJsonKey;
 	appUserInterfaceManage = new AppUserInterfaceManageJsonKey;
+	favoritemDockWidget = new FavoritemDockWidgetJsonKey;
+	favoriteWidget = new FavoriteWidgetJsonKey;
 	return true;
 }
 
@@ -105,4 +113,12 @@ AppUserInterfaceManageJsonKey * AppDataJsonKey::getAppUserInterfaceManage( ) con
 
 FavoriteSrollAreaJsonKey * AppDataJsonKey::getFavoriteSrollArea( ) const {
 	return favoriteSrollArea;
+}
+
+FavoritemDockWidgetJsonKey * AppDataJsonKey::getFavoritemDockWidget( ) const {
+	return favoritemDockWidget;
+}
+
+FavoriteWidgetJsonKey * AppDataJsonKey::getFavoriteWidget( ) const {
+	return favoriteWidget;
 }

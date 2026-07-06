@@ -248,6 +248,14 @@ bool MusicContreWidget::deleteResource( ) {
 	return true;
 }
 
+bool MusicContreWidget::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+
+bool MusicContreWidget::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}
+
 bool MusicContreWidget::init( ) {
 	return true;
 }

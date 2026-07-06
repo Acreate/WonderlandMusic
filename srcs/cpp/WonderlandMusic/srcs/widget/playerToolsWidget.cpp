@@ -120,6 +120,7 @@ bool PlayerToolsWidget::initBefore( ) {
 }
 
 bool PlayerToolsWidget::initAfter( ) {
+	compLayout( );
 	return true;
 }
 

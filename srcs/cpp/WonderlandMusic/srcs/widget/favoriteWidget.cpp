@@ -8,6 +8,7 @@
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
+#include "../application/jsonKey/favoriteWidgetJsonKey.h"
 #include "../application/translate/favoriteWidgetTranslate.h"
 
 #include "../mutex/userMutex.h"
@@ -38,6 +39,42 @@ bool FavoriteWidget::deleteResource( ) {
 
 FavoriteWidget::~FavoriteWidget( ) {
 	deleteResource( );
+}
+
+bool FavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
+	auto appDataJsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( );
+	auto jsonKey = appDataJsonKey->getFavoriteWidget( );
+
+	QJsonObject jsonObject;
+	jsonObject.insert( jsonKey->getWidth( ), this->width( ) );
+	jsonObject.insert( jsonKey->getHeight( ), this->height( ) );
+	get_json_object.insert( jsonKey->getObjectName( ), jsonObject );
+	return true;
+}
+
+bool FavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
+	if( set_json_object.empty( ) )
+		return false;
+	auto appDataJsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( );
+	auto jsonKey = appDataJsonKey->getFavoriteWidget( );
+	auto find = set_json_object.find( jsonKey->getObjectName( ) );
+	auto end = set_json_object.end( );
+	if( find == end )
+		return false;
+
+	auto jsonObject = find.value( ).toObject( );
+	end = jsonObject.end( );
+	qint64 width = this->width( );
+	qint64 height = this->height( );
+	find = jsonObject.find( jsonKey->getWidth( ) );
+	if( find != end )
+		width = find.value( ).toInteger( );
+	find = jsonObject.find( jsonKey->getHeight( ) );
+	if( find != end )
+		height = find.value( ).toInteger( );
+	resize( width, height );
+	adjustSize( );
+	return true;
 }
 
 bool FavoriteWidget::init( ) {

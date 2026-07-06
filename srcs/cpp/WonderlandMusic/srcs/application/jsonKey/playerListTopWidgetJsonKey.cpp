@@ -4,20 +4,16 @@
 #include "../appInstance.h"
 
 bool PlayerListTopWidgetJsonKey::init( ) {
-	objectName = "app.main.window.play.window.list.item.top";
-	itemWidth = "width";
-	itemSplitWidth = "split";
-	itemIndexWidth = "index";
-	itemMusicNameWidth = "name";
-	itemMusicSingerWidth = "singer";
-	itemMusicDurationWidth = "duration";
-	itemWidgetBeforeWidth = "before";
-	itemWidgetAfterWidth = "after";
+	objectName = "app.play.window.item.top";
+	width = "width";
+	itemSplitWidth = "item.split";
+	itemIndexWidth = "item.index";
+	itemMusicNameWidth = "item.name";
+	itemMusicSingerWidth = "item.singer";
+	itemMusicDurationWidth = "item.duration";
+	itemWidgetBeforeWidth = "item.before";
+	itemWidgetAfterWidth = "item.after";
 	return true;
-}
-
-const QString & PlayerListTopWidgetJsonKey::getItemWidth( ) const {
-	return itemWidth;
 }
 
 const QString & PlayerListTopWidgetJsonKey::getItemSplitWidth( ) const {
@@ -50,4 +46,8 @@ const QString & PlayerListTopWidgetJsonKey::getItemWidgetAfterWidth( ) const {
 
 const QString & PlayerListTopWidgetJsonKey::getObjectName( ) const {
 	return objectName;
+}
+
+const QString & PlayerListTopWidgetJsonKey::getWidth( ) const {
+	return width;
 }

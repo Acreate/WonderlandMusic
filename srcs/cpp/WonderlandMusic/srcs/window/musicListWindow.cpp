@@ -33,11 +33,15 @@ bool MusicListWindow::deleteResource( ) {
 }
 
 bool MusicListWindow::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	musicItemSizeInfoDockWidget->getJsonData( get_json_object );
+	musicContreScrollArea->getJsonData( get_json_object );
+	return true;
 }
 
 bool MusicListWindow::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	musicItemSizeInfoDockWidget->setJsonData( set_json_object );
+	musicContreScrollArea->setJsonData( set_json_object );
+	return true;
 }
 
 bool MusicListWindow::init( ) {

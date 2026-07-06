@@ -47,6 +47,18 @@ bool MainStackedWidget::initAfter( ) {
 	return true;
 }
 
+bool MainStackedWidget::getJsonData( QJsonObject &get_json_object ) const {
+	playerWindow->getJsonData( get_json_object );
+	settingWidget->getJsonData( get_json_object );
+	return true;
+}
+
+bool MainStackedWidget::setJsonData( const QJsonObject &set_json_object ) {
+	playerWindow->setJsonData( set_json_object );
+	settingWidget->setJsonData( set_json_object );
+	return true;
+}
+
 PlayerWindow * MainStackedWidget::getPlayerWindow( ) const {
 	return playerWindow;
 }

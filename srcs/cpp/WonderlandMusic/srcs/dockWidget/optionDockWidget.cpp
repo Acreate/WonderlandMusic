@@ -29,6 +29,14 @@ bool OptionDockWidget::deleteResource( ) {
 	return false;
 }
 
+bool OptionDockWidget::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+
+bool OptionDockWidget::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}
+
 bool OptionDockWidget::init( ) {
 	setAllowedAreas( Qt::LeftDockWidgetArea );
 	setContentsMargins( 0, 0, 0, 0 );

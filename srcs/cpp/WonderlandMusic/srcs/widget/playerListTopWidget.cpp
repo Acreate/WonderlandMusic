@@ -27,17 +27,16 @@ PlayerListTopWidget::PlayerListTopWidget( QWidget *parent ) : QWidget( parent ),
 }
 
 PlayerListTopWidget::~PlayerListTopWidget( ) {
+	deleteResource( );
 }
 
 bool PlayerListTopWidget::getJsonData( QJsonObject &get_json_object ) const {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
-	int width = contentsRect( ).width( );
 	auto listTopWidgetJsonKey = jsonFileKey->getPlayerListTopWidget( );
 
 	QJsonObject jsonObject;
 
-	jsonObject.insert( listTopWidgetJsonKey->getItemWidth( ), width );
 	jsonObject.insert( listTopWidgetJsonKey->getItemSplitWidth( ), splitWidth );
 	jsonObject.insert( listTopWidgetJsonKey->getItemMusicNameWidth( ), musicNameWidth );
 	jsonObject.insert( listTopWidgetJsonKey->getItemMusicSingerWidth( ), musicSingerWidth );
@@ -45,6 +44,8 @@ bool PlayerListTopWidget::getJsonData( QJsonObject &get_json_object ) const {
 	jsonObject.insert( listTopWidgetJsonKey->getItemWidgetBeforeWidth( ), widgetBeforeWidth );
 	jsonObject.insert( listTopWidgetJsonKey->getItemWidgetAfterWidth( ), widgetAfterWidth );
 	jsonObject.insert( listTopWidgetJsonKey->getItemIndexWidth( ), indexWidth );
+	jsonObject.insert( listTopWidgetJsonKey->getWidth( ), this->width( ) );
+
 	auto &objectName = listTopWidgetJsonKey->getObjectName( );
 	get_json_object.insert( objectName, jsonObject );
 	return true;
@@ -89,11 +90,11 @@ bool PlayerListTopWidget::setJsonData( const QJsonObject &set_json_object ) {
 	find = jsonObject.find( listTopWidgetJsonKey->getItemIndexWidth( ) );
 	if( find != end )
 		indexWidth = find.value( ).toInt( musicDurationWidth );
-	find = jsonObject.find( listTopWidgetJsonKey->getItemWidth( ) );
+	find = jsonObject.find( listTopWidgetJsonKey->getWidth( ) );
 	if( find != end ) {
-		QRect rect = contentsRect( );
-		int w = find.value( ).toInt( rect.width( ) );
-		setFixedSize( w, rect.height( ) );
+		int w = this->width( );
+		w = find.value( ).toInt( w );
+		setFixedSize( w, this->height( ) );
 	}
 	autoSetItemSize( );
 	return true;
@@ -190,16 +191,6 @@ void PlayerListTopWidget::emitChangedWidth( ) {
 }
 
 bool PlayerListTopWidget::init( ) {
-	cursorShape = Qt::ArrowCursor;
-	indexWidth = widgetBeforeWidth = widgetAfterWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
-	QSize minSize;
-	if( getMinSize( minSize ) == false )
-		return false;
-	setFixedSize( minSize );
-	if( averageItem( ) == false )
-		return false;
-	repaint( );
-	emitChangedWidth( );
 	return true;
 }
 
@@ -233,6 +224,28 @@ bool PlayerListTopWidget::averageItem( ) {// 获取字符串最小宽度
 	this->musicDurationWidth = part * durationWidth;
 	this->musicSingerWidth = part * singerWidth;
 	this->musicNameWidth = residue - this->musicDurationWidth - this->musicSingerWidth;
+	return true;
+}
+
+bool PlayerListTopWidget::deleteResource( ) {
+	return true;
+}
+
+bool PlayerListTopWidget::initBefore( ) {
+	deleteResource( );
+	cursorShape = Qt::ArrowCursor;
+	indexWidth = widgetBeforeWidth = widgetAfterWidth = splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
+	QSize minSize;
+	if( getMinSize( minSize ) == false )
+		return false;
+	setFixedSize( minSize );
+	if( averageItem( ) == false )
+		return false;
+	return true;
+}
+
+bool PlayerListTopWidget::initAfter( ) {
+	autoSetItemSize( );
 	return true;
 }
 

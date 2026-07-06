@@ -64,9 +64,9 @@ bool PlayerWindow::initBefore( ) {
 }
 
 bool PlayerWindow::initAfter( ) {
+	setCentralWidget( musicListWindow );
 	favoritemDockWidget->show( );
 	musicControlDocWidget->show( );
-	setCentralWidget( musicListWindow );
 	return true;
 }
 
@@ -75,9 +75,15 @@ void PlayerWindow::resizeEvent( QResizeEvent *event ) {
 }
 
 bool PlayerWindow::getJsonData( QJsonObject &get_json_object ) const {
+	musicListWindow->getJsonData( get_json_object );
+	favoritemDockWidget->getJsonData( get_json_object );
+	musicControlDocWidget->getJsonData( get_json_object );
 	return true;
 }
 
 bool PlayerWindow::setJsonData( const QJsonObject &set_json_object ) {
+	musicListWindow->setJsonData( set_json_object );
+	favoritemDockWidget->setJsonData( set_json_object );
+	musicControlDocWidget->setJsonData( set_json_object );
 	return true;
 }

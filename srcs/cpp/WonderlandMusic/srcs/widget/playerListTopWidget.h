@@ -3,9 +3,10 @@
 
 #include <QWidget>
 
+#include "../interface/iAppCore.h"
 #include "../interface/iAppJsonData.h"
 
-class PlayerListTopWidget : public QWidget, public IAppJsonData {
+class PlayerListTopWidget : public QWidget, public IAppJsonData, public IAppCore {
 	Q_OBJECT;
 
 protected:
@@ -58,11 +59,18 @@ public:
 
 	virtual void emitChangedWidth( );
 
-	virtual bool init( );
+	bool init( ) override;
 
 	virtual void suggestWidth( int suggest_width );
 
 	virtual bool averageItem( );
+
+protected:
+	bool deleteResource( ) override;
+
+public:
+	bool initBefore( ) override;
+	bool initAfter( ) override;
 
 protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;

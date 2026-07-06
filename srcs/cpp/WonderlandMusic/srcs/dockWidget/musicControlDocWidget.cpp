@@ -47,3 +47,11 @@ bool MusicControlDocWidget::initAfter( ) {
 	playerWindow->addDockWidget( Qt::DockWidgetArea::BottomDockWidgetArea, this );
 	return true;
 }
+
+bool MusicControlDocWidget::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+
+bool MusicControlDocWidget::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}

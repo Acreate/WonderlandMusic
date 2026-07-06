@@ -47,27 +47,11 @@ AppMenuManage * AppUserInterfaceManage::getAppMenuManage( ) const {
 bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
 	mainWindow->getJsonData( get_json_object );
 
-	auto playerWindow = mainWindow->getMainStackedWidget( )->getPlayerWindow( );
-
-	auto playerListTopWidget = playerWindow->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
-	playerListTopWidget->getJsonData( get_json_object );
-
-	auto favoriteWidget = playerWindow->getFavoritemDockWidget( );
-	favoriteWidget->setJsonData( get_json_object );
 	return true;
 }
 
 bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 	mainWindow->setJsonData( set_json_object );
-
-	auto playerWindow = mainWindow->getMainStackedWidget( )->getPlayerWindow( );
-
-	auto playerListTopWidget = playerWindow->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
-	playerListTopWidget->setJsonData( set_json_object );
-
-	auto favoriteWidget = playerWindow->getFavoritemDockWidget( );
-	favoriteWidget->setJsonData( set_json_object );
-
 	return true;
 }
 

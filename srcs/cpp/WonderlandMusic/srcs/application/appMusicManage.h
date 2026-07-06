@@ -2,8 +2,11 @@
 #define APPMUSICMANAGE_H_H_HEAD__FILE__
 #include "../interface/iAppCore.h"
 #include "../interface/iAppDiskJsonData.h"
-#include "../interface/iAppJsonData.h"
 
+class FavoriteWidget;
+class FavoriteItemWidget;
+class MusicContreWidget;
+class LabelWidget;
 class MusicItem;
 class UserMutex;
 class QMediaPlayer;
@@ -12,7 +15,8 @@ class AppMusicDecoder;
 class AppMusicManage : public QObject, public IAppCore, public IAppDiskJsonData {
 	Q_OBJECT;
 
-protected:
+private Q_SLOTS:
+	void deleteFavoriteItemWidget( QObject *delete_ptr );
 
 protected:
 	UserMutex *loadMutex = nullptr;
@@ -21,11 +25,21 @@ protected:
 	std::vector< QString > loadFileVector;
 	size_t loadCount;
 	std::vector< MusicItem * > musicItemvVector;
+	std::vector< std::pair< FavoriteItemWidget *, std::vector< MusicItem * > > > musicFavoriteMapVector;
+	MusicContreWidget *musicContreWidget = nullptr;
+	FavoriteWidget *favoriteWidget = nullptr;
 
 protected:
 	bool deleteResource( ) override;
 
+	virtual bool connectPlayerListWidgetMenuSignal( );
+	virtual bool connectFavoriteWidgetMenuSignal( );
 	virtual void loadFile( const QString &music_file );
+
+	virtual void loadMusciFromFileVector( const std::vector< QString > &music_file );
+
+	virtual void loadMusciFromDir( const std::vector< QString > &music_dir );
+	virtual bool appendFavorite( const QString &name );
 
 public:
 	bool readJsonData( ) override;
@@ -42,15 +56,11 @@ public:
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
+	virtual bool getFavoriteItemMusicVector( std::vector< MusicItem * > &result_vector, const FavoriteItemWidget *favorite_widget ) const;
+
 	~AppMusicManage( ) override;
 
 	virtual AppMusicDecoder * getAppMusicDecoder( ) const;
-
-	virtual void loadMusciFromFileVector( const std::vector< QString > &music_file );
-
-	virtual void loadMusciFromDir( const std::vector< QString > &music_dir );
-
-	virtual std::vector< MusicItem * > & getMusicItem( std::vector< MusicItem * > &result_vector ) const;
 
 	virtual bool removeSelectMusicItem( );
 	virtual bool deleteSelectMusicItem( );
@@ -63,6 +73,8 @@ public:
 	virtual bool selectMusicItemAggregateToPlayItemBefore( );
 	virtual bool selectMusicItemAggregateToPlayItemAfter( );
 	virtual bool selectFavorite( );
+Q_SIGNALS:
+	void signal_update_favorite_item( const FavoriteItemWidget *favorite_widget );
 };
 
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

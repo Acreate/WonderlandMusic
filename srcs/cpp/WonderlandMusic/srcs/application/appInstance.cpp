@@ -6,6 +6,8 @@
 #include "appUserInterfaceManage.h"
 #include "applicationManage.h"
 
+#include "../menu/systemTrayIconMenu.h"
+
 #include "../window/mainWindow.h"
 
 AppInstance *AppInstance::instance = nullptr;
@@ -65,20 +67,11 @@ AppInstance::~AppInstance( ) {
 }
 
 bool AppInstance::init( ) {
-	Before_Init_Resource_App_Core_Ptr( applicationManage );
-	Before_Init_Resource_App_Core_Ptr( appDateTimerManage );
-	Before_Init_Resource_App_Core_Ptr( appDataManage );
-	Before_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
-
 	Init_Resource_App_Core_Ptr( applicationManage );
 	Init_Resource_App_Core_Ptr( appDateTimerManage );
 	Init_Resource_App_Core_Ptr( appDataManage );
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 
-	After_Init_Resource_App_Core_Ptr( applicationManage );
-	After_Init_Resource_App_Core_Ptr( appDateTimerManage );
-	After_Init_Resource_App_Core_Ptr( appDataManage );
-	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 	return true;
 }
 
@@ -89,12 +82,26 @@ bool AppInstance::initBefore( ) {
 	appDateTimerManage = new AppDateTimerManage;
 	appDataManage = new AppDataManage;
 	appUserInterfaceManage = new AppUserInterfaceManage;
+	Before_Init_Resource_App_Core_Ptr( applicationManage );
+	Before_Init_Resource_App_Core_Ptr( appDateTimerManage );
+	Before_Init_Resource_App_Core_Ptr( appDataManage );
+	Before_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 	return true;
 }
 
 bool AppInstance::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( applicationManage );
+	After_Init_Resource_App_Core_Ptr( appDateTimerManage );
+	After_Init_Resource_App_Core_Ptr( appDataManage );
+	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 	appDataManage->readJsonData( );
 	appUserInterfaceManage->readJsonData( );
+	auto appMenuManage = appUserInterfaceManage->getAppMenuManage( );
+	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
+	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_quit_app, this, []( ) {
+		AppInstance::getAppInstance( )->getApplicationManage( )->quit( );
+	} );
+
 	return true;
 }
 

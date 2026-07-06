@@ -12,7 +12,8 @@ class AppMenuManage : public QObject, public IAppCore {
 protected:
 	SystemTrayIconMenu *systemTrayIconMenu = nullptr;
 	PlayerListWidgetMenu *playerListWidgetMenu = nullptr;
-	FavoriteWidgetMenu* favoriteWidgetMenu = nullptr;
+	FavoriteWidgetMenu *favoriteWidgetMenu = nullptr;
+
 public:
 	AppMenuManage( );
 
@@ -33,6 +34,12 @@ public:
 	virtual bool popPlayerListWidgetMenu( const QPoint &pos ) const;
 
 	virtual bool popFavoriteWidgetMenu( const QPoint &pos ) const;
+
+	virtual SystemTrayIconMenu * getSystemTrayIconMenu( ) const;
+
+	virtual PlayerListWidgetMenu * getPlayerListWidgetMenu( ) const;
+
+	virtual FavoriteWidgetMenu * getFavoriteWidgetMenu( ) const;
 };
 
 #endif // APPMENUMANAGE_H_H_HEAD__FILE__

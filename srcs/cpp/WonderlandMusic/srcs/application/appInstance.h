@@ -10,7 +10,9 @@ class AppDateTimerManage;
 class AppUserInterfaceManage;
 class AppDataManage;
 
-class AppInstance : public IAppCore {
+class AppInstance : public QObject, public IAppCore {
+	Q_OBJECT;
+
 private:
 	static AppInstance *instance;
 

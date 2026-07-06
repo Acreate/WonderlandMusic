@@ -9,6 +9,8 @@
 #include "appMenuManage.h"
 #include "applicationManage.h"
 
+#include "../menu/systemTrayIconMenu.h"
+
 #include "../systemTrayIcon/systemTrayIcon.h"
 
 #include "../tools/pathTools.h"
@@ -64,20 +66,11 @@ bool AppUserInterfaceManage::writeJsonData( ) {
 }
 
 bool AppUserInterfaceManage::init( ) {
-	Before_Init_Resource_App_Core_Ptr( appDrawManage );
-	Before_Init_Resource_App_Core_Ptr( mainWindow );
-	Before_Init_Resource_App_Core_Ptr( systemTrayIcon );
-	Before_Init_Resource_App_Core_Ptr( appMenuManage );
-
 	Init_Resource_App_Core_Ptr( appDrawManage );
 	Init_Resource_App_Core_Ptr( mainWindow );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
 	Init_Resource_App_Core_Ptr( appMenuManage );
 
-	After_Init_Resource_App_Core_Ptr( appDrawManage );
-	After_Init_Resource_App_Core_Ptr( mainWindow );
-	After_Init_Resource_App_Core_Ptr( systemTrayIcon );
-	After_Init_Resource_App_Core_Ptr( appMenuManage );
 	return true;
 }
 
@@ -87,13 +80,30 @@ bool AppUserInterfaceManage::initBefore( ) {
 	mainWindow = new MainWindow;
 	systemTrayIcon = new SystemTrayIcon;
 	appMenuManage = new AppMenuManage;
+	Before_Init_Resource_App_Core_Ptr( appDrawManage );
+	Before_Init_Resource_App_Core_Ptr( mainWindow );
+	Before_Init_Resource_App_Core_Ptr( systemTrayIcon );
+	Before_Init_Resource_App_Core_Ptr( appMenuManage );
 	return true;
 }
 
 bool AppUserInterfaceManage::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( appDrawManage );
+	After_Init_Resource_App_Core_Ptr( mainWindow );
+	After_Init_Resource_App_Core_Ptr( systemTrayIcon );
+	After_Init_Resource_App_Core_Ptr( appMenuManage );
 	if( showMainWindow( ) == false )
 		return false;
 	systemTrayIcon->show( );
+
+	auto instance = AppInstance::getAppInstance( );
+	auto appMenuManage = instance->getAppUserInterfaceManage( )->getAppMenuManage( );
+	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
+
+	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_show_main_window, this, [this]( ) {
+		showMainWindow( );
+	} );
+
 	return true;
 }
 

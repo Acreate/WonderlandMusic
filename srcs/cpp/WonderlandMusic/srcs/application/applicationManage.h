@@ -26,6 +26,8 @@ public:
 	~ApplicationManage( ) override;
 
 	bool notify( QObject *, QEvent * ) override;
+Q_SIGNALS:
+	void signal_app_quit( );
 };
 
 #endif // APPLICATIONMANAGE_H_H_HEAD__FILE__

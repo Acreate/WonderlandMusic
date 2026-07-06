@@ -36,31 +36,20 @@ bool MusicContreWidget::showFavorteMusicContreList( const QString &music_favorte
 }
 
 void MusicContreWidget::setItemVector( const std::vector< MusicItem * > &load_music_items ) {
-	size_t count = load_music_items.size( );
-	auto data = load_music_items.data( );
 	size_t index;
+	MusicInfoItemWidget **saveInfoData;
 	musicInfoMutex->lock( );
-	size_t oldSize = musicInfoVector.size( );
-	size_t newsize = count + oldSize;
-	musicInfoVector.resize( newsize );
-	auto saveInfoData = musicInfoVector.data( );
-	auto offsetPtr = saveInfoData + oldSize;
-	size_t findIndex;
-
-	for( index = 0; index < count; index += 1 ) {
-		auto musicItem = data[ index ];
-		auto absfile = musicItem->getAbsFilePath( );
-		for( findIndex = 0; findIndex < oldSize; findIndex += 1 )
-			if( saveInfoData[ findIndex ]->isFile( absfile ) )
-				break;
-		if( findIndex < oldSize )
-			continue;
-		auto musicInfoItemWidget = new MusicInfoItemWidget( *musicItem );
-		offsetPtr[ index ] = musicInfoItemWidget;
-		oldSize += 1;
+	size_t count;
+	count = load_music_items.size( );
+	musicInfoVector.resize( count );
+	if( count ) {
+		saveInfoData = musicInfoVector.data( );
+		auto data = load_music_items.data( );
+		for( index = 0; index < count; index += 1 )
+			saveInfoData[ index ] = data[ index ]->getMusicInfoItemWidget( );
 	}
-	if( oldSize != newsize )
-		musicInfoVector.resize( oldSize );
+	activeLeftItemWidget = nullptr;
+	selectLeftItemWidget = nullptr;
 	musicInfoMutex->unlock( );
 	updateItemWidget( );
 }

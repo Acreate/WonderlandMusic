@@ -51,6 +51,11 @@ bool SystemTrayIcon::initBefore( ) {
 	if( QSystemTrayIcon::isSystemTrayAvailable( ) == false )
 		return false;
 	deleteResource( );
+
+	return true;
+}
+
+bool SystemTrayIcon::initAfter( ) {
 	auto applicationInstance = AppInstance::getAppInstance( );
 	auto appDataManage = applicationInstance->getAppDataManage( );
 	auto systemTrayIconTranslate = appDataManage->getTranslate( )->getSystemTrayIcon( );
@@ -74,10 +79,7 @@ bool SystemTrayIcon::initBefore( ) {
 	}
 
 	setToolTip( systemTrayIconTranslate->getAppName( ) );
-	return true;
-}
 
-bool SystemTrayIcon::initAfter( ) {
 	connect( this, &QSystemTrayIcon::activated, this, &SystemTrayIcon::activated_slot );
 	return true;
 }

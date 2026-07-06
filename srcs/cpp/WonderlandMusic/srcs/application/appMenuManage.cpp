@@ -30,25 +30,24 @@ bool AppMenuManage::initBefore( ) {
 	systemTrayIconMenu = new SystemTrayIconMenu;
 	playerListWidgetMenu = new PlayerListWidgetMenu;
 	favoriteWidgetMenu = new FavoriteWidgetMenu;
+	Before_Init_Resource_App_Core_Ptr( systemTrayIconMenu );
+	Before_Init_Resource_App_Core_Ptr( playerListWidgetMenu );
+	Before_Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	return true;
 }
 
 bool AppMenuManage::init( ) {
-	Before_Init_Resource_App_Core_Ptr( systemTrayIconMenu );
-	Before_Init_Resource_App_Core_Ptr( playerListWidgetMenu );
-	Before_Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
-
 	Init_Resource_App_Core_Ptr( systemTrayIconMenu );
 	Init_Resource_App_Core_Ptr( playerListWidgetMenu );
 	Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
 
-	After_Init_Resource_App_Core_Ptr( systemTrayIconMenu );
-	After_Init_Resource_App_Core_Ptr( playerListWidgetMenu );
-	After_Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	return true;
 }
 
 bool AppMenuManage::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( systemTrayIconMenu );
+	After_Init_Resource_App_Core_Ptr( playerListWidgetMenu );
+	After_Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	return true;
 }
 
@@ -74,4 +73,16 @@ bool AppMenuManage::popFavoriteWidgetMenu( const QPoint &pos ) const {
 		return false;
 	favoriteWidgetMenu->exec( resutPos );
 	return true;
+}
+
+SystemTrayIconMenu * AppMenuManage::getSystemTrayIconMenu( ) const {
+	return systemTrayIconMenu;
+}
+
+PlayerListWidgetMenu * AppMenuManage::getPlayerListWidgetMenu( ) const {
+	return playerListWidgetMenu;
+}
+
+FavoriteWidgetMenu * AppMenuManage::getFavoriteWidgetMenu( ) const {
+	return favoriteWidgetMenu;
 }

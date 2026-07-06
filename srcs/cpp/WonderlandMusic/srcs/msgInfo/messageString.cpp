@@ -2,6 +2,8 @@
 
 #include <source_location>
 
+#include "../tools/sourceLocationTools.h"
+
 const QString & MessageString::getJion( ) const {
 	return jion;
 }
@@ -17,11 +19,19 @@ MessageString::MessageString( ) {
 }
 
 MessageString::MessageString( const std::source_location &source_location ) {
-	messageList << QString( "%1 : %2 : [%3]" ).arg( source_location.file_name( ) ).arg( source_location.function_name( ) ).arg( source_location.line( ) );
+	QString sourceFile;
+	QString sourceFun;
+	QString sourceLine;
+	SourceLocationTools::formatSourceFilePath( sourceFile, sourceFun, sourceLine, source_location );
+	messageList << QString( "%1 : %2 : [%3]" ).arg( sourceFile ).arg( sourceFun ).arg( sourceLine );
 }
 
 MessageString & MessageString::operator<<( const std::source_location &source_location ) {
-	messageList << QString( "%1 : %2 : [%3]" ).arg( source_location.file_name( ) ).arg( source_location.function_name( ) ).arg( source_location.line( ) );
+	QString sourceFile;
+	QString sourceFun;
+	QString sourceLine;
+	SourceLocationTools::formatSourceFilePath( sourceFile, sourceFun, sourceLine, source_location );
+	messageList << QString( "%1 : %2 : [%3]" ).arg( sourceFile ).arg( sourceFun ).arg( sourceLine );
 	return *this;
 }
 

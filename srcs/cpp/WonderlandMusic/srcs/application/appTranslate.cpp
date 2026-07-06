@@ -6,6 +6,7 @@
 #include "appInstance.h"
 
 #include "translate/aboutWidgetTranslate.h"
+#include "translate/appMusicManageTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
 #include "translate/favoriteWidgetMenuTranslate.h"
 #include "translate/favoriteWidgetTranslate.h"
@@ -58,6 +59,7 @@ bool AppTranslate::initBefore( ) {
 	favoriteWidget = new FavoriteWidgetTranslate;
 	optionDockWidget = new OptionDockWidgetTranslate;
 	favoriteWidgetMenu = new FavoriteWidgetMenuTranslate;
+	appMusicManage = new AppMusicManageTranslate;
 	return true;
 }
 
@@ -84,6 +86,7 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( favoriteWidget );
 	Delete_Resource_App_Core_Ptr( optionDockWidget );
 	Delete_Resource_App_Core_Ptr( favoriteWidgetMenu );
+	Delete_Resource_App_Core_Ptr( appMusicManage );
 	return true;
 }
 
@@ -110,6 +113,7 @@ bool AppTranslate::init( ) {
 	Init_Resource_App_Core_Ptr( favoriteWidget );
 	Init_Resource_App_Core_Ptr( optionDockWidget );
 	Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
+	Init_Resource_App_Core_Ptr( appMusicManage );
 
 	return true;
 }
@@ -184,4 +188,8 @@ OptionDockWidgetTranslate * AppTranslate::getOptionDockWidget( ) const {
 
 FavoriteWidgetMenuTranslate * AppTranslate::getFavoriteWidgetMenu( ) const {
 	return favoriteWidgetMenu;
+}
+
+AppMusicManageTranslate * AppTranslate::getAppMusicManage( ) const {
+	return appMusicManage;
 }

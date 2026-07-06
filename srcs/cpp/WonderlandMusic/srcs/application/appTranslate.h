@@ -22,6 +22,7 @@ class PlayerToolsWidgetTranslate;
 class SettingWidgetTranslate;
 class UserMutexTranslate;
 class ISelectDirWidgetTranslate;
+class AppMusicManageTranslate;
 
 class AppTranslate : public IAppCore {
 protected:
@@ -43,6 +44,7 @@ protected:
 	FavoriteWidgetTranslate *favoriteWidget = nullptr;
 	OptionDockWidgetTranslate *optionDockWidget = nullptr;
 	FavoriteWidgetMenuTranslate *favoriteWidgetMenu = nullptr;
+	AppMusicManageTranslate *appMusicManage = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -93,6 +95,8 @@ public:
 	virtual OptionDockWidgetTranslate * getOptionDockWidget( ) const;
 
 	virtual FavoriteWidgetMenuTranslate * getFavoriteWidgetMenu( ) const;
+
+	virtual AppMusicManageTranslate * getAppMusicManage( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

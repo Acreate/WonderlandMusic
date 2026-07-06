@@ -5,7 +5,7 @@
 bool UserMutexTranslate::init( ) {
 	nodeSetUnlockError = QObject::tr( "未解锁" );
 	trylockError = QObject::tr( "锁异常" );
-	lastTrylock = QObject::tr( "最后一次尝试解锁" );
+	lastTrylock = QObject::tr( "最后一次尝试锁" );
 	lastUnlock = QObject::tr( "最后一次解锁" );
 	lastLock = QObject::tr( "最后一次锁" );
 	return true;

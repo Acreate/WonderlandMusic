@@ -2,6 +2,7 @@
 
 #include <QMediaMetaData>
 #include <QMediaPlayer>
+#include <windows.h>
 
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
@@ -9,6 +10,8 @@
 #include "../application/translate/musicInfoItemTranslate.h"
 
 #include "../dateTimeFormat/dateTimeFormat.h"
+
+#include "../itemWidget/musicInfoItemWidget.h"
 
 #include "../tools/pathTools.h"
 
@@ -44,6 +47,10 @@ qint64 MusicItem::getDuration( ) const {
 
 const QString & MusicItem::getFormatStringDuration( ) const {
 	return musicInfo.formatStringDuration;
+}
+
+MusicInfoItemWidget * MusicItem::getMusicInfoItemWidget( ) const {
+	return musicInfoItemWidget;
 }
 
 MusicItem::Info::~Info( ) {
@@ -115,12 +122,25 @@ const QString & MusicItem::Info::getFormatStringDuration( ) const {
 }
 
 MusicItem::~MusicItem( ) {
+	disconnect( );
+	delete musicInfoItemWidget;
+	musicInfoItemWidget = nullptr;
 }
 
 MusicItem::MusicItem( const QMediaPlayer &media_player ) : musicInfo( media_player ) {
+	musicInfoItemWidget = new MusicInfoItemWidget( *this );
+	connect( musicInfoItemWidget, &QObject::destroyed, this, [this] ( QObject *delete_obj_ptr ) {
+		if( musicInfoItemWidget )
+			musicInfoItemWidget = new MusicInfoItemWidget( *this );
+	} );
 }
 
 MusicItem::MusicItem( const QJsonObject &music_json_object ) : musicInfo( music_json_object ) {
+	musicInfoItemWidget = new MusicInfoItemWidget( *this );
+	connect( musicInfoItemWidget, &QObject::destroyed, this, [this] ( QObject *delete_obj_ptr ) {
+		if( musicInfoItemWidget )
+			musicInfoItemWidget = new MusicInfoItemWidget( *this );
+	} );
 }
 
 bool MusicItem::getJsonData( QJsonObject &get_json_object ) const {
@@ -130,10 +150,3 @@ bool MusicItem::getJsonData( QJsonObject &get_json_object ) const {
 bool MusicItem::setJsonData( const QJsonObject &set_json_object ) {
 	return musicInfo.setJsonData( set_json_object );
 }
-
-//
-//MusicItem::MusicItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration ) : musicName( music_name ), musicSinger( music_singer ), duration( duration ) {
-//	musicFilePath = PathTools::getAutoShortenPathName( music_file_path );
-//	absFilePath = QFileInfo( music_file_path ).absoluteFilePath( );
-//	equFilePath = absFilePath == musicFilePath;
-//}

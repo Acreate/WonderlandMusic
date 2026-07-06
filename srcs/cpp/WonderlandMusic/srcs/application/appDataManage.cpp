@@ -5,27 +5,24 @@
 
 #include "appDataJsonKey.h"
 #include "appInstance.h"
+#include "appMenuManage.h"
 #include "appMusicManage.h"
 #include "appTranslate.h"
 #include "appUserInterfaceManage.h"
 #include "applicationManage.h"
+
+#include "../menu/favoriteWidgetMenu.h"
+#include "../menu/playerListWidgetMenu.h"
+#include "../menu/systemTrayIconMenu.h"
 
 #include "../tools/pathTools.h"
 
 #include "jsonKey/appDataManageJsonKey.h"
 
 bool AppDataManage::init( ) {
-	Before_Init_Resource_App_Core_Ptr( translate );
-	Before_Init_Resource_App_Core_Ptr( appDataJsonKey );
-	Before_Init_Resource_App_Core_Ptr( appMusicManage );
-
 	Init_Resource_App_Core_Ptr( translate );
 	Init_Resource_App_Core_Ptr( appDataJsonKey );
 	Init_Resource_App_Core_Ptr( appMusicManage );
-
-	After_Init_Resource_App_Core_Ptr( translate );
-	After_Init_Resource_App_Core_Ptr( appDataJsonKey );
-	After_Init_Resource_App_Core_Ptr( appMusicManage );
 
 	return true;
 }
@@ -44,11 +41,20 @@ bool AppDataManage::initBefore( ) {
 	appDataJsonKey = new AppDataJsonKey;
 	appMusicManage = new AppMusicManage;
 
+	Before_Init_Resource_App_Core_Ptr( translate );
+	Before_Init_Resource_App_Core_Ptr( appDataJsonKey );
+	Before_Init_Resource_App_Core_Ptr( appMusicManage );
+
 	return true;
 }
 
 bool AppDataManage::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( translate );
+	After_Init_Resource_App_Core_Ptr( appDataJsonKey );
+	After_Init_Resource_App_Core_Ptr( appMusicManage );
+
 	readJsonData( );
+
 	return true;
 }
 
@@ -106,6 +112,7 @@ bool AppDataManage::readJsonData( ) {
 	// 把 json 数据加载到 AppDataManage
 	if( setJsonData( appJsonObject ) == false )
 		return false;
+
 	// 把 json 数据加载到 AppMusicManage
 	appMusicManage->readJsonData( );
 

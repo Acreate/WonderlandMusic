@@ -4,15 +4,52 @@
 
 #include "appDataManage.h"
 #include "appInstance.h"
+#include "appMenuManage.h"
 #include "appMusicDecoder.h"
+#include "appUserInterfaceManage.h"
+#include "applicationManage.h"
+
+#include "../dockWidget/favoritemDockWidget.h"
 
 #include "../item/musicItem.h"
 
+#include "../itemWidget/favoriteItemWidget.h"
+
+#include "../menu/favoriteWidgetMenu.h"
+#include "../menu/playerListWidgetMenu.h"
+
 #include "../mutex/userMutex.h"
+
+#include "../scrollArea/favoriteSrollArea.h"
+#include "../scrollArea/musicContreScrollArea.h"
+
+#include "../stackedWidget/mainStackedWidget.h"
 
 #include "../tools/pathTools.h"
 
+#include "../widget/favoriteWidget.h"
+
+#include "../window/mainWindow.h"
+#include "../window/musicListWindow.h"
+#include "../window/playerWindow.h"
+
+#include "translate/appMusicManageTranslate.h"
+
+void AppMusicManage::deleteFavoriteItemWidget( QObject *delete_ptr ) {
+	loadMutex->lock( );
+	size_t count = musicFavoriteMapVector.size( );
+	auto data = musicFavoriteMapVector.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ].first == delete_ptr ) {
+			musicFavoriteMapVector.erase( musicFavoriteMapVector.begin( ) + index );
+			break;
+		}
+	loadMutex->unlock( );
+}
+
 bool AppMusicManage::deleteResource( ) {
+	disconnect( );
 	if( loadMutex ) {
 		loadMutex->lock( );
 		size_t index;
@@ -28,15 +65,81 @@ bool AppMusicManage::deleteResource( ) {
 			auto data = musicItemvVector.data( );
 			for( index = 0; index < count; index += 1 )
 				delete data[ index ];
+			musicItemvVector.clear( );
+		}
+		count = musicFavoriteMapVector.size( );
+		if( count ) {
+			auto data = musicFavoriteMapVector.data( );
+			for( index = 0; index < count; index += 1 ) {
+				data[ index ].first->disconnect( this );
+				delete data[ index ].first;
+			}
+			musicFavoriteMapVector.clear( );
 		}
 		Delete_Resource_App_Core_Ptr( appMusicDecoder );
-		disconnect( );
 		loadMediaVector.clear( );
 		loadFileVector.clear( );
 		loadCount = 0;
 		loadMutex->unlock( );
 		Delete_Resource_App_Core_Ptr( loadMutex );
 	}
+	return true;
+}
+
+bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
+	auto instance = AppInstance::getAppInstance( );
+	auto appMenuManage = instance->getAppUserInterfaceManage( )->getAppMenuManage( );
+	auto playerListWidgetMenu = appMenuManage->getPlayerListWidgetMenu( );
+
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_open_file_dialog, this, []( ) {
+		// todo : 打开多选文件对话框
+	} );
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_open_dir_dialog, this, []( ) {
+		// todo : 打开多选目录对话框
+	} );
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_select_move_top, this, []( ) {
+		// todo : 选择移动到顶部
+	} );
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_select_move_bottom, this, []( ) {
+		// todo : 选择移动到底部
+	} );
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_select_aggregate_select_first, this, []( ) {
+		// todo : 在首选项聚合选择
+	} );
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_select_aggregate_select_last, this, []( ) {
+		// todo : 在末选项聚合选择
+	} );
+
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_select_aggregate_play_before, this, []( ) {
+		// todo : 在播放项前聚合选择
+	} );
+
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_select_aggregate_play_after, this, []( ) {
+		// todo : 在播放项后聚合选择
+	} );
+
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_select_music_remove_list, this, []( ) {
+		// todo : 在列表当中删除选择
+	} );
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_select_music_delete_file_list, this, []( ) {
+		// todo : 在磁盘中删除选择
+	} );
+	return true;
+}
+
+bool AppMusicManage::connectFavoriteWidgetMenuSignal( ) {
+	auto instance = AppInstance::getAppInstance( );
+	auto appMenuManage = instance->getAppUserInterfaceManage( )->getAppMenuManage( );
+	auto favoriteWidgetMenu = appMenuManage->getFavoriteWidgetMenu( );
+	connect( favoriteWidgetMenu, &FavoriteWidgetMenu::signal_add, this, []( ) {
+		// todo : 添加收藏夹
+	} );
+	connect( favoriteWidgetMenu, &FavoriteWidgetMenu::signal_del, this, []( ) {
+		// todo : 删除收藏夹
+	} );
+	connect( favoriteWidgetMenu, &FavoriteWidgetMenu::signal_change, this, []( ) {
+		// todo : 更改收藏夹
+	} );
 	return true;
 }
 
@@ -95,11 +198,11 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 }
 
 bool AppMusicManage::readJsonData( ) {
-	return false;
+	return true;
 }
 
 bool AppMusicManage::writeJsonData( ) {
-	return false;
+	return true;
 }
 
 void AppMusicManage::loadMusciFromFileVector( const std::vector< QString > &music_file ) {
@@ -222,11 +325,15 @@ void AppMusicManage::loadMusciFromDir( const std::vector< QString > &music_dir )
 	loadMusciFromFileVector( fileVector );
 }
 
-std::vector< MusicItem * > & AppMusicManage::getMusicItem( std::vector< MusicItem * > &result_vector ) const {
+bool AppMusicManage::appendFavorite( const QString &name ) {
+	auto itemWidget = new FavoriteItemWidget( );
+	connect( itemWidget, &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItemWidget );
+	itemWidget->setFavoriteName( name );
 	loadMutex->lock( );
-	result_vector = musicItemvVector;
+	musicFavoriteMapVector.emplace_back( itemWidget, std::vector< MusicItem * >( ) );
 	loadMutex->unlock( );
-	return result_vector;
+	favoriteWidget->updateAppMusicManageInof( musicFavoriteMapVector );
+	return true;
 }
 
 bool AppMusicManage::removeSelectMusicItem( ) {
@@ -274,20 +381,37 @@ bool AppMusicManage::selectFavorite( ) {
 }
 
 bool AppMusicManage::init( ) {
-	deleteResource( );
-	loadMutex = new UserMutex;
-	appMusicDecoder = new AppMusicDecoder;
-	Before_Init_Resource_App_Core_Ptr( appMusicDecoder );
 	Init_Resource_App_Core_Ptr( appMusicDecoder );
-	After_Init_Resource_App_Core_Ptr( appMusicDecoder );
 	return true;
 }
 
 bool AppMusicManage::initBefore( ) {
+	deleteResource( );
+	loadMutex = new UserMutex;
+	appMusicDecoder = new AppMusicDecoder;
+	Before_Init_Resource_App_Core_Ptr( appMusicDecoder );
 	return true;
 }
 
 bool AppMusicManage::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( appMusicDecoder );
+	if( connectPlayerListWidgetMenuSignal( ) == false )
+		return false;
+	if( connectFavoriteWidgetMenuSignal( ) == false )
+		return false;
+
+	auto appInstance = AppInstance::getAppInstance( );
+	PlayerWindow *playerWindow = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( );
+	musicContreWidget = playerWindow->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
+	favoriteWidget = playerWindow->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
+
+	auto translate = appInstance->getAppDataManage( )->getTranslate( )->getAppMusicManage( );
+	if( appendFavorite( translate->getRootFavoriteName( ) ) == false )
+		return false;
+	auto applicationManage = appInstance->getApplicationManage( );
+	connect( applicationManage, &ApplicationManage::signal_app_quit, this, [this]( ) {
+		deleteResource( );
+	} );
 	return true;
 }
 
@@ -296,6 +420,21 @@ bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {
 }
 
 bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}
+
+bool AppMusicManage::getFavoriteItemMusicVector( std::vector< MusicItem * > &result_vector, const FavoriteItemWidget *favorite_widget ) const {
+	size_t count = musicFavoriteMapVector.size( );
+	if( count == 0 )
+		return false;
+
+	auto data = musicFavoriteMapVector.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ].first == favorite_widget ) {
+			result_vector = data[ index ].second;
+			return true;
+		}
 	return false;
 }
 

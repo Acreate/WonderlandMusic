@@ -40,6 +40,7 @@ bool ApplicationManage::notify( QObject *object, QEvent *event ) {
 			case QEvent::Close :
 				appDataManage->writeJsonData( );
 				appUserInterfaceManage->writeJsonData( );
+				emit signal_app_quit( );
 				break;
 		}
 	}

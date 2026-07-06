@@ -2,9 +2,11 @@
 #define MUSICITEM_H_H_HEAD__FILE__
 #include "../interface/iAppJsonData.h"
 
+class MusicInfoItemWidget;
 class QMediaPlayer;
 
-class MusicItem : public IAppJsonData {
+class MusicItem : public QObject, public IAppJsonData {
+	Q_OBJECT;
 	friend class AppMusicManage;
 
 protected:
@@ -48,6 +50,7 @@ protected:
 		virtual const QString & getFormatStringDuration( ) const;
 	};
 
+	MusicInfoItemWidget *musicInfoItemWidget;
 	Info musicInfo;
 	/* 只能被友元创建与释放 */
 protected:
@@ -79,6 +82,8 @@ public:
 	virtual qint64 getDuration( ) const;
 
 	virtual const QString & getFormatStringDuration( ) const;
+
+	virtual MusicInfoItemWidget * getMusicInfoItemWidget( ) const;
 };
 
 #endif // MUSICITEM_H_H_HEAD__FILE__

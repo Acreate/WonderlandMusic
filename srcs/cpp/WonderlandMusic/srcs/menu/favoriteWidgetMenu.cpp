@@ -29,7 +29,7 @@ bool FavoriteWidgetMenu::deleteResource( ) {
 	return true;
 }
 
-LabelWidget * FavoriteWidgetMenu::getLabelWidget( ) const {
+FavoriteItemWidget * FavoriteWidgetMenu::getLabelWidget( ) const {
 	return labelWidget;
 }
 
@@ -54,7 +54,7 @@ bool FavoriteWidgetMenu::initAfter( ) {
 
 	auto interfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
 	auto favoriteWidget = interfaceManage->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
-	connect( favoriteWidget, &FavoriteWidget::signal_favorite_Item_pop_menu, this, [this] ( LabelWidget *label_widget ) {
+	connect( favoriteWidget, &FavoriteWidget::signal_favorite_Item_pop_menu, this, [this] ( FavoriteItemWidget *label_widget ) {
 		labelWidget = label_widget;
 		QPoint suggestPos;
 		bool result = WidgetTools::getMenuSuggestionShowMenuPos( suggestPos, QCursor::pos( ), this );

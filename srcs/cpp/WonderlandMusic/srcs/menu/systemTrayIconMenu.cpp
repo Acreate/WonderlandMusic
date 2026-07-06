@@ -29,13 +29,9 @@ bool SystemTrayIconMenu::initBefore( ) {
 }
 
 bool SystemTrayIconMenu::initAfter( ) {
-	connect( showMainWindowItem, &QAction::triggered, this, []( ) {
-		AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->showMainWindow( );
-	} );
+	connect( showMainWindowItem, &QAction::triggered, this, &SystemTrayIconMenu::signal_show_main_window );
 
-	connect( quitApp, &QAction::triggered, this, []( ) {
-		AppInstance::getAppInstance( )->getApplicationManage( )->quit( );
-	} );
+	connect( quitApp, &QAction::triggered, this, &SystemTrayIconMenu::signal_quit_app );
 	return true;
 }
 

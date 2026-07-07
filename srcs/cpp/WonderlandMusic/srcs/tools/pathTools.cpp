@@ -154,7 +154,7 @@ bool PathTools::readJsonObject( QJsonObject &result_json_object, const QString &
 	return true;
 }
 
-bool PathTools::writeJsonObject( const QJsonObject &result_json_object, const QString &json_file_path ) {
+bool PathTools::writeJsonObject( const QJsonObject &write_json_object, const QString &json_file_path ) {
 	QFileInfo info( json_file_path );
 	if( info.exists( ) == false ) {
 		QDir dir = info.dir( );
@@ -166,7 +166,7 @@ bool PathTools::writeJsonObject( const QJsonObject &result_json_object, const QS
 	QFile file( json_file_path );
 	if( file.open( QIODeviceBase::WriteOnly ) == false )
 		return false;
-	QJsonDocument writeJsonDocument( result_json_object );
+	QJsonDocument writeJsonDocument( write_json_object );
 	auto byteArray = writeJsonDocument.toJson( );
 	file.write( byteArray );
 	return true;

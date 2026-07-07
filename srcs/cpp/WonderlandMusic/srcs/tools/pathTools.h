@@ -26,7 +26,7 @@ namespace PathTools {
 
 	bool readJsonObject( QJsonObject &result_json_object, const QString &json_file_path );
 
-	bool writeJsonObject( const QJsonObject &result_json_object, const QString &json_file_path );
+	bool writeJsonObject( const QJsonObject &write_json_object, const QString &json_file_path );
 
 	bool wirteWavFile( const QString &wirte_file_path, const std::vector< char > &wirte_pcm_vector_data );
 

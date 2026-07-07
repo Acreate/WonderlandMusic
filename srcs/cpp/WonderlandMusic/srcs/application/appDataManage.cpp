@@ -1,8 +1,6 @@
 ﻿#include "appDataManage.h"
-
 #include <QJsonObject>
 #include <qtranslator.h>
-
 #include "appDataJsonKey.h"
 #include "appInstance.h"
 #include "appMenuManage.h"
@@ -10,13 +8,10 @@
 #include "appTranslate.h"
 #include "appUserInterfaceManage.h"
 #include "applicationManage.h"
-
 #include "../menu/favoriteWidgetMenu.h"
 #include "../menu/playerListWidgetMenu.h"
 #include "../menu/systemTrayIconMenu.h"
-
 #include "../tools/pathTools.h"
-
 #include "jsonKey/appDataManageJsonKey.h"
 
 bool AppDataManage::init( ) {
@@ -52,8 +47,6 @@ bool AppDataManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( translate );
 	After_Init_Resource_App_Core_Ptr( appDataJsonKey );
 	After_Init_Resource_App_Core_Ptr( appMusicManage );
-
-	readJsonData( );
 
 	return true;
 }

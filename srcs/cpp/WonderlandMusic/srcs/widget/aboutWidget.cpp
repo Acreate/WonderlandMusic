@@ -1,18 +1,15 @@
 ﻿#include "aboutWidget.h"
-
 #include <QDir>
 #include <QLabel>
 #include <qstyle.h>
 #include <QTextEdit>
 #include <QHBoxLayout>
 #include <QLibraryInfo>
-
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/applicationManage.h"
 #include "../application/jsonKey/aboutWidgetJsonKey.h"
-
 #include "../msgInfo/messageErrorOut.h"
 
 AboutWidget::AboutWidget( QWidget *parent ) : QWidget( parent ) {
@@ -37,7 +34,7 @@ bool AboutWidget::init( ) {
 	qtIco->setPixmap( icon );
 
 	auto jsonFileKey = applicationInstance->getAppDataManage( )->getAppDataJsonKey( );
-	auto aboutWidgetJsonFileKey = jsonFileKey->getAboutWidgetJsonFileKey( );
+	auto aboutWidgetJsonFileKey = jsonFileKey->getAboutWidget( );
 	auto logoIconPath = aboutWidgetJsonFileKey->getQtLogoIconPath( );
 	QFileInfo fileInfo( logoIconPath );
 	QImage qImage;

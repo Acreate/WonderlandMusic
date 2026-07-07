@@ -232,12 +232,19 @@ bool AppMusicManage::readJsonData( ) {
 	QJsonObject readJson;
 	if( PathTools::readJsonObject( readJson, jsonKey->getFilePath( ) ) == false )
 		return false;
-	setJsonData( readJson );
+	if( setJsonData( readJson ) == false )
+		return false;
 
 	return true;
 }
 
 bool AppMusicManage::writeJsonData( ) {
+	QJsonObject getJson;
+	if( getJsonData( getJson ) == false )
+		return false;
+	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppMusicManage( );
+	if( PathTools::writeJsonObject( getJson, jsonKey->getFilePath( ) ) == false )
+		return false;
 	return true;
 }
 
@@ -465,7 +472,27 @@ bool AppMusicManage::initAfter( ) {
 }
 
 bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	QString jsonObejctJsonKey;
+	QString selectDirPathJsonKey;
+	QString selectFilePathJsonKey;
+
+	if( AppJsonKeyTools::getAppMusicManage( [&] ( const AppMusicManageJsonKey &json_key ) {
+		jsonObejctJsonKey = json_key.getJsonObejct( );
+		selectDirPathJsonKey = json_key.getSelectDirPath( );
+		selectFilePathJsonKey = json_key.getSelectFilePath( );
+	} ) == false )
+		return false;
+	QJsonObject object;
+	if( FavoriteItem::getJsonDataVector( object, favoriteItemVector ) == false ) {
+		return false;
+	}
+	if( MusicItem::getJsonDataVector( object, musicItemVector ) == false ) {
+		return false;
+	}
+	object.insert( selectFilePathJsonKey, this->openMultipleFilePath );
+	object.insert( selectDirPathJsonKey, this->openMultipleDirPath );
+	get_json_object.insert( jsonObejctJsonKey, object );
+	return true;
 }
 
 bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
@@ -487,7 +514,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 	if( find == end )
 		return false;
 	auto jsonObject = find.value( ).toObject( );
-	
+
 	loadMutex->lock( );
 	end = jsonObject.end( );
 	// 获取文件选择路径

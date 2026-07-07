@@ -96,7 +96,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< int8_t >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< int16_t > &conver ) {
@@ -117,7 +117,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< int16_t >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< int32_t > &conver ) {
@@ -138,7 +138,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< int32_t >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< int64_t > &conver ) {
@@ -159,7 +159,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< int64_t >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< uint8_t > &conver ) {
@@ -180,7 +180,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< uint8_t >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< uint16_t > &conver ) {
@@ -201,7 +201,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< uint16_t >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< uint32_t > &conver ) {
@@ -222,7 +222,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< uint32_t >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< uint64_t > &conver ) {
@@ -243,7 +243,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< uint64_t >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< QString > &conver ) {
@@ -264,7 +264,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< string >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< std::string > &conver ) {
@@ -285,7 +285,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< string >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector< std::wstring > &conver ) {
@@ -306,7 +306,7 @@ bool JsonObjectTools::toJson( QJsonObject &result_json_object, const std::vector
 	vectorJson.insert( "count", countJson );
 	vectorJson.insert( "data", dataJson );
 	result_json_object.insert( "std::vector< string >", vectorJson );
-	return false;
+	return true;
 }
 
 bool JsonObjectTools::toObject( int8_t &result_conver, const QJsonObject &json_object ) {

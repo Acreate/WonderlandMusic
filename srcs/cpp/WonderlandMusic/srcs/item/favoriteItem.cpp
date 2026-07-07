@@ -61,15 +61,21 @@ bool FavoriteItem::getJsonDataVector( QJsonObject &get_json_object, const std::v
 	size_t count = conver_vector.size( );
 	if( count == 0 )
 		return false;
+
 	QString arrayObject;
 	QString arrayDataKey;
 	QString arrayCountKey;
 	QString itemNameKey;
+	QString musicArrayKey;
+	QString musicCountKey;
 	if( AppJsonKeyTools::getFavoriteItem( [&] ( const FavoriteItemJsonKey &json_key ) {
 		arrayObject = json_key.getFavoriteItemArrayObject( );
 		arrayDataKey = json_key.getFavoriteItemArray( );
 		arrayCountKey = json_key.getFavoriteItemCount( );
 		itemNameKey = json_key.getFavoriteName( );
+
+		musicArrayKey = json_key.getMusicArray( );
+		musicCountKey = json_key.getMusicCount( );
 	} ) == false )
 		return false;
 
@@ -115,11 +121,16 @@ bool FavoriteItem::setJsonDataVector( std::vector< FavoriteItem * > &result_vect
 	QString arrayDataKey;
 	QString arrayCountKey;
 	QString itemNameKey;
+	QString musicArrayKey;
+	QString musicCountKey;
 	if( AppJsonKeyTools::getFavoriteItem( [&] ( const FavoriteItemJsonKey &json_key ) {
 		arrayObject = json_key.getFavoriteItemArrayObject( );
 		arrayDataKey = json_key.getFavoriteItemArray( );
 		arrayCountKey = json_key.getFavoriteItemCount( );
 		itemNameKey = json_key.getFavoriteName( );
+
+		musicArrayKey = json_key.getMusicArray( );
+		musicCountKey = json_key.getMusicCount( );
 	} ) == false )
 		return false;
 

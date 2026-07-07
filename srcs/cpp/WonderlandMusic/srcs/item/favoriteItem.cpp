@@ -9,12 +9,12 @@
 FavoriteItem::ItemInfo::ItemInfo( const QString &name, const std::vector< MusicItem * > &music_itemv_vector, FavoriteItemWidget *favorite_item_widget ) : name( name ), musicItemvVector( music_itemv_vector ),
 	favoriteItemWidget( favorite_item_widget ) {
 	deleteErrorObj = new QObject;
+	connect( favoriteItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 }
 
 FavoriteItem::ItemInfo::~ItemInfo( ) {
 	this->musicItemvVector.clear( );
 	delete this->favoriteItemWidget;
-	delete this->deleteErrorObj;
 }
 
 FavoriteItem::FavoriteItem( const QString &name, const std::vector< MusicItem * > &music_itemv_vector ) {

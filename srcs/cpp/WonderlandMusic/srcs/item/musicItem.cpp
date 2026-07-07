@@ -56,7 +56,6 @@ MusicInfoItemWidget * MusicItem::getMusicInfoItemWidget( ) const {
 }
 
 MusicItem::Info::~Info( ) {
-	delete deleteErrorObj;
 	delete musicInfoItemWidget;
 }
 
@@ -71,12 +70,14 @@ bool MusicItem::Info::setJsonData( const QJsonObject &set_json_object ) {
 MusicItem::Info::Info( const QJsonObject &music_json_object, MusicItem *music_item ) {
 	musicInfoItemWidget = new MusicInfoItemWidget( *music_item );
 	deleteErrorObj = new QObject;
+	connect( musicInfoItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 	setJsonData( music_json_object );
 }
 
 MusicItem::Info::Info( const QMediaPlayer &media_player, MusicItem *music_item ) {
 	musicInfoItemWidget = new MusicInfoItemWidget( *music_item );
 	deleteErrorObj = new QObject;
+	connect( musicInfoItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 	auto localFile = media_player.source( ).toLocalFile( );
 	auto &&mediaMetaData = media_player.metaData( );
 	musicSinger = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );

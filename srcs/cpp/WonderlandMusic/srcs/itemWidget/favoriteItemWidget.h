@@ -18,6 +18,7 @@ public:
 	FavoriteItemWidget( QWidget *parent );
 	virtual QString getFavoriteName( ) const;
 	virtual void setFavoriteName( const QString &name );
+	virtual void updateWidth( );
 
 protected:
 	void mouseDoubleClickEvent( QMouseEvent *event ) override;

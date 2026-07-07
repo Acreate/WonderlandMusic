@@ -3,6 +3,7 @@
 #include "../interface/iAppCore.h"
 #include "../interface/iAppDiskJsonData.h"
 
+class FavoriteItem;
 class FavoriteWidget;
 class FavoriteItemWidget;
 class MusicContreWidget;
@@ -25,7 +26,7 @@ protected:
 	std::vector< QString > loadFileVector;
 	size_t loadCount;
 	std::vector< MusicItem * > musicItemvVector;
-	std::vector< std::pair< FavoriteItemWidget *, std::vector< MusicItem * > > > musicFavoriteMapVector;
+	std::vector< FavoriteItem * > favoriteItemVector;
 	MusicContreWidget *musicContreWidget = nullptr;
 	FavoriteWidget *favoriteWidget = nullptr;
 	QString openMultipleFilePath;
@@ -58,8 +59,6 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;
-
-	virtual bool getFavoriteItemMusicVector( std::vector< MusicItem * > &result_vector, const FavoriteItemWidget *favorite_widget ) const;
 
 	~AppMusicManage( ) override;
 

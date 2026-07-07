@@ -22,6 +22,7 @@ protected:
 	private:
 		// 允许上层类访问
 		friend class MusicItem;
+		MusicItem *musicItem;
 		bool equFilePath;
 		QString absFilePath;
 		QString musicFilePath;
@@ -30,10 +31,12 @@ protected:
 		qint64 duration;
 		QString formatStringDuration;
 
+		MusicInfoItemWidget *musicInfoItemWidget;
+		QObject* deleteErrorObj;
 	protected:
-		Info( const QJsonObject &music_json_object );
+		Info( const QJsonObject &music_json_object, MusicItem *music_item );
 
-		Info( const QMediaPlayer &media_player );
+		Info( const QMediaPlayer &media_player, MusicItem *music_item );
 
 		virtual bool isEquFilePath( ) const;
 
@@ -48,10 +51,13 @@ protected:
 		virtual qint64 getDuration( ) const;
 
 		virtual const QString & getFormatStringDuration( ) const;
+
+		virtual MusicInfoItemWidget * getMusicInfoItemWidget( ) const;
+
+		virtual MusicItem * getMusicItem( ) const;
 	};
 
-	MusicInfoItemWidget *musicInfoItemWidget;
-	Info musicInfo;
+	Info *musicInfo;
 	/* 只能被友元创建与释放 */
 protected:
 	~MusicItem( ) override;

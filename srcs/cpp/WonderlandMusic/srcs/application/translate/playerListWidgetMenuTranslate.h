@@ -1,9 +1,9 @@
-﻿#ifndef PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
-#define PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
+﻿#ifndef PLAYERLISTWIDGETMENUTRANSLATE_H_H_HEAD__FILE__
+#define PLAYERLISTWIDGETMENUTRANSLATE_H_H_HEAD__FILE__
 
 #include <interface/iTranslate.h>
 
-class PlayerListWidgetMenuTranlate : public ITranslate {
+class PlayerListWidgetMenuTranslate : public ITranslate {
 	QString filePathLoadMenu;
 	QString loadFileAction;
 	QString loadDirAction;
@@ -55,4 +55,4 @@ public:
 	virtual const QString & getAggregateToSelectLast( ) const;
 };
 
-#endif // PLAYERLISTWIDGETMENUTRANLATE_H_H_HEAD__FILE__
+#endif // PLAYERLISTWIDGETMENUTRANSLATE_H_H_HEAD__FILE__

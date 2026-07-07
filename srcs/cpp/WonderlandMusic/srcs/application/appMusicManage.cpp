@@ -13,6 +13,7 @@
 
 #include "../dockWidget/favoritemDockWidget.h"
 
+#include "../item/favoriteItem.h"
 #include "../item/musicItem.h"
 
 #include "../itemWidget/favoriteItemWidget.h"
@@ -43,12 +44,12 @@
 
 void AppMusicManage::deleteFavoriteItemWidget( QObject *delete_ptr ) {
 	loadMutex->lock( );
-	size_t count = musicFavoriteMapVector.size( );
-	auto data = musicFavoriteMapVector.data( );
+	size_t count = favoriteItemVector.size( );
+	auto data = favoriteItemVector.data( );
 	size_t index = 0;
 	for( ; index < count; index += 1 )
-		if( data[ index ].first == delete_ptr ) {
-			musicFavoriteMapVector.erase( musicFavoriteMapVector.begin( ) + index );
+		if( data[ index ] == delete_ptr ) {
+			favoriteItemVector.erase( favoriteItemVector.begin( ) + index );
 			break;
 		}
 	loadMutex->unlock( );
@@ -75,14 +76,14 @@ bool AppMusicManage::deleteResource( ) {
 			}
 			musicItemvVector.clear( );
 		}
-		count = musicFavoriteMapVector.size( );
+		count = favoriteItemVector.size( );
 		if( count ) {
-			auto data = musicFavoriteMapVector.data( );
+			auto data = favoriteItemVector.data( );
 			for( index = 0; index < count; index += 1 ) {
-				data[ index ].first->disconnect( this );
-				delete data[ index ].first;
+				data[ index ]->disconnect( this );
+				delete data[ index ];
 			}
-			musicFavoriteMapVector.clear( );
+			favoriteItemVector.clear( );
 		}
 		Delete_Resource_App_Core_Ptr( appMusicDecoder );
 		loadMediaVector.clear( );
@@ -360,13 +361,12 @@ void AppMusicManage::loadMusciFromDir( const std::vector< QString > &music_dir )
 }
 
 bool AppMusicManage::appendFavorite( const QString &name ) {
-	auto itemWidget = new FavoriteItemWidget( );
+	auto itemWidget = new FavoriteItem( name );
 	connect( itemWidget, &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItemWidget );
-	itemWidget->setFavoriteName( name );
 	loadMutex->lock( );
-	musicFavoriteMapVector.emplace_back( itemWidget, std::vector< MusicItem * >( ) );
+	favoriteItemVector.emplace_back( itemWidget );
 	loadMutex->unlock( );
-	favoriteWidget->updateAppMusicManageInof( musicFavoriteMapVector );
+	favoriteWidget->updateAppMusicManageInof( favoriteItemVector );
 	return true;
 }
 
@@ -374,14 +374,14 @@ bool AppMusicManage::appendFirstFavorite( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto translate = appInstance->getAppDataManage( )->getTranslate( )->getAppMusicManage( );
 	auto name = translate->getRootFavoriteName( );
-	auto itemWidget = new FavoriteItemWidget( );
+	auto itemWidget = new FavoriteItem( name );
 	itemWidget->setEnabled( false );
 	connect( itemWidget, &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItemWidget );
 	itemWidget->setFavoriteName( name );
 	loadMutex->lock( );
-	musicFavoriteMapVector.emplace_back( itemWidget, std::vector< MusicItem * >( ) );
+	favoriteItemVector.emplace_back( itemWidget );
 	loadMutex->unlock( );
-	favoriteWidget->updateAppMusicManageInof( musicFavoriteMapVector );
+	favoriteWidget->updateAppMusicManageInof( favoriteItemVector );
 	return true;
 }
 
@@ -501,48 +501,9 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		for( index = 0; index < count; index += 1 )
 			data[ index ] = copydata[ index ];
 	}
-	// 获取音频对象
-	std::vector< std::pair< FavoriteItemWidget *, std::vector< MusicItem * > > > resultFavoriteItemWidget;
-	if( FavoriteItemWidget::setJsonDataVector( resultFavoriteItemWidget, set_json_object ) ) {
-		auto count = musicFavoriteMapVector.size( );
-		size_t index;
-		std::pair< FavoriteItemWidget *, std::vector< MusicItem * > > *data;
-		if( count ) {
-			data = musicFavoriteMapVector.data( );
-			for( index = 0; index < count; index += 1 ) {
-				data[ index ].first->disconnect( this );
-				delete data[ index ].first;
-			}
-		}
-		count = resultFavoriteItemWidget.size( );
-		musicFavoriteMapVector.reserve( count );
-		data = musicFavoriteMapVector.data( );
-		auto copydata = resultFavoriteItemWidget.data( );
-		for( index = 0; index < count; index += 1 )
-			data[ index ] = copydata[ index ];
-	}
+	// todo : 回复收藏夹
 
 	return true;
-}
-
-bool AppMusicManage::getFavoriteItemMusicVector( std::vector< MusicItem * > &result_vector, const FavoriteItemWidget *favorite_widget ) const {
-	loadMutex->lock( );
-	size_t count = musicFavoriteMapVector.size( );
-	if( count == 0 ) {
-		loadMutex->unlock( );
-		return false;
-	}
-
-	auto data = musicFavoriteMapVector.data( );
-	size_t index = 0;
-	for( ; index < count; index += 1 )
-		if( data[ index ].first == favorite_widget ) {
-			result_vector = data[ index ].second;
-			loadMutex->unlock( );
-			return true;
-		}
-	loadMutex->unlock( );
-	return false;
 }
 
 AppMusicManage::~AppMusicManage( ) {

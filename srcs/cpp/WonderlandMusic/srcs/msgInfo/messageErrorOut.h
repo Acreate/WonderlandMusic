@@ -2,12 +2,9 @@
 #define MESSAGEERROROUT_H_H_HEAD__FILE__
 #include <qstring.h>
 #include <source_location>
-
 #include "messageString.h"
-
 /// @brief 临时创建一个 MessageErrorOut 对象
 #define Message_Error_Out MessageErrorOut()
-
 class MessageTranslate;
 class QDateTime;
 class DateTimeFormat;
@@ -36,7 +33,6 @@ protected:
 	QString jointString;
 	QString startString;
 	QString endString;
-
 	bool isWriteFile;
 
 public:
@@ -44,43 +40,22 @@ public:
 
 public:
 	virtual ~MessageErrorOut( );
-
 	MessageErrorOut( bool is_write_file = true, const QString &log_home_path = "log", const std::source_location &source_location = std::source_location::current( ) );
-
 	MessageErrorOut( const QString &log_home_path, const std::source_location &source_location );
-
 	MessageErrorOut( const std::source_location &source_location );
-
 	MessageErrorOut & operator<<( const MessageString &msg );
-
 	virtual const QString & getJoinString( ) const;
-
 	virtual void setJoinString( const QString &join );
-
 	virtual const QString & getStartString( ) const;
-
 	virtual void setStartString( const QString &start_string );
-
 	virtual const QString & getEndString( ) const;
-
 	virtual void setEndString( const QString &end_string );
-
 	virtual const std::vector< MessageString > & getOutMsgVector( ) const;
-
 	virtual QString toQString( ) const;
-
 	virtual QString toQString( const DateTimeFormat &date_time_format ) const;
-
 	virtual QString writeLog( const QString &wirte_log_path, const DateTimeFormat &date_time_format ) const;
-
 	virtual QString writeLog( const DateTimeFormat &date_time_format ) const;
-
 	virtual QString writeLog( const QString &wirte_log_path ) const;
-
 	virtual QString writeLog( ) const;
-
-private:
-	virtual QString & formatMessageOut( const DateTimeFormat &date_time_format, QString &result_msg, const std::source_location &source_location, const QString &msg ) const;
 };
-
 #endif // MESSAGEERROROUT_H_H_HEAD__FILE__

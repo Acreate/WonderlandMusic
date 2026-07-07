@@ -8,6 +8,7 @@
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/appMusicManageTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
+#include "translate/deleteExceptionTranslate.h"
 #include "translate/favoriteWidgetMenuTranslate.h"
 #include "translate/favoriteWidgetTranslate.h"
 #include "translate/jsonTranslate.h"
@@ -15,7 +16,7 @@
 #include "translate/messageTranslate.h"
 #include "translate/musicInfoItemTranslate.h"
 #include "translate/optionDockWidgetTranslate.h"
-#include "translate/playerListWidgetMenuTranlate.h"
+#include "translate/playerListWidgetMenuTranslate.h"
 #include "translate/playerListWidgetTranslate.h"
 #include "translate/playerToolsWidgetTranslate.h"
 #include "translate/playerTopWidgetTranslate.h"
@@ -43,7 +44,7 @@ bool AppTranslate::initBefore( ) {
 
 	settingWidget = new SettingWidgetTranslate;
 	playerToolsWidget = new PlayerToolsWidgetTranslate;
-	playerListWidgetMenu = new PlayerListWidgetMenuTranlate;
+	playerListWidgetMenu = new PlayerListWidgetMenuTranslate;
 	playerTopWidget = new PlayerTopWidgetTranslate;
 	playerWindow = new PlayerWindowTranslate;
 	json = new JsonTranslate;
@@ -60,6 +61,7 @@ bool AppTranslate::initBefore( ) {
 	optionDockWidget = new OptionDockWidgetTranslate;
 	favoriteWidgetMenu = new FavoriteWidgetMenuTranslate;
 	appMusicManage = new AppMusicManageTranslate;
+	deleteException = new DeleteExceptionTranslate;
 	return true;
 }
 
@@ -87,6 +89,7 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( optionDockWidget );
 	Delete_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	Delete_Resource_App_Core_Ptr( appMusicManage );
+	Delete_Resource_App_Core_Ptr( deleteException );
 	return true;
 }
 
@@ -114,8 +117,13 @@ bool AppTranslate::init( ) {
 	Init_Resource_App_Core_Ptr( optionDockWidget );
 	Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	Init_Resource_App_Core_Ptr( appMusicManage );
+	Init_Resource_App_Core_Ptr( deleteException );
 
 	return true;
+}
+
+PlayerListWidgetMenuTranslate * AppTranslate::getPlayerListWidgetMenu( ) const {
+	return playerListWidgetMenu;
 }
 
 SettingWidgetTranslate * AppTranslate::getSettingWidget( ) const {
@@ -124,10 +132,6 @@ SettingWidgetTranslate * AppTranslate::getSettingWidget( ) const {
 
 PlayerToolsWidgetTranslate * AppTranslate::getPlayerToolsWidget( ) const {
 	return playerToolsWidget;
-}
-
-PlayerListWidgetMenuTranlate * AppTranslate::getPlayerListWidgetMenu( ) const {
-	return playerListWidgetMenu;
 }
 
 PlayerTopWidgetTranslate * AppTranslate::getPlayerTopWidget( ) const {
@@ -192,4 +196,8 @@ FavoriteWidgetMenuTranslate * AppTranslate::getFavoriteWidgetMenu( ) const {
 
 AppMusicManageTranslate * AppTranslate::getAppMusicManage( ) const {
 	return appMusicManage;
+}
+
+DeleteExceptionTranslate * AppTranslate::getDeleteException( ) const {
+	return deleteException;
 }

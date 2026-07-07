@@ -1,6 +1,6 @@
-﻿#include "playerListWidgetMenuTranlate.h"
+﻿#include "playerListWidgetMenuTranslate.h"
 
-bool PlayerListWidgetMenuTranlate::init( ) {
+bool PlayerListWidgetMenuTranslate::init( ) {
 	filePathLoadMenu = QObject::tr( "加载菜单" );
 	loadFileAction = QObject::tr( "添加文件到列表" );
 	loadDirAction = QObject::tr( "添加目录到列表" );
@@ -21,58 +21,58 @@ bool PlayerListWidgetMenuTranlate::init( ) {
 	return true;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getFilePathLoadMenu( ) const {
+const QString & PlayerListWidgetMenuTranslate::getFilePathLoadMenu( ) const {
 	return filePathLoadMenu;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getLoadFileAction( ) const {
+const QString & PlayerListWidgetMenuTranslate::getLoadFileAction( ) const {
 	return loadFileAction;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getLoadDirAction( ) const {
+const QString & PlayerListWidgetMenuTranslate::getLoadDirAction( ) const {
 	return loadDirAction;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getPlayerMusicMenu( ) const {
+const QString & PlayerListWidgetMenuTranslate::getPlayerMusicMenu( ) const {
 	return playerMusicMenu;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getAggregateToPlayerAfter( ) const {
+const QString & PlayerListWidgetMenuTranslate::getAggregateToPlayerAfter( ) const {
 	return aggregateToPlayerAfter;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getAggregateToPlayerBefore( ) const {
+const QString & PlayerListWidgetMenuTranslate::getAggregateToPlayerBefore( ) const {
 	return aggregateToPlayerBefore;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getControlMenu( ) const {
+const QString & PlayerListWidgetMenuTranslate::getControlMenu( ) const {
 	return controlMenu;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getRemoveMusciItemAction( ) const {
+const QString & PlayerListWidgetMenuTranslate::getRemoveMusciItemAction( ) const {
 	return removeMusciItemAction;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getDeleteMusicFileAction( ) const {
+const QString & PlayerListWidgetMenuTranslate::getDeleteMusicFileAction( ) const {
 	return deleteMusicFileAction;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getRemoveMenu( ) const {
+const QString & PlayerListWidgetMenuTranslate::getRemoveMenu( ) const {
 	return removeMenu;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getMoveTopAction( ) const {
+const QString & PlayerListWidgetMenuTranslate::getMoveTopAction( ) const {
 	return moveTopAction;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getMoveBottomAction( ) const {
+const QString & PlayerListWidgetMenuTranslate::getMoveBottomAction( ) const {
 	return moveBottomAction;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getAggregateToSelectFirst( ) const {
+const QString & PlayerListWidgetMenuTranslate::getAggregateToSelectFirst( ) const {
 	return aggregateToSelectFirst;
 }
 
-const QString & PlayerListWidgetMenuTranlate::getAggregateToSelectLast( ) const {
+const QString & PlayerListWidgetMenuTranslate::getAggregateToSelectLast( ) const {
 	return aggregateToSelectLast;
 }

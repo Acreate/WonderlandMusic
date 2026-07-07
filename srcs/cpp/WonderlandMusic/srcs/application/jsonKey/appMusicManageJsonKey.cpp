@@ -10,7 +10,7 @@ bool AppMusicManageJsonKey::init( ) {
 	return true;
 }
 
-const QString & AppMusicManageJsonKey::getFilePath( ) const {
+QString AppMusicManageJsonKey::getFilePath( ) const {
 	auto appInstance = AppInstance::getAppInstance( );
 	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
 	return applicationDirPath + filePath;

@@ -1,78 +1,82 @@
 ﻿#include "musicItem.h"
-
 #include <QJsonObject>
 #include <QMediaMetaData>
 #include <QMediaPlayer>
 #include <windows.h>
-
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonKey/musicItemJsonKey.h"
+#include "../application/translate/deleteExceptionTranslate.h"
 #include "../application/translate/musicInfoItemTranslate.h"
-
 #include "../dateTimeFormat/dateTimeFormat.h"
-
 #include "../itemWidget/musicInfoItemWidget.h"
-
+#include "../msgInfo/deleteException.h"
+#include "../tools/appTranslateTools.h"
 #include "../tools/arrayTools.h"
 #include "../tools/pathTools.h"
 
 bool MusicItem::isMusicFile( const QString &music_file_path ) {
-	return QFileInfo( music_file_path ).absoluteFilePath( ) == musicInfo.absFilePath;
+	return QFileInfo( music_file_path ).absoluteFilePath( ) == musicInfo->absFilePath;
 }
 
 bool MusicItem::isMusicFile( const MusicItem &music_file_path ) {
 	if( this == &music_file_path || &( this->musicInfo ) == &( music_file_path.musicInfo ) )
 		return true;
-	return music_file_path.musicInfo.musicFilePath == this->musicInfo.musicFilePath;
+	return music_file_path.musicInfo->musicFilePath == this->musicInfo->musicFilePath;
 }
 
 const QString & MusicItem::getAbsFilePath( ) const {
-	return musicInfo.absFilePath;
+	return musicInfo->absFilePath;
 }
 
 const QString & MusicItem::getMusicFilePath( ) const {
-	return musicInfo.musicFilePath;
+	return musicInfo->musicFilePath;
 }
 
 const QString & MusicItem::getMusicName( ) const {
-	return musicInfo.musicName;
+	return musicInfo->musicName;
 }
 
 const QString & MusicItem::getMusicSinger( ) const {
-	return musicInfo.musicSinger;
+	return musicInfo->musicSinger;
 }
 
 qint64 MusicItem::getDuration( ) const {
-	return musicInfo.duration;
+	return musicInfo->duration;
 }
 
 const QString & MusicItem::getFormatStringDuration( ) const {
-	return musicInfo.formatStringDuration;
+	return musicInfo->formatStringDuration;
 }
 
 MusicInfoItemWidget * MusicItem::getMusicInfoItemWidget( ) const {
-	return musicInfoItemWidget;
+	return musicInfo->musicInfoItemWidget;
 }
 
 MusicItem::Info::~Info( ) {
+	delete deleteErrorObj;
+	delete musicInfoItemWidget;
 }
 
 bool MusicItem::Info::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	return musicInfoItemWidget->getJsonData( get_json_object );
 }
 
 bool MusicItem::Info::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	return musicInfoItemWidget->setJsonData( set_json_object );
 }
 
-MusicItem::Info::Info( const QJsonObject &music_json_object ) {
+MusicItem::Info::Info( const QJsonObject &music_json_object, MusicItem *music_item ) {
+	musicInfoItemWidget = new MusicInfoItemWidget( *music_item );
+	deleteErrorObj = new QObject;
 	setJsonData( music_json_object );
 }
 
-MusicItem::Info::Info( const QMediaPlayer &media_player ) {
+MusicItem::Info::Info( const QMediaPlayer &media_player, MusicItem *music_item ) {
+	musicInfoItemWidget = new MusicInfoItemWidget( *music_item );
+	deleteErrorObj = new QObject;
 	auto localFile = media_player.source( ).toLocalFile( );
 	auto &&mediaMetaData = media_player.metaData( );
 	musicSinger = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
@@ -125,25 +129,31 @@ const QString & MusicItem::Info::getFormatStringDuration( ) const {
 	return formatStringDuration;
 }
 
-MusicItem::~MusicItem( ) {
-	disconnect( );
-	delete musicInfoItemWidget;
-	musicInfoItemWidget = nullptr;
+MusicInfoItemWidget * MusicItem::Info::getMusicInfoItemWidget( ) const {
+	return musicInfoItemWidget;
 }
 
-MusicItem::MusicItem( const QMediaPlayer &media_player ) : musicInfo( media_player ) {
-	musicInfoItemWidget = new MusicInfoItemWidget( *this );
-	connect( musicInfoItemWidget, &QObject::destroyed, this, [this] ( QObject *delete_obj_ptr ) {
-		if( musicInfoItemWidget )
-			musicInfoItemWidget = new MusicInfoItemWidget( *this );
+MusicItem * MusicItem::Info::getMusicItem( ) const {
+	return musicItem;
+}
+
+MusicItem::~MusicItem( ) {
+	musicInfo->deleteErrorObj->disconnect( );
+	disconnect( );
+	delete musicInfo;
+}
+
+MusicItem::MusicItem( const QMediaPlayer &media_player ) {
+	musicInfo = new Info( media_player, this );
+	connect( musicInfo->deleteErrorObj, &QObject::destroyed, [this] ( QObject *delete_obj_ptr ) {
+		Delete_Ptr_Exception( musicInfo->deleteErrorObj, delete_obj_ptr );
 	} );
 }
 
-MusicItem::MusicItem( const QJsonObject &music_json_object ) : musicInfo( music_json_object ) {
-	musicInfoItemWidget = new MusicInfoItemWidget( *this );
-	connect( musicInfoItemWidget, &QObject::destroyed, this, [this] ( QObject *delete_obj_ptr ) {
-		if( musicInfoItemWidget )
-			musicInfoItemWidget = new MusicInfoItemWidget( *this );
+MusicItem::MusicItem( const QJsonObject &music_json_object ) {
+	musicInfo = new Info( music_json_object, this );
+	connect( musicInfo->deleteErrorObj, &QObject::destroyed, [this] ( QObject *delete_obj_ptr ) {
+		Delete_Ptr_Exception( musicInfo->deleteErrorObj, delete_obj_ptr );
 	} );
 }
 
@@ -212,9 +222,9 @@ bool MusicItem::setJsonDataVector( std::vector< MusicItem * > &result_vector, co
 }
 
 bool MusicItem::getJsonData( QJsonObject &get_json_object ) const {
-	return musicInfo.getJsonData( get_json_object );
+	return musicInfo->getJsonData( get_json_object );
 }
 
 bool MusicItem::setJsonData( const QJsonObject &set_json_object ) {
-	return musicInfo.setJsonData( set_json_object );
+	return musicInfo->setJsonData( set_json_object );
 }

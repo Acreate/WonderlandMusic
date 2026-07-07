@@ -10,7 +10,7 @@ class AppMusicManageJsonKey : public IJsonKey {
 public:
 	bool init( ) override;
 
-	virtual const QString & getFilePath( ) const;
+	virtual QString getFilePath( ) const;
 
 	virtual const QString & getSelectFilePath( ) const;
 

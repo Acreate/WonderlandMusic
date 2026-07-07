@@ -34,8 +34,8 @@ namespace ArrayTools {
 	}
 
 	template< typename Array_Unity_Type_ >
-	size_t sortNullptr( const Array_Unity_Type_ *array_ptr, const size_t &array_count ) {
-		Array_Unity_Type_ *buff = new Array_Unity_Type_ [ array_count ];
+	size_t sortNullptr( Array_Unity_Type_ **array_ptr, const size_t &array_count ) {
+		Array_Unity_Type_ **buff = new Array_Unity_Type_ *[ array_count ];
 		size_t count = 0;
 		size_t index;
 
@@ -52,6 +52,7 @@ namespace ArrayTools {
 		delete [] buff;
 		return count;
 	}
+
 };
 
 #endif // ARRAYTOOLS_H_H_HEAD__FILE__

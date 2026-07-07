@@ -5,7 +5,7 @@
 #include "../application/appMusicManage.h"
 #include "../application/appTranslate.h"
 #include "../application/appUserInterfaceManage.h"
-#include "../application/translate/playerListWidgetMenuTranlate.h"
+#include "../application/translate/playerListWidgetMenuTranslate.h"
 
 #include "../scrollArea/musicContreScrollArea.h"
 

@@ -8,6 +8,8 @@
 #include "../application/appInstance.h"
 #include "../application/jsonKey/favoriteWidgetJsonKey.h"
 
+#include "../item/favoriteItem.h"
+
 #include "../itemWidget/favoriteItemWidget.h"
 
 #include "../mutex/userMutex.h"
@@ -26,7 +28,7 @@ FavoriteWidget::~FavoriteWidget( ) {
 	deleteResource( );
 }
 
-void FavoriteWidget::updateAppMusicManageInof( const std::vector< std::pair< FavoriteItemWidget *, std::vector< MusicItem * > > > &vector ) {
+void FavoriteWidget::updateAppMusicManageInof( const std::vector< FavoriteItem * > &vector ) {
 	size_t count = vector.size( );
 	favoriteVector.resize( count );
 	if( count == 0 )
@@ -35,8 +37,8 @@ void FavoriteWidget::updateAppMusicManageInof( const std::vector< std::pair< Fav
 	auto favoriteData = favoriteVector.data( );
 	size_t index = 0;
 	for( ; index < count; index += 1 ) {
-		favoriteData[ index ] = vectorData[ index ].first;
-		favoriteData[ index ]->setParent( this );
+		favoriteData[ index ] = vectorData[ index ];
+		favoriteData[ index ]->getFavoriteItemWidget( )->setParent( this );
 	}
 	emit signal_update_item_over( );
 	updateLayout( );
@@ -104,18 +106,20 @@ void FavoriteWidget::updateLayout( ) {
 
 		size_t index = 0;
 
-		data[ index ]->adjustSize( );
-		data[ index ]->move( 0, maxHeight );
-		maxHeight += data[ index ]->height( );
-		compWidth = data[ index ]->width( ) + offsetX;
+		auto favoriteItemWidget = data[ index ]->getFavoriteItemWidget( );
+		favoriteItemWidget->adjustSize( );
+		favoriteItemWidget->move( 0, maxHeight );
+		maxHeight += favoriteItemWidget->height( );
+		compWidth = favoriteItemWidget->width( ) + offsetX;
 		if( compWidth > maxWidth )
 			maxWidth = compWidth;
 
 		for( index = 1; index < count; index += 1 ) {
-			data[ index ]->adjustSize( );
-			data[ index ]->move( offsetX, maxHeight );
-			maxHeight += data[ index ]->height( );
-			compWidth = data[ index ]->width( ) + offsetX;
+			favoriteItemWidget = data[ index ]->getFavoriteItemWidget( );
+			favoriteItemWidget->adjustSize( );
+			favoriteItemWidget->move( offsetX, maxHeight );
+			maxHeight += favoriteItemWidget->height( );
+			compWidth = favoriteItemWidget->width( ) + offsetX;
 			if( compWidth > maxWidth )
 				maxWidth = compWidth;
 		}
@@ -124,12 +128,12 @@ void FavoriteWidget::updateLayout( ) {
 	}
 }
 
-bool FavoriteWidget::resetFavoriteItem( const std::vector< FavoriteItemWidget * > &favorite_vector ) {
+bool FavoriteWidget::resetFavoriteItem( const std::vector< FavoriteItem * > &favorite_vector ) {
 	favoriteVector = favorite_vector;
-	return false;
+	return true;
 }
 
-FavoriteItemWidget * FavoriteWidget::getSelectItem( const QString &name ) const {
+FavoriteItem * FavoriteWidget::getSelectItem( const QString &name ) const {
 	size_t count = favoriteVector.size( );
 	if( count ) {
 		auto data = favoriteVector.data( );
@@ -141,13 +145,13 @@ FavoriteItemWidget * FavoriteWidget::getSelectItem( const QString &name ) const 
 	return nullptr;
 }
 
-FavoriteItemWidget * FavoriteWidget::getSelectItem( const QPoint &pos ) const {
+FavoriteItem * FavoriteWidget::getSelectItem( const QPoint &pos ) const {
 	size_t count = favoriteVector.size( );
 	if( count ) {
 		auto data = favoriteVector.data( );
 		size_t index = 0;
 		for( ; index < count; index += 1 )
-			if( data[ index ]->geometry( ).contains( pos ) )
+			if( data[ index ]->getFavoriteItemWidget( )->geometry( ).contains( pos ) )
 				return data[ index ];
 	}
 	return nullptr;

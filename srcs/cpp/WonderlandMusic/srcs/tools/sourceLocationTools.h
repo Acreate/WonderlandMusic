@@ -1,6 +1,6 @@
 ﻿#ifndef SOURCELOCATIONTOOLS_H_H_HEAD__FILE__
 #define SOURCELOCATIONTOOLS_H_H_HEAD__FILE__
-
+class DateTimeFormat;
 class QString;
 
 namespace std {
@@ -16,6 +16,17 @@ namespace SourceLocationTools {
 	/// @param location 被格式化的源文件信号对象
 	/// @param msg 格式化的消息
 	void formatString( QString &format_string, QString &source_file, QString &source_function, QString &source_line, const std::source_location &location, const QString &msg );
+	/// @brief 格式化输出对象
+	/// @param format_string 格式化信息输出
+	/// @param location 被格式化的源文件信号对象
+	/// @param msg 格式化的消息
+	void formatString( QString &format_string, const std::source_location &location, const QString &msg );
+	/// @brief 格式化输出对象
+	/// @param result_msg 格式化信息输出
+	/// @param date_time_format 日期格式对象
+	/// @param source_location 被格式化的源文件信号对象
+	/// @param msg 格式化的消息
+	void formatString( QString &result_msg, const DateTimeFormat &date_time_format, const std::source_location &source_location, const QString &msg );
 	/// @brief 格式化一个源文件信息对象
 	/// @param source_file 格式化源文件路径
 	/// @param source_function 格式化源文件函数
@@ -23,5 +34,4 @@ namespace SourceLocationTools {
 	/// @param location 被格式化的源文件信号对象
 	void formatSourceFilePath( QString &source_file, QString &source_function, QString &source_line, const std::source_location &location );
 };
-
 #endif // SOURCELOCATIONTOOLS_H_H_HEAD__FILE__

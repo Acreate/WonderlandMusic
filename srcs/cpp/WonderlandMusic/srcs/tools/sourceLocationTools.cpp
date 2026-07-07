@@ -1,16 +1,10 @@
 ﻿#include "sourceLocationTools.h"
-
 #include <QFileInfo>
 #include <QString>
 #include <source_location>
-
+#include "appTranslateTools.h"
 #include "../../auto_generate_files/macro/cmake_to_c_cpp_header_env.h"
-
-#include "../application/appDataManage.h"
-#include "../application/appInstance.h"
-#include "../application/appTranslate.h"
 #include "../application/translate/messageTranslate.h"
-
 #include "../dateTimeFormat/dateTimeFormat.h"
 
 void SourceLocationTools::formatString( QString &format_string, QString &source_file, QString &source_function, QString &source_line, const std::source_location &location, const QString &msg ) {
@@ -25,34 +19,22 @@ void SourceLocationTools::formatString( QString &format_string, QString &source_
 	DateTimeFormat dateTimeFormat;
 	dateTimeFormat.formatData( currentDataTimeToString ).append( dateTimeFormat.formatTime( ) );
 
-	MessageTranslate *messageTranslate = nullptr;
-	auto *applicationInstance = AppInstance::getAppInstance( );
-	if( applicationInstance ) {
-		auto appDataManage = applicationInstance->getAppDataManage( );
-		if( appDataManage ) {
-			auto translate = appDataManage->getTranslate( );
-			if( translate ) {
-				messageTranslate = translate->getMessage( );
-				source_file = messageTranslate->getSourceFile( );
-				source_function = messageTranslate->getSourceFunction( );
-				source_line = messageTranslate->getSourceLine( );
-			}
-		}
-	}
-	if( messageTranslate == nullptr ) {
-		messageTranslate = new MessageTranslate;
-		if( messageTranslate->init( ) ) {
-			source_file = messageTranslate->getSourceFile( );
-			source_function = messageTranslate->getSourceFunction( );
-			source_line = messageTranslate->getSourceLine( );
-		} else {
-			source_file = QObject::tr( "源文件" );
-			source_function = QObject::tr( "源函数" );
-			source_line = QObject::tr( "源行号" );
-		}
-		delete messageTranslate;
+	bool message = AppTranslateTools::getMessage( [&] ( MessageTranslate &message_translate ) {
+		source_file = message_translate.getSourceFile( );
+		source_function = message_translate.getSourceFunction( );
+		source_line = message_translate.getSourceLine( );
+	} );
+	if( message == false ) {
+		source_file = QObject::tr( "源文件" );
+		source_function = QObject::tr( "源函数" );
+		source_line = QObject::tr( "源行号" );
 	}
 	format_string.append( "\n-----\n :: \n : " ).append( source_file ).append( " = " ).append( msgCodeFileName ).append( "\n : " ).append( source_function ).append( " = " ).append( msgCodeFunctionName ).append( "\n : " ).append( source_line ).append( " = " ).append( QString::number( msgCodeLine ) ).append( "\n : " ).append( currentDataTimeToString ).append( " ->\n ::\n" ).append( msg ).append( "\n-----\n" );
+}
+
+void SourceLocationTools::formatString( QString &format_string, const std::source_location &location, const QString &msg ) {
+	QString source_file, source_function, source_line;
+	SourceLocationTools::formatString( format_string, source_file, source_function, source_line, location, msg );
 }
 
 void SourceLocationTools::formatSourceFilePath( QString &source_file, QString &source_function, QString &source_line, const std::source_location &location ) {
@@ -62,4 +44,34 @@ void SourceLocationTools::formatSourceFilePath( QString &source_file, QString &s
 	QFileInfo info( source_file );
 	auto absoluteFilePath = info.absoluteFilePath( );
 	source_file = absoluteFilePath.remove( Cmake_Source_Dir );
+}
+
+void SourceLocationTools::formatString( QString &result_msg, const DateTimeFormat &date_time_format, const std::source_location &source_location, const QString &msg ) {
+	uint_least32_t msgCodeLine = source_location.line( );
+	QString msgCodeFileName = source_location.file_name( );
+	QString msgCodeFunctionName = source_location.function_name( );
+	QFileInfo info( msgCodeFileName );
+
+	auto absoluteFilePath = info.absoluteFilePath( );
+	msgCodeFileName = absoluteFilePath.remove( Cmake_Source_Dir );
+
+	QString currentDataTimeToString;
+	DateTimeFormat dateTimeFormat;
+	dateTimeFormat.formatData( currentDataTimeToString ).append( dateTimeFormat.formatTime( ) );
+
+	QString sourceFile;
+	QString sourceFunction;
+	QString sourceLine;
+	bool message = AppTranslateTools::getMessage( [&sourceFile, &sourceFunction, &sourceLine] ( MessageTranslate &message_translate ) {
+		sourceFile = message_translate.getSourceFile( );
+		sourceFunction = message_translate.getSourceFunction( );
+		sourceLine = message_translate.getSourceLine( );
+	} );
+	if( message == false ) {
+		sourceFile = QObject::tr( "源文件" );
+		sourceFunction = QObject::tr( "源函数" );
+		sourceLine = QObject::tr( "源行号" );
+	}
+
+	result_msg.append( "\n-----\n :: \n : " ).append( sourceFile ).append( " = " ).append( msgCodeFileName ).append( "\n : " ).append( sourceFunction ).append( " = " ).append( msgCodeFunctionName ).append( "\n : " ).append( sourceLine ).append( " = " ).append( QString::number( msgCodeLine ) ).append( "\n : " ).append( currentDataTimeToString ).append( " ->\n ::\n" ).append( msg ).append( "\n-----\n" );
 }

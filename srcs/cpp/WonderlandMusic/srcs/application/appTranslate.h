@@ -3,10 +3,11 @@
 
 #include "../interface/iAppCore.h"
 
+class PlayerListWidgetMenuTranslate;
+class DeleteExceptionTranslate;
 class FavoriteWidgetMenuTranslate;
 class OptionDockWidgetTranslate;
 class FavoriteWidgetTranslate;
-class PlayerListWidgetMenuTranlate;
 class SystemTrayIconTranslate;
 class SystemTrayIconMenuTranslate;
 class MusicInfoItemTranslate;
@@ -28,7 +29,7 @@ class AppTranslate : public IAppCore {
 protected:
 	SettingWidgetTranslate *settingWidget = nullptr;
 	PlayerToolsWidgetTranslate *playerToolsWidget = nullptr;
-	PlayerListWidgetMenuTranlate *playerListWidgetMenu = nullptr;
+	PlayerListWidgetMenuTranslate *playerListWidgetMenu = nullptr;
 	PlayerTopWidgetTranslate *playerTopWidget = nullptr;
 	PlayerWindowTranslate *playerWindow = nullptr;
 	JsonTranslate *json = nullptr;
@@ -45,6 +46,7 @@ protected:
 	OptionDockWidgetTranslate *optionDockWidget = nullptr;
 	FavoriteWidgetMenuTranslate *favoriteWidgetMenu = nullptr;
 	AppMusicManageTranslate *appMusicManage = nullptr;
+	DeleteExceptionTranslate *deleteException = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -60,11 +62,11 @@ public:
 
 	bool init( ) override;
 
+	virtual PlayerListWidgetMenuTranslate * getPlayerListWidgetMenu( ) const;
+
 	virtual SettingWidgetTranslate * getSettingWidget( ) const;
 
 	virtual PlayerToolsWidgetTranslate * getPlayerToolsWidget( ) const;
-
-	virtual PlayerListWidgetMenuTranlate * getPlayerListWidgetMenu( ) const;
 
 	virtual PlayerTopWidgetTranslate * getPlayerTopWidget( ) const;
 
@@ -97,6 +99,8 @@ public:
 	virtual FavoriteWidgetMenuTranslate * getFavoriteWidgetMenu( ) const;
 
 	virtual AppMusicManageTranslate * getAppMusicManage( ) const;
+
+	virtual DeleteExceptionTranslate * getDeleteException( ) const;
 };
 
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

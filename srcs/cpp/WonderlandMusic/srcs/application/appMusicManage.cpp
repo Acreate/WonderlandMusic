@@ -71,7 +71,7 @@ bool AppMusicManage::deleteResource( ) {
 		if( count ) {
 			auto data = musicItemVector.data( );
 			for( index = 0; index < count; index += 1 ) {
-				data[ index ]->disconnect( this );
+				data[ index ]->disconnect( data[ index ], nullptr, this, nullptr );
 				delete data[ index ];
 			}
 			musicItemVector.clear( );
@@ -80,7 +80,7 @@ bool AppMusicManage::deleteResource( ) {
 		if( count ) {
 			auto data = favoriteItemVector.data( );
 			for( index = 0; index < count; index += 1 ) {
-				data[ index ]->disconnect( this );
+				data[ index ]->disconnect( data[ index ], nullptr, this, nullptr );
 				delete data[ index ];
 			}
 			favoriteItemVector.clear( );
@@ -194,7 +194,7 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 				break;
 		}
 		loadMutex->lock( );
-		loadMusicFile->disconnect( );
+		loadMusicFile->disconnect( loadMusicFile, nullptr, this, nullptr );
 		loadCount += 1;
 		size_t loadOverCount = loadMediaVector.size( );
 		musicItemVector.emplace_back( musicItem );
@@ -515,7 +515,6 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		return false;
 	auto jsonObject = find.value( ).toObject( );
 
-	loadMutex->lock( );
 	end = jsonObject.end( );
 	// 获取文件选择路径
 	find = jsonObject.find( selectFilePathJsonKey );
@@ -534,7 +533,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		if( count ) {
 			data = musicItemVector.data( );
 			for( index = 0; index < count; index += 1 ) {
-				data[ index ]->disconnect( this );
+				data[ index ]->disconnect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
 				delete data[ index ];
 			}
 		}
@@ -555,7 +554,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		if( count ) {
 			data = favoriteItemVector.data( );
 			for( index = 0; index < count; index += 1 ) {
-				data[ index ]->disconnect( this );
+				data[ index ]->disconnect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
 				delete data[ index ];
 			}
 		}
@@ -568,7 +567,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 			connect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
 		}
 	}
-	loadMutex->unlock( );
+	favoriteWidget->updateAppMusicManageInof( favoriteItemVector );
 	return true;
 }
 

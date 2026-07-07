@@ -1,16 +1,12 @@
 ﻿#include "userMutex.h"
-
 #include <mutex>
 #include <source_location>
-
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/translate/messageTranslate.h"
 #include "../application/translate/userMutexTranslate.h"
-
 #include "../msgInfo/messageErrorOut.h"
-
 #include "../tools/sourceLocationTools.h"
 
 void UserMutex::out_debug_info( ) const {
@@ -160,7 +156,7 @@ bool UserMutex::unlock( const std::source_location &source_location ) const {
 		_STD _Throw_Cpp_error( std::_RESOURCE_DEADLOCK_WOULD_OCCUR );
 	}
 	*unlockSourceLocation = source_location;
-	return true;
+	return tryLock;
 }
 
 UserMutex::LockGuard UserMutex::getLockGuard( ) const {

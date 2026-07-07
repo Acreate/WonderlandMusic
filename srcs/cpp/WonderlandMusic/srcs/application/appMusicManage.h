@@ -28,6 +28,8 @@ protected:
 	std::vector< std::pair< FavoriteItemWidget *, std::vector< MusicItem * > > > musicFavoriteMapVector;
 	MusicContreWidget *musicContreWidget = nullptr;
 	FavoriteWidget *favoriteWidget = nullptr;
+	QString openMultipleFilePath;
+	QString openMultipleDirPath;
 
 protected:
 	bool deleteResource( ) override;
@@ -40,6 +42,7 @@ protected:
 
 	virtual void loadMusciFromDir( const std::vector< QString > &music_dir );
 	virtual bool appendFavorite( const QString &name );
+	virtual bool appendFirstFavorite( );
 
 public:
 	bool readJsonData( ) override;

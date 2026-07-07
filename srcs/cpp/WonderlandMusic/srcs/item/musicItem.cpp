@@ -1,18 +1,22 @@
 ﻿#include "musicItem.h"
 
+#include <QJsonObject>
 #include <QMediaMetaData>
 #include <QMediaPlayer>
 #include <windows.h>
 
+#include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
+#include "../application/jsonKey/musicItemJsonKey.h"
 #include "../application/translate/musicInfoItemTranslate.h"
 
 #include "../dateTimeFormat/dateTimeFormat.h"
 
 #include "../itemWidget/musicInfoItemWidget.h"
 
+#include "../tools/arrayTools.h"
 #include "../tools/pathTools.h"
 
 bool MusicItem::isMusicFile( const QString &music_file_path ) {
@@ -141,6 +145,70 @@ MusicItem::MusicItem( const QJsonObject &music_json_object ) : musicInfo( music_
 		if( musicInfoItemWidget )
 			musicInfoItemWidget = new MusicInfoItemWidget( *this );
 	} );
+}
+
+bool MusicItem::getJsonDataVector( QJsonObject &get_json_object, const std::vector< MusicItem * > &conver_vector ) {
+	QJsonObject vectorData;
+	size_t count = conver_vector.size( );
+	auto data = conver_vector.data( );
+	size_t index = 0;
+	size_t jsonCount = 0;
+	for( ; index < count; index += 1 ) {
+		QJsonObject getJson;
+		if( data[ index ]->getJsonData( getJson ) ) {
+			vectorData.insert( QString::number( jsonCount ), getJson );
+			jsonCount += 1;
+		}
+	}
+	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getMusicItem( );
+	QJsonObject vector;
+	vector.insert( jsonKey->getMusicData( ), vectorData );
+	vector.insert( jsonKey->getMusicCount( ), QString::number( jsonCount ) );
+	get_json_object.insert( jsonKey->getMusicVector( ), vector );
+	return true;
+}
+
+bool MusicItem::setJsonDataVector( std::vector< MusicItem * > &result_vector, const QJsonObject &set_json_object ) {
+	if( set_json_object.empty( ) )
+		return false;
+	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getMusicItem( );
+
+	auto find = set_json_object.find( jsonKey->getMusicVector( ) );
+	auto end = set_json_object.end( );
+	if( find == end )
+		return false;
+	QJsonObject vector = find.value( ).toObject( );
+	end = vector.end( );
+	find = vector.find( jsonKey->getMusicCount( ) );
+	if( find == end )
+		return false;
+	bool conver;
+	auto vectorCount = find->toString( ).toULongLong( &conver );
+	if( conver == false )
+		return false;
+	if( vectorCount == 0 )
+		return true;
+	find = vector.find( jsonKey->getMusicData( ) );
+	if( find == end )
+		return false;
+	result_vector.resize( vectorCount );
+	auto setData = result_vector.data( );
+	QJsonObject vectorData = find.value( ).toObject( );
+	auto begin = vectorData.begin( );
+	end = vectorData.end( );
+	for( ; begin != end; ++begin ) {
+		auto index = begin.key( ).toULongLong( &conver );
+		if( conver == false )
+			continue;
+		if( index >= vectorCount )
+			continue;
+		auto jsonObject = begin.value( ).toObject( );
+		auto musicItem = new MusicItem( jsonObject );
+		setData[ index ] = musicItem;
+	}
+	vectorCount = ArrayTools::sortNullptr( setData, vectorCount );
+	result_vector.resize( vectorCount );
+	return true;
 }
 
 bool MusicItem::getJsonData( QJsonObject &get_json_object ) const {

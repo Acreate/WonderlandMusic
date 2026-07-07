@@ -2,12 +2,25 @@
 #define APPMUSICMANAGETRANSLATE_H_H_HEAD__FILE__
 #include "../../interface/iTranslate.h"
 
-class AppMusicManageTranslate : public ITranslate{
+class AppMusicManageTranslate : public ITranslate {
 	QString rootFavoriteName;
+	QString anyFileTypeName;
+	QString musicFileTypeName;
+	QString selectMultipleFileTitle;
+	QString selectMultipleDirTitle;
+
 public:
 	bool init( ) override;
 
 	virtual const QString & getRootFavoriteName( ) const;
+
+	virtual const QString & getAnyFileTypeName( ) const;
+
+	virtual const QString & getMusicFileTypeName( ) const;
+
+	virtual const QString & getSelectMultipleFileTitle( ) const;
+
+	virtual const QString & getSelectMultipleDirTitle( ) const;
 };
 
 #endif // APPMUSICMANAGETRANSLATE_H_H_HEAD__FILE__

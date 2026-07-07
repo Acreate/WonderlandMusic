@@ -1,7 +1,9 @@
 ﻿#include "appMusicManage.h"
 
+#include <QJsonObject>
 #include <QMediaPlayer>
 
+#include "appDataJsonKey.h"
 #include "appDataManage.h"
 #include "appInstance.h"
 #include "appMenuManage.h"
@@ -25,13 +27,17 @@
 
 #include "../stackedWidget/mainStackedWidget.h"
 
+#include "../tools/arrayTools.h"
 #include "../tools/pathTools.h"
+#include "../tools/widgetTools.h"
 
 #include "../widget/favoriteWidget.h"
 
 #include "../window/mainWindow.h"
 #include "../window/musicListWindow.h"
 #include "../window/playerWindow.h"
+
+#include "jsonKey/appMusicManageJsonKey.h"
 
 #include "translate/appMusicManageTranslate.h"
 
@@ -63,8 +69,10 @@ bool AppMusicManage::deleteResource( ) {
 		count = musicItemvVector.size( );
 		if( count ) {
 			auto data = musicItemvVector.data( );
-			for( index = 0; index < count; index += 1 )
+			for( index = 0; index < count; index += 1 ) {
+				data[ index ]->disconnect( this );
 				delete data[ index ];
+			}
 			musicItemvVector.clear( );
 		}
 		count = musicFavoriteMapVector.size( );
@@ -91,8 +99,28 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 	auto appMenuManage = instance->getAppUserInterfaceManage( )->getAppMenuManage( );
 	auto playerListWidgetMenu = appMenuManage->getPlayerListWidgetMenu( );
 
-	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_open_file_dialog, this, []( ) {
-		// todo : 打开多选文件对话框
+	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_open_file_dialog, this, [this]( ) {
+		auto instance = AppInstance::getAppInstance( );
+		auto appTranslate = instance->getAppDataManage( )->getTranslate( );
+		auto translate = appTranslate->getAppMusicManage( );
+
+		auto decodeFileSuffix = appMusicDecoder->getSupperDecodeFileSuffix( );
+		QStringList filterSuffixList;
+		size_t count = decodeFileSuffix.size( );
+		auto data = decodeFileSuffix.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			filterSuffixList.append( "*." + data[ index ] );
+		auto musicTypeName = translate->getMusicFileTypeName( );
+		auto filterSuffix = filterSuffixList.join( " " );
+		auto filterName = musicTypeName + "(" + filterSuffix + ");;" + translate->getAnyFileTypeName( ) + "(*.*)";
+
+		auto mainWindow = instance->getAppUserInterfaceManage( )->getMainWindow( );
+		QStringList resultSelectFile;
+		std::vector< QString > fileVector;
+		if( WidgetTools::showMultipleSelectFileDialog( fileVector, openMultipleFilePath, mainWindow, translate->getSelectMultipleFileTitle( ), filterName ) == false )
+			return;
+		loadMusciFromFileVector( fileVector );
 	} );
 	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_open_dir_dialog, this, []( ) {
 		// todo : 打开多选目录对话框
@@ -198,6 +226,12 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 }
 
 bool AppMusicManage::readJsonData( ) {
+	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppMusicManage( );
+	QJsonObject readJson;
+	if( PathTools::readJsonObject( readJson, jsonKey->getFilePath( ) ) == false )
+		return false;
+	setJsonData( readJson );
+
 	return true;
 }
 
@@ -336,6 +370,21 @@ bool AppMusicManage::appendFavorite( const QString &name ) {
 	return true;
 }
 
+bool AppMusicManage::appendFirstFavorite( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto translate = appInstance->getAppDataManage( )->getTranslate( )->getAppMusicManage( );
+	auto name = translate->getRootFavoriteName( );
+	auto itemWidget = new FavoriteItemWidget( );
+	itemWidget->setEnabled( false );
+	connect( itemWidget, &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItemWidget );
+	itemWidget->setFavoriteName( name );
+	loadMutex->lock( );
+	musicFavoriteMapVector.emplace_back( itemWidget, std::vector< MusicItem * >( ) );
+	loadMutex->unlock( );
+	favoriteWidget->updateAppMusicManageInof( musicFavoriteMapVector );
+	return true;
+}
+
 bool AppMusicManage::removeSelectMusicItem( ) {
 	return false;
 }
@@ -404,9 +453,8 @@ bool AppMusicManage::initAfter( ) {
 	PlayerWindow *playerWindow = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( );
 	musicContreWidget = playerWindow->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
 	favoriteWidget = playerWindow->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
-
-	auto translate = appInstance->getAppDataManage( )->getTranslate( )->getAppMusicManage( );
-	if( appendFavorite( translate->getRootFavoriteName( ) ) == false )
+	openMultipleDirPath = openMultipleFilePath = appInstance->getAppDataManage( )->getAppSettingPath( );
+	if( appendFirstFavorite( ) == false )
 		return false;
 	auto applicationManage = appInstance->getApplicationManage( );
 	connect( applicationManage, &ApplicationManage::signal_app_quit, this, [this]( ) {
@@ -420,21 +468,80 @@ bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {
 }
 
 bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	if( set_json_object.empty( ) )
+		return false;
+	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppMusicManage( );
+	auto end = set_json_object.end( );
+	QJsonObject::const_iterator find;
+	// 获取文件选择路径
+	find = set_json_object.find( jsonKey->getSelectFilePath( ) );
+	if( find != end )
+		openMultipleFilePath = find.value( ).toString( openMultipleFilePath );
+	// 获取目录选择路径
+	find = set_json_object.find( jsonKey->getSelectDirPath( ) );
+	if( find != end )
+		openMultipleDirPath = find.value( ).toString( openMultipleDirPath );
+	// 获取音频对象
+	std::vector< MusicItem * > resultMusicItemVector;
+	if( MusicItem::setJsonDataVector( resultMusicItemVector, set_json_object ) ) {
+		auto count = musicItemvVector.size( );
+		size_t index;
+		MusicItem **data;
+		if( count ) {
+			data = musicItemvVector.data( );
+			for( index = 0; index < count; index += 1 ) {
+				data[ index ]->disconnect( this );
+				delete data[ index ];
+			}
+		}
+		count = resultMusicItemVector.size( );
+		musicItemvVector.reserve( count );
+		data = musicItemvVector.data( );
+		auto copydata = resultMusicItemVector.data( );
+		for( index = 0; index < count; index += 1 )
+			data[ index ] = copydata[ index ];
+	}
+	// 获取音频对象
+	std::vector< std::pair< FavoriteItemWidget *, std::vector< MusicItem * > > > resultFavoriteItemWidget;
+	if( FavoriteItemWidget::setJsonDataVector( resultFavoriteItemWidget, set_json_object ) ) {
+		auto count = musicFavoriteMapVector.size( );
+		size_t index;
+		std::pair< FavoriteItemWidget *, std::vector< MusicItem * > > *data;
+		if( count ) {
+			data = musicFavoriteMapVector.data( );
+			for( index = 0; index < count; index += 1 ) {
+				data[ index ].first->disconnect( this );
+				delete data[ index ].first;
+			}
+		}
+		count = resultFavoriteItemWidget.size( );
+		musicFavoriteMapVector.reserve( count );
+		data = musicFavoriteMapVector.data( );
+		auto copydata = resultFavoriteItemWidget.data( );
+		for( index = 0; index < count; index += 1 )
+			data[ index ] = copydata[ index ];
+	}
+
+	return true;
 }
 
 bool AppMusicManage::getFavoriteItemMusicVector( std::vector< MusicItem * > &result_vector, const FavoriteItemWidget *favorite_widget ) const {
+	loadMutex->lock( );
 	size_t count = musicFavoriteMapVector.size( );
-	if( count == 0 )
+	if( count == 0 ) {
+		loadMutex->unlock( );
 		return false;
+	}
 
 	auto data = musicFavoriteMapVector.data( );
 	size_t index = 0;
 	for( ; index < count; index += 1 )
 		if( data[ index ].first == favorite_widget ) {
 			result_vector = data[ index ].second;
+			loadMutex->unlock( );
 			return true;
 		}
+	loadMutex->unlock( );
 	return false;
 }
 

@@ -32,6 +32,26 @@ namespace ArrayTools {
 				return true;
 		return false;
 	}
+
+	template< typename Array_Unity_Type_ >
+	size_t sortNullptr( const Array_Unity_Type_ *array_ptr, const size_t &array_count ) {
+		Array_Unity_Type_ *buff = new Array_Unity_Type_ [ array_count ];
+		size_t count = 0;
+		size_t index;
+
+		for( index = 0; index < array_count; index += 1 )
+			buff[ index ] = nullptr;
+		for( index = 0; index < array_count; index += 1 ) {
+			if( array_ptr[ index ] == nullptr )
+				continue;
+			buff[ count ] = array_ptr[ index ];
+			count += 1;
+		}
+		for( index = 0; index < count; index += 1 )
+			array_ptr[ index ] = buff[ index ];
+		delete [] buff;
+		return count;
+	}
 };
 
 #endif // ARRAYTOOLS_H_H_HEAD__FILE__

@@ -3,6 +3,9 @@
 
 #include "../interface/iAppCore.h"
 
+class FavorItemWidgetJsonKey;
+class MusicItemJsonKey;
+class AppMusicManageJsonKey;
 class FavoriteWidgetJsonKey;
 class FavoriteSrollAreaJsonKey;
 class FavoritemDockWidgetJsonKey;
@@ -31,6 +34,9 @@ protected:
 	FavoriteSrollAreaJsonKey *favoriteSrollArea = nullptr;
 	FavoritemDockWidgetJsonKey *favoritemDockWidget = nullptr;
 	FavoriteWidgetJsonKey *favoriteWidget = nullptr;
+	AppMusicManageJsonKey *appMusicManage = nullptr;
+	FavorItemWidgetJsonKey *favorItemWidget = nullptr;
+	MusicItemJsonKey *musicItem = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -69,5 +75,11 @@ public:
 	virtual FavoritemDockWidgetJsonKey * getFavoritemDockWidget( ) const;
 
 	virtual FavoriteWidgetJsonKey * getFavoriteWidget( ) const;
+
+	virtual AppMusicManageJsonKey * getAppMusicManage( ) const;
+
+	virtual FavorItemWidgetJsonKey * getFavorItemWidget( ) const;
+
+	virtual MusicItemJsonKey * getMusicItem( ) const;
 };
 #endif // APPDATAJSONKEY_H_H_HEAD__FILE__

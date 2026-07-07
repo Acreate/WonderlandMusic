@@ -4,12 +4,15 @@
 
 #include "jsonKey/aboutWidgetJsonKey.h"
 #include "jsonKey/appDataManageJsonKey.h"
+#include "jsonKey/appMusicManageJsonKey.h"
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
+#include "jsonKey/favorItemWidgetJsonKey.h"
 #include "jsonKey/favoriteSrollAreaJsonKey.h"
 #include "jsonKey/favoriteWidgetJsonKey.h"
 #include "jsonKey/favoritemDockWidgetJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
 #include "jsonKey/musicInfoItemWidgetJsonKey.h"
+#include "jsonKey/musicItemJsonKey.h"
 #include "jsonKey/playerListToolWidgetJsonKey.h"
 #include "jsonKey/playerListTopWidgetJsonKey.h"
 #include "jsonKey/playerWindowJsonKey.h"
@@ -28,6 +31,9 @@ bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( appUserInterfaceManage );
 	Delete_Resource_App_Core_Ptr( favoritemDockWidget );
 	Delete_Resource_App_Core_Ptr( favoriteWidget );
+	Delete_Resource_App_Core_Ptr( appMusicManage );
+	Delete_Resource_App_Core_Ptr( favorItemWidget );
+	Delete_Resource_App_Core_Ptr( musicItem );
 	return true;
 }
 
@@ -51,6 +57,9 @@ bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 	Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	Init_Resource_App_Core_Ptr( favoriteWidget );
+	Init_Resource_App_Core_Ptr( appMusicManage );
+	Init_Resource_App_Core_Ptr( favorItemWidget );
+	Init_Resource_App_Core_Ptr( musicItem );
 	return true;
 }
 
@@ -68,6 +77,9 @@ bool AppDataJsonKey::initBefore( ) {
 	appUserInterfaceManage = new AppUserInterfaceManageJsonKey;
 	favoritemDockWidget = new FavoritemDockWidgetJsonKey;
 	favoriteWidget = new FavoriteWidgetJsonKey;
+	appMusicManage = new AppMusicManageJsonKey;
+	favorItemWidget = new FavorItemWidgetJsonKey;
+	musicItem = new MusicItemJsonKey;
 	return true;
 }
 
@@ -121,4 +133,16 @@ FavoritemDockWidgetJsonKey * AppDataJsonKey::getFavoritemDockWidget( ) const {
 
 FavoriteWidgetJsonKey * AppDataJsonKey::getFavoriteWidget( ) const {
 	return favoriteWidget;
+}
+
+AppMusicManageJsonKey * AppDataJsonKey::getAppMusicManage( ) const {
+	return appMusicManage;
+}
+
+FavorItemWidgetJsonKey * AppDataJsonKey::getFavorItemWidget( ) const {
+	return favorItemWidget;
+}
+
+MusicItemJsonKey * AppDataJsonKey::getMusicItem( ) const {
+	return musicItem;
 }

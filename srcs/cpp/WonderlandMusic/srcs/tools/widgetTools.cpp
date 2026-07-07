@@ -1,7 +1,9 @@
 ﻿#include "widgetTools.h"
 
+#include <QFileDialog>
 #include <QMenu>
 #include <QWidget>
+#include <QStringList>
 #include <qscreen.h>
 
 #include "../application/appInstance.h"
@@ -25,7 +27,7 @@ bool WidgetTools::getMenuSuggestionShowMenuPos( QPoint &suggestion_show_pos, con
 	calculation_menu->adjustSize( );
 	auto menuWidth = calculation_menu->width( );
 	auto menuHeight = calculation_menu->height( );
-	auto screens = AppInstance::getAppInstance( )->getApplicationManage(  )->screens( );
+	auto screens = AppInstance::getAppInstance( )->getApplicationManage( )->screens( );
 	qsizetype count = screens.size( );
 	auto data = screens.data( );
 	qsizetype index = 0;
@@ -45,4 +47,65 @@ bool WidgetTools::getMenuSuggestionShowMenuPos( QPoint &suggestion_show_pos, con
 		}
 	}
 	return false;
+}
+
+bool WidgetTools::showMultipleSelectFileDialog( std::vector< QString > &result_select_file, const QString &select_default_dir_path, QWidget *parent, const QString &title_text, const QString &filter ) {
+	QFileDialog *multipleSelectDialog = new QFileDialog;
+	if( multipleSelectDialog == nullptr )
+		return false;
+	//multipleSelectDialog->setParent( parent );
+	multipleSelectDialog->setWindowTitle( title_text );
+	multipleSelectDialog->setNameFilter( filter );
+	multipleSelectDialog->setDirectory( select_default_dir_path );
+	multipleSelectDialog->setFileMode( QFileDialog::ExistingFiles );
+	multipleSelectDialog->setOption( QFileDialog::DontUseNativeDialog );
+	multipleSelectDialog->setOption( QFileDialog::DontResolveSymlinks, true );
+	multipleSelectDialog->setOption( QFileDialog::DontConfirmOverwrite, true );
+	multipleSelectDialog->setOption( QFileDialog::DontUseCustomDirectoryIcons, true );
+	multipleSelectDialog->setOption( QFileDialog::ReadOnly, true );
+	// 3. 视图强制列表模式（详情模式加载更多列，更卡）
+	multipleSelectDialog->setViewMode( QFileDialog::List );
+	moveWidgetToCenterPos( parent, multipleSelectDialog );
+	multipleSelectDialog->exec( );
+	auto selectList = multipleSelectDialog->selectedFiles( );
+	delete multipleSelectDialog;
+	qint64 qsizetype = selectList.size( );
+	if( qsizetype == 0 )
+		return false;
+	result_select_file.resize( qsizetype );
+	auto desData = result_select_file.data( );
+	auto sourData = selectList.data( );
+	qint64 index = 0;
+	for( ; index < qsizetype; index += 1 )
+		desData[ index ] = sourData[ index ];
+	return true;
+}
+
+bool WidgetTools::showMultipleSelectDirDialog( std::vector< QString > &result_select_file, const QString &select_default_dir_path, QWidget *parent, const QString &title_text ) {
+	QFileDialog *multipleSelectDialog = new QFileDialog;
+	if( multipleSelectDialog == nullptr )
+		return false;
+	//multipleSelectDialog->setParent( parent );
+	multipleSelectDialog->setWindowTitle( title_text );
+	multipleSelectDialog->setDirectory( select_default_dir_path );
+	multipleSelectDialog->setFileMode( QFileDialog::Directory );
+	multipleSelectDialog->setOption( QFileDialog::DontUseNativeDialog );
+	multipleSelectDialog->setOption( QFileDialog::DontResolveSymlinks, true );
+	multipleSelectDialog->setOption( QFileDialog::DontConfirmOverwrite, true );
+	multipleSelectDialog->setOption( QFileDialog::DontUseCustomDirectoryIcons, true );
+	multipleSelectDialog->setOption( QFileDialog::ShowDirsOnly, true );
+	moveWidgetToCenterPos( parent, multipleSelectDialog );
+	multipleSelectDialog->exec( );
+	auto selectList = multipleSelectDialog->selectedFiles( );
+	delete multipleSelectDialog;
+	qint64 qsizetype = selectList.size( );
+	if( qsizetype == 0 )
+		return false;
+	result_select_file.resize( qsizetype );
+	auto desData = result_select_file.data( );
+	auto sourData = selectList.data( );
+	qint64 index = 0;
+	for( ; index < qsizetype; index += 1 )
+		desData[ index ] = sourData[ index ];
+	return true;
 }

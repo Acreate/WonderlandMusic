@@ -61,6 +61,10 @@ protected:
 	MusicItem( const QJsonObject &music_json_object );
 
 public:
+	static bool getJsonDataVector( QJsonObject &get_json_object, const std::vector< MusicItem * > &conver_vector );
+	static bool setJsonDataVector( std::vector< MusicItem * > &result_vector, const QJsonObject &set_json_object );
+
+public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 
 	bool setJsonData( const QJsonObject &set_json_object ) override;

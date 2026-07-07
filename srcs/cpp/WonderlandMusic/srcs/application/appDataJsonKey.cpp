@@ -1,7 +1,5 @@
 ﻿#include "appDataJsonKey.h"
-
 #include "appInstance.h"
-
 #include "jsonKey/aboutWidgetJsonKey.h"
 #include "jsonKey/appDataManageJsonKey.h"
 #include "jsonKey/appMusicManageJsonKey.h"
@@ -20,7 +18,7 @@
 
 bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( playerListToolWidget );
-	Delete_Resource_App_Core_Ptr( aboutWidgetJsonFileKey );
+	Delete_Resource_App_Core_Ptr( aboutWidget );
 	Delete_Resource_App_Core_Ptr( playerListTopWidget );
 	Delete_Resource_App_Core_Ptr( playerWindow );
 	Delete_Resource_App_Core_Ptr( mainWindow );
@@ -46,7 +44,7 @@ AppDataJsonKey::AppDataJsonKey( ) {
 
 bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( playerListToolWidget );
-	Init_Resource_App_Core_Ptr( aboutWidgetJsonFileKey );
+	Init_Resource_App_Core_Ptr( aboutWidget );
 	Init_Resource_App_Core_Ptr( playerListTopWidget );
 	Init_Resource_App_Core_Ptr( playerWindow );
 	Init_Resource_App_Core_Ptr( mainWindow );
@@ -66,7 +64,7 @@ bool AppDataJsonKey::init( ) {
 bool AppDataJsonKey::initBefore( ) {
 	deleteResource( );
 	playerListToolWidget = new PlayerListToolWidgetJsonKey;
-	aboutWidgetJsonFileKey = new AboutWidgetJsonKey;
+	aboutWidget = new AboutWidgetJsonKey;
 	playerListTopWidget = new PlayerListTopWidgetJsonKey;
 	playerWindow = new PlayerWindowJsonKey;
 	mainWindow = new MainWindowJsonKey;
@@ -91,8 +89,8 @@ PlayerListToolWidgetJsonKey * AppDataJsonKey::getPlayerListToolWidget( ) const {
 	return playerListToolWidget;
 }
 
-AboutWidgetJsonKey * AppDataJsonKey::getAboutWidgetJsonFileKey( ) const {
-	return aboutWidgetJsonFileKey;
+AboutWidgetJsonKey * AppDataJsonKey::getAboutWidget( ) const {
+	return aboutWidget;
 }
 
 PlayerListTopWidgetJsonKey * AppDataJsonKey::getPlayerListTopWidget( ) const {

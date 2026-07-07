@@ -1,29 +1,7 @@
 ﻿#ifndef APPTRANSLATETOOLS_H_H_HEAD__FILE__
 #define APPTRANSLATETOOLS_H_H_HEAD__FILE__
 #include <functional>
-
-class AppTranslate;
-class AppMusicManageTranslate;
-class DeleteExceptionTranslate;
-class FavoriteWidgetMenuTranslate;
-class OptionDockWidgetTranslate;
-class FavoriteWidgetTranslate;
-class UserMutexTranslate;
-class SystemTrayIconTranslate;
-class SystemTrayIconMenuTranslate;
-class MusicInfoItemTranslate;
-class PlayerListWidgetTranslate;
-class MessageTranslate;
-class MainWindowTranslate;
-class AboutWidgetTranslate;
-class DateTimeFormatTranslate;
-class JsonTranslate;
-class PlayerWindowTranslate;
-class PlayerTopWidgetTranslate;
-class PlayerListWidgetMenuTranslate;
-class PlayerToolsWidgetTranslate;
-class SettingWidgetTranslate;
-
+#include <head/head_translate_class.h>
 #define Declaration_Get_Translate( type_name_ ) \
 	bool get##type_name_(const std::function< void( type_name_##Translate & ) > &translate_fun_call);
 

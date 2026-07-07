@@ -1,10 +1,12 @@
 ﻿#include "favoriteItem.h"
+#include <QJsonObject>
 #include "musicItem.h"
 #include "../application/translate/deleteExceptionTranslate.h"
 #include "../itemWidget/favoriteItemWidget.h"
 #include "../msgInfo/deleteException.h"
 #include "../msgInfo/messageErrorOut.h"
 #include "../tools/appTranslateTools.h"
+#include "../tools/jsonObjectTools.h"
 
 FavoriteItem::ItemInfo::ItemInfo( const QString &name, const std::vector< MusicItem * > &music_itemv_vector, FavoriteItemWidget *favorite_item_widget ) : name( name ), musicItemvVector( music_itemv_vector ),
 	favoriteItemWidget( favorite_item_widget ) {
@@ -48,6 +50,26 @@ QString FavoriteItem::getFavoriteName( ) const {
 
 FavoriteItemWidget * FavoriteItem::getFavoriteItemWidget( ) const {
 	return info->favoriteItemWidget;
+}
+
+bool FavoriteItem::getJsonDataVector( QJsonObject &get_json_object, const std::vector< FavoriteItem * > &conver_vector ) {
+	size_t count = conver_vector.size( );
+	if( count == 0 )
+		return false;
+	
+	
+	AppTranslateTools::getFavoriteWidget(  )
+	
+	QJsonObject conveJson;
+	if( JsonObjectTools::toJson( conveJson, count ) == false )
+		return false;
+	auto data = conver_vector.data( );
+
+	return false;
+}
+
+bool FavoriteItem::setJsonDataVector( std::vector< FavoriteItem * > &result_vector, const QJsonObject &set_json_object ) {
+	return false;
 }
 
 bool FavoriteItem::getJsonData( QJsonObject &get_json_object ) const {

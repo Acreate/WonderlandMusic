@@ -1,0 +1,25 @@
+﻿#ifndef HEAD_TRANSLATE_CLASS_H_H_HEAD__FILE__
+#define HEAD_TRANSLATE_CLASS_H_H_HEAD__FILE__
+class PlayerListWidgetMenuTranslate;
+class DeleteExceptionTranslate;
+class FavoriteWidgetMenuTranslate;
+class OptionDockWidgetTranslate;
+class FavoriteWidgetTranslate;
+class SystemTrayIconTranslate;
+class SystemTrayIconMenuTranslate;
+class MusicInfoItemTranslate;
+class PlayerListWidgetTranslate;
+class MessageTranslate;
+class MainWindowTranslate;
+class AboutWidgetTranslate;
+class DateTimeFormatTranslate;
+class JsonTranslate;
+class PlayerWindowTranslate;
+class PlayerTopWidgetTranslate;
+class PlayerToolsWidgetTranslate;
+class SettingWidgetTranslate;
+class UserMutexTranslate;
+class ISelectDirWidgetTranslate;
+class AppMusicManageTranslate;
+class AppTranslate;
+#endif // HEAD_TRANSLATE_CLASS_H_H_HEAD__FILE__

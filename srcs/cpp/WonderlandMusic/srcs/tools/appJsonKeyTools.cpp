@@ -7,6 +7,7 @@
 #include "../application/jsonKey/appMusicManageJsonKey.h"
 #include "../application/jsonKey/appUserInterfaceManageJsonKey.h"
 #include "../application/jsonKey/favorItemWidgetJsonKey.h"
+#include "../application/jsonKey/favoriteItemJsonKey.h"
 #include "../application/jsonKey/favoriteSrollAreaJsonKey.h"
 #include "../application/jsonKey/favoriteWidgetJsonKey.h"
 #include "../application/jsonKey/favoritemDockWidgetJsonKey.h"
@@ -30,7 +31,7 @@ AppDataJsonKey * AppJsonKeyTools::getAppJsonKey( ) {
 
 #define Json_Key_Type( type_name_ ) type_name_##JsonKey
 #define Defininition_Get_Json_Key( type_name_ ) \
-	bool AppJsonKeyTools::get##type_name_(const std::function< void(const Json_Key_Type(type_name_) & ) > &json_key_fun_call){\
+	bool AppJsonKeyTools::get##type_name_(const std::function< void(const Json_Key_Type(type_name_) & json_key) > &json_key_fun_call){\
 		Json_Key_Type(type_name_) *var = nullptr; \
 		auto *getPtr = getAppJsonKey( ); \
 		if( getPtr ){ \
@@ -63,3 +64,4 @@ Defininition_Get_Json_Key( FavoriteWidget );
 Defininition_Get_Json_Key( AppMusicManage );
 Defininition_Get_Json_Key( FavorItemWidget );
 Defininition_Get_Json_Key( MusicItem );
+Defininition_Get_Json_Key( FavoriteItem );

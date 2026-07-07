@@ -34,7 +34,7 @@ AppTranslate * AppTranslateTools::getAppTranslate( ) {
 }
 
 #define Defininition_Get_Translate( type_name_ ) \
-	bool AppTranslateTools::get##type_name_(const std::function< void( type_name_##Translate & ) > &translate_fun_call){\
+	bool AppTranslateTools::get##type_name_(const std::function< void( type_name_##Translate & translate) > &translate_fun_call){\
 		type_name_##Translate *var = nullptr; \
 		AppTranslate *appTranslate = getAppTranslate( ); \
 		if( appTranslate ){ \

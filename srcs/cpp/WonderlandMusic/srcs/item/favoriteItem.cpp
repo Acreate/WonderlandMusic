@@ -1,10 +1,15 @@
 ﻿#include "favoriteItem.h"
 #include <QJsonObject>
 #include "musicItem.h"
+#include "../application/appDataManage.h"
+#include "../application/appInstance.h"
+#include "../application/appMusicManage.h"
+#include "../application/jsonKey/favoriteItemJsonKey.h"
 #include "../application/translate/deleteExceptionTranslate.h"
 #include "../itemWidget/favoriteItemWidget.h"
 #include "../msgInfo/deleteException.h"
 #include "../msgInfo/messageErrorOut.h"
+#include "../tools/appJsonKeyTools.h"
 #include "../tools/appTranslateTools.h"
 #include "../tools/jsonObjectTools.h"
 
@@ -56,20 +61,124 @@ bool FavoriteItem::getJsonDataVector( QJsonObject &get_json_object, const std::v
 	size_t count = conver_vector.size( );
 	if( count == 0 )
 		return false;
-	
-	
-	AppTranslateTools::getFavoriteWidget(  )
-	
+	QString arrayObject;
+	QString arrayDataKey;
+	QString arrayCountKey;
+	QString itemNameKey;
+	if( AppJsonKeyTools::getFavoriteItem( [&] ( const FavoriteItemJsonKey &json_key ) {
+		arrayObject = json_key.getFavoriteItemArrayObject( );
+		arrayDataKey = json_key.getFavoriteItemArray( );
+		arrayCountKey = json_key.getFavoriteItemCount( );
+		itemNameKey = json_key.getFavoriteName( );
+	} ) == false )
+		return false;
+
 	QJsonObject conveJson;
 	if( JsonObjectTools::toJson( conveJson, count ) == false )
 		return false;
+	QJsonObject converVectorObject;
+	converVectorObject.insert( arrayCountKey, conveJson );
+	conveJson = QJsonObject( );
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
 	auto data = conver_vector.data( );
-
-	return false;
+	size_t index;
+	QJsonObject itemJson;
+	QJsonObject getJson;
+	std::vector< size_t > resultIndex;
+	for( index = 0; index < count; index += 1 ) {
+		// 插入名称
+		if( JsonObjectTools::toJson( getJson, data[ index ]->info->name ) == false )
+			return false;
+		itemJson.insert( itemNameKey, getJson );
+		// 插入列表
+		auto &musicItems = data[ index ]->info->musicItemvVector;
+		getJson = QJsonObject( );
+		appMusicManage->toMusicIndex( resultIndex, musicItems );
+		if( JsonObjectTools::toJson( getJson, resultIndex ) == false )
+			return false;
+		itemJson.insert( itemNameKey, getJson );
+		// 插入到项
+		conveJson.insert( QString::number( index ), itemJson );
+		itemJson = QJsonObject( );
+		getJson = QJsonObject( );
+	}
+	converVectorObject.insert( arrayDataKey, conveJson );
+	get_json_object.insert( arrayObject, converVectorObject );
+	return true;
 }
 
 bool FavoriteItem::setJsonDataVector( std::vector< FavoriteItem * > &result_vector, const QJsonObject &set_json_object ) {
-	return false;
+	if( set_json_object.empty( ) )
+		return false;
+
+	QString arrayObject;
+	QString arrayDataKey;
+	QString arrayCountKey;
+	QString itemNameKey;
+	if( AppJsonKeyTools::getFavoriteItem( [&] ( const FavoriteItemJsonKey &json_key ) {
+		arrayObject = json_key.getFavoriteItemArrayObject( );
+		arrayDataKey = json_key.getFavoriteItemArray( );
+		arrayCountKey = json_key.getFavoriteItemCount( );
+		itemNameKey = json_key.getFavoriteName( );
+	} ) == false )
+		return false;
+
+	auto find = set_json_object.find( arrayObject );
+	auto end = set_json_object.end( );
+	if( find == end )
+		return false;
+	auto jsonObject = find.value( ).toObject( );
+	end = jsonObject.end( );
+	find = jsonObject.find( arrayCountKey );
+	if( end == find )
+		return false;
+	auto object = find.value( ).toObject( );
+	size_t count;
+	if( JsonObjectTools::toObject( count, object ) == false )
+		return false;
+
+	if( count == 0 )
+		return true;
+	find = jsonObject.find( arrayDataKey );
+	if( end == find )
+		return false;
+	object = find.value( ).toObject( );
+	result_vector.resize( count );
+	auto resultData = result_vector.data( );
+	auto iterator = object.begin( );
+	auto iterEnd = object.end( );
+	bool conver;
+	size_t index;
+	std::vector< size_t > resultIndex;
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	std::vector< MusicItem * > musicItems;
+	for( ; iterEnd != iterator; ++iterator ) {
+		auto keyString = iterEnd.key( );
+		index = keyString.toULongLong( &conver );
+		if( conver == false )
+			return false;
+		if( index <= count )
+			return false;
+		// 获取项
+		jsonObject = iterEnd.value( ).toObject( );
+		// 获取名称
+		end = jsonObject.end( );
+		find = jsonObject.find( itemNameKey );
+		if( end == find )
+			return false;
+		auto favoriteName = find.value( ).toString( );
+		// 获取列表
+		find = jsonObject.find( itemNameKey );
+		if( end == find )
+			return false;
+		auto jsonValueRefs = find.value( ).toObject( );
+		if( JsonObjectTools::toObject( resultIndex, jsonValueRefs ) == false )
+			return false;
+		appMusicManage->fromMusicIndex( musicItems, resultIndex );
+		resultData[ index ] = new FavoriteItem( favoriteName, musicItems );
+	}
+
+	return true;
 }
 
 bool FavoriteItem::getJsonData( QJsonObject &get_json_object ) const {

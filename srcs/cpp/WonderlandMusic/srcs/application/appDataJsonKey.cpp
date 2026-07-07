@@ -5,6 +5,7 @@
 #include "jsonKey/appMusicManageJsonKey.h"
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
 #include "jsonKey/favorItemWidgetJsonKey.h"
+#include "jsonKey/favoriteItemJsonKey.h"
 #include "jsonKey/favoriteSrollAreaJsonKey.h"
 #include "jsonKey/favoriteWidgetJsonKey.h"
 #include "jsonKey/favoritemDockWidgetJsonKey.h"
@@ -32,6 +33,7 @@ bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( appMusicManage );
 	Delete_Resource_App_Core_Ptr( favorItemWidget );
 	Delete_Resource_App_Core_Ptr( musicItem );
+	Delete_Resource_App_Core_Ptr( favoriteItem );
 	return true;
 }
 
@@ -58,6 +60,7 @@ bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( appMusicManage );
 	Init_Resource_App_Core_Ptr( favorItemWidget );
 	Init_Resource_App_Core_Ptr( musicItem );
+	Init_Resource_App_Core_Ptr( favoriteItem );
 	return true;
 }
 
@@ -78,6 +81,7 @@ bool AppDataJsonKey::initBefore( ) {
 	appMusicManage = new AppMusicManageJsonKey;
 	favorItemWidget = new FavorItemWidgetJsonKey;
 	musicItem = new MusicItemJsonKey;
+	favoriteItem = new FavoriteItemJsonKey;
 	return true;
 }
 
@@ -143,4 +147,8 @@ FavorItemWidgetJsonKey * AppDataJsonKey::getFavorItemWidget( ) const {
 
 MusicItemJsonKey * AppDataJsonKey::getMusicItem( ) const {
 	return musicItem;
+}
+
+FavoriteItemJsonKey * AppDataJsonKey::getFavoriteItem( ) const {
+	return favoriteItem;
 }

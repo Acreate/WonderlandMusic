@@ -13,6 +13,7 @@
 #include "../dateTimeFormat/dateTimeFormat.h"
 #include "../itemWidget/musicInfoItemWidget.h"
 #include "../msgInfo/deleteException.h"
+#include "../tools/appJsonKeyTools.h"
 #include "../tools/appTranslateTools.h"
 #include "../tools/arrayTools.h"
 #include "../tools/pathTools.h"
@@ -159,6 +160,17 @@ MusicItem::MusicItem( const QJsonObject &music_json_object ) {
 }
 
 bool MusicItem::getJsonDataVector( QJsonObject &get_json_object, const std::vector< MusicItem * > &conver_vector ) {
+	QString musicVectorJsonKey;
+	QString musicCountJsonKey;
+	QString musicDataJsonKey;
+
+	if( AppJsonKeyTools::getMusicItem( [&] ( const MusicItemJsonKey &json_key ) {
+		musicVectorJsonKey = json_key.getMusicVector( );
+		musicCountJsonKey = json_key.getMusicCount( );
+		musicDataJsonKey = json_key.getMusicData( );
+	} ) == false )
+		return false;
+
 	QJsonObject vectorData;
 	size_t count = conver_vector.size( );
 	auto data = conver_vector.data( );
@@ -171,26 +183,36 @@ bool MusicItem::getJsonDataVector( QJsonObject &get_json_object, const std::vect
 			jsonCount += 1;
 		}
 	}
-	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getMusicItem( );
 	QJsonObject vector;
-	vector.insert( jsonKey->getMusicData( ), vectorData );
-	vector.insert( jsonKey->getMusicCount( ), QString::number( jsonCount ) );
-	get_json_object.insert( jsonKey->getMusicVector( ), vector );
+	vector.insert( musicDataJsonKey, vectorData );
+	vector.insert( musicCountJsonKey, QString::number( jsonCount ) );
+	get_json_object.insert( musicVectorJsonKey, vector );
 	return true;
 }
 
 bool MusicItem::setJsonDataVector( std::vector< MusicItem * > &result_vector, const QJsonObject &set_json_object ) {
 	if( set_json_object.empty( ) )
 		return false;
-	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getMusicItem( );
 
-	auto find = set_json_object.find( jsonKey->getMusicVector( ) );
+	QString musicVectorJsonKey;
+	QString musicCountJsonKey;
+	QString musicDataJsonKey;
+
+	if( AppJsonKeyTools::getMusicItem( [&] ( const MusicItemJsonKey &json_key ) {
+		musicVectorJsonKey = json_key.getMusicVector( );
+		musicCountJsonKey = json_key.getMusicCount( );
+		musicDataJsonKey = json_key.getMusicData( );
+	} ) == false )
+		return false;
+
+	auto find = set_json_object.find( musicVectorJsonKey );
 	auto end = set_json_object.end( );
 	if( find == end )
 		return false;
 	QJsonObject vector = find.value( ).toObject( );
 	end = vector.end( );
-	find = vector.find( jsonKey->getMusicCount( ) );
+
+	find = vector.find( musicCountJsonKey );
 	if( find == end )
 		return false;
 	bool conver;
@@ -199,7 +221,7 @@ bool MusicItem::setJsonDataVector( std::vector< MusicItem * > &result_vector, co
 		return false;
 	if( vectorCount == 0 )
 		return true;
-	find = vector.find( jsonKey->getMusicData( ) );
+	find = vector.find( musicDataJsonKey );
 	if( find == end )
 		return false;
 	result_vector.resize( vectorCount );

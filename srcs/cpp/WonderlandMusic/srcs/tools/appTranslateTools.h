@@ -3,7 +3,7 @@
 #include <functional>
 #include <head/head_translate_class.h>
 #define Declaration_Get_Translate( type_name_ ) \
-	bool get##type_name_(const std::function< void( type_name_##Translate & ) > &translate_fun_call);
+	bool get##type_name_(const std::function< void( type_name_##Translate & translate) > &translate_fun_call);
 
 namespace AppTranslateTools {
 	AppTranslate * getAppTranslate( );

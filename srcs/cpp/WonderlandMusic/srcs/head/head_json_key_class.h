@@ -1,5 +1,6 @@
 ﻿#ifndef HEAD_JSON_KEY_CLASS_H_H_HEAD__FILE__
 #define HEAD_JSON_KEY_CLASS_H_H_HEAD__FILE__
+class AppDataJsonKey;
 class FavorItemWidgetJsonKey;
 class MusicItemJsonKey;
 class AppMusicManageJsonKey;
@@ -16,5 +17,5 @@ class MainWindowJsonKey;
 class PlayerListTopWidgetJsonKey;
 class AboutWidgetJsonKey;
 class PlayerListToolWidgetJsonKey;
-class AppDataJsonKey;
+class FavoriteItemJsonKey;
 #endif // HEAD_JSON_KEY_CLASS_H_H_HEAD__FILE__

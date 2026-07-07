@@ -3,11 +3,10 @@
 #include <functional>
 #include <head/head_json_key_class.h>
 #define Declaration_Get_JsonKey( type_name_ ) \
-	bool get##type_name_(const std::function< void( const type_name_##JsonKey & ) > &json_key_fun_call)
-class AppDataJsonKey;
+	bool get##type_name_(const std::function< void( const type_name_##JsonKey & json_key) > &json_key_fun_call)
 
 namespace AppJsonKeyTools {
-	AppDataJsonKey * getAppTranslate( );
+	AppDataJsonKey * getAppJsonKey( );
 	Declaration_Get_JsonKey( PlayerListToolWidget );
 	Declaration_Get_JsonKey( AboutWidget );
 	Declaration_Get_JsonKey( PlayerListTopWidget );
@@ -23,6 +22,7 @@ namespace AppJsonKeyTools {
 	Declaration_Get_JsonKey( AppMusicManage );
 	Declaration_Get_JsonKey( FavorItemWidget );
 	Declaration_Get_JsonKey( MusicItem );
+	Declaration_Get_JsonKey( FavoriteItem );
 };
 #undef Declaration_Get_JsonKey
 #endif // APPJSONKEYTOOLS_H_H_HEAD__FILE__

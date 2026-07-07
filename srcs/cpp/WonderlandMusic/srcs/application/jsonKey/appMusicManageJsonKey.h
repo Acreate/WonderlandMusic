@@ -3,6 +3,7 @@
 #include "../../interface/iJsonKey.h"
 
 class AppMusicManageJsonKey : public IJsonKey {
+	QString jsonObejct;
 	QString filePath;
 	QString selectFilePath;
 	QString selectDirPath;
@@ -10,6 +11,7 @@ class AppMusicManageJsonKey : public IJsonKey {
 public:
 	bool init( ) override;
 
+	virtual const QString & getJsonObejct( ) const;
 	virtual QString getFilePath( ) const;
 
 	virtual const QString & getSelectFilePath( ) const;

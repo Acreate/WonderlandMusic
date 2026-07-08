@@ -8,39 +8,23 @@ class FavoriteItem : public QObject, public IAppJsonData {
 	Q_OBJECT;
 
 public:
-	class PropertyAccessor {
-		friend class FavoriteItem;
-		friend class AppMusicManage;
-		FavoriteItem *favoriteItem;
-		void setRead( bool read );
-		PropertyAccessor( FavoriteItem *favorite_item );
-	};
+	class ItemInfo;
 
-	PropertyAccessor *propertyAccessor;
-	friend class FavoriteItem::PropertyAccessor;
-
-protected:
-	class ItemStatus {
-		friend class FavoriteItem;
-		friend class FavoriteItem::PropertyAccessor;
-		bool read = true;
-	};
-
-	ItemStatus *itemStatus;
-
-protected:
 	class ItemInfo {
+		friend class AppMusicManage;
 		friend class FavoriteItem;
 		QString name;
 		std::vector< MusicItem * > musicItemvVector;
 		FavoriteItemWidget *favoriteItemWidget;
 		QObject *deleteErrorObj;
+		bool read = true;
 		ItemInfo( const QString &name, const std::vector< MusicItem * > &music_itemv_vector, FavoriteItemWidget *favorite_item_widget );
 
 	public:
 		virtual ~ItemInfo( );
 	};
 
+protected:
 	ItemInfo *info;
 
 public:
@@ -61,6 +45,7 @@ public:
 	static bool setJsonDataVector( std::vector< FavoriteItem * > &result_vector, const QJsonObject &set_json_object );
 
 public:
+	virtual ItemInfo * getInfo( ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual const QString & getName( ) const;

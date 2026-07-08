@@ -24,18 +24,9 @@ FavoriteItem::ItemInfo::~ItemInfo( ) {
 	delete this->favoriteItemWidget;
 }
 
-void FavoriteItem::PropertyAccessor::setRead( bool read ) {
-	favoriteItem->itemStatus->read = read;
-}
-
-FavoriteItem::PropertyAccessor::PropertyAccessor( FavoriteItem *favorite_item ) : favoriteItem( favorite_item ) {
-}
-
 FavoriteItem::FavoriteItem( const QString &name, const std::vector< MusicItem * > &music_itemv_vector ) {
 	info = new ItemInfo( name, music_itemv_vector, new FavoriteItemWidget( this ) );
-	itemStatus = new ItemStatus;
-	propertyAccessor = new PropertyAccessor( this );
-	itemStatus->read = false;
+	info->read = false;
 	info->favoriteItemWidget->setEnabled( false );
 	info->favoriteItemWidget->installEventFilter( this );
 	connect( info->deleteErrorObj, &QObject::destroyed, [this] ( QObject *obj ) {
@@ -52,8 +43,6 @@ void FavoriteItem::setEnabled( bool enabled ) {
 FavoriteItem::~FavoriteItem( ) {
 	info->deleteErrorObj->disconnect( info->deleteErrorObj, &QObject::destroyed, this, nullptr );
 	delete info;
-	delete itemStatus;
-	delete propertyAccessor;
 }
 
 bool FavoriteItem::eventFilter( QObject *watched, QEvent *event ) {
@@ -61,7 +50,7 @@ bool FavoriteItem::eventFilter( QObject *watched, QEvent *event ) {
 		auto type = event->type( );
 		switch( type ) {
 			case QEvent::EnabledChange :
-				if( itemStatus->read == false )
+				if( info->read == false )
 					event->ignore( );
 				return true;
 		}
@@ -241,6 +230,10 @@ bool FavoriteItem::setJsonDataVector( std::vector< FavoriteItem * > &result_vect
 	}
 
 	return true;
+}
+
+FavoriteItem::ItemInfo * FavoriteItem::getInfo( ) const {
+	return info;
 }
 
 bool FavoriteItem::getJsonData( QJsonObject &get_json_object ) const {

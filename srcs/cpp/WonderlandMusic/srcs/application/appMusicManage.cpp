@@ -720,6 +720,11 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 			connect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
 		}
 	}
+	FavoriteItem *favoriteItem = nullptr;
+	if( getRootFavoriteItem( favoriteItem ) == false )
+		return false;
+	favoriteItem->getInfo( )->musicItemvVector = this->musicItemVector;
+
 	auto appUserInterfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
 	auto playerWindow = appUserInterfaceManage->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( );
 	auto musicListWindow = playerWindow->getMusicListWindow( );

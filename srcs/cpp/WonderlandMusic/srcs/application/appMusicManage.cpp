@@ -606,7 +606,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 			}
 		}
 		count = resultMusicItemVector.size( );
-		musicItemVector.reserve( count );
+		musicItemVector.resize( count );
 		data = musicItemVector.data( );
 		auto copydata = resultMusicItemVector.data( );
 		for( index = 0; index < count; index += 1 ) {
@@ -627,7 +627,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 			}
 		}
 		count = resultFavoriteItemVector.size( );
-		favoriteItemVector.reserve( count );
+		favoriteItemVector.resize( count );
 		data = favoriteItemVector.data( );
 		auto copydata = resultFavoriteItemVector.data( );
 		for( index = 0; index < count; index += 1 ) {

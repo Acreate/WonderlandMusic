@@ -19,6 +19,7 @@
 #include "../scrollArea/musicContreScrollArea.h"
 #include "../stackedWidget/mainStackedWidget.h"
 #include "../tools/appJsonKeyTools.h"
+#include "../tools/appTranslateTools.h"
 #include "../tools/pathTools.h"
 #include "../tools/widgetTools.h"
 #include "../widget/favoriteWidget.h"
@@ -129,7 +130,13 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 			job->deleteLater( );
 		} );
 		connect( dataManage, &AppDataManage::signal_load_over, job, [=] ( const std::vector< MusicItem * > &music_item_vector ) {
-			favoriteItem->appendMusicItem( fileVector );
+			if( favoriteItem )
+				favoriteItem->appendMusicItem( fileVector );
+			else {
+				decltype(favoriteItem) item = nullptr;
+				if( getRootFavoriteItem( item ) )
+					item->appendMusicItem( fileVector );
+			}
 			job->disconnect( );
 			job->deleteLater( );
 		} );
@@ -457,6 +464,7 @@ bool AppMusicManage::init( ) {
 
 bool AppMusicManage::initBefore( ) {
 	deleteResource( );
+	loadCount = 0;
 	loadMutex = new UserMutex;
 	appMusicDecoder = new AppMusicDecoder;
 	Before_Init_Resource_App_Core_Ptr( appMusicDecoder );
@@ -483,6 +491,32 @@ bool AppMusicManage::initAfter( ) {
 		deleteResource( );
 	} );
 	return true;
+}
+
+bool AppMusicManage::getRootFavoriteItem( FavoriteItem *&result_root_item ) const {
+	loadMutex->lock( );
+	size_t count = favoriteItemVector.size( );
+	if( count ) {
+		QString rootName;
+		if( AppTranslateTools::getAppMusicManage( [&rootName] ( AppMusicManageTranslate &translate ) {
+			rootName = translate.getRootFavoriteName( );
+		} ) == false ) {
+			loadMutex->unlock( );
+			return false;
+		}
+		size_t index;
+		auto data = favoriteItemVector.data( );
+		for( index = 0; index < count; index += 1 )
+			if( data[ index ]->getFavoriteName( ) == rootName ) {
+				result_root_item = data[ index ];
+				loadMutex->unlock( );
+				return true;
+			}
+	}
+
+	loadMutex->unlock( );
+
+	return false;
 }
 
 size_t AppMusicManage::findMusicItem( MusicItem *&result_item, const QString &find_music ) const {

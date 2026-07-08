@@ -48,6 +48,7 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
+	virtual bool getRootFavoriteItem( FavoriteItem *&result_root_item ) const;
 	virtual size_t findMusicItem( MusicItem * &result_item, const QString &find_music ) const;
 	virtual size_t findMusicItem( std::vector< MusicItem * > &result_item, const std::vector< QString > &find_music ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;

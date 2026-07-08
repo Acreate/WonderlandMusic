@@ -1,29 +1,19 @@
 ﻿#include "musicContreWidget.h"
-
 #include <QDateTime>
 #include <QPainter>
 #include <qevent.h>
-
 #include "playerListTopWidget.h"
-
 #include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
 #include "../application/appRenderImage.h"
 #include "../application/appUserInterfaceManage.h"
 #include "../application/applicationManage.h"
-
 #include "../dockWidget/musicItemSizeInfoDockWidget.h"
-
 #include "../item/musicItem.h"
-
 #include "../itemWidget/musicInfoItemWidget.h"
-
 #include "../mutex/userMutex.h"
-
 #include "../stackedWidget/mainStackedWidget.h"
-
 #include "../tools/vectorTools.h"
-
 #include "../window/mainWindow.h"
 #include "../window/musicListWindow.h"
 #include "../window/playerWindow.h"
@@ -35,7 +25,7 @@ bool MusicContreWidget::showFavorteMusicContreList( const QString &music_favorte
 	return false;
 }
 
-void MusicContreWidget::setItemVector( const std::vector< MusicItem * > &load_music_items ) {
+void MusicContreWidget::setMusicInfoVector( const std::vector< MusicItem * > &load_music_items ) {
 	size_t index;
 	MusicInfoItemWidget **saveInfoData;
 	musicInfoMutex->lock( );
@@ -134,6 +124,19 @@ void MusicContreWidget::removeRepetition( ) {
 	VectorTools::getRepetition( buff, release, musicInfoVector, compFunction );
 	VectorTools::deleteVectorPtr( release );
 	musicInfoVector = buff;
+}
+
+const std::vector< MusicInfoItemWidget * > & MusicContreWidget::getMusicInfoVector( ) const {
+	return musicInfoVector;
+}
+
+void MusicContreWidget::setMusicInfoVector( const std::vector< MusicInfoItemWidget * > &music_info_vector ) {
+	musicInfoMutex->lock( );
+	musicInfoVector = music_info_vector;
+	activeLeftItemWidget = nullptr;
+	selectLeftItemWidget = nullptr;
+	musicInfoMutex->unlock( );
+	updateItemWidget( );
 }
 
 void MusicContreWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier ) {

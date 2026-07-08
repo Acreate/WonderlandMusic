@@ -1,14 +1,23 @@
 ﻿#include "favoriteWidget.h"
 #include <QJsonObject>
 #include <QMouseEvent>
+#include "musicContreWidget.h"
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appMusicManage.h"
+#include "../application/appUserInterfaceManage.h"
 #include "../application/jsonKey/favoriteWidgetJsonKey.h"
+#include "../application/translate/appMusicManageTranslate.h"
 #include "../item/favoriteItem.h"
 #include "../itemWidget/favoriteItemWidget.h"
 #include "../mutex/userMutex.h"
+#include "../scrollArea/musicContreScrollArea.h"
+#include "../stackedWidget/mainStackedWidget.h"
+#include "../tools/appTranslateTools.h"
+#include "../window/mainWindow.h"
+#include "../window/musicListWindow.h"
+#include "../window/playerWindow.h"
 
 FavoriteWidget::FavoriteWidget( QWidget *parent ) : QWidget( parent ) {
 }
@@ -22,6 +31,22 @@ bool FavoriteWidget::deleteResource( ) {
 
 FavoriteWidget::~FavoriteWidget( ) {
 	deleteResource( );
+}
+
+void FavoriteWidget::setSelectFavorite( FavoriteItem *const select_favorite ) {
+	if( selectFavorite ) {
+		selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
+
+		selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
+
+		selectFavorite->disconnect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
+	}
+	selectFavorite = select_favorite;
+	if( selectFavorite ) {
+		connect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
+		connect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
+		connect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
+	}
 }
 
 void FavoriteWidget::updateAppMusicManageInof( const std::vector< FavoriteItem * > &vector ) {
@@ -38,6 +63,9 @@ void FavoriteWidget::updateAppMusicManageInof( const std::vector< FavoriteItem *
 		itemWidget->setParent( this );
 		itemWidget->show( );
 	}
+	decltype(selectFavorite) rootPtr = nullptr;
+	AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( )->getRootFavoriteItem( rootPtr );
+	setSelectFavorite( rootPtr );
 	emit signal_update_item_over( );
 	updateLayout( );
 }
@@ -189,4 +217,29 @@ void FavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				emit signal_favorite_Item_pop_menu( selectFavorite );
 			break;
 	}
+}
+
+void FavoriteWidget::slot_change_name_finished( ) {
+}
+
+void FavoriteWidget::slot_change_vector_finished( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
+	if( selectFavorite )
+		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
+	else if( appInstance->getAppDataManage( )->getAppMusicManage( )->getRootFavoriteItem( selectFavorite ) )
+		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
+	updateLayout( );
+}
+
+void FavoriteWidget::slot_destroyed( QObject *delete_ptr ) {
+	if( selectFavorite != delete_ptr )
+		return;
+
+	selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
+
+	selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
+
+	selectFavorite->disconnect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
+	selectFavorite = nullptr;
 }

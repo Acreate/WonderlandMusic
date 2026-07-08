@@ -19,7 +19,7 @@ void MusicContreScrollArea::setItemWidth( const PlayerListTopWidget *player_list
 }
 
 void MusicContreScrollArea::setItemVector( const std::vector< MusicItem * > &load_music_items ) {
-	musicContreWidget->setItemVector( load_music_items );
+	musicContreWidget->setMusicInfoVector( load_music_items );
 }
 
 void MusicContreScrollArea::setItemWidth( int widget_before_width, int splite_width, int index_width, int music_name_width, int music_singer_width, int music_duration_width, int widget_after_width ) {

@@ -39,6 +39,14 @@ public:
 	bool initBefore( ) override;
 
 	bool initAfter( ) override;
+
+protected:
+	void mouseDoubleClickEvent( QMouseEvent * ) override;
+	void mouseMoveEvent( QMouseEvent * ) override;
+	void mousePressEvent( QMouseEvent * ) override;
+	void mouseReleaseEvent( QMouseEvent * ) override;
+
+public:
 Q_SIGNALS:
 	void signal_horizontal_scroll_set_value( int value );
 };

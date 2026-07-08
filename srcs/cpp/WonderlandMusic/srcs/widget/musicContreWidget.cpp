@@ -101,6 +101,8 @@ void MusicContreWidget::updateItemWidget( ) {
 		itemWidget->setIndex( index + 1 );
 		itemWidget->update( );
 		itemWidget->setGeometry( 0, offsetY, newWidth, height );
+		itemWidget->setParent( this );
+		itemWidget->show( );
 		offsetY += height;
 	}
 	if( offsetY > 0 && newWidth > 0 )
@@ -266,20 +268,8 @@ bool MusicContreWidget::setJsonData( const QJsonObject &set_json_object ) {
 }
 
 bool MusicContreWidget::init( ) {
-	return true;
-}
-
-bool MusicContreWidget::initBefore( ) {
-	deleteResource( );
-	doubleClickIntervalTimeMilliSecond = 300;
-	activeLeftItemWidget = nullptr;
-	selectLeftItemWidget = nullptr;
-	musicInfoMutex = new UserMutex;
-	beforeClickTime = new QDateTime;
-	pen = new QPen;
-	drawPenWidth = 4;
-	drawPenColor = QColor( "#7bffa1" );
-	drawFillColor = QColor( "#50a2ff" );
+	drawPenColor.setNamedColor( "#7bffa1" );
+	drawFillColor.setNamedColor( "#50a2ff" );
 	drawFillColor.setAlpha( 100 );
 	pen->setWidth( drawPenWidth );
 	pen->setColor( drawPenColor );
@@ -287,7 +277,22 @@ bool MusicContreWidget::initBefore( ) {
 	return true;
 }
 
+bool MusicContreWidget::initBefore( ) {
+	deleteResource( );
+	musicInfoMutex = new UserMutex;
+	beforeClickTime = new QDateTime;
+	pen = new QPen;
+	doubleClickIntervalTimeMilliSecond = 300;
+	activeLeftItemWidget = nullptr;
+	selectLeftItemWidget = nullptr;
+	drawPenWidth = 4;
+	drawPenColor = QColor( );
+	drawFillColor = QColor( );
+	return true;
+}
+
 bool MusicContreWidget::initAfter( ) {
+	setMouseTracking( true );
 	auto interfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
 	auto playerListTopWidget = interfaceManage->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
 	connect( playerListTopWidget, &PlayerListTopWidget::signal_changed_width, this, &MusicContreWidget::setItemWidth );
@@ -331,6 +336,7 @@ void MusicContreWidget::resizeEvent( QResizeEvent *event ) {
 void MusicContreWidget::mouseMoveEvent( QMouseEvent *event ) {
 	if( musicInfoMutex->tryLock( ) == false )
 		return;
+	activeLeftItemWidget = nullptr;
 	size_t count = musicInfoVector.size( );
 	if( count == 0 ) {
 		musicInfoMutex->unlock( );
@@ -346,7 +352,8 @@ void MusicContreWidget::mouseMoveEvent( QMouseEvent *event ) {
 			break;
 		}
 	musicInfoMutex->unlock( );
-	update( );
+	if( activeLeftItemWidget )
+		update( );
 }
 
 void MusicContreWidget::mouseReleaseEvent( QMouseEvent *event ) {

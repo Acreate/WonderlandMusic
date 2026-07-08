@@ -38,6 +38,7 @@ protected:
 	virtual bool connectFavoriteWidgetMenuSignal( );
 	virtual void loadFile( const QString &music_file );
 	virtual void loadMusciFromFileVector( const std::vector< QString > &music_file );
+	virtual size_t filterMusciFromFileVector( std::vector< QString > &result_filter_over, const std::vector< QString > &music_file );
 	virtual void loadMusciFromDir( const std::vector< QString > &music_dir );
 	virtual bool appendFavorite( const QString &name );
 	virtual bool appendFirstFavorite( );
@@ -56,6 +57,14 @@ public:
 	virtual void toMusicIndex( std::vector< size_t > &result_index, const std::vector< MusicItem * > &find_index_music_item );
 	virtual void fromMusicIndex( std::vector< MusicItem * > &result_music_item, const std::vector< size_t > &find_index );
 	~AppMusicManage( ) override;
+	/// @brief 从序列当中移除目标，并不会释放其内存，应当由调用者进行管理
+	/// @param target 释放目标
+	/// @return 失败返回 false
+	virtual bool removeItem( const MusicItem *target );
+	/// @brief 从序列当中移除目标，并且释放其内存
+	/// @param target 释放目标
+	/// @return 失败返回 false
+	virtual bool deleteItem( const MusicItem *target );
 	virtual AppMusicDecoder * getAppMusicDecoder( ) const;
 	virtual bool removeSelectMusicItem( );
 	virtual bool deleteSelectMusicItem( );

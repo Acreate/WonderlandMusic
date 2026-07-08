@@ -1,10 +1,6 @@
 ﻿#include "musicContreScrollArea.h"
-
 #include <QScrollBar>
-
 #include "../application/appInstance.h"
-#include "../application/appUserInterfaceManage.h"
-
 #include "../widget/musicContreWidget.h"
 
 MusicContreScrollArea::MusicContreScrollArea( QWidget *parent ) : QScrollArea( parent ) {
@@ -45,28 +41,46 @@ bool MusicContreScrollArea::setJsonData( const QJsonObject &set_json_object ) {
 }
 
 bool MusicContreScrollArea::init( ) {
-	Before_Init_Resource_App_Core_Ptr( musicContreWidget );
 	Init_Resource_App_Core_Ptr( musicContreWidget );
-	After_Init_Resource_App_Core_Ptr( musicContreWidget );
 
 	return true;
 }
 
 bool MusicContreScrollArea::initBefore( ) {
 	deleteResource( );
-	musicContreWidget = new MusicContreWidget( this );
-	setWidgetResizable( true );
 	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 	setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+	setWidgetResizable( true );
+	musicContreWidget = new MusicContreWidget( this );
+	Before_Init_Resource_App_Core_Ptr( musicContreWidget );
 	return true;
 }
 
 bool MusicContreScrollArea::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( musicContreWidget );
 	setWidget( musicContreWidget );
-
 	auto scrollBar = horizontalScrollBar( );
-	auto uiManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
 	connect( scrollBar, &QScrollBar::valueChanged, this, &MusicContreScrollArea::signal_horizontal_scroll_set_value );
-
+	viewport( )->setAttribute( Qt::WA_TransparentForMouseEvents, false );
 	return true;
+}
+
+void MusicContreScrollArea::mouseDoubleClickEvent( QMouseEvent *mouse_event ) {
+	QScrollArea::mouseDoubleClickEvent( mouse_event );
+	//qDebug( ) << "mouseDoubleClickEvent";
+}
+
+void MusicContreScrollArea::mouseMoveEvent( QMouseEvent *mouse_event ) {
+	QScrollArea::mouseMoveEvent( mouse_event );
+	//qDebug( ) << "mouseMoveEvent";
+}
+
+void MusicContreScrollArea::mousePressEvent( QMouseEvent *mouse_event ) {
+	QScrollArea::mousePressEvent( mouse_event );
+	//qDebug( ) << "mousePressEvent";
+}
+
+void MusicContreScrollArea::mouseReleaseEvent( QMouseEvent *mouse_event ) {
+	QScrollArea::mouseReleaseEvent( mouse_event );
+	//qDebug( ) << "mouseReleaseEvent";
 }

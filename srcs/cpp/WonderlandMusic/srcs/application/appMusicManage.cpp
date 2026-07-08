@@ -122,6 +122,17 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 		if( WidgetTools::showMultipleSelectFileDialog( fileVector, openMultipleFilePath, mainWindow, translate->getSelectMultipleFileTitle( ), filterName ) == false )
 			return;
 		auto favoriteItem = favoriteWidget->getSelectFavorite( );
+
+		std::vector< QString > loadJob;
+		loadMutex->lock( );
+		size_t loadFileCount = filterMusciFromFileVector( loadJob, fileVector );
+		if( loadFileCount == 0 ) {
+			loadMutex->unlock( );
+			return;
+		}
+		loadFileVector.append_range( loadJob );
+		loadMutex->unlock( );
+
 		QObject *job = new QObject( this );
 
 		AppDataManage *dataManage = AppInstance::getAppInstance( )->getAppDataManage( );
@@ -130,6 +141,8 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 			job->deleteLater( );
 		} );
 		connect( dataManage, &AppDataManage::signal_load_over, job, [=] ( const std::vector< MusicItem * > &music_item_vector ) {
+			job->disconnect( );
+			job->deleteLater( );
 			if( favoriteItem )
 				favoriteItem->appendMusicItem( fileVector );
 			else {
@@ -137,11 +150,10 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 				if( getRootFavoriteItem( item ) )
 					item->appendMusicItem( fileVector );
 			}
-			job->disconnect( );
-			job->deleteLater( );
 		} );
-
-		loadMusciFromFileVector( fileVector );
+		auto loadBuffData = loadJob.data( );
+		for( index = 0; index < loadFileCount; index += 1 )
+			loadFile( loadBuffData[ index ] );
 	} );
 	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_open_dir_dialog, this, []( ) {
 		// todo : 打开多选目录对话框
@@ -335,6 +347,43 @@ void AppMusicManage::loadMusciFromFileVector( const std::vector< QString > &musi
 	loadMutex->unlock( );
 	for( index = 0; index < loadBuffCount; index += 1 )
 		loadFile( loadBuffData[ index ] );
+}
+
+size_t AppMusicManage::filterMusciFromFileVector( std::vector< QString > &result_filter_over, const std::vector< QString > &music_file ) {
+	size_t fileCount = music_file.size( );
+	auto fileData = music_file.data( );
+	size_t fileIndex;
+	result_filter_over.resize( fileCount );
+	auto resultData = result_filter_over.data( );
+	size_t resultCount = 0;
+	size_t loadIndex;
+	size_t musicIndex;
+	QFileInfo info;
+
+	size_t loadFileCount = loadFileVector.size( );
+	auto loadFileData = loadFileVector.data( );
+
+	size_t musicCount = musicItemVector.size( );
+	auto musicData = musicItemVector.data( );
+	for( fileIndex = 0; fileIndex < fileCount; fileIndex += 1 ) {
+		auto file = fileData[ fileIndex ];
+		info.setFile( file );
+		file = info.absoluteFilePath( );
+		for( loadIndex = 0; loadIndex < loadFileCount; loadIndex += 1 )
+			if( file == loadFileData[ loadIndex ] )
+				break;
+		if( loadIndex < loadFileCount )
+			continue;
+		for( musicIndex = 0; musicIndex < musicCount; musicIndex += 1 )
+			if( musicData[ musicIndex ]->isMusicFile( file ) )
+				break;
+		if( musicIndex < musicCount )
+			continue;
+		resultData[ resultCount ] = file;
+	}
+	if( resultCount != fileCount )
+		result_filter_over.resize( fileCount );
+	return resultCount;
 }
 
 void AppMusicManage::loadMusciFromDir( const std::vector< QString > &music_dir ) {
@@ -721,6 +770,43 @@ void AppMusicManage::fromMusicIndex( std::vector< MusicItem * > &result_music_it
 
 AppMusicManage::~AppMusicManage( ) {
 	deleteResource( );
+}
+
+bool AppMusicManage::removeItem( const MusicItem *target ) {
+	loadMutex->lock( );
+	size_t sourceCount = musicItemVector.size( );
+	size_t sourceIndex = 0;
+	auto sourceData = musicItemVector.data( );
+	for( ; sourceIndex < sourceCount; sourceIndex += 1 )
+		if( sourceData[ sourceIndex ] == target ) {
+			sourceData[ sourceIndex ]->disconnect( sourceData[ sourceIndex ], &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
+			musicItemVector.erase( musicItemVector.begin( ) + sourceIndex );
+			loadMutex->unlock( );
+			return true;
+		}
+	loadMutex->unlock( );
+	return false;
+}
+
+bool AppMusicManage::deleteItem( const MusicItem *target ) {
+	MusicItem *deletePtr = nullptr;
+	loadMutex->lock( );
+	size_t sourceCount = musicItemVector.size( );
+	size_t sourceIndex = 0;
+	auto sourceData = musicItemVector.data( );
+	for( ; sourceIndex < sourceCount; sourceIndex += 1 )
+		if( sourceData[ sourceIndex ] == target ) {
+			deletePtr = sourceData[ sourceIndex ];
+			musicItemVector.erase( musicItemVector.begin( ) + sourceIndex );
+			break;
+		}
+	loadMutex->unlock( );
+	if( deletePtr ) {
+		deletePtr->disconnect( deletePtr, &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
+		delete deletePtr;
+		return true;
+	}
+	return false;
 }
 
 AppMusicDecoder * AppMusicManage::getAppMusicDecoder( ) const {

@@ -1,9 +1,7 @@
 ﻿#include "musicInfoItemWidget.h"
-
 #include <QJsonObject>
 #include <QMediaMetaData>
 #include <QPainter>
-
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appDrawManage.h"
@@ -12,13 +10,9 @@
 #include "../application/appUserInterfaceManage.h"
 #include "../application/jsonKey/musicInfoItemWidgetJsonKey.h"
 #include "../application/translate/musicInfoItemTranslate.h"
-
 #include "../dateTimeFormat/dateTimeFormat.h"
-
 #include "../item/musicItem.h"
-
 #include "../tools/pathTools.h"
-
 #include "../window/playerWindow.h"
 
 void MusicInfoItemWidget::setItemWidth( int brfore, int after, int split, int index, int name, int singer, int duation ) {
@@ -83,7 +77,7 @@ MusicInfoItemWidget::MusicInfoItemWidget( QWidget *parent ) :
 
 bool MusicInfoItemWidget::renderToBuff( ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto appDrawManage = appInstance->getAppUserInterfaceManage( )->getAppDrawManage(  );
+	auto appDrawManage = appInstance->getAppUserInterfaceManage( )->getAppDrawManage( );
 	auto renderImage = appDrawManage->getAppRenderImage( );
 	auto font = renderImage->getFont( );
 
@@ -92,7 +86,7 @@ bool MusicInfoItemWidget::renderToBuff( ) {
 	auto currentHeight = height( );
 	auto currentWidh = width( );
 	*renderBuff = QImage( currentWidh, currentHeight, QImage::Format_RGBA8888 );
-
+	renderBuff->fill( 0 );
 	QPainter painter;
 	painter.begin( renderBuff );
 	auto pen = painter.pen( );
@@ -189,7 +183,7 @@ bool MusicInfoItemWidget::init( const QString &music_file_path, const QString &m
 	this->duration = duration_ms;
 	this->formatStringDuration = DateTimeFormat::millsecondToHourMinSecFrom( duration_ms );
 	equFilePath = absFilePath == musicFilePath;
-	renderToBuff( );
+	//renderToBuff( );
 	return true;
 }
 

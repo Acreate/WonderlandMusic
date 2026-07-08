@@ -99,9 +99,9 @@ void MusicContreWidget::updateItemWidget( ) {
 		auto itemWidget = data[ index ];
 		itemWidget->setItemWidth( widgetBeforeWidth, widgetAfterWidth, splitWidth, indexWidth, musicNameWidth, musicSingerWidth, musicDurationWidth );
 		itemWidget->setIndex( index + 1 );
-		itemWidget->update( );
 		itemWidget->setGeometry( 0, offsetY, newWidth, height );
 		itemWidget->setParent( this );
+		itemWidget->renderToBuff( );
 		itemWidget->show( );
 		offsetY += height;
 	}
@@ -300,6 +300,88 @@ bool MusicContreWidget::initAfter( ) {
 	return true;
 }
 
+MusicInfoItemWidget * MusicContreWidget::highlghtItem( const QPoint &pos ) {
+	if( musicInfoMutex->tryLock( ) == false )
+		return nullptr;
+	activeLeftItemWidget = nullptr;
+	size_t count = musicInfoVector.size( );
+	if( count == 0 ) {
+		auto data = musicInfoVector.data( );
+		size_t index;
+		for( index = 0; index < count; index += 1 )
+			if( data[ index ]->geometry( ).contains( pos ) ) {
+				activeLeftItemWidget = data[ index ];
+				break;
+			}
+		update( );
+	}
+	musicInfoMutex->unlock( );
+	return activeLeftItemWidget;
+}
+
+MusicInfoItemWidget * MusicContreWidget::selectorItem( const QPoint &pos ) {
+	bool isDoubleClick = false;
+	MusicInfoItemWidget *selectItem = nullptr;
+	musicInfoMutex->lock( );
+	size_t count = musicInfoVector.size( );
+	if( count == 0 ) {
+		auto data = musicInfoVector.data( );
+		size_t index;
+		for( index = 0; index < count; index += 1 )
+			if( data[ index ]->geometry( ).contains( pos ) ) {
+				selectItem = data[ index ];
+				// 双击检测
+				auto currentDateTime = QDateTime::currentDateTime( );
+				if( selectLeftItemWidget == selectItem )
+					isDoubleClick = doubleClickIntervalTimeMilliSecond > ( currentDateTime - *beforeClickTime ).count( );
+				*beforeClickTime = currentDateTime;
+				selectLeftItemWidget = selectItem;
+				break;
+			}
+		// 双击或单击，二选一
+		if( isDoubleClick ) {
+			musicInfoMutex->unlock( );
+			// 触发信号
+			emit signal_item_double_select( );
+		} else if( selectItem ) { // 单击
+			std::vector< MusicInfoItemWidget * > resultVector;
+			apendSelectMusicItemWidget( selectItem, true );
+			resultVector = selectItemWidgetVector;
+			musicInfoMutex->unlock( );
+			// 触发信号
+			emit signal_item_select( );
+		} else
+			musicInfoMutex->unlock( );
+		update( );
+	}
+	return selectItem;
+}
+
+MusicInfoItemWidget * MusicContreWidget::showItemMenu( const QPoint &pos ) {
+	MusicInfoItemWidget *selectItem = nullptr;
+	musicInfoMutex->lock( );
+
+	size_t count = musicInfoVector.size( );
+	if( count ) {
+		auto data = musicInfoVector.data( );
+		size_t index;
+		for( index = 0; index < count; index += 1 )
+			if( data[ index ]->geometry( ).contains( pos ) ) {
+				selectItem = data[ index ];
+				apendSelectMusicItemWidget( selectItem, false );
+				musicInfoMutex->unlock( );
+				update( );
+				// 触发信号
+				emit signal_item_select( );
+				break;
+			}
+	}
+	if( selectItem == nullptr )
+		musicInfoMutex->unlock( );
+	emit signal_pop_menu( );
+	return selectItem;
+}
+
 void MusicContreWidget::paintEvent( QPaintEvent *event ) {
 	if( musicInfoMutex == nullptr || musicInfoMutex->tryLock( ) == false )
 		return;
@@ -331,103 +413,4 @@ void MusicContreWidget::resizeEvent( QResizeEvent *event ) {
 	auto size = event->size( );
 	currentWidgetHeight = size.height( );
 	currentWidgetWidth = size.width( );
-}
-
-void MusicContreWidget::mouseMoveEvent( QMouseEvent *event ) {
-	if( musicInfoMutex->tryLock( ) == false )
-		return;
-	activeLeftItemWidget = nullptr;
-	size_t count = musicInfoVector.size( );
-	if( count == 0 ) {
-		musicInfoMutex->unlock( );
-		return;
-	}
-
-	auto point = event->pos( );
-	auto data = musicInfoVector.data( );
-	size_t index;
-	for( index = 0; index < count; index += 1 )
-		if( data[ index ]->geometry( ).contains( point ) ) {
-			activeLeftItemWidget = data[ index ];
-			break;
-		}
-	musicInfoMutex->unlock( );
-	if( activeLeftItemWidget )
-		update( );
-}
-
-void MusicContreWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	Qt::MouseButton mouseButton = event->button( );
-	switch( mouseButton ) {
-		case Qt::MouseButton::LeftButton : {
-			bool isDoubleClick = false;
-			MusicInfoItemWidget *selectItem = nullptr;
-			musicInfoMutex->lock( );
-			size_t count = musicInfoVector.size( );
-			if( count == 0 ) {
-				musicInfoMutex->unlock( );
-				return;
-			}
-
-			auto point = event->pos( );
-			auto data = musicInfoVector.data( );
-			size_t index;
-			for( index = 0; index < count; index += 1 )
-				if( data[ index ]->geometry( ).contains( point ) ) {
-					selectItem = data[ index ];
-
-					// 双击检测
-					auto currentDateTime = QDateTime::currentDateTime( );
-					if( selectLeftItemWidget == selectItem )
-						isDoubleClick = doubleClickIntervalTimeMilliSecond > ( currentDateTime - *beforeClickTime ).count( );
-					*beforeClickTime = currentDateTime;
-					break;
-				}
-			musicInfoMutex->unlock( );
-			// 双击或单击，二选一
-			if( isDoubleClick ) {
-				// 触发信号
-				emit signal_item_double_select( );
-			} else if( selectItem ) { // 单击
-				std::vector< MusicInfoItemWidget * > resultVector;
-				musicInfoMutex->lock( );
-				apendSelectMusicItemWidget( selectItem, true );
-				resultVector = selectItemWidgetVector;
-				musicInfoMutex->unlock( );
-				// 触发信号
-				emit signal_item_select( );
-				update( );
-			}
-		}
-		break;
-		case Qt::MouseButton::RightButton : {
-			MusicInfoItemWidget *selectItem = nullptr;
-			musicInfoMutex->lock( );
-
-			size_t count = musicInfoVector.size( );
-			if( count ) {
-				auto point = event->pos( );
-				auto data = musicInfoVector.data( );
-				size_t index;
-				for( index = 0; index < count; index += 1 )
-					if( data[ index ]->geometry( ).contains( point ) ) {
-						selectItem = data[ index ];
-						break;
-					}
-			}
-			musicInfoMutex->unlock( );
-			if( selectItem ) {
-				std::vector< MusicInfoItemWidget * > resultVector;
-				musicInfoMutex->lock( );
-				apendSelectMusicItemWidget( selectItem, false );
-				resultVector = selectItemWidgetVector;
-				musicInfoMutex->unlock( );
-				update( );
-				// 触发信号
-				emit signal_item_select( );
-			}
-			emit signal_pop_menu( );
-		}
-		break;
-	}
 }

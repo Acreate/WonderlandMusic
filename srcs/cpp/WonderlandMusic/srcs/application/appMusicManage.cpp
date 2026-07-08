@@ -9,6 +9,7 @@
 #include "appUserInterfaceManage.h"
 #include "applicationManage.h"
 #include "../dockWidget/favoritemDockWidget.h"
+#include "../dockWidget/musicItemSizeInfoDockWidget.h"
 #include "../item/favoriteItem.h"
 #include "../item/musicItem.h"
 #include "../itemWidget/favoriteItemWidget.h"
@@ -23,6 +24,7 @@
 #include "../tools/pathTools.h"
 #include "../tools/widgetTools.h"
 #include "../widget/favoriteWidget.h"
+#include "../widget/musicContreWidget.h"
 #include "../window/mainWindow.h"
 #include "../window/musicListWindow.h"
 #include "../window/playerWindow.h"
@@ -718,6 +720,13 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 			connect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
 		}
 	}
+	auto appUserInterfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
+	auto playerWindow = appUserInterfaceManage->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( );
+	auto musicListWindow = playerWindow->getMusicListWindow( );
+	auto musicContreWidget = musicListWindow->getMusicContreScrollArea( )->getMusicContreWidget( );
+	auto playerListTopWidget = musicListWindow->getMusicItemSizeInfoDockWidget( )->getPlayerListTopWidget( );
+	musicContreWidget->setItemPlayerListTopWidgetWidth( playerListTopWidget );
+
 	favoriteWidget->updateAppMusicManageInof( favoriteItemVector );
 	return true;
 }

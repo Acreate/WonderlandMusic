@@ -10,6 +10,7 @@ class MusicInfoItemWidget;
 
 class MusicContreWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
+	friend class MusicContreScrollArea;
 
 protected:
 	int currentWidgetWidth;
@@ -63,12 +64,13 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
+	virtual MusicInfoItemWidget * highlghtItem( const QPoint &pos );
+	virtual MusicInfoItemWidget * selectorItem( const QPoint &pos );
+	virtual MusicInfoItemWidget * showItemMenu( const QPoint &pos );
 	// 重载
 protected:
 	void paintEvent( QPaintEvent *event ) override;
 	void resizeEvent( QResizeEvent *event ) override;
-	void mouseMoveEvent( QMouseEvent *event ) override;
-	void mouseReleaseEvent( QMouseEvent *event ) override;
 Q_SIGNALS:
 	void signal_item_select( );
 	void signal_item_double_select( );

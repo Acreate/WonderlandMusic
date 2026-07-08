@@ -1,4 +1,5 @@
 ﻿#include "musicContreScrollArea.h"
+#include <QMouseEvent>
 #include <QScrollBar>
 #include "../application/appInstance.h"
 #include "../widget/musicContreWidget.h"
@@ -62,25 +63,36 @@ bool MusicContreScrollArea::initAfter( ) {
 	auto scrollBar = horizontalScrollBar( );
 	connect( scrollBar, &QScrollBar::valueChanged, this, &MusicContreScrollArea::signal_horizontal_scroll_set_value );
 	viewport( )->setAttribute( Qt::WA_TransparentForMouseEvents, false );
+	setMouseTracking( true );
 	return true;
 }
 
 void MusicContreScrollArea::mouseDoubleClickEvent( QMouseEvent *mouse_event ) {
 	QScrollArea::mouseDoubleClickEvent( mouse_event );
-	//qDebug( ) << "mouseDoubleClickEvent";
 }
 
 void MusicContreScrollArea::mouseMoveEvent( QMouseEvent *mouse_event ) {
 	QScrollArea::mouseMoveEvent( mouse_event );
-	//qDebug( ) << "mouseMoveEvent";
+	if( musicContreWidget == nullptr )
+		return;
+	musicContreWidget->highlghtItem( musicContreWidget->mapFromParent( mouse_event->pos( ) ) );
 }
 
 void MusicContreScrollArea::mousePressEvent( QMouseEvent *mouse_event ) {
 	QScrollArea::mousePressEvent( mouse_event );
-	//qDebug( ) << "mousePressEvent";
 }
 
 void MusicContreScrollArea::mouseReleaseEvent( QMouseEvent *mouse_event ) {
 	QScrollArea::mouseReleaseEvent( mouse_event );
-	//qDebug( ) << "mouseReleaseEvent";
+	if( musicContreWidget == nullptr )
+		return;
+	Qt::MouseButton mouseButton = mouse_event->button( );
+	switch( mouseButton ) {
+		case Qt::MouseButton::LeftButton :
+			musicContreWidget->selectorItem( musicContreWidget->mapFromParent( mouse_event->pos( ) ) );
+			break;
+		case Qt::MouseButton::RightButton :
+			musicContreWidget->showItemMenu( musicContreWidget->mapFromParent( mouse_event->pos( ) ) );
+			break;
+	}
 }

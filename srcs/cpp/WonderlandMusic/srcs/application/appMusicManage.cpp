@@ -120,6 +120,20 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 		std::vector< QString > fileVector;
 		if( WidgetTools::showMultipleSelectFileDialog( fileVector, openMultipleFilePath, mainWindow, translate->getSelectMultipleFileTitle( ), filterName ) == false )
 			return;
+		auto favoriteItem = favoriteWidget->getSelectFavorite( );
+		QObject *job = new QObject( this );
+
+		AppDataManage *dataManage = AppInstance::getAppInstance( )->getAppDataManage( );
+		connect( dataManage, &AppDataManage::signal_load_error, job, [=]( ) {
+			job->disconnect( );
+			job->deleteLater( );
+		} );
+		connect( dataManage, &AppDataManage::signal_load_over, job, [=] ( const std::vector< MusicItem * > &music_item_vector ) {
+			favoriteItem->appendMusicItem( fileVector );
+			job->disconnect( );
+			job->deleteLater( );
+		} );
+
 		loadMusciFromFileVector( fileVector );
 	} );
 	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_open_dir_dialog, this, []( ) {
@@ -469,6 +483,60 @@ bool AppMusicManage::initAfter( ) {
 		deleteResource( );
 	} );
 	return true;
+}
+
+size_t AppMusicManage::findMusicItem( MusicItem *&result_item, const QString &find_music ) const {
+	loadMutex->lock( );
+	size_t count = musicItemVector.size( );
+	size_t resultCount = 0;
+	if( count ) {
+		size_t index = 0;
+		auto data = musicItemVector.data( );
+		for( ; index < count; index += 1 )
+			if( data[ index ]->isMusicFile( find_music ) ) {
+				result_item = data[ index ];
+				resultCount += 1;
+				break;
+			}
+	}
+	loadMutex->unlock( );
+	return resultCount;
+}
+
+size_t AppMusicManage::findMusicItem( std::vector< MusicItem * > &result_item, const std::vector< QString > &find_music ) const {
+	loadMutex->lock( );
+	size_t count = musicItemVector.size( );
+	size_t resultCount = 0;
+	if( count ) {
+		size_t index = 0;
+		auto data = musicItemVector.data( );
+		size_t findeIndex;
+		size_t findCount = find_music.size( );
+		auto findData = find_music.data( );
+		result_item.resize( findCount );
+		auto setData = result_item.data( );
+		size_t filterIndex;
+
+		for( findeIndex = 0; findeIndex < findCount; findeIndex += 1 ) {
+			auto findFile = findData[ findeIndex ];
+			for( ; index < count; index += 1 ) {
+				if( data[ index ]->isMusicFile( findFile ) ) {
+					for( filterIndex = 0; filterIndex < resultCount; filterIndex += 1 )
+						if( setData[ filterIndex ] == data[ index ] )
+							break;
+					if( filterIndex < resultCount )
+						break;
+					setData[ resultCount ] = data[ index ];
+					resultCount += 1;
+					break;
+				}
+			}
+		}
+		if( resultCount != findCount )
+			result_item.resize( resultCount );
+	}
+	loadMutex->unlock( );
+	return resultCount;
 }
 
 bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {

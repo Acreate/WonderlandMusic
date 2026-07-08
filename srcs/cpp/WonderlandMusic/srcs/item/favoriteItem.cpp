@@ -24,8 +24,20 @@ FavoriteItem::ItemInfo::~ItemInfo( ) {
 	delete this->favoriteItemWidget;
 }
 
+void FavoriteItem::PropertyAccessor::setRead( bool read ) {
+	favoriteItem->itemStatus->read = read;
+}
+
+FavoriteItem::PropertyAccessor::PropertyAccessor( FavoriteItem *favorite_item ) : favoriteItem( favorite_item ) {
+}
+
 FavoriteItem::FavoriteItem( const QString &name, const std::vector< MusicItem * > &music_itemv_vector ) {
 	info = new ItemInfo( name, music_itemv_vector, new FavoriteItemWidget( this ) );
+	itemStatus = new ItemStatus;
+	propertyAccessor = new PropertyAccessor( this );
+	itemStatus->read = false;
+	info->favoriteItemWidget->setEnabled( false );
+	info->favoriteItemWidget->installEventFilter( this );
 	connect( info->deleteErrorObj, &QObject::destroyed, [this] ( QObject *obj ) {
 		Delete_Ptr_Exception( info->deleteErrorObj, obj );
 	} );
@@ -37,12 +49,24 @@ void FavoriteItem::setEnabled( bool enabled ) {
 	info->favoriteItemWidget->setEnabled( enabled );
 }
 
-FavoriteItem::FavoriteItem( const QString &name ) : FavoriteItem( name, std::vector< MusicItem * >( ) ) {
-}
-
 FavoriteItem::~FavoriteItem( ) {
 	info->deleteErrorObj->disconnect( info->deleteErrorObj, &QObject::destroyed, this, nullptr );
 	delete info;
+	delete itemStatus;
+	delete propertyAccessor;
+}
+
+bool FavoriteItem::eventFilter( QObject *watched, QEvent *event ) {
+	if( watched == info->favoriteItemWidget ) {
+		auto type = event->type( );
+		switch( type ) {
+			case QEvent::EnabledChange :
+				if( itemStatus->read == false )
+					event->ignore( );
+				return true;
+		}
+	}
+	return QObject::eventFilter( watched, event );
 }
 
 void FavoriteItem::setFavoriteName( const QString &favorite_name ) {
@@ -333,6 +357,38 @@ bool FavoriteItem::removeMusicItem( const std::vector< MusicItem * > &remove_ite
 	info->musicItemvVector = buff;
 	emit signal_change_vector_finished( );
 	return true;
+}
+
+bool FavoriteItem::appendMusicItem( const QString &music_item ) {
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	MusicItem *getItem = nullptr;
+	if( appMusicManage->findMusicItem( getItem, music_item ) == 0 )
+		return false;
+	return appendMusicItem( getItem );
+}
+
+bool FavoriteItem::appendMusicItem( const std::vector< QString > &append_item_vector ) {
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	std::vector< MusicItem * > getItem;
+	if( appMusicManage->findMusicItem( getItem, append_item_vector ) == 0 )
+		return false;
+	return appendMusicItem( getItem );
+}
+
+bool FavoriteItem::removeMusicItem( const QString &music_item ) {
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	MusicItem *getItem = nullptr;
+	if( appMusicManage->findMusicItem( getItem, music_item ) == 0 )
+		return false;
+	return removeMusicItem( getItem );
+}
+
+bool FavoriteItem::removeMusicItem( const std::vector< QString > &remove_item_vector ) {
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	std::vector< MusicItem * > getItem;
+	if( appMusicManage->findMusicItem( getItem, remove_item_vector ) == 0 )
+		return false;
+	return removeMusicItem( getItem );
 }
 
 std::vector< MusicItem * > FavoriteItem::findMusicName( const QString &find_name ) const {

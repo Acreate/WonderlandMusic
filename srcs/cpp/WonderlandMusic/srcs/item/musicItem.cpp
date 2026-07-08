@@ -69,16 +69,12 @@ bool MusicItem::Info::setJsonData( const QJsonObject &set_json_object ) {
 }
 
 MusicItem::Info::Info( const QJsonObject &music_json_object, MusicItem *music_item ) {
-	musicInfoItemWidget = new MusicInfoItemWidget( *music_item );
 	deleteErrorObj = new QObject;
 	connect( musicInfoItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 	setJsonData( music_json_object );
 }
 
 MusicItem::Info::Info( const QMediaPlayer &media_player, MusicItem *music_item ) {
-	musicInfoItemWidget = new MusicInfoItemWidget( *music_item );
-	deleteErrorObj = new QObject;
-	connect( musicInfoItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 	auto localFile = media_player.source( ).toLocalFile( );
 	auto &&mediaMetaData = media_player.metaData( );
 	musicSinger = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
@@ -101,6 +97,8 @@ MusicItem::Info::Info( const QMediaPlayer &media_player, MusicItem *music_item )
 	QFileInfo info( localFile );
 	absFilePath = info.absoluteFilePath( );
 	equFilePath = absFilePath == musicFilePath;
+	deleteErrorObj = new QObject;
+	connect( musicInfoItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 }
 
 bool MusicItem::Info::isEquFilePath( ) const {
@@ -147,6 +145,8 @@ MusicItem::~MusicItem( ) {
 
 MusicItem::MusicItem( const QMediaPlayer &media_player ) {
 	musicInfo = new Info( media_player, this );
+	musicInfo->musicInfoItemWidget = new MusicInfoItemWidget( *this );
+
 	connect( musicInfo->deleteErrorObj, &QObject::destroyed, [this] ( QObject *delete_obj_ptr ) {
 		Delete_Ptr_Exception( musicInfo->deleteErrorObj, delete_obj_ptr );
 	} );
@@ -154,6 +154,8 @@ MusicItem::MusicItem( const QMediaPlayer &media_player ) {
 
 MusicItem::MusicItem( const QJsonObject &music_json_object ) {
 	musicInfo = new Info( music_json_object, this );
+	musicInfo->musicInfoItemWidget = new MusicInfoItemWidget( *this );
+
 	connect( musicInfo->deleteErrorObj, &QObject::destroyed, [this] ( QObject *delete_obj_ptr ) {
 		Delete_Ptr_Exception( musicInfo->deleteErrorObj, delete_obj_ptr );
 	} );

@@ -48,6 +48,8 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
+	virtual size_t findMusicItem( MusicItem * &result_item, const QString &find_music ) const;
+	virtual size_t findMusicItem( std::vector< MusicItem * > &result_item, const std::vector< QString > &find_music ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual void toMusicIndex( std::vector< size_t > &result_index, const std::vector< MusicItem * > &find_index_music_item );

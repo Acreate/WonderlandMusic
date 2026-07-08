@@ -92,6 +92,14 @@ bool FavoriteWidget::initAfter( ) {
 	return true;
 }
 
+FavoriteItem * FavoriteWidget::getSelectFavorite( ) const {
+	return selectFavorite;
+}
+
+const std::vector<FavoriteItem *> & FavoriteWidget::getFavoriteVector( ) const {
+	return favoriteVector;
+}
+
 void FavoriteWidget::updateLayout( ) {
 	int maxWidth = 0;
 	int maxHeight = 0;

@@ -36,6 +36,9 @@ public:
 
 	bool initAfter( ) override;
 
+	virtual FavoriteItem * getSelectFavorite( ) const;
+
+	virtual const std::vector<FavoriteItem *> & getFavoriteVector( ) const;
 	virtual void updateLayout( );
 
 	virtual bool resetFavoriteItem( const std::vector< FavoriteItem * > &favorite_vector );

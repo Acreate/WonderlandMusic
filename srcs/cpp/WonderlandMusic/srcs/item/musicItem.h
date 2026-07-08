@@ -1,7 +1,6 @@
 ﻿#ifndef MUSICITEM_H_H_HEAD__FILE__
 #define MUSICITEM_H_H_HEAD__FILE__
 #include "../interface/iAppJsonData.h"
-
 class MusicInfoItemWidget;
 class QMediaPlayer;
 
@@ -14,9 +13,7 @@ protected:
 	class Info : public IAppJsonData {
 	public:
 		~Info( ) override;
-
 		bool getJsonData( QJsonObject &get_json_object ) const override;
-
 		bool setJsonData( const QJsonObject &set_json_object ) override;
 
 	private:
@@ -30,30 +27,21 @@ protected:
 		QString musicSinger;
 		qint64 duration;
 		QString formatStringDuration;
+		/// @brief 音频项，该项不由 class Info 创建，而由 class MusicItem 创建并赋予
+		MusicInfoItemWidget *musicInfoItemWidget = nullptr;
+		QObject *deleteErrorObj;
 
-		MusicInfoItemWidget *musicInfoItemWidget;
-		QObject* deleteErrorObj;
 	protected:
 		Info( const QJsonObject &music_json_object, MusicItem *music_item );
-
 		Info( const QMediaPlayer &media_player, MusicItem *music_item );
-
 		virtual bool isEquFilePath( ) const;
-
 		virtual const QString & getAbsFilePath( ) const;
-
 		virtual const QString & getMusicFilePath( ) const;
-
 		virtual const QString & getMusicName( ) const;
-
 		virtual const QString & getMusicSinger( ) const;
-
 		virtual qint64 getDuration( ) const;
-
 		virtual const QString & getFormatStringDuration( ) const;
-
 		virtual MusicInfoItemWidget * getMusicInfoItemWidget( ) const;
-
 		virtual MusicItem * getMusicItem( ) const;
 	};
 
@@ -61,9 +49,7 @@ protected:
 	/* 只能被友元创建与释放 */
 protected:
 	~MusicItem( ) override;
-
 	MusicItem( const QMediaPlayer &media_player );
-
 	MusicItem( const QJsonObject &music_json_object );
 
 public:
@@ -72,28 +58,16 @@ public:
 
 public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
-
 	bool setJsonData( const QJsonObject &set_json_object ) override;
-
 	//MusicItem( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration );
-
 	virtual bool isMusicFile( const QString &music_file_path );
-
 	virtual bool isMusicFile( const MusicItem &music_file_path );
-
 	virtual const QString & getAbsFilePath( ) const;
-
 	virtual const QString & getMusicFilePath( ) const;
-
 	virtual const QString & getMusicName( ) const;
-
 	virtual const QString & getMusicSinger( ) const;
-
 	virtual qint64 getDuration( ) const;
-
 	virtual const QString & getFormatStringDuration( ) const;
-
 	virtual MusicInfoItemWidget * getMusicInfoItemWidget( ) const;
 };
-
 #endif // MUSICITEM_H_H_HEAD__FILE__

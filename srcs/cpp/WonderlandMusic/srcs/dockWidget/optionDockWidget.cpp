@@ -76,10 +76,9 @@ bool OptionDockWidget::initAfter( ) {
 	showPlayListWidgetBtn->setText( optionDockWidget->getMusicTypeName( ) );
 	showSettingWidgetBtn->setText( optionDockWidget->getSettingWidget( ) );
 	showAboutWidgetBtn->setText( optionDockWidget->getAboutWidget( ) );
-	
+
 	// 强制宽度
 	leftOptionWidget->adjustSize( );
-	leftOptionWidget->setFixedWidth( leftOptionWidget->width( ) );
 
 	connect( showPlayListWidgetBtn, &QPushButton::clicked, this, &OptionDockWidget::signal_click_player_button );
 	connect( showSettingWidgetBtn, &QPushButton::clicked, this, &OptionDockWidget::signal_click_setting_button );
@@ -92,6 +91,8 @@ bool OptionDockWidget::initAfter( ) {
 	compWidth = showAboutWidgetBtn->width( );
 	if( maxWidth < compWidth )
 		maxWidth = compWidth;
-	setFixedWidth( maxWidth );
+
+	mainWindow->resizeDocks( { this }, { maxWidth }, Qt::Horizontal );
+	leftOptionWidget->setFixedWidth( maxWidth );
 	return true;
 }

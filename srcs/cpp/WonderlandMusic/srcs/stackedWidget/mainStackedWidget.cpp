@@ -1,8 +1,6 @@
 ﻿#include "mainStackedWidget.h"
-
 #include "../widget/aboutWidget.h"
 #include "../widget/settingWidget.h"
-
 #include "../window/playerWindow.h"
 
 MainStackedWidget::MainStackedWidget( QWidget *parent ) : QStackedWidget( parent ) {
@@ -17,15 +15,9 @@ bool MainStackedWidget::deleteResource( ) {
 }
 
 bool MainStackedWidget::init( ) {
-	Before_Init_Resource_App_Core_Ptr( playerWindow );
-	Before_Init_Resource_App_Core_Ptr( settingWidget );
-
 	Init_Resource_App_Core_Ptr( playerWindow );
 	Init_Resource_App_Core_Ptr( settingWidget );
 	Init_Resource_App_Core_Ptr( aboutWidget );
-
-	After_Init_Resource_App_Core_Ptr( playerWindow );
-	After_Init_Resource_App_Core_Ptr( settingWidget );
 
 	return true;
 }
@@ -35,10 +27,14 @@ bool MainStackedWidget::initBefore( ) {
 	playerWindow = new PlayerWindow( this );
 	settingWidget = new SettingWidget( this );
 	aboutWidget = new AboutWidget( this );
+	Before_Init_Resource_App_Core_Ptr( playerWindow );
+	Before_Init_Resource_App_Core_Ptr( settingWidget );
 	return true;
 }
 
 bool MainStackedWidget::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( playerWindow );
+	After_Init_Resource_App_Core_Ptr( settingWidget );
 	addWidget( playerWindow );
 	addWidget( settingWidget );
 	addWidget( aboutWidget );

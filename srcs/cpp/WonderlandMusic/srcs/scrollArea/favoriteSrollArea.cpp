@@ -1,13 +1,10 @@
 ﻿#include "favoriteSrollArea.h"
-
 #include <QJsonObject>
-
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/jsonKey/favoriteSrollAreaJsonKey.h"
-
 #include "../widget/favoriteWidget.h"
 
 FavoriteSrollArea::FavoriteSrollArea( QWidget *parent ) : QScrollArea( parent ) {
@@ -32,17 +29,17 @@ bool FavoriteSrollArea::initBefore( ) {
 	setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 	setWidgetResizable( true );
 	favoriteWidget = new FavoriteWidget( this );
+	Before_Init_Resource_App_Core_Ptr( favoriteWidget );
 	return true;
 }
 
 bool FavoriteSrollArea::init( ) {
-	Before_Init_Resource_App_Core_Ptr( favoriteWidget );
 	Init_Resource_App_Core_Ptr( favoriteWidget );
-	After_Init_Resource_App_Core_Ptr( favoriteWidget );
 	return true;
 }
 
 bool FavoriteSrollArea::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( favoriteWidget );
 	setWidget( favoriteWidget );
 	return true;
 }

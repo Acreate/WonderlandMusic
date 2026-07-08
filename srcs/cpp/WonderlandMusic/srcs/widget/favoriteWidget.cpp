@@ -4,6 +4,7 @@
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
+#include "../application/appMusicManage.h"
 #include "../application/jsonKey/favoriteWidgetJsonKey.h"
 #include "../item/favoriteItem.h"
 #include "../itemWidget/favoriteItemWidget.h"
@@ -78,17 +79,21 @@ bool FavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 }
 
 bool FavoriteWidget::init( ) {
-	deleteResource( );
 	return true;
 }
 
 bool FavoriteWidget::initBefore( ) {
 	deleteResource( );
+
 	return true;
 }
 
 bool FavoriteWidget::initAfter( ) {
 	updateLayout( );
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	if( selectFavorite == nullptr ) // 没有旧记录。则使用默认项
+		if( appMusicManage->getRootFavoriteItem( selectFavorite ) == false )
+			return false; // 无法使用默认项
 	return true;
 }
 
@@ -96,7 +101,7 @@ FavoriteItem * FavoriteWidget::getSelectFavorite( ) const {
 	return selectFavorite;
 }
 
-const std::vector<FavoriteItem *> & FavoriteWidget::getFavoriteVector( ) const {
+const std::vector< FavoriteItem * > & FavoriteWidget::getFavoriteVector( ) const {
 	return favoriteVector;
 }
 

@@ -1,11 +1,8 @@
 ﻿#include "mainWindow.h"
-
 #include <QJsonObject>
 #include <QSystemTrayIcon>
 #include <qboxlayout.h>
-
 #include "playerWindow.h"
-
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
@@ -13,13 +10,9 @@
 #include "../application/applicationManage.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
 #include "../application/translate/mainWindowTranslate.h"
-
 #include "../dockWidget/optionDockWidget.h"
-
 #include "../msgInfo/messageErrorOut.h"
-
 #include "../stackedWidget/mainStackedWidget.h"
-
 #include "../tools/pathTools.h"
 
 MainWindow::MainWindow( QWidget *parent ) : MainWindow( parent, Qt::WindowFlags( ) ) {
@@ -119,14 +112,8 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 }
 
 bool MainWindow::init( ) {
-	Before_Init_Resource_App_Core_Ptr( mainStackedWidget );
-	Before_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
-
 	Init_Resource_App_Core_Ptr( mainStackedWidget );
 	Init_Resource_App_Core_Ptr( leftOptionDockWidget );
-
-	After_Init_Resource_App_Core_Ptr( mainStackedWidget );
-	After_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
 
 	return true;
 }
@@ -141,10 +128,15 @@ bool MainWindow::initBefore( ) {
 	mainStackedWidget = new MainStackedWidget( this );
 
 	leftOptionDockWidget = new OptionDockWidget( this );
+	Before_Init_Resource_App_Core_Ptr( mainStackedWidget );
+	Before_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
 	return true;
 }
 
 bool MainWindow::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( mainStackedWidget );
+	After_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
+
 	setCentralWidget( mainStackedWidget );
 
 	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_player_button, [this]( ) {

@@ -1,13 +1,10 @@
 ﻿#include "playerWindow.h"
 #include <QJsonObject>
 #include <qevent.h>
-
 #include "musicListWindow.h"
-
 #include "../dockWidget/favoritemDockWidget.h"
 #include "../dockWidget/musicControlDocWidget.h"
 #include "../mutex/userMutex.h"
-
 #include "../tools/pathTools.h"
 #include "../widget/musicContreWidget.h"
 
@@ -39,17 +36,9 @@ bool PlayerWindow::deleteResource( ) {
 }
 
 bool PlayerWindow::init( ) {
-	Before_Init_Resource_App_Core_Ptr( musicListWindow );
-	Before_Init_Resource_App_Core_Ptr( favoritemDockWidget );
-	Before_Init_Resource_App_Core_Ptr( musicControlDocWidget );
-
 	Init_Resource_App_Core_Ptr( musicListWindow );
 	Init_Resource_App_Core_Ptr( favoritemDockWidget );
 	Init_Resource_App_Core_Ptr( musicControlDocWidget );
-
-	After_Init_Resource_App_Core_Ptr( musicListWindow );
-	After_Init_Resource_App_Core_Ptr( favoritemDockWidget );
-	After_Init_Resource_App_Core_Ptr( musicControlDocWidget );
 
 	return true;
 }
@@ -60,10 +49,16 @@ bool PlayerWindow::initBefore( ) {
 	favoritemDockWidget = new FavoritemDockWidget( this );
 	musicListWindow = new MusicListWindow( this );
 	musicControlDocWidget = new MusicControlDocWidget( this );
+	Before_Init_Resource_App_Core_Ptr( musicListWindow );
+	Before_Init_Resource_App_Core_Ptr( favoritemDockWidget );
+	Before_Init_Resource_App_Core_Ptr( musicControlDocWidget );
 	return true;
 }
 
 bool PlayerWindow::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( musicListWindow );
+	After_Init_Resource_App_Core_Ptr( favoritemDockWidget );
+	After_Init_Resource_App_Core_Ptr( musicControlDocWidget );
 	setCentralWidget( musicListWindow );
 	favoritemDockWidget->show( );
 	musicControlDocWidget->show( );

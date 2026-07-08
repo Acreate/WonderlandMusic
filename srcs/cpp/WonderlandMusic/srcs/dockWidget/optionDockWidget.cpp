@@ -1,13 +1,10 @@
 ﻿#include "optionDockWidget.h"
-
 #include <QPushButton>
 #include <qboxlayout.h>
-
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/appTranslate.h"
 #include "../application/translate/optionDockWidgetTranslate.h"
-
 #include "../window/mainWindow.h"
 
 OptionDockWidget::OptionDockWidget( MainWindow *parent ) : QDockWidget( parent ), mainWindow( parent ) {
@@ -49,9 +46,6 @@ bool OptionDockWidget::init( ) {
 	optionLayout->addWidget( showSettingWidgetBtn, 0, Qt::AlignTop );
 	optionLayout->addWidget( showAboutWidgetBtn, 0, Qt::AlignTop );
 	optionLayout->addSpacerItem( spacerItem );
-	// 强制宽度
-	leftOptionWidget->adjustSize( );
-	leftOptionWidget->setFixedWidth( leftOptionWidget->width( ) );
 
 	setWidget( leftOptionWidget );
 	mainWindow->addDockWidget( Qt::DockWidgetArea::LeftDockWidgetArea, this );
@@ -65,21 +59,28 @@ bool OptionDockWidget::initBefore( ) {
 	optionLayout = new QVBoxLayout( leftOptionWidget );
 	spacerItem = new QSpacerItem( 1, 1, QSizePolicy::Ignored, QSizePolicy::Expanding );
 
-	auto appInstance = AppInstance::getAppInstance( );
-	auto appDataManage = appInstance->getAppDataManage( );
-	auto appTranslate = appDataManage->getTranslate( );
-	auto optionDockWidget = appTranslate->getOptionDockWidget( );
-	showPlayListWidgetBtn = new QPushButton( optionDockWidget->getMusicTypeName( ), leftOptionWidget );
+	showPlayListWidgetBtn = new QPushButton( leftOptionWidget );
 
-	showSettingWidgetBtn = new QPushButton( optionDockWidget->getSettingWidget( ), leftOptionWidget );
+	showSettingWidgetBtn = new QPushButton( leftOptionWidget );
 
-	showAboutWidgetBtn = new QPushButton( optionDockWidget->getAboutWidget( ), leftOptionWidget );
+	showAboutWidgetBtn = new QPushButton( leftOptionWidget );
 
 	return true;
 }
 
 bool OptionDockWidget::initAfter( ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto appDataManage = appInstance->getAppDataManage( );
+	auto appTranslate = appDataManage->getTranslate( );
+	auto optionDockWidget = appTranslate->getOptionDockWidget( );
+	showPlayListWidgetBtn->setText( optionDockWidget->getMusicTypeName( ) );
+	showSettingWidgetBtn->setText( optionDockWidget->getSettingWidget( ) );
+	showAboutWidgetBtn->setText( optionDockWidget->getAboutWidget( ) );
+	
+	// 强制宽度
 	leftOptionWidget->adjustSize( );
+	leftOptionWidget->setFixedWidth( leftOptionWidget->width( ) );
+
 	connect( showPlayListWidgetBtn, &QPushButton::clicked, this, &OptionDockWidget::signal_click_player_button );
 	connect( showSettingWidgetBtn, &QPushButton::clicked, this, &OptionDockWidget::signal_click_setting_button );
 	connect( showAboutWidgetBtn, &QPushButton::clicked, this, &OptionDockWidget::signal_click_about_button );

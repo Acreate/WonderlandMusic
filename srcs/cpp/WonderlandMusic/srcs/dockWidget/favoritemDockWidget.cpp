@@ -35,9 +35,7 @@ bool FavoritemDockWidget::deleteResource( ) {
 }
 
 bool FavoritemDockWidget::init( ) {
-	Before_Init_Resource_App_Core_Ptr( favoriteSrollArea );
 	Init_Resource_App_Core_Ptr( favoriteSrollArea );
-	After_Init_Resource_App_Core_Ptr( favoriteSrollArea );
 
 	return true;
 }
@@ -48,10 +46,12 @@ bool FavoritemDockWidget::initBefore( ) {
 	setContentsMargins( 0, 0, 0, 0 );
 	titleBarWidget = new QWidget( this );
 	favoriteSrollArea = new FavoriteSrollArea( this );
+	Before_Init_Resource_App_Core_Ptr( favoriteSrollArea );
 	return true;
 }
 
 bool FavoritemDockWidget::initAfter( ) {
+	After_Init_Resource_App_Core_Ptr( favoriteSrollArea );
 	setTitleBarWidget( titleBarWidget );
 	setWidget( favoriteSrollArea );
 	playerWindow->addDockWidget( Qt::LeftDockWidgetArea, this );

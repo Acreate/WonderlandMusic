@@ -43,6 +43,11 @@ public:
 	virtual void removeRepetition( );
 	virtual const std::vector< MusicInfoItemWidget * > & getMusicInfoVector( ) const;
 	virtual void setMusicInfoVector( const std::vector< MusicInfoItemWidget * > &music_info_vector );
+	virtual void clearMusicItem( );
+
+	virtual void clearMusicInfoItemWidget( ) {
+		clearMusicItem( );
+	}
 
 protected:
 	virtual void apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier );

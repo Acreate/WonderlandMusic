@@ -41,12 +41,16 @@ void FavoriteWidget::setSelectFavorite( FavoriteItem *const select_favorite ) {
 
 		selectFavorite->disconnect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
 	}
+	auto appInstance = AppInstance::getAppInstance( );
+	auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
 	selectFavorite = select_favorite;
 	if( selectFavorite ) {
 		connect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
 		connect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
 		connect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
-	}
+		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
+	} else if( appInstance->getAppDataManage( )->getAppMusicManage( )->getRootFavoriteItem( selectFavorite ) )
+		musicContreWidget->clearMusicItem(  );
 }
 
 void FavoriteWidget::updateAppMusicManageInof( const std::vector< FavoriteItem * > &vector ) {
@@ -119,9 +123,13 @@ bool FavoriteWidget::initBefore( ) {
 bool FavoriteWidget::initAfter( ) {
 	updateLayout( );
 	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
-	if( selectFavorite == nullptr ) // 没有旧记录。则使用默认项
-		if( appMusicManage->getRootFavoriteItem( selectFavorite ) == false )
+	// 没有旧记录。则使用默认项
+	if( selectFavorite == nullptr ) {
+		decltype(selectFavorite) favoriteItem = nullptr;
+		if( appMusicManage->getRootFavoriteItem( favoriteItem ) == false )
 			return false; // 无法使用默认项
+		setSelectFavorite( favoriteItem );
+	}
 	return true;
 }
 

@@ -139,6 +139,15 @@ void MusicContreWidget::setMusicInfoVector( const std::vector< MusicInfoItemWidg
 	updateItemWidget( );
 }
 
+void MusicContreWidget::clearMusicItem( ) {
+	musicInfoMutex->lock( );
+	musicInfoVector.clear( );
+	activeLeftItemWidget = nullptr;
+	selectLeftItemWidget = nullptr;
+	musicInfoMutex->unlock( );
+	updateItemWidget( );
+}
+
 void MusicContreWidget::apendSelectMusicItemWidget( MusicInfoItemWidget *append_select_target, bool check_key_board_modifier ) {
 	activeLeftItemWidget = append_select_target;
 	selectLeftItemWidget = append_select_target;
@@ -237,6 +246,14 @@ bool MusicContreWidget::selectKeyControlModifier( ) {
 
 bool MusicContreWidget::deleteResource( ) {
 	disconnect( );
+	if( musicInfoMutex ) {
+		musicInfoMutex->lock( );
+		musicInfoVector.clear( );
+		Delete_Resource_App_Core_Ptr( musicInfoMutex );
+		Delete_Resource_App_Core_Ptr( beforeClickTime );
+		Delete_Resource_App_Core_Ptr( pen );
+		musicInfoMutex->unlock( );
+	}
 	return true;
 }
 

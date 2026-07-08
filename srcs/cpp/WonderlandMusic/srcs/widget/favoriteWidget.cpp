@@ -8,13 +8,11 @@
 #include "../application/appMusicManage.h"
 #include "../application/appUserInterfaceManage.h"
 #include "../application/jsonKey/favoriteWidgetJsonKey.h"
-#include "../application/translate/appMusicManageTranslate.h"
 #include "../item/favoriteItem.h"
 #include "../itemWidget/favoriteItemWidget.h"
 #include "../mutex/userMutex.h"
 #include "../scrollArea/musicContreScrollArea.h"
 #include "../stackedWidget/mainStackedWidget.h"
-#include "../tools/appTranslateTools.h"
 #include "../window/mainWindow.h"
 #include "../window/musicListWindow.h"
 #include "../window/playerWindow.h"
@@ -34,26 +32,38 @@ FavoriteWidget::~FavoriteWidget( ) {
 }
 
 void FavoriteWidget::setSelectFavorite( FavoriteItem *const select_favorite ) {
-	if( selectFavorite ) {
+	auto appInstance = AppInstance::getAppInstance( );
+	auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
+
+	if( selectFavorite && selectFavorite != rootItem ) {
 		selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
 
 		selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
 
 		selectFavorite->disconnect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
 	}
-	auto appInstance = AppInstance::getAppInstance( );
-	auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
 	selectFavorite = select_favorite;
-	if( selectFavorite ) {
+	if( selectFavorite && rootItem != selectFavorite ) {
 		connect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
 		connect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
 		connect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
 		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
-	} else if( appInstance->getAppDataManage( )->getAppMusicManage( )->getRootFavoriteItem( selectFavorite ) )
-		musicContreWidget->clearMusicItem(  );
+		return;
+	}
+	if( rootItem && ( selectFavorite == nullptr || rootItem == select_favorite ) ) {
+		selectFavorite = select_favorite;
+		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
+		return;
+	}
 }
 
 void FavoriteWidget::updateAppMusicManageInof( const std::vector< FavoriteItem * > &vector ) {
+	// 顶部
+	FavoriteItemWidget *itemWidget = rootItem->getFavoriteItemWidget( );
+	itemWidget->setParent( this );
+	itemWidget->show( );
+	setSelectFavorite( rootItem );
+	// 排序后续
 	size_t count = vector.size( );
 	favoriteVector.resize( count );
 	if( count == 0 )
@@ -63,13 +73,11 @@ void FavoriteWidget::updateAppMusicManageInof( const std::vector< FavoriteItem *
 	size_t index = 0;
 	for( ; index < count; index += 1 ) {
 		favoriteData[ index ] = vectorData[ index ];
-		FavoriteItemWidget *itemWidget = favoriteData[ index ]->getFavoriteItemWidget( );
+		itemWidget = favoriteData[ index ]->getFavoriteItemWidget( );
 		itemWidget->setParent( this );
 		itemWidget->show( );
 	}
-	decltype(selectFavorite) rootPtr = nullptr;
-	AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( )->getRootFavoriteItem( rootPtr );
-	setSelectFavorite( rootPtr );
+
 	emit signal_update_item_over( );
 	updateLayout( );
 }
@@ -121,15 +129,17 @@ bool FavoriteWidget::initBefore( ) {
 }
 
 bool FavoriteWidget::initAfter( ) {
-	updateLayout( );
 	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	rootItem = appMusicManage->getRootItem( );
+	FavoriteItemWidget *itemWidget = rootItem->getFavoriteItemWidget( );
+	itemWidget->setParent( this );
+	itemWidget->show( );
 	// 没有旧记录。则使用默认项
-	if( selectFavorite == nullptr ) {
-		decltype(selectFavorite) favoriteItem = nullptr;
-		if( appMusicManage->getRootFavoriteItem( favoriteItem ) == false )
-			return false; // 无法使用默认项
-		setSelectFavorite( favoriteItem );
-	}
+	if( selectFavorite == nullptr )
+		setSelectFavorite( rootItem );
+
+	updateLayout( );
+	connect( appMusicManage, &AppMusicManage::signal_update_favorite_item, this, &FavoriteWidget::slot_update_favorite_item );
 	return true;
 }
 
@@ -144,34 +154,32 @@ const std::vector< FavoriteItem * > & FavoriteWidget::getFavoriteVector( ) const
 void FavoriteWidget::updateLayout( ) {
 	int maxWidth = 0;
 	int maxHeight = 0;
+	int compWidth;
+	int offsetX = 10;
+	// 顶部
+	FavoriteItemWidget *itemWidget = rootItem->getFavoriteItemWidget( );
+	itemWidget->adjustSize( );
+	itemWidget->move( 0, maxHeight );
+	maxHeight += itemWidget->height( );
+	compWidth = itemWidget->width( );
+	if( compWidth > maxWidth )
+		maxWidth = compWidth;
 	size_t count = favoriteVector.size( );
 	if( count ) {
-		int compWidth;
-		int offsetX = 10;
 		auto data = favoriteVector.data( );
-
-		size_t index = 0;
-
-		auto favoriteItemWidget = data[ index ]->getFavoriteItemWidget( );
-		favoriteItemWidget->adjustSize( );
-		favoriteItemWidget->move( 0, maxHeight );
-		maxHeight += favoriteItemWidget->height( );
-		compWidth = favoriteItemWidget->width( ) + offsetX;
-		if( compWidth > maxWidth )
-			maxWidth = compWidth;
-
-		for( index = 1; index < count; index += 1 ) {
-			favoriteItemWidget = data[ index ]->getFavoriteItemWidget( );
-			favoriteItemWidget->adjustSize( );
-			favoriteItemWidget->move( offsetX, maxHeight );
-			maxHeight += favoriteItemWidget->height( );
-			compWidth = favoriteItemWidget->width( ) + offsetX;
+		size_t index;
+		for( index = 0; index < count; index += 1 ) {
+			itemWidget = data[ index ]->getFavoriteItemWidget( );
+			itemWidget->adjustSize( );
+			itemWidget->move( offsetX, maxHeight );
+			maxHeight += itemWidget->height( );
+			compWidth = itemWidget->width( ) + offsetX;
 			if( compWidth > maxWidth )
 				maxWidth = compWidth;
 		}
-		resize( maxWidth, maxHeight );
-		emit signal_update_layout_over( );
 	}
+	resize( maxWidth, maxHeight );
+	emit signal_update_layout_over( );
 }
 
 bool FavoriteWidget::resetFavoriteItem( const std::vector< FavoriteItem * > &favorite_vector ) {
@@ -231,13 +239,15 @@ void FavoriteWidget::slot_change_name_finished( ) {
 }
 
 void FavoriteWidget::slot_change_vector_finished( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
-	if( selectFavorite )
+	if( selectFavorite ) {
+		auto appInstance = AppInstance::getAppInstance( );
+		auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
 		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
-	else if( appInstance->getAppDataManage( )->getAppMusicManage( )->getRootFavoriteItem( selectFavorite ) )
-		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
-	updateLayout( );
+		updateLayout( );
+		return;
+	}
+	// 没有被正确运行并且返回
+	setSelectFavorite( rootItem );
 }
 
 void FavoriteWidget::slot_destroyed( QObject *delete_ptr ) {
@@ -250,4 +260,12 @@ void FavoriteWidget::slot_destroyed( QObject *delete_ptr ) {
 
 	selectFavorite->disconnect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
 	selectFavorite = nullptr;
+}
+
+void FavoriteWidget::slot_update_favorite_item( const FavoriteItemWidget *favorite_widget ) {
+	if( favorite_widget != this->selectFavorite->getFavoriteItemWidget( ) )
+		return;
+	auto appInstance = AppInstance::getAppInstance( );
+	auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
+	musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
 }

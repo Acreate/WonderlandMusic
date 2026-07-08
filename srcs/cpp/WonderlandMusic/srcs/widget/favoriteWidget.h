@@ -14,6 +14,7 @@ class FavoriteWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
+	FavoriteItem *rootItem = nullptr;
 	FavoriteItem *selectFavorite = nullptr;
 	std::vector< FavoriteItem * > favoriteVector;
 
@@ -48,6 +49,7 @@ private Q_SLOTS:
 	void slot_change_name_finished( );
 	void slot_change_vector_finished( );
 	void slot_destroyed( QObject *delete_ptr );
+	void slot_update_favorite_item( const FavoriteItemWidget *favorite_widget );
 Q_SIGNALS:
 	void signal_update_layout_over( );
 	void signal_update_item_over( );

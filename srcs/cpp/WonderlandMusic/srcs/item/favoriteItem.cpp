@@ -72,8 +72,6 @@ FavoriteItemWidget * FavoriteItem::getFavoriteItemWidget( ) const {
 
 bool FavoriteItem::getJsonDataVector( QJsonObject &get_json_object, const std::vector< FavoriteItem * > &conver_vector ) {
 	size_t count = conver_vector.size( );
-	if( count == 0 )
-		return false;
 
 	QString arrayObject;
 	QString arrayDataKey;
@@ -256,6 +254,9 @@ const std::vector< MusicItem * > & FavoriteItem::getMusicItemvVector( ) const {
 }
 
 bool FavoriteItem::appendMusicItem( MusicItem *music_item ) {
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	if( appMusicManage->getRootItem( ) == this )
+		return true;
 	size_t count = info->musicItemvVector.size( );
 	if( count == 0 ) {
 		info->musicItemvVector.emplace_back( music_item );
@@ -272,6 +273,9 @@ bool FavoriteItem::appendMusicItem( MusicItem *music_item ) {
 }
 
 bool FavoriteItem::appendMusicItem( const std::vector< MusicItem * > &append_item_vector ) {
+	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	if( appMusicManage->getRootItem( ) == this )
+		return true;
 	size_t count = info->musicItemvVector.size( );
 	auto data = info->musicItemvVector.data( );
 	size_t appCount = append_item_vector.size( );
@@ -362,6 +366,8 @@ bool FavoriteItem::appendMusicItem( const QString &music_item ) {
 
 bool FavoriteItem::appendMusicItem( const std::vector< QString > &append_item_vector ) {
 	auto appMusicManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( );
+	if( appMusicManage->getRootItem( ) == this )
+		return true;
 	std::vector< MusicItem * > getItem;
 	if( appMusicManage->findMusicItem( getItem, append_item_vector ) == 0 )
 		return false;

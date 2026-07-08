@@ -25,7 +25,7 @@ protected:
 	std::vector< QMediaPlayer * > loadMediaVector;
 	std::vector< QString > loadFileVector;
 	size_t loadCount;
-	std::vector< MusicItem * > musicItemVector;
+	FavoriteItem *rootItem = nullptr;
 	std::vector< FavoriteItem * > favoriteItemVector;
 	MusicContreWidget *musicContreWidget = nullptr;
 	FavoriteWidget *favoriteWidget = nullptr;
@@ -41,7 +41,6 @@ protected:
 	virtual size_t filterMusciFromFileVector( std::vector< QString > &result_filter_over, const std::vector< QString > &music_file );
 	virtual void loadMusciFromDir( const std::vector< QString > &music_dir );
 	virtual bool appendFavorite( const QString &name );
-	virtual bool appendFirstFavorite( );
 
 public:
 	bool readJsonData( ) override;
@@ -49,7 +48,7 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
-	virtual bool getRootFavoriteItem( FavoriteItem *&result_root_item ) const;
+	virtual FavoriteItem * getRootItem( ) const;
 	virtual size_t findMusicItem( MusicItem * &result_item, const QString &find_music ) const;
 	virtual size_t findMusicItem( std::vector< MusicItem * > &result_item, const std::vector< QString > &find_music ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;

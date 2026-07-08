@@ -46,12 +46,12 @@ void AppMusicManage::deleteFavoriteItem( QObject *delete_ptr ) {
 
 void AppMusicManage::deleteMusicItem( QObject *delete_ptr ) {
 	loadMutex->lock( );
-	size_t count = musicItemVector.size( );
-	auto data = musicItemVector.data( );
+	size_t count = rootItem->getInfo( )->musicItemvVector.size( );
+	auto data = rootItem->getInfo( )->musicItemvVector.data( );
 	size_t index = 0;
 	for( ; index < count; index += 1 )
 		if( data[ index ] == delete_ptr ) {
-			musicItemVector.erase( musicItemVector.begin( ) + index );
+			rootItem->getInfo( )->musicItemvVector.erase( rootItem->getInfo( )->musicItemvVector.begin( ) + index );
 			break;
 		}
 	loadMutex->unlock( );
@@ -69,14 +69,14 @@ bool AppMusicManage::deleteResource( ) {
 			for( index = 0; index < count; index += 1 )
 				delete data[ index ];
 		}
-		count = musicItemVector.size( );
+		count = rootItem->getInfo( )->musicItemvVector.size( );
 		if( count ) {
-			auto data = musicItemVector.data( );
+			auto data = rootItem->getInfo( )->musicItemvVector.data( );
 			for( index = 0; index < count; index += 1 ) {
 				data[ index ]->disconnect( data[ index ], nullptr, this, nullptr );
 				delete data[ index ];
 			}
-			musicItemVector.clear( );
+			rootItem->getInfo( )->musicItemvVector.clear( );
 		}
 		count = favoriteItemVector.size( );
 		if( count ) {
@@ -91,6 +91,9 @@ bool AppMusicManage::deleteResource( ) {
 		loadMediaVector.clear( );
 		loadFileVector.clear( );
 		loadCount = 0;
+		rootItem->disconnect( rootItem, nullptr, this, nullptr );
+		delete rootItem;
+		rootItem = nullptr;
 		loadMutex->unlock( );
 		Delete_Resource_App_Core_Ptr( loadMutex );
 	}
@@ -145,12 +148,12 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 		connect( dataManage, &AppDataManage::signal_load_over, job, [=] ( const std::vector< MusicItem * > &music_item_vector ) {
 			job->disconnect( );
 			job->deleteLater( );
-			if( favoriteItem )
+			if( favoriteItem ) {
 				favoriteItem->appendMusicItem( fileVector );
-			else {
-				decltype(favoriteItem) item = nullptr;
-				if( getRootFavoriteItem( item ) )
-					item->appendMusicItem( fileVector );
+				emit signal_update_favorite_item( favoriteItem->getInfo( )->favoriteItemWidget );
+			} else {
+				rootItem->appendMusicItem( fileVector );
+				emit signal_update_favorite_item( rootItem->getInfo( )->favoriteItemWidget );
 			}
 		} );
 		auto loadBuffData = loadJob.data( );
@@ -231,7 +234,7 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 		loadMusicFile->disconnect( loadMusicFile, nullptr, this, nullptr );
 		loadCount += 1;
 		size_t loadOverCount = loadMediaVector.size( );
-		musicItemVector.emplace_back( musicItem );
+		rootItem->getInfo( )->musicItemvVector.emplace_back( musicItem );
 		loadMutex->unlock( );
 		emit dataManage->signal_load_unity( *musicItem );
 		if( loadOverCount == loadCount ) {
@@ -241,15 +244,15 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 				delete mediaPlayer[ loadOverCount ];
 			loadMediaVector.clear( );
 			// 拷贝序列
-			loadCount = musicItemVector.size( );
+			loadCount = rootItem->getInfo( )->musicItemvVector.size( );
 			std::vector< const MusicItem * > buff( loadCount );
 			auto buffData = buff.data( );
-			auto sourceData = musicItemVector.data( );
+			auto sourceData = rootItem->getInfo( )->musicItemvVector.data( );
 			for( loadOverCount = 0; loadOverCount < loadCount; loadOverCount += 1 )
 				buffData[ loadOverCount ] = sourceData[ loadOverCount ];
 			loadMutex->unlock( );
 			// 触发信号
-			emit dataManage->signal_load_over( musicItemVector );
+			emit dataManage->signal_load_over( rootItem->getInfo( )->musicItemvVector );
 		}
 	} );
 
@@ -365,8 +368,8 @@ size_t AppMusicManage::filterMusciFromFileVector( std::vector< QString > &result
 	size_t loadFileCount = loadFileVector.size( );
 	auto loadFileData = loadFileVector.data( );
 
-	size_t musicCount = musicItemVector.size( );
-	auto musicData = musicItemVector.data( );
+	size_t musicCount = rootItem->getInfo( )->musicItemvVector.size( );
+	auto musicData = rootItem->getInfo( )->musicItemvVector.data( );
 	for( fileIndex = 0; fileIndex < fileCount; fileIndex += 1 ) {
 		auto file = fileData[ fileIndex ];
 		info.setFile( file );
@@ -382,9 +385,10 @@ size_t AppMusicManage::filterMusciFromFileVector( std::vector< QString > &result
 		if( musicIndex < musicCount )
 			continue;
 		resultData[ resultCount ] = file;
+		resultCount += 1;
 	}
 	if( resultCount != fileCount )
-		result_filter_over.resize( fileCount );
+		result_filter_over.resize( resultCount );
 	return resultCount;
 }
 
@@ -449,21 +453,6 @@ bool AppMusicManage::appendFavorite( const QString &name ) {
 	return true;
 }
 
-bool AppMusicManage::appendFirstFavorite( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto translate = appInstance->getAppDataManage( )->getTranslate( )->getAppMusicManage( );
-	auto name = translate->getRootFavoriteName( );
-	auto itemWidget = new FavoriteItem( name );
-	itemWidget->setEnabled( false );
-	connect( itemWidget, &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
-	itemWidget->setFavoriteName( name );
-	loadMutex->lock( );
-	favoriteItemVector.emplace_back( itemWidget );
-	loadMutex->unlock( );
-	favoriteWidget->updateAppMusicManageInof( favoriteItemVector );
-	return true;
-}
-
 bool AppMusicManage::removeSelectMusicItem( ) {
 	return false;
 }
@@ -518,6 +507,7 @@ bool AppMusicManage::initBefore( ) {
 	loadCount = 0;
 	loadMutex = new UserMutex;
 	appMusicDecoder = new AppMusicDecoder;
+	rootItem = new FavoriteItem( "" );
 	Before_Init_Resource_App_Core_Ptr( appMusicDecoder );
 	return true;
 }
@@ -528,14 +518,16 @@ bool AppMusicManage::initAfter( ) {
 		return false;
 	if( connectFavoriteWidgetMenuSignal( ) == false )
 		return false;
+	if( AppTranslateTools::getAppMusicManage( [this] ( AppMusicManageTranslate &translate ) {
+		rootItem->setFavoriteName( translate.getRootFavoriteName( ) );
+	} ) == false )
+		rootItem->setFavoriteName( QObject::tr( "默认" ) );
 
 	auto appInstance = AppInstance::getAppInstance( );
 	PlayerWindow *playerWindow = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( );
 	musicContreWidget = playerWindow->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
 	favoriteWidget = playerWindow->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
 	openMultipleDirPath = openMultipleFilePath = appInstance->getAppDataManage( )->getAppSettingPath( );
-	if( appendFirstFavorite( ) == false )
-		return false;
 	// 在退出之前释放所有 item，包括 ui 组件，其中 ui item 被其他组件释放会弹出异常
 	auto applicationManage = appInstance->getApplicationManage( );
 	connect( applicationManage, &ApplicationManage::signal_app_quit, this, [this]( ) {
@@ -544,39 +536,17 @@ bool AppMusicManage::initAfter( ) {
 	return true;
 }
 
-bool AppMusicManage::getRootFavoriteItem( FavoriteItem *&result_root_item ) const {
-	loadMutex->lock( );
-	size_t count = favoriteItemVector.size( );
-	if( count ) {
-		QString rootName;
-		if( AppTranslateTools::getAppMusicManage( [&rootName] ( AppMusicManageTranslate &translate ) {
-			rootName = translate.getRootFavoriteName( );
-		} ) == false ) {
-			loadMutex->unlock( );
-			return false;
-		}
-		size_t index;
-		auto data = favoriteItemVector.data( );
-		for( index = 0; index < count; index += 1 )
-			if( data[ index ]->getFavoriteName( ) == rootName ) {
-				result_root_item = data[ index ];
-				loadMutex->unlock( );
-				return true;
-			}
-	}
-
-	loadMutex->unlock( );
-
-	return false;
+FavoriteItem * AppMusicManage::getRootItem( ) const {
+	return rootItem;
 }
 
 size_t AppMusicManage::findMusicItem( MusicItem *&result_item, const QString &find_music ) const {
 	loadMutex->lock( );
-	size_t count = musicItemVector.size( );
+	size_t count = rootItem->getInfo( )->musicItemvVector.size( );
 	size_t resultCount = 0;
 	if( count ) {
 		size_t index = 0;
-		auto data = musicItemVector.data( );
+		auto data = rootItem->getInfo( )->musicItemvVector.data( );
 		for( ; index < count; index += 1 )
 			if( data[ index ]->isMusicFile( find_music ) ) {
 				result_item = data[ index ];
@@ -590,11 +560,12 @@ size_t AppMusicManage::findMusicItem( MusicItem *&result_item, const QString &fi
 
 size_t AppMusicManage::findMusicItem( std::vector< MusicItem * > &result_item, const std::vector< QString > &find_music ) const {
 	loadMutex->lock( );
-	size_t count = musicItemVector.size( );
+	auto &musicItemvVector = rootItem->getInfo( )->musicItemvVector;
+	size_t count = musicItemvVector.size( );
 	size_t resultCount = 0;
 	if( count ) {
 		size_t index = 0;
-		auto data = musicItemVector.data( );
+		auto data = musicItemvVector.data( );
 		size_t findeIndex;
 		size_t findCount = find_music.size( );
 		auto findData = find_music.data( );
@@ -604,13 +575,15 @@ size_t AppMusicManage::findMusicItem( std::vector< MusicItem * > &result_item, c
 
 		for( findeIndex = 0; findeIndex < findCount; findeIndex += 1 ) {
 			auto findFile = findData[ findeIndex ];
-			for( ; index < count; index += 1 ) {
+			for( index = 0; index < count; index += 1 ) {
 				if( data[ index ]->isMusicFile( findFile ) ) {
-					for( filterIndex = 0; filterIndex < resultCount; filterIndex += 1 )
-						if( setData[ filterIndex ] == data[ index ] )
+					if( resultCount ) {
+						for( filterIndex = 0; filterIndex < resultCount; filterIndex += 1 )
+							if( setData[ filterIndex ] == data[ index ] )
+								break;
+						if( filterIndex < resultCount )
 							break;
-					if( filterIndex < resultCount )
-						break;
+					}
 					setData[ resultCount ] = data[ index ];
 					resultCount += 1;
 					break;
@@ -636,12 +609,10 @@ bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {
 	} ) == false )
 		return false;
 	QJsonObject object;
-	if( FavoriteItem::getJsonDataVector( object, favoriteItemVector ) == false ) {
+	if( FavoriteItem::getJsonDataVector( object, favoriteItemVector ) == false )
 		return false;
-	}
-	if( MusicItem::getJsonDataVector( object, musicItemVector ) == false ) {
+	if( MusicItem::getJsonDataVector( object, rootItem->getInfo( )->musicItemvVector ) == false ) 
 		return false;
-	}
 	object.insert( selectFilePathJsonKey, this->openMultipleFilePath );
 	object.insert( selectDirPathJsonKey, this->openMultipleDirPath );
 	get_json_object.insert( jsonObejctJsonKey, object );
@@ -680,19 +651,19 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 	// 获取音频对象
 	std::vector< MusicItem * > resultMusicItemVector;
 	if( MusicItem::setJsonDataVector( resultMusicItemVector, jsonObject ) ) {
-		auto count = musicItemVector.size( );
+		auto count = rootItem->getInfo( )->musicItemvVector.size( );
 		size_t index;
 		MusicItem **data;
 		if( count ) {
-			data = musicItemVector.data( );
+			data = rootItem->getInfo( )->musicItemvVector.data( );
 			for( index = 0; index < count; index += 1 ) {
 				data[ index ]->disconnect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
 				delete data[ index ];
 			}
 		}
 		count = resultMusicItemVector.size( );
-		musicItemVector.resize( count );
-		data = musicItemVector.data( );
+		rootItem->getInfo( )->musicItemvVector.resize( count );
+		data = rootItem->getInfo( )->musicItemvVector.data( );
 		auto copydata = resultMusicItemVector.data( );
 		for( index = 0; index < count; index += 1 ) {
 			data[ index ] = copydata[ index ];
@@ -718,12 +689,9 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		for( index = 0; index < count; index += 1 ) {
 			data[ index ] = copydata[ index ];
 			connect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
+			emit signal_update_favorite_item( data[ index ]->getInfo( )->favoriteItemWidget );
 		}
 	}
-	FavoriteItem *favoriteItem = nullptr;
-	if( getRootFavoriteItem( favoriteItem ) == false )
-		return false;
-	favoriteItem->getInfo( )->musicItemvVector = this->musicItemVector;
 
 	auto appUserInterfaceManage = AppInstance::getAppInstance( )->getAppUserInterfaceManage( );
 	auto playerWindow = appUserInterfaceManage->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( );
@@ -733,6 +701,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 	musicContreWidget->setItemPlayerListTopWidgetWidth( playerListTopWidget );
 
 	favoriteWidget->updateAppMusicManageInof( favoriteItemVector );
+	emit signal_update_favorite_item( rootItem->getInfo( )->favoriteItemWidget );
 	return true;
 }
 
@@ -742,8 +711,8 @@ void AppMusicManage::toMusicIndex( std::vector< size_t > &result_index, const st
 	size_t findIndex;
 	result_index.resize( findCount );
 	auto findData = find_index_music_item.data( );
-	size_t sourceCount = musicItemVector.size( );
-	auto sourceData = musicItemVector.data( );
+	size_t sourceCount = rootItem->getInfo( )->musicItemvVector.size( );
+	auto sourceData = rootItem->getInfo( )->musicItemvVector.data( );
 	size_t sourceIndex;
 	auto findResultIndexData = result_index.data( );
 	size_t findResultCount = 0;
@@ -769,8 +738,8 @@ void AppMusicManage::fromMusicIndex( std::vector< MusicItem * > &result_music_it
 	result_music_item.resize( findCount );
 	auto resultData = result_music_item.data( );
 	size_t resultCount = 0;
-	size_t sourceCount = musicItemVector.size( );
-	auto sourceData = musicItemVector.data( );
+	size_t sourceCount = rootItem->getInfo( )->musicItemvVector.size( );
+	auto sourceData = rootItem->getInfo( )->musicItemvVector.data( );
 	for( findIndex = 0; findIndex < findCount; findIndex += 1 ) {
 		auto findItem = findData[ findIndex ];
 		if( findIndex >= sourceCount )
@@ -788,13 +757,13 @@ AppMusicManage::~AppMusicManage( ) {
 
 bool AppMusicManage::removeItem( const MusicItem *target ) {
 	loadMutex->lock( );
-	size_t sourceCount = musicItemVector.size( );
+	size_t sourceCount = rootItem->getInfo( )->musicItemvVector.size( );
 	size_t sourceIndex = 0;
-	auto sourceData = musicItemVector.data( );
+	auto sourceData = rootItem->getInfo( )->musicItemvVector.data( );
 	for( ; sourceIndex < sourceCount; sourceIndex += 1 )
 		if( sourceData[ sourceIndex ] == target ) {
 			sourceData[ sourceIndex ]->disconnect( sourceData[ sourceIndex ], &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
-			musicItemVector.erase( musicItemVector.begin( ) + sourceIndex );
+			rootItem->getInfo( )->musicItemvVector.erase( rootItem->getInfo( )->musicItemvVector.begin( ) + sourceIndex );
 			loadMutex->unlock( );
 			return true;
 		}
@@ -805,13 +774,13 @@ bool AppMusicManage::removeItem( const MusicItem *target ) {
 bool AppMusicManage::deleteItem( const MusicItem *target ) {
 	MusicItem *deletePtr = nullptr;
 	loadMutex->lock( );
-	size_t sourceCount = musicItemVector.size( );
+	size_t sourceCount = rootItem->getInfo( )->musicItemvVector.size( );
 	size_t sourceIndex = 0;
-	auto sourceData = musicItemVector.data( );
+	auto sourceData = rootItem->getInfo( )->musicItemvVector.data( );
 	for( ; sourceIndex < sourceCount; sourceIndex += 1 )
 		if( sourceData[ sourceIndex ] == target ) {
 			deletePtr = sourceData[ sourceIndex ];
-			musicItemVector.erase( musicItemVector.begin( ) + sourceIndex );
+			rootItem->getInfo( )->musicItemvVector.erase( rootItem->getInfo( )->musicItemvVector.begin( ) + sourceIndex );
 			break;
 		}
 	loadMutex->unlock( );

@@ -1,17 +1,12 @@
 ﻿#include "favoriteWidget.h"
-
 #include <QJsonObject>
 #include <QMouseEvent>
-
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
 #include "../application/jsonKey/favoriteWidgetJsonKey.h"
-
 #include "../item/favoriteItem.h"
-
 #include "../itemWidget/favoriteItemWidget.h"
-
 #include "../mutex/userMutex.h"
 
 FavoriteWidget::FavoriteWidget( QWidget *parent ) : QWidget( parent ) {
@@ -38,7 +33,9 @@ void FavoriteWidget::updateAppMusicManageInof( const std::vector< FavoriteItem *
 	size_t index = 0;
 	for( ; index < count; index += 1 ) {
 		favoriteData[ index ] = vectorData[ index ];
-		favoriteData[ index ]->getFavoriteItemWidget( )->setParent( this );
+		FavoriteItemWidget *itemWidget = favoriteData[ index ]->getFavoriteItemWidget( );
+		itemWidget->setParent( this );
+		itemWidget->show( );
 	}
 	emit signal_update_item_over( );
 	updateLayout( );

@@ -41,6 +41,9 @@ public:
 	virtual const QString & getName( ) const;
 	virtual const std::vector< MusicItem * > & getMusicItemvVector( ) const;
 	virtual bool appendMusicItem( MusicItem *music_item );
+	virtual bool appendMusicItem( const std::vector< MusicItem * > &append_item_vector );
+	virtual bool removeMusicItem( const MusicItem *music_item );
+	virtual bool removeMusicItem( const std::vector< MusicItem * > &remove_item_vector );
 	virtual std::vector< MusicItem * > findMusicName( const QString &find_name ) const;
 	virtual std::vector< MusicItem * > findMusicFilePath( const QString &find_file_path ) const;
 	virtual std::vector< MusicItem * > findMusicMusicSinger( const QString &music_singer ) const;

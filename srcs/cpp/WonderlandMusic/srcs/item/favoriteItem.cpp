@@ -13,8 +13,8 @@
 #include "../tools/appTranslateTools.h"
 #include "../tools/jsonObjectTools.h"
 
-FavoriteItem::ItemInfo::ItemInfo( const QString &name, const std::vector< MusicItem * > &music_itemv_vector, FavoriteItemWidget *favorite_item_widget ) : name( name ), musicItemvVector( music_itemv_vector ),
-	favoriteItemWidget( favorite_item_widget ) {
+FavoriteItem::ItemInfo::ItemInfo( const QString &name, const std::vector< MusicItem * > &music_itemv_vector, FavoriteItemWidget *favorite_item_widget ) : name( name ), musicItemvVector( music_itemv_vector ), favoriteItemWidget( favorite_item_widget ) {
+	favorite_item_widget->setFavoriteName( name );
 	deleteErrorObj = new QObject;
 	connect( favoriteItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 }
@@ -224,7 +224,10 @@ bool FavoriteItem::getJsonData( QJsonObject &get_json_object ) const {
 }
 
 bool FavoriteItem::setJsonData( const QJsonObject &set_json_object ) {
-	return info->favoriteItemWidget->setJsonData( set_json_object );
+	bool jsonData = info->favoriteItemWidget->setJsonData( set_json_object );
+	if( jsonData )
+		emit signal_change_vector_finished( );
+	return jsonData;
 }
 
 const QString & FavoriteItem::getName( ) const {
@@ -244,9 +247,91 @@ bool FavoriteItem::appendMusicItem( MusicItem *music_item ) {
 	auto data = info->musicItemvVector.data( );
 	size_t index;
 	for( index = 0; index < count; index += 1 )
-		if( data[ index ] == music_item || data[ index ]->isMusicFile( *music_item ) )
+		if( data[ index ] == music_item )
 			return false;
 	info->musicItemvVector.emplace_back( music_item );
+	emit signal_change_vector_finished( );
+	return true;
+}
+
+bool FavoriteItem::appendMusicItem( const std::vector< MusicItem * > &append_item_vector ) {
+	size_t count = info->musicItemvVector.size( );
+	auto data = info->musicItemvVector.data( );
+	size_t appCount = append_item_vector.size( );
+	size_t appIndex = 0;
+	size_t activeCount = 0;
+	std::vector< MusicItem * > appendItem( appCount );
+	auto appendBuffData = appendItem.data( );
+	auto appendData = append_item_vector.data( );
+
+	size_t index;
+	for( ; appIndex < appCount; appIndex += 1 ) {
+		auto compItem = appendData[ appIndex ];
+		for( index = 0; index < count; index += 1 )
+			if( data[ index ] == compItem )
+				break;
+		if( index < count )
+			continue;
+		appendBuffData[ activeCount ] = compItem;
+		activeCount += 1;
+	}
+	if( activeCount == 0 )
+		return false;
+	if( activeCount != appCount )
+		appendItem.resize( activeCount );
+	info->musicItemvVector.append_range( append_item_vector );
+	emit signal_change_vector_finished( );
+	return true;
+}
+
+bool FavoriteItem::removeMusicItem( const MusicItem *music_item ) {
+	size_t count = info->musicItemvVector.size( );
+	if( count == 0 )
+		return false;
+	auto data = info->musicItemvVector.data( );
+	std::vector< MusicItem * > buff( count );
+	auto buffData = buff.data( );
+	size_t buffCount = 0;
+	size_t index;
+	for( index = 0; index < count; index += 1 ) {
+		if( data[ index ] == music_item )
+			continue;
+		buffData[ buffCount ] = data[ index ];
+		buffCount += 1;
+	}
+	if( buffCount != count )
+		buff.resize( buffCount );
+	info->musicItemvVector = buff;
+	emit signal_change_vector_finished( );
+	return true;
+}
+
+bool FavoriteItem::removeMusicItem( const std::vector< MusicItem * > &remove_item_vector ) {
+	size_t count = info->musicItemvVector.size( );
+	if( count == 0 )
+		return false;
+	auto data = info->musicItemvVector.data( );
+	std::vector< MusicItem * > buff( count );
+	auto buffData = buff.data( );
+	size_t buffCount = 0;
+	size_t index;
+	size_t removeCount = remove_item_vector.size( );
+	auto removeData = remove_item_vector.data( );
+	size_t removeIndex;
+	for( index = 0; index < count; index += 1 ) {
+		auto musicItem = data[ index ];
+		for( removeIndex = 0; removeIndex < removeCount; removeIndex += 1 )
+			if( musicItem == removeData[ removeIndex ] )
+				break;
+		if( removeIndex < removeCount )
+			continue;
+		buffData[ buffCount ] = musicItem;
+		buffCount += 1;
+	}
+	if( buffCount != count )
+		buff.resize( buffCount );
+	info->musicItemvVector = buff;
+	emit signal_change_vector_finished( );
 	return true;
 }
 

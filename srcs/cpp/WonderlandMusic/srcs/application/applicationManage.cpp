@@ -1,9 +1,7 @@
 ﻿#include "applicationManage.h"
-
 #include "appDataManage.h"
 #include "appInstance.h"
 #include "appUserInterfaceManage.h"
-
 #include "../window/mainWindow.h"
 
 bool ApplicationManage::deleteResource( ) {

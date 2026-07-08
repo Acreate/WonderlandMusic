@@ -19,7 +19,6 @@
 #include "../scrollArea/musicContreScrollArea.h"
 #include "../stackedWidget/mainStackedWidget.h"
 #include "../tools/appJsonKeyTools.h"
-#include "../tools/arrayTools.h"
 #include "../tools/pathTools.h"
 #include "../tools/widgetTools.h"
 #include "../widget/favoriteWidget.h"
@@ -464,6 +463,7 @@ bool AppMusicManage::initAfter( ) {
 	openMultipleDirPath = openMultipleFilePath = appInstance->getAppDataManage( )->getAppSettingPath( );
 	if( appendFirstFavorite( ) == false )
 		return false;
+	// 在退出之前释放所有 item，包括 ui 组件，其中 ui item 被其他组件释放会弹出异常
 	auto applicationManage = appInstance->getApplicationManage( );
 	connect( applicationManage, &ApplicationManage::signal_app_quit, this, [this]( ) {
 		deleteResource( );

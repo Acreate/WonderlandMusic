@@ -3,14 +3,10 @@
 #include <qtranslator.h>
 #include "appDataJsonKey.h"
 #include "appInstance.h"
-#include "appMenuManage.h"
 #include "appMusicManage.h"
 #include "appTranslate.h"
-#include "appUserInterfaceManage.h"
 #include "applicationManage.h"
-#include "../menu/favoriteWidgetMenu.h"
 #include "../menu/playerListWidgetMenu.h"
-#include "../menu/systemTrayIconMenu.h"
 #include "../tools/pathTools.h"
 #include "jsonKey/appDataManageJsonKey.h"
 

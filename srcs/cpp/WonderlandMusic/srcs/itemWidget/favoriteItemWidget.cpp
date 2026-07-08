@@ -1,9 +1,7 @@
 ﻿#include "favoriteItemWidget.h"
-
 #include <QHBoxLayout>
 #include <QJsonObject>
 #include <QLineEdit>
-
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
@@ -13,7 +11,7 @@
 FavoriteItemWidget::~FavoriteItemWidget( ) {
 }
 
-FavoriteItemWidget::FavoriteItemWidget( FavoriteItem *favor_item ) : QWidget( nullptr ) {
+FavoriteItemWidget::FavoriteItemWidget( FavoriteItem *favor_item ) : QWidget( nullptr ), favoriteItem( favor_item ) {
 	lineEdit = new QLineEdit( this );
 	connect( lineEdit, &QLineEdit::editingFinished, this, [this]( ) {
 		lineEdit->setEnabled( false );

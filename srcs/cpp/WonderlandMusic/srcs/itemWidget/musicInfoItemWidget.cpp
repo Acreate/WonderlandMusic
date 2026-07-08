@@ -171,7 +171,7 @@ bool MusicInfoItemWidget::setJsonData( const QJsonObject &set_json_object ) {
 	QFileInfo info( musicFilePath );
 	absFilePath = info.absoluteFilePath( );
 	equFilePath = absFilePath == musicFilePath;
-	renderToBuff( );
+	//renderToBuff( );
 	return true;
 }
 
@@ -220,7 +220,7 @@ bool MusicInfoItemWidget::init( const QString &file_path, const QMediaMetaData &
 	QFileInfo info( file_path );
 	absFilePath = info.absoluteFilePath( );
 	equFilePath = absFilePath == musicFilePath;
-	renderToBuff( );
+	//renderToBuff( );
 	return true;
 }
 

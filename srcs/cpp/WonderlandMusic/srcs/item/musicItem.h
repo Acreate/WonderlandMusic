@@ -30,10 +30,11 @@ protected:
 		/// @brief 音频项，该项不由 class Info 创建，而由 class MusicItem 创建并赋予
 		MusicInfoItemWidget *musicInfoItemWidget = nullptr;
 		QObject *deleteErrorObj;
+		virtual void setMusicInfoItemWidget( MusicInfoItemWidget *music_info_item_widget );
 
 	protected:
-		Info( const QJsonObject &music_json_object, MusicItem *music_item );
 		Info( const QMediaPlayer &media_player, MusicItem *music_item );
+		Info( MusicItem *music_item );
 		virtual bool isEquFilePath( ) const;
 		virtual const QString & getAbsFilePath( ) const;
 		virtual const QString & getMusicFilePath( ) const;

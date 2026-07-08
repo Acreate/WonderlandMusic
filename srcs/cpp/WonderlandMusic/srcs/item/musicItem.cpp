@@ -68,12 +68,6 @@ bool MusicItem::Info::setJsonData( const QJsonObject &set_json_object ) {
 	return musicInfoItemWidget->setJsonData( set_json_object );
 }
 
-MusicItem::Info::Info( const QJsonObject &music_json_object, MusicItem *music_item ) {
-	deleteErrorObj = new QObject;
-	connect( musicInfoItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
-	setJsonData( music_json_object );
-}
-
 MusicItem::Info::Info( const QMediaPlayer &media_player, MusicItem *music_item ) {
 	auto localFile = media_player.source( ).toLocalFile( );
 	auto &&mediaMetaData = media_player.metaData( );
@@ -98,6 +92,19 @@ MusicItem::Info::Info( const QMediaPlayer &media_player, MusicItem *music_item )
 	absFilePath = info.absoluteFilePath( );
 	equFilePath = absFilePath == musicFilePath;
 	deleteErrorObj = new QObject;
+}
+
+MusicItem::Info::Info( MusicItem *music_item ) {
+	musicItem = music_item;
+	deleteErrorObj = new QObject;
+}
+
+void MusicItem::Info::setMusicInfoItemWidget( MusicInfoItemWidget *music_info_item_widget ) {
+	if( this->musicInfoItemWidget ) {
+		this->musicInfoItemWidget->disconnect( );
+		this->musicInfoItemWidget->deleteLater( );
+	}
+	this->musicInfoItemWidget = music_info_item_widget;
 	connect( musicInfoItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 }
 
@@ -145,7 +152,7 @@ MusicItem::~MusicItem( ) {
 
 MusicItem::MusicItem( const QMediaPlayer &media_player ) {
 	musicInfo = new Info( media_player, this );
-	musicInfo->musicInfoItemWidget = new MusicInfoItemWidget( *this );
+	musicInfo->setMusicInfoItemWidget( new MusicInfoItemWidget( *this ) );
 
 	connect( musicInfo->deleteErrorObj, &QObject::destroyed, [this] ( QObject *delete_obj_ptr ) {
 		Delete_Ptr_Exception( musicInfo->deleteErrorObj, delete_obj_ptr );
@@ -153,8 +160,10 @@ MusicItem::MusicItem( const QMediaPlayer &media_player ) {
 }
 
 MusicItem::MusicItem( const QJsonObject &music_json_object ) {
-	musicInfo = new Info( music_json_object, this );
-	musicInfo->musicInfoItemWidget = new MusicInfoItemWidget( *this );
+	musicInfo = new Info( this );
+	auto musicItemWidget = new MusicInfoItemWidget( *this );
+	musicItemWidget->setJsonData( music_json_object );
+	musicInfo->setMusicInfoItemWidget( musicItemWidget );
 
 	connect( musicInfo->deleteErrorObj, &QObject::destroyed, [this] ( QObject *delete_obj_ptr ) {
 		Delete_Ptr_Exception( musicInfo->deleteErrorObj, delete_obj_ptr );

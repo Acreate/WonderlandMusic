@@ -247,7 +247,6 @@ bool MusicContreWidget::selectKeyControlModifier( ) {
 }
 
 bool MusicContreWidget::deleteResource( ) {
-	disconnect( );
 	if( musicInfoMutex ) {
 		musicInfoMutex->lock( );
 		musicInfoVector.clear( );

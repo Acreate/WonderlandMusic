@@ -146,7 +146,6 @@ MusicItem * MusicItem::Info::getMusicItem( ) const {
 
 MusicItem::~MusicItem( ) {
 	musicInfo->deleteErrorObj->disconnect( musicInfo->deleteErrorObj, &QObject::destroyed, this, nullptr );
-	disconnect( );
 	delete musicInfo;
 }
 

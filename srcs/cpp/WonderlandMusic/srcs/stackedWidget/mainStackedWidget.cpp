@@ -10,7 +10,6 @@ bool MainStackedWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( playerWindow );
 	Delete_Resource_App_Core_Ptr( settingWidget );
 	Delete_Resource_App_Core_Ptr( aboutWidget );
-	disconnect( );
 	return true;
 }
 

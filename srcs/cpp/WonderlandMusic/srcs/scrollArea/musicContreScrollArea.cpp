@@ -28,7 +28,6 @@ MusicContreWidget * MusicContreScrollArea::getMusicContreWidget( ) const {
 }
 
 bool MusicContreScrollArea::deleteResource( ) {
-	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicContreWidget );
 	return true;
 }

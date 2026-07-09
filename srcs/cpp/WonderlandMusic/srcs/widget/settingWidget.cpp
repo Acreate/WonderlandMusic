@@ -17,7 +17,6 @@
 #include "../tools/widgetTools.h"
 
 bool SettingWidget::deleteResource( ) {
-	disconnect( );
 	Delete_Resource_App_Core_Ptr( mainSettingWdiget );
 	return true;
 }

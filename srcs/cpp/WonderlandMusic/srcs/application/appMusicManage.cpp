@@ -58,7 +58,6 @@ void AppMusicManage::deleteMusicItem( QObject *delete_ptr ) {
 }
 
 bool AppMusicManage::deleteResource( ) {
-	disconnect( );
 	if( loadMutex ) {
 		loadMutex->lock( );
 		size_t index;

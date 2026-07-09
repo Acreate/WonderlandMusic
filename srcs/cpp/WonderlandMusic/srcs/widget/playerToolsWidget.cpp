@@ -17,7 +17,6 @@
 #include "../msgInfo/messageErrorOut.h"
 
 bool PlayerToolsWidget::deleteResource( ) {
-	disconnect( );
 	Delete_Resource_App_Core_Ptr( thePreviousSong );
 	Delete_Resource_App_Core_Ptr( theNextSong );
 	Delete_Resource_App_Core_Ptr( controlPlay );

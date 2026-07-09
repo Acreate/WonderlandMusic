@@ -26,7 +26,6 @@ MusicContreScrollArea * MusicListWindow::getMusicContreScrollArea( ) const {
 }
 
 bool MusicListWindow::deleteResource( ) {
-	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicItemSizeInfoDockWidget );
 	Delete_Resource_App_Core_Ptr( musicContreScrollArea );
 	return true;

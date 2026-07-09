@@ -28,7 +28,6 @@ MusicControlDocWidget * PlayerWindow::getMusicControlDocWidget( ) const {
 }
 
 bool PlayerWindow::deleteResource( ) {
-	disconnect( );
 	Delete_Resource_App_Core_Ptr( musicListWindow );
 	Delete_Resource_App_Core_Ptr( musicControlDocWidget );
 	Delete_Resource_App_Core_Ptr( favoritemDockWidget );

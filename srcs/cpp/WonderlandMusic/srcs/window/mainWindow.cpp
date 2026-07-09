@@ -155,7 +155,6 @@ bool MainWindow::initAfter( ) {
 bool MainWindow::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( leftOptionDockWidget );
 	Delete_Resource_App_Core_Ptr( mainStackedWidget );
-	disconnect( );
 	return true;
 }
 

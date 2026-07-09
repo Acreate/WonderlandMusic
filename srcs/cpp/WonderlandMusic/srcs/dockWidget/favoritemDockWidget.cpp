@@ -27,7 +27,6 @@ FavoriteSrollArea * FavoritemDockWidget::getFavoriteSrollArea( ) const {
 }
 
 bool FavoritemDockWidget::deleteResource( ) {
-	disconnect( );
 	playerWindow->removeDockWidget( this );
 	Delete_Resource_App_Core_Ptr( titleBarWidget );
 	Delete_Resource_App_Core_Ptr( favoriteSrollArea );

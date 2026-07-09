@@ -21,7 +21,6 @@ FavoriteWidget::FavoriteWidget( QWidget *parent ) : QWidget( parent ) {
 }
 
 bool FavoriteWidget::deleteResource( ) {
-	disconnect( );
 	selectFavorite = nullptr;
 	favoriteVector.clear( );
 	return true;

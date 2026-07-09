@@ -15,7 +15,6 @@ OptionDockWidget::~OptionDockWidget( ) {
 }
 
 bool OptionDockWidget::deleteResource( ) {
-	disconnect( );
 	Delete_Resource_App_Core_Ptr( showAboutWidgetBtn );
 	Delete_Resource_App_Core_Ptr( showSettingWidgetBtn );
 	Delete_Resource_App_Core_Ptr( showPlayListWidgetBtn );

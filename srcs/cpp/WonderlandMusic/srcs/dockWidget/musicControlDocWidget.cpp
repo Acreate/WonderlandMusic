@@ -16,7 +16,6 @@ PlayerToolsWidget * MusicControlDocWidget::getPlayerToolsWidget( ) const {
 }
 
 bool MusicControlDocWidget::deleteResource( ) {
-	disconnect( );
 	playerWindow->removeDockWidget( this );
 	Delete_Resource_App_Core_Ptr( titleBarWidget );
 	Delete_Resource_App_Core_Ptr( playerToolsWidget );

@@ -18,7 +18,6 @@ AppMenuManage::~AppMenuManage( ) {
 }
 
 bool AppMenuManage::deleteResource( ) {
-	disconnect( );
 	Delete_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	Delete_Resource_App_Core_Ptr( playerListWidgetMenu );
 	Delete_Resource_App_Core_Ptr( systemTrayIconMenu );

@@ -21,7 +21,6 @@
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
 
 bool AppUserInterfaceManage::deleteResource( ) {
-	disconnect( );
 	if( systemTrayIcon )
 		systemTrayIcon->hide( );
 	Delete_Resource_App_Core_Ptr( appMenuManage );

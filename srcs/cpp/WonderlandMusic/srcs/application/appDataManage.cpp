@@ -19,7 +19,6 @@ bool AppDataManage::init( ) {
 }
 
 bool AppDataManage::initBefore( ) {
-	deleteResource( );
 	auto appInstance = AppInstance::getAppInstance( );
 	QString dirPath = appInstance->getApplicationManage( )->applicationDirPath( );
 	appSettingPath = dirPath + "/program/";
@@ -55,7 +54,6 @@ bool AppDataManage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( translate );
 	Delete_Resource_App_Core_Ptr( appDataJsonKey );
 	Delete_Resource_App_Core_Ptr( appMusicManage );
-	disconnect( );
 	return true;
 }
 

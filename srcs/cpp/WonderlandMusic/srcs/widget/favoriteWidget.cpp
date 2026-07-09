@@ -201,6 +201,8 @@ FavoriteItem * FavoriteWidget::getSelectItem( const QString &name ) const {
 }
 
 FavoriteItem * FavoriteWidget::getSelectItem( const QPoint &pos ) const {
+	if( rootItem->getFavoriteItemWidget( )->geometry( ).contains( pos ) )
+		return rootItem;
 	size_t count = favoriteVector.size( );
 	if( count ) {
 		auto data = favoriteVector.data( );

@@ -39,11 +39,8 @@ public:
 	virtual bool resetFavoriteItem( const std::vector< FavoriteItem * > &favorite_vector );
 	virtual FavoriteItem * getSelectItem( const QString &name ) const;
 	virtual FavoriteItem * getSelectItem( const QPoint &pos ) const;
-
-protected:
-	void mouseMoveEvent( QMouseEvent *event ) override;
-	void mousePressEvent( QMouseEvent *event ) override;
-	void mouseReleaseEvent( QMouseEvent *event ) override;
+	virtual FavoriteItem * leftClickPos( const QPoint &pos );
+	virtual FavoriteItem * rightClickPos( const QPoint &pos );
 
 private Q_SLOTS:
 	void slot_change_name_finished( );
@@ -53,7 +50,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void signal_update_layout_over( );
 	void signal_update_item_over( );
-	void signal_click_favorite_Item( FavoriteItem *label_widget );
-	void signal_favorite_Item_pop_menu( FavoriteItem *label_widget );
+	void signal_click_favorite_Item( );
+	void signal_favorite_Item_pop_menu( );
 };
 #endif // FAVORITEWIDGET_H_H_HEAD__FILE__

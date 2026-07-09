@@ -1,7 +1,5 @@
 ﻿#include "systemTrayIcon.h"
-
 #include <QFileInfo>
-
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
@@ -10,11 +8,8 @@
 #include "../application/appUserInterfaceManage.h"
 #include "../application/jsonKey/systemTrayIconJsonKey.h"
 #include "../application/translate/systemTrayIconTranslate.h"
-
 #include "../menu/systemTrayIconMenu.h"
-
 #include "../msgInfo/messageErrorOut.h"
-
 #include "../window/mainWindow.h"
 
 bool SystemTrayIcon::deleteResource( ) {
@@ -26,7 +21,7 @@ void SystemTrayIcon::activated_slot( QSystemTrayIcon::ActivationReason reason ) 
 	// 单击托盘图标显示/隐藏窗口
 	switch( reason ) {
 		case Context :
-			AppInstance::getAppInstance( )->getAppUserInterfaceManage( )->getAppMenuManage( )->popSystemTratIconMenu( QCursor::pos( ) );
+			emit sigal_pop_menu( );
 			break;
 		case Trigger : {
 			AppInstance *appInstance;

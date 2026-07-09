@@ -81,7 +81,7 @@ void MusicContreWidget::updateItemWidget( ) {
 	size_t count = musicInfoVector.size( );
 	if( count == 0 ) {
 		if( newWidth > 0 )
-			setFixedWidth( newWidth );
+			setMinimumWidth( newWidth );
 		musicInfoMutex->unlock( );
 		return;
 	}
@@ -106,11 +106,11 @@ void MusicContreWidget::updateItemWidget( ) {
 		offsetY += height;
 	}
 	if( offsetY > 0 && newWidth > 0 )
-		this->setFixedSize( newWidth, offsetY );
+		this->setMinimumSize( newWidth, offsetY );
 	else if( offsetY == 0 && newWidth > 0 )
-		setFixedWidth( newWidth );
+		setMinimumWidth( newWidth );
 	else if( offsetY > 0 && newWidth == 0 )
-		setFixedHeight( offsetY );
+		setMinimumHeight( offsetY );
 	musicInfoMutex->unlock( );
 }
 
@@ -352,7 +352,8 @@ MusicInfoItemWidget * MusicContreWidget::selectorItem( const QPoint &pos ) {
 		} else
 			musicInfoMutex->unlock( );
 		update( );
-	}
+	} else
+		musicInfoMutex->unlock( );
 	return selectItem;
 }
 

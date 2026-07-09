@@ -22,6 +22,9 @@ public:
 
 protected:
 	bool deleteResource( ) override;
+	void mousePressEvent( QMouseEvent * ) override;
+	void mouseReleaseEvent( QMouseEvent * ) override;
+	void mouseDoubleClickEvent( QMouseEvent * ) override;
 
 public:
 	bool initBefore( ) override;

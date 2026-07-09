@@ -1,5 +1,6 @@
 ﻿#include "favoriteSrollArea.h"
 #include <QJsonObject>
+#include <QMouseEvent>
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
@@ -21,6 +22,27 @@ FavoriteWidget * FavoriteSrollArea::getFavoriteWidget( ) const {
 bool FavoriteSrollArea::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( favoriteWidget );
 	return true;
+}
+
+void FavoriteSrollArea::mousePressEvent( QMouseEvent *mouse_event ) {
+	QScrollArea::mousePressEvent( mouse_event );
+}
+
+void FavoriteSrollArea::mouseReleaseEvent( QMouseEvent *mouse_event ) {
+	QScrollArea::mouseReleaseEvent( mouse_event );
+	auto mouseButton = mouse_event->button( );
+	switch( mouseButton ) {
+		case Qt::LeftButton :
+			favoriteWidget->leftClickPos( favoriteWidget->mapFromParent( mouse_event->pos( ) ) );
+			break;
+		case Qt::RightButton :
+			favoriteWidget->rightClickPos( favoriteWidget->mapFromParent( mouse_event->pos( ) ) );
+			break;
+	}
+}
+
+void FavoriteSrollArea::mouseDoubleClickEvent( QMouseEvent *mouse_event ) {
+	QScrollArea::mouseDoubleClickEvent( mouse_event );
 }
 
 bool FavoriteSrollArea::initBefore( ) {

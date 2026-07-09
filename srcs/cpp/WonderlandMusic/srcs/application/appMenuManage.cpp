@@ -1,14 +1,21 @@
 ﻿#include "appMenuManage.h"
-
 #include <qscreen.h>
-
 #include "appInstance.h"
-
+#include "appUserInterfaceManage.h"
+#include "../dockWidget/favoritemDockWidget.h"
 #include "../menu/favoriteWidgetMenu.h"
 #include "../menu/playerListWidgetMenu.h"
 #include "../menu/systemTrayIconMenu.h"
-
+#include "../scrollArea/favoriteSrollArea.h"
+#include "../scrollArea/musicContreScrollArea.h"
+#include "../stackedWidget/mainStackedWidget.h"
+#include "../systemTrayIcon/systemTrayIcon.h"
 #include "../tools/widgetTools.h"
+#include "../widget/favoriteWidget.h"
+#include "../widget/musicContreWidget.h"
+#include "../window/mainWindow.h"
+#include "../window/musicListWindow.h"
+#include "../window/playerWindow.h"
 
 AppMenuManage::AppMenuManage( ) {
 }
@@ -47,6 +54,33 @@ bool AppMenuManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( systemTrayIconMenu );
 	After_Init_Resource_App_Core_Ptr( playerListWidgetMenu );
 	After_Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
+
+	auto appInstance = AppInstance::getAppInstance( );
+	auto userInterfaceManage = appInstance->getAppUserInterfaceManage( );
+	auto mainWindow = userInterfaceManage->getMainWindow( );
+	auto mainStackedWidget = mainWindow->getMainStackedWidget( );
+	auto playerWindow = mainStackedWidget->getPlayerWindow( );
+	auto musicListWindow = playerWindow->getMusicListWindow( );
+	auto musicContreScrollArea = musicListWindow->getMusicContreScrollArea( );
+	auto musicContreWidget = musicContreScrollArea->getMusicContreWidget( );
+	connect( musicContreWidget, &MusicContreWidget::signal_pop_menu, this, [this]( ) {
+		auto pos = QCursor::pos( );
+		popPlayerListWidgetMenu( pos );
+	} );
+	auto favoritemDockWidget = playerWindow->getFavoritemDockWidget( );
+	auto favoriteSrollArea = favoritemDockWidget->getFavoriteSrollArea( );
+	auto favoriteWidget = favoriteSrollArea->getFavoriteWidget( );
+	connect( favoriteWidget, &FavoriteWidget::signal_favorite_Item_pop_menu, this, [this]( ) {
+		auto pos = QCursor::pos( );
+		popFavoriteWidgetMenu( pos );
+	} );
+
+	auto systemTrayIcon = userInterfaceManage->getSystemTrayIcon( );;
+	connect( systemTrayIcon, &SystemTrayIcon::sigal_pop_menu, this, [this]( ) {
+		auto pos = QCursor::pos( );
+		popSystemTratIconMenu( pos );
+	} );
+
 	return true;
 }
 
@@ -60,9 +94,12 @@ bool AppMenuManage::popSystemTratIconMenu( const QPoint &pos ) const {
 
 bool AppMenuManage::popPlayerListWidgetMenu( const QPoint &pos ) const {
 	QPoint resutPos;
+
 	if( WidgetTools::getMenuSuggestionShowMenuPos( resutPos, pos, systemTrayIconMenu ) == false )
 		return false;
+
 	playerListWidgetMenu->exec( resutPos );
+
 	return true;
 }
 

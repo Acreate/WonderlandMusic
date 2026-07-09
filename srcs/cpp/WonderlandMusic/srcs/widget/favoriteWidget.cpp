@@ -47,11 +47,13 @@ void FavoriteWidget::setSelectFavorite( FavoriteItem *const select_favorite ) {
 		connect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
 		connect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
 		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
+		emit signal_click_favorite_Item( );
 		return;
 	}
 	if( rootItem && ( selectFavorite == nullptr || rootItem == select_favorite ) ) {
 		selectFavorite = select_favorite;
 		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
+		emit signal_click_favorite_Item( );
 		return;
 	}
 }
@@ -210,28 +212,19 @@ FavoriteItem * FavoriteWidget::getSelectItem( const QPoint &pos ) const {
 	return nullptr;
 }
 
-void FavoriteWidget::mouseMoveEvent( QMouseEvent *event ) {
-	QWidget::mouseMoveEvent( event );
+FavoriteItem * FavoriteWidget::leftClickPos( const QPoint &pos ) {
+	selectFavorite = getSelectItem( pos );
+	if( selectFavorite == nullptr )
+		return nullptr;
+	emit signal_click_favorite_Item( );
+	return selectFavorite;
 }
 
-void FavoriteWidget::mousePressEvent( QMouseEvent *event ) {
-	QWidget::mousePressEvent( event );
-}
-
-void FavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	auto mouseButton = event->button( );
-	switch( mouseButton ) {
-		case Qt::LeftButton :
-			selectFavorite = getSelectItem( event->pos( ) );
-			if( selectFavorite )
-				emit signal_click_favorite_Item( selectFavorite );
-			break;
-		case Qt::RightButton :
-			selectFavorite = getSelectItem( event->pos( ) );
-			if( selectFavorite )
-				emit signal_favorite_Item_pop_menu( selectFavorite );
-			break;
-	}
+FavoriteItem * FavoriteWidget::rightClickPos( const QPoint &pos ) {
+	selectFavorite = getSelectItem( pos );
+	emit signal_click_favorite_Item( );
+	emit signal_favorite_Item_pop_menu( );
+	return selectFavorite;
 }
 
 void FavoriteWidget::slot_change_name_finished( ) {

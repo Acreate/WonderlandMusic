@@ -106,5 +106,10 @@ bool AppInstance::initAfter( ) {
 }
 
 int AppInstance::exec( ) {
-	return applicationManage->exec( );
+	
+	
+	int exec = applicationManage->exec( );
+	
+	
+	return exec;
 }

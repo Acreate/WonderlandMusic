@@ -1,6 +1,7 @@
 ﻿#ifndef FAVORITEITEM_H_H_HEAD__FILE__
 #define FAVORITEITEM_H_H_HEAD__FILE__
 #include "../interface/iAppJsonData.h"
+class AppMusicManage;
 class FavoriteItemWidget;
 class MusicItem;
 
@@ -11,7 +12,6 @@ public:
 	class ItemInfo;
 
 	class ItemInfo {
-		friend class AppMusicManage;
 		friend class FavoriteItem;
 		QString name;
 		std::vector< MusicItem * > musicItemvVector;
@@ -61,6 +61,15 @@ public:
 	virtual std::vector< MusicItem * > findMusicName( const QString &find_name ) const;
 	virtual std::vector< MusicItem * > findMusicFilePath( const QString &find_file_path ) const;
 	virtual std::vector< MusicItem * > findMusicMusicSinger( const QString &music_singer ) const;
+	virtual MusicItem * findFirstMusicItem( const MusicItem *target ) const;
+	virtual MusicItem * findFirstMusicItem( const QString &any_string ) const;
+	virtual MusicItem * findFirstMusicName( const QString &music_name ) const;
+	virtual MusicItem * findFirstMusicSinger( const QString &music_singer ) const;
+	virtual MusicItem * findFirstMusicFilePath( const QString &find_file_path ) const;
+	virtual void clearAllMusicItem( );
+	virtual void deleteAllMusicItem( );
+	virtual void fromMusicIndex( std::vector< MusicItem * > &result_music_item, const std::vector< size_t > &find_index );
+	virtual void toMusicIndex( std::vector< size_t > &result_index, const std::vector< MusicItem * > &find_index_music_item );
 Q_SIGNALS:
 	void signal_change_vector_finished( FavoriteItem *favorite_item );
 	void signal_free( FavoriteItem *favorite_item );

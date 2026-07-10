@@ -309,21 +309,15 @@ bool FavoriteItem::removeMusicItem( const MusicItem *music_item ) {
 	if( count == 0 )
 		return false;
 	auto data = info->musicItemvVector.data( );
-	std::vector< MusicItem * > buff( count );
-	auto buffData = buff.data( );
-	size_t buffCount = 0;
+
 	size_t index;
-	for( index = 0; index < count; index += 1 ) {
-		if( data[ index ] == music_item )
-			continue;
-		buffData[ buffCount ] = data[ index ];
-		buffCount += 1;
-	}
-	if( buffCount != count )
-		buff.resize( buffCount );
-	info->musicItemvVector = buff;
-	emit signal_change_vector_finished( this );
-	return true;
+	for( index = 0; index < count; index += 1 )
+		if( data[ index ] == music_item ) {
+			info->musicItemvVector.erase( info->musicItemvVector.begin( ) + index );
+			emit signal_change_vector_finished( this );
+			return true;;
+		}
+	return false;
 }
 
 bool FavoriteItem::removeMusicItem( const std::vector< MusicItem * > &remove_item_vector ) {
@@ -348,10 +342,11 @@ bool FavoriteItem::removeMusicItem( const std::vector< MusicItem * > &remove_ite
 		buffData[ buffCount ] = musicItem;
 		buffCount += 1;
 	}
-	if( buffCount != count )
+	if( buffCount != count ) {
 		buff.resize( buffCount );
-	info->musicItemvVector = buff;
-	emit signal_change_vector_finished( this );
+		info->musicItemvVector = buff;
+		emit signal_change_vector_finished( this );
+	}
 	return true;
 }
 
@@ -426,4 +421,116 @@ std::vector< MusicItem * > FavoriteItem::findMusicMusicSinger( const QString &mu
 		if( data[ index ]->getMusicSinger( ) == music_singer )
 			result.emplace_back( data[ index ] );
 	return result;
+}
+
+MusicItem * FavoriteItem::findFirstMusicItem( const MusicItem *target ) const {
+	size_t count = info->musicItemvVector.size( );
+	if( count == 0 )
+		return nullptr;
+	auto data = info->musicItemvVector.data( );
+	size_t index;
+	for( index = 0; index < count; index += 1 )
+		if( data[ index ] == target )
+			return data[ index ];
+	return nullptr;
+}
+
+MusicItem * FavoriteItem::findFirstMusicItem( const QString &any_string ) const {
+	size_t count = info->musicItemvVector.size( );
+	if( count == 0 )
+		return nullptr;
+	auto data = info->musicItemvVector.data( );
+	size_t index;
+	for( index = 0; index < count; index += 1 )
+		if( data[ index ]->isMusicFile( any_string ) || data[ index ]->getMusicName( ) == any_string || data[ index ]->getMusicSinger( ) == any_string )
+			return data[ index ];
+
+	return nullptr;
+}
+
+MusicItem * FavoriteItem::findFirstMusicName( const QString &music_name ) const {
+	size_t count = info->musicItemvVector.size( );
+	if( count == 0 )
+		return nullptr;
+	auto data = info->musicItemvVector.data( );
+	size_t index;
+	for( index = 0; index < count; index += 1 )
+		if( data[ index ]->getMusicName( ) == music_name )
+			return data[ index ];
+	return nullptr;
+}
+
+MusicItem * FavoriteItem::findFirstMusicSinger( const QString &music_singer ) const {
+	size_t count = info->musicItemvVector.size( );
+	if( count == 0 )
+		return nullptr;
+	auto data = info->musicItemvVector.data( );
+	size_t index;
+	for( index = 0; index < count; index += 1 )
+		if( data[ index ]->getMusicSinger( ) == music_singer )
+			return data[ index ];
+	return nullptr;
+}
+
+MusicItem * FavoriteItem::findFirstMusicFilePath( const QString &find_file_path ) const {
+	size_t count = info->musicItemvVector.size( );
+	if( count == 0 )
+		return nullptr;
+	auto data = info->musicItemvVector.data( );
+	size_t index;
+	for( index = 0; index < count; index += 1 )
+		if( data[ index ]->isMusicFile( find_file_path ) )
+			return data[ index ];
+	return nullptr;
+}
+
+void FavoriteItem::clearAllMusicItem( ) {
+	info->musicItemvVector.clear( );
+	emit signal_change_vector_finished( this );
+}
+
+void FavoriteItem::deleteAllMusicItem( ) {
+	AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( )->deleteFavoriteItemAllMusicItem( this );
+}
+
+void FavoriteItem::fromMusicIndex( std::vector< MusicItem * > &result_music_item, const std::vector< size_t > &find_index ) {
+	size_t findCount = find_index.size( );
+	size_t findIndex;
+	auto findData = find_index.data( );
+	result_music_item.resize( findCount );
+	auto resultData = result_music_item.data( );
+	size_t resultCount = 0;
+	size_t sourceCount = info->musicItemvVector.size( );
+	auto sourceData = info->musicItemvVector.data( );
+	for( findIndex = 0; findIndex < findCount; findIndex += 1 ) {
+		auto findItem = findData[ findIndex ];
+		if( findIndex >= sourceCount )
+			continue;
+		resultData[ resultCount ] = sourceData[ findItem ];
+		resultCount += 1;
+	}
+	result_music_item.resize( resultCount );
+}
+
+void FavoriteItem::toMusicIndex( std::vector< size_t > &result_index, const std::vector< MusicItem * > &find_index_music_item ) {
+	size_t findCount = find_index_music_item.size( );
+	size_t findIndex;
+	result_index.resize( findCount );
+	auto findData = find_index_music_item.data( );
+	size_t sourceCount = info->musicItemvVector.size( );
+	auto sourceData = info->musicItemvVector.data( );
+	size_t sourceIndex;
+	auto findResultIndexData = result_index.data( );
+	size_t findResultCount = 0;
+	for( findIndex = 0; findIndex < findCount; findIndex += 1 ) {
+		auto findItem = findData[ findIndex ];
+		for( sourceIndex = 0; sourceIndex < sourceCount; sourceIndex += 1 )
+			if( sourceData[ sourceIndex ] == findItem )
+				break;
+		if( sourceIndex == sourceCount )
+			continue;
+		findResultIndexData[ findResultCount ] = sourceIndex;
+		findResultCount += 1;
+	}
+	result_index.resize( findResultCount );
 }

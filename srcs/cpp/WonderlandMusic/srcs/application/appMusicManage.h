@@ -16,12 +16,14 @@ class AppMusicManage : public QObject, public IAppCore, public IAppDiskJsonData 
 	Q_OBJECT;
 
 private Q_SLOTS:
-	void deleteFavoriteItem( QObject *delete_ptr );
-	void deleteMusicItem( QObject *delete_ptr );
+	void removeVectorFavoriteItem( FavoriteItem *delete_ptr );
+	void removeVectorMusicItem( MusicItem *delete_ptr );
 
 protected:
-	UserMutex *loadMutex = nullptr;
+	//UserMutex *loadMutex = nullptr;
 	AppMusicDecoder *appMusicDecoder = nullptr;
+	std::vector< std::pair< FavoriteItem *, QMetaObject::Connection > > favoriteItemFreeConnectVector;
+	std::vector< std::pair< MusicItem *, QMetaObject::Connection > > musicItemFreeConnectVector;
 	std::vector< QMediaPlayer * > loadMediaVector;
 	std::vector< QString > loadFileVector;
 	size_t loadCount;
@@ -43,6 +45,10 @@ protected:
 	virtual bool appendFavorite( const QString &name );
 	virtual bool connectMusicInfoItemWidgetSignal( MusicItem *music_item );
 	virtual bool connectFavoriteItemWidgetSignal( FavoriteItem *favorite_item );
+	virtual void releaseMusicItemFreeConnect( );
+	virtual void releaseFavoriteItemFreeConnect( );
+	virtual void releaseMusicItemFreeConnect( const MusicItem *music_item );
+	virtual void releaseFavoriteItemFreeConnect( const FavoriteItem *favorite_item );
 
 public:
 	bool readJsonData( ) override;
@@ -57,6 +63,7 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual void toMusicIndex( std::vector< size_t > &result_index, const std::vector< MusicItem * > &find_index_music_item );
 	virtual void fromMusicIndex( std::vector< MusicItem * > &result_music_item, const std::vector< size_t > &find_index );
+	virtual bool deleteFavoriteItemAllMusicItem( FavoriteItem *favorite_item );
 	~AppMusicManage( ) override;
 	/// @brief 从序列当中移除目标，并不会释放其内存，应当由调用者进行管理
 	/// @param target 释放目标

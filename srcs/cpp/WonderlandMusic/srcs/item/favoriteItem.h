@@ -62,7 +62,6 @@ public:
 	virtual std::vector< MusicItem * > findMusicFilePath( const QString &find_file_path ) const;
 	virtual std::vector< MusicItem * > findMusicMusicSinger( const QString &music_singer ) const;
 Q_SIGNALS:
-	void signal_change_name_finished( );
-	void signal_change_vector_finished( );
+	void signal_change_vector_finished( FavoriteItem *favorite_item );
 };
 #endif // FAVORITEITEM_H_H_HEAD__FILE__

@@ -151,7 +151,7 @@ MusicItem::~MusicItem( ) {
 
 MusicItem::MusicItem( const QMediaPlayer &media_player ) {
 	musicInfo = new Info( media_player, this );
-	musicInfo->setMusicInfoItemWidget( new MusicInfoItemWidget( *this ) );
+	musicInfo->setMusicInfoItemWidget( new MusicInfoItemWidget( this ) );
 
 	connect( musicInfo->deleteErrorObj, &QObject::destroyed, [this] ( QObject *delete_obj_ptr ) {
 		Delete_Ptr_Exception( musicInfo->deleteErrorObj, delete_obj_ptr );
@@ -160,7 +160,7 @@ MusicItem::MusicItem( const QMediaPlayer &media_player ) {
 
 MusicItem::MusicItem( const QJsonObject &music_json_object ) {
 	musicInfo = new Info( this );
-	auto musicItemWidget = new MusicInfoItemWidget( *this );
+	auto musicItemWidget = new MusicInfoItemWidget( this );
 	musicItemWidget->setJsonData( music_json_object );
 	musicInfo->setMusicInfoItemWidget( musicItemWidget );
 

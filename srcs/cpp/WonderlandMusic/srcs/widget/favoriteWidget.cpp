@@ -35,25 +35,20 @@ void FavoriteWidget::setSelectFavorite( FavoriteItem *const select_favorite ) {
 	auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
 
 	if( selectFavorite && selectFavorite != rootItem ) {
-		selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
-
 		selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
 
 		selectFavorite->disconnect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
 	}
 	selectFavorite = select_favorite;
 	if( selectFavorite && rootItem != selectFavorite ) {
-		connect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
 		connect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
 		connect( selectFavorite, &QObject::destroyed, this, &FavoriteWidget::slot_destroyed );
 		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
-		emit signal_click_favorite_Item( );
 		return;
 	}
 	if( rootItem && ( selectFavorite == nullptr || rootItem == select_favorite ) ) {
 		selectFavorite = select_favorite;
 		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
-		emit signal_click_favorite_Item( );
 		return;
 	}
 }
@@ -140,7 +135,9 @@ bool FavoriteWidget::initAfter( ) {
 		setSelectFavorite( rootItem );
 
 	updateLayout( );
-	connect( appMusicManage, &AppMusicManage::signal_update_favorite_item, this, &FavoriteWidget::slot_update_favorite_item );
+	connect( appMusicManage, &AppMusicManage::signal_favorite_item_change_vector_finished, this, [this] ( FavoriteItem *favorite_item ) {
+		slot_update_favorite_item( favorite_item->getFavoriteItemWidget( ) );
+	} );
 	return true;
 }
 
@@ -214,24 +211,6 @@ FavoriteItem * FavoriteWidget::getSelectItem( const QPoint &pos ) const {
 	return nullptr;
 }
 
-FavoriteItem * FavoriteWidget::leftClickPos( const QPoint &pos ) {
-	selectFavorite = getSelectItem( pos );
-	if( selectFavorite == nullptr )
-		return nullptr;
-	emit signal_click_favorite_Item( );
-	return selectFavorite;
-}
-
-FavoriteItem * FavoriteWidget::rightClickPos( const QPoint &pos ) {
-	selectFavorite = getSelectItem( pos );
-	emit signal_click_favorite_Item( );
-	emit signal_favorite_Item_pop_menu( );
-	return selectFavorite;
-}
-
-void FavoriteWidget::slot_change_name_finished( ) {
-}
-
 void FavoriteWidget::slot_change_vector_finished( ) {
 	if( selectFavorite ) {
 		auto appInstance = AppInstance::getAppInstance( );
@@ -247,8 +226,6 @@ void FavoriteWidget::slot_change_vector_finished( ) {
 void FavoriteWidget::slot_destroyed( QObject *delete_ptr ) {
 	if( selectFavorite != delete_ptr )
 		return;
-
-	selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_name_finished, this, &FavoriteWidget::slot_change_name_finished );
 
 	selectFavorite->disconnect( selectFavorite, &FavoriteItem::signal_change_vector_finished, this, &FavoriteWidget::slot_change_vector_finished );
 

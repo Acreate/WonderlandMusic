@@ -74,7 +74,6 @@ void MusicContreScrollArea::mouseMoveEvent( QMouseEvent *mouse_event ) {
 	QScrollArea::mouseMoveEvent( mouse_event );
 	if( musicContreWidget == nullptr )
 		return;
-	musicContreWidget->highlghtItem( musicContreWidget->mapFromParent( mouse_event->pos( ) ) );
 }
 
 void MusicContreScrollArea::mousePressEvent( QMouseEvent *mouse_event ) {
@@ -87,11 +86,8 @@ void MusicContreScrollArea::mouseReleaseEvent( QMouseEvent *mouse_event ) {
 		return;
 	Qt::MouseButton mouseButton = mouse_event->button( );
 	switch( mouseButton ) {
-		case Qt::MouseButton::LeftButton :
-			musicContreWidget->selectorItem( musicContreWidget->mapFromParent( mouse_event->pos( ) ) );
-			break;
 		case Qt::MouseButton::RightButton :
-			musicContreWidget->showItemMenu( musicContreWidget->mapFromParent( mouse_event->pos( ) ) );
+			emit signal_pop_menu( );
 			break;
 	}
 }

@@ -13,6 +13,7 @@
 #include "../item/favoriteItem.h"
 #include "../item/musicItem.h"
 #include "../itemWidget/favoriteItemWidget.h"
+#include "../itemWidget/musicInfoItemWidget.h"
 #include "../menu/favoriteWidgetMenu.h"
 #include "../menu/playerListWidgetMenu.h"
 #include "../mutex/userMutex.h"
@@ -149,10 +150,8 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 			job->deleteLater( );
 			if( favoriteItem ) {
 				favoriteItem->appendMusicItem( fileVector );
-				emit signal_update_favorite_item( favoriteItem->getInfo( )->favoriteItemWidget );
 			} else {
 				rootItem->appendMusicItem( fileVector );
-				emit signal_update_favorite_item( rootItem->getInfo( )->favoriteItemWidget );
 			}
 		} );
 		auto loadBuffData = loadJob.data( );
@@ -208,6 +207,54 @@ bool AppMusicManage::connectFavoriteWidgetMenuSignal( ) {
 	return true;
 }
 
+bool AppMusicManage::connectMusicInfoItemWidgetSignal( MusicItem *music_item ) {
+	if( music_item == nullptr )
+		return false;
+	connect( music_item, &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
+	auto infoItemWidget = music_item->getMusicInfoItemWidget( );
+	connect( infoItemWidget, &MusicInfoItemWidget::signal_enter_item, this, [this] ( MusicInfoItemWidget *item ) {
+		emit signal_music_item_enter( item->getMusicItem( ) );
+	} );
+	connect( infoItemWidget, &MusicInfoItemWidget::signal_leave_item, this, [this] ( MusicInfoItemWidget *item ) {
+		emit signal_music_item_leave( item->getMusicItem( ) );
+	} );
+	connect( infoItemWidget, &MusicInfoItemWidget::signal_single_click_item, this, [this] ( MusicInfoItemWidget *item ) {
+		emit signal_music_item_single_click( item->getMusicItem( ) );
+	} );
+	connect( infoItemWidget, &MusicInfoItemWidget::signal_double_click_item, this, [this] ( MusicInfoItemWidget *item ) {
+		emit signal_music_item_double_click( item->getMusicItem( ) );
+	} );
+	return true;
+}
+
+bool AppMusicManage::connectFavoriteItemWidgetSignal( FavoriteItem *favorite_item ) {
+	if( favorite_item == nullptr )
+		return false;
+	connect( favorite_item, &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
+	connect( favorite_item, &FavoriteItem::signal_change_vector_finished, this, &AppMusicManage::signal_favorite_item_change_vector_finished );
+	/*
+	void FavoriteItemWidget::signal_change_name_finished( FavoriteItemWidget *item );
+	void FavoriteItemWidget::signal_click_item( FavoriteItemWidget *item );
+	void FavoriteItemWidget::signal_enter_item( FavoriteItemWidget *item );
+	void FavoriteItemWidget::signal_leave_item( FavoriteItemWidget *item );
+	 */
+	auto favoriteItemWidget = favorite_item->getFavoriteItemWidget( );
+	connect( favoriteItemWidget, &FavoriteItemWidget::signal_change_name_finished, this, [this] ( FavoriteItemWidget *item ) {
+		emit signal_favorite_item_change_name( item->getFavorItem( ) );
+	} );
+	connect( favoriteItemWidget, &FavoriteItemWidget::signal_click_item, this, [this] ( FavoriteItemWidget *item ) {
+		emit signal_favorite_item_click( item->getFavorItem( ) );
+	} );
+	connect( favoriteItemWidget, &FavoriteItemWidget::signal_enter_item, this, [this] ( FavoriteItemWidget *item ) {
+		emit signal_favorite_item_enter( item->getFavorItem( ) );
+	} );
+	connect( favoriteItemWidget, &FavoriteItemWidget::signal_leave_item, this, [this] ( FavoriteItemWidget *item ) {
+		emit signal_favorite_item_leave( item->getFavorItem( ) );
+	} );
+
+	return false;
+}
+
 void AppMusicManage::loadFile( const QString &music_file ) {
 	// 构建对象
 	auto loadMusicFile = new QMediaPlayer;
@@ -215,7 +262,6 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 	loadMusicFile->connect( loadMusicFile, &QMediaPlayer::mediaStatusChanged, this, [this, loadMusicFile] ( QMediaPlayer::MediaStatus status ) {
 		AppDataManage *dataManage = AppInstance::getAppInstance( )->getAppDataManage( );
 		MusicItem *musicItem = new MusicItem( *loadMusicFile );
-		connect( musicItem, &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
 		switch( status ) {
 			case QMediaPlayer::EndOfMedia :
 			case QMediaPlayer::InvalidMedia :
@@ -234,6 +280,9 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 		loadCount += 1;
 		size_t loadOverCount = loadMediaVector.size( );
 		rootItem->getInfo( )->musicItemvVector.emplace_back( musicItem );
+
+		connectMusicInfoItemWidgetSignal( musicItem );
+
 		loadMutex->unlock( );
 		emit dataManage->signal_load_unity( *musicItem );
 		if( loadOverCount == loadCount ) {
@@ -563,7 +612,7 @@ size_t AppMusicManage::findMusicItem( std::vector< MusicItem * > &result_item, c
 	size_t count = musicItemvVector.size( );
 	size_t resultCount = 0;
 	if( count ) {
-		size_t index = 0;
+		size_t index;
 		auto data = musicItemvVector.data( );
 		size_t findeIndex;
 		size_t findCount = find_music.size( );
@@ -610,7 +659,7 @@ bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {
 	QJsonObject object;
 	if( FavoriteItem::getJsonDataVector( object, favoriteItemVector ) == false )
 		return false;
-	if( MusicItem::getJsonDataVector( object, rootItem->getInfo( )->musicItemvVector ) == false ) 
+	if( MusicItem::getJsonDataVector( object, rootItem->getInfo( )->musicItemvVector ) == false )
 		return false;
 	object.insert( selectFilePathJsonKey, this->openMultipleFilePath );
 	object.insert( selectDirPathJsonKey, this->openMultipleDirPath );
@@ -666,7 +715,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		auto copydata = resultMusicItemVector.data( );
 		for( index = 0; index < count; index += 1 ) {
 			data[ index ] = copydata[ index ];
-			connect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
+			connectMusicInfoItemWidgetSignal( data[ index ] );
 		}
 	}
 	std::vector< FavoriteItem * > resultFavoriteItemVector;
@@ -687,8 +736,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		auto copydata = resultFavoriteItemVector.data( );
 		for( index = 0; index < count; index += 1 ) {
 			data[ index ] = copydata[ index ];
-			connect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
-			emit signal_update_favorite_item( data[ index ]->getInfo( )->favoriteItemWidget );
+			connectFavoriteItemWidgetSignal( data[ index ] );
 		}
 	}
 
@@ -700,7 +748,6 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 	musicContreWidget->setItemPlayerListTopWidgetWidth( playerListTopWidget );
 
 	favoriteWidget->updateAppMusicManageInof( favoriteItemVector );
-	emit signal_update_favorite_item( rootItem->getInfo( )->favoriteItemWidget );
 	return true;
 }
 

@@ -53,24 +53,22 @@ int MusicInfoItemWidget::getMusicDurationWidth( ) const {
 	return musicDurationWidth;
 }
 
-MusicInfoItemWidget::MusicInfoItemWidget( ) : MusicInfoItemWidget( nullptr ) {
+MusicItem * MusicInfoItemWidget::getMusicItem( ) const {
+	return musicItem;
 }
 
-MusicInfoItemWidget::MusicInfoItemWidget( const MusicItem &music_item ) {
-	absFilePath = music_item.getAbsFilePath( );
-	musicFilePath = music_item.getMusicFilePath( );
-	musicName = music_item.getMusicName( );
-	musicSinger = music_item.getMusicSinger( );
-	duration = music_item.getDuration( );
-	formatStringDuration = music_item.getFormatStringDuration( );
-	equFilePath = absFilePath == musicFilePath;
-}
-
-MusicInfoItemWidget::MusicInfoItemWidget( QWidget *parent ) :
-	QWidget( parent ) {
-	hide( );
-	index = 0;
+MusicInfoItemWidget::MusicInfoItemWidget( MusicItem *music_item ) : QWidget( nullptr ) {
 	splitWidth = musicNameWidth = musicSingerWidth = musicDurationWidth = 4;
+	absFilePath = music_item->getAbsFilePath( );
+	musicFilePath = music_item->getMusicFilePath( );
+	musicName = music_item->getMusicName( );
+	musicSinger = music_item->getMusicSinger( );
+	duration = music_item->getDuration( );
+	formatStringDuration = music_item->getFormatStringDuration( );
+	equFilePath = absFilePath == musicFilePath;
+	musicItem = music_item;
+	index = 0;
+	hide( );
 	// 开启鼠标穿透
 	setAttribute( Qt::WA_TransparentForMouseEvents, true );
 }
@@ -172,6 +170,30 @@ bool MusicInfoItemWidget::setJsonData( const QJsonObject &set_json_object ) {
 void MusicInfoItemWidget::paintEvent( QPaintEvent *event ) {
 	QPainter painter( this );
 	painter.drawImage( 0, 0, *renderBuff );
+}
+
+void MusicInfoItemWidget::enterEvent( QEnterEvent *event ) {
+	QWidget::enterEvent( event );
+	emit signal_enter_item( this );
+}
+
+void MusicInfoItemWidget::leaveEvent( QEvent *event ) {
+	QWidget::leaveEvent( event );
+	emit signal_leave_item( this );
+}
+
+void MusicInfoItemWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
+	QWidget::mouseDoubleClickEvent( event );
+	emit signal_double_click_item( this );
+}
+
+void MusicInfoItemWidget::mousePressEvent( QMouseEvent *event ) {
+	QWidget::mousePressEvent( event );
+}
+
+void MusicInfoItemWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	QWidget::mouseReleaseEvent( event );
+	emit signal_single_click_item( this );
 }
 
 bool MusicInfoItemWidget::init( const QString &music_file_path, const QString &music_name, const QString &music_singer, qint64 duration_ms ) {

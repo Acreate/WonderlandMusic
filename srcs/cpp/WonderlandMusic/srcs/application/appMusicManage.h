@@ -41,6 +41,8 @@ protected:
 	virtual size_t filterMusciFromFileVector( std::vector< QString > &result_filter_over, const std::vector< QString > &music_file );
 	virtual void loadMusciFromDir( const std::vector< QString > &music_dir );
 	virtual bool appendFavorite( const QString &name );
+	virtual bool connectMusicInfoItemWidgetSignal( MusicItem *music_item );
+	virtual bool connectFavoriteItemWidgetSignal( FavoriteItem *favorite_item );
 
 public:
 	bool readJsonData( ) override;
@@ -77,6 +79,14 @@ public:
 	virtual bool selectMusicItemAggregateToPlayItemAfter( );
 	virtual bool selectFavorite( );
 Q_SIGNALS:
-	void signal_update_favorite_item( const FavoriteItemWidget *favorite_widget );
+	void signal_favorite_item_change_name( FavoriteItem *favorite_widget );
+	void signal_favorite_item_click( FavoriteItem *favorite_widget );
+	void signal_favorite_item_enter( FavoriteItem *signal_item );
+	void signal_favorite_item_leave( FavoriteItem *signal_item );
+	void signal_favorite_item_change_vector_finished( FavoriteItem *favorite_item );
+	void signal_music_item_single_click( MusicItem *signal_item );
+	void signal_music_item_double_click( MusicItem *signal_item );
+	void signal_music_item_enter( MusicItem *signal_item );
+	void signal_music_item_leave( MusicItem *signal_item );
 };
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

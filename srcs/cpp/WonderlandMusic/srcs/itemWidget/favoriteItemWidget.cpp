@@ -15,7 +15,7 @@ FavoriteItemWidget::FavoriteItemWidget( FavoriteItem *favor_item ) : QWidget( nu
 	lineEdit = new QLineEdit( this );
 	connect( lineEdit, &QLineEdit::editingFinished, this, [this]( ) {
 		lineEdit->setEnabled( false );
-		emit signal_change_name_finished( );
+		emit signal_change_name_finished( this );
 	} );
 	connect( lineEdit, &QLineEdit::textChanged, this, [this]( ) {
 		updateWidth( );
@@ -108,4 +108,14 @@ void FavoriteItemWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
 void FavoriteItemWidget::focusOutEvent( QFocusEvent *event ) {
 	QWidget::focusOutEvent( event );
 	lineEdit->setEnabled( false );
+}
+
+void FavoriteItemWidget::enterEvent( QEnterEvent *event ) {
+	QWidget::enterEvent( event );
+	emit signal_enter_item( this );
+}
+
+void FavoriteItemWidget::leaveEvent( QEvent *event ) {
+	QWidget::leaveEvent( event );
+	emit signal_leave_item( this );
 }

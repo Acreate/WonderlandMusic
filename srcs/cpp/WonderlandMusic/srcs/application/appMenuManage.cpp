@@ -12,7 +12,6 @@
 #include "../systemTrayIcon/systemTrayIcon.h"
 #include "../tools/widgetTools.h"
 #include "../widget/favoriteWidget.h"
-#include "../widget/musicContreWidget.h"
 #include "../window/mainWindow.h"
 #include "../window/musicListWindow.h"
 #include "../window/playerWindow.h"
@@ -62,15 +61,13 @@ bool AppMenuManage::initAfter( ) {
 	auto playerWindow = mainStackedWidget->getPlayerWindow( );
 	auto musicListWindow = playerWindow->getMusicListWindow( );
 	auto musicContreScrollArea = musicListWindow->getMusicContreScrollArea( );
-	auto musicContreWidget = musicContreScrollArea->getMusicContreWidget( );
-	connect( musicContreWidget, &MusicContreWidget::signal_pop_menu, this, [this]( ) {
+	connect( musicContreScrollArea, &MusicContreScrollArea::signal_pop_menu, this, [this]( ) {
 		auto pos = QCursor::pos( );
 		popPlayerListWidgetMenu( pos );
 	} );
 	auto favoritemDockWidget = playerWindow->getFavoritemDockWidget( );
 	auto favoriteSrollArea = favoritemDockWidget->getFavoriteSrollArea( );
-	auto favoriteWidget = favoriteSrollArea->getFavoriteWidget( );
-	connect( favoriteWidget, &FavoriteWidget::signal_favorite_Item_pop_menu, this, [this]( ) {
+	connect( favoriteSrollArea, &FavoriteSrollArea::signal_pop_menu, this, [this]( ) {
 		auto pos = QCursor::pos( );
 		popFavoriteWidgetMenu( pos );
 	} );

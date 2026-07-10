@@ -32,8 +32,6 @@ FavoriteItem::FavoriteItem( const QString &name, const std::vector< MusicItem * 
 	connect( info->deleteErrorObj, &QObject::destroyed, [this] ( QObject *obj ) {
 		Delete_Ptr_Exception( info->deleteErrorObj, obj );
 	} );
-
-	connect( info->favoriteItemWidget, &FavoriteItemWidget::signal_change_name_finished, this, &FavoriteItem::signal_change_name_finished );
 }
 
 void FavoriteItem::setEnabled( bool enabled ) {
@@ -241,7 +239,7 @@ bool FavoriteItem::getJsonData( QJsonObject &get_json_object ) const {
 bool FavoriteItem::setJsonData( const QJsonObject &set_json_object ) {
 	bool jsonData = info->favoriteItemWidget->setJsonData( set_json_object );
 	if( jsonData )
-		emit signal_change_vector_finished( );
+		emit signal_change_vector_finished( this );
 	return jsonData;
 }
 
@@ -268,7 +266,7 @@ bool FavoriteItem::appendMusicItem( MusicItem *music_item ) {
 		if( data[ index ] == music_item )
 			return false;
 	info->musicItemvVector.emplace_back( music_item );
-	emit signal_change_vector_finished( );
+	emit signal_change_vector_finished( this );
 	return true;
 }
 
@@ -301,7 +299,7 @@ bool FavoriteItem::appendMusicItem( const std::vector< MusicItem * > &append_ite
 	if( activeCount != appCount )
 		appendItem.resize( activeCount );
 	info->musicItemvVector.append_range( append_item_vector );
-	emit signal_change_vector_finished( );
+	emit signal_change_vector_finished( this );
 	return true;
 }
 
@@ -323,7 +321,7 @@ bool FavoriteItem::removeMusicItem( const MusicItem *music_item ) {
 	if( buffCount != count )
 		buff.resize( buffCount );
 	info->musicItemvVector = buff;
-	emit signal_change_vector_finished( );
+	emit signal_change_vector_finished( this );
 	return true;
 }
 
@@ -352,7 +350,7 @@ bool FavoriteItem::removeMusicItem( const std::vector< MusicItem * > &remove_ite
 	if( buffCount != count )
 		buff.resize( buffCount );
 	info->musicItemvVector = buff;
-	emit signal_change_vector_finished( );
+	emit signal_change_vector_finished( this );
 	return true;
 }
 

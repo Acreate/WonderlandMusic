@@ -64,16 +64,8 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
-	virtual MusicInfoItemWidget * highlghtItem( const QPoint &pos );
-	virtual MusicInfoItemWidget * selectorItem( const QPoint &pos );
-	virtual MusicInfoItemWidget * showItemMenu( const QPoint &pos );
 	// 重载
 protected:
-	void paintEvent( QPaintEvent *event ) override;
 	void resizeEvent( QResizeEvent *event ) override;
-Q_SIGNALS:
-	void signal_item_select( );
-	void signal_item_double_select( );
-	void signal_pop_menu( );
 };
 #endif // MUSICCONTREWIDGET_H_H_HEAD__FILE__

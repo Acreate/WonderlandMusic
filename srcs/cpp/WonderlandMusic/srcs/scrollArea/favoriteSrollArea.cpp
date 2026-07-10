@@ -32,11 +32,8 @@ void FavoriteSrollArea::mouseReleaseEvent( QMouseEvent *mouse_event ) {
 	QScrollArea::mouseReleaseEvent( mouse_event );
 	auto mouseButton = mouse_event->button( );
 	switch( mouseButton ) {
-		case Qt::LeftButton :
-			favoriteWidget->leftClickPos( favoriteWidget->mapFromParent( mouse_event->pos( ) ) );
-			break;
 		case Qt::RightButton :
-			favoriteWidget->rightClickPos( favoriteWidget->mapFromParent( mouse_event->pos( ) ) );
+			emit signal_pop_menu( );
 			break;
 	}
 }

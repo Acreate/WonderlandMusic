@@ -210,7 +210,10 @@ bool AppMusicManage::connectFavoriteWidgetMenuSignal( ) {
 bool AppMusicManage::connectMusicInfoItemWidgetSignal( MusicItem *music_item ) {
 	if( music_item == nullptr )
 		return false;
-	connect( music_item, &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
+	connect( music_item, &MusicItem::signal_free, this, [this] ( MusicItem *delete_ptr ) {
+		emit signal_music_item_free( delete_ptr );
+		deleteMusicItem( delete_ptr );
+	} );
 	auto infoItemWidget = music_item->getMusicInfoItemWidget( );
 	connect( infoItemWidget, &MusicInfoItemWidget::signal_enter_item, this, [this] ( MusicInfoItemWidget *item ) {
 		emit signal_music_item_enter( item->getMusicItem( ) );
@@ -230,14 +233,11 @@ bool AppMusicManage::connectMusicInfoItemWidgetSignal( MusicItem *music_item ) {
 bool AppMusicManage::connectFavoriteItemWidgetSignal( FavoriteItem *favorite_item ) {
 	if( favorite_item == nullptr )
 		return false;
-	connect( favorite_item, &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
+	connect( favorite_item, &FavoriteItem::signal_free, this, [this] ( FavoriteItem *delete_ptr ) {
+		emit signal_favorite_item_free( delete_ptr );
+		deleteFavoriteItem( delete_ptr );
+	} );
 	connect( favorite_item, &FavoriteItem::signal_change_vector_finished, this, &AppMusicManage::signal_favorite_item_change_vector_finished );
-	/*
-	void FavoriteItemWidget::signal_change_name_finished( FavoriteItemWidget *item );
-	void FavoriteItemWidget::signal_click_item( FavoriteItemWidget *item );
-	void FavoriteItemWidget::signal_enter_item( FavoriteItemWidget *item );
-	void FavoriteItemWidget::signal_leave_item( FavoriteItemWidget *item );
-	 */
 	auto favoriteItemWidget = favorite_item->getFavoriteItemWidget( );
 	connect( favoriteItemWidget, &FavoriteItemWidget::signal_change_name_finished, this, [this] ( FavoriteItemWidget *item ) {
 		emit signal_favorite_item_change_name( item->getFavorItem( ) );
@@ -493,7 +493,7 @@ void AppMusicManage::loadMusciFromDir( const std::vector< QString > &music_dir )
 
 bool AppMusicManage::appendFavorite( const QString &name ) {
 	auto itemWidget = new FavoriteItem( name );
-	connect( itemWidget, &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
+	connectFavoriteItemWidgetSignal( itemWidget );
 	loadMutex->lock( );
 	favoriteItemVector.emplace_back( itemWidget );
 	loadMutex->unlock( );
@@ -705,7 +705,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		if( count ) {
 			data = rootItem->getInfo( )->musicItemvVector.data( );
 			for( index = 0; index < count; index += 1 ) {
-				data[ index ]->disconnect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
+				data[ index ]->disconnect( data[ index ], nullptr, this, nullptr );
 				delete data[ index ];
 			}
 		}
@@ -726,7 +726,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		if( count ) {
 			data = favoriteItemVector.data( );
 			for( index = 0; index < count; index += 1 ) {
-				data[ index ]->disconnect( data[ index ], &QObject::destroyed, this, &AppMusicManage::deleteFavoriteItem );
+				data[ index ]->disconnect( data[ index ], nullptr, this, nullptr );
 				delete data[ index ];
 			}
 		}
@@ -808,7 +808,7 @@ bool AppMusicManage::removeItem( const MusicItem *target ) {
 	auto sourceData = rootItem->getInfo( )->musicItemvVector.data( );
 	for( ; sourceIndex < sourceCount; sourceIndex += 1 )
 		if( sourceData[ sourceIndex ] == target ) {
-			sourceData[ sourceIndex ]->disconnect( sourceData[ sourceIndex ], &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
+			sourceData[ sourceIndex ]->disconnect( sourceData[ sourceIndex ], nullptr, this, nullptr );
 			rootItem->getInfo( )->musicItemvVector.erase( rootItem->getInfo( )->musicItemvVector.begin( ) + sourceIndex );
 			loadMutex->unlock( );
 			return true;
@@ -831,7 +831,7 @@ bool AppMusicManage::deleteItem( const MusicItem *target ) {
 		}
 	loadMutex->unlock( );
 	if( deletePtr ) {
-		deletePtr->disconnect( deletePtr, &QObject::destroyed, this, &AppMusicManage::deleteMusicItem );
+		deletePtr->disconnect( deletePtr, nullptr, this, nullptr );
 		delete deletePtr;
 		return true;
 	}

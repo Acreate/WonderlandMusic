@@ -70,5 +70,7 @@ public:
 	virtual qint64 getDuration( ) const;
 	virtual const QString & getFormatStringDuration( ) const;
 	virtual MusicInfoItemWidget * getMusicInfoItemWidget( ) const;
+Q_SIGNALS:
+	void signal_free( MusicItem *favorite_item );
 };
 #endif // MUSICITEM_H_H_HEAD__FILE__

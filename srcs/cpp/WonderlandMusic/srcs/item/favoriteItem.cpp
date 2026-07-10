@@ -39,6 +39,7 @@ void FavoriteItem::setEnabled( bool enabled ) {
 }
 
 FavoriteItem::~FavoriteItem( ) {
+	emit signal_free( this );
 	info->deleteErrorObj->disconnect( info->deleteErrorObj, &QObject::destroyed, this, nullptr );
 	delete info;
 }

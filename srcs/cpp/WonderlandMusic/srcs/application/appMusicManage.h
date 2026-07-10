@@ -84,9 +84,11 @@ Q_SIGNALS:
 	void signal_favorite_item_enter( FavoriteItem *signal_item );
 	void signal_favorite_item_leave( FavoriteItem *signal_item );
 	void signal_favorite_item_change_vector_finished( FavoriteItem *favorite_item );
+	void signal_favorite_item_free( FavoriteItem *favorite_item );
 	void signal_music_item_single_click( MusicItem *signal_item );
 	void signal_music_item_double_click( MusicItem *signal_item );
 	void signal_music_item_enter( MusicItem *signal_item );
 	void signal_music_item_leave( MusicItem *signal_item );
+	void signal_music_item_free( MusicItem *signal_item );
 };
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

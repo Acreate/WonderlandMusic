@@ -63,5 +63,6 @@ public:
 	virtual std::vector< MusicItem * > findMusicMusicSinger( const QString &music_singer ) const;
 Q_SIGNALS:
 	void signal_change_vector_finished( FavoriteItem *favorite_item );
+	void signal_free( FavoriteItem *favorite_item );
 };
 #endif // FAVORITEITEM_H_H_HEAD__FILE__

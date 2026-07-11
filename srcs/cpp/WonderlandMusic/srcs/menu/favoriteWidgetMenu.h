@@ -1,13 +1,12 @@
 ﻿#ifndef FAVORITEWIDGETMENU_H_H_HEAD__FILE__
 #define FAVORITEWIDGETMENU_H_H_HEAD__FILE__
 #include <QMenu>
-
 #include "../interface/iAppCore.h"
-
 class FavoriteItem;
 
 class FavoriteWidgetMenu : public QMenu, public IAppCore {
 	Q_OBJECT;
+	friend class AppMenuManage;
 
 protected:
 	FavoriteItem *labelWidget = nullptr;
@@ -20,24 +19,20 @@ protected:
 
 public:
 	FavoriteWidgetMenu( );
-
 	~FavoriteWidgetMenu( ) override;
 
 protected:
 	bool deleteResource( ) override;
+	virtual void setLabelWidget( FavoriteItem *const label_widget );
 
 public:
 	virtual FavoriteItem * getLabelWidget( ) const;
-
 	bool initBefore( ) override;
-
 	bool init( ) override;
-
 	bool initAfter( ) override;
 Q_SIGNALS:
 	void signal_add( );
 	void signal_del( );
 	void signal_change( );
 };
-
 #endif // FAVORITEWIDGETMENU_H_H_HEAD__FILE__

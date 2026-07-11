@@ -1,9 +1,8 @@
 ﻿#ifndef PLAYERLISTWIDGETMENU_H_H_HEAD__FILE__
 #define PLAYERLISTWIDGETMENU_H_H_HEAD__FILE__
-
 #include <QMenu>
-
 #include "../interface/iAppCore.h"
+class FavoriteItem;
 
 class PlayerListWidgetMenu : public QMenu, public IAppCore {
 	Q_OBJECT;
@@ -35,33 +34,29 @@ protected:
 	QAction *aggregateToSelectFirst;
 	/// @brief 聚合到末选项
 	QAction *aggregateToSelectLast;
+	/// @brief 选择的收藏夹所在项
+	FavoriteItem *selectItem = nullptr;
 
 protected:
 	bool deleteResource( ) override;
 
 public:
+	virtual FavoriteItem * getSelectItem( ) const;
+
+	virtual void setSelectItem( FavoriteItem *const select_item );
 	PlayerListWidgetMenu( );
-
 	~PlayerListWidgetMenu( ) override;
-
 	bool init( ) override;
-
 	bool initBefore( ) override;
-
 	bool initAfter( ) override;
 Q_SIGNALS:
 	void signal_open_file_dialog( );
 	void signal_open_dir_dialog( );
 	void signal_select_move_top( );
-
 	void signal_select_move_bottom( );
-
 	void signal_select_aggregate_select_first( );
-
 	void signal_select_aggregate_select_last( );
-
 	void signal_select_aggregate_play_before( );
-
 	void signal_select_aggregate_play_after( );
 	void signal_select_music_remove_list( );
 	void signal_select_music_delete_file_list( );

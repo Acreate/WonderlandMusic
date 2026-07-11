@@ -138,6 +138,7 @@ bool FavoriteWidget::initAfter( ) {
 	connect( appMusicManage, &AppMusicManage::signal_favorite_item_change_vector_finished, this, [this] ( FavoriteItem *favorite_item ) {
 		slot_update_favorite_item( favorite_item->getFavoriteItemWidget( ) );
 	} );
+	connect( appMusicManage, &AppMusicManage::signal_load_over, this, &FavoriteWidget::slot_load_over );
 	return true;
 }
 
@@ -239,4 +240,16 @@ void FavoriteWidget::slot_update_favorite_item( const FavoriteItemWidget *favori
 	auto appInstance = AppInstance::getAppInstance( );
 	auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
 	musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
+}
+
+void FavoriteWidget::slot_load_over( FavoriteItem *signal_item, const std::vector< MusicItem * > &music_item_vector ) {
+	if( signal_item == nullptr ) {
+		auto appInstance = AppInstance::getAppInstance( );
+		auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
+		musicContreWidget->setMusicInfoVector( rootItem->getMusicItemvVector( ) );
+	} else if( signal_item == selectFavorite ) {
+		auto appInstance = AppInstance::getAppInstance( );
+		auto musicContreWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getMusicListWindow( )->getMusicContreScrollArea( )->getMusicContreWidget( );
+		musicContreWidget->setMusicInfoVector( selectFavorite->getMusicItemvVector( ) );
+	}
 }

@@ -9,6 +9,7 @@
 #include "../itemWidget/favoriteItemWidget.h"
 #include "../msgInfo/deleteException.h"
 #include "../msgInfo/messageErrorOut.h"
+#include "../mutex/userMutex.h"
 #include "../tools/appJsonKeyTools.h"
 #include "../tools/appTranslateTools.h"
 #include "../tools/jsonObjectTools.h"
@@ -16,12 +17,18 @@
 FavoriteItem::ItemInfo::ItemInfo( const QString &name, const std::vector< MusicItem * > &music_itemv_vector, FavoriteItemWidget *favorite_item_widget ) : name( name ), musicItemvVector( music_itemv_vector ), favoriteItemWidget( favorite_item_widget ) {
 	favorite_item_widget->setFavoriteName( name );
 	deleteErrorObj = new QObject;
+	userMutex = new UserMutex;
 	connect( favoriteItemWidget, &QObject::destroyed, deleteErrorObj, &QObject::destroyed );
 }
 
 FavoriteItem::ItemInfo::~ItemInfo( ) {
 	this->musicItemvVector.clear( );
 	delete this->favoriteItemWidget;
+	delete userMutex;
+}
+
+FavoriteItemWidget * FavoriteItem::ItemInfo::getFavoriteItemWidget( ) const {
+	return favoriteItemWidget;
 }
 
 FavoriteItem::FavoriteItem( const QString &name, const std::vector< MusicItem * > &music_itemv_vector ) {

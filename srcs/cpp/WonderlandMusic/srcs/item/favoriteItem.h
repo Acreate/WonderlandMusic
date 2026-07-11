@@ -1,6 +1,12 @@
 ﻿#ifndef FAVORITEITEM_H_H_HEAD__FILE__
 #define FAVORITEITEM_H_H_HEAD__FILE__
 #include "../interface/iAppJsonData.h"
+
+namespace std {
+	struct source_location;
+}
+
+class UserMutex;
 class AppMusicManage;
 class FavoriteItemWidget;
 class MusicItem;
@@ -12,6 +18,7 @@ public:
 	class ItemInfo;
 
 	class ItemInfo {
+		UserMutex *userMutex;
 		friend class FavoriteItem;
 		QString name;
 		std::vector< MusicItem * > musicItemvVector;
@@ -22,6 +29,7 @@ public:
 
 	public:
 		virtual ~ItemInfo( );
+		virtual FavoriteItemWidget * getFavoriteItemWidget( ) const;
 	};
 
 protected:
@@ -70,6 +78,9 @@ public:
 	virtual void deleteAllMusicItem( );
 	virtual void fromMusicIndex( std::vector< MusicItem * > &result_music_item, const std::vector< size_t > &find_index );
 	virtual void toMusicIndex( std::vector< size_t > &result_index, const std::vector< MusicItem * > &find_index_music_item );
+	virtual bool tryLock( const std::source_location &source_location = std::source_location::current( ) ) const;
+	virtual bool lock( const std::source_location &source_location = std::source_location::current( ) ) const;
+	virtual bool unlock( const std::source_location &source_location = std::source_location::current( ) ) const;
 Q_SIGNALS:
 	void signal_change_vector_finished( FavoriteItem *favorite_item );
 	void signal_free( FavoriteItem *favorite_item );

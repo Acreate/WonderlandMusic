@@ -1,8 +1,11 @@
 ﻿#include "appMenuManage.h"
 #include <qscreen.h>
+#include "appDataManage.h"
 #include "appInstance.h"
+#include "appMusicManage.h"
 #include "appUserInterfaceManage.h"
 #include "../dockWidget/favoritemDockWidget.h"
+#include "../item/favoriteItem.h"
 #include "../menu/favoriteWidgetMenu.h"
 #include "../menu/playerListWidgetMenu.h"
 #include "../menu/systemTrayIconMenu.h"
@@ -94,7 +97,9 @@ bool AppMenuManage::popPlayerListWidgetMenu( const QPoint &pos ) const {
 
 	if( WidgetTools::getMenuSuggestionShowMenuPos( resutPos, pos, systemTrayIconMenu ) == false )
 		return false;
-
+	auto appInstance = AppInstance::getAppInstance( );
+	auto loadFileToItem = appInstance->getAppDataManage( )->getAppMusicManage( )->getLoadFileToItem( );
+	playerListWidgetMenu->setSelectItem( loadFileToItem );
 	playerListWidgetMenu->exec( resutPos );
 
 	return true;
@@ -104,6 +109,10 @@ bool AppMenuManage::popFavoriteWidgetMenu( const QPoint &pos ) const {
 	QPoint resutPos;
 	if( WidgetTools::getMenuSuggestionShowMenuPos( resutPos, pos, systemTrayIconMenu ) == false )
 		return false;
+	auto appInstance = AppInstance::getAppInstance( );
+	auto favoriteWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
+	auto fromGlobal = favoriteWidget->mapFromGlobal( resutPos );
+	favoriteWidgetMenu->setLabelWidget( favoriteWidget->getSelectItem( fromGlobal ) );
 	favoriteWidgetMenu->exec( resutPos );
 	return true;
 }

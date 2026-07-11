@@ -28,6 +28,7 @@ protected:
 	std::vector< QString > loadFileVector;
 	size_t loadCount;
 	FavoriteItem *rootItem = nullptr;
+	FavoriteItem *loadFileToItem = nullptr;
 	std::vector< FavoriteItem * > favoriteItemVector;
 	MusicContreWidget *musicContreWidget = nullptr;
 	FavoriteWidget *favoriteWidget = nullptr;
@@ -65,6 +66,7 @@ public:
 	virtual void fromMusicIndex( std::vector< MusicItem * > &result_music_item, const std::vector< size_t > &find_index );
 	virtual bool deleteFavoriteItemAllMusicItem( FavoriteItem *favorite_item );
 	~AppMusicManage( ) override;
+	virtual FavoriteItem * getLoadFileToItem( ) const;
 	/// @brief 从序列当中移除目标，并不会释放其内存，应当由调用者进行管理
 	/// @param target 释放目标
 	/// @return 失败返回 false
@@ -97,5 +99,9 @@ Q_SIGNALS:
 	void signal_music_item_enter( MusicItem *signal_item );
 	void signal_music_item_leave( MusicItem *signal_item );
 	void signal_music_item_free( MusicItem *signal_item );
+	void signal_load_error( const QString &music_file_path );
+	void signal_load_over( FavoriteItem *signal_item, const std::vector< MusicItem * > &music_item_vector );
+	void signal_load_star( const QString &music_file_path );
+	void signal_load_unity( const MusicItem &music_item );
 };
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

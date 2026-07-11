@@ -1,14 +1,9 @@
 ﻿#include "favoriteWidgetMenu.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
-#include "../application/appUserInterfaceManage.h"
+#include "../application/appMusicManage.h"
 #include "../application/translate/favoriteWidgetMenuTranslate.h"
-#include "../dockWidget/favoritemDockWidget.h"
-#include "../scrollArea/favoriteSrollArea.h"
-#include "../stackedWidget/mainStackedWidget.h"
-#include "../tools/widgetTools.h"
 #include "../widget/favoriteWidget.h"
-#include "../window/mainWindow.h"
 #include "../window/playerWindow.h"
 
 FavoriteWidgetMenu::FavoriteWidgetMenu( ) {
@@ -45,4 +40,18 @@ bool FavoriteWidgetMenu::initAfter( ) {
 	connect( deleteFavorite, &QAction::triggered, this, &FavoriteWidgetMenu::signal_del );
 	connect( changeFavorite, &QAction::triggered, this, &FavoriteWidgetMenu::signal_change );
 	return true;
+}
+
+void FavoriteWidgetMenu::setLabelWidget( FavoriteItem *const label_widget ) {
+	labelWidget = label_widget;
+	auto favoriteItem = AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( )->getRootItem( );
+	bool enable = false;
+	if( favoriteItem == label_widget ) {
+		deleteFavorite->setEnabled( enable );
+		changeFavorite->setEnabled( enable );
+	} else {
+		enable = label_widget != nullptr;
+		deleteFavorite->setEnabled( enable );
+		changeFavorite->setEnabled( enable );
+	}
 }

@@ -44,6 +44,7 @@ private Q_SLOTS:
 	void slot_change_vector_finished( );
 	void slot_destroyed( QObject *delete_ptr );
 	void slot_update_favorite_item( const FavoriteItemWidget *favorite_widget );
+	void slot_load_over( FavoriteItem *signal_item, const std::vector< MusicItem * > &music_item_vector );
 Q_SIGNALS:
 	void signal_update_layout_over( );
 	void signal_update_item_over( );

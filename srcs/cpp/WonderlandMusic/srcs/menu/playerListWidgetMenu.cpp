@@ -18,6 +18,16 @@ bool PlayerListWidgetMenu::deleteResource( ) {
 	return true;
 }
 
+FavoriteItem * PlayerListWidgetMenu::getSelectItem( ) const {
+	return selectItem;
+}
+
+void PlayerListWidgetMenu::setSelectItem( FavoriteItem *const select_item ) {
+	selectItem = select_item;
+	bool enable = select_item == nullptr;
+	loadMenu->setEnabled( enable );
+}
+
 bool PlayerListWidgetMenu::init( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	if( appInstance == nullptr )

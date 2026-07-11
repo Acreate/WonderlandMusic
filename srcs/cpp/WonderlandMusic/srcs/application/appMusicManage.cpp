@@ -61,13 +61,18 @@ bool AppMusicManage::deleteResource( ) {
 			delete data[ index ];
 		loadMediaVector.clear( );
 	}
-	auto musicItems = rootItem->getMusicItemvVector( );
-	count = musicItems.size( );
-	if( count ) {
-		rootItem->clearAllMusicItem( );
-		auto data = musicItems.data( );
-		for( index = 0; index < count; index += 1 )
-			delete data[ index ];
+	if( rootItem ) {
+		auto musicItems = rootItem->getMusicItemvVector( );
+		count = musicItems.size( );
+		if( count ) {
+			rootItem->clearAllMusicItem( );
+			auto data = musicItems.data( );
+			for( index = 0; index < count; index += 1 )
+				delete data[ index ];
+		}
+		rootItem->disconnect( rootItem, nullptr, this, nullptr );
+		delete rootItem;
+		rootItem = nullptr;
 	}
 	count = favoriteItemVector.size( );
 	if( count ) {
@@ -79,12 +84,7 @@ bool AppMusicManage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( appMusicDecoder );
 	loadFileVector.clear( );
 	loadCount = 0;
-	if( rootItem ) {
-		rootItem->disconnect( rootItem, nullptr, this, nullptr );
-		delete rootItem;
-		rootItem = nullptr;
-	}
-
+	loadFileToItem = nullptr;
 	return true;
 }
 
@@ -94,6 +94,8 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 	auto playerListWidgetMenu = appMenuManage->getPlayerListWidgetMenu( );
 
 	connect( playerListWidgetMenu, &PlayerListWidgetMenu::signal_open_file_dialog, this, [this]( ) {
+		if( loadFileToItem == nullptr )
+			return; // 上次未加载完成
 		auto instance = AppInstance::getAppInstance( );
 		auto appTranslate = instance->getAppDataManage( )->getTranslate( );
 		auto translate = appTranslate->getAppMusicManage( );
@@ -114,30 +116,13 @@ bool AppMusicManage::connectPlayerListWidgetMenuSignal( ) {// 链接信号
 		std::vector< QString > fileVector;
 		if( WidgetTools::showMultipleSelectFileDialog( fileVector, openMultipleFilePath, mainWindow, translate->getSelectMultipleFileTitle( ), filterName ) == false )
 			return;
-		auto favoriteItem = favoriteWidget->getSelectFavorite( );
+		loadFileToItem = favoriteWidget->getSelectFavorite( );
 
 		std::vector< QString > loadJob;
 		size_t loadFileCount = filterMusciFromFileVector( loadJob, fileVector );
 		if( loadFileCount == 0 )
 			return;
 		loadFileVector.append_range( loadJob );
-
-		QObject *job = new QObject( this );
-
-		AppDataManage *dataManage = AppInstance::getAppInstance( )->getAppDataManage( );
-		connect( dataManage, &AppDataManage::signal_load_error, job, [=]( ) {
-			job->disconnect( );
-			job->deleteLater( );
-		} );
-		connect( dataManage, &AppDataManage::signal_load_over, job, [=] ( const std::vector< MusicItem * > &music_item_vector ) {
-			job->disconnect( );
-			job->deleteLater( );
-			if( favoriteItem ) {
-				favoriteItem->appendMusicItem( fileVector );
-			} else {
-				rootItem->appendMusicItem( fileVector );
-			}
-		} );
 		auto loadBuffData = loadJob.data( );
 		for( index = 0; index < loadFileCount; index += 1 )
 			loadFile( loadBuffData[ index ] );
@@ -300,13 +285,12 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 	auto loadMusicFile = new QMediaPlayer;
 	// 链接信号
 	loadMusicFile->connect( loadMusicFile, &QMediaPlayer::mediaStatusChanged, this, [this, loadMusicFile] ( QMediaPlayer::MediaStatus status ) {
-		AppDataManage *dataManage = AppInstance::getAppInstance( )->getAppDataManage( );
 		MusicItem *musicItem = new MusicItem( *loadMusicFile );
 		switch( status ) {
 			case QMediaPlayer::EndOfMedia :
 			case QMediaPlayer::InvalidMedia :
 			case QMediaPlayer::NoMedia :
-				emit dataManage->signal_load_error( musicItem->getAbsFilePath( ) );
+				emit signal_load_error( musicItem->getAbsFilePath( ) );
 			case QMediaPlayer::LoadingMedia :
 			case QMediaPlayer::StalledMedia :
 			case QMediaPlayer::BufferingMedia :
@@ -319,10 +303,12 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 		loadCount += 1;
 		size_t loadOverCount = loadMediaVector.size( );
 		rootItem->appendMusicItem( musicItem );
+		if( rootItem != loadFileToItem )
+			loadFileToItem->appendMusicItem( musicItem );
 
 		connectMusicInfoItemWidgetSignal( musicItem );
 
-		emit dataManage->signal_load_unity( *musicItem );
+		emit signal_load_unity( *musicItem );
 		if( loadOverCount == loadCount ) {
 			auto mediaPlayer = loadMediaVector.data( );
 			for( loadOverCount = 0; loadOverCount < loadCount; loadOverCount += 1 )
@@ -331,7 +317,8 @@ void AppMusicManage::loadFile( const QString &music_file ) {
 			// 拷贝序列
 			auto musicItems = rootItem->getMusicItemvVector( );
 			// 触发信号
-			emit dataManage->signal_load_over( musicItems );
+			emit signal_load_over( loadFileToItem, musicItems );
+			loadFileToItem = nullptr;
 		}
 	} );
 
@@ -802,6 +789,10 @@ bool AppMusicManage::deleteFavoriteItemAllMusicItem( FavoriteItem *favorite_item
 
 AppMusicManage::~AppMusicManage( ) {
 	deleteResource( );
+}
+
+FavoriteItem * AppMusicManage::getLoadFileToItem( ) const {
+	return loadFileToItem;
 }
 
 bool AppMusicManage::removeItem( const MusicItem *target ) {

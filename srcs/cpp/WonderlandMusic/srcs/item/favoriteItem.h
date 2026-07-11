@@ -1,10 +1,9 @@
 ﻿#ifndef FAVORITEITEM_H_H_HEAD__FILE__
 #define FAVORITEITEM_H_H_HEAD__FILE__
+#include <source_location>
+
 #include "../interface/iAppJsonData.h"
 
-namespace std {
-	struct source_location;
-}
 
 class UserMutex;
 class AppMusicManage;

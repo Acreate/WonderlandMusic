@@ -541,3 +541,15 @@ void FavoriteItem::toMusicIndex( std::vector< size_t > &result_index, const std:
 	}
 	result_index.resize( findResultCount );
 }
+
+bool FavoriteItem::tryLock( const std::source_location &source_location ) const {
+	return info->userMutex->tryLock( source_location );
+}
+
+bool FavoriteItem::lock( const std::source_location &source_location ) const {
+	return info->userMutex->lock( source_location );
+}
+
+bool FavoriteItem::unlock( const std::source_location &source_location ) const {
+	return info->userMutex->unlock( source_location );
+}

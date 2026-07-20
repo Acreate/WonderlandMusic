@@ -1,43 +1,37 @@
 ﻿#include <QLoggingCategory>
 #include <qfile.h>
-
 #include "application/appInstance.h"
 #include "application/appUserInterfaceManage.h"
-
+#include "dateTimeFormat/dateTimeFormat.h"
 #include "msgInfo/messageErrorOut.h"
-
 #include "tools/pathTools.h"
-
 static MessageErrorOut *messageErrorOut = nullptr;
 static MessageString *permit = nullptr;
 static MessageString *screening = nullptr;
 static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
-
+static QDateTime *startDateTime = nullptr;
+static QDateTime *endDateTime = nullptr;
 #ifdef CANCEL_FILTER
 	#define is_en_filter 0
 #else
 	#define is_en_filter 1
 #endif
-
 #ifdef CANCEL_WRITE_LOG
 	#define is_en_write_log 0
 #else
 	#define is_en_write_log 1
 #endif
-
 #if is_en_write_log
 #include "tools/templateArgs.h"
 	#define new_ptr( ptr ) TemplateArgs::make_args_ptr( ptr )
 #else
 	#define new_ptr( ptr ) ( ptr = nullptr)
 #endif
-
 #if is_en_filter
 	#define en_filter() 
 #else
 	#define en_filter() return
 #endif
-
 void myCategoryFilter( QLoggingCategory *category ) {
 	QString name = category->categoryName( );
 	if( name == "qt.multimedia.ffmpeg" || name == "qt.multimedia.ffmpeg.metadata" || name == "qt.multimedia.audiodevice.probes" || name == "qt.multimedia.ffmpeg.mediadataholder" ) {
@@ -62,68 +56,74 @@ void myCategoryFilter( QLoggingCategory *category ) {
 	}
 }
 
-int main( int argc, char *argv[ ], char *envp[ ] ) {
+void initTimeInfo( ) {
 	messageErrorOut = new_ptr( messageErrorOut );
 	permit = new_ptr( permit );
 	screening = new_ptr( screening );
+	startDateTime = new_ptr( startDateTime );
+	endDateTime = new_ptr( endDateTime );
+}
+
+void satrtProcess( ) {
 	if( messageErrorOut ) {
+		*startDateTime = QDateTime::currentDateTime( );
 		*messageErrorOut << QObject::tr( "\t: <<<< == 程序日志 == >>>>" );
 		messageErrorOut->setJoinString( "\n" );
-		*messageErrorOut << QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序开始" ) << "----------------------";
+		*messageErrorOut << startDateTime->toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序开始" ) << "----------------------";
 	}
-	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
+}
 
-	AppInstance *application = new AppInstance( argc, argv );
-
-	int exec = -1;
-	QString resultString = QObject::tr( "返回值" );
-	if( application->initBefore( ) == false ) {
-		if( messageErrorOut ) {
-			*messageErrorOut << "----------------------"
-				<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
-				<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
-				+ QString::number( exec ).toUpper( ) + " }";
-			delete messageErrorOut;
-		}
-		return exec;
-	}
-	exec = -2;
-	if( application->init( ) == false ) {
-		if( messageErrorOut ) {
-			*messageErrorOut << "----------------------"
-				<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
-				<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
-				+ QString::number( exec ).toUpper( ) + " }";
-			delete messageErrorOut;
-		}
-
-		return exec;
-	}
-	exec = -3;
-	if( application->initAfter( ) == false ) {
-		if( messageErrorOut ) {
-			*messageErrorOut << "----------------------"
-				<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
-				<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
-				+ QString::number( exec ).toUpper( ) + " }";
-			delete messageErrorOut;
-		}
-		return exec;
-	}
-	exec = application->exec( );
+int endProcess( int exit_code ) {
 	if( messageErrorOut ) {
 		permit->setJion( "\n" );
 		screening->setJion( "\n" );
 		*messageErrorOut << *permit;
 		*messageErrorOut << "";
 		*messageErrorOut << *screening;
+
+		*endDateTime = QDateTime::currentDateTime( );
+		auto milliseconds = *endDateTime - *startDateTime;
+		QString runSepTime = DateTimeFormat::millsecondToHourMinSecFrom( milliseconds.count( ) ) + QObject::tr( " -> 运行周期" );
+
+		QString resultString = QObject::tr( "返回值" );
 		*messageErrorOut << "----------------------"
-			<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" )
-			<< "\t:\t" + resultString + "{ 0x" + QString::number( exec, 16 ).toUpper( ) + ", "
-			+ QString::number( exec ).toUpper( ) + " }";
+			<< QDateTime::currentDateTime( ).toString( "\t:\tyyyy年MM月dd日 hh:mm:ss.z -> " ) + QObject::tr( "程序结束" ) << "\t:\t" + runSepTime
+			<< "\t:\t" + resultString + "{ 0x" + QString::number( exit_code, 16 ).toUpper( ) + ", "
+			+ QString::number( exit_code ).toUpper( ) + " }";
+
 		delete messageErrorOut;
+		delete permit;
+		delete screening;
+		delete startDateTime;
+		delete endDateTime;
+
 		messageErrorOut = nullptr;
+		permit = nullptr;
+		screening = nullptr;
+		startDateTime = nullptr;
+		endDateTime = nullptr;
 	}
+	return exit_code;
+}
+
+int main( int argc, char *argv[ ], char *envp[ ] ) {
+	initTimeInfo( );
+
+	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
+	satrtProcess( );
+	AppInstance *application = new AppInstance( argc, argv );
+
+	if( application->initBefore( ) == false )
+		return endProcess( -1 );
+
+	if( application->init( ) == false )
+		return endProcess( -2 );
+	if( application->initAfter( ) == false )
+		return endProcess( -3 );
+
+	auto exec = application->exec( );
+	endProcess( exec );
+
 	delete application;
 	return exec;
 }

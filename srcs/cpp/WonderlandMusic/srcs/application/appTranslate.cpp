@@ -1,26 +1,15 @@
 ﻿#include "appTranslate.h"
-
 #include <QTextCodec>
-
 #include "appDataManage.h"
 #include "appInstance.h"
-
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/appMusicManageTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
 #include "translate/deleteExceptionTranslate.h"
-#include "translate/favoriteWidgetMenuTranslate.h"
-#include "translate/favoriteWidgetTranslate.h"
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
-#include "translate/musicInfoItemTranslate.h"
-#include "translate/optionDockWidgetTranslate.h"
-#include "translate/playerListWidgetMenuTranslate.h"
-#include "translate/playerListWidgetTranslate.h"
-#include "translate/playerToolsWidgetTranslate.h"
-#include "translate/playerTopWidgetTranslate.h"
-#include "translate/playerWindowTranslate.h"
+#include "translate/musicWidgetTranslate.h"
 #include "translate/settingWidgetTranslate.h"
 #include "translate/systemTrayIconMenuTranslate.h"
 #include "translate/systemTrayIconTranslate.h"
@@ -42,26 +31,18 @@ bool AppTranslate::initBefore( ) {
 	auto currentQMFile = appSettingPath + QObject::tr( "/translations/WonderlandMusic_zh_CN.qm" );
 	appDataManage->setAppStringTranslate( currentQMFile );
 
-	settingWidget = new SettingWidgetTranslate;
-	playerToolsWidget = new PlayerToolsWidgetTranslate;
-	playerListWidgetMenu = new PlayerListWidgetMenuTranslate;
-	playerTopWidget = new PlayerTopWidgetTranslate;
-	playerWindow = new PlayerWindowTranslate;
 	json = new JsonTranslate;
 	dateTimeFormat = new DateTimeFormatTranslate;
 	aboutWidget = new AboutWidgetTranslate;
 	mainWindow = new MainWindowTranslate;
 	message = new MessageTranslate;
-	playerListWidget = new PlayerListWidgetTranslate;
-	musicInfoItem = new MusicInfoItemTranslate;
 	systemTrayIconMenu = new SystemTrayIconMenuTranslate;
 	systemTrayIcon = new SystemTrayIconTranslate;
 	userMutex = new UserMutexTranslate;
-	favoriteWidget = new FavoriteWidgetTranslate;
-	optionDockWidget = new OptionDockWidgetTranslate;
-	favoriteWidgetMenu = new FavoriteWidgetMenuTranslate;
 	appMusicManage = new AppMusicManageTranslate;
 	deleteException = new DeleteExceptionTranslate;
+	musicWidget = new MusicWidgetTranslate;
+	settingWidget = new SettingWidgetTranslate;
 	return true;
 }
 
@@ -70,26 +51,18 @@ bool AppTranslate::initAfter( ) {
 }
 
 bool AppTranslate::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( settingWidget );
-	Delete_Resource_App_Core_Ptr( playerToolsWidget );
-	Delete_Resource_App_Core_Ptr( playerListWidgetMenu );
-	Delete_Resource_App_Core_Ptr( playerTopWidget );
-	Delete_Resource_App_Core_Ptr( playerWindow );
 	Delete_Resource_App_Core_Ptr( json );
 	Delete_Resource_App_Core_Ptr( dateTimeFormat );
 	Delete_Resource_App_Core_Ptr( aboutWidget );
 	Delete_Resource_App_Core_Ptr( mainWindow );
 	Delete_Resource_App_Core_Ptr( message );
-	Delete_Resource_App_Core_Ptr( playerListWidget );
-	Delete_Resource_App_Core_Ptr( musicInfoItem );
 	Delete_Resource_App_Core_Ptr( systemTrayIconMenu );
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 	Delete_Resource_App_Core_Ptr( userMutex );
-	Delete_Resource_App_Core_Ptr( favoriteWidget );
-	Delete_Resource_App_Core_Ptr( optionDockWidget );
-	Delete_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	Delete_Resource_App_Core_Ptr( appMusicManage );
 	Delete_Resource_App_Core_Ptr( deleteException );
+	Delete_Resource_App_Core_Ptr( musicWidget );
+	Delete_Resource_App_Core_Ptr( settingWidget );
 	return true;
 }
 
@@ -98,48 +71,20 @@ AppTranslate::~AppTranslate( ) {
 }
 
 bool AppTranslate::init( ) {
-	Init_Resource_App_Core_Ptr( settingWidget );
-	Init_Resource_App_Core_Ptr( playerToolsWidget );
-	Init_Resource_App_Core_Ptr( playerListWidgetMenu );
-	Init_Resource_App_Core_Ptr( playerTopWidget );
-	Init_Resource_App_Core_Ptr( playerWindow );
 	Init_Resource_App_Core_Ptr( json );
 	Init_Resource_App_Core_Ptr( dateTimeFormat );
 	Init_Resource_App_Core_Ptr( aboutWidget );
 	Init_Resource_App_Core_Ptr( mainWindow );
 	Init_Resource_App_Core_Ptr( message );
-	Init_Resource_App_Core_Ptr( playerListWidget );
-	Init_Resource_App_Core_Ptr( musicInfoItem );
 	Init_Resource_App_Core_Ptr( systemTrayIconMenu );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
 	Init_Resource_App_Core_Ptr( userMutex );
-	Init_Resource_App_Core_Ptr( favoriteWidget );
-	Init_Resource_App_Core_Ptr( optionDockWidget );
-	Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	Init_Resource_App_Core_Ptr( appMusicManage );
 	Init_Resource_App_Core_Ptr( deleteException );
+	Init_Resource_App_Core_Ptr( musicWidget );
+	Init_Resource_App_Core_Ptr( settingWidget );
 
 	return true;
-}
-
-PlayerListWidgetMenuTranslate * AppTranslate::getPlayerListWidgetMenu( ) const {
-	return playerListWidgetMenu;
-}
-
-SettingWidgetTranslate * AppTranslate::getSettingWidget( ) const {
-	return settingWidget;
-}
-
-PlayerToolsWidgetTranslate * AppTranslate::getPlayerToolsWidget( ) const {
-	return playerToolsWidget;
-}
-
-PlayerTopWidgetTranslate * AppTranslate::getPlayerTopWidget( ) const {
-	return playerTopWidget;
-}
-
-PlayerWindowTranslate * AppTranslate::getPlayerWindow( ) const {
-	return playerWindow;
 }
 
 JsonTranslate * AppTranslate::getJson( ) const {
@@ -162,14 +107,6 @@ MessageTranslate * AppTranslate::getMessage( ) const {
 	return message;
 }
 
-PlayerListWidgetTranslate * AppTranslate::getPlayerListWidget( ) const {
-	return playerListWidget;
-}
-
-MusicInfoItemTranslate * AppTranslate::getMusicInfoItem( ) const {
-	return musicInfoItem;
-}
-
 SystemTrayIconMenuTranslate * AppTranslate::getSystemTrayIconMenu( ) const {
 	return systemTrayIconMenu;
 }
@@ -182,22 +119,18 @@ UserMutexTranslate * AppTranslate::getUserMutex( ) const {
 	return userMutex;
 }
 
-FavoriteWidgetTranslate * AppTranslate::getFavoriteWidget( ) const {
-	return favoriteWidget;
-}
-
-OptionDockWidgetTranslate * AppTranslate::getOptionDockWidget( ) const {
-	return optionDockWidget;
-}
-
-FavoriteWidgetMenuTranslate * AppTranslate::getFavoriteWidgetMenu( ) const {
-	return favoriteWidgetMenu;
-}
-
 AppMusicManageTranslate * AppTranslate::getAppMusicManage( ) const {
 	return appMusicManage;
 }
 
 DeleteExceptionTranslate * AppTranslate::getDeleteException( ) const {
 	return deleteException;
+}
+
+MusicWidgetTranslate * AppTranslate::getMusicWidget( ) const {
+	return musicWidget;
+}
+
+SettingWidgetTranslate * AppTranslate::getSettingWidget( ) const {
+	return settingWidget;
 }

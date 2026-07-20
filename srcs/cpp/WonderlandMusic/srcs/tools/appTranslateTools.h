@@ -7,26 +7,19 @@
 
 namespace AppTranslateTools {
 	AppTranslate * getAppTranslate( );
-	Declaration_Get_Translate( SettingWidget );
-	Declaration_Get_Translate( PlayerToolsWidget );
-	Declaration_Get_Translate( PlayerListWidgetMenu );
-	Declaration_Get_Translate( PlayerTopWidget );
-	Declaration_Get_Translate( PlayerWindow );
 	Declaration_Get_Translate( Json );
+	Declaration_Get_Translate( Message );
 	Declaration_Get_Translate( DateTimeFormat );
 	Declaration_Get_Translate( AboutWidget );
 	Declaration_Get_Translate( MainWindow );
-	Declaration_Get_Translate( Message );
-	Declaration_Get_Translate( PlayerListWidget );
-	Declaration_Get_Translate( MusicInfoItem );
 	Declaration_Get_Translate( SystemTrayIconMenu );
 	Declaration_Get_Translate( SystemTrayIcon );
 	Declaration_Get_Translate( UserMutex );
-	Declaration_Get_Translate( FavoriteWidget );
-	Declaration_Get_Translate( OptionDockWidget );
-	Declaration_Get_Translate( FavoriteWidgetMenu );
 	Declaration_Get_Translate( AppMusicManage );
 	Declaration_Get_Translate( DeleteException );
+	Declaration_Get_Translate( DeleteException );
+	Declaration_Get_Translate( MusicWidget );
+	Declaration_Get_Translate( SettingWidget );
 }
 # undef  Declaration_Get_Translate
 #endif // APPTRANSLATETOOLS_H_H_HEAD__FILE__

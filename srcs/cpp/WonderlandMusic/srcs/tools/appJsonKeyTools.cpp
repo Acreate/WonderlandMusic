@@ -6,17 +6,7 @@
 #include "../application/jsonKey/appDataManageJsonKey.h"
 #include "../application/jsonKey/appMusicManageJsonKey.h"
 #include "../application/jsonKey/appUserInterfaceManageJsonKey.h"
-#include "../application/jsonKey/favorItemWidgetJsonKey.h"
-#include "../application/jsonKey/favoriteItemJsonKey.h"
-#include "../application/jsonKey/favoriteSrollAreaJsonKey.h"
-#include "../application/jsonKey/favoriteWidgetJsonKey.h"
-#include "../application/jsonKey/favoritemDockWidgetJsonKey.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
-#include "../application/jsonKey/musicInfoItemWidgetJsonKey.h"
-#include "../application/jsonKey/musicItemJsonKey.h"
-#include "../application/jsonKey/playerListToolWidgetJsonKey.h"
-#include "../application/jsonKey/playerListTopWidgetJsonKey.h"
-#include "../application/jsonKey/playerWindowJsonKey.h"
 #include "../application/jsonKey/systemTrayIconJsonKey.h"
 
 AppDataJsonKey * AppJsonKeyTools::getAppJsonKey( ) {
@@ -49,19 +39,9 @@ AppDataJsonKey * AppJsonKeyTools::getAppJsonKey( ) {
 		} \
 		return false;\
 	}
-Defininition_Get_Json_Key( PlayerListToolWidget );
 Defininition_Get_Json_Key( AboutWidget );
-Defininition_Get_Json_Key( PlayerListTopWidget );
-Defininition_Get_Json_Key( PlayerWindow );
-Defininition_Get_Json_Key( MusicInfoItemWidget );
 Defininition_Get_Json_Key( MainWindow );
 Defininition_Get_Json_Key( SystemTrayIcon );
 Defininition_Get_Json_Key( AppDataManage );
 Defininition_Get_Json_Key( AppUserInterfaceManage );
-Defininition_Get_Json_Key( FavoriteSrollArea );
-Defininition_Get_Json_Key( FavoritemDockWidget );
-Defininition_Get_Json_Key( FavoriteWidget );
 Defininition_Get_Json_Key( AppMusicManage );
-Defininition_Get_Json_Key( FavorItemWidget );
-Defininition_Get_Json_Key( MusicItem );
-Defininition_Get_Json_Key( FavoriteItem );

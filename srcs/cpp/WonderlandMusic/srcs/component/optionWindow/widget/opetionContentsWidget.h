@@ -1,0 +1,6 @@
+﻿#ifndef OPETIONCONTENTSWIDGET_H_H_HEAD__FILE__
+#define OPETIONCONTENTSWIDGET_H_H_HEAD__FILE__
+
+class OpetionContentsWidget {
+};
+#endif // OPETIONCONTENTSWIDGET_H_H_HEAD__FILE__

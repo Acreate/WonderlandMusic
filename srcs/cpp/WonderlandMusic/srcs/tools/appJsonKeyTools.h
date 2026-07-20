@@ -7,22 +7,12 @@
 
 namespace AppJsonKeyTools {
 	AppDataJsonKey * getAppJsonKey( );
-	Declaration_Get_JsonKey( PlayerListToolWidget );
 	Declaration_Get_JsonKey( AboutWidget );
-	Declaration_Get_JsonKey( PlayerListTopWidget );
-	Declaration_Get_JsonKey( PlayerWindow );
-	Declaration_Get_JsonKey( MusicInfoItemWidget );
 	Declaration_Get_JsonKey( MainWindow );
 	Declaration_Get_JsonKey( SystemTrayIcon );
 	Declaration_Get_JsonKey( AppDataManage );
 	Declaration_Get_JsonKey( AppUserInterfaceManage );
-	Declaration_Get_JsonKey( FavoriteSrollArea );
-	Declaration_Get_JsonKey( FavoritemDockWidget );
-	Declaration_Get_JsonKey( FavoriteWidget );
 	Declaration_Get_JsonKey( AppMusicManage );
-	Declaration_Get_JsonKey( FavorItemWidget );
-	Declaration_Get_JsonKey( MusicItem );
-	Declaration_Get_JsonKey( FavoriteItem );
 };
 #undef Declaration_Get_JsonKey
 #endif // APPJSONKEYTOOLS_H_H_HEAD__FILE__

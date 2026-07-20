@@ -1,23 +1,11 @@
 ﻿#include "appMenuManage.h"
 #include <qscreen.h>
 #include "appDataManage.h"
-#include "appInstance.h"
-#include "appMusicManage.h"
-#include "appUserInterfaceManage.h"
-#include "../dockWidget/favoritemDockWidget.h"
-#include "../item/favoriteItem.h"
 #include "../menu/favoriteWidgetMenu.h"
 #include "../menu/playerListWidgetMenu.h"
 #include "../menu/systemTrayIconMenu.h"
-#include "../scrollArea/favoriteSrollArea.h"
-#include "../scrollArea/musicContreScrollArea.h"
-#include "../stackedWidget/mainStackedWidget.h"
-#include "../systemTrayIcon/systemTrayIcon.h"
 #include "../tools/widgetTools.h"
-#include "../widget/favoriteWidget.h"
 #include "../window/mainWindow.h"
-#include "../window/musicListWindow.h"
-#include "../window/playerWindow.h"
 
 AppMenuManage::AppMenuManage( ) {
 }
@@ -56,30 +44,7 @@ bool AppMenuManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( systemTrayIconMenu );
 	After_Init_Resource_App_Core_Ptr( playerListWidgetMenu );
 	After_Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
-
-	auto appInstance = AppInstance::getAppInstance( );
-	auto userInterfaceManage = appInstance->getAppUserInterfaceManage( );
-	auto mainWindow = userInterfaceManage->getMainWindow( );
-	auto mainStackedWidget = mainWindow->getMainStackedWidget( );
-	auto playerWindow = mainStackedWidget->getPlayerWindow( );
-	auto musicListWindow = playerWindow->getMusicListWindow( );
-	auto musicContreScrollArea = musicListWindow->getMusicContreScrollArea( );
-	connect( musicContreScrollArea, &MusicContreScrollArea::signal_pop_menu, this, [this]( ) {
-		auto pos = QCursor::pos( );
-		popPlayerListWidgetMenu( pos );
-	} );
-	auto favoritemDockWidget = playerWindow->getFavoritemDockWidget( );
-	auto favoriteSrollArea = favoritemDockWidget->getFavoriteSrollArea( );
-	connect( favoriteSrollArea, &FavoriteSrollArea::signal_pop_menu, this, [this]( ) {
-		auto pos = QCursor::pos( );
-		popFavoriteWidgetMenu( pos );
-	} );
-
-	auto systemTrayIcon = userInterfaceManage->getSystemTrayIcon( );;
-	connect( systemTrayIcon, &SystemTrayIcon::sigal_pop_menu, this, [this]( ) {
-		auto pos = QCursor::pos( );
-		popSystemTratIconMenu( pos );
-	} );
+	// todo : 弹出菜单
 
 	return true;
 }
@@ -88,6 +53,7 @@ bool AppMenuManage::popSystemTratIconMenu( const QPoint &pos ) const {
 	QPoint resutPos;
 	if( WidgetTools::getMenuSuggestionShowMenuPos( resutPos, pos, systemTrayIconMenu ) == false )
 		return false;
+	// todo : 弹出右下角菜单
 	systemTrayIconMenu->exec( resutPos );
 	return true;
 }
@@ -97,11 +63,8 @@ bool AppMenuManage::popPlayerListWidgetMenu( const QPoint &pos ) const {
 
 	if( WidgetTools::getMenuSuggestionShowMenuPos( resutPos, pos, systemTrayIconMenu ) == false )
 		return false;
-	auto appInstance = AppInstance::getAppInstance( );
-	auto loadFileToItem = appInstance->getAppDataManage( )->getAppMusicManage( )->getLoadFileToItem( );
-	playerListWidgetMenu->setSelectItem( loadFileToItem );
-	playerListWidgetMenu->exec( resutPos );
 
+	// todo : 弹出播放列表菜单
 	return true;
 }
 
@@ -109,11 +72,8 @@ bool AppMenuManage::popFavoriteWidgetMenu( const QPoint &pos ) const {
 	QPoint resutPos;
 	if( WidgetTools::getMenuSuggestionShowMenuPos( resutPos, pos, systemTrayIconMenu ) == false )
 		return false;
-	auto appInstance = AppInstance::getAppInstance( );
-	auto favoriteWidget = appInstance->getAppUserInterfaceManage( )->getMainWindow( )->getMainStackedWidget( )->getPlayerWindow( )->getFavoritemDockWidget( )->getFavoriteSrollArea( )->getFavoriteWidget( );
-	auto fromGlobal = favoriteWidget->mapFromGlobal( resutPos );
-	favoriteWidgetMenu->setLabelWidget( favoriteWidget->getSelectItem( fromGlobal ) );
-	favoriteWidgetMenu->exec( resutPos );
+
+	// todo : 弹出收藏夹菜单
 	return true;
 }
 

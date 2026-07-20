@@ -6,18 +6,10 @@
 #include "../application/translate/appMusicManageTranslate.h"
 #include "../application/translate/dateTimeFormatTranslate.h"
 #include "../application/translate/deleteExceptionTranslate.h"
-#include "../application/translate/favoriteWidgetMenuTranslate.h"
-#include "../application/translate/favoriteWidgetTranslate.h"
 #include "../application/translate/jsonTranslate.h"
 #include "../application/translate/mainWindowTranslate.h"
 #include "../application/translate/messageTranslate.h"
-#include "../application/translate/musicInfoItemTranslate.h"
-#include "../application/translate/optionDockWidgetTranslate.h"
-#include "../application/translate/playerListWidgetMenuTranslate.h"
-#include "../application/translate/playerListWidgetTranslate.h"
-#include "../application/translate/playerToolsWidgetTranslate.h"
-#include "../application/translate/playerTopWidgetTranslate.h"
-#include "../application/translate/playerWindowTranslate.h"
+#include "../application/translate/musicWidgetTranslate.h"
 #include "../application/translate/settingWidgetTranslate.h"
 #include "../application/translate/systemTrayIconMenuTranslate.h"
 #include "../application/translate/systemTrayIconTranslate.h"
@@ -52,23 +44,15 @@ AppTranslate * AppTranslateTools::getAppTranslate( ) {
 		} \
 		return false;\
 	}
-Defininition_Get_Translate( SettingWidget );
-Defininition_Get_Translate( PlayerToolsWidget );
-Defininition_Get_Translate( PlayerListWidgetMenu );
-Defininition_Get_Translate( PlayerTopWidget );
-Defininition_Get_Translate( PlayerWindow );
 Defininition_Get_Translate( Json );
 Defininition_Get_Translate( DateTimeFormat );
 Defininition_Get_Translate( AboutWidget );
 Defininition_Get_Translate( MainWindow );
-Defininition_Get_Translate( Message );
-Defininition_Get_Translate( PlayerListWidget );
-Defininition_Get_Translate( MusicInfoItem );
 Defininition_Get_Translate( SystemTrayIconMenu );
 Defininition_Get_Translate( SystemTrayIcon );
 Defininition_Get_Translate( UserMutex );
-Defininition_Get_Translate( FavoriteWidget );
-Defininition_Get_Translate( OptionDockWidget );
-Defininition_Get_Translate( FavoriteWidgetMenu );
 Defininition_Get_Translate( AppMusicManage );
 Defininition_Get_Translate( DeleteException );
+Defininition_Get_Translate( Message );
+Defininition_Get_Translate( MusicWidget );
+Defininition_Get_Translate( SettingWidget );

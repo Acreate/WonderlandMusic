@@ -10,22 +10,26 @@
 #include "../application/appInstance.h"
 #include "../application/applicationManage.h"
 #include "../application/jsonKey/aboutWidgetJsonKey.h"
+#include "../application/translate/aboutWidgetTranslate.h"
 #include "../msgInfo/messageErrorOut.h"
+#include "../tools/appTranslateTools.h"
 
-AboutWidget::AboutWidget( QWidget *parent ) : QWidget( parent ) {
-	mainLayout = new QHBoxLayout( this );
-
-	qtIco = new QLabel( this );
-
-	mainLayout->addWidget( qtIco, 0, Qt::AlignTop );
-
-	textBox = new QTextEdit( this );
-	mainLayout->addWidget( textBox );
+AboutWidget::AboutWidget( OptionWindow *parent ) : OptionPanel( parent ) {
 }
 
 bool AboutWidget::init( ) {
 	auto applicationInstance = AppInstance::getAppInstance( );
-	setWindowTitle( QString( applicationInstance->getApplicationManage( )->applicationName( ) + " " + tr( "关于" ) ) );
+
+	bool aboutWidget = AppTranslateTools::getAboutWidget( [this, applicationInstance] ( AboutWidgetTranslate &translate ) {
+		auto &titleName = translate.getTitleName( );
+		setName( titleName );
+		setWindowTitle( QString( applicationInstance->getApplicationManage( )->applicationName( ) + " " + titleName ) );
+	} );
+	if( aboutWidget == false ) {
+		auto titleName = tr( "关于" );
+		setName( titleName );
+		setWindowTitle( QString( applicationInstance->getApplicationManage( )->applicationName( ) + " " + titleName ) );
+	}
 	mainLayout->setContentsMargins( 0, 0, 0, 0 );
 	mainLayout->setSpacing( 0 );
 	QStyle *stylePtr = style( );
@@ -51,6 +55,50 @@ bool AboutWidget::init( ) {
 	textBox->setReadOnly( true );
 	textBox->setText( getSoftwareProtocolInfo( ) );
 	textBox->setAutoFormatting( QTextEdit::AutoAll );
+	return true;
+}
+
+AboutWidget::~AboutWidget( ) {
+	deleteResource( );
+}
+
+void AboutWidget::response( ) {
+}
+
+QWidget * AboutWidget::toWidget( ) {
+	return this;
+}
+
+bool AboutWidget::deleteResource( ) {
+	Delete_Resource_App_Core_Ptr( textBox );
+	Delete_Resource_App_Core_Ptr( qtIco );
+	Delete_Resource_App_Core_Ptr( mainLayout );
+	return true;
+}
+
+bool AboutWidget::initBefore( ) {
+	deleteResource( );
+	mainLayout = new QHBoxLayout( this );
+
+	qtIco = new QLabel( this );
+
+	mainLayout->addWidget( qtIco, 0, Qt::AlignTop );
+
+	textBox = new QTextEdit( this );
+	mainLayout->addWidget( textBox );
+
+	return true;
+}
+
+bool AboutWidget::initAfter( ) {
+	return true;
+}
+
+bool AboutWidget::getJsonData( QJsonObject &get_json_object ) const {
+	return true;
+}
+
+bool AboutWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }
 

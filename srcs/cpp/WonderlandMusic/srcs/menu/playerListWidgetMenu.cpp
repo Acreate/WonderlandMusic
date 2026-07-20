@@ -1,10 +1,7 @@
 ﻿#include "playerListWidgetMenu.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
-#include "../application/appMusicManage.h"
 #include "../application/appTranslate.h"
-#include "../application/translate/playerListWidgetMenuTranslate.h"
-#include "../widget/musicContreWidget.h"
 
 PlayerListWidgetMenu::PlayerListWidgetMenu( ) : QMenu( ) {
 }
@@ -36,35 +33,6 @@ bool PlayerListWidgetMenu::init( ) {
 	auto appTranslate = appDataManage->getTranslate( );
 	if( appTranslate == nullptr )
 		return false;
-	auto playerListWidgetMenuTranlate = appTranslate->getPlayerListWidgetMenu( );
-	if( playerListWidgetMenuTranlate == nullptr )
-		return false;
-	auto musicDecoder = appInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
-	if( musicDecoder == nullptr )
-		return false;
-	auto jsonFileKey = appDataManage->getAppDataJsonKey( );
-	if( jsonFileKey == nullptr )
-		return false;
-
-	removeMenu = addMenu( playerListWidgetMenuTranlate->getRemoveMenu( ) );
-	controlMenu = addMenu( playerListWidgetMenuTranlate->getControlMenu( ) );
-
-	loadMenu = addMenu( playerListWidgetMenuTranlate->getFilePathLoadMenu( ) );
-
-	insterPlayBefore = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getAggregateToPlayerBefore( ) );
-	insterPlayAfter = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getAggregateToPlayerAfter( ) );
-
-	moveTop = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getMoveTopAction( ) );
-	moveBottom = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getMoveBottomAction( ) );
-
-	aggregateToSelectFirst = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getAggregateToSelectFirst( ) );
-	aggregateToSelectLast = controlMenu->QWidget::addAction( playerListWidgetMenuTranlate->getAggregateToSelectLast( ) );
-
-	removeMusicAtList = removeMenu->QWidget::addAction( playerListWidgetMenuTranlate->getRemoveMusciItemAction( ) );
-	deleteMusicAtDiskFile = removeMenu->QWidget::addAction( playerListWidgetMenuTranlate->getDeleteMusicFileAction( ) );
-
-	opendSelectFileDialogAction = loadMenu->addAction( playerListWidgetMenuTranlate->getLoadFileAction( ) );
-	oopenSelectDirDialogAction = loadMenu->addAction( playerListWidgetMenuTranlate->getLoadDirAction( ) );
 
 	return true;
 }

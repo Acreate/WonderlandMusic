@@ -1,20 +1,9 @@
 ﻿#ifndef MAINWINDOW_H_H_HEAD__FILE__
 #define MAINWINDOW_H_H_HEAD__FILE__
-
 #include <QMainWindow>
-
 #include "../interface/iAppCore.h"
 #include "../interface/iAppJsonData.h"
-
-class MusicContreWidget;
-class PlayerToolsWidget;
-class FavoriteWidget;
-class PlayerListTopWidget;
-class MainStackedWidget;
-class OptionDockWidget;
-class PlayerWindow;
-class QScrollArea;
-class QPushButton;
+class OptionWindow;
 class JsonFileKey;
 class QStackedWidget;
 class PlayerListWidget;
@@ -27,40 +16,24 @@ class MainWindow : public QMainWindow, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
-	/// @brief 配置主显示组件-层叠
-	MainStackedWidget *mainStackedWidget = nullptr;
-	/// @brief 在主窗口配置左侧容器窗口
-	OptionDockWidget *leftOptionDockWidget = nullptr;
+	OptionWindow *optionWindow = nullptr;
+	AboutWidget *aboutWidget = nullptr;
 
 public:
 	~MainWindow( ) override;
-
 	MainWindow( QWidget *parent, Qt::WindowFlags flags );
-
 	MainWindow( QWidget *parent );
-
 	MainWindow( Qt::WindowFlags flags );
-
 	MainWindow( );
-
-	virtual MainStackedWidget * getMainStackedWidget( ) const;
-
-	virtual OptionDockWidget * getLeftOptionDockWidget( ) const;
-
+	virtual OptionWindow * getOptionWindow( ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
-
 	bool setJsonData( const QJsonObject &set_json_object ) override;
-
 	bool init( ) override;
-
 	bool initBefore( ) override;
-
 	bool initAfter( ) override;
 
 protected:
 	bool deleteResource( ) override;
-
 	bool event( QEvent *event ) override;
 };
-
 #endif // MAINWINDOW_H_H_HEAD__FILE__

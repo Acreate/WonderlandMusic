@@ -2,13 +2,10 @@
 #define APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__
 #include "../interface/iAppCore.h"
 #include "../interface/iAppDiskJsonData.h"
-class AddFavoriteWindow;
 class AppMenuManage;
-class LabelWidget;
 class AppDrawManage;
-class PlayerListTopWidget;
-class MainWindow;
 class SystemTrayIcon;
+class MainWindow;
 
 class AppUserInterfaceManage : public QObject, public IAppCore, public IAppDiskJsonData {
 	Q_OBJECT;
@@ -22,8 +19,6 @@ protected:
 	AppDrawManage *appDrawManage = nullptr;
 	/// @brief 菜单管理
 	AppMenuManage *appMenuManage = nullptr;
-	/// @brief 收藏夹添加窗口
-	AddFavoriteWindow *addFavoriteWindow = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -37,8 +32,6 @@ public:
 	bool initBefore( ) override;
 	bool initAfter( ) override;
 	~AppUserInterfaceManage( ) override;
-
-	virtual AddFavoriteWindow * getAddFavoriteWindow( ) const;
 	virtual AppMenuManage * getAppMenuManage( ) const;
 	virtual bool showMainWindow( ) const;
 	virtual bool hideMainWindow( ) const;

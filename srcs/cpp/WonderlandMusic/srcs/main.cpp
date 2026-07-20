@@ -1,5 +1,4 @@
 ﻿#include <QLoggingCategory>
-#include <qfile.h>
 #include "application/appInstance.h"
 #include "application/appUserInterfaceManage.h"
 #include "dateTimeFormat/dateTimeFormat.h"

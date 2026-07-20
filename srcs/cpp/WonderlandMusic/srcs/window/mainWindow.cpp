@@ -1,8 +1,6 @@
 ﻿#include "mainWindow.h"
 #include <QJsonObject>
-#include <QSystemTrayIcon>
 #include <qboxlayout.h>
-#include "playerWindow.h"
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
@@ -10,10 +8,12 @@
 #include "../application/applicationManage.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
 #include "../application/translate/mainWindowTranslate.h"
-#include "../dockWidget/optionDockWidget.h"
+#include "../component/optionWindow/optionWindow.h"
 #include "../msgInfo/messageErrorOut.h"
-#include "../stackedWidget/mainStackedWidget.h"
 #include "../tools/pathTools.h"
+#include "../widget/aboutWidget.h"
+#include "../widget/musicWidget.h"
+#include "../widget/settingWidget.h"
 
 MainWindow::MainWindow( QWidget *parent ) : MainWindow( parent, Qt::WindowFlags( ) ) {
 }
@@ -24,17 +24,12 @@ MainWindow::MainWindow( Qt::WindowFlags flags ) : MainWindow( nullptr, flags ) {
 MainWindow::MainWindow( ) : MainWindow( nullptr, Qt::WindowFlags( ) ) {
 }
 
-MainStackedWidget * MainWindow::getMainStackedWidget( ) const {
-	return mainStackedWidget;
-}
-
-OptionDockWidget * MainWindow::getLeftOptionDockWidget( ) const {
-	return leftOptionDockWidget;
+OptionWindow * MainWindow::getOptionWindow( ) const {
+	return optionWindow;
 }
 
 bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
-	mainStackedWidget->getJsonData( get_json_object );
-	leftOptionDockWidget->getJsonData( get_json_object );
+	optionWindow->getJsonData( get_json_object );
 	auto appInstance = AppInstance::getAppInstance( );
 	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
 	auto geo = geometry( );
@@ -55,8 +50,7 @@ bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 }
 
 bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
-	mainStackedWidget->setJsonData( set_json_object );
-	leftOptionDockWidget->setJsonData( set_json_object );
+	optionWindow->setJsonData( set_json_object );
 	if( set_json_object.empty( ) )
 		return false;
 	auto appInstance = AppInstance::getAppInstance( );
@@ -112,9 +106,13 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 }
 
 bool MainWindow::init( ) {
-	Init_Resource_App_Core_Ptr( mainStackedWidget );
-	Init_Resource_App_Core_Ptr( leftOptionDockWidget );
-
+	Init_Resource_App_Core_Ptr( optionWindow );
+	if( optionWindow->addOptionPanel( new MusicWidget( optionWindow ) ) == false )
+		return false;
+	if( optionWindow->addOptionPanel( new SettingWidget( optionWindow ) ) == false )
+		return false;
+	if( optionWindow->addOptionPanel( new AboutWidget( optionWindow ) ) == false )
+		return false;
 	return true;
 }
 
@@ -125,36 +123,22 @@ bool MainWindow::initBefore( ) {
 	// 配置窗口顶部显示
 	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
 
-	mainStackedWidget = new MainStackedWidget( this );
-
-	leftOptionDockWidget = new OptionDockWidget( this );
-	Before_Init_Resource_App_Core_Ptr( mainStackedWidget );
-	Before_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
+	optionWindow = new OptionWindow( this );
+	Before_Init_Resource_App_Core_Ptr( optionWindow );
 	return true;
 }
 
 bool MainWindow::initAfter( ) {
-	After_Init_Resource_App_Core_Ptr( mainStackedWidget );
-	After_Init_Resource_App_Core_Ptr( leftOptionDockWidget );
+	After_Init_Resource_App_Core_Ptr( optionWindow );
 
-	setCentralWidget( mainStackedWidget );
+	setCentralWidget( optionWindow );
 
-	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_player_button, [this]( ) {
-		mainStackedWidget->slot_showPlayerWidget( );
-	} );
-	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_setting_button, [this]( ) {
-		mainStackedWidget->slot_showSettingWidget( );
-	} );
-	connect( leftOptionDockWidget, &OptionDockWidget::signal_click_about_button, [this]( ) {
-		mainStackedWidget->slot_showAboutWidget( );
-	} );
-	leftOptionDockWidget->show( );
+	optionWindow->show( );
 	return true;
 }
 
 bool MainWindow::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( leftOptionDockWidget );
-	Delete_Resource_App_Core_Ptr( mainStackedWidget );
+	Delete_Resource_App_Core_Ptr( optionWindow );
 	return true;
 }
 

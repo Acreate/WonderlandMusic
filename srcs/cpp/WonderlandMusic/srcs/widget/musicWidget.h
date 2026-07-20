@@ -1,14 +1,14 @@
-﻿#ifndef SETTINGWIDGET_H_H_HEAD__FILE__
-#define SETTINGWIDGET_H_H_HEAD__FILE__
-#include <QWidget>
+﻿#ifndef MUSICWIDGET_H_H_HEAD__FILE__
+#define MUSICWIDGET_H_H_HEAD__FILE__
+#include "../component/favoriteWindow/favoriteWindow.h"
 #include "../component/optionWindow/interface/optionPanel.h"
 
-class SettingWidget : public QWidget, public OptionPanel {
+class MusicWidget : public FavoriteWindow, public OptionPanel {
 	Q_OBJECT;
 
 public:
-	SettingWidget( OptionWindow *parent );
-	~SettingWidget( ) override;
+	MusicWidget( OptionWindow *parent );
+	~MusicWidget( ) override;
 	void response( ) override;
 	QWidget * toWidget( ) override;
 
@@ -22,4 +22,4 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 };
-#endif // SETTINGWIDGET_H_H_HEAD__FILE__
+#endif // MUSICWIDGET_H_H_HEAD__FILE__

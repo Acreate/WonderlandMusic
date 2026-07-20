@@ -5,22 +5,12 @@
 
 class AppDataJsonKey : public IAppCore {
 protected:
-	PlayerListToolWidgetJsonKey *playerListToolWidget = nullptr;
 	AboutWidgetJsonKey *aboutWidget = nullptr;
-	PlayerListTopWidgetJsonKey *playerListTopWidget = nullptr;
-	PlayerWindowJsonKey *playerWindow = nullptr;
-	MusicInfoItemWidgetJsonKey *musicInfoItemWidget = nullptr;
 	MainWindowJsonKey *mainWindow = nullptr;
 	SystemTrayIconJsonKey *systemTrayIcon = nullptr;
 	AppDataManageJsonKey *appDataManage = nullptr;
 	AppUserInterfaceManageJsonKey *appUserInterfaceManage = nullptr;
-	FavoriteSrollAreaJsonKey *favoriteSrollArea = nullptr;
-	FavoritemDockWidgetJsonKey *favoritemDockWidget = nullptr;
-	FavoriteWidgetJsonKey *favoriteWidget = nullptr;
 	AppMusicManageJsonKey *appMusicManage = nullptr;
-	FavorItemWidgetJsonKey *favorItemWidget = nullptr;
-	MusicItemJsonKey *musicItem = nullptr;
-	FavoriteItemJsonKey *favoriteItem = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -31,22 +21,11 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
-	virtual PlayerListToolWidgetJsonKey * getPlayerListToolWidget( ) const;
 	virtual AboutWidgetJsonKey * getAboutWidget( ) const;
-	virtual PlayerListTopWidgetJsonKey * getPlayerListTopWidget( ) const;
-	virtual PlayerWindowJsonKey * getPlayerWindow( ) const;
-	virtual MusicInfoItemWidgetJsonKey * getMusicInfoItemWidget( ) const;
 	virtual MainWindowJsonKey * getMainWindow( ) const;
 	virtual SystemTrayIconJsonKey * getSystemTrayIcon( ) const;
 	virtual AppDataManageJsonKey * getAppDataManage( ) const;
 	virtual AppUserInterfaceManageJsonKey * getAppUserInterfaceManage( ) const;
-	virtual FavoriteSrollAreaJsonKey * getFavoriteSrollArea( ) const;
-	virtual FavoritemDockWidgetJsonKey * getFavoritemDockWidget( ) const;
-	virtual FavoriteWidgetJsonKey * getFavoriteWidget( ) const;
 	virtual AppMusicManageJsonKey * getAppMusicManage( ) const;
-	virtual FavorItemWidgetJsonKey * getFavorItemWidget( ) const;
-	virtual MusicItemJsonKey * getMusicItem( ) const;
-
-	virtual FavoriteItemJsonKey * getFavoriteItem( ) const;
 };
 #endif // APPDATAJSONKEY_H_H_HEAD__FILE__

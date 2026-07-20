@@ -9,16 +9,13 @@
 #include "../menu/systemTrayIconMenu.h"
 #include "../systemTrayIcon/systemTrayIcon.h"
 #include "../tools/pathTools.h"
-#include "../window/addFavoriteWindow.h"
 #include "../window/mainWindow.h"
-#include "../window/musicListWindow.h"
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
 
 bool AppUserInterfaceManage::deleteResource( ) {
 	if( systemTrayIcon )
 		systemTrayIcon->hide( );
 	Delete_Resource_App_Core_Ptr( appMenuManage );
-	Delete_Resource_App_Core_Ptr( addFavoriteWindow );
 	Delete_Resource_App_Core_Ptr( mainWindow );
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 	Delete_Resource_App_Core_Ptr( appDrawManage );
@@ -61,7 +58,6 @@ bool AppUserInterfaceManage::writeJsonData( ) {
 
 bool AppUserInterfaceManage::init( ) {
 	Init_Resource_App_Core_Ptr( appDrawManage );
-	Init_Resource_App_Core_Ptr( addFavoriteWindow );
 	Init_Resource_App_Core_Ptr( mainWindow );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
 	Init_Resource_App_Core_Ptr( appMenuManage );
@@ -72,12 +68,10 @@ bool AppUserInterfaceManage::init( ) {
 bool AppUserInterfaceManage::initBefore( ) {
 	deleteResource( );
 	appDrawManage = new AppDrawManage;
-	addFavoriteWindow = new AddFavoriteWindow;
 	mainWindow = new MainWindow;
 	systemTrayIcon = new SystemTrayIcon;
 	appMenuManage = new AppMenuManage;
 	Before_Init_Resource_App_Core_Ptr( appDrawManage );
-	Before_Init_Resource_App_Core_Ptr( addFavoriteWindow );
 	Before_Init_Resource_App_Core_Ptr( mainWindow );
 	Before_Init_Resource_App_Core_Ptr( systemTrayIcon );
 	Before_Init_Resource_App_Core_Ptr( appMenuManage );
@@ -86,7 +80,6 @@ bool AppUserInterfaceManage::initBefore( ) {
 
 bool AppUserInterfaceManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( appDrawManage );
-	After_Init_Resource_App_Core_Ptr( addFavoriteWindow );
 	After_Init_Resource_App_Core_Ptr( mainWindow );
 	After_Init_Resource_App_Core_Ptr( systemTrayIcon );
 	After_Init_Resource_App_Core_Ptr( appMenuManage );
@@ -107,10 +100,6 @@ bool AppUserInterfaceManage::initAfter( ) {
 
 AppUserInterfaceManage::~AppUserInterfaceManage( ) {
 	deleteResource( );
-}
-
-AddFavoriteWindow * AppUserInterfaceManage::getAddFavoriteWindow( ) const {
-	return addFavoriteWindow;
 }
 
 bool AppUserInterfaceManage::showMainWindow( ) const {

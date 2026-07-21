@@ -19,20 +19,18 @@ protected:
 
 public:
 	UserMutex( );
-
 	UserMutex( const UserMutex &other ) = delete;
-
 	UserMutex & operator=( const UserMutex &other ) = delete;
-
 	virtual bool tryLock( const std::source_location &source_location = std::source_location::current( ) ) const;
-
 	virtual bool lock( const std::source_location &source_location = std::source_location::current( ) ) const;
-
 	virtual bool unlock( const std::source_location &source_location = std::source_location::current( ) ) const;
-
 	virtual LockGuard getLockGuard( ) const;
-
 	virtual ~UserMutex( );
-};
 
+protected:
+	virtual bool tryLock( std::mutex *mutex_cor_ptr, const std::source_location &source_location = std::source_location::current( ) ) const;
+	virtual bool lock( std::mutex *mutex_cor_ptr, const std::source_location &source_location = std::source_location::current( ) ) const;
+	virtual bool unlock( std::mutex *mutex_cor_ptr, const std::source_location &source_location = std::source_location::current( ) ) const;
+	virtual LockGuard getLockGuard( std::mutex *mutex_cor_ptr ) const;
+};
 #endif // USERMUTEX_H_H_HEAD__FILE__

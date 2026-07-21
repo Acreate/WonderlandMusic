@@ -112,11 +112,38 @@ UserMutex::UserMutex( ) {
 }
 
 bool UserMutex::tryLock( const std::source_location &source_location ) const {
-	if( mutexCorPtr == nullptr )
+	return tryLock( mutexCorPtr, source_location );
+}
+
+bool UserMutex::lock( const std::source_location &source_location ) const {
+	return lock( mutexCorPtr, source_location );
+}
+
+bool UserMutex::unlock( const std::source_location &source_location ) const {
+	return unlock( mutexCorPtr, source_location );
+}
+
+UserMutex::LockGuard UserMutex::getLockGuard( ) const {
+	return getLockGuard( mutexCorPtr );
+}
+
+UserMutex::~UserMutex( ) {
+	decltype(mutexCorPtr) ptr = mutexCorPtr;
+	mutexCorPtr = nullptr;
+	if( tryLock( ptr ) == false )
+		unlock( ptr );
+	delete ptr;
+	delete trylockSourceLocation;
+	delete lockSourceLocation;
+	delete unlockSourceLocation;
+}
+
+bool UserMutex::tryLock( std::mutex *mutex_cor_ptr, const std::source_location &source_location ) const {
+	if( mutex_cor_ptr == nullptr )
 		return false;
 	bool tryLock;
 	try {
-		tryLock = mutexCorPtr->try_lock( );
+		tryLock = mutex_cor_ptr->try_lock( );
 	} catch( ... ) {
 		out_debug_info( );
 		tryLock = false;
@@ -126,13 +153,13 @@ bool UserMutex::tryLock( const std::source_location &source_location ) const {
 	return tryLock;
 }
 
-bool UserMutex::lock( const std::source_location &source_location ) const {
-	if( mutexCorPtr == nullptr )
+bool UserMutex::lock( std::mutex *mutex_cor_ptr, const std::source_location &source_location ) const {
+	if( mutex_cor_ptr == nullptr )
 		return false;
 
 	bool tryLock;
 	try {
-		mutexCorPtr->lock( );
+		mutex_cor_ptr->lock( );
 		tryLock = true;
 	} catch( ... ) {
 		out_debug_info( );
@@ -143,12 +170,12 @@ bool UserMutex::lock( const std::source_location &source_location ) const {
 	return tryLock;
 }
 
-bool UserMutex::unlock( const std::source_location &source_location ) const {
-	if( mutexCorPtr == nullptr )
+bool UserMutex::unlock( std::mutex *mutex_cor_ptr, const std::source_location &source_location ) const {
+	if( mutex_cor_ptr == nullptr )
 		return false;
 	bool tryLock;
 	try {
-		mutexCorPtr->unlock( );
+		mutex_cor_ptr->unlock( );
 		tryLock = true;
 	} catch( ... ) {
 		out_debug_info( );
@@ -159,16 +186,7 @@ bool UserMutex::unlock( const std::source_location &source_location ) const {
 	return tryLock;
 }
 
-UserMutex::LockGuard UserMutex::getLockGuard( ) const {
-	LockGuard lockGuard( new std::lock_guard< std::mutex >( *mutexCorPtr ) );
+UserMutex::LockGuard UserMutex::getLockGuard( std::mutex *mutex_cor_ptr ) const {
+	LockGuard lockGuard( new std::lock_guard< std::mutex >( *mutex_cor_ptr ) );
 	return lockGuard;
-}
-
-UserMutex::~UserMutex( ) {
-	if( mutexCorPtr->try_lock( ) == false )
-		mutexCorPtr->unlock( );
-	delete mutexCorPtr;
-	delete trylockSourceLocation;
-	delete lockSourceLocation;
-	delete unlockSourceLocation;
 }

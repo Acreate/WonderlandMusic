@@ -11,7 +11,9 @@ class OpetionListWidget : public QWidget, public IAppCore {
 
 protected:
 	UserMutex *mutex = nullptr;
-	std::vector< OptionButton * > labelVector;
+	std::vector< OptionButton * > optionButtonVector;
+	int suggestWidth;
+	int suggestHeight;
 
 public:
 	OpetionListWidget( QWidget *parent );
@@ -19,6 +21,10 @@ public:
 	virtual void addItem( OptionItem *option_item );
 	virtual void deleteItem( OptionItem *option_item );
 	virtual bool hasItem( size_t &result_index, const OptionItem *option_item );
+	virtual void updateOptionButtonLayout( );
+	virtual int getSuggestWidth( ) const;
+	virtual int getSuggestHeight( ) const;
+	virtual QSize getSuggestSize( ) const;
 
 protected:
 	bool deleteResource( ) override;
@@ -28,6 +34,6 @@ public:
 	bool init( ) override;
 	bool initAfter( ) override;
 Q_SIGNALS:
-	void signal_click_item( OptionItem *option_item );
+	void signal_click_item( OptionButton *option_button );
 };
 #endif // OPETIONLISTWIDGET_H_H_HEAD__FILE__

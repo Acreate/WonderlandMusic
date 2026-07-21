@@ -6,10 +6,15 @@
 #include "../../../application/appUserInterfaceManage.h"
 #include "../optionItem/optionItem.h"
 
-OptionButton::OptionButton( OptionItem *bind_item ) : bindItem( bind_item ) {
+OptionButton::OptionButton( OpetionListWidget *opetion_list_widget, OptionItem *bind_item ) : opetionListWidget( opetion_list_widget ),
+	bindItem( bind_item ) {
 }
 
 OptionButton::~OptionButton( ) {
+}
+
+OpetionListWidget * OptionButton::getOpetionListWidget( ) const {
+	return opetionListWidget;
 }
 
 OptionItem * OptionButton::getBindItem( ) const {
@@ -83,7 +88,7 @@ void OptionButton::mousePressEvent( QMouseEvent *event ) {
 
 void OptionButton::mouseReleaseEvent( QMouseEvent *event ) {
 	if( click )
-		emit signal_click_item( this->bindItem );
+		emit signal_click_item( this );
 	click = false;
 }
 

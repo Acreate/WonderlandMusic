@@ -16,11 +16,11 @@ void OptionItem::setName( const QString &name ) {
 	optionPanel->setName( name );
 }
 
-const QIcon & OptionItem::getIcon( ) const {
+const QImage & OptionItem::getIcon( ) const {
 	return optionPanel->getIcon( );
 }
 
-void OptionItem::setIcon( const QIcon &icon ) {
+void OptionItem::setIcon( const QImage &icon ) {
 	optionPanel->setIcon( icon );
 }
 

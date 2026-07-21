@@ -1,8 +1,8 @@
 ﻿#ifndef OPTIONITEM_H_H_HEAD__FILE__
 #define OPTIONITEM_H_H_HEAD__FILE__
-#include <QString>
-#include <QIcon>
 #include <QObject>
+class QImage;
+class QString;
 class OptionPanel;
 class IAppCore;
 class IAppJsonData;
@@ -28,8 +28,8 @@ protected:
 public:
 	virtual const QString & getName( ) const;
 	virtual void setName( const QString &name );
-	virtual const QIcon & getIcon( ) const;
-	virtual void setIcon( const QIcon &icon );
+	virtual const QImage & getIcon( ) const;
+	virtual void setIcon( const QImage &icon );
 	virtual Show_Type getShowType( ) const;
 	virtual void setShowType( const Show_Type show_type );
 	virtual OptionPanel * getOptionPanel( ) const;

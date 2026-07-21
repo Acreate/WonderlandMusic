@@ -3,6 +3,8 @@
 #include <QMainWindow>
 #include "../../interface/iAppCore.h"
 #include "../../interface/iAppJsonData.h"
+class OpetionContentsWidget;
+class OpetionListWidget;
 class UserMutex;
 class OptionPanel;
 class OptionItem;
@@ -12,6 +14,8 @@ class OptionWindow : public QMainWindow, public IAppCore, public IAppJsonData {
 
 protected:
 	UserMutex *mutex = nullptr;
+	OpetionListWidget *opetionListWidget = nullptr;
+	OpetionContentsWidget *opetionContentsWidget = nullptr;
 	std::vector< OptionPanel * > optionPanelVector;
 
 protected Q_SLOTS:

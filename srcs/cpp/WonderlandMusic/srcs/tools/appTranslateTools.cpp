@@ -6,10 +6,12 @@
 #include "../application/translate/appMusicManageTranslate.h"
 #include "../application/translate/dateTimeFormatTranslate.h"
 #include "../application/translate/deleteExceptionTranslate.h"
+#include "../application/translate/favoriteWidgetMenuTranslate.h"
 #include "../application/translate/jsonTranslate.h"
 #include "../application/translate/mainWindowTranslate.h"
 #include "../application/translate/messageTranslate.h"
 #include "../application/translate/musicWidgetTranslate.h"
+#include "../application/translate/playerListWidgetMenuTranslate.h"
 #include "../application/translate/settingWidgetTranslate.h"
 #include "../application/translate/systemTrayIconMenuTranslate.h"
 #include "../application/translate/systemTrayIconTranslate.h"
@@ -56,3 +58,5 @@ Defininition_Get_Translate( DeleteException );
 Defininition_Get_Translate( Message );
 Defininition_Get_Translate( MusicWidget );
 Defininition_Get_Translate( SettingWidget );
+Defininition_Get_Translate( PlayerListWidgetMenu );
+Defininition_Get_Translate( FavoriteWidgetMenu );

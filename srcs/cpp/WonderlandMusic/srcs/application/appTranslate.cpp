@@ -6,10 +6,12 @@
 #include "translate/appMusicManageTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"
 #include "translate/deleteExceptionTranslate.h"
+#include "translate/favoriteWidgetMenuTranslate.h"
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
 #include "translate/musicWidgetTranslate.h"
+#include "translate/playerListWidgetMenuTranslate.h"
 #include "translate/settingWidgetTranslate.h"
 #include "translate/systemTrayIconMenuTranslate.h"
 #include "translate/systemTrayIconTranslate.h"
@@ -43,6 +45,8 @@ bool AppTranslate::initBefore( ) {
 	deleteException = new DeleteExceptionTranslate;
 	musicWidget = new MusicWidgetTranslate;
 	settingWidget = new SettingWidgetTranslate;
+	playerListWidgetMenu = new PlayerListWidgetMenuTranslate;
+	favoriteWidgetMenu = new FavoriteWidgetMenuTranslate;
 	return true;
 }
 
@@ -63,6 +67,8 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( deleteException );
 	Delete_Resource_App_Core_Ptr( musicWidget );
 	Delete_Resource_App_Core_Ptr( settingWidget );
+	Delete_Resource_App_Core_Ptr( playerListWidgetMenu );
+	Delete_Resource_App_Core_Ptr( favoriteWidgetMenu );
 	return true;
 }
 
@@ -83,6 +89,8 @@ bool AppTranslate::init( ) {
 	Init_Resource_App_Core_Ptr( deleteException );
 	Init_Resource_App_Core_Ptr( musicWidget );
 	Init_Resource_App_Core_Ptr( settingWidget );
+	Init_Resource_App_Core_Ptr( playerListWidgetMenu );
+	Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
 
 	return true;
 }
@@ -133,4 +141,10 @@ MusicWidgetTranslate * AppTranslate::getMusicWidget( ) const {
 
 SettingWidgetTranslate * AppTranslate::getSettingWidget( ) const {
 	return settingWidget;
+}
+PlayerListWidgetMenuTranslate * AppTranslate::getPlayerListWidgetMenu( ) const {
+	return playerListWidgetMenu;
+}
+FavoriteWidgetMenuTranslate * AppTranslate::getFavoriteWidgetMenu( ) const {
+	return favoriteWidgetMenu;
 }

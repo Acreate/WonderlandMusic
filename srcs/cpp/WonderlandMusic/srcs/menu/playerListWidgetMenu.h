@@ -8,10 +8,14 @@ class PlayerListWidgetMenu : public QMenu, public IAppCore {
 	Q_OBJECT;
 
 protected:
+	/// @brief 加载菜单
+	QMenu *loadMusicMenu;
 	/// @brief 删除菜单
-	QMenu *removeMenu;
-	/// @brief 控制菜单
-	QMenu *controlMenu;
+	QMenu *removeMusicMenu;
+	/// @brief 聚合菜单
+	QMenu *aggregateMusicMenu;
+	/// @brief 排序菜单
+	QMenu *sortMusicMenu;
 	/// @brief 插入当前播放列表
 	QAction *insterPlayAfter;
 	/// @brief 播放当前列表
@@ -24,12 +28,10 @@ protected:
 	QAction *removeMusicAtList;
 	/// @brief 删除选中
 	QAction *deleteMusicAtDiskFile;
-	/// @brief 加载菜单
-	QMenu *loadMenu;
 	/// @brief 添加选择文件到集
 	QAction *opendSelectFileDialogAction;
 	/// @brief 添加选择目录到集
-	QAction *oopenSelectDirDialogAction;
+	QAction *openSelectDirDialogAction;
 	/// @brief 聚合到首选项
 	QAction *aggregateToSelectFirst;
 	/// @brief 聚合到末选项

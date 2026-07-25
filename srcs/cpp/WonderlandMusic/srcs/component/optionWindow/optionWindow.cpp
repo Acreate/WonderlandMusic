@@ -41,7 +41,7 @@ bool OptionWindow::addOptionPanel( OptionPanel *option_panel ) {
 	size_t index;
 	if( getOptionPanelIndex( index, option_panel ) == true )
 		return true;
-	if( option_panel->initBefore( ) == true && option_panel->init( ) == true && option_panel->initAfter( ) == true )
+	if( option_panel->initBefore( ) == false || option_panel->init( ) == false || option_panel->initAfter( ) == false )
 		return false;
 	mutex->lock( );
 	connect( option_panel->getOptionItem( ), &OptionItem::signal_delete_OptionPanel, this, &OptionWindow::removeOptionPanel );
@@ -118,6 +118,7 @@ bool OptionWindow::deleteResource( ) {
 
 bool OptionWindow::initBefore( ) {
 	deleteResource( );
+	mutex = new UserMutex;
 	auto parentObjectPtr = parent( );
 	// 存在父窗口节点，则使用组件模式
 	if( qobject_cast< QWidget * >( parentObjectPtr ) )

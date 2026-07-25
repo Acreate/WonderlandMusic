@@ -1,6 +1,6 @@
 ﻿#include "favoriteWindow.h"
 
-FavoriteWindow::FavoriteWindow( QWidget *parent ): QMainWindow( parent ) {
+FavoriteWindow::FavoriteWindow( QWidget *parent ) : QMainWindow( parent ) {
 }
 
 FavoriteWindow::~FavoriteWindow( ) {
@@ -8,32 +8,31 @@ FavoriteWindow::~FavoriteWindow( ) {
 }
 
 void FavoriteWindow::updateItemInfo( FavoriteItem *favorite_item ) {
-	
 }
 
 void FavoriteWindow::deleteItemInfo( FavoriteItem *favorite_item ) {
 }
 
 bool FavoriteWindow::deleteResource( ) {
-	return false;
+	return true;
 }
 
 bool FavoriteWindow::initBefore( ) {
-	return false;
+	return true;
 }
 
 bool FavoriteWindow::init( ) {
-	return false;
+	return true;
 }
 
 bool FavoriteWindow::initAfter( ) {
-	return false;
+	return true;
 }
 
 bool FavoriteWindow::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	return true;
 }
 
 bool FavoriteWindow::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	return true;
 }

@@ -17,6 +17,8 @@ protected:
 	DeleteExceptionTranslate *deleteException = nullptr;
 	MusicWidgetTranslate *musicWidget = nullptr;
 	SettingWidgetTranslate *settingWidget = nullptr;
+	PlayerListWidgetMenuTranslate *playerListWidgetMenu = nullptr;
+	FavoriteWidgetMenuTranslate *favoriteWidgetMenu = nullptr;
 	bool deleteResource( ) override;
 
 public:
@@ -37,5 +39,7 @@ public:
 	virtual DeleteExceptionTranslate * getDeleteException( ) const;
 	virtual MusicWidgetTranslate * getMusicWidget( ) const;
 	virtual SettingWidgetTranslate * getSettingWidget( ) const;
+	virtual PlayerListWidgetMenuTranslate * getPlayerListWidgetMenu( ) const;
+	virtual FavoriteWidgetMenuTranslate * getFavoriteWidgetMenu( ) const;
 };
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

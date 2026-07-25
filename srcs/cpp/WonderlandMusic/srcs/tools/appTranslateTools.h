@@ -20,6 +20,8 @@ namespace AppTranslateTools {
 	Declaration_Get_Translate( DeleteException );
 	Declaration_Get_Translate( MusicWidget );
 	Declaration_Get_Translate( SettingWidget );
+	Declaration_Get_Translate( PlayerListWidgetMenu );
+	Declaration_Get_Translate( FavoriteWidgetMenu );
 }
 # undef  Declaration_Get_Translate
 #endif // APPTRANSLATETOOLS_H_H_HEAD__FILE__

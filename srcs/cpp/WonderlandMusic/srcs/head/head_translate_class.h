@@ -12,5 +12,7 @@ class JsonTranslate;
 class MessageTranslate;
 class MusicWidgetTranslate;
 class SettingWidgetTranslate;
+class PlayerListWidgetMenuTranslate;
+class FavoriteWidgetMenuTranslate;
 class AppTranslate;
 #endif // HEAD_TRANSLATE_CLASS_H_H_HEAD__FILE__

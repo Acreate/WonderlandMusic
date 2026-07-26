@@ -4,7 +4,7 @@
 #include "../tools/appTranslateTools.h"
 class MusicWidgetTranslate;
 
-MusicWidget::MusicWidget( OptionWindow *parent ) : FavoriteWindow( parent ), OptionPanel( parent ) {
+MusicWidget::MusicWidget( OptionWindow *parent ) : FavoriteWindow( parent ), OptionPanel( ) {
 }
 
 MusicWidget::~MusicWidget( ) {

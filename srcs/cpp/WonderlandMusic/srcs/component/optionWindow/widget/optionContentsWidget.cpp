@@ -33,13 +33,7 @@ bool OptionContentsWidget::deleteResource( ) {
 	if( userMutex ) {
 		userMutex->lock( );
 		listParentWindow->setCentralWidget( nullptr );
-
-		size_t size = optionPanelVector.size( );
-		if( size ) {
-			size_t index = 0;
-			auto data = optionPanelVector.data( );
-		}
-
+		optionPanelVector.clear( );
 		userMutex->unlock( );
 		Delete_Resource_App_Core_Ptr( userMutex );
 	}

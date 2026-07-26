@@ -27,9 +27,9 @@ bool FavoriteWidgetMenu::init( ) {
 }
 
 bool FavoriteWidgetMenu::initAfter( ) {
-	connect( addFavorite, &QAction::triggered, this, &FavoriteWidgetMenu::signal_add );
+	/*connect( addFavorite, &QAction::triggered, this, &FavoriteWidgetMenu::signal_add );
 	connect( deleteFavorite, &QAction::triggered, this, &FavoriteWidgetMenu::signal_del );
-	connect( changeFavorite, &QAction::triggered, this, &FavoriteWidgetMenu::signal_change );
+	connect( changeFavorite, &QAction::triggered, this, &FavoriteWidgetMenu::signal_change );*/
 	return true;
 }
 

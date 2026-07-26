@@ -14,22 +14,24 @@ private:
 
 	OptionWindow *optionWindow = nullptr;
 	OptionButton *optionButton = nullptr;
+	QString *name;
+	QImage *icon;
 
 protected:
 	~OptionPanel( ) override;
 
-	virtual void setName( const QString &name );
-	virtual void setIcon( const QImage &icon );
-
 public:
-	OptionPanel( OptionWindow *option_window );
-	OptionPanel( OptionWindow *option_window, const QString &name );
-	OptionPanel( OptionWindow *option_window, const QImage &icon );
-	OptionPanel( OptionWindow *option_window, const QString &name, const QImage &icon );
+	OptionPanel( );
+	OptionPanel( const QString &name );
+	OptionPanel( const QImage &icon );
+	OptionPanel( const QString &name, const QImage &icon );
 	virtual OptionWindow * getOptionWindow( ) const;
 
+public:
 	virtual const QString & getName( ) const;
 	virtual const QImage & getIcon( ) const;
+	virtual void setName( const QString &name );
+	virtual void setIcon( const QImage &icon );
 	virtual QWidget * toWidget( ) = 0;
 };
 #endif // OPTIONPANEL_H_H_HEAD__FILE__

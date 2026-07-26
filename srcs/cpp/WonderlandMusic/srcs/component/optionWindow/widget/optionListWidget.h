@@ -26,15 +26,18 @@ protected:
 public:
 	OptionListWidget( OptionWindow *parent );
 	~OptionListWidget( ) override;
-	virtual void addItem( OptionButton *option_item );
-	virtual void deleteItem( OptionButton *option_item );
-	virtual bool hasItem( size_t &result_index, const OptionButton *option_item );
+	virtual void addOptionButton( OptionButton *option_item );
+	virtual void removeOptionButton( OptionButton *option_item );
+	virtual void removeAllOptionButton( );
+	virtual bool hasOptionButton( size_t &result_index, const OptionButton *option_item );
 	virtual void updateOptionButtonLayout( );
 	virtual int getSuggestWidth( ) const;
 	virtual int getSuggestHeight( ) const;
 	virtual QSize getSuggestSize( ) const;
 
 protected:
+	void paintEvent( QPaintEvent *event ) override;
+
 	bool deleteResource( ) override;
 
 public:

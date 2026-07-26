@@ -1,30 +1,18 @@
 ﻿#include "optionButton.h"
 #include <QPainter>
+
+#include "../optionWindow.h"
+
 #include "../../../application/appDrawManage.h"
 #include "../../../application/appInstance.h"
 #include "../../../application/appRenderImage.h"
 #include "../../../application/appUserInterfaceManage.h"
 
-#include "../widget/optionListWidget.h"
+#include "../interface/optionPanel.h"
 
-const QString & OptionButton::getName( ) const {
-	return *name;
-}
-const QImage & OptionButton::getIcon( ) const {
-	return *icon;
-}
-void OptionButton::setName( const QString &name ) {
-	*this->name = name;
-}
-void OptionButton::setIcon( const QImage &icon ) {
-	*this->icon = icon;
-}
 OptionButton::~OptionButton( ) {
-	delete name;
-	delete icon;
 }
-OptionButton::OptionButton( OptionWindow *option_window, const QString &name, const QImage &icon ) : optionWindow( option_window ), name( new QString( name ) ), icon( new QImage( icon ) ) {
-	updateSize( );
+OptionButton::OptionButton( OptionWindow *option_window ) : optionWindow( option_window ) {
 }
 
 bool OptionButton::isClick( ) const {
@@ -46,15 +34,15 @@ QSize OptionButton::updateSize( ) {
 
 	switch( show ) {
 		case Show_Type::Txt :
-			appRenderImage->getTxtSize( result, *name );
+			appRenderImage->getTxtSize( result, optionPanel->getName( ) );
 			break;
 		case Show_Type::Icon :
-			result = this->icon->size( );
+			result = optionPanel->getIcon( ).size( );
 			break;
 		case Show_Type::All : {
-			appRenderImage->getTxtSize( result, *name );
+			appRenderImage->getTxtSize( result, optionPanel->getName( ) );
 			int w = result.width( );
-			auto icon = this->icon->scaledToWidth( w );
+			auto icon = optionPanel->getIcon( ).scaledToWidth( w );
 			result.setWidth( icon.width( ) + w );
 		}
 		break;
@@ -64,6 +52,8 @@ QSize OptionButton::updateSize( ) {
 }
 
 void OptionButton::paintEvent( QPaintEvent *paint_event ) {
+	if( optionPanel == nullptr )
+		return;
 	int height = this->height( );
 	if( height == 0 )
 		return;
@@ -72,12 +62,13 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 	QImage renderIcon;
 	switch( show ) {
 		case Show_Type::Txt : {
-			if( name->isEmpty( ) == false ) {
+			auto &name = optionPanel->getName( );
+			if( name.isEmpty( ) == false ) {
 				auto appInstance = AppInstance::getAppInstance( );
 				auto interfaceManage = appInstance->getAppUserInterfaceManage( );
 				auto appDrawManage = interfaceManage->getAppDrawManage( );
 				auto appRenderImage = appDrawManage->getAppRenderImage( );
-				if( appRenderImage->renderTxt( renderIcon, *name ) ) {
+				if( appRenderImage->renderTxt( renderIcon, name ) ) {
 					renderIcon = renderIcon.scaledToHeight( height );
 					painter.drawImage( offsetX, 0, renderIcon );
 				}
@@ -85,24 +76,27 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 		}
 		break;
 		case Show_Type::Icon : {
-			if( icon->isNull( ) == false ) {
-				renderIcon = icon->scaledToHeight( height );
+			auto &icon = optionPanel->getIcon( );
+			if( icon.isNull( ) == false ) {
+				renderIcon = icon.scaledToHeight( height );
 				painter.drawImage( 0, 0, renderIcon );
 			}
 		}
 		break;
 		case Show_Type::All : {
-			if( icon->isNull( ) == false ) {
-				renderIcon = icon->scaledToHeight( height );
+			auto &icon = optionPanel->getIcon( );
+			if( icon.isNull( ) == false ) {
+				renderIcon = icon.scaledToHeight( height );
 				painter.drawImage( 0, 0, renderIcon );
-				offsetX += icon->width( );
+				offsetX += icon.width( );
 			}
-			if( name->isEmpty( ) == false ) {
+			auto &name = optionPanel->getName( );
+			if( name.isEmpty( ) == false ) {
 				auto appInstance = AppInstance::getAppInstance( );
 				auto interfaceManage = appInstance->getAppUserInterfaceManage( );
 				auto appDrawManage = interfaceManage->getAppDrawManage( );
 				auto appRenderImage = appDrawManage->getAppRenderImage( );
-				if( appRenderImage->renderTxt( renderIcon, *name ) ) {
+				if( appRenderImage->renderTxt( renderIcon, name ) ) {
 					renderIcon = renderIcon.scaledToHeight( height );
 					painter.drawImage( offsetX, 0, renderIcon );
 				}
@@ -117,8 +111,8 @@ void OptionButton::mousePressEvent( QMouseEvent *event ) {
 }
 
 void OptionButton::mouseReleaseEvent( QMouseEvent *event ) {
-	if( click )
-		emit signal_click_item( this );
+	if( click && optionWindow )
+		optionWindow->showOptionButton( this );
 	click = false;
 }
 

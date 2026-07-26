@@ -3,11 +3,7 @@
 #include "../component/optionWindow/optionWindow.h"
 #include "../tools/appTranslateTools.h"
 
-SettingWidget::SettingWidget( OptionWindow *parent ) : QWidget( parent ), OptionPanel( parent ) {
-	if( AppTranslateTools::getSettingWidget( [this] ( SettingWidgetTranslate &translate ) {
-		setName( translate.getTitleName( ) );
-	} ) == false )
-		setName( tr( "设置" ) );
+SettingWidget::SettingWidget( OptionWindow *parent ) : QWidget( parent ), OptionPanel( ) {
 }
 
 SettingWidget::~SettingWidget( ) {

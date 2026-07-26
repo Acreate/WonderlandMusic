@@ -17,7 +17,7 @@
 #include "../msgInfo/messageErrorOut.h"
 #include "../tools/appTranslateTools.h"
 
-AboutWidget::AboutWidget( OptionWindow *parent ) : OptionPanel( parent ) {
+AboutWidget::AboutWidget( OptionWindow *parent ) : OptionPanel( ) {
 }
 
 bool AboutWidget::init( ) {
@@ -77,6 +77,7 @@ QWidget * AboutWidget::toWidget( ) {
 
 bool AboutWidget::initBefore( ) {
 	deleteResource( );
+
 	mainLayout = new QHBoxLayout( this );
 
 	qtIco = new QLabel( this );

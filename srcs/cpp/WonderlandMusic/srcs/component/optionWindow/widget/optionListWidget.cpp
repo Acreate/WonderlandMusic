@@ -1,5 +1,7 @@
 ﻿#include "optionListWidget.h"
 
+#include <QPainter>
+
 #include "../optionWindow.h"
 
 #include "../../../head/release_macro.h"
@@ -20,7 +22,7 @@ OptionListWidget::OptionListWidget( OptionWindow *parent ) : QWidget( parent ), 
 OptionListWidget::~OptionListWidget( ) {
 	deleteResource( );
 }
-bool OptionListWidget::hasItem( size_t &result_index, const OptionButton *option_item ) {
+bool OptionListWidget::hasOptionButton( size_t &result_index, const OptionButton *option_item ) {
 	bool has = false;
 	mutex->lock( );
 	auto count = optionButtonVector.size( );
@@ -36,6 +38,9 @@ bool OptionListWidget::hasItem( size_t &result_index, const OptionButton *option
 }
 
 void OptionListWidget::updateOptionButtonLayout( ) {
+	if( mutex == nullptr )
+		return;
+
 	suggestWidth = 0;
 	suggestHeight = 0;
 	mutex->lock( );
@@ -48,7 +53,7 @@ void OptionListWidget::updateOptionButtonLayout( ) {
 			optionButton = data[ index ];
 			if( optionButton == nullptr )
 				continue;
-			optionButton->adjustSize( );
+			optionButton->updateSize( );
 			optionButton->move( 0, suggestHeight );
 			int width = optionButton->width( );
 			if( suggestWidth < width )
@@ -68,29 +73,39 @@ int OptionListWidget::getSuggestHeight( ) const {
 QSize OptionListWidget::getSuggestSize( ) const {
 	return QSize( suggestWidth, suggestHeight );
 }
+void OptionListWidget::paintEvent( QPaintEvent *event ) {
+	QPainter painter( this );
+	painter.fillRect( contentsRect( ), Qt::GlobalColor::red );
+}
 
-void OptionListWidget::addItem( OptionButton *option_item ) {
+void OptionListWidget::addOptionButton( OptionButton *option_item ) {
 	size_t index;
-	if( hasItem( index, option_item ) == true )
+	if( hasOptionButton( index, option_item ) == true )
 		return;
 	mutex->lock( );
 	optionButtonVector.emplace_back( option_item );
 	mutex->unlock( );
+	updateOptionButtonLayout( );
 }
-void OptionListWidget::deleteItem( OptionButton *option_item ) {
+void OptionListWidget::removeOptionButton( OptionButton *option_item ) {
 	size_t index;
-	if( hasItem( index, option_item ) == true )
+	if( hasOptionButton( index, option_item ) == true )
 		return;
 	mutex->lock( );
 	auto iterator = optionButtonVector.begin( ) + index;
 	optionButtonVector.erase( iterator );
 	mutex->unlock( );
+	updateOptionButtonLayout( );
+}
+void OptionListWidget::removeAllOptionButton( ) {
+	mutex->lock( );
+	optionButtonVector.clear( );
+	mutex->unlock( );
+	updateOptionButtonLayout( );
 }
 bool OptionListWidget::deleteResource( ) {
 	if( mutex ) {
-		mutex->lock( );
-		optionButtonVector.clear( );
-		mutex->unlock( );
+		removeAllOptionButton( );
 		Delete_Resource_App_Core_Ptr( mutex );
 		suggestWidth = 0;
 		suggestHeight = 0;

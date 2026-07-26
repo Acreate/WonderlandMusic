@@ -133,14 +133,15 @@ bool MainWindow::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( optionWindow );
 
 	setCentralWidget( optionWindow );
-	OptionPanel *optionPanel;
-
-	optionPanel = new MusicWidget( optionWindow );
-	Component_Assert_Ptr( optionPanel, getOptionWindow( ) );
-	optionPanel = new SettingWidget( optionWindow );
-	Component_Assert_Ptr( optionPanel, getOptionWindow( ) );
-	optionPanel = new AboutWidget( optionWindow );
-	Component_Assert_Ptr( optionPanel, getOptionWindow( ) );
+	auto musicWidget = new MusicWidget( optionWindow );
+	if( optionWindow->addOptionPanel( musicWidget ) == false )
+		return false;
+	auto settingWidget = new SettingWidget( optionWindow );
+	if( optionWindow->addOptionPanel( settingWidget ) == false )
+		return false;
+	auto aboutWidget = new AboutWidget( optionWindow );
+	if( optionWindow->addOptionPanel( aboutWidget ) == false )
+		return false;
 	optionWindow->show( );
 	return true;
 }

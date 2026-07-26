@@ -6,6 +6,12 @@
 #include "appMusicManage.h"
 #include "appTranslate.h"
 #include "applicationManage.h"
+
+#include "../head/after_init_macro.h"
+#include "../head/before_init_macro.h"
+#include "../head/init_macro.h"
+#include "../head/release_macro.h"
+
 #include "../menu/playerListWidgetMenu.h"
 #include "../tools/pathTools.h"
 #include "jsonKey/appDataManageJsonKey.h"

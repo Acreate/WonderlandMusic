@@ -11,6 +11,9 @@
 #include "../application/applicationManage.h"
 #include "../application/jsonKey/aboutWidgetJsonKey.h"
 #include "../application/translate/aboutWidgetTranslate.h"
+
+#include "../head/release_macro.h"
+
 #include "../msgInfo/messageErrorOut.h"
 #include "../tools/appTranslateTools.h"
 
@@ -62,18 +65,14 @@ AboutWidget::~AboutWidget( ) {
 	deleteResource( );
 }
 
-void AboutWidget::response( ) {
-}
-
-QWidget * AboutWidget::toWidget( ) {
-	return this;
-}
-
 bool AboutWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( textBox );
 	Delete_Resource_App_Core_Ptr( qtIco );
 	Delete_Resource_App_Core_Ptr( mainLayout );
 	return true;
+}
+QWidget * AboutWidget::toWidget( ) {
+	return this;
 }
 
 bool AboutWidget::initBefore( ) {

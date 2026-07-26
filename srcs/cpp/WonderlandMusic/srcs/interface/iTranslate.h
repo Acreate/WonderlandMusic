@@ -3,7 +3,6 @@
 
 #include "iAppCore.h"
 
-
 class ITranslate : public IAppCore {
 protected:
 	bool deleteResource( ) override;

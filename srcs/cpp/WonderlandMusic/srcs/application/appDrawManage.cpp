@@ -2,6 +2,11 @@
 
 #include "appRenderImage.h"
 
+#include "../head/after_init_macro.h"
+#include "../head/before_init_macro.h"
+#include "../head/init_macro.h"
+#include "../head/release_macro.h"
+
 AppDrawManage::~AppDrawManage( ) {
 	deleteResource( );
 }

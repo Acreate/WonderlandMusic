@@ -1,23 +1,42 @@
 ﻿#ifndef OPTIONBUTTON_H_H_HEAD__FILE__
 #define OPTIONBUTTON_H_H_HEAD__FILE__
 #include <QLabel>
-class OpetionListWidget;
-class OptionItem;
+class OptionPanel;
 
-class OptionButton : public QLabel {
+class OptionButton : public QWidget {
 	Q_OBJECT;
+
+	friend class OptionWindow;
+	friend class OptionPanel;
+
+	OptionWindow *optionWindow;
+	QString *name;
+	QImage *icon;
+
+public:
+	virtual const QString & getName( ) const;
+	virtual const QImage & getIcon( ) const;
+	virtual void setName( const QString &name );
+	virtual void setIcon( const QImage &icon );
+
+public:
+	enum class Show_Type {
+		All,
+		Txt,
+		Icon
+	};
 
 protected:
 	bool click = false;
-	OpetionListWidget *opetionListWidget;
-	OptionItem *bindItem;
+	Show_Type show;
+	~OptionButton( ) override;
 
 public:
-	OptionButton( OpetionListWidget *opetion_list_widget, OptionItem *bind_item );
-	~OptionButton( ) override;
-	virtual OpetionListWidget * getOpetionListWidget( ) const;
-	virtual OptionItem * getBindItem( ) const;
+	OptionButton( OptionWindow *option_window, const QString &name, const QImage &icon );
 	virtual bool isClick( ) const;
+	virtual Show_Type getShow( ) const;
+	virtual void setShow( const Show_Type show );
+	virtual QSize updateSize( );
 
 protected:
 	void paintEvent( QPaintEvent * ) override;

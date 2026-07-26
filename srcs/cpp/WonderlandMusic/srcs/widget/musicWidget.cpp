@@ -10,9 +10,6 @@ MusicWidget::MusicWidget( OptionWindow *parent ) : FavoriteWindow( parent ), Opt
 MusicWidget::~MusicWidget( ) {
 }
 
-void MusicWidget::response( ) {
-}
-
 QWidget * MusicWidget::toWidget( ) {
 	return this;
 }

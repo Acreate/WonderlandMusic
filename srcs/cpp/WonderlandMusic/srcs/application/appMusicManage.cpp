@@ -5,6 +5,11 @@
 #include "appInstance.h"
 #include "appMusicDecoder.h"
 #include "applicationManage.h"
+
+#include "../head/after_init_macro.h"
+#include "../head/before_init_macro.h"
+#include "../head/init_macro.h"
+
 #include "../mutex/userMutex.h"
 #include "../tools/appJsonKeyTools.h"
 #include "../tools/pathTools.h"

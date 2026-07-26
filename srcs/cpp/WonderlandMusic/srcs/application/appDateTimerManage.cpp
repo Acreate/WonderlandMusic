@@ -2,6 +2,8 @@
 
 #include <QDateTime>
 
+#include "../head/release_macro.h"
+
 bool AppDateTimerManage::init( ) {
 	return true;
 }

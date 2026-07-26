@@ -1,6 +1,12 @@
 ﻿#include "appMenuManage.h"
 #include <qscreen.h>
 #include "appDataManage.h"
+
+#include "../head/after_init_macro.h"
+#include "../head/before_init_macro.h"
+#include "../head/init_macro.h"
+#include "../head/release_macro.h"
+
 #include "../menu/favoriteWidgetMenu.h"
 #include "../menu/playerListWidgetMenu.h"
 #include "../menu/systemTrayIconMenu.h"

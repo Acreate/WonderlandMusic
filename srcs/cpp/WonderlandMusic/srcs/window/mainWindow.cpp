@@ -9,6 +9,13 @@
 #include "../application/jsonKey/mainWindowJsonKey.h"
 #include "../application/translate/mainWindowTranslate.h"
 #include "../component/optionWindow/optionWindow.h"
+
+#include "../head/after_init_macro.h"
+#include "../head/before_init_macro.h"
+#include "../head/component_assert_macro.h"
+#include "../head/init_macro.h"
+#include "../head/release_macro.h"
+
 #include "../msgInfo/messageErrorOut.h"
 #include "../tools/pathTools.h"
 #include "../widget/aboutWidget.h"
@@ -107,12 +114,6 @@ MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 
 bool MainWindow::init( ) {
 	Init_Resource_App_Core_Ptr( optionWindow );
-	if( optionWindow->addOptionPanel( new MusicWidget( optionWindow ) ) == false )
-		return false;
-	if( optionWindow->addOptionPanel( new SettingWidget( optionWindow ) ) == false )
-		return false;
-	if( optionWindow->addOptionPanel( new AboutWidget( optionWindow ) ) == false )
-		return false;
 	return true;
 }
 
@@ -132,7 +133,14 @@ bool MainWindow::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( optionWindow );
 
 	setCentralWidget( optionWindow );
+	OptionPanel *optionPanel;
 
+	optionPanel = new MusicWidget( optionWindow );
+	Component_Assert_Ptr( optionPanel, getOptionWindow( ) );
+	optionPanel = new SettingWidget( optionWindow );
+	Component_Assert_Ptr( optionPanel, getOptionWindow( ) );
+	optionPanel = new AboutWidget( optionWindow );
+	Component_Assert_Ptr( optionPanel, getOptionWindow( ) );
 	optionWindow->show( );
 	return true;
 }

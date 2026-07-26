@@ -1,5 +1,10 @@
 ﻿#include "appDataJsonKey.h"
 #include "appInstance.h"
+
+#include "../head/init_macro.h"
+#include "../head/release_macro.h"
+
+
 #include "jsonKey/aboutWidgetJsonKey.h"
 #include "jsonKey/appDataManageJsonKey.h"
 #include "jsonKey/appMusicManageJsonKey.h"

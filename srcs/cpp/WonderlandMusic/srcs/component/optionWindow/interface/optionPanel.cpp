@@ -1,6 +1,8 @@
 ﻿#include "optionPanel.h"
+
 #include "../optionWindow.h"
-#include "../optionItem/optionItem.h"
+
+#include "../optionButton/optionButton.h"
 
 OptionPanel::OptionPanel( OptionWindow *option_window ) : OptionPanel( option_window, "", QImage( ) ) {
 }
@@ -11,39 +13,30 @@ OptionPanel::OptionPanel( OptionWindow *option_window, const QString &name ) : O
 OptionPanel::OptionPanel( OptionWindow *option_window, const QImage &icon ) : OptionPanel( option_window, "", icon ) {
 }
 
-OptionPanel::OptionPanel( OptionWindow *option_window, const QString &name, const QImage &icon ) : optionWindow( option_window ), name( name ), icon( icon ) {
-	optionItem = new OptionItem( OptionItem::Show_Type::All );
+OptionPanel::OptionPanel( OptionWindow *option_window, const QString &name, const QImage &icon ) {
+	if( option_window == nullptr )
+		return;
+	optionButton = new OptionButton( option_window, name, icon );
+	if( option_window->addOptionPanel( this ) )
+		optionWindow = option_window;
 }
 
 OptionPanel::~OptionPanel( ) {
-	emit optionItem->signal_delete_OptionPanel( this );
-	delete optionItem;
+	if( optionWindow )
+		optionWindow->deleteOptionPanel( this );
+	delete optionButton;
+}
+void OptionPanel::setName( const QString &name ) {
+}
+void OptionPanel::setIcon( const QImage &icon ) {
+}
+const QString & OptionPanel::getName( ) const {
+	return optionButton->getName( );
+}
+const QImage & OptionPanel::getIcon( ) const {
+	return optionButton->getIcon( );
 }
 
 OptionWindow * OptionPanel::getOptionWindow( ) const {
 	return optionWindow;
-}
-
-OptionItem * OptionPanel::getOptionItem( ) const {
-	return optionItem;
-}
-
-const QString & OptionPanel::getName( ) const {
-	return name;
-}
-
-void OptionPanel::setName( const QString &name ) {
-	this->name = name;
-}
-
-const QImage & OptionPanel::getIcon( ) const {
-	return icon;
-}
-
-void OptionPanel::setIcon( const QImage &icon ) {
-	this->icon = icon;
-}
-
-void OptionPanel::updateInfo( ) {
-	optionWindow->updateOptionPanelInfo( this );
 }

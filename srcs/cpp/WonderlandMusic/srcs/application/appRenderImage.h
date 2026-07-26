@@ -2,6 +2,7 @@
 #define APPRENDERIMAGE_H_H_HEAD__FILE__
 #include "../interface/iAppCore.h"
 
+class QSize;
 class QWidget;
 class QPen;
 class QColor;
@@ -17,11 +18,11 @@ protected:
 	QColor *brackGroundColor = nullptr;
 	QColor *drawPenColor = nullptr;
 	QPen *drawPen = nullptr;
-	int fontMetricsHeight;
-	int fontMetricsAscent;
 
 protected:
 	bool deleteResource( ) override;
+	virtual bool renderTxt( QImage &result_render_image, const QString &render_txt, const QFont &font, const QFontMetrics &font_metrics ) const;
+	virtual bool getTxtSize( QSize &result_txt_size, const QString &render_txt, const QFontMetrics &font_metrics ) const;
 
 public:
 	AppRenderImage( );
@@ -39,7 +40,10 @@ public:
 	virtual const QFontMetrics * getFontMetrics( ) const;
 
 	virtual bool renderTxt( QImage &result_render_image, const QString &render_txt ) const;
+	virtual bool renderTxt( QImage &result_render_image, const QString &render_txt, const QFont &font ) const;
 
+	virtual bool getTxtSize( QSize &result_txt_size, const QString &render_txt, const QFont &font ) const;
+	virtual bool getTxtSize( QSize &result_txt_size, const QString &render_txt ) const;
 	virtual bool renderWidget( QImage &result_render_image, QWidget *render_widget ) const;
 };
 #endif // APPRENDERIMAGE_H_H_HEAD__FILE__

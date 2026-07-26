@@ -1,7 +1,10 @@
 ﻿#ifndef APPMENUMANAGE_H_H_HEAD__FILE__
 #define APPMENUMANAGE_H_H_HEAD__FILE__
+#include <QObject>
+
 #include "../interface/iAppCore.h"
 
+class QPoint;
 class FavoriteWidgetMenu;
 class PlayerListWidgetMenu;
 class SystemTrayIconMenu;

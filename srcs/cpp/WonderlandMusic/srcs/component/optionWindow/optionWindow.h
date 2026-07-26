@@ -3,8 +3,9 @@
 #include <QMainWindow>
 #include "../../interface/iAppCore.h"
 #include "../../interface/iAppJsonData.h"
-class OpetionContentsWidget;
-class OpetionListWidget;
+class OptionListDockWidget;
+class OptionContentsWidget;
+class OptionListWidget;
 class UserMutex;
 class OptionPanel;
 class OptionItem;
@@ -14,8 +15,8 @@ class OptionWindow : public QMainWindow, public IAppCore, public IAppJsonData {
 
 protected:
 	UserMutex *mutex = nullptr;
-	OpetionListWidget *opetionListWidget = nullptr;
-	OpetionContentsWidget *opetionContentsWidget = nullptr;
+	OptionListDockWidget *optionListDockWidget = nullptr;
+	OptionContentsWidget *opetionContentsWidget = nullptr;
 	std::vector< OptionPanel * > optionPanelVector;
 
 protected Q_SLOTS:
@@ -30,6 +31,7 @@ public:
 	virtual bool getOptionPanelIndex( size_t &result_index, const OptionPanel *option_panel );
 	virtual bool moveOptionPanelIndex( const OptionPanel *option_panel, const size_t &target_index );
 	virtual void updateWindow( );
+	virtual bool showOptionPanel( OptionPanel *option_panel );
 
 protected:
 	bool deleteResource( ) override;
@@ -40,5 +42,7 @@ public:
 	bool initAfter( ) override;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
+Q_SIGNALS:
+	void signal_show_OptionPanel( OptionPanel *option_panel );
 };
 #endif // OPTIONWINDOW_H_H_HEAD__FILE__

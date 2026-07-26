@@ -2,6 +2,10 @@
 #include <QTextCodec>
 #include "appDataManage.h"
 #include "appInstance.h"
+
+#include "../head/init_macro.h"
+#include "../head/release_macro.h"
+
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/appMusicManageTranslate.h"
 #include "translate/dateTimeFormatTranslate.h"

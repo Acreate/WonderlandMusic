@@ -1,7 +1,11 @@
 ﻿#ifndef APPDATETIMERMANAGE_H_H_HEAD__FILE__
 #define APPDATETIMERMANAGE_H_H_HEAD__FILE__
 
+#include <QObject>
+
 #include "../interface/iAppCore.h"
+
+class QDateTime;
 
 class AppDateTimerManage : public QObject, public IAppCore {
 protected:

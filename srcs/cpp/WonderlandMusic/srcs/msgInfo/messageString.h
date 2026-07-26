@@ -6,6 +6,11 @@ namespace std {
 	struct source_location;
 }
 
+template< typename T >
+const char * getTypeName( T *ty ) {
+	return typeid( T ).name( );
+}
+
 class MessageString {
 protected:
 	QStringList messageList;

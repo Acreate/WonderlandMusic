@@ -1,6 +1,5 @@
 ﻿#ifndef ABOUTAPPLICATIONWIDGET_H_H_HEAD__FILE__
 #define ABOUTAPPLICATIONWIDGET_H_H_HEAD__FILE__
-#include <QWidget>
 #include "../component/optionWindow/interface/optionPanel.h"
 class QTextEdit;
 class QHBoxLayout;
@@ -23,13 +22,13 @@ public:
 	AboutWidget( OptionWindow *parent );
 	bool init( ) override;
 	~AboutWidget( ) override;
-	void response( ) override;
-	QWidget * toWidget( ) override;
 
 protected:
 	bool deleteResource( ) override;
 
 public:
+	QWidget * toWidget( ) override;
+
 	bool initBefore( ) override;
 	bool initAfter( ) override;
 	bool getJsonData( QJsonObject &get_json_object ) const override;

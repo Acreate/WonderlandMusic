@@ -9,13 +9,13 @@ class MusicWidget : public FavoriteWindow, public OptionPanel {
 public:
 	MusicWidget( OptionWindow *parent );
 	~MusicWidget( ) override;
-	void response( ) override;
-	QWidget * toWidget( ) override;
 
 protected:
 	bool deleteResource( ) override;
 
 public:
+	QWidget * toWidget( ) override;
+
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;

@@ -2,8 +2,6 @@
 
 #include "../optionWindow.h"
 
-#include "../optionButton/optionButton.h"
-
 OptionPanel::OptionPanel( ) : OptionPanel( "", QImage( ) ) {
 }
 

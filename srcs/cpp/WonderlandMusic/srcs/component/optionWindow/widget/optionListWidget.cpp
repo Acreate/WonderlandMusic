@@ -53,6 +53,8 @@ void OptionListWidget::updateOptionButtonLayout( ) {
 			optionButton = data[ index ];
 			if( optionButton == nullptr )
 				continue;
+			optionButton->setParent( this );
+			optionButton->show( );
 			optionButton->updateSize( );
 			optionButton->move( 0, suggestHeight );
 			int width = optionButton->width( );
@@ -73,9 +75,16 @@ int OptionListWidget::getSuggestHeight( ) const {
 QSize OptionListWidget::getSuggestSize( ) const {
 	return QSize( suggestWidth, suggestHeight );
 }
+void OptionListWidget::toSuggestSize( ) {
+	setFixedSize( suggestWidth, suggestHeight );
+}
+void OptionListWidget::setSuggestSize( ) {
+	updateOptionButtonLayout( );
+	setFixedSize( suggestWidth, suggestHeight );
+}
 void OptionListWidget::paintEvent( QPaintEvent *event ) {
 	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::red );
+	//painter.fillRect( contentsRect( ), Qt::GlobalColor::red );
 }
 
 void OptionListWidget::addOptionButton( OptionButton *option_item ) {

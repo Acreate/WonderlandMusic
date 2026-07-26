@@ -22,14 +22,14 @@ public:
 
 protected:
 	bool click = false;
-	Show_Type show;
+	Show_Type showType = Show_Type::All;
 	~OptionButton( ) override;
 
 public:
 	OptionButton( OptionWindow *option_window );
 	virtual bool isClick( ) const;
-	virtual Show_Type getShow( ) const;
-	virtual void setShow( const Show_Type show );
+	virtual Show_Type getShowType( ) const;
+	virtual void setShowType( const Show_Type show );
 	virtual QSize updateSize( );
 
 protected:

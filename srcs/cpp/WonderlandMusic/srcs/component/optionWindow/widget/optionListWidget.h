@@ -34,6 +34,8 @@ public:
 	virtual int getSuggestWidth( ) const;
 	virtual int getSuggestHeight( ) const;
 	virtual QSize getSuggestSize( ) const;
+	virtual void toSuggestSize( );
+	virtual void setSuggestSize( );
 
 protected:
 	void paintEvent( QPaintEvent *event ) override;

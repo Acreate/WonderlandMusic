@@ -65,6 +65,7 @@ bool AppRenderImage::renderTxt( QImage &result_render_image, const QString &rend
 	auto buffImage = QImage( renderWidth, fontMetrics->height( ), QImage::Format_RGBA8888 );
 	if( buffImage.isNull( ) )
 		return false;
+	buffImage.fill( 0 );
 	QPainter painter;
 	painter.begin( &buffImage );
 	painter.fillRect( 0, 0, renderWidth, fontMetrics->height( ), *brackGroundColor );

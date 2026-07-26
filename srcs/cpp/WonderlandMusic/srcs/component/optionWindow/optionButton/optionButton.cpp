@@ -18,11 +18,12 @@ OptionButton::OptionButton( OptionWindow *option_window ) : optionWindow( option
 bool OptionButton::isClick( ) const {
 	return click;
 }
-OptionButton::Show_Type OptionButton::getShow( ) const {
-	return show;
+OptionButton::Show_Type OptionButton::getShowType( ) const {
+	return showType;
 }
-void OptionButton::setShow( const Show_Type show ) {
-	this->show = show;
+void OptionButton::setShowType( const Show_Type show ) {
+	showType = show;
+	updateSize( );
 	update( );
 }
 QSize OptionButton::updateSize( ) {
@@ -32,18 +33,26 @@ QSize OptionButton::updateSize( ) {
 	auto appRenderImage = appDrawManage->getAppRenderImage( );
 	QSize result( 0, 0 );
 
-	switch( show ) {
+	switch( showType ) {
 		case Show_Type::Txt :
 			appRenderImage->getTxtSize( result, optionPanel->getName( ) );
 			break;
-		case Show_Type::Icon :
-			result = optionPanel->getIcon( ).size( );
-			break;
+		case Show_Type::Icon : {
+			auto &image = optionPanel->getIcon( );
+			if( image.isNull( ) )
+				break;
+			result = image.size( );
+		}
+		break;
 		case Show_Type::All : {
 			appRenderImage->getTxtSize( result, optionPanel->getName( ) );
-			int w = result.width( );
-			auto icon = optionPanel->getIcon( ).scaledToWidth( w );
-			result.setWidth( icon.width( ) + w );
+			auto &image = optionPanel->getIcon( );
+			if( image.isNull( ) == false ) {
+				int w = result.width( );
+				auto icon = image.scaledToWidth( w );
+				result.setWidth( icon.width( ) + w );
+				break;
+			}
 		}
 		break;
 	}
@@ -60,7 +69,7 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 	QPainter painter( this );
 	int offsetX = 0;
 	QImage renderIcon;
-	switch( show ) {
+	switch( showType ) {
 		case Show_Type::Txt : {
 			auto &name = optionPanel->getName( );
 			if( name.isEmpty( ) == false ) {

@@ -96,6 +96,8 @@ void OptionWindow::deleteAllOptionPanel( ) {
 		delete optionPanel;
 	}
 }
+void OptionWindow::updateOptionButtonSize( OptionButton *option_button ) {
+}
 
 OptionWindow::OptionWindow( QWidget *paretn ) : QMainWindow( paretn ) {
 }
@@ -123,17 +125,23 @@ bool OptionWindow::addOptionPanel( OptionPanel *option_panel ) {
 	option_panel->optionButton->optionPanel = option_panel;
 	option_panel->optionButton->optionWindow = this;
 
+	mutex->lock( );
+	optionPanelVector.emplace_back( option_panel );
+	mutex->unlock( );
+
 	if( option_panel->initBefore( ) == false || option_panel->init( ) == false || option_panel->initAfter( ) == false ) {
 		option_panel->optionButton->optionWindow = nullptr;
 		option_panel->optionButton->optionPanel = nullptr;
 		delete option_panel->optionButton;
 		option_panel->optionButton = nullptr;
+
+		mutex->lock( );
+		removeOptionPanel( option_panel );
+		mutex->unlock( );
+
 		return false;
 	}
-	mutex->lock( );
-	optionPanelVector.emplace_back( option_panel );
 	optionListDockWidget->optionListWidget->addOptionButton( option_panel->optionButton );
-	mutex->unlock( );
 	updateWindow( );
 	return true;
 }
@@ -198,7 +206,8 @@ bool OptionWindow::moveOptionPanelIndex( const OptionPanel *option_panel, const 
 void OptionWindow::updateWindow( ) {
 	if( optionListDockWidget == nullptr )
 		return;
-	optionListDockWidget->optionListWidget->updateOptionButtonLayout( );
+	optionListDockWidget->optionListWidget->setSuggestSize( );
+	optionListDockWidget->optionListWidget->update( );
 }
 bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 	size_t index;

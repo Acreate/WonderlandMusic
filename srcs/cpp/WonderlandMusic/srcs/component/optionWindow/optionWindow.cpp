@@ -1,4 +1,5 @@
 ﻿#include "optionWindow.h"
+#include <QScrollBar>
 
 #include "../../head/after_init_macro.h"
 #include "../../head/before_init_macro.h"
@@ -206,8 +207,7 @@ bool OptionWindow::moveOptionPanelIndex( const OptionPanel *option_panel, const 
 void OptionWindow::updateWindow( ) {
 	if( optionListDockWidget == nullptr )
 		return;
-	optionListDockWidget->optionListWidget->setSuggestSize( );
-	optionListDockWidget->optionListWidget->update( );
+	optionListDockWidget->updateOptionButtonLayout( );
 }
 bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 	size_t index;
@@ -280,6 +280,22 @@ bool OptionWindow::init( ) {
 bool OptionWindow::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( optionListDockWidget );
 	After_Init_Resource_App_Core_Ptr( optionContentsScroll );
+
+	setStyleSheet( R"(
+QMainWindow::separator {
+    background: transparent;
+    width: 0px;    /* 垂直分隔条宽度 */
+    height: 0px;   /* 水平分隔条高度 */
+    border: none;
+}
+/* 可选：hover时依然保留拖拽手感，按需开启 */
+QMainWindow::separator:hover {
+    background: rgba(128,128,128,0.2);
+    width: 3px;
+    height: 3px;
+}
+)" );
+
 	return true;
 }
 

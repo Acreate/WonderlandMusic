@@ -133,6 +133,7 @@ bool MainWindow::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( optionWindow );
 
 	setCentralWidget( optionWindow );
+	optionWindow->show( );
 	auto musicWidget = new MusicWidget( optionWindow );
 	if( optionWindow->addOptionPanel( musicWidget ) == false )
 		return false;
@@ -142,7 +143,6 @@ bool MainWindow::initAfter( ) {
 	auto aboutWidget = new AboutWidget( optionWindow );
 	if( optionWindow->addOptionPanel( aboutWidget ) == false )
 		return false;
-	optionWindow->show( );
 	return true;
 }
 

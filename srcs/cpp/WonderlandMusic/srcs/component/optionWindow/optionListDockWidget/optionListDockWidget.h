@@ -29,9 +29,6 @@ public:
 	virtual OptionListWidget * getOptionListWidget( ) const;
 
 	virtual void updateOptionButtonLayout( );
-	virtual int getSuggestWidth( ) const;
-	virtual int getSuggestHeight( ) const;
-	virtual QSize getSuggestSize( ) const;
 
 protected:
 	bool deleteResource( ) override;

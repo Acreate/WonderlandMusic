@@ -2,6 +2,8 @@
 
 #include <QMenu>
 #include <QScrollArea>
+#include <qlayout.h>
+#include <qstyle.h>
 
 #include "../optionWindow.h"
 
@@ -23,16 +25,16 @@ OptionListWidget * OptionListDockWidget::getOptionListWidget( ) const {
 	return optionListWidget;
 }
 void OptionListDockWidget::updateOptionButtonLayout( ) {
-	optionListWidget->updateOptionButtonLayout( );
-}
-int OptionListDockWidget::getSuggestWidth( ) const {
-	return optionListWidget->getSuggestWidth( );
-}
-int OptionListDockWidget::getSuggestHeight( ) const {
-	return optionListWidget->getSuggestHeight( );
-}
-QSize OptionListDockWidget::getSuggestSize( ) const {
-	return optionListWidget->getSuggestSize( );
+	optionListWidget->setSuggestSize( );
+	int newWidth = optionListWidget->width( );
+	auto verticalScrollBar = scrollArea->verticalScrollBar( );
+	if( verticalScrollBar && scrollArea->isVisible( ) ) {
+		auto style = scrollArea->style( );
+		int scrollBarWidth = style->pixelMetric( QStyle::PM_ScrollBarExtent, nullptr, scrollArea );
+		newWidth += scrollBarWidth;
+	}
+	setFixedWidth( newWidth );
+	optionListWidget->update( );
 }
 bool OptionListDockWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( dockTitleWidget );
@@ -55,10 +57,31 @@ bool OptionListDockWidget::init( ) {
 }
 bool OptionListDockWidget::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( optionListWidget );
+
+	setStyleSheet( R"(
+QDockWidget {
+    border: none;
+}
+/* 内容容器，消除内部暗线 */
+QDockWidget > QWidget {
+    border: none;
+}
+/* 标题栏不要额外边框 */
+QDockWidget::title {
+    border: none;
+}
+)" );
+
 	scrollArea->setWidget( optionListWidget );
 	scrollArea->setWidgetResizable( true );
-	scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+	scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	auto mainLayout = layout( );
+
+	if( mainLayout ) {
+		mainLayout->setContentsMargins( 0, 0, 0, 0 );
+		mainLayout->setSpacing( 0 );
+	}
 	setWidget( scrollArea );
 	setTitleBarWidget( dockTitleWidget );
 	setContextMenuPolicy( Qt::NoContextMenu );
@@ -66,6 +89,5 @@ bool OptionListDockWidget::initAfter( ) {
 	setAllowedAreas( Qt::LeftDockWidgetArea );
 	setFloating( false );
 	optionWindow->addDockWidget( Qt::LeftDockWidgetArea, this );
-
 	return true;
 }

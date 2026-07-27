@@ -29,5 +29,7 @@ public:
 	bool initAfter( ) override;
 
 	virtual AppMusicDecoder * getAppMusicDecoder( ) const;
+	virtual bool getMusicWindowInfoJsonData( QJsonObject &result_json_object );
+	virtual bool setMusicWindowInfoJsonData( const QJsonObject &result_json_object );
 };
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

@@ -18,7 +18,7 @@ namespace AppTranslateTools {
 	Declaration_Get_Translate( AppMusicManage );
 	Declaration_Get_Translate( DeleteException );
 	Declaration_Get_Translate( DeleteException );
-	Declaration_Get_Translate( MusicWidget );
+	Declaration_Get_Translate( MusicWindow );
 	Declaration_Get_Translate( SettingWidget );
 	Declaration_Get_Translate( PlayerListWidgetMenu );
 	Declaration_Get_Translate( FavoriteWidgetMenu );

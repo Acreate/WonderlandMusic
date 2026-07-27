@@ -63,6 +63,12 @@ bool AppMusicManage::initAfter( ) {
 AppMusicDecoder * AppMusicManage::getAppMusicDecoder( ) const {
 	return appMusicDecoder;
 }
+bool AppMusicManage::getMusicWindowInfoJsonData( QJsonObject &result_json_object ) {
+	return false;
+}
+bool AppMusicManage::setMusicWindowInfoJsonData( const QJsonObject &result_json_object ) {
+	return false;
+}
 
 bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {
 	QString jsonObejctJsonKey;

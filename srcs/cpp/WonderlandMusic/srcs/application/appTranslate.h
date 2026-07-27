@@ -15,7 +15,7 @@ protected:
 	UserMutexTranslate *userMutex = nullptr;
 	AppMusicManageTranslate *appMusicManage = nullptr;
 	DeleteExceptionTranslate *deleteException = nullptr;
-	MusicWidgetTranslate *musicWidget = nullptr;
+	MusicWindowTranslate *musicWindow = nullptr;
 	SettingWidgetTranslate *settingWidget = nullptr;
 	PlayerListWidgetMenuTranslate *playerListWidgetMenu = nullptr;
 	FavoriteWidgetMenuTranslate *favoriteWidgetMenu = nullptr;
@@ -37,7 +37,7 @@ public:
 	virtual UserMutexTranslate * getUserMutex( ) const;
 	virtual AppMusicManageTranslate * getAppMusicManage( ) const;
 	virtual DeleteExceptionTranslate * getDeleteException( ) const;
-	virtual MusicWidgetTranslate * getMusicWidget( ) const;
+	virtual MusicWindowTranslate * getMusicWindow( ) const;
 	virtual SettingWidgetTranslate * getSettingWidget( ) const;
 	virtual PlayerListWidgetMenuTranslate * getPlayerListWidgetMenu( ) const;
 	virtual FavoriteWidgetMenuTranslate * getFavoriteWidgetMenu( ) const;

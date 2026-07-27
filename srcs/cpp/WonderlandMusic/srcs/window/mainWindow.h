@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include "../interface/iAppCore.h"
 #include "../interface/iAppJsonData.h"
+class MusicWindow;
 class OptionWindow;
 class JsonFileKey;
 class QStackedWidget;
@@ -17,6 +18,8 @@ class MainWindow : public QMainWindow, public IAppCore, public IAppJsonData {
 
 protected:
 	OptionWindow *optionWindow = nullptr;
+	MusicWindow *musicWindow = nullptr;
+	SettingWidget *settingWidget = nullptr;
 	AboutWidget *aboutWidget = nullptr;
 
 public:

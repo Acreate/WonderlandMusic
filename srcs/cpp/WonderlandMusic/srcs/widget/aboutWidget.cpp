@@ -55,9 +55,14 @@ bool AboutWidget::init( ) {
 
 	auto pixmap = QPixmap::fromImage( qImage );
 	qtIco->setPixmap( pixmap );
+	qtIco->adjustSize( );
+	qtIco->update( );
 	textBox->setReadOnly( true );
 	textBox->setText( getSoftwareProtocolInfo( ) );
 	textBox->setAutoFormatting( QTextEdit::AutoAll );
+	textBox->adjustSize( );
+	textBox->update( );
+	mainLayout->update( );
 	return true;
 }
 

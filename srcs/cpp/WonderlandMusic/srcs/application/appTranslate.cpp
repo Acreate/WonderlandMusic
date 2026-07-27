@@ -14,7 +14,7 @@
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
-#include "translate/musicWidgetTranslate.h"
+#include "translate/musicWindowTranslate.h"
 #include "translate/playerListWidgetMenuTranslate.h"
 #include "translate/settingWidgetTranslate.h"
 #include "translate/systemTrayIconMenuTranslate.h"
@@ -47,7 +47,7 @@ bool AppTranslate::initBefore( ) {
 	userMutex = new UserMutexTranslate;
 	appMusicManage = new AppMusicManageTranslate;
 	deleteException = new DeleteExceptionTranslate;
-	musicWidget = new MusicWidgetTranslate;
+	musicWindow = new MusicWindowTranslate;
 	settingWidget = new SettingWidgetTranslate;
 	playerListWidgetMenu = new PlayerListWidgetMenuTranslate;
 	favoriteWidgetMenu = new FavoriteWidgetMenuTranslate;
@@ -69,7 +69,7 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( userMutex );
 	Delete_Resource_App_Core_Ptr( appMusicManage );
 	Delete_Resource_App_Core_Ptr( deleteException );
-	Delete_Resource_App_Core_Ptr( musicWidget );
+	Delete_Resource_App_Core_Ptr( musicWindow );
 	Delete_Resource_App_Core_Ptr( settingWidget );
 	Delete_Resource_App_Core_Ptr( playerListWidgetMenu );
 	Delete_Resource_App_Core_Ptr( favoriteWidgetMenu );
@@ -91,7 +91,7 @@ bool AppTranslate::init( ) {
 	Init_Resource_App_Core_Ptr( userMutex );
 	Init_Resource_App_Core_Ptr( appMusicManage );
 	Init_Resource_App_Core_Ptr( deleteException );
-	Init_Resource_App_Core_Ptr( musicWidget );
+	Init_Resource_App_Core_Ptr( musicWindow );
 	Init_Resource_App_Core_Ptr( settingWidget );
 	Init_Resource_App_Core_Ptr( playerListWidgetMenu );
 	Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
@@ -138,9 +138,8 @@ AppMusicManageTranslate * AppTranslate::getAppMusicManage( ) const {
 DeleteExceptionTranslate * AppTranslate::getDeleteException( ) const {
 	return deleteException;
 }
-
-MusicWidgetTranslate * AppTranslate::getMusicWidget( ) const {
-	return musicWidget;
+MusicWindowTranslate * AppTranslate::getMusicWindow( ) const {
+	return musicWindow;
 }
 
 SettingWidgetTranslate * AppTranslate::getSettingWidget( ) const {

@@ -10,9 +10,9 @@ class AboutWidgetTranslate;
 class DateTimeFormatTranslate;
 class JsonTranslate;
 class MessageTranslate;
-class MusicWidgetTranslate;
 class SettingWidgetTranslate;
 class PlayerListWidgetMenuTranslate;
 class FavoriteWidgetMenuTranslate;
+class MusicWindowTranslate;
 class AppTranslate;
 #endif // HEAD_TRANSLATE_CLASS_H_H_HEAD__FILE__

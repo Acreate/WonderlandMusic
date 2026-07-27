@@ -4,22 +4,23 @@
 #include "../application/appDataJsonKey.h"
 #include "../application/appDataManage.h"
 #include "../application/appInstance.h"
+#include "../application/appMusicManage.h"
 #include "../application/appTranslate.h"
 #include "../application/applicationManage.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
 #include "../application/translate/mainWindowTranslate.h"
+
+#include "../component/musicWindow/musicWindow.h"
 #include "../component/optionWindow/optionWindow.h"
 
 #include "../head/after_init_macro.h"
 #include "../head/before_init_macro.h"
-#include "../head/component_assert_macro.h"
 #include "../head/init_macro.h"
 #include "../head/release_macro.h"
 
 #include "../msgInfo/messageErrorOut.h"
 #include "../tools/pathTools.h"
 #include "../widget/aboutWidget.h"
-#include "../widget/musicWidget.h"
 #include "../widget/settingWidget.h"
 
 MainWindow::MainWindow( QWidget *parent ) : MainWindow( parent, Qt::WindowFlags( ) ) {
@@ -134,22 +135,35 @@ bool MainWindow::initAfter( ) {
 
 	setCentralWidget( optionWindow );
 	optionWindow->show( );
-	auto musicWidget = new MusicWidget( optionWindow );
-	if( optionWindow->addOptionPanel( musicWidget ) == false )
+	musicWindow = new MusicWindow( );
+	if( optionWindow->addOptionPanel( musicWindow ) == false )
 		return false;
-	auto settingWidget = new SettingWidget( optionWindow );
+	settingWidget = new SettingWidget( optionWindow );
 	if( optionWindow->addOptionPanel( settingWidget ) == false )
 		return false;
-	auto aboutWidget = new AboutWidget( optionWindow );
+	aboutWidget = new AboutWidget( optionWindow );
 	if( optionWindow->addOptionPanel( aboutWidget ) == false )
 		return false;
-	if( optionWindow->showOptionPanel( musicWidget ) == false )
+	QJsonObject musicJsonObject;
+	if( AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( )->getMusicWindowInfoJsonData( musicJsonObject ) )
+		musicWindow->setJsonData( musicJsonObject );
+	if( optionWindow->showOptionPanel( musicWindow ) == false )
 		return false;
 	return true;
 }
 
 bool MainWindow::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( optionWindow );
+	if( optionWindow ) {
+		if( musicWindow ) {
+			QJsonObject musicInfo;
+			if( musicWindow->getJsonData( musicInfo ) )
+				AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( )->setMusicWindowInfoJsonData( musicInfo );
+		}
+		Delete_Resource_App_Core_Ptr( optionWindow );
+		musicWindow = nullptr;
+		settingWidget = nullptr;
+		aboutWidget = nullptr;
+	}
 	return true;
 }
 

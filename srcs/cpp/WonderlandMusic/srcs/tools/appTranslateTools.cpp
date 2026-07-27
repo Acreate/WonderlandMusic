@@ -10,7 +10,7 @@
 #include "../application/translate/jsonTranslate.h"
 #include "../application/translate/mainWindowTranslate.h"
 #include "../application/translate/messageTranslate.h"
-#include "../application/translate/musicWidgetTranslate.h"
+#include "../application/translate/musicWindowTranslate.h"
 #include "../application/translate/playerListWidgetMenuTranslate.h"
 #include "../application/translate/settingWidgetTranslate.h"
 #include "../application/translate/systemTrayIconMenuTranslate.h"
@@ -56,7 +56,7 @@ Defininition_Get_Translate( UserMutex );
 Defininition_Get_Translate( AppMusicManage );
 Defininition_Get_Translate( DeleteException );
 Defininition_Get_Translate( Message );
-Defininition_Get_Translate( MusicWidget );
+Defininition_Get_Translate( MusicWindow );
 Defininition_Get_Translate( SettingWidget );
 Defininition_Get_Translate( PlayerListWidgetMenu );
 Defininition_Get_Translate( FavoriteWidgetMenu );

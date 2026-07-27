@@ -234,8 +234,14 @@ bool OptionWindow::showOptionPanel( ) {
 		return false;
 	mutex->lock( );
 	takeCentralWidget( );
-	setCentralWidget( currentOptionPanelWidget->toWidget( ) );
+	auto widget = currentOptionPanelWidget->toWidget( );
+	if( widget ) {
+		setCentralWidget( widget );
+		widget->adjustSize( );
+		adjustSize( );
+	}
 	mutex->unlock( );
+	emit signal_show_OptionPanel( currentOptionPanelWidget );
 	return true;
 }
 bool OptionWindow::hideOptionPanel( OptionPanel *option_panel ) {
@@ -259,16 +265,19 @@ bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 	mutex->lock( );
 	currentOptionPanelWidget = option_panel;
 	takeCentralWidget( );
-	setCentralWidget( currentOptionPanelWidget->toWidget( ) );
+	auto widget = currentOptionPanelWidget->toWidget( );
+	if( widget ) {
+		setCentralWidget( widget );
+		widget->adjustSize( );
+		adjustSize( );
+	}
 	mutex->unlock( );
+
+	emit signal_show_OptionPanel( option_panel );
 	return true;
 }
 bool OptionWindow::showOptionButton( OptionButton *option_button ) {
-	size_t index;
-	if( getOptionButtonIndex( index, option_button ) == false || option_button->optionWindow != this )
-		return false;
-	showOptionPanel( option_button->optionPanel );
-	return true;
+	return showOptionPanel( option_button->optionPanel );
 }
 bool OptionWindow::setOptionPanelName( OptionPanel *option_panel, const QString &name ) {
 	size_t index;

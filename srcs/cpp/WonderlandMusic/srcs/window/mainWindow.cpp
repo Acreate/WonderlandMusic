@@ -143,6 +143,8 @@ bool MainWindow::initAfter( ) {
 	auto aboutWidget = new AboutWidget( optionWindow );
 	if( optionWindow->addOptionPanel( aboutWidget ) == false )
 		return false;
+	if( optionWindow->showOptionPanel( musicWidget ) == false )
+		return false;
 	return true;
 }
 

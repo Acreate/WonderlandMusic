@@ -2,8 +2,6 @@
 
 #include "../optionWindow.h"
 
-#include "../optionContentsScroll/optionContentsScroll.h"
-
 OptionPanel::OptionPanel( ) : OptionPanel( "", QImage( ) ) {
 }
 
@@ -21,12 +19,6 @@ OptionPanel::~OptionPanel( ) {
 		optionWindow->removeOptionPanel( this );
 	delete name;
 	delete icon;
-}
-void OptionPanel::setVerticalScrollBarPolicy( Qt::ScrollBarPolicy policy ) {
-	optionContentsScroll->setVerticalScrollBarPolicy( policy );
-}
-void OptionPanel::setHorizontalScrollBarPolicy( Qt::ScrollBarPolicy policy ) {
-	optionContentsScroll->setHorizontalScrollBarPolicy( policy );
 }
 void OptionPanel::setName( const QString &name ) {
 	if( optionWindow == nullptr )

@@ -77,8 +77,6 @@ QWidget * AboutWidget::toWidget( ) {
 
 bool AboutWidget::initBefore( ) {
 	deleteResource( );
-	setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	mainLayout = new QHBoxLayout( this );
 
 	qtIco = new QLabel( this );

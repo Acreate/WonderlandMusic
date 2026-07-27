@@ -4,9 +4,7 @@
 #include "../../interface/iAppCore.h"
 #include "../../interface/iAppJsonData.h"
 class OptionButton;
-class OptionContentsScroll;
 class OptionListDockWidget;
-class OptionContentsWidget;
 class OptionListWidget;
 class UserMutex;
 class OptionPanel;
@@ -20,8 +18,8 @@ class OptionWindow : public QMainWindow, public IAppCore, public IAppJsonData {
 protected:
 	UserMutex *mutex = nullptr;
 	OptionListDockWidget *optionListDockWidget = nullptr;
-	OptionContentsScroll *optionContentsScroll = nullptr;
 	std::vector< OptionPanel * > optionPanelVector;
+	OptionPanel *currentOptionPanelWidget = nullptr;
 
 protected :
 	virtual void removeOptionPanel( OptionPanel *option_panel );
@@ -38,10 +36,14 @@ public:
 	virtual bool getOptionButtonIndex( size_t &result_index, const OptionButton *option_button );
 	virtual bool moveOptionPanelIndex( const OptionPanel *option_panel, const size_t &target_index );
 	virtual void updateWindow( );
-	virtual bool showOptionPanel( OptionPanel *option_panel );
 	virtual bool showOptionButton( OptionButton *option_button );
 	virtual bool setOptionPanelName( OptionPanel *option_panel, const QString &name );
 	virtual bool setOptionPanelIcon( OptionPanel *option_panel, const QImage &icon );
+
+	virtual bool hideOptionPanel( );
+	virtual bool showOptionPanel( );
+	virtual bool hideOptionPanel( OptionPanel *option_panel );
+	virtual bool showOptionPanel( OptionPanel *option_panel );
 
 protected:
 	bool deleteResource( ) override;

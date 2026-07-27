@@ -2,37 +2,72 @@
 
 #include "../optionWindow.h"
 
-#include "../../../head/after_init_macro.h"
-#include "../../../head/before_init_macro.h"
-#include "../../../head/init_macro.h"
-#include "../../../head/release_macro.h"
+#include "../interface/optionPanel.h"
 
-#include "../widget/optionContentsWidget.h"
 OptionContentsScroll::OptionContentsScroll( OptionWindow *option_window ) : optionWindow( option_window ) {
 }
 OptionContentsScroll::~OptionContentsScroll( ) {
 }
 bool OptionContentsScroll::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( optionContentsWidget );
 	return true;
+}
+void OptionContentsScroll::hideOptionPanel( OptionPanel *option_panel ) {
+	if( option_panel == nullptr )
+		return;
+	if( currentOptionPanel == option_panel ) {
+		auto widget = currentOptionPanel->toWidget( );
+		if( widget ) {
+			takeWidget( );
+			widget->hide( );
+			setWidget( nullptr );
+		}
+		currentOptionPanel = nullptr;
+	}
+}
+void OptionContentsScroll::showOptionPanel( OptionPanel *option_panel ) {
+	if( option_panel == nullptr )
+		return;
+
+	hideOptionPanel( );
+
+	auto widget = option_panel->toWidget( );
+	if( widget ) {
+		takeWidget( );
+		setWidget( widget );
+	}
+	currentOptionPanel = option_panel;
+}
+void OptionContentsScroll::hideOptionPanel( ) {
+	if( currentOptionPanel ) {
+		auto widget = currentOptionPanel->toWidget( );
+		if( widget ) {
+			takeWidget( );
+			widget->hide( );
+			setWidget( nullptr );
+		}
+		currentOptionPanel = nullptr;
+	}
+}
+void OptionContentsScroll::showOptionPanel( ) {
+	if( currentOptionPanel ) {
+		auto widget = currentOptionPanel->toWidget( );
+		if( widget ) {
+			takeWidget( );
+			setWidget( widget );
+		}
+		currentOptionPanel = nullptr;
+	}
 }
 bool OptionContentsScroll::initBefore( ) {
 	deleteResource( );
-	optionContentsWidget = new OptionContentsWidget( optionWindow );
 
-	Before_Init_Resource_App_Core_Ptr( optionContentsWidget );
 	return true;
 }
 bool OptionContentsScroll::init( ) {
-	Init_Resource_App_Core_Ptr( optionContentsWidget );
 	return true;
 }
 bool OptionContentsScroll::initAfter( ) {
-	After_Init_Resource_App_Core_Ptr( optionContentsWidget );
 	setWidgetResizable( true );
-	setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	setWidget( optionContentsWidget );
 	optionWindow->setCentralWidget( this );
 	return true;
 }

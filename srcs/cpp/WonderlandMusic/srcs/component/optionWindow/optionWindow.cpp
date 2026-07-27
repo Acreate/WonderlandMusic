@@ -13,6 +13,7 @@
 
 #include "optionContentsScroll/optionContentsScroll.h"
 #include "optionListDockWidget/optionListDockWidget.h"
+
 #include "widget/optionListWidget.h"
 
 void OptionWindow::removeOptionPanel( OptionPanel *option_panel ) {
@@ -21,6 +22,7 @@ void OptionWindow::removeOptionPanel( OptionPanel *option_panel ) {
 		return;
 	OptionButton *optionButton = option_panel->optionButton;
 	optionListDockWidget->optionListWidget->removeOptionButton( optionButton );
+	optionContentsScroll->hideOptionPanel( optionButton->optionPanel );
 	mutex->lock( );
 	option_panel->optionWindow = nullptr;
 	optionButton->optionWindow = nullptr;
@@ -61,6 +63,7 @@ void OptionWindow::deleteOptionPanel( OptionPanel *option_panel ) {
 		return;
 	OptionButton *optionButton = option_panel->optionButton;
 	optionListDockWidget->optionListWidget->removeOptionButton( optionButton );
+	optionContentsScroll->hideOptionPanel( optionButton->optionPanel );
 	mutex->lock( );
 	option_panel->optionWindow = nullptr;
 	optionButton->optionWindow = nullptr;
@@ -77,6 +80,7 @@ void OptionWindow::deleteAllOptionPanel( ) {
 	if( count == 0 )
 		return;
 	optionListDockWidget->optionListWidget->removeAllOptionButton( );
+	optionContentsScroll->hideOptionPanel( );
 	decltype(optionPanelVector) deleteVector( count );
 	mutex->lock( );
 	size_t index;
@@ -96,8 +100,6 @@ void OptionWindow::deleteAllOptionPanel( ) {
 		delete optionPanel->optionButton;
 		delete optionPanel;
 	}
-}
-void OptionWindow::updateOptionButtonSize( OptionButton *option_button ) {
 }
 
 OptionWindow::OptionWindow( QWidget *paretn ) : QMainWindow( paretn ) {
@@ -121,7 +123,7 @@ bool OptionWindow::addOptionPanel( OptionPanel *option_panel ) {
 		option_panel->optionWindow->removeOptionPanel( option_panel );
 
 	option_panel->optionWindow = this;
-
+	option_panel->optionContentsScroll = optionContentsScroll;
 	option_panel->optionButton = new OptionButton( this );
 	option_panel->optionButton->optionPanel = option_panel;
 	option_panel->optionButton->optionWindow = this;
@@ -144,6 +146,7 @@ bool OptionWindow::addOptionPanel( OptionPanel *option_panel ) {
 	}
 	optionListDockWidget->optionListWidget->addOptionButton( option_panel->optionButton );
 	updateWindow( );
+	optionContentsScroll->showOptionPanel( option_panel );
 	return true;
 }
 
@@ -215,6 +218,7 @@ bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 		return false;
 	mutex->lock( );
 
+	optionContentsScroll->showOptionPanel( option_panel );
 	mutex->unlock( );
 	return true;
 }
@@ -223,7 +227,7 @@ bool OptionWindow::showOptionButton( OptionButton *option_button ) {
 	if( getOptionButtonIndex( index, option_button ) == false || option_button->optionWindow != this )
 		return false;
 	mutex->lock( );
-
+	optionContentsScroll->showOptionPanel( option_button->optionPanel );
 	mutex->unlock( );
 	return true;
 }
@@ -265,21 +269,21 @@ bool OptionWindow::initBefore( ) {
 	if( qobject_cast< QWidget * >( parentObjectPtr ) )
 		setWindowFlags( Qt::WindowType::Widget );
 
-	Before_Init_Resource_App_Core_Ptr( optionListDockWidget );
 	Before_Init_Resource_App_Core_Ptr( optionContentsScroll );
+	Before_Init_Resource_App_Core_Ptr( optionListDockWidget );
 
 	return true;
 }
 
 bool OptionWindow::init( ) {
-	Init_Resource_App_Core_Ptr( optionListDockWidget );
 	Init_Resource_App_Core_Ptr( optionContentsScroll );
+	Init_Resource_App_Core_Ptr( optionListDockWidget );
 	return true;
 }
 
 bool OptionWindow::initAfter( ) {
-	After_Init_Resource_App_Core_Ptr( optionListDockWidget );
 	After_Init_Resource_App_Core_Ptr( optionContentsScroll );
+	After_Init_Resource_App_Core_Ptr( optionListDockWidget );
 
 	setStyleSheet( R"(
 QMainWindow::separator {

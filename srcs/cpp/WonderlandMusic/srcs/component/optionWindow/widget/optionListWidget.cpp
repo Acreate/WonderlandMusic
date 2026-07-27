@@ -98,7 +98,7 @@ void OptionListWidget::addOptionButton( OptionButton *option_item ) {
 }
 void OptionListWidget::removeOptionButton( OptionButton *option_item ) {
 	size_t index;
-	if( hasOptionButton( index, option_item ) == true )
+	if( hasOptionButton( index, option_item ) == false )
 		return;
 	mutex->lock( );
 	auto iterator = optionButtonVector.begin( ) + index;

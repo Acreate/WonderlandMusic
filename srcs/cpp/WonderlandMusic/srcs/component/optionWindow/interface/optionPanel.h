@@ -4,6 +4,7 @@
 
 #include "../../../interface/iAppCore.h"
 #include "../../../interface/iAppJsonData.h"
+class OptionContentsScroll;
 class OptionButton;
 class CoreInfo;
 class OptionWindow;
@@ -14,11 +15,14 @@ private:
 
 	OptionWindow *optionWindow = nullptr;
 	OptionButton *optionButton = nullptr;
+	OptionContentsScroll *optionContentsScroll = nullptr;
 	QString *name;
 	QImage *icon;
 
 protected:
 	~OptionPanel( ) override;
+	virtual void setVerticalScrollBarPolicy( Qt::ScrollBarPolicy policy );
+	virtual void setHorizontalScrollBarPolicy( Qt::ScrollBarPolicy policy );
 
 public:
 	OptionPanel( );

@@ -13,6 +13,8 @@
 OptionButton::~OptionButton( ) {
 }
 OptionButton::OptionButton( OptionWindow *option_window ) : optionWindow( option_window ) {
+	startOffsetX = 5;
+	startOffsetY = 5;
 }
 
 bool OptionButton::isClick( ) const {
@@ -56,6 +58,7 @@ QSize OptionButton::updateSize( ) {
 		}
 		break;
 	}
+	result = QSize( result.width( ) + startOffsetX * 2, result.height( ) + startOffsetY * 2 );
 	setFixedSize( result );
 	return result;
 }
@@ -67,7 +70,9 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 	if( height == 0 )
 		return;
 	QPainter painter( this );
-	int offsetX = 0;
+	int offsetX = startOffsetX;
+	int offsetY = startOffsetY;
+	height -= startOffsetY * 2;
 	QImage renderIcon;
 	switch( showType ) {
 		case Show_Type::Txt : {
@@ -79,7 +84,7 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 				auto appRenderImage = appDrawManage->getAppRenderImage( );
 				if( appRenderImage->renderTxt( renderIcon, name ) ) {
 					renderIcon = renderIcon.scaledToHeight( height );
-					painter.drawImage( offsetX, 0, renderIcon );
+					painter.drawImage( offsetX, offsetY, renderIcon );
 				}
 			}
 		}
@@ -88,7 +93,7 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 			auto &icon = optionPanel->getIcon( );
 			if( icon.isNull( ) == false ) {
 				renderIcon = icon.scaledToHeight( height );
-				painter.drawImage( 0, 0, renderIcon );
+				painter.drawImage( offsetX, offsetY, renderIcon );
 			}
 		}
 		break;
@@ -96,7 +101,7 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 			auto &icon = optionPanel->getIcon( );
 			if( icon.isNull( ) == false ) {
 				renderIcon = icon.scaledToHeight( height );
-				painter.drawImage( 0, 0, renderIcon );
+				painter.drawImage( offsetX, offsetY, renderIcon );
 				offsetX += icon.width( );
 			}
 			auto &name = optionPanel->getName( );
@@ -107,7 +112,7 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 				auto appRenderImage = appDrawManage->getAppRenderImage( );
 				if( appRenderImage->renderTxt( renderIcon, name ) ) {
 					renderIcon = renderIcon.scaledToHeight( height );
-					painter.drawImage( offsetX, 0, renderIcon );
+					painter.drawImage( offsetX, offsetY, renderIcon );
 				}
 			}
 		}

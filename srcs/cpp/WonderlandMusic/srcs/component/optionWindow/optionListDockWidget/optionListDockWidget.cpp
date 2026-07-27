@@ -89,5 +89,6 @@ QDockWidget::title {
 	setAllowedAreas( Qt::LeftDockWidgetArea );
 	setFloating( false );
 	optionWindow->addDockWidget( Qt::LeftDockWidgetArea, this );
+	show( );
 	return true;
 }

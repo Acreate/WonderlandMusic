@@ -19,6 +19,8 @@ bool MusicWidget::deleteResource( ) {
 }
 
 bool MusicWidget::initBefore( ) {
+	deleteResource( );
+
 	if( AppTranslateTools::getMusicWidget( [this] ( MusicWidgetTranslate &translate ) {
 		setName( translate.getTitleName( ) );
 	} ) == false )

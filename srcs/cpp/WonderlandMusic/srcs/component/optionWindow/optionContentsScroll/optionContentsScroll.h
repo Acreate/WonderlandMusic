@@ -4,7 +4,8 @@
 
 #include "../../../interface/iAppCore.h"
 
-class OptionContentsWidget;
+class UserMutex;
+class OptionPanel;
 class OptionWindow;
 
 class OptionContentsScroll : public QScrollArea, public IAppCore {
@@ -13,17 +14,23 @@ class OptionContentsScroll : public QScrollArea, public IAppCore {
 
 private:
 	OptionWindow *optionWindow = nullptr;
-	OptionContentsWidget *optionContentsWidget = nullptr;
+	UserMutex *userMutex = nullptr;
+	OptionPanel *currentOptionPanel = nullptr;
 
 protected:
 	OptionContentsScroll( OptionWindow *option_window );
 	~OptionContentsScroll( ) override;
 	bool deleteResource( ) override;
 
+	virtual void hideOptionPanel( OptionPanel *option_panel );
+	virtual void showOptionPanel( OptionPanel *option_panel );
+
 public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
+	virtual void hideOptionPanel( );
+	virtual void showOptionPanel( );
 };
 
 #endif // OPTIONCONTENTSSCROLL_H_H_HEAD__FILE__

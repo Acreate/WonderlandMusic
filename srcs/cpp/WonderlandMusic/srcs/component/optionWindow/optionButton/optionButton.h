@@ -12,6 +12,8 @@ class OptionButton : public QWidget {
 	OptionWindow *optionWindow;
 
 	OptionPanel *optionPanel = nullptr;
+	int startOffsetX;
+	int startOffsetY;
 
 public:
 	enum class Show_Type {

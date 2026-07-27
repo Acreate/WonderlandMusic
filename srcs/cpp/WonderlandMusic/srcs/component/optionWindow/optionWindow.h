@@ -28,7 +28,6 @@ protected :
 	virtual void removeAllOptionPanel( );
 	virtual void deleteOptionPanel( OptionPanel *option_panel );
 	virtual void deleteAllOptionPanel( );
-	virtual void updateOptionButtonSize( OptionButton *option_button );
 
 public:
 	OptionWindow( QWidget *paretn );

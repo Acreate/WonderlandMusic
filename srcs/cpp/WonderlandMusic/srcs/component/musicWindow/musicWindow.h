@@ -4,6 +4,7 @@
 
 #include "../../component/optionWindow/interface/optionPanel.h"
 
+class MusicCentreScrollWidget;
 class FavoriteDockWidget;
 class MusicToolDockWidget;
 class MusicTitleDockWidget;
@@ -18,13 +19,14 @@ class MusicWindow : public QMainWindow, public OptionPanel {
 private:
 	UserMutex *userMutex = nullptr;
 	FavoriteDockWidget *favoriteDockWidget = nullptr;
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	MusicCentreScrollWidget *musicCentreScrollWidget = nullptr;
 	MusicTitleDockWidget *musicTitleDockWidget = nullptr;
 	MusicToolDockWidget *musicToolDockWidget = nullptr;
 	std::vector< MusicItem * > musicItemVector;
 
 public:
 	MusicWindow( );
+	~MusicWindow( ) override;
 
 protected:
 	bool deleteResource( ) override;

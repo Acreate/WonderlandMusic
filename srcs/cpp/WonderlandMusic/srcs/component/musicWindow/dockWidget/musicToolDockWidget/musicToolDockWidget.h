@@ -2,8 +2,9 @@
 #define MUSICTOOLDOCKWIDGET_H_H_HEAD__FILE__
 #include <QDockWidget>
 
-#include "../../../interface/iAppCore.h"
+#include <interface/iAppCore.h>
 
+class DockWidgetTitleWidget;
 class MusicToolWidget;
 
 class MusicToolDockWidget : public QDockWidget, public IAppCore {
@@ -12,6 +13,7 @@ class MusicToolDockWidget : public QDockWidget, public IAppCore {
 
 private:
 	MusicToolWidget *musicToolWidget = nullptr;
+	DockWidgetTitleWidget *dockWidgetTitleWidget = nullptr;
 	MusicWindow *musicWindow = nullptr;
 	MusicToolDockWidget( MusicWindow *music_window );
 	~MusicToolDockWidget( ) override;

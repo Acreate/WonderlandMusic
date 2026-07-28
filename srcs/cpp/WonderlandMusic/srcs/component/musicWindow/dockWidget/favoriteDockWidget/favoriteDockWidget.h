@@ -2,8 +2,9 @@
 #define FAVORITEDOCKWIDGET_H_H_HEAD__FILE__
 #include <QDockWidget>
 
-#include "../../../interface/iAppCore.h"
+#include <interface/iAppCore.h>
 
+class DockWidgetTitleWidget;
 class FavoriteListWidget;
 
 class FavoriteDockWidget : public QDockWidget, public IAppCore {
@@ -13,7 +14,7 @@ class FavoriteDockWidget : public QDockWidget, public IAppCore {
 private:
 	MusicWindow *musicWindow = nullptr;
 	FavoriteListWidget *favoriteListWidget = nullptr;
-	QWidget *favoriteDockTitleWidget = nullptr;
+	DockWidgetTitleWidget *dockWidgetTitleWidget = nullptr;
 
 	FavoriteDockWidget( MusicWindow *music_window );
 

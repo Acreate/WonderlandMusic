@@ -14,23 +14,26 @@
 #include "../../tools/appTranslateTools.h"
 #include "../../tools/pathTools.h"
 
-#include "favoriteDockWidget/favoriteDockWidget.h"
-
-#include "musicCentreWidget/musicCentreWidget.h"
+#include "dockWidget/favoriteDockWidget/favoriteDockWidget.h"
+#include "dockWidget/musicTitleDockWidget/musicTitleDockWidget.h"
+#include "dockWidget/musicToolDockWidget/musicToolDockWidget.h"
 
 #include "musicItem/musicItem.h"
 
-#include "musicTitleDockWidget/musicTitleDockWidget.h"
+#include "widget/musicCentreScrollWidget/musicCentreScrollWidget.h"
+#include "widget/musicCentreScrollWidget/musicCentreWidget/musicCentreWidget.h"
 
-#include "musicToolDockWidget/musicToolDockWidget.h"
 MusicWindow::MusicWindow( ) {
+}
+MusicWindow::~MusicWindow( ) {
+	deleteResource( );
 }
 bool MusicWindow::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
 	unSafetyClearInfo( );
-	Delete_Resource_App_Core_Ptr( musicCentreWidget );
+	Delete_Resource_App_Core_Ptr( musicCentreScrollWidget );
 	Delete_Resource_App_Core_Ptr( favoriteDockWidget );
 	Delete_Resource_App_Core_Ptr( musicTitleDockWidget );
 	Delete_Resource_App_Core_Ptr( musicToolDockWidget );
@@ -52,17 +55,17 @@ void MusicWindow::unSafetyClearInfo( ) {
 	}
 }
 void MusicWindow::unSafetyClearShow( ) {
-	if( musicCentreWidget )
-		musicCentreWidget->clearShowMusic( );
+	if( musicCentreScrollWidget && musicCentreScrollWidget->musicCentreWidget )
+		musicCentreScrollWidget->musicCentreWidget->clearShowMusic( );
 }
 bool MusicWindow::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
-	musicCentreWidget = new MusicCentreWidget( this );
+	musicCentreScrollWidget = new MusicCentreScrollWidget( this );
 	favoriteDockWidget = new FavoriteDockWidget( this );
 	musicTitleDockWidget = new MusicTitleDockWidget( this );
 	musicToolDockWidget = new MusicToolDockWidget( this );
-	Before_Init_Resource_App_Core_Ptr( musicCentreWidget );
+	Before_Init_Resource_App_Core_Ptr( musicCentreScrollWidget );
 	Before_Init_Resource_App_Core_Ptr( favoriteDockWidget );
 	Before_Init_Resource_App_Core_Ptr( musicTitleDockWidget );
 	Before_Init_Resource_App_Core_Ptr( musicToolDockWidget );
@@ -73,14 +76,14 @@ bool MusicWindow::init( ) {
 		setName( translate.getTitleName( ) );
 	} ) == false )
 		setName( tr( "音乐" ) );
-	Init_Resource_App_Core_Ptr( musicCentreWidget );
+	Init_Resource_App_Core_Ptr( musicCentreScrollWidget );
 	Init_Resource_App_Core_Ptr( favoriteDockWidget );
 	Init_Resource_App_Core_Ptr( musicTitleDockWidget );
 	Init_Resource_App_Core_Ptr( musicToolDockWidget );
 	return true;
 }
 bool MusicWindow::initAfter( ) {
-	After_Init_Resource_App_Core_Ptr( musicCentreWidget );
+	After_Init_Resource_App_Core_Ptr( musicCentreScrollWidget );
 	After_Init_Resource_App_Core_Ptr( favoriteDockWidget );
 	After_Init_Resource_App_Core_Ptr( musicTitleDockWidget );
 	After_Init_Resource_App_Core_Ptr( musicToolDockWidget );

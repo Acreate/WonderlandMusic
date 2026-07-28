@@ -1,14 +1,13 @@
 ﻿#include "musicCentreWidget.h"
 
-#include "../musicWindow.h"
+#include "../../../musicWindow.h"
+
 MusicCentreWidget::MusicCentreWidget( MusicWindow *parent ) : QWidget( parent ), musicWindow( parent ) {
 }
 MusicCentreWidget::~MusicCentreWidget( ) {
 	deleteResource( );
 }
 bool MusicCentreWidget::deleteResource( ) {
-	if( musicWindow->centralWidget( ) == this )
-		musicWindow->takeCentralWidget( );
 	return true;
 }
 bool MusicCentreWidget::initBefore( ) {
@@ -19,6 +18,7 @@ bool MusicCentreWidget::init( ) {
 	return true;
 }
 bool MusicCentreWidget::initAfter( ) {
-	musicWindow->setCentralWidget( this );
 	return true;
+}
+void MusicCentreWidget::clearShowMusic( ) {
 }

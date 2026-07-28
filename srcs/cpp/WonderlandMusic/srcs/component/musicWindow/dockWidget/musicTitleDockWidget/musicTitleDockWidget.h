@@ -2,8 +2,11 @@
 #define MUSICTITLEDOCKWIDGET_H_H_HEAD__FILE__
 #include <QDockWidget>
 
-#include "../../../interface/iAppCore.h"
+#include <interface/iAppCore.h>
 
+class DockWidgetTitleWidget;
+class TitleVerticalScrollBar;
+class QScrollArea;
 class MusicTitleWidget;
 
 class MusicTitleDockWidget : public QDockWidget, public IAppCore {
@@ -12,7 +15,10 @@ class MusicTitleDockWidget : public QDockWidget, public IAppCore {
 
 private:
 	MusicWindow *musicWindow = nullptr;
+	TitleVerticalScrollBar *verticalScrollBar = nullptr;
+	QScrollArea *musicTitileScrollArea = nullptr;
 	MusicTitleWidget *musicTitleWidget = nullptr;
+	DockWidgetTitleWidget*  dockWidgetTitleWidget = nullptr;
 	MusicTitleDockWidget( MusicWindow *music_window );
 	~MusicTitleDockWidget( ) override;
 

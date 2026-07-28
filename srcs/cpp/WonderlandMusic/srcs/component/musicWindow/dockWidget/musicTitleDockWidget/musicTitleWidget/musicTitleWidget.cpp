@@ -1,18 +1,18 @@
 ﻿#include "musicTitleWidget.h"
-MusicTitleWidget::MusicTitleWidget( ) {
+MusicTitleWidget::MusicTitleWidget( QWidget *parent ) : QWidget( parent ) {
 }
 MusicTitleWidget::~MusicTitleWidget( ) {
 	deleteResource( );
 }
 bool MusicTitleWidget::deleteResource( ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::initBefore( ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::init( ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::initAfter( ) {
-	return false;
+	return true;
 }

@@ -22,9 +22,9 @@ void OptionWindow::removeOptionPanel( OptionPanel *option_panel ) {
 	OptionButton *optionButton = option_panel->optionButton;
 	optionListDockWidget->optionListWidget->removeOptionButton( optionButton );
 	mutex->lock( );
-	option_panel->optionWindow = nullptr;
 	optionButton->optionWindow = nullptr;
 	optionButton->optionPanel = nullptr;
+	option_panel->optionWindow = nullptr;
 	option_panel->optionButton = nullptr;
 	optionPanelVector.erase( optionPanelVector.begin( ) + index );
 	mutex->unlock( );
@@ -145,11 +145,8 @@ bool OptionWindow::addOptionPanel( OptionPanel *option_panel ) {
 		option_panel->optionButton->optionPanel = nullptr;
 		delete option_panel->optionButton;
 		option_panel->optionButton = nullptr;
-
-		mutex->lock( );
-		removeOptionPanel( option_panel );
-		mutex->unlock( );
-
+		if( getOptionPanelIndex( index, option_panel ) )
+			optionPanelVector.erase( index + optionPanelVector.begin( ) );
 		return false;
 	}
 	optionListDockWidget->optionListWidget->addOptionButton( option_panel->optionButton );

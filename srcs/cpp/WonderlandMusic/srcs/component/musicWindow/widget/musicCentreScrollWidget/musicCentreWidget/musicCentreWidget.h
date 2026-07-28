@@ -2,7 +2,7 @@
 #define MUSICCENTREWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../../../interface/iAppCore.h"
+#include <interface/iAppCore.h>
 
 class MusicTitleWidget;
 class MusicListScrollArea;
@@ -12,6 +12,7 @@ class MusicCentreScrollArea;
 class MusicCentreWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
 	friend class MusicWindow;
+	friend class MusicCentreScrollWidget;
 
 private:
 	MusicWindow *musicWindow;
@@ -26,7 +27,7 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
-	virtual void clearShow( );
+	virtual void clearShowMusic( );
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

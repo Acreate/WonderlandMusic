@@ -1,18 +1,18 @@
 ﻿#include "musicToolWidget.h"
-MusicToolWidget::MusicToolWidget( ): QWidget( ) {
+MusicToolWidget::MusicToolWidget( QWidget *parent ) : QWidget( parent ) {
 }
 MusicToolWidget::~MusicToolWidget( ) {
-	deleteResource(  );
+	deleteResource( );
 }
 bool MusicToolWidget::deleteResource( ) {
-	return false;
+	return true;
 }
 bool MusicToolWidget::initBefore( ) {
-	return false;
+	return true;
 }
 bool MusicToolWidget::init( ) {
-	return false;
+	return true;
 }
 bool MusicToolWidget::initAfter( ) {
-	return false;
+	return true;
 }

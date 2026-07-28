@@ -16,7 +16,6 @@ private:
 	UserMutex *userMutex = nullptr;
 	MusicCentreWidget *musicCentreWidget = nullptr;
 	std::vector< MusicItem * > musicItemVector;
-	std::vector< QImage * > musicItemRenderImageVector;
 
 public:
 	MusicWindow( );

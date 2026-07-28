@@ -27,15 +27,19 @@ bool MusicWindow::deleteResource( ) {
 	unSafetyClearInfo( );
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
-	unSafetyClearShow( );
 	return true;
 }
 void MusicWindow::unSafetyClearInfo( ) {
 	size_t count = musicItemVector.size( );
 	if( count ) {
 		auto musicItem = musicItemVector.data( );
-		for( result_index = 0; result_index < count; result_index += 1 ) {
+		size_t index;
+		for( index = 0; index < count; index += 1 ) {
+			musicItem[ index ]->musicWindow = nullptr;
+			delete musicItem;
 		}
+		musicItemVector.clear( );
+		unSafetyClearShow( );
 	}
 }
 void MusicWindow::unSafetyClearShow( ) {
@@ -116,5 +120,4 @@ void MusicWindow::clear( ) {
 	userMutex->lock( );
 	unSafetyClearInfo( );
 	userMutex->unlock( );
-	unSafetyClearShow( );
 }

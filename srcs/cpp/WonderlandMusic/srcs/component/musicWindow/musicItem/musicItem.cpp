@@ -12,6 +12,10 @@ MusicItem::~MusicItem( ) {
 		delete mediaPlayer;
 		mediaPlayer = nullptr;
 	}
+	if( rendBuff ) {
+		delete rendBuff;
+		rendBuff = nullptr;
+	}
 }
 MusicItem::MusicItem( MusicWindow *music_window, const QString &file_path ) : musicWindow( music_window ), loadedOver( false ) {
 	QFileInfo fileInfo( file_path );
@@ -73,4 +77,7 @@ bool MusicItem::getElapsedTime( qint64 &result_elapsed_time ) const {
 		return loadedOver;
 	result_elapsed_time = this->elapsedTime;
 	return loadedOver;
+}
+QImage * MusicItem::getRendBuff( ) const {
+	return rendBuff;
 }

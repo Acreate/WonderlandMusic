@@ -9,6 +9,8 @@
 #include "../../../../head/init_macro.h"
 #include "../../../../head/release_macro.h"
 
+#include "../../../../tools/fontTools.h"
+
 #include "../dockWidgetTitleWidget/dockWidgetTitleWidget.h"
 
 #include "musicTitleWidget/musicTitleWidget.h"
@@ -52,5 +54,9 @@ bool MusicTitleDockWidget::initAfter( ) {
 	setFloating( false );
 	setContextMenuPolicy( Qt::NoContextMenu );
 	musicWindow->addDockWidget( Qt::TopDockWidgetArea, this );
+	int height;
+	if( FontTools::getFontHeight( height ) == false )
+		height = 28;
+	musicWindow->resizeDocks( { this }, { height }, Qt::Vertical );
 	return true;
 }

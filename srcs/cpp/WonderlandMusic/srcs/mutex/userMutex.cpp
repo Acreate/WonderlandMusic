@@ -1,73 +1,42 @@
 ﻿#include "userMutex.h"
 #include <mutex>
 #include <source_location>
-#include "../application/appDataManage.h"
-#include "../application/appInstance.h"
-#include "../application/appTranslate.h"
 #include "../application/translate/messageTranslate.h"
 #include "../application/translate/userMutexTranslate.h"
 #include "../msgInfo/messageErrorOut.h"
+
+#include "../tools/appTranslateTools.h"
 #include "../tools/sourceLocationTools.h"
 
 void UserMutex::out_debug_info( ) const {
 	QString source_file;
 	QString source_function;
 	QString source_line;
-	MessageTranslate *messageTranslate = nullptr;
-	UserMutexTranslate *userMutexTranslate = nullptr;
-	auto appInstance = AppInstance::getAppInstance( );
-	if( appInstance ) {
-		auto appDataManage = appInstance->getAppDataManage( );
-		if( appDataManage ) {
-			auto appTranslate = appDataManage->getTranslate( );
-			if( appTranslate ) {
-				messageTranslate = appTranslate->getMessage( );
 
-				userMutexTranslate = appTranslate->getUserMutex( );
-			}
-		}
+	if( AppTranslateTools::getMessage( [&] ( MessageTranslate &translate ) {
+		source_file = translate.getSourceFile( );
+		source_function = translate.getSourceFunction( );
+		source_line = translate.getSourceLine( );
+	} ) == false ) {
+		source_file = QObject::tr( "源文件" );
+		source_function = QObject::tr( "源函数" );
+		source_line = QObject::tr( "源行号" );
 	}
 
-	if( messageTranslate == nullptr ) {
-		messageTranslate = new MessageTranslate;
-		if( messageTranslate->init( ) ) {
-			source_file = messageTranslate->getSourceFile( );
-			source_function = messageTranslate->getSourceFunction( );
-			source_line = messageTranslate->getSourceLine( );
-		} else {
-			source_file = QObject::tr( "源文件" );
-			source_function = QObject::tr( "源函数" );
-			source_line = QObject::tr( "源行号" );
-		}
-		delete messageTranslate;
-	} else {
-		source_file = messageTranslate->getSourceFile( );
-		source_function = messageTranslate->getSourceFunction( );
-		source_line = messageTranslate->getSourceLine( );
-	}
 	QString trylockError;
 	QString lastTrylock;
 	QString lastLock;
 	QString lastUnlock;
-	if( userMutexTranslate == nullptr ) {
-		userMutexTranslate = new UserMutexTranslate;
-		if( userMutexTranslate->init( ) ) {
-			trylockError = userMutexTranslate->getTrylockError( );
-			lastTrylock = userMutexTranslate->getLastTrylock( );
-			lastLock = userMutexTranslate->getLastLock( );
-			lastUnlock = userMutexTranslate->getLastUnlock( );
-		} else {
-			trylockError = QObject::tr( "锁异常" );
-			lastTrylock = QObject::tr( "最后一次尝试锁" );
-			lastUnlock = QObject::tr( "最后一次解锁" );
-			lastLock = QObject::tr( "最后一次锁" );
-		}
-		delete userMutexTranslate;
-	} else {
-		trylockError = userMutexTranslate->getTrylockError( );
-		lastTrylock = userMutexTranslate->getLastTrylock( );
-		lastLock = userMutexTranslate->getLastLock( );
-		lastUnlock = userMutexTranslate->getLastUnlock( );
+	if( AppTranslateTools::getUserMutex( [&] ( UserMutexTranslate &translate ) {
+		trylockError = translate.getTrylockError( );
+		lastTrylock = translate.getLastTrylock( );
+		lastLock = translate.getLastLock( );
+		lastUnlock = translate.getLastUnlock( );
+	} ) == false ) {
+		trylockError = QObject::tr( "锁异常" );
+		lastTrylock = QObject::tr( "最后一次尝试锁" );
+		lastUnlock = QObject::tr( "最后一次解锁" );
+		lastLock = QObject::tr( "最后一次锁" );
 	}
 
 	MessageString messageString;

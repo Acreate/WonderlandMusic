@@ -4,12 +4,10 @@
 #include <qjsondocument.h>
 #include <qjsonparseerror.h>
 
+#include "instanceTools.h"
 #include "vectorTools.h"
 
-#include "../application/appDataManage.h"
-#include "../application/appInstance.h"
 #include "../application/appMusicDecoder.h"
-#include "../application/appMusicManage.h"
 #include "../application/applicationManage.h"
 
 #include "../msgInfo/messageErrorOut.h"
@@ -47,8 +45,8 @@ qsizetype PathTools::filterDir( QStringList &result_get_path, const std::vector<
 }
 
 QString PathTools::getAutoShortenPathName( const QString &org_file_path ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationFilePath = appInstance->getApplicationManage( )->applicationDirPath( );
+	auto applicationManage = InstanceTools::getApplicationManage( );
+	auto applicationFilePath = applicationManage->applicationDirPath( );
 	QDir base( applicationFilePath );
 
 	QString result = base.relativeFilePath( org_file_path );
@@ -69,8 +67,7 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::v
 	result_get_path.resize( count );
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
-	auto applicationInstance = AppInstance::getAppInstance( );
-	auto musicDecoder = applicationInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
+	auto musicDecoder = InstanceTools::getAppMusicDecoder( );
 	for( index = 0; index < count; ++index )
 		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];
@@ -80,8 +77,7 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::v
 	return resultCount;
 }
 bool PathTools::isMusicFile( const QString &entry_path ) {
-	auto applicationInstance = AppInstance::getAppInstance( );
-	auto musicDecoder = applicationInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
+	auto musicDecoder = InstanceTools::getAppMusicDecoder( );
 	return musicDecoder->musicFileNmaeSupperDecoder( entry_path );
 }
 qsizetype PathTools::filterFile( QStringList &result_get_path, const QStringList &entry_path ) {
@@ -125,8 +121,8 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStrin
 	result_get_path.resize( count );
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
-	auto applicationInstance = AppInstance::getAppInstance( );
-	auto musicDecoder = applicationInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
+
+	auto musicDecoder = InstanceTools::getAppMusicDecoder( );
 	for( index = 0; index < count; ++index )
 		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];

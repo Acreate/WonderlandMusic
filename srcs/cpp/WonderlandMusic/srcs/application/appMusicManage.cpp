@@ -1,10 +1,6 @@
 ﻿#include "appMusicManage.h"
 #include <QJsonObject>
-#include "appDataJsonKey.h"
-#include "appDataManage.h"
-#include "appInstance.h"
 #include "appMusicDecoder.h"
-#include "applicationManage.h"
 
 #include "../head/after_init_macro.h"
 #include "../head/before_init_macro.h"
@@ -21,24 +17,27 @@ bool AppMusicManage::deleteResource( ) {
 }
 
 bool AppMusicManage::readJsonData( ) {
-	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppMusicManage( );
-	QJsonObject readJson;
-	if( PathTools::readJsonObject( readJson, jsonKey->getFilePath( ) ) == false )
-		return false;
-	if( setJsonData( readJson ) == false )
-		return false;
+	bool resultBool = false;
+	AppJsonKeyTools::getAppMusicManage( [this,&resultBool] ( const AppMusicManageJsonKey &json_key ) {
+		QJsonObject readJson;
+		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) == false )
+			return;
+		resultBool = setJsonData( readJson );
+	} );
 
-	return true;
+	return resultBool;
 }
 
 bool AppMusicManage::writeJsonData( ) {
-	QJsonObject getJson;
-	if( getJsonData( getJson ) == false )
-		return false;
-	auto jsonKey = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppMusicManage( );
-	if( PathTools::writeJsonObject( getJson, jsonKey->getFilePath( ) ) == false )
-		return false;
-	return true;
+	bool resultBool = false;
+	AppJsonKeyTools::getAppMusicManage( [this,&resultBool] ( const AppMusicManageJsonKey &json_key ) {
+		QJsonObject getJson;
+		if( getJsonData( getJson ) == false )
+			return;
+		resultBool = PathTools::writeJsonObject( getJson, json_key.getFilePath( ) );
+	} );
+
+	return resultBool;
 }
 
 bool AppMusicManage::init( ) {

@@ -3,11 +3,8 @@
 
 #include "../optionWindow.h"
 
-#include "../../../application/appDrawManage.h"
-#include "../../../application/appInstance.h"
 #include "../../../application/appRenderImage.h"
-#include "../../../application/appUserInterfaceManage.h"
-
+#include "../../../tools/instanceTools.h"
 #include "../interface/optionPanel.h"
 
 OptionButton::~OptionButton( ) {
@@ -29,10 +26,7 @@ void OptionButton::setShowType( const Show_Type show ) {
 	update( );
 }
 QSize OptionButton::updateSize( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto userInterfaceManage = appInstance->getAppUserInterfaceManage( );
-	auto appDrawManage = userInterfaceManage->getAppDrawManage( );
-	auto appRenderImage = appDrawManage->getAppRenderImage( );
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
 	QSize result( 0, 0 );
 
 	switch( showType ) {
@@ -78,10 +72,7 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 		case Show_Type::Txt : {
 			auto &name = optionPanel->getName( );
 			if( name.isEmpty( ) == false ) {
-				auto appInstance = AppInstance::getAppInstance( );
-				auto interfaceManage = appInstance->getAppUserInterfaceManage( );
-				auto appDrawManage = interfaceManage->getAppDrawManage( );
-				auto appRenderImage = appDrawManage->getAppRenderImage( );
+				auto appRenderImage = InstanceTools::getAppRenderImage( );
 				if( appRenderImage->renderTxt( renderIcon, name ) ) {
 					renderIcon = renderIcon.scaledToHeight( height );
 					painter.drawImage( offsetX, offsetY, renderIcon );
@@ -106,10 +97,7 @@ void OptionButton::paintEvent( QPaintEvent *paint_event ) {
 			}
 			auto &name = optionPanel->getName( );
 			if( name.isEmpty( ) == false ) {
-				auto appInstance = AppInstance::getAppInstance( );
-				auto interfaceManage = appInstance->getAppUserInterfaceManage( );
-				auto appDrawManage = interfaceManage->getAppDrawManage( );
-				auto appRenderImage = appDrawManage->getAppRenderImage( );
+				auto appRenderImage = InstanceTools::getAppRenderImage( );
 				if( appRenderImage->renderTxt( renderIcon, name ) ) {
 					renderIcon = renderIcon.scaledToHeight( height );
 					painter.drawImage( offsetX, offsetY, renderIcon );

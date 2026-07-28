@@ -4,13 +4,13 @@
 #include <QMediaPlayer>
 #include <QIODevice>
 
-#include "../application/appInstance.h"
 #include "../application/applicationManage.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
 #include "../thread/musicPlayerThread/musicMediaPlayerThread.h"
 
+#include "../tools/instanceTools.h"
 #include "../tools/pathTools.h"
 
 bool MusicPlayer::deleteResource( ) {
@@ -66,7 +66,7 @@ bool MusicPlayer::getIsStop( ) const {
 bool MusicPlayer::playerStop( ) {
 	if( musicPlayerThread ) {
 		musicPlayerThread->stopPlayerMusic( );
-		auto appInstance = AppInstance::getAppInstance( )->getApplicationManage( );
+		auto appInstance = InstanceTools::getApplicationManage( );
 		while( musicPlayerThread != nullptr )
 			appInstance->processEvents( );
 	}

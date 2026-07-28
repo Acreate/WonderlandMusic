@@ -1,10 +1,11 @@
 ﻿#include "appTranslate.h"
 #include <QTextCodec>
 #include "appDataManage.h"
-#include "appInstance.h"
 
 #include "../head/init_macro.h"
 #include "../head/release_macro.h"
+
+#include "../tools/instanceTools.h"
 
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/appMusicManageTranslate.h"
@@ -31,8 +32,8 @@ bool AppTranslate::initBefore( ) {
 	if( utf8 == nullptr )
 		return false;
 	QTextCodec::setCodecForLocale( utf8 );
-	auto appInstance = AppInstance::getAppInstance( );
-	AppDataManage *appDataManage = appInstance->getAppDataManage( );
+
+	AppDataManage *appDataManage = InstanceTools::getAppDataManage( );
 	auto appSettingPath = appDataManage->getAppSettingPath( );
 	auto currentQMFile = appSettingPath + QObject::tr( "/translations/WonderlandMusic_zh_CN.qm" );
 	appDataManage->setAppStringTranslate( currentQMFile );

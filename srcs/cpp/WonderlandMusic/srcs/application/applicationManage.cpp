@@ -1,7 +1,10 @@
 ﻿#include "applicationManage.h"
+
 #include "appDataManage.h"
-#include "appInstance.h"
 #include "appUserInterfaceManage.h"
+
+#include "../tools/instanceTools.h"
+
 #include "../window/mainWindow.h"
 
 bool ApplicationManage::deleteResource( ) {
@@ -17,9 +20,7 @@ bool ApplicationManage::init( ) {
 }
 
 bool ApplicationManage::initAfter( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	appDataManage = appInstance->getAppDataManage( );
-	appUserInterfaceManage = appInstance->getAppUserInterfaceManage( );
+	appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
 	mainWindow = appUserInterfaceManage->getMainWindow( );
 	return true;
 }

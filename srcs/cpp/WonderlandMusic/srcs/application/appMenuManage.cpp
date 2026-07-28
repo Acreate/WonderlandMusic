@@ -1,6 +1,5 @@
 ﻿#include "appMenuManage.h"
 #include <qscreen.h>
-#include "appDataManage.h"
 
 #include "../head/after_init_macro.h"
 #include "../head/before_init_macro.h"

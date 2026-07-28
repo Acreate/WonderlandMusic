@@ -1,11 +1,7 @@
 ﻿#include "appUserInterfaceManage.h"
 #include <QJsonObject>
-#include "appDataJsonKey.h"
-#include "appDataManage.h"
 #include "appDrawManage.h"
-#include "appInstance.h"
 #include "appMenuManage.h"
-#include "applicationManage.h"
 
 #include "../head/after_init_macro.h"
 #include "../head/before_init_macro.h"
@@ -14,6 +10,9 @@
 
 #include "../menu/systemTrayIconMenu.h"
 #include "../systemTrayIcon/systemTrayIcon.h"
+
+#include "../tools/appJsonKeyTools.h"
+#include "../tools/instanceTools.h"
 #include "../tools/pathTools.h"
 #include "../window/mainWindow.h"
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
@@ -44,21 +43,22 @@ bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 }
 
 bool AppUserInterfaceManage::readJsonData( ) {
-	auto interfaceManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppUserInterfaceManage( );
-	QJsonObject readJson;
-	if( PathTools::readJsonObject( readJson, interfaceManage->getFilePath( ) ) ) {
-		setJsonData( readJson );
-	}
-
+	AppJsonKeyTools::getAppUserInterfaceManage( [this] ( const AppUserInterfaceManageJsonKey &json_key ) {
+		QJsonObject readJson;
+		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) )
+			setJsonData( readJson );
+	} );
 	return true;
 }
 
 bool AppUserInterfaceManage::writeJsonData( ) {
-	QJsonObject writeJsonObject;
-	if( getJsonData( writeJsonObject ) ) {
-		auto interfaceManage = AppInstance::getAppInstance( )->getAppDataManage( )->getAppDataJsonKey( )->getAppUserInterfaceManage( );
-		PathTools::writeJsonObject( writeJsonObject, interfaceManage->getFilePath( ) );
-	}
+	AppJsonKeyTools::getAppUserInterfaceManage( [this] ( const AppUserInterfaceManageJsonKey &json_key ) {
+		QJsonObject writeJsonObject;
+		if( getJsonData( writeJsonObject ) ) {
+			PathTools::writeJsonObject( writeJsonObject, json_key.getFilePath( ) );
+		}
+	} );
+
 	return true;
 }
 
@@ -93,8 +93,7 @@ bool AppUserInterfaceManage::initAfter( ) {
 		return false;
 	systemTrayIcon->show( );
 
-	auto instance = AppInstance::getAppInstance( );
-	auto appMenuManage = instance->getAppUserInterfaceManage( )->getAppMenuManage( );
+	auto appMenuManage = InstanceTools::getAppMenuManage( );
 	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
 
 	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_show_main_window, this, [this]( ) {

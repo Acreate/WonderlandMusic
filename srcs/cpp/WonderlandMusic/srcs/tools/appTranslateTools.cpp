@@ -1,6 +1,7 @@
 ﻿#include "appTranslateTools.h"
-#include "../application/appDataManage.h"
-#include "../application/appInstance.h"
+
+#include "instanceTools.h"
+
 #include "../application/appTranslate.h"
 #include "../application/translate/aboutWidgetTranslate.h"
 #include "../application/translate/appMusicManageTranslate.h"
@@ -17,20 +18,10 @@
 #include "../application/translate/systemTrayIconTranslate.h"
 #include "../application/translate/userMutexTranslate.h"
 
-AppTranslate * AppTranslateTools::getAppTranslate( ) {
-	auto appInstance = AppInstance::getAppInstance( );
-	if( appInstance == nullptr )
-		return nullptr;
-	auto dataManage = appInstance->getAppDataManage( );
-	if( dataManage == nullptr )
-		return nullptr;
-	return dataManage->getTranslate( );;
-}
-
 #define Defininition_Get_Translate( type_name_ ) \
 	bool AppTranslateTools::get##type_name_(const std::function< void( type_name_##Translate & translate) > &translate_fun_call){\
 		type_name_##Translate *var = nullptr; \
-		AppTranslate *appTranslate = getAppTranslate( ); \
+		AppTranslate *appTranslate = InstanceTools::getAppTranslate( ); \
 		if( appTranslate ){ \
 			var = appTranslate->get##type_name_( );\
 			if( var ) { \

@@ -45,6 +45,9 @@ bool FavoriteDockWidget::initAfter( ) {
 	setFloating( false );
 	setContextMenuPolicy( Qt::NoContextMenu );
 	musicWindow->addDockWidget( Qt::LeftDockWidgetArea, this );
+
+	musicWindow->resizeDocks( { this }, { 200 }, Qt::Horizontal );
+
 	return true;
 }
 void FavoriteDockWidget::updateDockSize( ) {

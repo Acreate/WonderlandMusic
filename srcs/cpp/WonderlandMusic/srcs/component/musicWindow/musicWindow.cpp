@@ -14,17 +14,26 @@
 #include "../../tools/appTranslateTools.h"
 #include "../../tools/pathTools.h"
 
+#include "favoriteDockWidget/favoriteDockWidget.h"
+
 #include "musicCentreWidget/musicCentreWidget.h"
 
 #include "musicItem/musicItem.h"
+
+#include "musicTitleDockWidget/musicTitleDockWidget.h"
+
+#include "musicToolDockWidget/musicToolDockWidget.h"
 MusicWindow::MusicWindow( ) {
 }
 bool MusicWindow::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
-	Delete_Resource_App_Core_Ptr( musicCentreWidget );
 	unSafetyClearInfo( );
+	Delete_Resource_App_Core_Ptr( musicCentreWidget );
+	Delete_Resource_App_Core_Ptr( favoriteDockWidget );
+	Delete_Resource_App_Core_Ptr( musicTitleDockWidget );
+	Delete_Resource_App_Core_Ptr( musicToolDockWidget );
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
@@ -43,12 +52,20 @@ void MusicWindow::unSafetyClearInfo( ) {
 	}
 }
 void MusicWindow::unSafetyClearShow( ) {
+	if( musicCentreWidget )
+		musicCentreWidget->clearShowMusic( );
 }
 bool MusicWindow::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
 	musicCentreWidget = new MusicCentreWidget( this );
+	favoriteDockWidget = new FavoriteDockWidget( this );
+	musicTitleDockWidget = new MusicTitleDockWidget( this );
+	musicToolDockWidget = new MusicToolDockWidget( this );
 	Before_Init_Resource_App_Core_Ptr( musicCentreWidget );
+	Before_Init_Resource_App_Core_Ptr( favoriteDockWidget );
+	Before_Init_Resource_App_Core_Ptr( musicTitleDockWidget );
+	Before_Init_Resource_App_Core_Ptr( musicToolDockWidget );
 	return true;
 }
 bool MusicWindow::init( ) {
@@ -57,10 +74,16 @@ bool MusicWindow::init( ) {
 	} ) == false )
 		setName( tr( "音乐" ) );
 	Init_Resource_App_Core_Ptr( musicCentreWidget );
+	Init_Resource_App_Core_Ptr( favoriteDockWidget );
+	Init_Resource_App_Core_Ptr( musicTitleDockWidget );
+	Init_Resource_App_Core_Ptr( musicToolDockWidget );
 	return true;
 }
 bool MusicWindow::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( musicCentreWidget );
+	After_Init_Resource_App_Core_Ptr( favoriteDockWidget );
+	After_Init_Resource_App_Core_Ptr( musicTitleDockWidget );
+	After_Init_Resource_App_Core_Ptr( musicToolDockWidget );
 	return true;
 }
 bool MusicWindow::getJsonData( QJsonObject &get_json_object ) const {

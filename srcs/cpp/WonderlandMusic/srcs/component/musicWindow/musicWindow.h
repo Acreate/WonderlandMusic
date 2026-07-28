@@ -4,6 +4,9 @@
 
 #include "../../component/optionWindow/interface/optionPanel.h"
 
+class FavoriteDockWidget;
+class MusicToolDockWidget;
+class MusicTitleDockWidget;
 class UserMutex;
 class MusicItem;
 class MusicCentreWidget;
@@ -14,7 +17,10 @@ class MusicWindow : public QMainWindow, public OptionPanel {
 
 private:
 	UserMutex *userMutex = nullptr;
+	FavoriteDockWidget *favoriteDockWidget = nullptr;
 	MusicCentreWidget *musicCentreWidget = nullptr;
+	MusicTitleDockWidget *musicTitleDockWidget = nullptr;
+	MusicToolDockWidget *musicToolDockWidget = nullptr;
 	std::vector< MusicItem * > musicItemVector;
 
 public:

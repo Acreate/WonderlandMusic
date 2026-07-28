@@ -26,6 +26,7 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
+	virtual void clearShow( );
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

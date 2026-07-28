@@ -23,6 +23,7 @@ namespace PathTools {
 	QString getAutoShortenPathName( const QString &org_file_path );
 
 	qsizetype filterMusicFile( QStringList &result_get_path, const std::vector< QString > &entry_path );
+	bool isMusicFile( const QString &entry_path );
 
 	bool readJsonObject( QJsonObject &result_json_object, const QString &json_file_path );
 

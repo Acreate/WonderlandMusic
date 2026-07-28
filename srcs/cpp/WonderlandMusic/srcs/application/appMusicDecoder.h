@@ -6,6 +6,8 @@
 
 #include "../interface/iAppCore.h"
 
+class QMediaPlayer;
+
 class AppMusicDecoder : public IAppCore {
 protected:
 	class StringOperator {
@@ -56,6 +58,9 @@ protected:
 
 public:
 	virtual std::vector< QString > getSupperDecodeFileSuffix( ) const;
+	virtual bool loadMusicFile( const QString &music_file_path );
+Q_SIGNALS:
+	void signal_load_music_file_over( QMediaPlayer *media_player );
 };
 
 #endif // APPMUSICDECODER_H_H_HEAD__FILE__

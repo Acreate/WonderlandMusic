@@ -48,7 +48,7 @@ qsizetype PathTools::filterDir( QStringList &result_get_path, const std::vector<
 
 QString PathTools::getAutoShortenPathName( const QString &org_file_path ) {
 	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationFilePath = appInstance->getApplicationManage(  )->applicationDirPath( );
+	auto applicationFilePath = appInstance->getApplicationManage( )->applicationDirPath( );
 	QDir base( applicationFilePath );
 
 	QString result = base.relativeFilePath( org_file_path );
@@ -79,7 +79,11 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::v
 	result_get_path.resize( resultCount );
 	return resultCount;
 }
-
+bool PathTools::isMusicFile( const QString &entry_path ) {
+	auto applicationInstance = AppInstance::getAppInstance( );
+	auto musicDecoder = applicationInstance->getAppDataManage( )->getAppMusicManage( )->getAppMusicDecoder( );
+	return musicDecoder->musicFileNmaeSupperDecoder( entry_path );
+}
 qsizetype PathTools::filterFile( QStringList &result_get_path, const QStringList &entry_path ) {
 	qsizetype resultDataIndex = 0;
 	QFileInfo info;

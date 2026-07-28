@@ -4,6 +4,7 @@
 #include <QMetaEnum>
 #include <QString>
 #include <QMediaFormat>
+#include <QMediaPlayer>
 
 #include "appInstance.h"
 
@@ -123,4 +124,13 @@ std::vector< QString > AppMusicDecoder::getSupperDecodeFileSuffix( ) const {
 		resultData[ index ] = *data[ index ];
 
 	return result;
+}
+bool AppMusicDecoder::loadMusicFile( const QString &music_file_path ) {
+	QFileInfo info( music_file_path );
+	if( info.exists( ) == false )
+		return false;
+	if( musicFileNmaeSupperDecoder( music_file_path ) == false )
+		return false;
+	QMediaPlayer *mediaPlayer = new QMediaPlayer;
+	return false;
 }

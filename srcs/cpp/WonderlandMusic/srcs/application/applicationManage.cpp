@@ -22,6 +22,7 @@ bool ApplicationManage::init( ) {
 bool ApplicationManage::initAfter( ) {
 	appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
 	mainWindow = appUserInterfaceManage->getMainWindow( );
+	appDataManage = InstanceTools::getAppDataManage( );
 	return true;
 }
 
@@ -37,8 +38,10 @@ bool ApplicationManage::notify( QObject *object, QEvent *event ) {
 		auto type = event->type( );
 		switch( type ) {
 			case QEvent::Close :
-				appDataManage->writeJsonData( );
 				appUserInterfaceManage->writeJsonData( );
+				break;
+			case QEvent::Quit :
+				appDataManage->writeJsonData( );
 				emit signal_app_quit( );
 				break;
 		}

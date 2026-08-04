@@ -50,6 +50,7 @@ bool MusicTitleDockWidget::initAfter( ) {
 	musicTitileScrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 	musicTitileScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	musicTitileScrollArea->setWidget( musicTitleWidget );
+	musicTitileScrollArea->setWidgetResizable( true );
 	setWidget( musicTitileScrollArea );
 	setFloating( false );
 	setContextMenuPolicy( Qt::NoContextMenu );
@@ -58,5 +59,6 @@ bool MusicTitleDockWidget::initAfter( ) {
 	if( FontTools::getFontHeight( height ) == false )
 		height = 28;
 	musicWindow->resizeDocks( { this }, { height }, Qt::Vertical );
+	musicTitileScrollArea->resize( musicWindow->width( ), height );
 	return true;
 }

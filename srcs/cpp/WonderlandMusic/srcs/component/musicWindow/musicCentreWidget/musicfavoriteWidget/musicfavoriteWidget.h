@@ -11,17 +11,17 @@ class MusicfavoriteWidget : public QWidget, public IAppCore {
 	MusicfavoriteWidget( MusicCentreWidget *music_centre_widget );
 
 protected:
-	~MusicfavoriteWidget( ) override {
-		deleteResource( );
-	}
+	~MusicfavoriteWidget( ) override;
 
 protected:
 	bool deleteResource( ) override;
+	void paintEvent( QPaintEvent *event ) override;
 
 public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
+	virtual int getSuggestWidth( ) const;
 };
 
 #endif // MUSICFAVORITEWIDGET_H_H_HEAD__FILE__

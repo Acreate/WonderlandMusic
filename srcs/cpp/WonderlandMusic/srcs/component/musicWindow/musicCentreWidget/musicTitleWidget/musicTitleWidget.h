@@ -12,16 +12,16 @@ class MusicTitleWidget : public QWidget, public IAppCore {
 	MusicTitleWidget( MusicCentreWidget *music_centre_widget );
 
 protected:
-	~MusicTitleWidget( ) override {
-		deleteResource( );
-	}
+	~MusicTitleWidget( ) override;
 
 protected:
 	bool deleteResource( ) override;
+	void paintEvent( QPaintEvent *event ) override;
 
 public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
+	virtual int getSuggestHeight( ) const;
 };
 #endif // MUSICTITLEWIDGET_H_H_HEAD__FILE__

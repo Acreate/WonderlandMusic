@@ -12,13 +12,11 @@ class MusicListWidget : public QWidget, public IAppCore {
 	MusicListWidget( MusicCentreWidget *music_centre_widget );
 
 protected:
-	~MusicListWidget( ) override {
-		deleteResource( );
-	}
+	~MusicListWidget( ) override;
 
 protected:
 	bool deleteResource( ) override;
-
+	void paintEvent(QPaintEvent *event) override;
 public:
 	bool initBefore( ) override;
 	bool init( ) override;

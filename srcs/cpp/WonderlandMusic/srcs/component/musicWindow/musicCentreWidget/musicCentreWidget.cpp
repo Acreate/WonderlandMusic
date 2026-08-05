@@ -1,6 +1,7 @@
 ﻿#include "musicCentreWidget.h"
 
 #include <QScrollArea>
+#include <QScrollBar>
 
 #include <head/after_init_macro.h>
 #include <head/before_init_macro.h>
@@ -78,6 +79,7 @@ bool MusicCentreWidget::setMusicCentreWidgetInfo( MusicCentreWidgetInfo &music_c
 }
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );
+	userMutex = new UserMutex;
 	musicCentreWidgetInfo = new MusicCentreWidgetInfo;
 	musicfavoriteWidget = new MusicfavoriteWidget( this );
 	musicTitleWidget = new MusicTitleWidget( this );
@@ -106,10 +108,21 @@ bool MusicCentreWidget::initAfter( ) {
 	musicTitleWidgetScrollArea = createControlScrollArea( musicTitleWidget );
 	musicListWidgetScrollArea = createControlScrollArea( musicListWidget );
 
+	musicTitleWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	auto verticalScrollBar = musicTitleWidgetScrollArea->verticalScrollBar( );
+	if( verticalScrollBar )
+		verticalScrollBar->setEnabled( false );
+	auto horizontalScrollBar = musicTitleWidgetScrollArea->horizontalScrollBar( );
+	auto scrollBar = musicListWidgetScrollArea->horizontalScrollBar( );
+
+	connect( scrollBar, &QScrollBar::valueChanged, horizontalScrollBar, &QScrollBar::setValue );
+	connect( scrollBar, &QScrollBar::rangeChanged, horizontalScrollBar, &QScrollBar::setRange );
+
 	musicfavoriteWidgetScrollArea->show( );
 	musicTitleWidgetScrollArea->show( );
 	musicListWidgetScrollArea->show( );
 	musicToolWidget->show( );
+
 	calculateSize( );
 
 	return true;
@@ -117,5 +130,37 @@ bool MusicCentreWidget::initAfter( ) {
 void MusicCentreWidget::clearShowMusic( ) {
 }
 bool MusicCentreWidget::calculateSize( ) {
+	if( userMutex == nullptr )
+		return false;
+	// 当前组件高度
+	int thisCentreHeight = this->height( );
+	if( thisCentreHeight <= 0 )
+		return false;
+	// 当前组件宽度
+	int thisCentreWidthWidth = this->width( );
+	if( thisCentreWidthWidth <= 0 )
+		return false;
+	// 组件建议宽度
+	int suggestWidth = musicfavoriteWidget->getSuggestWidth( );
+	// 收藏组件的高度
+	musicfavoriteWidgetScrollArea->setGeometry( 0, 0, suggestWidth, thisCentreHeight );
+	musicfavoriteWidgetScrollArea->move( 0, 0 );
+
+	// 剩余宽度
+	int modWidth = thisCentreWidthWidth - suggestWidth;
+	// 建议高度
+	int suggestHeight = musicTitleWidget->getSuggestHeight( );
+	// 标题宽度
+	musicTitleWidgetScrollArea->setGeometry( suggestWidth, 0, modWidth, suggestHeight );
+
+	// 工具面板高度
+	int musicToolHeight = musicToolWidget->getSuggestHeight( );
+	// 中心面板
+	int modHeight = thisCentreHeight - ( musicToolHeight + suggestHeight );
+	musicListWidgetScrollArea->setGeometry( suggestWidth, suggestHeight, modWidth, modHeight );
+
+	modHeight = musicListWidgetScrollArea->y( ) + musicListWidgetScrollArea->height( );
+	// 工具宽度
+	musicToolWidget->setGeometry( suggestWidth, modHeight, modWidth, musicToolHeight );
 	return true;
 }

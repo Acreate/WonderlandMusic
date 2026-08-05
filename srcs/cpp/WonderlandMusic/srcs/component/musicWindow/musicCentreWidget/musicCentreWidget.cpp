@@ -1,7 +1,6 @@
 ﻿#include "musicCentreWidget.h"
 
 #include <QScrollArea>
-#include <QScrollBar>
 
 #include <head/after_init_macro.h>
 #include <head/before_init_macro.h>
@@ -12,7 +11,7 @@
 
 #include "../musicWindow.h"
 
-#include "../musicCentreWidgetInfo/musicCentreWidgetInfo.h"
+#include "../transparencyScrollBar/transparencyScrollBar.h"
 
 #include "musicListWidget/musicListWidget.h"
 
@@ -32,6 +31,7 @@ bool MusicCentreWidget::deleteResource( ) {
 		return true;
 	userMutex->lock( );
 	unSafetyClearShow( );
+	//Delete_Resource_App_Core_Ptr( transparencyScrollBar );
 	musicfavoriteWidgetScrollArea->takeWidget( );
 	Delete_Resource_App_Core_Ptr( musicfavoriteWidgetScrollArea );
 	musicListWidgetScrollArea->takeWidget( );
@@ -43,7 +43,6 @@ bool MusicCentreWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicTitleWidget );
 	Delete_Resource_App_Core_Ptr( musicListWidget );
 	Delete_Resource_App_Core_Ptr( musicToolWidget );
-	Delete_Resource_App_Core_Ptr( musicCentreWidgetInfo );
 
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
@@ -65,22 +64,9 @@ QScrollArea * MusicCentreWidget::createControlScrollArea( QWidget *widget ) {
 	scrollArea->setWidget( widget );
 	return scrollArea;
 }
-bool MusicCentreWidget::getMusicCentreWidgetInfo( MusicCentreWidgetInfo &music_centre_widget_info ) const {
-	if( this->musicCentreWidgetInfo == nullptr )
-		return false;
-	music_centre_widget_info = *this->musicCentreWidgetInfo;
-	return true;
-}
-bool MusicCentreWidget::setMusicCentreWidgetInfo( MusicCentreWidgetInfo &music_centre_widget_info ) {
-	if( this->musicCentreWidgetInfo == nullptr )
-		return false;
-	*this->musicCentreWidgetInfo = music_centre_widget_info;
-	return calculateSize( );
-}
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
-	musicCentreWidgetInfo = new MusicCentreWidgetInfo;
 	musicfavoriteWidget = new MusicfavoriteWidget( this );
 	musicTitleWidget = new MusicTitleWidget( this );
 	musicListWidget = new MusicListWidget( this );
@@ -108,6 +94,7 @@ bool MusicCentreWidget::initAfter( ) {
 	musicTitleWidgetScrollArea = createControlScrollArea( musicTitleWidget );
 	musicListWidgetScrollArea = createControlScrollArea( musicListWidget );
 
+	musicTitleWidgetScrollArea->setVerticalScrollBar( new TransparencyScrollBar( this ) );
 	musicTitleWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	auto verticalScrollBar = musicTitleWidgetScrollArea->verticalScrollBar( );
 	if( verticalScrollBar )

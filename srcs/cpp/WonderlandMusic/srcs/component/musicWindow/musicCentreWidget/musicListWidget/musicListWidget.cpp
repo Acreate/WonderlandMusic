@@ -15,7 +15,7 @@ void MusicListWidget::paintEvent( QPaintEvent *event ) {
 	QWidget::paintEvent( event );
 
 	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::black );
+	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkGreen );
 }
 bool MusicListWidget::initBefore( ) {
 	return true;

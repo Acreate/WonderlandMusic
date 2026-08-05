@@ -4,7 +4,7 @@
 
 #include <interface/iAppCore.h>
 
-class MusicCentreWidgetInfo;
+class TransparencyScrollBar;
 class QScrollArea;
 class MusicListWidget;
 class UserMutex;
@@ -19,7 +19,6 @@ class MusicCentreWidget : public QWidget, public IAppCore {
 
 private:
 	MusicWindow *musicWindow;
-	MusicCentreWidgetInfo *musicCentreWidgetInfo = nullptr;
 	UserMutex *userMutex = nullptr;
 	QScrollArea *musicfavoriteWidgetScrollArea = nullptr;
 	QScrollArea *musicTitleWidgetScrollArea = nullptr;
@@ -36,8 +35,6 @@ protected:
 	virtual bool unSafetyClearShow( );
 	void resizeEvent( QResizeEvent *event ) override;
 	virtual QScrollArea * createControlScrollArea( QWidget *widget );
-	virtual bool getMusicCentreWidgetInfo( MusicCentreWidgetInfo &music_centre_widget_info ) const;
-	virtual bool setMusicCentreWidgetInfo( MusicCentreWidgetInfo &music_centre_widget_info );
 
 public:
 	bool initBefore( ) override;

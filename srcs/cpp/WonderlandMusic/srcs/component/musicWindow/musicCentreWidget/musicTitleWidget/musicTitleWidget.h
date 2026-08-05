@@ -10,6 +10,7 @@ class MusicTitleWidget : public QWidget, public IAppCore {
 	friend class MusicCentreWidget;
 	MusicCentreWidget *musicCentreWidget;
 	MusicTitleWidget( MusicCentreWidget *music_centre_widget );
+	int suggestHeight;
 
 protected:
 	~MusicTitleWidget( ) override;

@@ -22,4 +22,7 @@ public:
 	virtual const QString & getAppName( ) const;
 };
 
+namespace AppTranslateTools {
+	Declaration_Get_Translate( SystemTrayIcon );
+}
 #endif // SYSTEMTRAYICONTRANSLATE_H_H_HEAD__FILE__

@@ -1,6 +1,6 @@
 ﻿#ifndef ITRANSLATE_H_H_HEAD__FILE__
 #define ITRANSLATE_H_H_HEAD__FILE__
-
+#include <tools/appTranslateTools.h>
 #include "iAppCore.h"
 
 class ITranslate : public IAppCore {

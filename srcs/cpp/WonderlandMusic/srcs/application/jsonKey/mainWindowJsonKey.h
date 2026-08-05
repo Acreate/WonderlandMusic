@@ -25,4 +25,7 @@ public:
 	virtual const QString & getObjectName( ) const;
 };
 
+namespace AppJsonKeyTools {
+	Declaration_Get_JsonKey( MainWindow );
+}
 #endif // MAINWINDOWJSONKEY_H_H_HEAD__FILE__

@@ -19,4 +19,8 @@ public:
 	virtual const QString & getSelectDirPath( ) const;
 };
 
+namespace AppJsonKeyTools {
+	Declaration_Get_JsonKey( AppMusicManage );
+}
+
 #endif // APPMUSICMANAGEJSONKEY_H_H_HEAD__FILE__

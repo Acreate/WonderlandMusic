@@ -42,4 +42,8 @@ public:
 	virtual const QString & getSortSinger( ) const;
 };
 
+namespace AppTranslateTools {
+	Declaration_Get_Translate( PlayerListWidgetMenu );
+}
+
 #endif // PLAYERLISTWIDGETMENUTRANSLATE_H_H_HEAD__FILE__

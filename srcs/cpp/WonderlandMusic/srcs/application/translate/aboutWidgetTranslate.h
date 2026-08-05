@@ -10,4 +10,9 @@ public:
 
 	virtual const QString & getTitleName( ) const;
 };
+
+namespace AppTranslateTools {
+	Declaration_Get_Translate( AboutWidget );
+}
+
 #endif // ABOUTWIDGETTRANSLATE_H_H_HEAD__FILE__

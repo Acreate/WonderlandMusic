@@ -1,6 +1,10 @@
 ﻿#include "jsonTranslate.h"
 
-#include <QObject>
+#include <application/appTranslate.h>
+#include <head/defininition_get_translate.h>
+#include <tools/instanceTools.h>
+
+Defininition_Get_Translate( Json );
 
 bool JsonTranslate::init( ) {
 	fileConverJsonDocError = QObject::tr( "文件转 QJsonDocument 对象错误" );

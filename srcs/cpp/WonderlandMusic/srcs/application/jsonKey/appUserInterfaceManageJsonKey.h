@@ -20,4 +20,8 @@ public:
 	virtual const QString & getMusicFavoriteWidget( ) const;
 };
 
+namespace AppJsonKeyTools {
+	Declaration_Get_JsonKey( AppUserInterfaceManage );
+}
+
 #endif // APPUSERINTERFACEMANAGEJSONKEY_H_H_HEAD__FILE__

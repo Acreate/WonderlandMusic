@@ -1,6 +1,10 @@
 ﻿#include "userMutexTranslate.h"
 
-#include <QObject>
+#include <application/appTranslate.h>
+#include <head/defininition_get_translate.h>
+#include <tools/instanceTools.h>
+
+Defininition_Get_Translate( UserMutex );
 
 bool UserMutexTranslate::init( ) {
 	nodeSetUnlockError = QObject::tr( "未解锁" );

@@ -38,4 +38,7 @@ public:
 	virtual const QString & getMillsecond( ) const;
 };
 
+namespace AppTranslateTools {
+	Declaration_Get_Translate( DateTimeFormat );
+}
 #endif // DATETIMEFORMATTRANSLATE_H_H_HEAD__FILE__

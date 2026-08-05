@@ -25,4 +25,7 @@ public:
 	virtual const QString & getLastUnlock( ) const;
 };
 
+namespace AppTranslateTools {
+	Declaration_Get_Translate( UserMutex );
+}
 #endif // USERMUTEXTRANSLATE_H_H_HEAD__FILE__

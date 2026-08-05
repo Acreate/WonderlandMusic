@@ -1,6 +1,10 @@
 ﻿#include "systemTrayIconTranslate.h"
 
-#include <QObject>
+#include <application/appTranslate.h>
+#include <head/defininition_get_translate.h>
+#include <tools/instanceTools.h>
+
+Defininition_Get_Translate( SystemTrayIcon );
 
 bool SystemTrayIconTranslate::init( ) {
 	isSystemTrayAvailableError = QObject::tr( "当前系统不支持托盘" );

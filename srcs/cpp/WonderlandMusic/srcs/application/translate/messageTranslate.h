@@ -36,4 +36,7 @@ public:
 	virtual const QString & getReadFileError( ) const;
 };
 
+namespace AppTranslateTools {
+	Declaration_Get_Translate( Message );
+}
 #endif // MESSAGETRANSLATE_H_H_HEAD__FILE__

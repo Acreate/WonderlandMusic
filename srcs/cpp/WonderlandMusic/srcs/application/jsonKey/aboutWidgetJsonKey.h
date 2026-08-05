@@ -13,4 +13,8 @@ public:
 public:
 	virtual QString getQtLogoIconPath( ) const;
 };
+
+namespace AppJsonKeyTools {
+	Declaration_Get_JsonKey( AboutWidget );
+};
 #endif // ABOUTWIDGETJSONKEY_H_H_HEAD__FILE__

@@ -14,5 +14,6 @@ class SettingWidgetTranslate;
 class PlayerListWidgetMenuTranslate;
 class FavoriteWidgetMenuTranslate;
 class MusicWindowTranslate;
+class MusicTitleWidgetTranslate;
 class AppTranslate;
 #endif // HEAD_TRANSLATE_CLASS_H_H_HEAD__FILE__

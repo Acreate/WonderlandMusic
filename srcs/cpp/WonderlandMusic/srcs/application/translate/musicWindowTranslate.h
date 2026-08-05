@@ -11,4 +11,8 @@ public:
 
 	virtual const QString & getTitleName( ) const;
 };
+
+namespace AppTranslateTools {
+	Declaration_Get_Translate( MusicWindow );
+}
 #endif // MUSICWINDOWTRANSLATE_H_H_HEAD__FILE__

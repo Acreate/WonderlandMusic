@@ -1,4 +1,11 @@
 ﻿#include "playerListWidgetMenuTranslate.h"
+
+#include <application/appTranslate.h>
+#include <head/defininition_get_translate.h>
+#include <tools/instanceTools.h>
+
+Defininition_Get_Translate( PlayerListWidgetMenu );
+
 bool PlayerListWidgetMenuTranslate::init( ) {
 	add = QObject::tr( "添加" );
 	addMusicFile = QObject::tr( "添加文件..." );

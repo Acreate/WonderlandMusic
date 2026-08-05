@@ -17,4 +17,7 @@ public:
 	virtual const QString & getIniDirHomePath( ) const;
 };
 
+namespace AppJsonKeyTools {
+	Declaration_Get_JsonKey( AppDataManage );
+}
 #endif // APPDATAMANAGEJSONKEY_H_H_HEAD__FILE__

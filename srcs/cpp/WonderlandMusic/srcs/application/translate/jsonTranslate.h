@@ -16,4 +16,7 @@ public:
 	virtual const QString & getNotFindJsonKey( ) const;
 };
 
+namespace AppTranslateTools {
+	Declaration_Get_Translate( Json );
+}
 #endif // JSONTRANSLATE_H_H_HEAD__FILE__

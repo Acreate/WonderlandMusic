@@ -12,4 +12,7 @@ public:
 	virtual QString getIconFilePath( ) const;
 };
 
+namespace AppJsonKeyTools {
+	Declaration_Get_JsonKey( SystemTrayIcon );
+}
 #endif // SYSTEMTRAYICONJSONKEY_H_H_HEAD__FILE__

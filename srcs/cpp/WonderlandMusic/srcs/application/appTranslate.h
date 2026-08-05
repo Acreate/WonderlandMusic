@@ -1,6 +1,6 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
-#include "../interface/iAppCore.h"
+#include <interface/iAppCore.h>
 #include <head/head_translate_class.h>
 
 class AppTranslate : public IAppCore {
@@ -19,6 +19,7 @@ protected:
 	SettingWidgetTranslate *settingWidget = nullptr;
 	PlayerListWidgetMenuTranslate *playerListWidgetMenu = nullptr;
 	FavoriteWidgetMenuTranslate *favoriteWidgetMenu = nullptr;
+	MusicTitleWidgetTranslate *musicTitleWidget = nullptr;
 	bool deleteResource( ) override;
 
 public:
@@ -27,6 +28,7 @@ public:
 	bool initBefore( ) override;
 	bool initAfter( ) override;
 	bool init( ) override;
+	virtual MusicTitleWidgetTranslate * getMusicTitleWidget( ) const;
 	virtual JsonTranslate * getJson( ) const;
 	virtual DateTimeFormatTranslate * getDateTimeFormat( ) const;
 	virtual AboutWidgetTranslate * getAboutWidget( ) const;

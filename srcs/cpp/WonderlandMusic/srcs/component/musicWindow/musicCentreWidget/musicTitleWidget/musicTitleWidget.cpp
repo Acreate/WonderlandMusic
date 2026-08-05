@@ -3,6 +3,10 @@
 #include <QPainter>
 
 #include "../musicCentreWidget.h"
+
+#include "../../../../application/appRenderImage.h"
+
+#include "../../../../tools/instanceTools.h"
 MusicTitleWidget::MusicTitleWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
 }
 MusicTitleWidget::~MusicTitleWidget( ) {
@@ -24,8 +28,13 @@ bool MusicTitleWidget::init( ) {
 	return true;
 }
 bool MusicTitleWidget::initAfter( ) {
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
+	if( appRenderImage == nullptr )
+		return false;
+	suggestHeight = appRenderImage->getFontMetrics( )->height( );
+
 	return true;
 }
 int MusicTitleWidget::getSuggestHeight( ) const {
-	return 50;
+	return suggestHeight;
 }

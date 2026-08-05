@@ -2,6 +2,12 @@
 #include "../appDataManage.h"
 #include "../appInstance.h"
 
+#include <head/defininition_get_json_key.h>
+
+#include <tools/instanceTools.h>
+#include "../appDataJsonKey.h"
+Defininition_Get_Json_Key( AppMusicManage );
+
 bool AppMusicManageJsonKey::init( ) {
 	filePath = "/json/app.music.manage.json";
 	jsonObejct = "app.music.manage";

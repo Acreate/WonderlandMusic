@@ -11,4 +11,8 @@ public:
 
 	virtual const QString & getAppWindowTitleName( ) const;
 };
+
+namespace AppTranslateTools {
+	Declaration_Get_Translate( MainWindow );
+}
 #endif // MAINWINDOWTRANSLATE_H_H_HEAD__FILE__

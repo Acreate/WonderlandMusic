@@ -4,10 +4,14 @@
 
 class DeleteExceptionTranslate : public ITranslate {
 	QString deletePtrError;
+
 public:
 	bool init( ) override;
 
 	virtual const QString & getDeletePtrError( ) const;
 };
 
+namespace AppTranslateTools {
+	Declaration_Get_Translate( DeleteException );
+}
 #endif // DELETEEXCEPTIONTRANSLATE_H_H_HEAD__FILE__

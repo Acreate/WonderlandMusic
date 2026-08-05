@@ -16,4 +16,7 @@ public:
 	virtual const QString & getQuitApp( ) const;
 };
 
+namespace AppTranslateTools {
+	Declaration_Get_Translate( SystemTrayIconMenu );
+}
 #endif // SYSTEMTRAYICONMENUTRANSLATE_H_H_HEAD__FILE__

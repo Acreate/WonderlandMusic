@@ -2,10 +2,10 @@
 #include <QTextCodec>
 #include "appDataManage.h"
 
-#include "../head/init_macro.h"
-#include "../head/release_macro.h"
+#include <head/init_macro.h>
+#include <head/release_macro.h>
 
-#include "../tools/instanceTools.h"
+#include <tools/instanceTools.h>
 
 #include "translate/aboutWidgetTranslate.h"
 #include "translate/appMusicManageTranslate.h"
@@ -15,6 +15,7 @@
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
+#include "translate/musicTitleWidgetTranslate.h"
 #include "translate/musicWindowTranslate.h"
 #include "translate/playerListWidgetMenuTranslate.h"
 #include "translate/settingWidgetTranslate.h"
@@ -52,6 +53,7 @@ bool AppTranslate::initBefore( ) {
 	settingWidget = new SettingWidgetTranslate;
 	playerListWidgetMenu = new PlayerListWidgetMenuTranslate;
 	favoriteWidgetMenu = new FavoriteWidgetMenuTranslate;
+	musicTitleWidget = new MusicTitleWidgetTranslate;
 	return true;
 }
 
@@ -74,6 +76,7 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( settingWidget );
 	Delete_Resource_App_Core_Ptr( playerListWidgetMenu );
 	Delete_Resource_App_Core_Ptr( favoriteWidgetMenu );
+	Delete_Resource_App_Core_Ptr( musicTitleWidget );
 	return true;
 }
 
@@ -96,8 +99,12 @@ bool AppTranslate::init( ) {
 	Init_Resource_App_Core_Ptr( settingWidget );
 	Init_Resource_App_Core_Ptr( playerListWidgetMenu );
 	Init_Resource_App_Core_Ptr( favoriteWidgetMenu );
+	Init_Resource_App_Core_Ptr( musicTitleWidget );
 
 	return true;
+}
+MusicTitleWidgetTranslate * AppTranslate::getMusicTitleWidget( ) const {
+	return musicTitleWidget;
 }
 
 JsonTranslate * AppTranslate::getJson( ) const {

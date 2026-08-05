@@ -73,13 +73,13 @@ void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 }
 void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	QWidget::mouseReleaseEvent( event );
-	if( dragSeparator == -1 )
+	if( dragSeparator == DragItemType::None )
 		return;
 	setMinimumWidth( getCalculateMinWidth( ) );
-	dragSeparator = -1;
+	dragSeparator = DragItemType::None;
 }
-bool MusicTitleWidget::isDragSeparator( int &index, int x_pos ) const {
-	index = -1;
+bool MusicTitleWidget::isDragSeparator( DragItemType &index, int x_pos ) const {
+	index = DragItemType::None;
 	int offsetX;
 	int clickWidth = intervalWidth * 2 + separatorWidth;
 	// 首个分隔符
@@ -93,7 +93,7 @@ bool MusicTitleWidget::isDragSeparator( int &index, int x_pos ) const {
 	// 点击编号分隔符
 	offsetX += clickWidth;
 	if( x_pos < offsetX ) {
-		index = 0;
+		index = DragItemType::Code;
 		return true;
 	}
 
@@ -104,7 +104,7 @@ bool MusicTitleWidget::isDragSeparator( int &index, int x_pos ) const {
 	// 点击歌名分隔符
 	offsetX += clickWidth;
 	if( x_pos < offsetX ) {
-		index = 1;
+		index = DragItemType::Name;
 		return true;
 	}
 
@@ -115,7 +115,7 @@ bool MusicTitleWidget::isDragSeparator( int &index, int x_pos ) const {
 	// 点击歌手分隔符
 	offsetX += clickWidth;
 	if( x_pos < offsetX ) {
-		index = 2;
+		index = DragItemType::Singer;
 		return true;
 	}
 	// 是否点击时长
@@ -125,7 +125,7 @@ bool MusicTitleWidget::isDragSeparator( int &index, int x_pos ) const {
 	// 点击时长分隔符
 	offsetX += clickWidth;
 	if( x_pos < offsetX ) {
-		index = 3;
+		index = DragItemType::Duration;
 		return true;
 	}
 
@@ -155,7 +155,7 @@ bool MusicTitleWidget::initAfter( ) {
 		musicDurationTimeWidth = fontMetrics->horizontalAdvance( musicDurationTime );
 	} ) == false )
 		return false;
-	dragSeparator = -1;
+	dragSeparator = DragItemType::None;
 	suggestHeight = fontMetrics->height( );
 	font = appRenderImage->getFont( );
 	fillSeparatorColor = Qt::GlobalColor::black;

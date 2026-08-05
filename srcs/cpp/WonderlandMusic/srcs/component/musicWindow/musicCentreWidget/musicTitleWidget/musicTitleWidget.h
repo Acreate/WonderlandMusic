@@ -10,6 +10,19 @@ class MusicCentreWidget;
 
 class MusicTitleWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
+
+public:
+	enum class DragItemType {
+		None,
+		Code,
+		Name,
+		Singer,
+		Duration
+	};
+
+	Q_ENUM( DragItemType )
+
+private:
 	MusicCentreWidget *musicCentreWidget;
 	int suggestHeight;
 	int intervalWidth;
@@ -18,7 +31,7 @@ class MusicTitleWidget : public QWidget, public IAppCore {
 	int musicNameWidth;
 	int musicSingerNameWidth;
 	int musicDurationTimeWidth;
-	int dragSeparator;
+	DragItemType dragSeparator;
 
 	QColor fillSeparatorColor;
 	const QFontMetrics *fontMetrics;
@@ -44,7 +57,7 @@ protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
-	virtual bool isDragSeparator( int &index, int x_pos ) const;
+	virtual bool isDragSeparator( DragItemType &index, int x_pos ) const;
 
 public:
 	bool initBefore( ) override;

@@ -5,6 +5,7 @@
 
 #include <interface/iAppCore.h>
 
+class UserMutex;
 class MusicCentreWidget;
 
 class MusicTitleWidget : public QWidget, public IAppCore {
@@ -17,15 +18,33 @@ class MusicTitleWidget : public QWidget, public IAppCore {
 	int musicNameWidth;
 	int musicSingerNameWidth;
 	int musicDurationTimeWidth;
+	int dragSeparator;
+
+	QColor fillSeparatorColor;
+	const QFontMetrics *fontMetrics;
+	QPainter *painter;
+	const QFont *font;
+	UserMutex *userMutex = nullptr;
+	QPen *pen = nullptr;
+
+	QString musicCode;
+	QString musicName;
+	QString musicSingeName;
+	QString musicDurationTime;
 
 public:
 	MusicTitleWidget( MusicCentreWidget *music_centre_widget );
 	~MusicTitleWidget( ) override;
 	virtual int getSuggestHeight( ) const;
+	virtual int getCalculateMinWidth( ) const;
 
 protected:
 	bool deleteResource( ) override;
 	void paintEvent( QPaintEvent *event ) override;
+	void mouseMoveEvent( QMouseEvent *event ) override;
+	void mousePressEvent( QMouseEvent *event ) override;
+	void mouseReleaseEvent( QMouseEvent *event ) override;
+	virtual bool isDragSeparator( ) const;
 
 public:
 	bool initBefore( ) override;

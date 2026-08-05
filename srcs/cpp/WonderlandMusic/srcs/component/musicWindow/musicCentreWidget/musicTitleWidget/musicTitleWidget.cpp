@@ -28,37 +28,35 @@ bool MusicTitleWidget::deleteResource( ) {
 	return true;
 }
 void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
-	AppTranslateTools::getMusicTitleWidget( [this] ( MusicTitleWidgetTranslate &translate ) {
-		int offsetX = intervalWidth;
-		int offsetY = 0;
+	int offsetX = intervalWidth;
+	int offsetY = 0;
 
-		painter->begin( this );
-		painter->setFont( *font );
-		painter->setPen( *pen );
-		painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicCode );
+	painter->begin( this );
+	painter->setFont( *font );
+	painter->setPen( *pen );
+	painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicCode );
 
-		offsetX += intervalWidth + musicCodeWidth;
-		painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
+	offsetX += intervalWidth + musicCodeWidth;
+	painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
 
-		offsetX += intervalWidth + separatorWidth;
-		painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicName );
+	offsetX += intervalWidth + separatorWidth;
+	painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicName );
 
-		offsetX += intervalWidth + musicNameWidth;
-		painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
+	offsetX += intervalWidth + musicNameWidth;
+	painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
 
-		offsetX += intervalWidth + separatorWidth;
-		painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicSingeName );
+	offsetX += intervalWidth + separatorWidth;
+	painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicSingeName );
 
-		offsetX += intervalWidth + musicSingerNameWidth;
-		painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
+	offsetX += intervalWidth + musicSingerNameWidth;
+	painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
 
-		offsetX += intervalWidth + separatorWidth;
-		painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicDurationTime );
+	offsetX += intervalWidth + separatorWidth;
+	painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicDurationTime );
 
-		offsetX += intervalWidth + musicDurationTimeWidth;
-		painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
-		painter->end( );
-	} );
+	offsetX += intervalWidth + musicDurationTimeWidth;
+	painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
+	painter->end( );
 }
 void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 	QWidget::mouseMoveEvent( event );

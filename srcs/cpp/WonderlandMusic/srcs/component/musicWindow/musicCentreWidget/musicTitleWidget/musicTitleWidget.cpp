@@ -1,6 +1,7 @@
 ﻿#include "musicTitleWidget.h"
 
 #include <QPainter>
+#include <QMouseEvent>
 
 #include "../musicCentreWidget.h"
 
@@ -28,12 +29,16 @@ bool MusicTitleWidget::deleteResource( ) {
 	return true;
 }
 void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
-	int offsetX = intervalWidth;
-	int offsetY = 0;
-
 	painter->begin( this );
 	painter->setFont( *font );
 	painter->setPen( *pen );
+
+	int offsetX = intervalWidth;
+	int offsetY = 0;
+
+	painter->fillRect( QRect( offsetX, offsetY, separatorWidth, suggestHeight ), fillSeparatorColor );
+
+	offsetX += intervalWidth + separatorWidth;
 	painter->drawText( QRect( offsetX, offsetY, musicCodeWidth, suggestHeight ), musicCode );
 
 	offsetX += intervalWidth + musicCodeWidth;
@@ -63,8 +68,8 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 	QWidget::mousePressEvent( event );
-	if( isDragSeparator( ) == false )
-		return;
+	int pos = event->pos( ).x( );
+	isDragSeparator( dragSeparator, pos );
 }
 void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	QWidget::mouseReleaseEvent( event );
@@ -73,7 +78,57 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	setMinimumWidth( getCalculateMinWidth( ) );
 	dragSeparator = -1;
 }
-bool MusicTitleWidget::isDragSeparator( ) const {
+bool MusicTitleWidget::isDragSeparator( int &index, int x_pos ) const {
+	index = -1;
+	int offsetX;
+	int clickWidth = intervalWidth * 2 + separatorWidth;
+	// 首个分隔符
+	offsetX = clickWidth;
+	if( x_pos < offsetX )
+		return false;
+	// 是否点击编号
+	offsetX += musicCodeWidth;
+	if( x_pos < offsetX )
+		return false;
+	// 点击编号分隔符
+	offsetX += clickWidth;
+	if( x_pos < offsetX ) {
+		index = 0;
+		return true;
+	}
+
+	// 是否点击歌名
+	offsetX += musicNameWidth;
+	if( x_pos < offsetX )
+		return false;
+	// 点击歌名分隔符
+	offsetX += clickWidth;
+	if( x_pos < offsetX ) {
+		index = 1;
+		return true;
+	}
+
+	// 是否点击歌手
+	offsetX += musicSingerNameWidth;
+	if( x_pos < offsetX )
+		return false;
+	// 点击歌手分隔符
+	offsetX += clickWidth;
+	if( x_pos < offsetX ) {
+		index = 2;
+		return true;
+	}
+	// 是否点击时长
+	offsetX += musicDurationTimeWidth;
+	if( x_pos < offsetX )
+		return false;
+	// 点击时长分隔符
+	offsetX += clickWidth;
+	if( x_pos < offsetX ) {
+		index = 3;
+		return true;
+	}
+
 	return false;
 }
 bool MusicTitleWidget::initBefore( ) {
@@ -100,6 +155,7 @@ bool MusicTitleWidget::initAfter( ) {
 		musicDurationTimeWidth = fontMetrics->horizontalAdvance( musicDurationTime );
 	} ) == false )
 		return false;
+	dragSeparator = -1;
 	suggestHeight = fontMetrics->height( );
 	font = appRenderImage->getFont( );
 	fillSeparatorColor = Qt::GlobalColor::black;
@@ -115,5 +171,5 @@ int MusicTitleWidget::getSuggestHeight( ) const {
 	return suggestHeight;
 }
 int MusicTitleWidget::getCalculateMinWidth( ) const {
-	return intervalWidth * 8 + separatorWidth * 3 + musicCodeWidth + musicNameWidth + musicSingerNameWidth + musicDurationTimeWidth;
+	return ( intervalWidth + separatorWidth ) * 5 + musicCodeWidth + musicNameWidth + musicSingerNameWidth + musicDurationTimeWidth + separatorWidth;
 }

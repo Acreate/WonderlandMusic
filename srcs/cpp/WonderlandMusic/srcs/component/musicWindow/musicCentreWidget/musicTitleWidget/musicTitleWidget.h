@@ -44,7 +44,7 @@ protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
-	virtual bool isDragSeparator( ) const;
+	virtual bool isDragSeparator( int &index, int x_pos ) const;
 
 public:
 	bool initBefore( ) override;

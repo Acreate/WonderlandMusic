@@ -3,8 +3,6 @@
 
 #include <head/head_translate_class.h>
 
-#include <head/declaration_get_translate.h>
-
 namespace AppTranslateTools {
 	AppTranslate * getAppTranslate( );
 }

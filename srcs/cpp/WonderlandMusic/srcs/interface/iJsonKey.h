@@ -2,7 +2,7 @@
 #define IJSONKEY_H_H_HEAD__FILE__
 
 #include "iAppCore.h"
-#include <tools/appJsonKeyTools.h>
+#include <head/declaration_get_jsonkey.h>
 
 class IJsonKey : public IAppCore {
 protected:

@@ -3,8 +3,6 @@
 #include <functional>
 #include <head/head_json_key_class.h>
 
-#include "../head/declaration_get_jsonkey.h"
-
 namespace AppJsonKeyTools {
 	AppDataJsonKey * getAppJsonKey( );
 }

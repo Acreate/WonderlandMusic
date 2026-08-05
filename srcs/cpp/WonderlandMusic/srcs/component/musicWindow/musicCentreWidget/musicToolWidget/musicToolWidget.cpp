@@ -1,8 +1,7 @@
 ﻿#include "musicToolWidget.h"
-MusicToolWidget::MusicToolWidget( QWidget *parent ) : QWidget( parent ) {
-}
-MusicToolWidget::~MusicToolWidget( ) {
-	deleteResource( );
+
+#include "../musicCentreWidget.h"
+MusicToolWidget::MusicToolWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
 }
 bool MusicToolWidget::deleteResource( ) {
 	return true;

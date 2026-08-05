@@ -4,13 +4,8 @@
 
 #include "../../component/optionWindow/interface/optionPanel.h"
 
-class MusicCentreScrollWidget;
-class FavoriteDockWidget;
-class MusicToolDockWidget;
-class MusicTitleDockWidget;
-class UserMutex;
-class MusicItem;
 class MusicCentreWidget;
+class UserMutex;
 
 class MusicWindow : public QMainWindow, public OptionPanel {
 	Q_OBJECT;
@@ -18,10 +13,7 @@ class MusicWindow : public QMainWindow, public OptionPanel {
 
 private:
 	UserMutex *userMutex = nullptr;
-	FavoriteDockWidget *favoriteDockWidget = nullptr;
-	MusicCentreScrollWidget *musicCentreScrollWidget = nullptr;
-	MusicTitleDockWidget *musicTitleDockWidget = nullptr;
-	MusicToolDockWidget *musicToolDockWidget = nullptr;
+	MusicCentreWidget *musicCentreWidget = nullptr;
 	std::vector< MusicItem * > musicItemVector;
 
 public:
@@ -31,8 +23,8 @@ public:
 protected:
 	bool deleteResource( ) override;
 
-	virtual void unSafetyClearInfo( );
-	virtual void unSafetyClearShow( );
+	virtual bool unSafetyClearInfo( );
+	virtual bool unSafetyClearShow( );
 	virtual bool updateItem( MusicItem *music_item );
 	virtual bool removeItem( MusicItem *music_item );
 

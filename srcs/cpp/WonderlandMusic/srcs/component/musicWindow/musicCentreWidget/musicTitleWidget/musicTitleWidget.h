@@ -31,8 +31,10 @@ private:
 	int musicNameWidth;
 	int musicSingerNameWidth;
 	int musicDurationTimeWidth;
+	int minItemWidth;
+	int clickWidth;
 	DragItemType dragSeparator;
-
+	int dragPosX;
 	QColor fillSeparatorColor;
 	const QFontMetrics *fontMetrics;
 	QPainter *painter;

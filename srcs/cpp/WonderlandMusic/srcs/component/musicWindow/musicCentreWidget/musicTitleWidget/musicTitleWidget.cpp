@@ -68,8 +68,9 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 	QWidget::mousePressEvent( event );
-	int pos = event->pos( ).x( );
-	isDragSeparator( dragSeparator, pos );
+
+	dragPosX = event->pos( ).x( );
+	isDragSeparator( dragSeparator, dragPosX );
 }
 void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	QWidget::mouseReleaseEvent( event );
@@ -81,7 +82,7 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 bool MusicTitleWidget::isDragSeparator( DragItemType &index, int x_pos ) const {
 	index = DragItemType::None;
 	int offsetX;
-	int clickWidth = intervalWidth * 2 + separatorWidth;
+
 	// 首个分隔符
 	offsetX = clickWidth;
 	if( x_pos < offsetX )
@@ -132,6 +133,17 @@ bool MusicTitleWidget::isDragSeparator( DragItemType &index, int x_pos ) const {
 	return false;
 }
 bool MusicTitleWidget::initBefore( ) {
+	deleteResource( );
+	pen = new QPen;
+	painter = new QPainter( );
+
+	separatorWidth = 5;
+	intervalWidth = 2;
+	dragSeparator = DragItemType::None;
+	dragPosX = 0;
+	minItemWidth = intervalWidth * 2 + separatorWidth;
+	clickWidth = intervalWidth * 2 + separatorWidth;
+	fillSeparatorColor = Qt::GlobalColor::black;
 	return true;
 }
 bool MusicTitleWidget::init( ) {
@@ -141,8 +153,6 @@ bool MusicTitleWidget::initAfter( ) {
 	auto appRenderImage = InstanceTools::getAppRenderImage( );
 	if( appRenderImage == nullptr )
 		return false;
-
-	fontMetrics = appRenderImage->getFontMetrics( );
 	if( AppTranslateTools::getMusicTitleWidget( [this] ( MusicTitleWidgetTranslate &translate ) {
 		musicCode = translate.getMusicCode( );
 		musicName = translate.getMusicName( );
@@ -155,14 +165,9 @@ bool MusicTitleWidget::initAfter( ) {
 		musicDurationTimeWidth = fontMetrics->horizontalAdvance( musicDurationTime );
 	} ) == false )
 		return false;
-	dragSeparator = DragItemType::None;
 	suggestHeight = fontMetrics->height( );
+	fontMetrics = appRenderImage->getFontMetrics( );
 	font = appRenderImage->getFont( );
-	fillSeparatorColor = Qt::GlobalColor::black;
-	separatorWidth = 5;
-	intervalWidth = 2;
-	pen = new QPen;
-	painter = new QPainter( );
 	pen->setColor( fillSeparatorColor );
 	setMinimumWidth( getCalculateMinWidth( ) );
 	return true;
@@ -171,5 +176,5 @@ int MusicTitleWidget::getSuggestHeight( ) const {
 	return suggestHeight;
 }
 int MusicTitleWidget::getCalculateMinWidth( ) const {
-	return ( intervalWidth + separatorWidth ) * 5 + musicCodeWidth + musicNameWidth + musicSingerNameWidth + musicDurationTimeWidth + separatorWidth;
+	return clickWidth * 5 + musicCodeWidth + musicNameWidth + musicSingerNameWidth + musicDurationTimeWidth;
 }

@@ -12,6 +12,7 @@
 
 #include "../head/release_macro.h"
 
+#include "../msgInfo/cmakeInfo.h"
 #include "../msgInfo/messageErrorOut.h"
 
 #include "../tools/instanceTools.h"
@@ -112,7 +113,7 @@ bool AboutWidget::getSoftwareProtocolInfo( QString &result_info ) {
 	result_info += "<p><b>" + tr( "软件版本：" ) + QString( "</b>%1</p>" ).arg( QString( "V0.0.1" ) );
 
 	QDateTime compileDateTime;
-	if( MessageErrorOut::getGeneratePorjectQDateTime( compileDateTime ) == false )
+	if( CmakeInfo::getGeneratePorjectDateTime( compileDateTime ) == false )
 		return false;
 	QString dateTimeString = compileDateTime.toString( "yyyy" + tr( "年" ) + "MM" + tr( "月" ) + "dd" + tr( "日" ) + " hh" + tr( "时" ) + "mm" + tr( "分" ) + "ss" + tr( "秒" ) );
 	result_info += "<p><b>" + tr( "编译时间：" ) + QString( "</b>%1</p>" ).arg( dateTimeString );

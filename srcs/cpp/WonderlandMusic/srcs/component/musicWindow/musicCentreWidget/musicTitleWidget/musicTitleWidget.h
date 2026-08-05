@@ -5,15 +5,23 @@
 
 #include <interface/iAppCore.h>
 
+class MusicCentreWidget;
+
 class MusicTitleWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
-	friend class MusicCentreWidget;
 	MusicCentreWidget *musicCentreWidget;
-	MusicTitleWidget( MusicCentreWidget *music_centre_widget );
 	int suggestHeight;
+	int intervalWidth;
+	int separatorWidth;
+	int musicCodeWidth;
+	int musicNameWidth;
+	int musicSingerNameWidth;
+	int musicDurationTimeWidth;
 
-protected:
+public:
+	MusicTitleWidget( MusicCentreWidget *music_centre_widget );
 	~MusicTitleWidget( ) override;
+	virtual int getSuggestHeight( ) const;
 
 protected:
 	bool deleteResource( ) override;
@@ -23,6 +31,5 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
-	virtual int getSuggestHeight( ) const;
 };
 #endif // MUSICTITLEWIDGET_H_H_HEAD__FILE__

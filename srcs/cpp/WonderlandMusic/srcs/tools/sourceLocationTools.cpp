@@ -2,10 +2,10 @@
 #include <QFileInfo>
 #include <QString>
 #include <source_location>
-#include "appTranslateTools.h"
-#include "../../auto_generate_files/macro/cmake_to_c_cpp_header_env.h"
 #include "../application/translate/messageTranslate.h"
 #include "../dateTimeFormat/dateTimeFormat.h"
+
+#include "../msgInfo/cmakeInfo.h"
 
 void SourceLocationTools::formatString( QString &format_string, QString &source_file, QString &source_function, QString &source_line, const std::source_location &location, const QString &msg ) {
 	uint_least32_t msgCodeLine = location.line( );
@@ -13,7 +13,9 @@ void SourceLocationTools::formatString( QString &format_string, QString &source_
 	QString msgCodeFunctionName = location.function_name( );
 	QFileInfo info( msgCodeFileName );
 	auto absoluteFilePath = info.absoluteFilePath( );
-	msgCodeFileName = absoluteFilePath.remove( Cmake_Source_Dir );
+	QString cmakeSourceDir;
+	CmakeInfo::getGeneratePorjectCmakeSourceDir( cmakeSourceDir );
+	msgCodeFileName = absoluteFilePath.remove( cmakeSourceDir );
 
 	QString currentDataTimeToString;
 	DateTimeFormat dateTimeFormat;
@@ -43,7 +45,9 @@ void SourceLocationTools::formatSourceFilePath( QString &source_file, QString &s
 	source_function = location.function_name( );
 	QFileInfo info( source_file );
 	auto absoluteFilePath = info.absoluteFilePath( );
-	source_file = absoluteFilePath.remove( Cmake_Source_Dir );
+	QString cmakeSourceDir;
+	CmakeInfo::getGeneratePorjectCmakeSourceDir( cmakeSourceDir );
+	source_file = absoluteFilePath.remove( cmakeSourceDir );
 }
 
 void SourceLocationTools::formatString( QString &result_msg, const DateTimeFormat &date_time_format, const std::source_location &source_location, const QString &msg ) {
@@ -53,7 +57,9 @@ void SourceLocationTools::formatString( QString &result_msg, const DateTimeForma
 	QFileInfo info( msgCodeFileName );
 
 	auto absoluteFilePath = info.absoluteFilePath( );
-	msgCodeFileName = absoluteFilePath.remove( Cmake_Source_Dir );
+	QString cmakeSourceDir;
+	CmakeInfo::getGeneratePorjectCmakeSourceDir( cmakeSourceDir );
+	msgCodeFileName = absoluteFilePath.remove( cmakeSourceDir );
 
 	QString currentDataTimeToString;
 	DateTimeFormat dateTimeFormat;

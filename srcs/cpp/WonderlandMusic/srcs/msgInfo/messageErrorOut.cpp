@@ -2,17 +2,16 @@
 #include <cmake_include_to_c_cpp_header_env.h>
 #include <qdir.h>
 #include "messageString.h"
-#include "../application/appDataManage.h"
 #include "../application/appDateTimerManage.h"
-#include "../application/appInstance.h"
-#include "../application/appTranslate.h"
 #include "../application/translate/messageTranslate.h"
 #include "../dateTimeFormat/dateTimeFormat.h"
+
+#include "../tools/instanceTools.h"
 #include "../tools/sourceLocationTools.h"
 #ifdef Q_OS_WIN
 #include <windows.h>
 // 核心：直接输出 UTF-16，不走 qDebug、不走本地编码
-void StdErrorConsoleOut( const QString &text ) {
+static void StdErrorConsoleOut( const QString &text ) {
 	HANDLE h = GetStdHandle( STD_ERROR_HANDLE );
 	if( h == INVALID_HANDLE_VALUE )
 		return;
@@ -111,15 +110,12 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 	if( isWriteFile == false )
 		return outString;
 	QDateTime appStartRunDataTime;
-	auto *applicationInstance = AppInstance::getAppInstance( );
 	const QDateTime *startDateTime = nullptr;
-	if( applicationInstance ) {
-		AppDateTimerManage *appDateTimerManage = applicationInstance->getAppDateTimerManage( );
-		if( appDateTimerManage ) {
-			startDateTime = appDateTimerManage->getStartDateTime( );
-			if( startDateTime )
-				appStartRunDataTime = *startDateTime;
-		}
+	AppDateTimerManage *appDateTimerManage = InstanceTools::getAppDateTimerManage( );
+	if( appDateTimerManage ) {
+		startDateTime = appDateTimerManage->getStartDateTime( );
+		if( startDateTime )
+			appStartRunDataTime = *startDateTime;
 	}
 	if( startDateTime == nullptr )
 		appStartRunDataTime = QDateTime::currentDateTime( );
@@ -138,22 +134,10 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 		if( dir.mkdir( logHomePtah ) == false ) {
 			outString.clear( );
 			QString createDirError;
-			AppDataManage *dataManage;
-			MessageTranslate *messageTranslate;
-			if( applicationInstance ) {
-				dataManage = applicationInstance->getAppDataManage( );
-				auto translate = dataManage->getTranslate( );
-				messageTranslate = translate->getMessage( );
-				createDirError = messageTranslate->getCreateDirError( );
-			}
-			if( messageTranslate == nullptr ) {
-				messageTranslate = new MessageTranslate;
-				if( messageTranslate->init( ) )
-					createDirError = messageTranslate->getCreateDirError( );
-				else
-					createDirError = QObject::tr( "创建目录失败" );
-				delete messageTranslate;
-			}
+			if( AppTranslateTools::getMessage( [&createDirError] ( MessageTranslate &translate ) {
+				createDirError = translate.getCreateDirError( );
+			} ) == false )
+				createDirError = QObject::tr( "创建目录失败" );
 
 			SourceLocationTools::formatString( outString, date_time_format, std::source_location::current( ), createDirError + " : " + logHomePtah );
 			StdErrorConsoleOut( outString );
@@ -165,22 +149,10 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 	if( openFile.open( flags ) == false ) {
 		outString.clear( );
 		QString openFileError;
-		AppDataManage *dataManage;
-		MessageTranslate *messageTranslate;
-		if( applicationInstance ) {
-			dataManage = applicationInstance->getAppDataManage( );
-			auto translate = dataManage->getTranslate( );
-			messageTranslate = translate->getMessage( );
-			openFileError = messageTranslate->getOpenFileError( );
-		}
-		if( messageTranslate == nullptr ) {
-			messageTranslate = new MessageTranslate;
-			if( messageTranslate->init( ) )
-				openFileError = messageTranslate->getOpenFileError( );
-			else
-				openFileError = QObject::tr( "打开文件失败" );
-			delete messageTranslate;
-		}
+		if( AppTranslateTools::getMessage( [&openFileError] ( MessageTranslate &translate ) {
+			openFileError = translate.getOpenFileError( );
+		} ) == false )
+			openFileError = QObject::tr( "打开文件失败" );
 		SourceLocationTools::formatString( outString, date_time_format, std::source_location::current( ), openFileError + " : " + writeFilePath );
 		StdErrorConsoleOut( outString );
 		return outString;

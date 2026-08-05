@@ -11,6 +11,9 @@ class DateTimeFormat;
 class QDate;
 
 class MessageErrorOut {
+public:
+	static bool getGeneratePorjectQDateTime( QDateTime &result_data_time );
+
 protected:
 	static std::shared_ptr< QDateTime > logStartDateTime;;
 

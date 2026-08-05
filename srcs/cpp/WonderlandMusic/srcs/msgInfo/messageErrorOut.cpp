@@ -67,6 +67,20 @@ const std::vector< MessageString > & MessageErrorOut::getOutMsgVector( ) const {
 	return this->outMsgVector;
 }
 
+bool MessageErrorOut::getGeneratePorjectQDateTime( QDateTime &result_data_time ) {
+	QString format = cmake_property_Generate_Date_Time_Format;
+	format.replace( "%Y", "yyyy" );
+	format.replace( "%m", "MM" );
+	format.replace( "%d", "dd" );
+	format.replace( "%H", "HH" );
+	format.replace( "%M", "mm" );
+	format.replace( "%S", "ss" );
+	result_data_time = QDateTime::fromString(
+		cmake_property_Generate_Date_Time,
+		format
+		);
+	return true;
+}
 MessageErrorOut::~MessageErrorOut( ) {
 	writeLog( );
 }

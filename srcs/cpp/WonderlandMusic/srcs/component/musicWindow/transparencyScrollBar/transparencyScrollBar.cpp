@@ -13,14 +13,16 @@ TransparencyScrollBar::TransparencyScrollBar( QWidget *widget ) : QScrollBar( wi
 TransparencyScrollBar::~TransparencyScrollBar( ) {
 }
 bool TransparencyScrollBar::event( QEvent *event ) {
+	event->ignore( );
+	QPainter *painter;
 	switch( event->type( ) ) {
-		case QEvent::Paint : {
-			event->ignore( );
-			Q_UNUSED( event );
-			QPainter painter( this );
-			painter.fillRect( contentsRect( ), Qt::GlobalColor::transparent );
-		}
-		break;
+		case QEvent::Paint :
+			painter = new QPainter( this );
+			painter->fillRect( contentsRect( ), Qt::GlobalColor::transparent );
+			delete painter;
+			break;
+		default :
+			break;
 	}
 	return true;
 }

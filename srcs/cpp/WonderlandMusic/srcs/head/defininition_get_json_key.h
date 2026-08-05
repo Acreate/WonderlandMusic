@@ -4,7 +4,7 @@
 #define Defininition_Get_Json_Key( type_name_ ) \
 	bool AppJsonKeyTools::get##type_name_(const std::function< void(const type_name_##JsonKey & json_key) > &json_key_fun_call){\
 		type_name_##JsonKey *var = nullptr; \
-		auto *getPtr =  InstanceTools::getAppDataJsonKey(  ); \
+		auto *getPtr = AppJsonKeyTools::getAppJsonKey( ); \
 		if( getPtr ){ \
 			var = getPtr->get##type_name_( );\
 			if( var ) { \

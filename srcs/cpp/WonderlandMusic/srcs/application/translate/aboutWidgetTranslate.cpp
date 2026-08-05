@@ -1,7 +1,7 @@
 ﻿#include "aboutWidgetTranslate.h"
 
 #include <application/appTranslate.h>
-#include <tools/instanceTools.h>
+#include <tools/appTranslateTools.h>
 
 #include <head/defininition_get_translate.h>
 

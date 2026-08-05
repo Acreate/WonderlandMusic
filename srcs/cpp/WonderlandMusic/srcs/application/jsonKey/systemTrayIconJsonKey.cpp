@@ -5,10 +5,10 @@
 
 #include <head/defininition_get_json_key.h>
 
-#include <tools/instanceTools.h>
+#include <tools/appJsonKeyTools.h>
 #include "../appDataJsonKey.h"
 
-Defininition_Get_Json_Key (SystemTrayIcon);
+Defininition_Get_Json_Key( SystemTrayIcon );
 bool SystemTrayIconJsonKey::init( ) {
 	iconFilePath = "/png/qtlogo-64.png";
 	return true;

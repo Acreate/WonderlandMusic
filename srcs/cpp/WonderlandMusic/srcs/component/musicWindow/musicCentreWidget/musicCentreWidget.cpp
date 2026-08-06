@@ -64,7 +64,7 @@ QScrollArea * MusicCentreWidget::createControlScrollArea( QWidget *widget ) {
 	scrollArea->setWidget( widget );
 	return scrollArea;
 }
-void MusicCentreWidget::updateTitleWidthInfo( int interval_width, int separator_width, int music_code_width, int &result_music_name_width, int music_singer_name_width, int music_duration_time_width ) const {
+void MusicCentreWidget::updateTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
 	// todo : ...
 }
 bool MusicCentreWidget::initBefore( ) {
@@ -109,12 +109,12 @@ bool MusicCentreWidget::initAfter( ) {
 	connect( scrollBar, &QScrollBar::valueChanged, horizontalScrollBar, &QScrollBar::setValue );
 	connect( scrollBar, &QScrollBar::rangeChanged, horizontalScrollBar, &QScrollBar::setRange );
 
+	calculateSize( );
+	
 	musicfavoriteWidgetScrollArea->show( );
 	musicTitleWidgetScrollArea->show( );
-	musicListWidgetScrollArea->show( );
 	musicToolWidget->show( );
-
-	calculateSize( );
+	musicListWidgetScrollArea->show( );
 
 	return true;
 }
@@ -158,5 +158,10 @@ bool MusicCentreWidget::calculateSize( ) {
 void MusicTitleWidgetTools::updateMusicCentreWidgetTitleWidthInfo( MusicCentreWidget *music_centre_widget, MusicTitleWidget *music_title_widget ) {
 	if( music_centre_widget == nullptr || music_title_widget == nullptr )
 		return;
-	music_centre_widget->updateTitleWidthInfo( music_title_widget->intervalWidth, music_title_widget->separatorWidth, music_title_widget->musicCodeWidth, music_title_widget->musicNameWidth, music_title_widget->musicSingerNameWidth, music_title_widget->musicDurationTimeWidth );
+	music_centre_widget->updateTitleWidthInfo( music_title_widget, music_title_widget->intervalWidth, music_title_widget->separatorWidth, music_title_widget->musicCodeWidth, music_title_widget->musicNameWidth, music_title_widget->musicSingerNameWidth, music_title_widget->musicDurationTimeWidth );
+}
+void MusicTitleWidgetTools::updateMusicTitleWidgetTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
+	if( music_title_widget == nullptr )
+		return;
+	music_title_widget->setTitleWidthInfo( interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
 }

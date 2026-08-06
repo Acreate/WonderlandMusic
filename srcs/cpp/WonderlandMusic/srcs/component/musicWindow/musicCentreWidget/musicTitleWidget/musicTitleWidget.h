@@ -70,9 +70,12 @@ protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
+	void showEvent( QShowEvent *event ) override;
 	virtual bool isDragSeparator( DragItemType &index, int x_pos ) const;
 
 	virtual void updateTitleWidthInfo( );
+
+	virtual void setTitleWidthInfo( int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
 
 public:
 	bool initBefore( ) override;

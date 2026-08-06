@@ -37,7 +37,7 @@ protected:
 	void resizeEvent( QResizeEvent *event ) override;
 	virtual QScrollArea * createControlScrollArea( QWidget *widget );
 
-	virtual void updateTitleWidthInfo( int interval_width, int separator_width, int music_code_width, int &result_music_name_width, int music_singer_name_width, int music_duration_time_width ) const;
+	virtual void updateTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
 
 public:
 	bool initBefore( ) override;
@@ -55,5 +55,6 @@ private:
 	friend class MusicCentreWidget;
 	friend class MusicTitleWidget;
 	static void updateMusicCentreWidgetTitleWidthInfo( MusicCentreWidget *music_centre_widget, MusicTitleWidget *music_title_widget );
+	static void updateMusicTitleWidgetTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
 };
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

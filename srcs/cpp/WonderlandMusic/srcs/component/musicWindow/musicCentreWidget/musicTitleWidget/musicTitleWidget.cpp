@@ -141,6 +141,10 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	update( );
 	updateTitleWidthInfo( );
 }
+void MusicTitleWidget::showEvent( QShowEvent *event ) {
+	QWidget::showEvent( event );
+	updateTitleWidthInfo( );
+}
 bool MusicTitleWidget::isDragSeparator( DragItemType &index, int x_pos ) const {
 	index = DragItemType::None;
 	int offsetX;
@@ -271,9 +275,12 @@ void MusicTitleWidget::getTitleWidthInfo( int &result_interval_width, int &resul
 	result_music_singer_name_width = musicSingerNameWidth;
 	result_music_duration_time_width = musicDurationTimeWidth;
 }
-void MusicTitleWidget::getTitleWidthInfo( int &result_music_code_width, int &result_music_name_width, int &result_music_singer_name_width, int &result_music_duration_time_width ) const {
-	result_music_code_width = musicCodeWidth;
-	result_music_name_width = musicNameWidth;
-	result_music_singer_name_width = musicSingerNameWidth;
-	result_music_duration_time_width = musicDurationTimeWidth;
+void MusicTitleWidget::setTitleWidthInfo( int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
+	intervalWidth = interval_width;
+	separatorWidth = separator_width;
+	musicCodeWidth = music_code_width;
+	musicNameWidth = music_name_width;
+	musicSingerNameWidth = music_singer_name_width;
+	musicDurationTimeWidth = music_duration_time_width;
+	repaint( );
 }

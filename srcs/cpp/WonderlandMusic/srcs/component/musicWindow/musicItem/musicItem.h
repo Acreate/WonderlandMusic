@@ -3,10 +3,12 @@
 #include <QObject>
 #include <QString>
 
+#include <interface/iAppJsonData.h>
+
 class MusicWindow;
 class QMediaPlayer;
 
-class MusicItem : public QObject {
+class MusicItem : public QObject, public IAppJsonData {
 	Q_OBJECT;
 	friend class MusicWindow;
 
@@ -19,7 +21,8 @@ private:
 	QMediaPlayer *mediaPlayer;
 	bool loadedOver;
 	MusicWindow *musicWindow;
-	QImage* rendBuff = nullptr;
+	QImage *rendBuff = nullptr;
+
 public:
 	~MusicItem( ) override;
 	MusicItem( MusicWindow *music_window, const QString &file_path );
@@ -30,6 +33,8 @@ public:
 	virtual bool getFilePath( QString &result_file_path ) const;
 	virtual bool getElapsedTime( qint64 &result_elapsed_time ) const;
 	virtual QImage * getRendBuff( ) const;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 };
 
 #endif // MUSICITEM_H_H_HEAD__FILE__

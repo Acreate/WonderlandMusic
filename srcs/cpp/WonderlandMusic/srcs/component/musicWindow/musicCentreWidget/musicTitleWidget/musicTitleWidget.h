@@ -5,10 +5,12 @@
 
 #include <interface/iAppCore.h>
 
+#include "../../../../interface/iAppJsonData.h"
+
 class UserMutex;
 class MusicCentreWidget;
 
-class MusicTitleWidget : public QWidget, public IAppCore {
+class MusicTitleWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 	friend class MusicTitleWidgetTools;
 
@@ -81,5 +83,7 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 };
 #endif // MUSICTITLEWIDGET_H_H_HEAD__FILE__

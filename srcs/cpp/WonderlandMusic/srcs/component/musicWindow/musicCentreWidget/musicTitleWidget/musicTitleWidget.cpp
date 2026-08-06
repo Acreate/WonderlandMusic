@@ -1,18 +1,20 @@
 ﻿#include "musicTitleWidget.h"
 
+#include <QJsonObject>
 #include <QPainter>
 #include <QMouseEvent>
 
+#include <head/q_json_object.h>
 #include "../musicCentreWidget.h"
 
-#include "../../../../application/appRenderImage.h"
-#include "../../../../application/translate/musicTitleWidgetTranslate.h"
+#include <application/appRenderImage.h>
+#include <application/translate/musicTitleWidgetTranslate.h>
 
-#include "../../../../head/release_macro.h"
+#include <head/release_macro.h>
 
-#include "../../../../mutex/userMutex.h"
+#include <mutex/userMutex.h>
 
-#include "../../../../tools/instanceTools.h"
+#include <tools/instanceTools.h>
 MusicTitleWidget::MusicTitleWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
 }
 MusicTitleWidget::~MusicTitleWidget( ) {
@@ -241,6 +243,26 @@ bool MusicTitleWidget::initAfter( ) {
 	pen->setColor( fillSeparatorColor );
 	setMouseTracking( true );
 	setMinimumWidth( getCalculateMinWidth( ) );
+	return true;
+}
+bool MusicTitleWidget::getJsonData( QJsonObject &get_json_object ) const {
+	instaerJsonObj( get_json_object, musicCodeWidth );
+	instaerJsonObj( get_json_object, musicNameWidth );
+	instaerJsonObj( get_json_object, musicSingerNameWidth );
+	instaerJsonObj( get_json_object, musicDurationTimeWidth );
+	return true;
+}
+bool MusicTitleWidget::setJsonData( const QJsonObject &set_json_object ) {
+	QJsonObject::const_iterator end;
+	QJsonObject::const_iterator find;
+	bool ok;
+	QString string;
+	end = set_json_object.end( );
+
+	conver_string_find_var( set_json_object, musicCodeWidth, find, end, ok, toInt );
+	conver_string_find_var( set_json_object, musicNameWidth, find, end, ok, toInt );
+	conver_string_find_var( set_json_object, musicSingerNameWidth, find, end, ok, toInt );
+	conver_string_find_var( set_json_object, musicDurationTimeWidth, find, end, ok, toInt );
 	return true;
 }
 int MusicTitleWidget::getSuggestHeight( ) const {

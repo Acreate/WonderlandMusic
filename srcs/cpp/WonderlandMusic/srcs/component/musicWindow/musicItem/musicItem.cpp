@@ -81,3 +81,9 @@ bool MusicItem::getElapsedTime( qint64 &result_elapsed_time ) const {
 QImage * MusicItem::getRendBuff( ) const {
 	return rendBuff;
 }
+bool MusicItem::getJsonData( QJsonObject &get_json_object ) const {
+	return true;
+}
+bool MusicItem::setJsonData( const QJsonObject &set_json_object ) {
+	return true;
+}

@@ -29,3 +29,9 @@ bool MusicfavoriteWidget::initAfter( ) {
 int MusicfavoriteWidget::getSuggestWidth( ) const {
 	return 50;
 }
+bool MusicfavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
+	return true;
+}
+bool MusicfavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
+	return true;
+}

@@ -1,5 +1,6 @@
 ﻿#include "musicCentreWidget.h"
 
+#include <QJsonObject>
 #include <QScrollArea>
 
 #include <head/after_init_macro.h>
@@ -110,7 +111,7 @@ bool MusicCentreWidget::initAfter( ) {
 	connect( scrollBar, &QScrollBar::rangeChanged, horizontalScrollBar, &QScrollBar::setRange );
 
 	calculateSize( );
-	
+
 	musicfavoriteWidgetScrollArea->show( );
 	musicTitleWidgetScrollArea->show( );
 	musicToolWidget->show( );
@@ -153,6 +154,43 @@ bool MusicCentreWidget::calculateSize( ) {
 	modHeight = musicListWidgetScrollArea->y( ) + musicListWidgetScrollArea->height( );
 	// 工具宽度
 	musicToolWidget->setGeometry( suggestWidth, modHeight, modWidth, musicToolHeight );
+	return true;
+}
+bool MusicCentreWidget::getJsonData( QJsonObject &get_json_object ) const {
+	QJsonObject musicTitleJson;
+	if( musicTitleWidget->getJsonData( musicTitleJson ) == false )
+		return false;
+	QJsonObject musicListJson;
+	if( musicListWidget->getJsonData( musicListJson ) == false )
+		return false;
+	QJsonObject musicFavoriteJson;
+	if( musicfavoriteWidget->getJsonData( musicFavoriteJson ) == false )
+		return false;
+	get_json_object.insert( musicTitleWidget->metaObject( )->className( ), musicTitleJson );
+	get_json_object.insert( musicListWidget->metaObject( )->className( ), musicListJson );
+	get_json_object.insert( musicfavoriteWidget->metaObject( )->className( ), musicFavoriteJson );
+	return true;
+}
+bool MusicCentreWidget::setJsonData( const QJsonObject &set_json_object ) {
+	auto end = set_json_object.end( );
+	auto iterator = set_json_object.find( musicTitleWidget->metaObject( )->className( ) );
+	if( iterator == end )
+		return false;
+	QJsonObject musicTitleJson = iterator->toObject( );
+	iterator = set_json_object.find( musicListWidget->metaObject( )->className( ) );
+	if( iterator == end )
+		return false;
+	QJsonObject musicListJson = iterator->toObject( );
+	iterator = set_json_object.find( musicfavoriteWidget->metaObject( )->className( ) );
+	if( iterator == end )
+		return false;
+	QJsonObject musicFavoriteJson = iterator->toObject( );
+	if( musicTitleWidget->setJsonData( musicTitleJson ) == false )
+		return false;
+	if( musicListWidget->setJsonData( musicListJson ) == false )
+		return false;
+	if( musicfavoriteWidget->setJsonData( musicFavoriteJson ) == false )
+		return false;
 	return true;
 }
 void MusicTitleWidgetTools::updateMusicCentreWidgetTitleWidthInfo( MusicCentreWidget *music_centre_widget, MusicTitleWidget *music_title_widget ) {

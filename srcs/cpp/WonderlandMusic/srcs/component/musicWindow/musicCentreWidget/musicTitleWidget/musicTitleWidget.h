@@ -10,6 +10,7 @@ class MusicCentreWidget;
 
 class MusicTitleWidget : public QWidget, public IAppCore {
 	Q_OBJECT;
+	friend class MusicTitleWidgetTools;
 
 public:
 	enum class DragItemType {
@@ -35,6 +36,9 @@ private:
 	int clickWidth;
 	DragItemType dragSeparator;
 	int dragPosX;
+	int *dragTargetPtr;
+	int dragTargetValue;
+	bool startDrag;
 	QColor fillSeparatorColor;
 	const QFontMetrics *fontMetrics;
 	QPainter *painter;
@@ -50,8 +54,15 @@ private:
 public:
 	MusicTitleWidget( MusicCentreWidget *music_centre_widget );
 	~MusicTitleWidget( ) override;
-	virtual int getSuggestHeight( ) const;
 	virtual int getCalculateMinWidth( ) const;
+	virtual int getSuggestHeight( ) const;
+	virtual int getIntervalWidth( ) const;
+	virtual int getSeparatorWidth( ) const;
+	virtual int getMusicCodeWidth( ) const;
+	virtual int getMusicNameWidth( ) const;
+	virtual int getMusicSingerNameWidth( ) const;
+	virtual int getMusicDurationTimeWidth( ) const;
+	virtual void getTitleWidthInfo( int &result_interval_width, int &result_separator_width, int &result_music_code_width, int &result_music_name_width, int &result_music_singer_name_width, int &result_music_duration_time_width ) const;
 
 protected:
 	bool deleteResource( ) override;
@@ -60,6 +71,8 @@ protected:
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 	virtual bool isDragSeparator( DragItemType &index, int x_pos ) const;
+
+	virtual void updateTitleWidthInfo( );
 
 public:
 	bool initBefore( ) override;

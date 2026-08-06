@@ -64,20 +64,82 @@ void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
 	painter->end( );
 }
 void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
-	QWidget::mouseMoveEvent( event );
+	//QWidget::mouseMoveEvent( event );
+
+	// 不在拖拽组件上，则开始检测
+	if( startDrag == false ) {
+		// 获取坐标位置
+		dragPosX = event->pos( ).x( );
+		// 获取鼠标
+		auto newCursor = cursor( );
+		// 检测位置
+		if( isDragSeparator( dragSeparator, dragPosX ) == false ) {
+			// 失败时，鼠标必须为 ArrowCursor 状态
+			if( newCursor.shape( ) == Qt::ArrowCursor )
+				return; // 如果是 ArrowCursor 状态，则直接返回
+			// 如果不是 ArrowCursor 状态，则配置 ArrowCursor 状态
+			newCursor.setShape( Qt::ArrowCursor );
+			setCursor( newCursor );
+		}
+		// 鼠标在拖拽组件上
+		switch( dragSeparator ) {
+			case DragItemType::Code :
+				dragTargetPtr = &musicCodeWidth;
+				dragTargetValue = *dragTargetPtr;
+				newCursor.setShape( Qt::SizeHorCursor );
+				setCursor( newCursor );
+				break;
+			case DragItemType::Name :
+				dragTargetPtr = &musicNameWidth;
+				dragTargetValue = *dragTargetPtr;
+				newCursor.setShape( Qt::SizeHorCursor );
+				setCursor( newCursor );
+				break;
+			case DragItemType::Singer :
+				dragTargetPtr = &musicSingerNameWidth;
+				dragTargetValue = *dragTargetPtr;
+				newCursor.setShape( Qt::SizeHorCursor );
+				setCursor( newCursor );
+				break;
+			case DragItemType::Duration :
+				dragTargetPtr = &musicDurationTimeWidth;
+				dragTargetValue = *dragTargetPtr;
+				newCursor.setShape( Qt::SizeHorCursor );
+				setCursor( newCursor );
+				break;
+			case DragItemType::None :
+			default :
+				dragTargetPtr = nullptr;
+				newCursor.setShape( Qt::ArrowCursor );
+				setCursor( newCursor );
+				break;
+		}
+
+		return;
+	}
+
+	*dragTargetPtr = dragTargetValue + event->pos( ).x( ) - dragPosX;
+	update( );
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
-	QWidget::mousePressEvent( event );
-
-	dragPosX = event->pos( ).x( );
-	isDragSeparator( dragSeparator, dragPosX );
+	//QWidget::mousePressEvent( event );
+	startDrag = true;
 }
 void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	QWidget::mouseReleaseEvent( event );
+	//QWidget::mouseReleaseEvent( event );
 	if( dragSeparator == DragItemType::None )
 		return;
+
+	startDrag = false;
 	setMinimumWidth( getCalculateMinWidth( ) );
 	dragSeparator = DragItemType::None;
+	dragTargetPtr = nullptr;
+
+	auto newCursor = cursor( );
+	newCursor.setShape( Qt::ArrowCursor );
+	setCursor( newCursor );
+	update( );
+	updateTitleWidthInfo( );
 }
 bool MusicTitleWidget::isDragSeparator( DragItemType &index, int x_pos ) const {
 	index = DragItemType::None;
@@ -132,6 +194,9 @@ bool MusicTitleWidget::isDragSeparator( DragItemType &index, int x_pos ) const {
 
 	return false;
 }
+void MusicTitleWidget::updateTitleWidthInfo( ) {
+	MusicTitleWidgetTools::updateMusicCentreWidgetTitleWidthInfo( musicCentreWidget, this );
+}
 bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );
 	pen = new QPen;
@@ -141,6 +206,7 @@ bool MusicTitleWidget::initBefore( ) {
 	intervalWidth = 2;
 	dragSeparator = DragItemType::None;
 	dragPosX = 0;
+	startDrag = false;
 	minItemWidth = intervalWidth * 2 + separatorWidth;
 	clickWidth = intervalWidth * 2 + separatorWidth;
 	fillSeparatorColor = Qt::GlobalColor::black;
@@ -153,6 +219,8 @@ bool MusicTitleWidget::initAfter( ) {
 	auto appRenderImage = InstanceTools::getAppRenderImage( );
 	if( appRenderImage == nullptr )
 		return false;
+	fontMetrics = appRenderImage->getFontMetrics( );
+	font = appRenderImage->getFont( );
 	if( AppTranslateTools::getMusicTitleWidget( [this] ( MusicTitleWidgetTranslate &translate ) {
 		musicCode = translate.getMusicCode( );
 		musicName = translate.getMusicName( );
@@ -166,9 +234,8 @@ bool MusicTitleWidget::initAfter( ) {
 	} ) == false )
 		return false;
 	suggestHeight = fontMetrics->height( );
-	fontMetrics = appRenderImage->getFontMetrics( );
-	font = appRenderImage->getFont( );
 	pen->setColor( fillSeparatorColor );
+	setMouseTracking( true );
 	setMinimumWidth( getCalculateMinWidth( ) );
 	return true;
 }
@@ -177,4 +244,36 @@ int MusicTitleWidget::getSuggestHeight( ) const {
 }
 int MusicTitleWidget::getCalculateMinWidth( ) const {
 	return clickWidth * 5 + musicCodeWidth + musicNameWidth + musicSingerNameWidth + musicDurationTimeWidth;
+}
+int MusicTitleWidget::getIntervalWidth( ) const {
+	return intervalWidth;
+}
+int MusicTitleWidget::getSeparatorWidth( ) const {
+	return separatorWidth;
+}
+int MusicTitleWidget::getMusicCodeWidth( ) const {
+	return musicCodeWidth;
+}
+int MusicTitleWidget::getMusicNameWidth( ) const {
+	return musicNameWidth;
+}
+int MusicTitleWidget::getMusicSingerNameWidth( ) const {
+	return musicSingerNameWidth;
+}
+int MusicTitleWidget::getMusicDurationTimeWidth( ) const {
+	return musicDurationTimeWidth;
+}
+void MusicTitleWidget::getTitleWidthInfo( int &result_interval_width, int &result_separator_width, int &result_music_code_width, int &result_music_name_width, int &result_music_singer_name_width, int &result_music_duration_time_width ) const {
+	result_interval_width = intervalWidth;
+	result_separator_width = separatorWidth;
+	result_music_code_width = musicCodeWidth;
+	result_music_name_width = musicNameWidth;
+	result_music_singer_name_width = musicSingerNameWidth;
+	result_music_duration_time_width = musicDurationTimeWidth;
+}
+void MusicTitleWidget::getTitleWidthInfo( int &result_music_code_width, int &result_music_name_width, int &result_music_singer_name_width, int &result_music_duration_time_width ) const {
+	result_music_code_width = musicCodeWidth;
+	result_music_name_width = musicNameWidth;
+	result_music_singer_name_width = musicSingerNameWidth;
+	result_music_duration_time_width = musicDurationTimeWidth;
 }

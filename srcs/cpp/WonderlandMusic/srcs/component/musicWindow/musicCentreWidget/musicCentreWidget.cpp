@@ -64,6 +64,9 @@ QScrollArea * MusicCentreWidget::createControlScrollArea( QWidget *widget ) {
 	scrollArea->setWidget( widget );
 	return scrollArea;
 }
+void MusicCentreWidget::updateTitleWidthInfo( int interval_width, int separator_width, int music_code_width, int &result_music_name_width, int music_singer_name_width, int music_duration_time_width ) const {
+	// todo : ...
+}
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
@@ -95,6 +98,7 @@ bool MusicCentreWidget::initAfter( ) {
 	musicListWidgetScrollArea = createControlScrollArea( musicListWidget );
 
 	musicTitleWidgetScrollArea->setVerticalScrollBar( new TransparencyScrollBar( this ) );
+	musicTitleWidgetScrollArea->setMouseTracking( true );
 	musicTitleWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	auto verticalScrollBar = musicTitleWidgetScrollArea->verticalScrollBar( );
 	if( verticalScrollBar )
@@ -150,4 +154,9 @@ bool MusicCentreWidget::calculateSize( ) {
 	// 工具宽度
 	musicToolWidget->setGeometry( suggestWidth, modHeight, modWidth, musicToolHeight );
 	return true;
+}
+void MusicTitleWidgetTools::updateMusicCentreWidgetTitleWidthInfo( MusicCentreWidget *music_centre_widget, MusicTitleWidget *music_title_widget ) {
+	if( music_centre_widget == nullptr || music_title_widget == nullptr )
+		return;
+	music_centre_widget->updateTitleWidthInfo( music_title_widget->intervalWidth, music_title_widget->separatorWidth, music_title_widget->musicCodeWidth, music_title_widget->musicNameWidth, music_title_widget->musicSingerNameWidth, music_title_widget->musicDurationTimeWidth );
 }

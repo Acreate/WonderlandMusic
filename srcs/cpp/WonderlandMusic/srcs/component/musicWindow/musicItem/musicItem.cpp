@@ -5,6 +5,10 @@
 #include <windows.h>
 
 #include "../musicWindow.h"
+
+#include "../musicCentreWidget/musicListWidget/musicListWidget.h"
+MusicItem::MusicItem( MusicWindow *music_window ) : musicWindow( music_window ) {
+}
 MusicItem::~MusicItem( ) {
 	if( musicWindow )
 		musicWindow->removeItem( this );
@@ -17,7 +21,7 @@ MusicItem::~MusicItem( ) {
 		rendBuff = nullptr;
 	}
 }
-MusicItem::MusicItem( MusicWindow *music_window, const QString &file_path ) : musicWindow( music_window ), loadedOver( false ) {
+MusicItem::MusicItem( MusicWindow *music_window, const QString &file_path ) : loadedOver( false ), musicWindow( music_window ) {
 	QFileInfo fileInfo( file_path );
 	if( fileInfo.exists( ) == false ) {
 		return;

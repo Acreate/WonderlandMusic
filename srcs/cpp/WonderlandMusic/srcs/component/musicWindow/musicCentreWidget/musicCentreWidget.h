@@ -6,6 +6,7 @@
 
 #include <interface/iAppJsonData.h>
 
+class MusicItem;
 class TransparencyScrollBar;
 class QScrollArea;
 class MusicListWidget;
@@ -49,6 +50,11 @@ public:
 	virtual bool calculateSize( );
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
+	virtual MusicWindow * getMusicWindow( ) const;
+	virtual MusicfavoriteWidget * getMusicfavoriteWidget( ) const;
+	virtual MusicTitleWidget * getMusicTitleWidget( ) const;
+	virtual MusicListWidget * getMusicListWidget( ) const;
+	virtual MusicToolWidget * getMusicToolWidget( ) const;
 };
 
 class MusicTitleWidgetTools {

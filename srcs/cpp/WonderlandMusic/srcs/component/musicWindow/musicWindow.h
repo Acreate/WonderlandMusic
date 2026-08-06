@@ -25,8 +25,6 @@ protected:
 
 	virtual bool unSafetyClearInfo( );
 	virtual bool unSafetyClearShow( );
-	virtual bool updateItem( MusicItem *music_item );
-	virtual bool removeItem( MusicItem *music_item );
 
 public:
 	bool initBefore( ) override;
@@ -40,6 +38,8 @@ public:
 	virtual void updateWindow( );
 	virtual void updateWindow( const QRect &update_rect );
 	virtual void clear( );
+	virtual bool updateItem( MusicItem *music_item );
+	virtual bool removeItem( MusicItem *music_item );
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

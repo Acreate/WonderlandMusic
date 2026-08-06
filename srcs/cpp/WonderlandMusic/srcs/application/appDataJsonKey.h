@@ -3,6 +3,8 @@
 #include "../interface/iAppCore.h"
 #include <head/head_json_key_class.h>
 
+class MusicWindowJsonKey;
+
 class AppDataJsonKey : public IAppCore {
 protected:
 	AboutWidgetJsonKey *aboutWidget = nullptr;
@@ -11,7 +13,7 @@ protected:
 	AppDataManageJsonKey *appDataManage = nullptr;
 	AppUserInterfaceManageJsonKey *appUserInterfaceManage = nullptr;
 	AppMusicManageJsonKey *appMusicManage = nullptr;
-
+	MusicWindowJsonKey* musicWindow = nullptr;
 protected:
 	bool deleteResource( ) override;
 
@@ -21,6 +23,7 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
+	virtual MusicWindowJsonKey * getMusicWindow( ) const;
 	virtual AboutWidgetJsonKey * getAboutWidget( ) const;
 	virtual MainWindowJsonKey * getMainWindow( ) const;
 	virtual SystemTrayIconJsonKey * getSystemTrayIcon( ) const;

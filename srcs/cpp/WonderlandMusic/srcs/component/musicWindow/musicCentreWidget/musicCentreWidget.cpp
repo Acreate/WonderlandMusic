@@ -193,6 +193,22 @@ bool MusicCentreWidget::setJsonData( const QJsonObject &set_json_object ) {
 		return false;
 	return true;
 }
+
+MusicWindow * MusicCentreWidget::getMusicWindow( ) const {
+	return musicWindow;
+}
+MusicfavoriteWidget * MusicCentreWidget::getMusicfavoriteWidget( ) const {
+	return musicfavoriteWidget;
+}
+MusicTitleWidget * MusicCentreWidget::getMusicTitleWidget( ) const {
+	return musicTitleWidget;
+}
+MusicListWidget * MusicCentreWidget::getMusicListWidget( ) const {
+	return musicListWidget;
+}
+MusicToolWidget * MusicCentreWidget::getMusicToolWidget( ) const {
+	return musicToolWidget;
+}
 void MusicTitleWidgetTools::updateMusicCentreWidgetTitleWidthInfo( MusicCentreWidget *music_centre_widget, MusicTitleWidget *music_title_widget ) {
 	if( music_centre_widget == nullptr || music_title_widget == nullptr )
 		return;

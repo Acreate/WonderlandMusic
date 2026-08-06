@@ -6,11 +6,13 @@
 #include <interface/iAppJsonData.h>
 
 class MusicWindow;
+class MusicListWidget;
 class QMediaPlayer;
 
 class MusicItem : public QObject, public IAppJsonData {
 	Q_OBJECT;
 	friend class MusicWindow;
+	friend class MusicListWidget;
 
 private:
 	quint64 idCode;
@@ -20,8 +22,11 @@ private:
 	qint64 elapsedTime;
 	QMediaPlayer *mediaPlayer;
 	bool loadedOver;
-	MusicWindow *musicWindow;
 	QImage *rendBuff = nullptr;
+	MusicWindow *musicWindow;
+
+protected:
+	MusicItem( MusicWindow *music_window );
 
 public:
 	~MusicItem( ) override;

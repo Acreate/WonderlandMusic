@@ -22,6 +22,7 @@ protected:
 	UserMutex *userMutex = nullptr;
 	MusicCentreWidget *musicCentreWidget;
 	std::vector< MusicItem * > musicItemVector;
+	QImage *drawBuff = nullptr;
 	int intervalWidth;
 	int separatorWidth;
 	int musicCodeWidth;
@@ -44,9 +45,13 @@ protected:
 	virtual bool unSafetyUpdateShow( );
 
 	virtual void unSafetyClear( );
-	virtual bool hasItem( size_t &result_index, const MusicItem *music_item ) const;
-	virtual bool addItem( MusicItem *music_item );
+	virtual bool unSafetyUpdateItem( MusicItem *music_item );
+	virtual bool unSafetyRemoveItem( MusicItem *music_item );
+	virtual bool unSafetyHasItem( size_t &result_index, const MusicItem *music_item ) const;
+	virtual bool unSafetyAddItem( MusicItem *music_item );
+
 	virtual void updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
+	virtual bool renderImage( QPainter &painter, int intervalWidth, size_t index, MusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color );
 
 public:
 	bool initBefore( ) override;
@@ -57,6 +62,8 @@ public:
 	virtual bool updateItem( MusicItem *music_item );
 	virtual bool removeItem( MusicItem *music_item );
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
+	virtual bool hasItem( size_t &result_index, const MusicItem *music_item ) const;
+	virtual bool addItem( MusicItem *music_item );
 	virtual bool updateInfo( );
 	virtual bool updateShow( );
 	virtual void clear( );

@@ -75,91 +75,168 @@ bool MusicListWidget::unSafetyClearInfo( ) {
 	return true;
 }
 bool MusicListWidget::unSafetyClearShow( ) {
-	userMutex->lock( );
+	if( unSafetyUpdateInfo( ) == false )
+		return false;
+	if( unSafetyUpdateShow( ) == false )
+		return false;
+	return true;
+}
+bool MusicListWidget::renderImage( QPainter &painter, int intervalWidth, size_t index, MusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color ) {
+	music_item->idCode = index;
+	music_item->rendBuff = new QImage( calculate_min_width, calculate_height, QImage::Format_RGB888 );
+	music_item->rendBuff->fill( 0 );
+	painter.begin( music_item->rendBuff );
+	painter.setFont( font );
+
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
+
+	intervalWidth += intervalWidth + separatorWidth;
+
+	QString text = QString::number( music_item->idCode );
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), text );
+
+	intervalWidth += intervalWidth + musicCodeWidth;
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
+
+	intervalWidth += intervalWidth + separatorWidth;
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), music_item->name );
+
+	intervalWidth += intervalWidth + musicNameWidth;
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
+
+	intervalWidth += intervalWidth + separatorWidth;
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), music_item->singer );
+
+	intervalWidth += intervalWidth + musicSingerNameWidth;
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
+
+	text = DateTimeFormat::millsecondToHourMinSecFrom( music_item->elapsedTime );
+	intervalWidth += intervalWidth + separatorWidth;
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), text );
+
+	intervalWidth += intervalWidth + musicDurationTimeWidth;
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
+
+	painter.end( );
+	return true;
+}
+bool MusicListWidget::unSafetyUpdateInfo( ) {
+	size_t count = musicItemVector.size( );
+	if( count == 0 )
+		return true;
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
+	if( appRenderImage == nullptr )
+		return false;
+	auto fontMetrics = appRenderImage->getFontMetrics( );
+	int fontHeight = fontMetrics->height( );
+	QPainter painter;
+	QColor fillSeparatorColor = QColor( 255, 255, 255 );
+	QString text;
+	int calculateMinWidth;
+	const QFont *font;
+	MusicItem **data;
+	size_t index;
+	calculateMinWidth = musicCentreWidget->getMusicTitleWidget( )->getCalculateMinWidth( );
+	font = appRenderImage->getFont( );
+	data = musicItemVector.data( );
+	auto musicWindow = musicCentreWidget->getMusicWindow( );
+	for( index = 0; index < count; index += 1 )
+		if( data[ index ]->musicWindow = musicWindow, data[ index ]->musicWindow == nullptr )
+			return false;
+		else if( data[ index ]->rendBuff == nullptr ) {
+			renderImage( painter, intervalWidth, index, data[ index ], calculateMinWidth, fontHeight, *font, fillSeparatorColor );
+		} else if( data[ index ]->idCode != index ) {
+			if( data[ index ]->rendBuff->width( ) != calculateMinWidth || data[ index ]->rendBuff->height( ) != fontHeight ) {
+				data[ index ]->rendBuff = new QImage( calculateMinWidth, fontHeight, QImage::Format_RGB888 );
+				data[ index ]->rendBuff->fill( 0 );
+				renderImage( painter, intervalWidth, index, data[ index ], calculateMinWidth, fontHeight, *font, fillSeparatorColor );
+				continue;
+			}
+			data[ index ]->idCode = index;
+			painter.begin( data[ index ]->rendBuff );
+			painter.setFont( *font );
+
+			intervalWidth += intervalWidth + separatorWidth;
+			text = QString::number( data[ index ]->idCode );
+			painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, fontHeight ), text );
+		}
+
+	return true;
+}
+bool MusicListWidget::unSafetyUpdateShow( ) {
 	size_t count = musicItemVector.size( );
 	if( count == 0 ) {
 		*drawBuff = QImage( );
-	} else {
-		auto appRenderImage = InstanceTools::getAppRenderImage( );
-		if( appRenderImage ) {
-			int drawBuffHeight = drawBuff->height( );
-			auto fontMetrics = appRenderImage->getFontMetrics( );
-			int fontHeight = fontMetrics->height( );
-			int imageHeight = fontHeight * count;
-			if( imageHeight != drawBuffHeight ) {
-				int calculateMinWidth = musicCentreWidget->getMusicTitleWidget( )->getCalculateMinWidth( );
-				*drawBuff = QImage( calculateMinWidth, imageHeight, QImage::Format_RGB888 );
-				drawBuff->fill( 0 );
-
-				QPainter painter;
-				auto font = appRenderImage->getFont( );
-				auto data = musicItemVector.data( );
-				size_t index = 0;
-				QColor fillSeparatorColor = QColor( 255, 255, 255 );
-				QString text;
-				int offsetX = intervalWidth;
-				int offsetY = 0;
-				for( ; index < count; index += 1 )
-					if( data[ index ]->rendBuff == nullptr ) {
-						data[ index ]->rendBuff = new QImage( calculateMinWidth, fontHeight, QImage::Format_RGB888 );
-						data[ index ]->rendBuff->fill( 0 );
-						painter.begin( data[ index ]->rendBuff );
-						painter.setFont( *font );
-
-						painter.fillRect( QRect( offsetX, offsetY, separatorWidth, fontHeight ), fillSeparatorColor );
-
-						offsetX += intervalWidth + separatorWidth;
-
-						text = QString::number( data[ index ]->idCode );
-						painter.drawText( QRect( offsetX, offsetY, musicCodeWidth, fontHeight ), text );
-
-						offsetX += intervalWidth + musicCodeWidth;
-						painter.fillRect( QRect( offsetX, offsetY, separatorWidth, fontHeight ), fillSeparatorColor );
-
-						offsetX += intervalWidth + separatorWidth;
-						painter.drawText( QRect( offsetX, offsetY, musicCodeWidth, fontHeight ), data[ index ]->name );
-
-						offsetX += intervalWidth + musicNameWidth;
-						painter.fillRect( QRect( offsetX, offsetY, separatorWidth, fontHeight ), fillSeparatorColor );
-
-						offsetX += intervalWidth + separatorWidth;
-						painter.drawText( QRect( offsetX, offsetY, musicCodeWidth, fontHeight ), data[ index ]->singer );
-
-						offsetX += intervalWidth + musicSingerNameWidth;
-						painter.fillRect( QRect( offsetX, offsetY, separatorWidth, fontHeight ), fillSeparatorColor );
-
-						text = DateTimeFormat::millsecondToHourMinSecFrom( data[ index ]->elapsedTime );
-						offsetX += intervalWidth + separatorWidth;
-						painter.drawText( QRect( offsetX, offsetY, musicCodeWidth, fontHeight ), text );
-
-						offsetX += intervalWidth + musicDurationTimeWidth;
-						painter.fillRect( QRect( offsetX, offsetY, separatorWidth, fontHeight ), fillSeparatorColor );
-
-						painter.end( );
-					}
-				offsetX = 0;
-				offsetY = 0;
-				painter.begin( drawBuff );
-				for( index = 0; index < count; index += 1 ) {
-					painter.drawImage( offsetX, offsetY, *data[ index ]->rendBuff );
-					offsetY += fontHeight;
-				}
-				painter.end( );
-			}
-		}
+		return true;
 	}
-	userMutex->unlock( );
-	return true; // todo : 清理显示
-}
-bool MusicListWidget::unSafetyUpdateInfo( ) {
-	return true; // todo : 更新信息
-}
-bool MusicListWidget::unSafetyUpdateShow( ) {
-	return true; // todo : 更新显示缓存-不更新窗口
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
+	if( appRenderImage == nullptr )
+		return false;
+	int drawBuffHeight = drawBuff->height( );
+	auto fontMetrics = appRenderImage->getFontMetrics( );
+	int fontHeight = fontMetrics->height( );
+	int imageHeight = fontHeight * count;
+	QPainter painter;
+	int offsetX;
+	int offsetY;
+
+	int calculateMinWidth;
+	MusicItem **data = musicItemVector.data( );
+	size_t index;
+	if( imageHeight != drawBuffHeight ) {
+		calculateMinWidth = musicCentreWidget->getMusicTitleWidget( )->getCalculateMinWidth( );
+		*drawBuff = QImage( calculateMinWidth, imageHeight, QImage::Format_RGB888 );
+		drawBuff->fill( 0 );
+	}
+	offsetX = 0;
+	offsetY = 0;
+	painter.begin( drawBuff );
+	for( index = 0; index < count; index += 1 ) {
+		painter.drawImage( offsetX, offsetY, *data[ index ]->rendBuff );
+		offsetY += fontHeight;
+	}
+	painter.end( );
+	return true;
 }
 void MusicListWidget::unSafetyClear( ) {
 	unSafetyClearShow( );
 	unSafetyClearInfo( );
+}
+bool MusicListWidget::unSafetyUpdateItem( MusicItem *music_item ) {
+	return false;
+}
+bool MusicListWidget::unSafetyRemoveItem( MusicItem *music_item ) {
+	return false;
+}
+bool MusicListWidget::unSafetyHasItem( size_t &result_index, const MusicItem *music_item ) const {
+	bool cond = false;
+	if( music_item->musicWindow != musicCentreWidget->getMusicWindow( ) )
+		return cond;
+	size_t count = musicItemVector.size( );
+	if( count == 0 )
+		return false;
+	auto musicItem = musicItemVector.data( );
+	for( result_index = 0; result_index < count; result_index += 1 )
+		if( cond = musicItem[ result_index ] == music_item, cond )
+			break;
+	return cond;
+}
+bool MusicListWidget::unSafetyAddItem( MusicItem *music_item ) {
+	size_t index;
+	if( unSafetyHasItem( index, music_item ) == true )
+		return unSafetyUpdateItem( music_item );
+	// 删除就有的项
+	if( music_item->musicWindow ) {
+		if( music_item->musicWindow != musicCentreWidget->getMusicWindow( ) ) {
+			bool removeItem = music_item->musicWindow->removeItem( music_item );
+			if( removeItem == false )
+				return false;
+		}
+	}
+	// 添加到该列表
+	music_item->musicWindow = musicCentreWidget->getMusicWindow( );
+	musicItemVector.emplace_back( music_item );
+	return true;
 }
 bool MusicListWidget::updateInfo( ) {
 	userMutex->lock( );
@@ -179,35 +256,16 @@ void MusicListWidget::clear( ) {
 	userMutex->unlock( );
 }
 bool MusicListWidget::hasItem( size_t &result_index, const MusicItem *music_item ) const {
-	bool cond = false;
-	if( music_item->musicWindow != musicCentreWidget->getMusicWindow( ) )
-		return cond;
 	userMutex->lock( );
-	size_t count = musicItemVector.size( );
-	if( count ) {
-		auto musicItem = musicItemVector.data( );
-		for( result_index = 0; result_index < count; result_index += 1 )
-			if( cond = musicItem[ result_index ] == music_item, cond )
-				break;
-	}
+	bool cond = unSafetyHasItem( result_index, music_item );
 	userMutex->unlock( );
 	return cond;
 }
 bool MusicListWidget::addItem( MusicItem *music_item ) {
-	size_t index;
-	if( hasItem( index, music_item ) == true )
-		return updateItem( music_item );
-	// 删除就有的项
-	if( music_item->musicWindow ) {
-		bool removeItem = music_item->musicWindow->removeItem( music_item );
-		if( removeItem == false )
-			return false;
-	}
 	userMutex->lock( );
-	music_item->musicWindow = musicCentreWidget->getMusicWindow( );
-	musicItemVector.emplace_back( music_item );
+	auto result = unSafetyAddItem( music_item );
 	userMutex->unlock( );
-	return true;
+	return result;
 }
 void MusicListWidget::updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
 	int calculateMinWidth = music_title_widget->getCalculateMinWidth( );
@@ -329,9 +387,11 @@ bool MusicListWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return ok;
 }
 bool MusicListWidget::updateItem( MusicItem *music_item ) {
-	if( music_item->musicWindow != musicCentreWidget->getMusicWindow( ) )
+	size_t index;
+	if( hasItem( index, music_item ) == false )
 		return false;
-	return true; // todo : 更新项信息
+
+	return true;
 }
 bool MusicListWidget::removeItem( MusicItem *music_item ) {
 	if( music_item->musicWindow != musicCentreWidget->getMusicWindow( ) )

@@ -32,13 +32,12 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	QWidget * toWidget( ) override;
-	virtual void updateWindow( );
-	virtual void updateWindow( const QRect &update_rect );
 	virtual void clear( );
 	virtual bool hasItem( size_t &result_index, const MusicItem *music_item ) const;
 	virtual bool addItem( MusicItem *music_item );
 	virtual bool updateItem( MusicItem *music_item );
 	virtual bool removeItem( MusicItem *music_item );
+	virtual MusicItem * fromJsonGenerateMusicItem( const QJsonObject &json_object );
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

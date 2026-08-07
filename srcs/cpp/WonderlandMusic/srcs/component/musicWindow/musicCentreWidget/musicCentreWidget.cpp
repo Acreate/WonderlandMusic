@@ -62,7 +62,9 @@ QScrollArea * MusicCentreWidget::createControlScrollArea( QWidget *widget ) {
 	return scrollArea;
 }
 void MusicCentreWidget::updateTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
-	// todo : ...
+	if( musicListWidget == nullptr )
+		return;
+	musicListWidget->updateItemWidthInfo( music_title_widget, interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
 }
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );

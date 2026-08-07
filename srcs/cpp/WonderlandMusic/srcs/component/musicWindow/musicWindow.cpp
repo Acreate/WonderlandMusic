@@ -1,7 +1,8 @@
 ﻿#include "musicWindow.h"
 
+#include <QJsonObject>
+
 #include "../../application/appInstance.h"
-#include "../../application/appMusicDecoder.h"
 #include "../../application/translate/musicWindowTranslate.h"
 
 #include "../../head/after_init_macro.h"
@@ -12,10 +13,10 @@
 #include "../../mutex/userMutex.h"
 #include "../../tools/pathTools.h"
 
-#include "musicItem/musicItem.h"
-
 #include "musicCentreWidget/musicCentreWidget.h"
 #include "musicCentreWidget/musicListWidget/musicListWidget.h"
+
+#include "musicItem/musicItem.h"
 
 MusicWindow::MusicWindow( ) {
 }
@@ -81,8 +82,6 @@ QWidget * MusicWindow::toWidget( ) {
 bool MusicWindow::hasItem( size_t &result_index, const MusicItem *music_item ) const {
 	if( music_item->musicWindow != this )
 		return false;
-	if( music_item->musicWindow != this )
-		return false;
 	if( musicCentreWidget == nullptr )
 		return false;
 	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
@@ -91,18 +90,14 @@ bool MusicWindow::hasItem( size_t &result_index, const MusicItem *music_item ) c
 	return musicListWidget->hasItem( result_index, music_item );
 }
 bool MusicWindow::addItem( MusicItem *music_item ) {
-	size_t index;
-	if( hasItem( index, music_item ) == true )
-		return updateItem( music_item );
-	music_item->musicWindow = this;
-	updateWindow( );
-	return false;
+	if( musicCentreWidget == nullptr )
+		return false;
+	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+	if( musicListWidget == nullptr )
+		return false;
+	return musicListWidget->addItem( music_item );
 }
 bool MusicWindow::updateItem( MusicItem *music_item ) {
-	if( music_item->musicWindow != this )
-		return false;
-	if( music_item->musicWindow != this )
-		return false;
 	if( musicCentreWidget == nullptr )
 		return false;
 	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
@@ -110,12 +105,9 @@ bool MusicWindow::updateItem( MusicItem *music_item ) {
 		return false;
 	if( musicListWidget->updateItem( music_item ) == false )
 		return false;
-	updateWindow( );
 	return true;
 }
 bool MusicWindow::removeItem( MusicItem *music_item ) {
-	if( music_item->musicWindow != this )
-		return false;
 	if( musicCentreWidget == nullptr )
 		return false;
 	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
@@ -123,13 +115,19 @@ bool MusicWindow::removeItem( MusicItem *music_item ) {
 		return false;
 	if( musicListWidget->removeItem( music_item ) == false )
 		return false;
-	updateWindow( );
 	return true;
 }
-void MusicWindow::updateWindow( ) {
+MusicItem * MusicWindow::fromJsonGenerateMusicItem( const QJsonObject &json_object ) {
+	if( json_object.empty( ) )
+		return nullptr;
+	MusicItem *musicItem = new MusicItem( this );
+	if( musicItem->setJsonData( json_object ) == false ) {
+		delete musicItem;
+		return nullptr;
+	}
+	return musicItem;
 }
-void MusicWindow::updateWindow( const QRect &update_rect ) {
-}
+
 void MusicWindow::clear( ) {
 	userMutex->lock( );
 	unSafetyClearInfo( );

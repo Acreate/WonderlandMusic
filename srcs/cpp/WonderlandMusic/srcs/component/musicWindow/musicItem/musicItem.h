@@ -26,6 +26,7 @@ private:
 	MusicWindow *musicWindow;
 
 protected:
+	MusicItem( );
 	MusicItem( MusicWindow *music_window );
 
 public:

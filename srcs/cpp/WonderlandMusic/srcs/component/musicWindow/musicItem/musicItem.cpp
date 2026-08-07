@@ -7,6 +7,8 @@
 #include "../musicWindow.h"
 
 #include "../musicCentreWidget/musicListWidget/musicListWidget.h"
+MusicItem::MusicItem( ) : musicWindow( nullptr ) {
+}
 MusicItem::MusicItem( MusicWindow *music_window ) : musicWindow( music_window ) {
 }
 MusicItem::~MusicItem( ) {

@@ -27,28 +27,10 @@ bool MusicWindow::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
-
-	unSafetyClearInfo( );
 	Delete_Resource_App_Core_Ptr( musicCentreWidget );
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
-}
-bool MusicWindow::unSafetyClearInfo( ) {
-	if( musicCentreWidget == nullptr )
-		return false;
-	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
-	if( musicListWidget == nullptr )
-		return false;
-	return musicListWidget->unSafetyClearInfo( );
-}
-bool MusicWindow::unSafetyClearShow( ) {
-	if( musicCentreWidget )
-		return false;
-	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
-	if( musicListWidget == nullptr )
-		return false;
-	return musicListWidget->unSafetyClearShow( );
 }
 bool MusicWindow::initBefore( ) {
 	deleteResource( );
@@ -127,9 +109,18 @@ MusicItem * MusicWindow::fromJsonGenerateMusicItem( const QJsonObject &json_obje
 	}
 	return musicItem;
 }
+MusicCentreWidget * MusicWindow::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
+}
 
 void MusicWindow::clear( ) {
-	userMutex->lock( );
-	unSafetyClearInfo( );
-	userMutex->unlock( );
+	MusicListWidget *musicListWidget;
+	if( musicCentreWidget ) {
+		musicListWidget = musicCentreWidget->getMusicListWidget( );
+		if( musicListWidget ) {
+			userMutex->lock( );
+			musicListWidget->clear( );
+			userMutex->unlock( );
+		}
+	}
 }

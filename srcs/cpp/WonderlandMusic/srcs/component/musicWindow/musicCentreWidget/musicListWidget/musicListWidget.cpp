@@ -51,13 +51,54 @@ void MusicListWidget::paintEvent( QPaintEvent *event ) {
 	painter.drawImage( 0, 0, *drawBuff );
 	userMutex->unlock( );
 }
-void MusicListWidget::setMusicItemInfoVector( const std::vector< MusicItem * > &music_items ) {
-	userMutex->lock( );
-	unSafetyClearInfo( );
+bool MusicListWidget::unSafetySetMusicItemInfoVector( const std::vector< MusicItem * > &music_items ) {
+	if( unSafetyClearInfo( ) == false )
+		return false;
 	this->musicItemVector = music_items;
-	unSafetyUpdateInfo( );
-	unSafetyUpdateShow( );
+	if( unSafetyUpdateInfo( ) == false )
+		return false;
+	if( unSafetyUpdateShow( ) == false )
+		return false;
+	return true;
+}
+bool MusicListWidget::setMusicItemInfoVector( const std::vector< MusicItem * > &music_items ) {
+	userMutex->lock( );
+	auto result = unSafetySetMusicItemInfoVector( music_items );
 	userMutex->unlock( );
+	repaint( );
+	return result;
+}
+void MusicListWidget::getMusicItemVector( std::vector< MusicItem * > &result_music_item_vector ) {
+	userMutex->lock( );
+	result_music_item_vector = this->musicItemVector;
+	userMutex->unlock( );
+}
+void MusicListWidget::getMusicItemVector( size_t &result_count, std::vector< MusicItem * > &result_music_item_vector, const std::vector< size_t > &get_index ) {
+	result_count = 0;
+	size_t getCount = get_index.size( );
+	result_music_item_vector.resize( getCount );
+	if( getCount == 0 )
+		return;
+	size_t getDataIndex;
+	auto getData = get_index.data( );
+	auto setData = result_music_item_vector.data( );
+	size_t setDataIndex = 0;
+	userMutex->lock( );
+	size_t count = this->musicItemVector.size( );
+	auto data = this->musicItemVector.data( );
+	for( ; setDataIndex < getCount; setDataIndex += 1 )
+		if( getDataIndex = getData[ setDataIndex ], getDataIndex < count ) {
+			setData[ result_count ] = data[ getDataIndex ];
+			result_count += 1;
+		}
+	userMutex->unlock( );
+	if( result_count != getCount )
+		result_music_item_vector.resize( result_count );
+}
+void MusicListWidgetTools::updateItemWidthInfo( MusicListWidget *targetr, MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
+	if( targetr == nullptr )
+		return;
+	targetr->updateItemWidthInfo( music_title_widget, interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
 }
 bool MusicListWidget::unSafetyClearInfo( ) {
 	size_t count = musicItemVector.size( );
@@ -81,8 +122,23 @@ bool MusicListWidget::unSafetyClearShow( ) {
 		return false;
 	return true;
 }
-bool MusicListWidget::renderImage( QPainter &painter, int intervalWidth, size_t index, MusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color ) {
+bool MusicListWidget::renderImage( size_t index, MusicItem *music_item ) const {
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
+	if( appRenderImage == nullptr )
+		return false;
+	auto fontMetrics = appRenderImage->getFontMetrics( );
+	int fontHeight = fontMetrics->height( );
+	QPainter painter;
+
+	QColor fillSeparatorColor = QColor( 255, 255, 255 );
+	auto calculateMinWidth = musicCentreWidget->getMusicTitleWidget( )->getCalculateMinWidth( );
+	auto font = appRenderImage->getFont( );
+	return renderImage( painter, intervalWidth, index, music_item, calculateMinWidth, fontHeight, *font, fillSeparatorColor );
+}
+bool MusicListWidget::renderImage( QPainter &painter, int intervalWidth, size_t index, MusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color ) const {
 	music_item->idCode = index;
+	if( music_item->rendBuff )
+		delete music_item->rendBuff;
 	music_item->rendBuff = new QImage( calculate_min_width, calculate_height, QImage::Format_RGB888 );
 	music_item->rendBuff->fill( 0 );
 	painter.begin( music_item->rendBuff );
@@ -203,10 +259,26 @@ void MusicListWidget::unSafetyClear( ) {
 	unSafetyClearInfo( );
 }
 bool MusicListWidget::unSafetyUpdateItem( MusicItem *music_item ) {
-	return false;
+	size_t index;
+	if( unSafetyHasItem( index, music_item ) == false )
+		return false;
+	auto data = musicItemVector.data( );
+	if( renderImage( index, data[ index ] ) == false )
+		return false;
+	unSafetyUpdateShow( );
+	return true;
 }
 bool MusicListWidget::unSafetyRemoveItem( MusicItem *music_item ) {
-	return false;
+	size_t index;
+	if( hasItem( index, music_item ) == false )
+		return false;
+	auto iterator = musicItemVector.begin( ) + index;
+	MusicItem *removeTarget = *iterator;
+	musicItemVector.erase( iterator );
+	removeTarget->musicWindow = nullptr;
+	unSafetyUpdateInfo( );
+	unSafetyUpdateShow( );
+	return true;
 }
 bool MusicListWidget::unSafetyHasItem( size_t &result_index, const MusicItem *music_item ) const {
 	bool cond = false;
@@ -236,24 +308,29 @@ bool MusicListWidget::unSafetyAddItem( MusicItem *music_item ) {
 	// 添加到该列表
 	music_item->musicWindow = musicCentreWidget->getMusicWindow( );
 	musicItemVector.emplace_back( music_item );
+	unSafetyUpdateInfo( );
+	unSafetyUpdateShow( );
 	return true;
 }
 bool MusicListWidget::updateInfo( ) {
 	userMutex->lock( );
 	auto result = unSafetyUpdateInfo( );
 	userMutex->unlock( );
+	repaint( );
 	return result;
 }
 bool MusicListWidget::updateShow( ) {
 	userMutex->lock( );
 	auto result = unSafetyUpdateShow( );
 	userMutex->unlock( );
+	repaint( );
 	return result;
 }
 void MusicListWidget::clear( ) {
 	userMutex->lock( );
 	unSafetyClear( );
 	userMutex->unlock( );
+	repaint( );
 }
 bool MusicListWidget::hasItem( size_t &result_index, const MusicItem *music_item ) const {
 	userMutex->lock( );
@@ -265,11 +342,10 @@ bool MusicListWidget::addItem( MusicItem *music_item ) {
 	userMutex->lock( );
 	auto result = unSafetyAddItem( music_item );
 	userMutex->unlock( );
+	repaint( );
 	return result;
 }
 void MusicListWidget::updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
-	int calculateMinWidth = music_title_widget->getCalculateMinWidth( );
-	resize( calculateMinWidth, height( ) );
 	intervalWidth = interval_width;
 	separatorWidth = separator_width;
 	musicCodeWidth = music_code_width;
@@ -281,6 +357,8 @@ void MusicListWidget::updateItemWidthInfo( MusicTitleWidget *music_title_widget,
 	unSafetyUpdateShow( );
 	userMutex->unlock( );
 	repaint( );
+	int calculateMinWidth = music_title_widget->getCalculateMinWidth( );
+	resize( calculateMinWidth, height( ) );
 }
 bool MusicListWidget::initBefore( ) {
 	deleteResource( );
@@ -387,27 +465,22 @@ bool MusicListWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return ok;
 }
 bool MusicListWidget::updateItem( MusicItem *music_item ) {
-	size_t index;
-	if( hasItem( index, music_item ) == false )
+	userMutex->lock( );
+	bool safetyRemoveItem = unSafetyUpdateItem( music_item );
+	userMutex->unlock( );
+	if( safetyRemoveItem == false )
 		return false;
-
-	return true;
+	repaint( );
+	return safetyRemoveItem;
 }
 bool MusicListWidget::removeItem( MusicItem *music_item ) {
-	if( music_item->musicWindow != musicCentreWidget->getMusicWindow( ) )
-		return false;
-	size_t index;
-	if( hasItem( index, music_item ) == false )
-		return false;
 	userMutex->lock( );
-	auto iterator = musicItemVector.begin( ) + index;
-	MusicItem *removeTarget = *iterator;
-	musicItemVector.erase( iterator );
+	bool safetyRemoveItem = unSafetyRemoveItem( music_item );
 	userMutex->unlock( );
-	updateInfo( );
-	updateShow( );
-	removeTarget->musicWindow = nullptr;
-	return true;
+	if( safetyRemoveItem == false )
+		return false;
+	repaint( );
+	return safetyRemoveItem;
 }
 MusicCentreWidget * MusicListWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;

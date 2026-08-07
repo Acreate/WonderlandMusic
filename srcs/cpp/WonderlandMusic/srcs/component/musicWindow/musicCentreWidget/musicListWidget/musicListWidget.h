@@ -15,8 +15,7 @@ class MusicItem;
 
 class MusicListWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
-	friend class MusicCentreWidget;
-	friend class MusicWindow;
+	friend class MusicListWidgetTools;
 
 protected:
 	UserMutex *userMutex = nullptr;
@@ -37,7 +36,7 @@ public:
 protected:
 	bool deleteResource( ) override;
 	void paintEvent( QPaintEvent *event ) override;
-	virtual void setMusicItemInfoVector( const std::vector< MusicItem * > &music_items );
+	virtual bool unSafetySetMusicItemInfoVector( const std::vector< MusicItem * > &music_items );
 
 	virtual bool unSafetyClearInfo( );
 	virtual bool unSafetyClearShow( );
@@ -51,7 +50,8 @@ protected:
 	virtual bool unSafetyAddItem( MusicItem *music_item );
 
 	virtual void updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
-	virtual bool renderImage( QPainter &painter, int intervalWidth, size_t index, MusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color );
+	virtual bool renderImage( QPainter &painter, int intervalWidth, size_t index, MusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color ) const;
+	virtual bool renderImage( size_t index, MusicItem *music_item ) const;
 
 public:
 	bool initBefore( ) override;
@@ -67,5 +67,15 @@ public:
 	virtual bool updateInfo( );
 	virtual bool updateShow( );
 	virtual void clear( );
+	virtual bool setMusicItemInfoVector( const std::vector< MusicItem * > &music_items );
+	virtual void getMusicItemVector( std::vector<MusicItem *> &result_music_item_vector );
+	virtual void getMusicItemVector( size_t &result_count, std::vector<MusicItem *> &result_music_item_vector, const std::vector< size_t > &get_index );
 };
+
+class MusicListWidgetTools {
+private:
+	friend class MusicCentreWidget;
+	static void updateItemWidthInfo( MusicListWidget *targetr, MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
+};
+
 #endif // MUSICLISTWIDGET_H_H_HEAD__FILE__

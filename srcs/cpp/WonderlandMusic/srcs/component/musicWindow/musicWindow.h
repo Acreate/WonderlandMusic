@@ -21,10 +21,6 @@ public:
 
 protected:
 	bool deleteResource( ) override;
-
-	virtual bool unSafetyClearInfo( );
-	virtual bool unSafetyClearShow( );
-
 public:
 	bool initBefore( ) override;
 	bool init( ) override;
@@ -38,6 +34,7 @@ public:
 	virtual bool updateItem( MusicItem *music_item );
 	virtual bool removeItem( MusicItem *music_item );
 	virtual MusicItem * fromJsonGenerateMusicItem( const QJsonObject &json_object );
+	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

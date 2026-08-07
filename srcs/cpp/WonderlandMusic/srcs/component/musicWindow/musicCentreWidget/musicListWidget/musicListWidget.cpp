@@ -34,10 +34,50 @@ void MusicListWidget::paintEvent( QPaintEvent *event ) {
 void MusicListWidget::setMusicItemInfoVector( const std::vector< MusicItem * > &music_items ) {
 	userMutex->lock( );
 	unsafetyClearMusicItemVector( );
-	this->musicItems = music_items;
+	this->musicItemVector = music_items;
 	userMutex->unlock( );
 }
 void MusicListWidget::unsafetyClearMusicItemVector( ) {
+	unSafetyClearInfo( );
+}
+bool MusicListWidget::unSafetyClearInfo( ) {
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		if( unSafetyClearShow( ) == false )
+			return false;
+		auto musicItem = musicItemVector.data( );
+		size_t index;
+		for( index = 0; index < count; index += 1 ) {
+			musicItem[ index ]->musicWindow = nullptr;
+			delete musicItem;
+		}
+		musicItemVector.clear( );
+	}
+	return true;
+}
+bool MusicListWidget::unSafetyClearShow( ) {
+	return true; // todo : 清理显示
+}
+void MusicListWidget::clear( ) {
+	userMutex->lock( );
+	unsafetyClearMusicItemVector( );
+	userMutex->unlock( );
+}
+bool MusicListWidget::hasItem( size_t &result_index, const MusicItem *music_item ) const {
+	bool cond = false;
+	userMutex->lock( );
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		auto musicItem = musicItemVector.data( );
+		for( result_index = 0; result_index < count; result_index += 1 )
+			if( cond = musicItem[ result_index ] == music_item, cond )
+				break;
+	}
+	userMutex->unlock( );
+	return cond;
+}
+bool MusicListWidget::addItem( MusicItem *music_item ) {
+	return false;
 }
 bool MusicListWidget::initBefore( ) {
 	deleteResource( );
@@ -53,11 +93,11 @@ bool MusicListWidget::initAfter( ) {
 bool MusicListWidget::getJsonData( QJsonObject &get_json_object ) const {
 	bool result = true;
 	userMutex->lock( );
-	size_t count = musicItems.size( );
+	size_t count = musicItemVector.size( );
 	get_json_object.insert( "count", QString::number( count ) );
 	if( count ) {
 		QJsonObject arrayJson;
-		auto data = musicItems.data( );
+		auto data = musicItemVector.data( );
 		size_t index = 0;
 		for( ; index < count; index += 1 ) {
 			QJsonObject itemJsonData;
@@ -136,10 +176,16 @@ bool MusicListWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return ok;
 }
 bool MusicListWidget::updateItem( MusicItem *music_item ) {
-	return false;
+	return false; // todo : 更新项信息
 }
 bool MusicListWidget::removeItem( MusicItem *music_item ) {
-	return false;
+	size_t index;
+	if( hasItem( index, music_item ) == false )
+		return false;
+	userMutex->lock( );
+	musicItemVector.erase( musicItemVector.begin( ) + index );
+	userMutex->unlock( );
+	return true;
 }
 MusicCentreWidget * MusicListWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;

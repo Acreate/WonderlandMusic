@@ -10,13 +10,12 @@
 #include "../../head/release_macro.h"
 
 #include "../../mutex/userMutex.h"
-
-#include "../../tools/appTranslateTools.h"
 #include "../../tools/pathTools.h"
 
 #include "musicItem/musicItem.h"
 
 #include "musicCentreWidget/musicCentreWidget.h"
+#include "musicCentreWidget/musicListWidget/musicListWidget.h"
 
 MusicWindow::MusicWindow( ) {
 }
@@ -35,24 +34,20 @@ bool MusicWindow::deleteResource( ) {
 	return true;
 }
 bool MusicWindow::unSafetyClearInfo( ) {
-	size_t count = musicItemVector.size( );
-	if( count ) {
-		if( unSafetyClearShow( ) == false )
-			return false;
-		auto musicItem = musicItemVector.data( );
-		size_t index;
-		for( index = 0; index < count; index += 1 ) {
-			musicItem[ index ]->musicWindow = nullptr;
-			delete musicItem;
-		}
-		musicItemVector.clear( );
-	}
-	return true;
+	if( musicCentreWidget == nullptr )
+		return false;
+	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+	if( musicListWidget == nullptr )
+		return false;
+	return musicListWidget->unSafetyClearInfo( );
 }
 bool MusicWindow::unSafetyClearShow( ) {
 	if( musicCentreWidget )
-		return true;
-	return musicCentreWidget->unSafetyClearShow( );
+		return false;
+	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+	if( musicListWidget == nullptr )
+		return false;
+	return musicListWidget->unSafetyClearShow( );
 }
 bool MusicWindow::initBefore( ) {
 	deleteResource( );
@@ -84,18 +79,16 @@ QWidget * MusicWindow::toWidget( ) {
 	return this;
 }
 bool MusicWindow::hasItem( size_t &result_index, const MusicItem *music_item ) const {
-	userMutex->lock( );
-
-	size_t count = musicItemVector.size( );
-	bool cond = false;
-	if( count ) {
-		auto musicItem = musicItemVector.data( );
-		for( result_index = 0; result_index < count; result_index += 1 )
-			if( cond = musicItem[ result_index ] == music_item, cond )
-				break;
-	}
-	userMutex->unlock( );
-	return cond;
+	if( music_item->musicWindow != this )
+		return false;
+	if( music_item->musicWindow != this )
+		return false;
+	if( musicCentreWidget == nullptr )
+		return false;
+	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+	if( musicListWidget == nullptr )
+		return false;
+	return musicListWidget->hasItem( result_index, music_item );
 }
 bool MusicWindow::addItem( MusicItem *music_item ) {
 	size_t index;
@@ -108,18 +101,28 @@ bool MusicWindow::addItem( MusicItem *music_item ) {
 bool MusicWindow::updateItem( MusicItem *music_item ) {
 	if( music_item->musicWindow != this )
 		return false;
+	if( music_item->musicWindow != this )
+		return false;
+	if( musicCentreWidget == nullptr )
+		return false;
+	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+	if( musicListWidget == nullptr )
+		return false;
+	if( musicListWidget->updateItem( music_item ) == false )
+		return false;
 	updateWindow( );
 	return true;
 }
 bool MusicWindow::removeItem( MusicItem *music_item ) {
 	if( music_item->musicWindow != this )
 		return false;
-	size_t index;
-	if( hasItem( index, music_item ) == false )
+	if( musicCentreWidget == nullptr )
 		return false;
-	userMutex->lock( );
-	musicItemVector.erase( musicItemVector.begin( ) + index );
-	userMutex->unlock( );
+	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+	if( musicListWidget == nullptr )
+		return false;
+	if( musicListWidget->removeItem( music_item ) == false )
+		return false;
 	updateWindow( );
 	return true;
 }

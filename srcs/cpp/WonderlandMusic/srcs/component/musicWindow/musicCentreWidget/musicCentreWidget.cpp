@@ -31,8 +31,6 @@ bool MusicCentreWidget::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
-	unSafetyClearShow( );
-	//Delete_Resource_App_Core_Ptr( transparencyScrollBar );
 	musicfavoriteWidgetScrollArea->takeWidget( );
 	Delete_Resource_App_Core_Ptr( musicfavoriteWidgetScrollArea );
 	musicListWidgetScrollArea->takeWidget( );
@@ -49,9 +47,7 @@ bool MusicCentreWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
 }
-bool MusicCentreWidget::unSafetyClearShow( ) {
-	return true;
-}
+
 void MusicCentreWidget::resizeEvent( QResizeEvent *event ) {
 	QWidget::resizeEvent( event );
 

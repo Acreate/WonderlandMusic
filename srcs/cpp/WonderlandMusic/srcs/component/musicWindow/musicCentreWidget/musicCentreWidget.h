@@ -36,7 +36,6 @@ private:
 protected:
 	~MusicCentreWidget( ) override;
 	bool deleteResource( ) override;
-	virtual bool unSafetyClearShow( );
 	void resizeEvent( QResizeEvent *event ) override;
 	virtual QScrollArea * createControlScrollArea( QWidget *widget );
 

@@ -7,17 +7,19 @@
 
 #include <interface/iAppJsonData.h>
 
+class MusicWindow;
 class UserMutex;
 class MusicItem;
 
 class MusicListWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 	friend class MusicCentreWidget;
+	friend class MusicWindow;
 
 protected:
 	UserMutex *userMutex = nullptr;
 	MusicCentreWidget *musicCentreWidget;
-	std::vector< MusicItem * > musicItems;
+	std::vector< MusicItem * > musicItemVector;
 
 public:
 	MusicListWidget( MusicCentreWidget *music_centre_widget );
@@ -29,6 +31,12 @@ protected:
 	virtual void setMusicItemInfoVector( const std::vector< MusicItem * > &music_items );
 	virtual void unsafetyClearMusicItemVector( );
 
+	virtual bool unSafetyClearInfo( );
+	virtual bool unSafetyClearShow( );
+	
+	virtual void clear( );
+	virtual bool hasItem( size_t &result_index, const MusicItem *music_item ) const;
+	virtual bool addItem( MusicItem *music_item );
 public:
 	bool initBefore( ) override;
 	bool init( ) override;

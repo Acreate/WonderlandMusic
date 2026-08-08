@@ -11,6 +11,7 @@ class QMediaPlayer;
 
 class MusicItem : public QObject, public IAppJsonData {
 	Q_OBJECT;
+	friend class FavoriteItem;
 	friend class MusicWindow;
 	friend class MusicListWidget;
 
@@ -23,15 +24,15 @@ private:
 	QMediaPlayer *mediaPlayer;
 	bool loadedOver;
 	QImage *rendBuff = nullptr;
-	MusicWindow *musicWindow;
+	FavoriteItem *favoriteItem;
 
 protected:
 	MusicItem( );
-	MusicItem( MusicWindow *music_window );
+	MusicItem( FavoriteItem *favorite_item );
 
 public:
 	~MusicItem( ) override;
-	MusicItem( MusicWindow *music_window, const QString &file_path );
+	MusicItem( FavoriteItem *favorite_item, const QString &file_path );
 	virtual bool isLoadedOver( );
 	virtual bool getIdCode( quint64 &result_id_code ) const;
 	virtual bool getName( QString &result_name ) const;

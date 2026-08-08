@@ -21,6 +21,7 @@ public:
 
 protected:
 	bool deleteResource( ) override;
+
 public:
 	bool initBefore( ) override;
 	bool init( ) override;
@@ -33,7 +34,6 @@ public:
 	virtual bool addItem( MusicItem *music_item );
 	virtual bool updateItem( MusicItem *music_item );
 	virtual bool removeItem( MusicItem *music_item );
-	virtual MusicItem * fromJsonGenerateMusicItem( const QJsonObject &json_object );
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 };
 

@@ -4,16 +4,17 @@
 #include <QMediaPlayer>
 #include <windows.h>
 
-#include "../musicWindow.h"
+#include "../../musicWindow.h"
 
-#include "../musicCentreWidget/musicListWidget/musicListWidget.h"
-MusicItem::MusicItem( ) : musicWindow( nullptr ) {
+#include "../favoriteItem/favoriteItem.h"
+
+MusicItem::MusicItem( ) : favoriteItem( nullptr ) {
 }
-MusicItem::MusicItem( MusicWindow *music_window ) : musicWindow( music_window ) {
+MusicItem::MusicItem( FavoriteItem *favorite_item ) : favoriteItem( favorite_item ) {
 }
 MusicItem::~MusicItem( ) {
-	if( musicWindow )
-		musicWindow->removeItem( this );
+	if( favoriteItem )
+		favoriteItem->removeItem( this );
 	if( mediaPlayer ) {
 		delete mediaPlayer;
 		mediaPlayer = nullptr;
@@ -23,7 +24,7 @@ MusicItem::~MusicItem( ) {
 		rendBuff = nullptr;
 	}
 }
-MusicItem::MusicItem( MusicWindow *music_window, const QString &file_path ) : loadedOver( false ), musicWindow( music_window ) {
+MusicItem::MusicItem( FavoriteItem *favorite_item, const QString &file_path ) : loadedOver( false ), favoriteItem( favorite_item ) {
 	QFileInfo fileInfo( file_path );
 	if( fileInfo.exists( ) == false ) {
 		return;
@@ -31,7 +32,7 @@ MusicItem::MusicItem( MusicWindow *music_window, const QString &file_path ) : lo
 	filePath = fileInfo.absoluteFilePath( );
 	mediaPlayer = new QMediaPlayer( );
 
-	connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, [this] ( QMediaPlayer::MediaStatus status ) {
+	connect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [this] ( QMediaPlayer::MediaStatus status ) {
 		switch( status ) {
 			case QMediaPlayer::LoadedMedia :
 				break;
@@ -41,11 +42,18 @@ MusicItem::MusicItem( MusicWindow *music_window, const QString &file_path ) : lo
 
 		// todo : 项信息
 
-		if( musicWindow )
-			musicWindow->updateItem( this );
-		mediaPlayer->deleteLater( );
-		mediaPlayer = nullptr;
-		loadedOver = true;
+		if( favoriteItem ) {
+			favoriteItem->updateItem( this );
+			mediaPlayer->deleteLater( );
+			mediaPlayer = nullptr;
+			loadedOver = true;
+		} else {
+			mediaPlayer->disconnect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, nullptr );
+			delete mediaPlayer;
+			mediaPlayer = nullptr;
+			loadedOver = true;
+			delete this;
+		}
 	} );
 
 	auto source = QUrl::fromLocalFile( filePath );

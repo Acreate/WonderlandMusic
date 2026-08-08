@@ -2,7 +2,6 @@
 
 #include <QJsonObject>
 
-#include "../../application/appInstance.h"
 #include "../../application/translate/musicWindowTranslate.h"
 
 #include "../../head/after_init_macro.h"
@@ -13,10 +12,10 @@
 #include "../../mutex/userMutex.h"
 #include "../../tools/pathTools.h"
 
+#include "Item/favoriteItem/favoriteItem.h"
+
 #include "musicCentreWidget/musicCentreWidget.h"
 #include "musicCentreWidget/musicListWidget/musicListWidget.h"
-
-#include "musicItem/musicItem.h"
 
 MusicWindow::MusicWindow( ) {
 }
@@ -62,14 +61,15 @@ QWidget * MusicWindow::toWidget( ) {
 	return this;
 }
 bool MusicWindow::hasItem( size_t &result_index, const MusicItem *music_item ) const {
-	if( music_item->musicWindow != this )
-		return false;
 	if( musicCentreWidget == nullptr )
 		return false;
 	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
 	if( musicListWidget == nullptr )
 		return false;
-	return musicListWidget->hasItem( result_index, music_item );
+	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	if( currentFavoriteItem == nullptr )
+		return false;
+	return currentFavoriteItem->hasItem( result_index, music_item );
 }
 bool MusicWindow::addItem( MusicItem *music_item ) {
 	if( musicCentreWidget == nullptr )
@@ -77,7 +77,10 @@ bool MusicWindow::addItem( MusicItem *music_item ) {
 	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
 	if( musicListWidget == nullptr )
 		return false;
-	return musicListWidget->addItem( music_item );
+	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	if( currentFavoriteItem == nullptr )
+		return false;
+	return currentFavoriteItem->addItem( music_item );
 }
 bool MusicWindow::updateItem( MusicItem *music_item ) {
 	if( musicCentreWidget == nullptr )
@@ -85,7 +88,10 @@ bool MusicWindow::updateItem( MusicItem *music_item ) {
 	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
 	if( musicListWidget == nullptr )
 		return false;
-	if( musicListWidget->updateItem( music_item ) == false )
+	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	if( currentFavoriteItem == nullptr )
+		return false;
+	if( currentFavoriteItem->updateItem( music_item ) == false )
 		return false;
 	return true;
 }
@@ -95,20 +101,14 @@ bool MusicWindow::removeItem( MusicItem *music_item ) {
 	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
 	if( musicListWidget == nullptr )
 		return false;
-	if( musicListWidget->removeItem( music_item ) == false )
+	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	if( currentFavoriteItem == nullptr )
+		return false;
+	if( currentFavoriteItem->removeItem( music_item ) == false )
 		return false;
 	return true;
 }
-MusicItem * MusicWindow::fromJsonGenerateMusicItem( const QJsonObject &json_object ) {
-	if( json_object.empty( ) )
-		return nullptr;
-	MusicItem *musicItem = new MusicItem( this );
-	if( musicItem->setJsonData( json_object ) == false ) {
-		delete musicItem;
-		return nullptr;
-	}
-	return musicItem;
-}
+
 MusicCentreWidget * MusicWindow::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }

@@ -78,6 +78,8 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::v
 }
 bool PathTools::isMusicFile( const QString &entry_path ) {
 	auto musicDecoder = InstanceTools::getAppMusicDecoder( );
+	if( musicDecoder == nullptr )
+		return false;
 	return musicDecoder->musicFileNmaeSupperDecoder( entry_path );
 }
 qsizetype PathTools::filterFile( QStringList &result_get_path, const QStringList &entry_path ) {

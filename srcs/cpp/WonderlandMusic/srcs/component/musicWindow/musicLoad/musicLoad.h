@@ -3,6 +3,8 @@
 
 #include <interface/iAppCore.h>
 
+class UserMutex;
+class MusicItem;
 class MusicListWidget;
 class QString;
 
@@ -10,7 +12,9 @@ class MusicLoad : public IAppCore {
 	friend class MusicLoadTools;
 
 protected:
+	std::vector< MusicItem * > loadMusicItemsHistory;
 	MusicListWidget *musicListWidget;
+	UserMutex *userMutex = nullptr;
 	MusicLoad( MusicListWidget *music_list_widget );
 	~MusicLoad( ) override;
 
@@ -18,6 +22,8 @@ public:
 
 protected:
 	bool deleteResource( ) override;
+	virtual void unsafeDeleteMusicItemsHistory( );
+	virtual bool unsafeHasMusicLoadMusicFileHistory( const QString &music_file );
 
 public:
 	bool initBefore( ) override;
@@ -25,6 +31,8 @@ public:
 	bool initAfter( ) override;
 	virtual bool loadMusicFile( const QString &music_file_path );
 	virtual bool loadMusicDir( const QString &music_dir_path );
+	virtual bool removeMusicItemsHistory( const MusicItem *music_item );
+	virtual bool hasMusicLoadMusicFileHistory( const QString &music_file );
 };
 
 class MusicLoadTools {

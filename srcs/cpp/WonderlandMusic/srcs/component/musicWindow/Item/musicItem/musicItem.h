@@ -5,6 +5,7 @@
 
 #include <interface/iAppJsonData.h>
 
+class MusicLoad;
 class MusicWindow;
 class MusicListWidget;
 class QMediaPlayer;
@@ -12,6 +13,7 @@ class QMediaPlayer;
 class MusicItem : public QObject, public IAppJsonData {
 	Q_OBJECT;
 	friend class FavoriteItem;
+	friend class MusicLoad;
 	friend class MusicWindow;
 	friend class MusicListWidget;
 
@@ -27,6 +29,7 @@ private:
 	bool loadedOver;
 	QImage *rendBuff = nullptr;
 	FavoriteItem *favoriteItem;
+	MusicLoad *loadPtr = nullptr;
 
 protected:
 	MusicItem( );

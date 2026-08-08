@@ -11,6 +11,8 @@
 
 #include "../../../../tools/pathTools.h"
 
+#include "../../musicLoad/musicLoad.h"
+
 #include "../favoriteItem/favoriteItem.h"
 
 MusicItem::MusicItem( ) : favoriteItem( nullptr ) {
@@ -18,6 +20,8 @@ MusicItem::MusicItem( ) : favoriteItem( nullptr ) {
 MusicItem::MusicItem( FavoriteItem *favorite_item ) : favoriteItem( favorite_item ) {
 }
 MusicItem::~MusicItem( ) {
+	if( loadPtr )
+		loadPtr->removeMusicItemsHistory( this );
 	if( favoriteItem )
 		favoriteItem->removeItem( this );
 	if( mediaPlayer ) {
@@ -68,6 +72,8 @@ MusicItem::MusicItem( FavoriteItem *favorite_item, const QString &file_path ) : 
 				mediaPlayer->deleteLater( );
 				mediaPlayer = nullptr;
 				loadedOver = true;
+				loadPtr->removeMusicItemsHistory( this );
+				loadPtr = nullptr;
 				return; // 保存收藏夹引用
 			}
 		}

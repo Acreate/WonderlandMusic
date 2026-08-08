@@ -9,7 +9,12 @@
 
 #include "../musicCentreWidget.h"
 
+#include "../../../../head/defininition_get_json_key.h"
+#include "../../../../head/q_json_object.h"
+
 #include "../../Item/favoriteItem/favoriteItem.h"
+
+#include "../musicFavoriteWidget/musicFavoriteWidget.h"
 
 MusicListWidget::MusicListWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
 }
@@ -76,9 +81,20 @@ bool MusicListWidget::initAfter( ) {
 	return true;
 }
 bool MusicListWidget::getJsonData( QJsonObject &get_json_object ) const {
+	if( currentFavoriteItem == nullptr )
+		return false;
+	get_json_object.insert( "currentFavoriteItem", currentFavoriteItem->getFavoriteItemName( ) );
 	return true;
 }
 bool MusicListWidget::setJsonData( const QJsonObject &set_json_object ) {
+	auto find = set_json_object.find( "currentFavoriteItem" );
+	auto end = set_json_object.end( );
+	if( find == end )
+		return false;
+	auto favoriteName = find->toString( );
+
+	if( musicCentreWidget->getMusicFavoriteWidget( )->getNameFavoriteItem( currentFavoriteItem, favoriteName ) == false )
+		return false;
 	return true;
 }
 MusicCentreWidget * MusicListWidget::getMusicCentreWidget( ) const {

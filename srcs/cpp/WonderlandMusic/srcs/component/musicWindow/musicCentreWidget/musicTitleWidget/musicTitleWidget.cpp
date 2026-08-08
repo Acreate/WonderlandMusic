@@ -265,6 +265,9 @@ bool MusicTitleWidget::setJsonData( const QJsonObject &set_json_object ) {
 	conver_string_find_var( set_json_object, musicDurationTimeWidth, find, end, ok, toInt );
 	return true;
 }
+MusicCentreWidget * MusicTitleWidget::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
+}
 int MusicTitleWidget::getSuggestHeight( ) const {
 	return suggestHeight;
 }

@@ -54,10 +54,10 @@ protected:
 
 public:
 	virtual bool hasMusicFile( const QString &file_path ) const;
-	virtual bool updateItem( MusicItem *music_item );
-	virtual bool removeItem( MusicItem *music_item );
-	virtual bool hasItem( size_t &result_index, const MusicItem *music_item ) const;
-	virtual bool addItem( MusicItem *music_item );
+	virtual bool updateMusicItem( MusicItem *music_item );
+	virtual bool removeMusicItem( MusicItem *music_item );
+	virtual bool hasMusicItem( size_t &result_index, const MusicItem *music_item ) const;
+	virtual bool addMusicItem( MusicItem *music_item );
 	virtual bool updateInfo( );
 	virtual bool updateShow( );
 	virtual void clear( );

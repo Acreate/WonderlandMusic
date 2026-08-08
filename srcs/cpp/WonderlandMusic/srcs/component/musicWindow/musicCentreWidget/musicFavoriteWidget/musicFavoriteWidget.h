@@ -38,10 +38,11 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual bool removeItem( FavoriteItem *favorite_item );
-	virtual bool loadMusicFile( const QString &music_file_path );
-	virtual bool loadMusicDir( const QString &music_dir_path );
 	virtual MusicLoad * getMusicLoad( ) const;
 	virtual bool removeMusicLoad( MusicLoad *music_load );
+	virtual bool getIndexFavoriteItem( FavoriteItem *&result_favorite_item, const size_t &index ) const;
+	virtual bool getNameFavoriteItem( FavoriteItem *&result_favorite_item, const QString &favorite_item_name ) const;
+	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 };
 
 #endif // MUSICFAVORITEWIDGET_H_H_HEAD__FILE__

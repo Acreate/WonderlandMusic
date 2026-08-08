@@ -177,12 +177,6 @@ bool MusicFavoriteWidget::unSafetyClear( ) {
 	return true;
 }
 
-bool MusicFavoriteWidget::loadMusicFile( const QString &music_file_path ) {
-	return musicLoad->loadMusicFile( music_file_path );
-}
-bool MusicFavoriteWidget::loadMusicDir( const QString &music_dir_path ) {
-	return musicLoad->loadMusicDir( music_dir_path );
-}
 MusicLoad * MusicFavoriteWidget::getMusicLoad( ) const {
 	return musicLoad;
 }
@@ -219,4 +213,33 @@ bool MusicFavoriteWidget::removeMusicLoad( MusicLoad *music_load ) {
 		return false;
 	}
 	return true;
+}
+bool MusicFavoriteWidget::getIndexFavoriteItem( FavoriteItem *&result_favorite_item, const size_t &index ) const {
+	userMutex->lock( );
+	size_t count = favoriteItemVector.size( );
+	auto result = count > index;
+	if( result )
+		result_favorite_item = favoriteItemVector.data( )[ index ];
+	userMutex->unlock( );
+	return result;
+}
+bool MusicFavoriteWidget::getNameFavoriteItem( FavoriteItem *&result_favorite_item, const QString &favorite_item_name ) const {
+	auto result = false;
+	userMutex->lock( );
+	size_t count = favoriteItemVector.size( );
+	if( count ) {
+		size_t index;
+		auto data = favoriteItemVector.data( );
+		for( index = 0; index < count; index += 1 )
+			if( data[ index ]->favoriteItemName == favorite_item_name ) {
+				result = true;
+				result_favorite_item = data[ index ];
+				break;
+			}
+	}
+	userMutex->unlock( );
+	return result;
+}
+MusicCentreWidget * MusicFavoriteWidget::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
 }

@@ -12,10 +12,7 @@
 #include "../../mutex/userMutex.h"
 #include "../../tools/pathTools.h"
 
-#include "Item/favoriteItem/favoriteItem.h"
-
 #include "musicCentreWidget/musicCentreWidget.h"
-#include "musicCentreWidget/musicListWidget/musicListWidget.h"
 
 MusicWindow::MusicWindow( ) {
 }

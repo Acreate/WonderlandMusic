@@ -23,7 +23,7 @@ MusicItem::~MusicItem( ) {
 	if( loadPtr )
 		loadPtr->removeMusicItemsHistory( this );
 	if( favoriteItem )
-		favoriteItem->removeItem( this );
+		favoriteItem->removeMusicItem( this );
 	if( mediaPlayer ) {
 		delete mediaPlayer;
 		mediaPlayer = nullptr;
@@ -68,7 +68,7 @@ MusicItem::MusicItem( FavoriteItem *favorite_item, const QString &file_path ) : 
 				name = mediaMetaData.stringValue( QMediaMetaData::Title );
 				if( name.isEmpty( ) )
 					name = info.baseName( );
-				favoriteItem->updateItem( this );
+				favoriteItem->updateMusicItem( this );
 				mediaPlayer->deleteLater( );
 				mediaPlayer = nullptr;
 				loadedOver = true;

@@ -158,11 +158,11 @@ bool MusicCentreWidget::getJsonData( QJsonObject &get_json_object ) const {
 	QJsonObject musicTitleJson;
 	if( musicTitleWidget->getJsonData( musicTitleJson ) == false )
 		return false;
-	QJsonObject musicListJson;
-	if( musicListWidget->getJsonData( musicListJson ) == false )
-		return false;
 	QJsonObject musicFavoriteJson;
 	if( musicfavoriteWidget->getJsonData( musicFavoriteJson ) == false )
+		return false;
+	QJsonObject musicListJson;
+	if( musicListWidget->getJsonData( musicListJson ) == false )
 		return false;
 	get_json_object.insert( musicTitleWidget->metaObject( )->className( ), musicTitleJson );
 	get_json_object.insert( musicListWidget->metaObject( )->className( ), musicListJson );
@@ -185,9 +185,9 @@ bool MusicCentreWidget::setJsonData( const QJsonObject &set_json_object ) {
 	QJsonObject musicFavoriteJson = iterator->toObject( );
 	if( musicTitleWidget->setJsonData( musicTitleJson ) == false )
 		return false;
-	if( musicListWidget->setJsonData( musicListJson ) == false )
-		return false;
 	if( musicfavoriteWidget->setJsonData( musicFavoriteJson ) == false )
+		return false;
+	if( musicListWidget->setJsonData( musicListJson ) == false )
 		return false;
 	return true;
 }

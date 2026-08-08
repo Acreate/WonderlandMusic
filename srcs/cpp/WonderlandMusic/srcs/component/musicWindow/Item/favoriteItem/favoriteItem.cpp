@@ -406,7 +406,7 @@ bool FavoriteItem::unSafetyUpdateItem( MusicItem *music_item ) {
 }
 bool FavoriteItem::unSafetyRemoveItem( MusicItem *music_item ) {
 	size_t index;
-	if( hasItem( index, music_item ) == false )
+	if( hasMusicItem( index, music_item ) == false )
 		return false;
 	auto iterator = musicItemVector.begin( ) + index;
 	MusicItem *removeTarget = *iterator;
@@ -436,7 +436,7 @@ bool FavoriteItem::unSafetyAddItem( MusicItem *music_item ) {
 	// 删除就有的项
 	if( music_item->favoriteItem ) {
 		if( music_item->favoriteItem != this ) {
-			bool removeItem = music_item->favoriteItem->removeItem( music_item );
+			bool removeItem = music_item->favoriteItem->removeMusicItem( music_item );
 			if( removeItem == false )
 				return false;
 		}
@@ -468,13 +468,13 @@ void FavoriteItem::clear( ) {
 	userMutex->unlock( );
 	unSafetyRepaint( );
 }
-bool FavoriteItem::hasItem( size_t &result_index, const MusicItem *music_item ) const {
+bool FavoriteItem::hasMusicItem( size_t &result_index, const MusicItem *music_item ) const {
 	userMutex->lock( );
 	bool cond = unSafetyHasItem( result_index, music_item );
 	userMutex->unlock( );
 	return cond;
 }
-bool FavoriteItem::addItem( MusicItem *music_item ) {
+bool FavoriteItem::addMusicItem( MusicItem *music_item ) {
 	userMutex->lock( );
 	auto result = unSafetyAddItem( music_item );
 	userMutex->unlock( );
@@ -482,7 +482,7 @@ bool FavoriteItem::addItem( MusicItem *music_item ) {
 	return result;
 }
 
-bool FavoriteItem::updateItem( MusicItem *music_item ) {
+bool FavoriteItem::updateMusicItem( MusicItem *music_item ) {
 	userMutex->lock( );
 	bool safetyRemoveItem = unSafetyUpdateItem( music_item );
 	userMutex->unlock( );
@@ -491,7 +491,7 @@ bool FavoriteItem::updateItem( MusicItem *music_item ) {
 	unSafetyRepaint( );
 	return safetyRemoveItem;
 }
-bool FavoriteItem::removeItem( MusicItem *music_item ) {
+bool FavoriteItem::removeMusicItem( MusicItem *music_item ) {
 	userMutex->lock( );
 	bool safetyRemoveItem = unSafetyRemoveItem( music_item );
 	userMutex->unlock( );

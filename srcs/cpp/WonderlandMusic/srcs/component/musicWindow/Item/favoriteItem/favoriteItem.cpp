@@ -15,6 +15,7 @@
 #include "../../musicCentreWidget/musicCentreWidget.h"
 #include "../../musicCentreWidget/musicListWidget/musicListWidget.h"
 #include "../../musicCentreWidget/musicTitleWidget/musicTitleWidget.h"
+#include "../../musicCentreWidget/musicfavoriteWidget/musicfavoriteWidget.h"
 
 #include "../musicItem/musicItem.h"
 
@@ -22,7 +23,7 @@ FavoriteItem::FavoriteItem( MusicCentreWidget *music_centre_widget, const QStrin
 }
 FavoriteItem::~FavoriteItem( ) {
 	if( musicCentreWidget ) {
-		auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+		auto musicListWidget = musicCentreWidget->getMusicFavoriteWidget( );
 		if( musicListWidget )
 			musicListWidget->removeItem( this );
 	}
@@ -183,6 +184,9 @@ void FavoriteItem::getMusicItemVector( size_t &result_count, std::vector< MusicI
 	userMutex->unlock( );
 	if( result_count != getCount )
 		result_music_item_vector.resize( result_count );
+}
+QImage * FavoriteItem::getDrawBuff( ) const {
+	return drawBuff;
 }
 
 void FavoriteItem::updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {

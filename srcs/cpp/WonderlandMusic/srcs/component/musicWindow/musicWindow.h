@@ -29,11 +29,6 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	QWidget * toWidget( ) override;
-	virtual void clear( );
-	virtual bool hasItem( size_t &result_index, const MusicItem *music_item ) const;
-	virtual bool addItem( MusicItem *music_item );
-	virtual bool updateItem( MusicItem *music_item );
-	virtual bool removeItem( MusicItem *music_item );
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 };
 

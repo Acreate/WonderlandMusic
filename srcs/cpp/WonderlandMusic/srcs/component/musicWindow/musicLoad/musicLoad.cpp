@@ -6,13 +6,18 @@
 
 #include "../Item/musicItem/musicItem.h"
 
+#include "../musicCentreWidget/musicCentreWidget.h"
 #include "../musicCentreWidget/musicListWidget/musicListWidget.h"
+#include "../musicCentreWidget/musicfavoriteWidget/musicfavoriteWidget.h"
 
-MusicLoad::MusicLoad( MusicListWidget *music_list_widget ) : musicListWidget( music_list_widget ) {
+MusicLoad::MusicLoad( MusicCentreWidget *music_centre_widget ) : musicCentreWidget( music_centre_widget ) {
 }
 MusicLoad::~MusicLoad( ) {
-	if( musicListWidget )
-		musicListWidget->removeMusicLoad( this );
+	if( musicCentreWidget ) {
+		auto musicFavoriteWidget = musicCentreWidget->getMusicFavoriteWidget( );
+		if( musicFavoriteWidget )
+			musicFavoriteWidget->removeMusicLoad( this );
+	}
 	deleteResource( );
 }
 bool MusicLoad::deleteResource( ) {
@@ -71,7 +76,7 @@ bool MusicLoad::initAfter( ) {
 	return true;
 }
 bool MusicLoad::loadMusicFile( const QString &music_file_path ) {
-	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	auto currentFavoriteItem = getCurrentFavoriteItem( );
 	if( currentFavoriteItem == nullptr )
 		return false;
 	QFileInfo info( music_file_path );
@@ -90,7 +95,7 @@ bool MusicLoad::loadMusicFile( const QString &music_file_path ) {
 bool MusicLoad::loadMusicDir( const QString &music_dir_path ) {
 	bool result = false;
 
-	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	auto currentFavoriteItem = getCurrentFavoriteItem( );
 	if( currentFavoriteItem ) {
 		QStringList filterMusicFileList;
 		QStringList getFileList;
@@ -128,22 +133,32 @@ bool MusicLoad::hasMusicLoadMusicFileHistory( const QString &music_file ) {
 	userMutex->unlock( );
 	return result;
 }
-bool MusicLoadTools::createMusicLoad( MusicLoad **music_load, MusicListWidget *music_list_widget ) {
-	if( music_list_widget == nullptr )
+FavoriteItem * MusicLoad::getCurrentFavoriteItem( ) const {
+	if( musicCentreWidget == nullptr )
+		return nullptr;
+	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+	if( musicListWidget == nullptr )
+		return nullptr;
+	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	return currentFavoriteItem;
+}
+
+bool MusicLoadTools::createMusicLoad( MusicLoad **music_load, MusicCentreWidget *music_centre_widget ) {
+	if( music_centre_widget == nullptr )
 		return false;
-	*music_load = new MusicLoad( music_list_widget );
-	return true;
+	*music_load = new MusicLoad( music_centre_widget );
+	return *music_load;
 }
 bool MusicLoadTools::releaseMusicLoad( MusicLoad **music_load ) {
-	if( music_load == nullptr || *music_load == nullptr )
+	if( *music_load == nullptr )
 		return false;
 	delete *music_load;
 	*music_load = nullptr;
 	return true;
 }
-bool MusicLoadTools::setMusicListWidget( MusicLoad *music_load, MusicListWidget *music_list_widget ) {
+bool MusicLoadTools::setMusicListWidget( MusicLoad *music_load, MusicCentreWidget *music_centre_widget ) {
 	if( music_load == nullptr )
 		return false;
-	music_load->musicListWidget = music_list_widget;
+	music_load->musicCentreWidget = music_centre_widget;
 	return true;
 }

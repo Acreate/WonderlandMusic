@@ -69,7 +69,7 @@ void MusicCentreWidget::updateTitleWidthInfo( MusicTitleWidget *music_title_widg
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
-	musicfavoriteWidget = new MusicfavoriteWidget( this );
+	musicfavoriteWidget = new MusicFavoriteWidget( this );
 	musicTitleWidget = new MusicTitleWidget( this );
 	musicListWidget = new MusicListWidget( this );
 	musicToolWidget = new MusicToolWidget( this );
@@ -195,7 +195,7 @@ bool MusicCentreWidget::setJsonData( const QJsonObject &set_json_object ) {
 MusicWindow * MusicCentreWidget::getMusicWindow( ) const {
 	return musicWindow;
 }
-MusicfavoriteWidget * MusicCentreWidget::getMusicfavoriteWidget( ) const {
+MusicFavoriteWidget * MusicCentreWidget::getMusicFavoriteWidget( ) const {
 	return musicfavoriteWidget;
 }
 MusicTitleWidget * MusicCentreWidget::getMusicTitleWidget( ) const {

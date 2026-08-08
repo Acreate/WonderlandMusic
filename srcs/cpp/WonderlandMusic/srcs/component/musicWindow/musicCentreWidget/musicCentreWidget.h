@@ -11,7 +11,7 @@ class TransparencyScrollBar;
 class QScrollArea;
 class MusicListWidget;
 class UserMutex;
-class MusicfavoriteWidget;
+class MusicFavoriteWidget;
 class MusicToolWidget;
 class MusicTitleWidget;
 class MusicWindow;
@@ -27,7 +27,7 @@ private:
 	QScrollArea *musicfavoriteWidgetScrollArea = nullptr;
 	QScrollArea *musicTitleWidgetScrollArea = nullptr;
 	QScrollArea *musicListWidgetScrollArea = nullptr;
-	MusicfavoriteWidget *musicfavoriteWidget = nullptr;
+	MusicFavoriteWidget *musicfavoriteWidget = nullptr;
 	MusicTitleWidget *musicTitleWidget = nullptr;
 	MusicListWidget *musicListWidget = nullptr;
 	MusicToolWidget *musicToolWidget = nullptr;
@@ -50,7 +50,7 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual MusicWindow * getMusicWindow( ) const;
-	virtual MusicfavoriteWidget * getMusicfavoriteWidget( ) const;
+	virtual MusicFavoriteWidget * getMusicFavoriteWidget( ) const;
 	virtual MusicTitleWidget * getMusicTitleWidget( ) const;
 	virtual MusicListWidget * getMusicListWidget( ) const;
 	virtual MusicToolWidget * getMusicToolWidget( ) const;

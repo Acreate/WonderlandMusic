@@ -3,6 +3,9 @@
 
 #include <interface/iAppCore.h>
 
+class FavoriteItem;
+class MusicCentreWidget;
+class MusicFavoriteWidget;
 class UserMutex;
 class MusicItem;
 class MusicListWidget;
@@ -13,12 +16,10 @@ class MusicLoad : public IAppCore {
 
 protected:
 	std::vector< MusicItem * > loadMusicItemsHistory;
-	MusicListWidget *musicListWidget;
+	MusicCentreWidget *musicCentreWidget;
 	UserMutex *userMutex = nullptr;
-	MusicLoad( MusicListWidget *music_list_widget );
+	MusicLoad( MusicCentreWidget *music_centre_widget );
 	~MusicLoad( ) override;
-
-public:
 
 protected:
 	bool deleteResource( ) override;
@@ -34,13 +35,14 @@ public:
 	virtual bool loadMusicDir( const QString &music_dir_path );
 	virtual bool removeMusicItemsHistory( const MusicItem *music_item );
 	virtual bool hasMusicLoadMusicFileHistory( const QString &music_file );
+	virtual FavoriteItem * getCurrentFavoriteItem( ) const;
 };
 
 class MusicLoadTools {
 	friend class MusicLoad;
-	friend class MusicListWidget;
-	static bool createMusicLoad( MusicLoad **music_load, MusicListWidget *music_list_widget );
+	friend class MusicFavoriteWidget;
+	static bool createMusicLoad( MusicLoad **music_load, MusicCentreWidget *music_centre_widget );
 	static bool releaseMusicLoad( MusicLoad **music_load );
-	static bool setMusicListWidget( MusicLoad *music_load, MusicListWidget *music_list_widget );
+	static bool setMusicListWidget( MusicLoad *music_load, MusicCentreWidget *music_centre_widget );
 };
 #endif // MUSICLOADTOOLS_H_H_HEAD__FILE__

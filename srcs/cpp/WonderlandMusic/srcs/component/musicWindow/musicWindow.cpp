@@ -60,67 +60,7 @@ bool MusicWindow::setJsonData( const QJsonObject &set_json_object ) {
 QWidget * MusicWindow::toWidget( ) {
 	return this;
 }
-bool MusicWindow::hasItem( size_t &result_index, const MusicItem *music_item ) const {
-	if( musicCentreWidget == nullptr )
-		return false;
-	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
-	if( musicListWidget == nullptr )
-		return false;
-	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
-	if( currentFavoriteItem == nullptr )
-		return false;
-	return currentFavoriteItem->hasItem( result_index, music_item );
-}
-bool MusicWindow::addItem( MusicItem *music_item ) {
-	if( musicCentreWidget == nullptr )
-		return false;
-	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
-	if( musicListWidget == nullptr )
-		return false;
-	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
-	if( currentFavoriteItem == nullptr )
-		return false;
-	return currentFavoriteItem->addItem( music_item );
-}
-bool MusicWindow::updateItem( MusicItem *music_item ) {
-	if( musicCentreWidget == nullptr )
-		return false;
-	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
-	if( musicListWidget == nullptr )
-		return false;
-	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
-	if( currentFavoriteItem == nullptr )
-		return false;
-	if( currentFavoriteItem->updateItem( music_item ) == false )
-		return false;
-	return true;
-}
-bool MusicWindow::removeItem( MusicItem *music_item ) {
-	if( musicCentreWidget == nullptr )
-		return false;
-	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
-	if( musicListWidget == nullptr )
-		return false;
-	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
-	if( currentFavoriteItem == nullptr )
-		return false;
-	if( currentFavoriteItem->removeItem( music_item ) == false )
-		return false;
-	return true;
-}
 
 MusicCentreWidget * MusicWindow::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
-}
-
-void MusicWindow::clear( ) {
-	MusicListWidget *musicListWidget;
-	if( musicCentreWidget ) {
-		musicListWidget = musicCentreWidget->getMusicListWidget( );
-		if( musicListWidget ) {
-			userMutex->lock( );
-			musicListWidget->clear( );
-			userMutex->unlock( );
-		}
-	}
 }

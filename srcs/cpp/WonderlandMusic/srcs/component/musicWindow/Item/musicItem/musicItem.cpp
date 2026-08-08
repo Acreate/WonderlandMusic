@@ -2,9 +2,14 @@
 
 #include <QFileInfo>
 #include <QMediaPlayer>
+#include <QMediaMetaData>
 #include <windows.h>
 
 #include "../../musicWindow.h"
+
+#include "../../../../dateTimeFormat/dateTimeFormat.h"
+
+#include "../../../../tools/pathTools.h"
 
 #include "../favoriteItem/favoriteItem.h"
 
@@ -40,14 +45,29 @@ MusicItem::MusicItem( FavoriteItem *favorite_item, const QString &file_path ) : 
 				return;
 		}
 
-		// todo : 项信息
-
 		if( favoriteItem ) {
+			auto localFile = mediaPlayer->source( ).toLocalFile( );
+			QFileInfo info( localFile );
+			absoluteFilePath = info.absoluteFilePath( );
+			filePath = info.fileName( );
+			auto &&mediaMetaData = mediaPlayer->metaData( );
+			this->singer = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
+			if( singer.isEmpty( ) )
+				singer = mediaMetaData.stringValue( QMediaMetaData::AlbumArtist );
+			if( singer.isEmpty( ) )
+				singer = mediaMetaData.stringValue( QMediaMetaData::Author );
+			if( singer.isEmpty( ) )
+				singer = tr( "匿名" ); // 使用匿名
+			elapsedTime = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
+			elapsedTimeString = DateTimeFormat::millsecondToHourMinSecFrom( elapsedTime );
+			name = mediaMetaData.stringValue( QMediaMetaData::Title );
+			if( name.isEmpty( ) )
+				name = info.baseName( );
 			favoriteItem->updateItem( this );
 			mediaPlayer->deleteLater( );
 			mediaPlayer = nullptr;
 			loadedOver = true;
-		} else {
+		} else { // 野指针时
 			mediaPlayer->disconnect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, nullptr );
 			delete mediaPlayer;
 			mediaPlayer = nullptr;

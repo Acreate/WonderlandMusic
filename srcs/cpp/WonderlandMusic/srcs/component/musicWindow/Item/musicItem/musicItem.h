@@ -20,6 +20,8 @@ private:
 	QString name;
 	QString singer;
 	QString filePath;
+	QString absoluteFilePath;
+	QString elapsedTimeString;
 	qint64 elapsedTime;
 	QMediaPlayer *mediaPlayer;
 	bool loadedOver;

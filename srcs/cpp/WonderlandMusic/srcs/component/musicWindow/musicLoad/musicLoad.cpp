@@ -26,10 +26,18 @@ bool MusicLoad::initAfter( ) {
 	return true;
 }
 bool MusicLoad::loadMusicFile( const QString &music_file_path ) {
+	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	MusicItem( currentFavoriteItem, music_file_path );
+	return true;
+}
+bool MusicLoad::loadMusicDir( const QString &music_dir_path ) {
+	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+	if( currentFavoriteItem == nullptr )
+		return false;
 	QStringList filterMusicFileList;
 	QStringList getFileList;
 	qsizetype musicFileCount;
-	if( PathTools::entryFilePath( filterMusicFileList, music_file_path ) == false )
+	if( PathTools::entryFilePath( filterMusicFileList, music_dir_path ) == false )
 		return false;
 	musicFileCount = PathTools::filterFile( getFileList, filterMusicFileList );
 	if( musicFileCount == 0 )
@@ -37,14 +45,10 @@ bool MusicLoad::loadMusicFile( const QString &music_file_path ) {
 	musicFileCount = PathTools::filterMusicFile( filterMusicFileList, getFileList );
 	if( musicFileCount == 0 )
 		return false;
-	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
 	auto data = filterMusicFileList.data( );
 	qsizetype index;
 	for( index = 0; index < musicFileCount; index += 1 )
 		MusicItem( currentFavoriteItem, data[ index ] );
-	return true;
-}
-bool MusicLoad::loadMusicDir( const QString &music_dir_path ) {
 	return true;
 }
 bool MusicLoadTools::createMusicLoad( MusicLoad **music_load, MusicListWidget *music_list_widget ) {

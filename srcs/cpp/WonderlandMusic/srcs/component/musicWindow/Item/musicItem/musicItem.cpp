@@ -49,31 +49,34 @@ MusicItem::MusicItem( FavoriteItem *favorite_item, const QString &file_path ) : 
 			auto localFile = mediaPlayer->source( ).toLocalFile( );
 			QFileInfo info( localFile );
 			absoluteFilePath = info.absoluteFilePath( );
-			filePath = info.fileName( );
-			auto &&mediaMetaData = mediaPlayer->metaData( );
-			this->singer = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
-			if( singer.isEmpty( ) )
-				singer = mediaMetaData.stringValue( QMediaMetaData::AlbumArtist );
-			if( singer.isEmpty( ) )
-				singer = mediaMetaData.stringValue( QMediaMetaData::Author );
-			if( singer.isEmpty( ) )
-				singer = tr( "匿名" ); // 使用匿名
-			elapsedTime = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
-			elapsedTimeString = DateTimeFormat::millsecondToHourMinSecFrom( elapsedTime );
-			name = mediaMetaData.stringValue( QMediaMetaData::Title );
-			if( name.isEmpty( ) )
-				name = info.baseName( );
-			favoriteItem->updateItem( this );
-			mediaPlayer->deleteLater( );
-			mediaPlayer = nullptr;
-			loadedOver = true;
-		} else { // 野指针时
-			mediaPlayer->disconnect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, nullptr );
-			delete mediaPlayer;
-			mediaPlayer = nullptr;
-			loadedOver = true;
-			delete this;
+			if( favoriteItem->hasMusicFile( absoluteFilePath ) == false ) {
+				filePath = info.fileName( );
+				auto &&mediaMetaData = mediaPlayer->metaData( );
+				this->singer = mediaMetaData.stringValue( QMediaMetaData::ContributingArtist );
+				if( singer.isEmpty( ) )
+					singer = mediaMetaData.stringValue( QMediaMetaData::AlbumArtist );
+				if( singer.isEmpty( ) )
+					singer = mediaMetaData.stringValue( QMediaMetaData::Author );
+				if( singer.isEmpty( ) )
+					singer = tr( "匿名" ); // 使用匿名
+				elapsedTime = mediaMetaData.value( QMediaMetaData::Duration ).toLongLong( );
+				elapsedTimeString = DateTimeFormat::millsecondToHourMinSecFrom( elapsedTime );
+				name = mediaMetaData.stringValue( QMediaMetaData::Title );
+				if( name.isEmpty( ) )
+					name = info.baseName( );
+				favoriteItem->updateItem( this );
+				mediaPlayer->deleteLater( );
+				mediaPlayer = nullptr;
+				loadedOver = true;
+				return; // 保存收藏夹引用
+			}
 		}
+		// 野指针时
+		mediaPlayer->disconnect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, nullptr );
+		delete mediaPlayer;
+		mediaPlayer = nullptr;
+		loadedOver = true;
+		delete this;
 	} );
 
 	auto source = QUrl::fromLocalFile( filePath );

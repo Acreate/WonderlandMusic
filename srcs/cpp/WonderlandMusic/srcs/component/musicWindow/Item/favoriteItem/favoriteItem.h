@@ -54,6 +54,7 @@ protected:
 	virtual bool renderImage( size_t index, MusicItem *music_item ) const;
 
 public:
+	virtual bool hasMusicFile( const QString &file_path ) const;
 	virtual bool updateItem( MusicItem *music_item );
 	virtual bool removeItem( MusicItem *music_item );
 	virtual bool hasItem( size_t &result_index, const MusicItem *music_item ) const;

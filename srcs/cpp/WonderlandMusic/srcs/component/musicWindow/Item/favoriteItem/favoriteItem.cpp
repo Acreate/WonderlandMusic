@@ -232,6 +232,20 @@ bool FavoriteItem::renderImage( size_t index, MusicItem *music_item ) const {
 	auto font = appRenderImage->getFont( );
 	return renderImage( painter, intervalWidth, index, music_item, calculateMinWidth, fontHeight, *font, fillSeparatorColor );
 }
+bool FavoriteItem::hasMusicFile( const QString &file_path ) const {
+	bool result = false;
+	userMutex->lock( );
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		auto data = musicItemVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			if( result = data[ index ]->absoluteFilePath == file_path, result )
+				break;
+	}
+	userMutex->unlock( );
+	return result;
+}
 bool FavoriteItem::renderImage( QPainter &painter, int intervalWidth, size_t index, MusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color ) const {
 	music_item->idCode = index;
 	if( music_item->rendBuff )
@@ -263,9 +277,8 @@ bool FavoriteItem::renderImage( QPainter &painter, int intervalWidth, size_t ind
 	intervalWidth += intervalWidth + musicSingerNameWidth;
 	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
 
-	text = DateTimeFormat::millsecondToHourMinSecFrom( music_item->elapsedTime );
 	intervalWidth += intervalWidth + separatorWidth;
-	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), text );
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), music_item->elapsedTimeString );
 
 	intervalWidth += intervalWidth + musicDurationTimeWidth;
 	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );

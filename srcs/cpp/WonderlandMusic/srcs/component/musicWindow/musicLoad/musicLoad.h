@@ -23,7 +23,8 @@ public:
 protected:
 	bool deleteResource( ) override;
 	virtual void unsafeDeleteMusicItemsHistory( );
-	virtual bool unsafeHasMusicLoadMusicFileHistory( const QString &music_file );
+	virtual bool unsafeHasMusicLoadMusicFileHistory( const QString &music_file ) const;
+	virtual bool unsafeRemoveMusicItemsHistory( const MusicItem *music_item );
 
 public:
 	bool initBefore( ) override;

@@ -35,7 +35,28 @@ void MusicLoad::unsafeDeleteMusicItemsHistory( ) {
 	}
 	loadMusicItemsHistory.clear( );
 }
-bool MusicLoad::unsafeHasMusicLoadMusicFileHistory( const QString &music_file ) {
+bool MusicLoad::unsafeHasMusicLoadMusicFileHistory( const QString &music_file ) const {
+	size_t count = loadMusicItemsHistory.size( );
+	if( count == 0 )
+		return false;
+	auto data = loadMusicItemsHistory.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ]->absoluteFilePath == music_file || data[ index ]->filePath == music_file )
+			return true;
+	return false;
+}
+bool MusicLoad::unsafeRemoveMusicItemsHistory( const MusicItem *music_item ) {
+	size_t count = loadMusicItemsHistory.size( );
+	if( count == 0 )
+		return false;
+	auto data = loadMusicItemsHistory.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ] == music_item ) {
+			loadMusicItemsHistory.erase( index + loadMusicItemsHistory.begin( ) );
+			return true;
+		}
 	return false;
 }
 bool MusicLoad::initBefore( ) {
@@ -59,9 +80,11 @@ bool MusicLoad::loadMusicFile( const QString &music_file_path ) {
 	auto absoluteFilePath = info.absoluteFilePath( );
 	if( PathTools::isMusicFile( absoluteFilePath ) == false )
 		return false;
+	userMutex->lock( );
 	auto musicItem = new MusicItem( currentFavoriteItem, music_file_path );
 	musicItem->loadPtr = this;
 	loadMusicItemsHistory.emplace_back( musicItem );
+	userMutex->unlock( );
 	return true;
 }
 bool MusicLoad::loadMusicDir( const QString &music_dir_path ) {
@@ -94,7 +117,10 @@ bool MusicLoad::loadMusicDir( const QString &music_dir_path ) {
 	return result;
 }
 bool MusicLoad::removeMusicItemsHistory( const MusicItem *music_item ) {
-	return false;
+	userMutex->lock( );
+	auto result = unsafeRemoveMusicItemsHistory( music_item );
+	userMutex->unlock( );
+	return result;
 }
 bool MusicLoad::hasMusicLoadMusicFileHistory( const QString &music_file ) {
 	userMutex->lock( );

@@ -1,9 +1,12 @@
 ﻿#include "musicFavoriteWidget.h"
 
 #include <QJsonObject>
+#include <QMouseEvent>
 #include <QPainter>
 
 #include "../musicCentreWidget.h"
+
+#include "../../../../application/appRenderImage.h"
 
 #include "../../../../head/after_init_macro.h"
 #include "../../../../head/before_init_macro.h"
@@ -12,7 +15,11 @@
 
 #include "../../../../mutex/userMutex.h"
 
+#include "../../../../tools/instanceTools.h"
+
 #include "../../Item/favoriteItem/favoriteItem.h"
+
+#include "../../interface/menu/iMusicFavoriteMenu.h"
 
 #include "../../musicLoad/musicLoad.h"
 MusicFavoriteWidget::MusicFavoriteWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
@@ -24,6 +31,7 @@ bool MusicFavoriteWidget::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
+	musicFavoriteMenu = nullptr;
 	MusicLoadTools::setMusicListWidget( musicLoad, nullptr );
 	MusicLoadTools::releaseMusicLoad( &musicLoad );
 	userMutex->unlock( );
@@ -34,6 +42,19 @@ void MusicFavoriteWidget::paintEvent( QPaintEvent *event ) {
 
 	QPainter painter( this );
 	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkBlue );
+}
+void MusicFavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	QWidget::mouseReleaseEvent( event );
+	FavoriteItem *favoriteItem = nullptr;
+	auto mouseButton = event->button( );
+	switch( mouseButton ) {
+		case Qt::RightButton :
+			if( musicFavoriteMenu == nullptr )
+				break;
+			getPosFavoriteItem( favoriteItem, event->pos( ) );
+			musicFavoriteMenu->execMenu( this, favoriteItem, QCursor::pos( ) );
+			break;
+	}
 }
 bool MusicFavoriteWidget::initBefore( ) {
 	deleteResource( );
@@ -176,6 +197,10 @@ bool MusicFavoriteWidget::unSafetyClear( ) {
 	favoriteItemVector.clear( );
 	return true;
 }
+bool MusicFavoriteWidget::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
+	musicFavoriteMenu = music_favorite_menu;
+	return true;
+}
 
 MusicLoad * MusicFavoriteWidget::getMusicLoad( ) const {
 	return musicLoad;
@@ -222,6 +247,20 @@ bool MusicFavoriteWidget::getIndexFavoriteItem( FavoriteItem *&result_favorite_i
 		result_favorite_item = favoriteItemVector.data( )[ index ];
 	userMutex->unlock( );
 	return result;
+}
+bool MusicFavoriteWidget::getPosFavoriteItem( FavoriteItem *&result_favorite_item, const QPoint &widget_local_pos ) const {
+	if( contentsRect( ).contains( widget_local_pos ) == false )
+		return false;
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
+	if( appRenderImage == nullptr )
+		return false;
+	auto fontMetrics = appRenderImage->getFontMetrics( );
+	if( fontMetrics == nullptr )
+		return false;
+	int height = fontMetrics->height( );
+	int yPos = widget_local_pos.y( );
+	size_t index = yPos / height;
+	return getIndexFavoriteItem( result_favorite_item, index );
 }
 bool MusicFavoriteWidget::getNameFavoriteItem( FavoriteItem *&result_favorite_item, const QString &favorite_item_name ) const {
 	auto result = false;

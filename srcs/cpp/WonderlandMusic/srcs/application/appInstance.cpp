@@ -6,6 +6,8 @@
 #include "appUserInterfaceManage.h"
 #include "applicationManage.h"
 
+#include "../component/musicWindow/musicWindow.h"
+
 #include "../head/after_init_macro.h"
 #include "../head/before_init_macro.h"
 #include "../head/init_macro.h"
@@ -106,15 +108,18 @@ bool AppInstance::initAfter( ) {
 	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_quit_app, this, []( ) {
 		AppInstance::getAppInstance( )->getApplicationManage( )->quit( );
 	} );
+	auto menuManage = appUserInterfaceManage->getAppMenuManage( );
+
+	auto mainWindow = appUserInterfaceManage->getMainWindow( );
+	auto musicWindow = mainWindow->getMusicWindow( );
+	musicWindow->setMusicFavoriteMenu( menuManage->getMusicFavoriteMenu( ) );
+	musicWindow->setMusicListMenu( menuManage->getMusicListMenu( ) );
 
 	return true;
 }
 
 int AppInstance::exec( ) {
-	
-	
 	int exec = applicationManage->exec( );
-	
-	
+
 	return exec;
 }

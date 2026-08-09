@@ -12,6 +12,8 @@
 
 #include "../musicWindow.h"
 
+#include "../tools/MusicFavoriteWidgetTools.h"
+#include "../tools/musicCenereWidgetTools.h"
 #include "../tools/musicListWidgetTools.h"
 
 #include "../transparencyScrollBar/transparencyScrollBar.h"
@@ -208,4 +210,10 @@ MusicListWidget * MusicCentreWidget::getMusicListWidget( ) const {
 }
 MusicToolWidget * MusicCentreWidget::getMusicToolWidget( ) const {
 	return musicToolWidget;
+}
+bool MusicCentreWidget::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
+	return MusicFavoriteWidgetTools::setMusicFavoriteMenu( musicfavoriteWidget, music_favorite_menu );
+}
+bool MusicCentreWidget::setMusicListMenu( IMusicListMenu *music_list_menu ) {
+	return MusicListWidgetTools::setMusicListMenu( musicListWidget, music_list_menu );
 }

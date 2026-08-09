@@ -151,6 +151,18 @@ bool MainWindow::initAfter( ) {
 		return false;
 	return true;
 }
+OptionWindow * MainWindow::getOptionWindow1( ) const {
+	return optionWindow;
+}
+MusicWindow * MainWindow::getMusicWindow( ) const {
+	return musicWindow;
+}
+SettingWidget * MainWindow::getSettingWidget( ) const {
+	return settingWidget;
+}
+AboutWidget * MainWindow::getAboutWidget( ) const {
+	return aboutWidget;
+}
 
 bool MainWindow::deleteResource( ) {
 	if( optionWindow ) {

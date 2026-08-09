@@ -34,6 +34,10 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
+	virtual OptionWindow * getOptionWindow1( ) const;
+	virtual MusicWindow * getMusicWindow( ) const;
+	virtual SettingWidget * getSettingWidget( ) const;
+	virtual AboutWidget * getAboutWidget( ) const;
 
 protected:
 	bool deleteResource( ) override;

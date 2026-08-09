@@ -7,8 +7,9 @@ void MusicListWidgetTools::updateItemWidthInfo( MusicListWidget *targetr, MusicT
 		return;
 	targetr->updateItemWidthInfo( music_title_widget, interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
 }
-void MusicListWidgetTools::setMenu( MusicListWidget *targetr, IMusicListMenu *music_list_menu ) {
+bool MusicListWidgetTools::setMusicListMenu( MusicListWidget *targetr, IMusicListMenu *music_list_menu ) {
 	if( targetr == nullptr )
-		return;
+		return false;
 	targetr->setMusicListMenu( music_list_menu );
+	return true;
 }

@@ -6,6 +6,8 @@
 
 #include <interface/iAppJsonData.h>
 
+class IMusicListMenu;
+class IMusicFavoriteMenu;
 class MusicItem;
 class TransparencyScrollBar;
 class QScrollArea;
@@ -55,6 +57,8 @@ public:
 	virtual MusicTitleWidget * getMusicTitleWidget( ) const;
 	virtual MusicListWidget * getMusicListWidget( ) const;
 	virtual MusicToolWidget * getMusicToolWidget( ) const;
+	virtual bool setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu );
+	virtual bool setMusicListMenu( IMusicListMenu *music_list_menu );
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

@@ -4,7 +4,6 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-#include <head/q_json_object.h>
 #include "../musicCentreWidget.h"
 
 #include <application/appRenderImage.h>
@@ -212,11 +211,11 @@ bool MusicTitleWidget::initBefore( ) {
 
 	separatorWidth = 5;
 	intervalWidth = 2;
+	minItemWidth = intervalWidth * 2 + separatorWidth;
+	clickWidth = intervalWidth * 2 + separatorWidth;
 	dragSeparator = DragItemType::None;
 	dragPosX = 0;
 	startDrag = false;
-	minItemWidth = intervalWidth * 2 + separatorWidth;
-	clickWidth = intervalWidth * 2 + separatorWidth;
 	fillSeparatorColor = Qt::GlobalColor::black;
 	return true;
 }
@@ -248,66 +247,18 @@ bool MusicTitleWidget::initAfter( ) {
 	return true;
 }
 bool MusicTitleWidget::getJsonData( QJsonObject &get_json_object ) const {
-	instaerJsonObj( get_json_object, musicCodeWidth );
-	instaerJsonObj( get_json_object, musicNameWidth );
-	instaerJsonObj( get_json_object, musicSingerNameWidth );
-	instaerJsonObj( get_json_object, musicDurationTimeWidth );
-	return true;
+	return ItemWidthInfo::getJsonData( get_json_object );
 }
 bool MusicTitleWidget::setJsonData( const QJsonObject &set_json_object ) {
-	QJsonObject::const_iterator end;
-	QJsonObject::const_iterator find;
-	bool ok;
-	QString string;
-	end = set_json_object.end( );
-
-	conver_string_find_var( set_json_object, musicCodeWidth, find, end, ok, toInt );
-	conver_string_find_var( set_json_object, musicNameWidth, find, end, ok, toInt );
-	conver_string_find_var( set_json_object, musicSingerNameWidth, find, end, ok, toInt );
-	conver_string_find_var( set_json_object, musicDurationTimeWidth, find, end, ok, toInt );
-	return true;
+	return ItemWidthInfo::setJsonData( set_json_object );
 }
 MusicCentreWidget * MusicTitleWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
-int MusicTitleWidget::getSuggestHeight( ) const {
-	return suggestHeight;
-}
-int MusicTitleWidget::getCalculateMinWidth( ) const {
-	return clickWidth * 5 + musicCodeWidth + musicNameWidth + musicSingerNameWidth + musicDurationTimeWidth;
-}
-int MusicTitleWidget::getIntervalWidth( ) const {
-	return intervalWidth;
-}
-int MusicTitleWidget::getSeparatorWidth( ) const {
-	return separatorWidth;
-}
-int MusicTitleWidget::getMusicCodeWidth( ) const {
-	return musicCodeWidth;
-}
-int MusicTitleWidget::getMusicNameWidth( ) const {
-	return musicNameWidth;
-}
-int MusicTitleWidget::getMusicSingerNameWidth( ) const {
-	return musicSingerNameWidth;
-}
-int MusicTitleWidget::getMusicDurationTimeWidth( ) const {
-	return musicDurationTimeWidth;
-}
 void MusicTitleWidget::getTitleWidthInfo( int &result_interval_width, int &result_separator_width, int &result_music_code_width, int &result_music_name_width, int &result_music_singer_name_width, int &result_music_duration_time_width ) const {
-	result_interval_width = intervalWidth;
-	result_separator_width = separatorWidth;
-	result_music_code_width = musicCodeWidth;
-	result_music_name_width = musicNameWidth;
-	result_music_singer_name_width = musicSingerNameWidth;
-	result_music_duration_time_width = musicDurationTimeWidth;
+	getItemWidthInfo( result_interval_width, result_separator_width, result_music_code_width, result_music_name_width, result_music_singer_name_width, result_music_duration_time_width );
 }
 void MusicTitleWidget::setTitleWidthInfo( int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
-	intervalWidth = interval_width;
-	separatorWidth = separator_width;
-	musicCodeWidth = music_code_width;
-	musicNameWidth = music_name_width;
-	musicSingerNameWidth = music_singer_name_width;
-	musicDurationTimeWidth = music_duration_time_width;
+	setItemWidthInfo( interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
 	repaint( );
 }

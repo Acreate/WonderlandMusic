@@ -2,13 +2,15 @@
 #define FAVORITEITEM_H_H_HEAD__FILE__
 #include <interface/iAppJsonData.h>
 
+#include "../../itemWidthInfo/itemWidthInfo.h"
+
 class MusicCentreWidget;
 class QPainter;
 class MusicTitleWidget;
 class UserMutex;
 class MusicItem;
 
-class FavoriteItem : public QObject, public IAppJsonData {
+class FavoriteItem : public QObject, public ItemWidthInfo {
 	Q_OBJECT;
 	friend class MusicFavoriteWidget;
 
@@ -19,12 +21,6 @@ protected:
 	UserMutex *userMutex;
 
 	QImage *drawBuff = nullptr;
-	int intervalWidth;
-	int separatorWidth;
-	int musicCodeWidth;
-	int musicNameWidth;
-	int musicSingerNameWidth;
-	int musicDurationTimeWidth;
 
 public:
 	FavoriteItem( MusicCentreWidget *music_centre_widget, const QString &favorite_item_name );

@@ -4,6 +4,8 @@
 
 #include "../../component/optionWindow/interface/optionPanel.h"
 
+class IMusicListMenu;
+class IMusicFavoriteMenu;
 class MusicCentreWidget;
 class UserMutex;
 
@@ -30,6 +32,8 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	QWidget * toWidget( ) override;
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
+	virtual bool setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu );
+	virtual bool setMusicListMenu( IMusicListMenu *music_list_menu );
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

@@ -14,13 +14,14 @@ class MusicCentreWidget;
 
 class MusicFavoriteWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
+	friend class MusicFavoriteWidgetTools;
 
 protected:
 	MusicCentreWidget *musicCentreWidget;
 	MusicLoad *musicLoad = nullptr;
 	UserMutex *userMutex = nullptr;
 	std::vector< FavoriteItem * > favoriteItemVector;
-	IMusicFavoriteMenu *musicFavoriteMenu;
+	IMusicFavoriteMenu *musicFavoriteMenu = nullptr;
 
 public:
 	MusicFavoriteWidget( MusicCentreWidget *music_centre_widget );
@@ -29,8 +30,9 @@ public:
 protected:
 	bool deleteResource( ) override;
 	void paintEvent( QPaintEvent *event ) override;
-
+	void mouseReleaseEvent( QMouseEvent *event ) override;
 	virtual bool unSafetyClear( );
+	virtual bool setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu );
 
 public:
 	bool initBefore( ) override;
@@ -43,6 +45,7 @@ public:
 	virtual MusicLoad * getMusicLoad( ) const;
 	virtual bool removeMusicLoad( MusicLoad *music_load );
 	virtual bool getIndexFavoriteItem( FavoriteItem *&result_favorite_item, const size_t &index ) const;
+	virtual bool getPosFavoriteItem( FavoriteItem *&result_favorite_item, const QPoint &widget_local_pos ) const;
 	virtual bool getNameFavoriteItem( FavoriteItem *&result_favorite_item, const QString &favorite_item_name ) const;
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 	virtual IMusicFavoriteMenu * getMusicFavoriteMenu( ) const;

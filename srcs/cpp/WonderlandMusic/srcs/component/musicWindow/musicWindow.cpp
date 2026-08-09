@@ -61,3 +61,13 @@ QWidget * MusicWindow::toWidget( ) {
 MusicCentreWidget * MusicWindow::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
+bool MusicWindow::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	return musicCentreWidget->setMusicFavoriteMenu( music_favorite_menu );
+}
+bool MusicWindow::setMusicListMenu( IMusicListMenu *music_list_menu ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	return musicCentreWidget->setMusicListMenu( music_list_menu );
+}

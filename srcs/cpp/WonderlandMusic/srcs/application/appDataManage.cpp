@@ -12,7 +12,6 @@
 #include "../head/init_macro.h"
 #include "../head/release_macro.h"
 
-#include "../menu/playerListWidgetMenu.h"
 #include "../tools/pathTools.h"
 #include "jsonKey/appDataManageJsonKey.h"
 

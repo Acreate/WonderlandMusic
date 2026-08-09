@@ -12,6 +12,9 @@
 
 #include "../musicWindow.h"
 
+#include "../menu/musicFavoriteMenu/musicFavoriteMenu.h"
+#include "../menu/musicListMenu/musicListMenu.h"
+
 #include "../transparencyScrollBar/transparencyScrollBar.h"
 
 #include "musicListWidget/musicListWidget.h"
@@ -31,6 +34,8 @@ bool MusicCentreWidget::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
+	Delete_Resource_App_Core_Ptr( musicListMenu );
+	Delete_Resource_App_Core_Ptr( musicFavoriteMenu );
 	musicfavoriteWidgetScrollArea->takeWidget( );
 	Delete_Resource_App_Core_Ptr( musicfavoriteWidgetScrollArea );
 	musicListWidgetScrollArea->takeWidget( );
@@ -73,10 +78,14 @@ bool MusicCentreWidget::initBefore( ) {
 	musicTitleWidget = new MusicTitleWidget( this );
 	musicListWidget = new MusicListWidget( this );
 	musicToolWidget = new MusicToolWidget( this );
+	musicFavoriteMenu = new MusicFavoriteMenu( this );
+	musicListMenu = new MusicListMenu( this );
 	Before_Init_Resource_App_Core_Ptr( musicfavoriteWidget );
 	Before_Init_Resource_App_Core_Ptr( musicTitleWidget );
 	Before_Init_Resource_App_Core_Ptr( musicListWidget );
 	Before_Init_Resource_App_Core_Ptr( musicToolWidget );
+	Before_Init_Resource_App_Core_Ptr( musicFavoriteMenu );
+	Before_Init_Resource_App_Core_Ptr( musicListMenu );
 	return true;
 }
 bool MusicCentreWidget::init( ) {
@@ -84,6 +93,8 @@ bool MusicCentreWidget::init( ) {
 	Init_Resource_App_Core_Ptr( musicTitleWidget );
 	Init_Resource_App_Core_Ptr( musicListWidget );
 	Init_Resource_App_Core_Ptr( musicToolWidget );
+	Init_Resource_App_Core_Ptr( musicFavoriteMenu );
+	Init_Resource_App_Core_Ptr( musicListMenu );
 	return true;
 }
 bool MusicCentreWidget::initAfter( ) {
@@ -91,6 +102,8 @@ bool MusicCentreWidget::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( musicTitleWidget );
 	After_Init_Resource_App_Core_Ptr( musicListWidget );
 	After_Init_Resource_App_Core_Ptr( musicToolWidget );
+	After_Init_Resource_App_Core_Ptr( musicFavoriteMenu );
+	After_Init_Resource_App_Core_Ptr( musicListMenu );
 
 	musicfavoriteWidgetScrollArea = createControlScrollArea( musicfavoriteWidget );
 	musicTitleWidgetScrollArea = createControlScrollArea( musicTitleWidget );
@@ -206,6 +219,9 @@ MusicListWidget * MusicCentreWidget::getMusicListWidget( ) const {
 }
 MusicToolWidget * MusicCentreWidget::getMusicToolWidget( ) const {
 	return musicToolWidget;
+}
+MusicFavoriteMenu * MusicCentreWidget::getMusicFavoriteMenu( ) const {
+	return musicFavoriteMenu;
 }
 void MusicTitleWidgetTools::updateMusicCentreWidgetTitleWidthInfo( MusicCentreWidget *music_centre_widget, MusicTitleWidget *music_title_widget ) {
 	if( music_centre_widget == nullptr || music_title_widget == nullptr )

@@ -6,6 +6,8 @@
 
 #include <interface/iAppJsonData.h>
 
+class MusicListMenu;
+class MusicFavoriteMenu;
 class MusicItem;
 class TransparencyScrollBar;
 class QScrollArea;
@@ -18,12 +20,13 @@ class MusicWindow;
 
 class MusicCentreWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
-	friend class MusicWindow;
 	friend class MusicTitleWidgetTools;
 
 private:
 	MusicWindow *musicWindow;
 	UserMutex *userMutex = nullptr;
+	MusicFavoriteMenu *musicFavoriteMenu = nullptr;
+	MusicListMenu *musicListMenu = nullptr;
 	QScrollArea *musicfavoriteWidgetScrollArea = nullptr;
 	QScrollArea *musicTitleWidgetScrollArea = nullptr;
 	QScrollArea *musicListWidgetScrollArea = nullptr;
@@ -31,10 +34,12 @@ private:
 	MusicTitleWidget *musicTitleWidget = nullptr;
 	MusicListWidget *musicListWidget = nullptr;
 	MusicToolWidget *musicToolWidget = nullptr;
+
+public:
 	MusicCentreWidget( MusicWindow *parent );
+	~MusicCentreWidget( ) override;
 
 protected:
-	~MusicCentreWidget( ) override;
 	bool deleteResource( ) override;
 	void resizeEvent( QResizeEvent *event ) override;
 	virtual QScrollArea * createControlScrollArea( QWidget *widget );
@@ -54,6 +59,7 @@ public:
 	virtual MusicTitleWidget * getMusicTitleWidget( ) const;
 	virtual MusicListWidget * getMusicListWidget( ) const;
 	virtual MusicToolWidget * getMusicToolWidget( ) const;
+	virtual MusicFavoriteMenu * getMusicFavoriteMenu( ) const;
 };
 
 class MusicTitleWidgetTools {

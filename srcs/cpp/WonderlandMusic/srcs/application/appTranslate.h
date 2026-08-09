@@ -1,7 +1,20 @@
 ﻿#ifndef APPTRANSLATE_H_H_HEAD__FILE__
 #define APPTRANSLATE_H_H_HEAD__FILE__
 #include <interface/iAppCore.h>
-#include <head/head_translate_class.h>
+
+class SettingWidgetTranslate;
+class MusicWindowTranslate;
+class DeleteExceptionTranslate;
+class AppMusicManageTranslate;
+class UserMutexTranslate;
+class SystemTrayIconTranslate;
+class SystemTrayIconMenuTranslate;
+class MessageTranslate;
+class MusicTitleWidgetTranslate;
+class MainWindowTranslate;
+class AboutWidgetTranslate;
+class DateTimeFormatTranslate;
+class JsonTranslate;
 
 class AppTranslate : public IAppCore {
 protected:
@@ -17,8 +30,6 @@ protected:
 	DeleteExceptionTranslate *deleteException = nullptr;
 	MusicWindowTranslate *musicWindow = nullptr;
 	SettingWidgetTranslate *settingWidget = nullptr;
-	PlayerListWidgetMenuTranslate *playerListWidgetMenu = nullptr;
-	FavoriteWidgetMenuTranslate *favoriteWidgetMenu = nullptr;
 	MusicTitleWidgetTranslate *musicTitleWidget = nullptr;
 	bool deleteResource( ) override;
 
@@ -41,7 +52,5 @@ public:
 	virtual DeleteExceptionTranslate * getDeleteException( ) const;
 	virtual MusicWindowTranslate * getMusicWindow( ) const;
 	virtual SettingWidgetTranslate * getSettingWidget( ) const;
-	virtual PlayerListWidgetMenuTranslate * getPlayerListWidgetMenu( ) const;
-	virtual FavoriteWidgetMenuTranslate * getFavoriteWidgetMenu( ) const;
 };
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

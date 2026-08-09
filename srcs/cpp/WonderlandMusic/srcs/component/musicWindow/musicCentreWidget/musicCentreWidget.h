@@ -6,8 +6,6 @@
 
 #include <interface/iAppJsonData.h>
 
-class MusicListMenu;
-class MusicFavoriteMenu;
 class MusicItem;
 class TransparencyScrollBar;
 class QScrollArea;
@@ -20,13 +18,11 @@ class MusicWindow;
 
 class MusicCentreWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
-	friend class MusicTitleWidgetTools;
+	friend class MusicCentreWidgetTools;
 
 private:
 	MusicWindow *musicWindow;
 	UserMutex *userMutex = nullptr;
-	MusicFavoriteMenu *musicFavoriteMenu = nullptr;
-	MusicListMenu *musicListMenu = nullptr;
 	QScrollArea *musicfavoriteWidgetScrollArea = nullptr;
 	QScrollArea *musicTitleWidgetScrollArea = nullptr;
 	QScrollArea *musicListWidgetScrollArea = nullptr;
@@ -59,17 +55,6 @@ public:
 	virtual MusicTitleWidget * getMusicTitleWidget( ) const;
 	virtual MusicListWidget * getMusicListWidget( ) const;
 	virtual MusicToolWidget * getMusicToolWidget( ) const;
-	virtual MusicFavoriteMenu * getMusicFavoriteMenu( ) const;
 };
 
-class MusicTitleWidgetTools {
-public:
-	virtual ~MusicTitleWidgetTools( ) = default;
-
-private:
-	friend class MusicCentreWidget;
-	friend class MusicTitleWidget;
-	static void updateMusicCentreWidgetTitleWidthInfo( MusicCentreWidget *music_centre_widget, MusicTitleWidget *music_title_widget );
-	static void updateMusicTitleWidgetTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
-};
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

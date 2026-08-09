@@ -30,10 +30,6 @@ public:
 
 	virtual bool popSystemTratIconMenu( const QPoint &pos ) const;
 
-	virtual bool popPlayerListWidgetMenu( const QPoint &pos ) const;
-
-	virtual bool popFavoriteWidgetMenu( const QPoint &pos ) const;
-
 	virtual SystemTrayIconMenu * getSystemTrayIconMenu( ) const;
 };
 

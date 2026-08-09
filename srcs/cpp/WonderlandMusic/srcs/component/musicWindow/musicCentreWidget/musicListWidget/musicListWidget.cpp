@@ -45,12 +45,11 @@ void MusicListWidget::paintEvent( QPaintEvent *event ) {
 	painter.drawImage( 0, 0, *currentFavoriteItem->getDrawBuff( ) );
 	userMutex->unlock( );
 }
-
-void MusicListWidgetTools::updateItemWidthInfo( MusicListWidget *targetr, MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
-	if( targetr == nullptr )
-		return;
-	targetr->updateItemWidthInfo( music_title_widget, interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
+bool MusicListWidget::setMusicListMenu( IMusicListMenu *music_list_menu ) {
+	this->musicListMenu = music_list_menu;
+	return true;
 }
+
 void MusicListWidget::updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
 	userMutex->lock( );
 	QSize *newSize = nullptr;
@@ -68,6 +67,9 @@ void MusicListWidget::updateItemWidthInfo( MusicTitleWidget *music_title_widget,
 
 FavoriteItem * MusicListWidget::getCurrentFavoriteItem( ) const {
 	return currentFavoriteItem;
+}
+IMusicListMenu * MusicListWidget::getMusicListMenu( ) const {
+	return musicListMenu;
 }
 bool MusicListWidget::initBefore( ) {
 	deleteResource( );

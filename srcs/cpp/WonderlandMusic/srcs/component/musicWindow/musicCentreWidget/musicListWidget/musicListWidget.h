@@ -7,6 +7,7 @@
 
 #include <interface/iAppJsonData.h>
 
+class IMusicListMenu;
 class MusicLoad;
 class FavoriteItem;
 class MusicTitleWidget;
@@ -22,6 +23,7 @@ protected:
 	UserMutex *userMutex = nullptr;
 	MusicCentreWidget *musicCentreWidget;
 	FavoriteItem *currentFavoriteItem = nullptr;
+	IMusicListMenu *musicListMenu = nullptr;
 
 public:
 	MusicListWidget( MusicCentreWidget *music_centre_widget );
@@ -30,6 +32,7 @@ public:
 protected:
 	bool deleteResource( ) override;
 	void paintEvent( QPaintEvent *event ) override;
+	virtual bool setMusicListMenu( IMusicListMenu *music_list_menu );
 
 public:
 	bool initBefore( ) override;
@@ -40,12 +43,7 @@ public:
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 	virtual void updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
 	virtual FavoriteItem * getCurrentFavoriteItem( ) const;
-};
-
-class MusicListWidgetTools {
-private:
-	friend class MusicCentreWidget;
-	static void updateItemWidthInfo( MusicListWidget *targetr, MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
+	virtual IMusicListMenu * getMusicListMenu( ) const;
 };
 
 #endif // MUSICLISTWIDGET_H_H_HEAD__FILE__

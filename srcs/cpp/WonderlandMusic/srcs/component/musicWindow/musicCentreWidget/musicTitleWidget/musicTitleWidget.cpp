@@ -15,6 +15,8 @@
 #include <mutex/userMutex.h>
 
 #include <tools/instanceTools.h>
+
+#include "../../tools/musicCenereWidgetTools.h"
 MusicTitleWidget::MusicTitleWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
 }
 MusicTitleWidget::~MusicTitleWidget( ) {
@@ -201,7 +203,7 @@ bool MusicTitleWidget::isDragSeparator( DragItemType &index, int x_pos ) const {
 	return false;
 }
 void MusicTitleWidget::updateTitleWidthInfo( ) {
-	MusicTitleWidgetTools::updateMusicCentreWidgetTitleWidthInfo( musicCentreWidget, this );
+	MusicCentreWidgetTools::updateMusicCentreWidgetTitleWidthInfo( musicCentreWidget, this );
 }
 bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );

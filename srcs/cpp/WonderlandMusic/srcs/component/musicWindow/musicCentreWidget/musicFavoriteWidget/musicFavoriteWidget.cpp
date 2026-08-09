@@ -243,3 +243,6 @@ bool MusicFavoriteWidget::getNameFavoriteItem( FavoriteItem *&result_favorite_it
 MusicCentreWidget * MusicFavoriteWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
+IMusicFavoriteMenu * MusicFavoriteWidget::getMusicFavoriteMenu( ) const {
+	return musicFavoriteMenu;
+}

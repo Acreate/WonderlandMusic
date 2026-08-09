@@ -6,19 +6,21 @@
 
 #include <interface/iAppJsonData.h>
 
+class IMusicFavoriteMenu;
 class UserMutex;
 class MusicLoad;
 class FavoriteItem;
+class MusicCentreWidget;
 
 class MusicFavoriteWidget : public QWidget, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
-	friend class MusicCentreWidget;
 
 protected:
 	MusicCentreWidget *musicCentreWidget;
 	MusicLoad *musicLoad = nullptr;
 	UserMutex *userMutex = nullptr;
 	std::vector< FavoriteItem * > favoriteItemVector;
+	IMusicFavoriteMenu *musicFavoriteMenu;
 
 public:
 	MusicFavoriteWidget( MusicCentreWidget *music_centre_widget );
@@ -43,6 +45,7 @@ public:
 	virtual bool getIndexFavoriteItem( FavoriteItem *&result_favorite_item, const size_t &index ) const;
 	virtual bool getNameFavoriteItem( FavoriteItem *&result_favorite_item, const QString &favorite_item_name ) const;
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
+	virtual IMusicFavoriteMenu * getMusicFavoriteMenu( ) const;
 };
 
 #endif // MUSICFAVORITEWIDGET_H_H_HEAD__FILE__

@@ -49,23 +49,6 @@ bool AppMenuManage::popSystemTratIconMenu( const QPoint &pos ) const {
 	return true;
 }
 
-bool AppMenuManage::popPlayerListWidgetMenu( const QPoint &pos ) const {
-	QPoint resutPos;
-
-	if( WidgetTools::getMenuSuggestionShowMenuPos( resutPos, pos, systemTrayIconMenu ) == false )
-		return false;
-
-	return true;
-}
-
-bool AppMenuManage::popFavoriteWidgetMenu( const QPoint &pos ) const {
-	QPoint resutPos;
-	if( WidgetTools::getMenuSuggestionShowMenuPos( resutPos, pos, systemTrayIconMenu ) == false )
-		return false;
-
-	return true;
-}
-
 SystemTrayIconMenu * AppMenuManage::getSystemTrayIconMenu( ) const {
 	return systemTrayIconMenu;
 }

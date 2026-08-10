@@ -78,6 +78,7 @@ bool MusicFavoriteWidget::init( ) {
 }
 bool MusicFavoriteWidget::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( musicLoad );
+	// todo ： 添加默认的收藏夹
 	return true;
 }
 int MusicFavoriteWidget::getSuggestWidth( ) const {
@@ -174,15 +175,21 @@ bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return ok;
 }
 bool MusicFavoriteWidget::removeItem( FavoriteItem *favorite_item ) {
+	bool result = false;
+	userMutex->lock( );
 	size_t count = favoriteItemVector.size( );
-	auto data = favoriteItemVector.data( );
-	size_t index = 0;
-	for( ; index < count; index += 1 )
-		if( data[ index ] == favorite_item ) {
-			favoriteItemVector.erase( favoriteItemVector.begin( ) + index );
-			return true;
-		}
-	return false;
+	if( count > 1 ) {
+		auto data = favoriteItemVector.data( );
+		size_t index = 1;
+		for( ; index < count; index += 1 )
+			if( data[ index ] == favorite_item ) {
+				favoriteItemVector.erase( favoriteItemVector.begin( ) + index );
+				result = true;
+				break;
+			}
+	}
+	userMutex->unlock( );
+	return result;
 }
 bool MusicFavoriteWidget::unSafetyClear( ) {
 	size_t count = favoriteItemVector.size( );

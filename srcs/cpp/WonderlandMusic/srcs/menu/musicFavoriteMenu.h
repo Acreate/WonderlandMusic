@@ -15,8 +15,11 @@ protected:
 	QAction *createFavoriteItemAction = nullptr;
 	QAction *renameFavoriteItemAction = nullptr;
 	QAction *deleteFavoriteItemAction = nullptr;
-	QAction *addMusicFile = nullptr;
-	QAction *addMusicDir = nullptr;
+	QAction *addMusicFileAction = nullptr;
+	QAction *addMusicDirAction = nullptr;
+
+	QString openSelecteMultiFileWidgetPath;
+	QString openSelecteMultiDirWidgetPath;
 
 public:
 	MusicFavoriteMenu( );
@@ -33,6 +36,13 @@ public:
 protected:
 	bool execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) override;
 	void hideEvent( QHideEvent * ) override;
+
+private Q_SLOTS :
+	void slot_createFavoriteItem( );
+	void slot_renameFavoriteItem( );
+	void slot_deleteFavoriteItem( );
+	void slot_addMusicFile( );
+	void slot_addMusicDir( );
 
 public:
 	QMenu * toMenu( ) override;

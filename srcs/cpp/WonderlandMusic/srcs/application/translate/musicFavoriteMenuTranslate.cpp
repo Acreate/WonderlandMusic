@@ -11,6 +11,9 @@ bool MusicFavoriteMenuTranslate::init( ) {
 	illegalDeleteFavoriteItem = QObject::tr( "非法删除" );
 	illegalAddMusicFileToFavoriteItem = QObject::tr( "非法添加文件" );
 	illegalAddMusicDirToFavoriteItem = QObject::tr( "非法添加目录" );
+
+	selectMusicFile = QObject::tr( "多选文件" );
+	selectMusicDir = QObject::tr( "多选目录" );
 	return true;
 }
 const QString & MusicFavoriteMenuTranslate::getCreateFavoriteItem( ) const {
@@ -27,6 +30,12 @@ const QString & MusicFavoriteMenuTranslate::getIllegalAddMusicFileToFavoriteItem
 }
 const QString & MusicFavoriteMenuTranslate::getIllegalAddMusicDirToFavoriteItem( ) const {
 	return illegalAddMusicDirToFavoriteItem;
+}
+const QString & MusicFavoriteMenuTranslate::getSelectMusicFile( ) const {
+	return selectMusicFile;
+}
+const QString & MusicFavoriteMenuTranslate::getSelectMusicDir( ) const {
+	return selectMusicDir;
 }
 const QString & MusicFavoriteMenuTranslate::getRenameFavoriteItem( ) const {
 	return renameFavoriteItem;

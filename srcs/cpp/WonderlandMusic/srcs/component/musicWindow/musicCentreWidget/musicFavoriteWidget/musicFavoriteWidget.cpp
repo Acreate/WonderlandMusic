@@ -8,11 +8,6 @@
 
 #include "../../../../application/appRenderImage.h"
 
-#include "../../../../head/after_init_macro.h"
-#include "../../../../head/before_init_macro.h"
-#include "../../../../head/create_ptr_macro.h"
-#include "../../../../head/init_macro.h"
-
 #include "../../../../mutex/userMutex.h"
 
 #include "../../../../tools/instanceTools.h"
@@ -21,7 +16,6 @@
 
 #include "../../interface/menu/iMusicFavoriteMenu.h"
 
-#include "../../musicLoad/musicLoad.h"
 MusicFavoriteWidget::MusicFavoriteWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
 }
 MusicFavoriteWidget::~MusicFavoriteWidget( ) {
@@ -33,8 +27,6 @@ bool MusicFavoriteWidget::deleteResource( ) {
 	userMutex->lock( );
 	unSafetyClear( );
 	musicFavoriteMenu = nullptr;
-	MusicLoadTools::setMusicListWidget( musicLoad, nullptr );
-	MusicLoadTools::releaseMusicLoad( &musicLoad );
 	userMutex->unlock( );
 	return true;
 }
@@ -92,24 +84,12 @@ bool MusicFavoriteWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
 
-	if( MusicLoadTools::createMusicLoad( &this->musicLoad, musicCentreWidget ) == false ) {
-		Create_Ptr_Resource_App_Core_Message_String_Ptr( this->musicLoad );
-		if( this->musicLoad ) {
-			MusicLoadTools::setMusicListWidget( this->musicLoad, nullptr );
-			MusicLoadTools::releaseMusicLoad( &this->musicLoad );
-		}
-		this->musicLoad = nullptr;
-		return false;
-	}
-	Before_Init_Resource_App_Core_Ptr( musicLoad );
 	return true;
 }
 bool MusicFavoriteWidget::init( ) {
-	Init_Resource_App_Core_Ptr( musicLoad );
 	return true;
 }
 bool MusicFavoriteWidget::initAfter( ) {
-	After_Init_Resource_App_Core_Ptr( musicLoad );
 	if( createDefaultFavoriteItem( ) == false )
 		return false;
 	return true;
@@ -270,43 +250,6 @@ bool MusicFavoriteWidget::createDefaultFavoriteItem( ) {
 	return result;
 }
 
-MusicLoad * MusicFavoriteWidget::getMusicLoad( ) const {
-	return musicLoad;
-}
-bool MusicFavoriteWidget::removeMusicLoad( MusicLoad *music_load ) {
-	bool resultBool = false;
-	if( this->musicLoad != nullptr ) {
-		if( music_load != this->musicLoad )
-			return resultBool;
-		resultBool = true;
-	} else if( music_load == nullptr )
-		resultBool = true;
-	// 判定是否继续
-	if( resultBool == false )
-		return resultBool;
-
-	if( MusicLoadTools::createMusicLoad( &this->musicLoad, musicCentreWidget ) == false ) {
-		Create_Ptr_Resource_App_Core_Message_String_Ptr( this->musicLoad );
-		this->musicLoad = music_load;
-		return false;
-	}
-	if( musicLoad->initBefore( ) == false ) {
-		Before_Init_Resource_App_Core_Message_String_Ptr( musicLoad );
-		this->musicLoad = music_load;
-		return false;
-	}
-	if( musicLoad->init( ) == false ) {
-		Init_Resource_App_Core_Message_String_Ptr( musicLoad );
-		this->musicLoad = music_load;
-		return false;
-	}
-	if( musicLoad->initAfter( ) == false ) {
-		After_Init_Resource_App_Core_Message_String_Ptr( musicLoad );
-		this->musicLoad = music_load;
-		return false;
-	}
-	return true;
-}
 bool MusicFavoriteWidget::getIndexFavoriteItem( FavoriteItem *&result_favorite_item, const size_t &index ) const {
 	userMutex->lock( );
 	size_t count = favoriteItemVector.size( );

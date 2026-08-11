@@ -18,7 +18,6 @@ class MusicFavoriteWidget : public QWidget, public IAppCore, public IAppJsonData
 
 protected:
 	MusicCentreWidget *musicCentreWidget;
-	MusicLoad *musicLoad = nullptr;
 	UserMutex *userMutex = nullptr;
 	std::vector< FavoriteItem * > favoriteItemVector;
 	IMusicFavoriteMenu *musicFavoriteMenu = nullptr;
@@ -44,8 +43,6 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual bool removeItem( FavoriteItem *favorite_item );
-	virtual MusicLoad * getMusicLoad( ) const;
-	virtual bool removeMusicLoad( MusicLoad *music_load );
 	virtual bool getIndexFavoriteItem( FavoriteItem *&result_favorite_item, const size_t &index ) const;
 	virtual bool getPosFavoriteItem( FavoriteItem *&result_favorite_item, const QPoint &widget_local_pos ) const;
 	virtual bool getNameFavoriteItem( FavoriteItem *&result_favorite_item, const QString &favorite_item_name ) const;

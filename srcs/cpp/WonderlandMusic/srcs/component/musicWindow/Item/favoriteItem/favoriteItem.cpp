@@ -10,6 +10,11 @@
 
 #include "../../../../dateTimeFormat/dateTimeFormat.h"
 
+#include "../../../../head/after_init_macro.h"
+#include "../../../../head/before_init_macro.h"
+#include "../../../../head/create_ptr_macro.h"
+#include "../../../../head/init_macro.h"
+
 #include "../../../../tools/instanceTools.h"
 
 #include "../../musicCentreWidget/musicCentreWidget.h"
@@ -17,9 +22,22 @@
 #include "../../musicCentreWidget/musicTitleWidget/musicTitleWidget.h"
 #include "../../musicCentreWidget/musicfavoriteWidget/musicfavoriteWidget.h"
 
+#include "../../musicLoad/musicLoad.h"
+
+#include "../../tools/musicLoadTools.h"
+
 #include "../musicItem/musicItem.h"
 
 FavoriteItem::FavoriteItem( MusicCentreWidget *music_centre_widget, const QString &favorite_item_name ) : QObject( music_centre_widget ), musicCentreWidget( music_centre_widget ), favoriteItemName( favorite_item_name ), userMutex( new UserMutex ), drawBuff( new QImage ) {
+	if( MusicLoadTools::createMusicLoad( &this->musicLoad, this ) ) {
+		if( this->musicLoad->initBefore( ) == false || this->musicLoad->init( ) == false || this->musicLoad->initAfter( ) == false ) {
+			MusicLoadTools::setMusicListWidget( this->musicLoad, nullptr );
+			MusicLoadTools::releaseMusicLoad( &this->musicLoad );
+		}
+	} else {
+		MusicLoadTools::setMusicListWidget( this->musicLoad, nullptr );
+		MusicLoadTools::releaseMusicLoad( &this->musicLoad );
+	}
 }
 FavoriteItem::~FavoriteItem( ) {
 	if( musicCentreWidget ) {
@@ -30,6 +48,8 @@ FavoriteItem::~FavoriteItem( ) {
 	setParent( nullptr );
 	userMutex->lock( );
 	unSafetyClear( );
+	MusicLoadTools::setMusicListWidget( musicLoad, nullptr );
+	MusicLoadTools::releaseMusicLoad( &musicLoad );
 	userMutex->unlock( );
 	delete userMutex;
 	delete drawBuff;
@@ -503,4 +523,42 @@ bool FavoriteItem::removeMusicItem( MusicItem *music_item ) {
 	userMutex->unlock( );
 	unSafetyRepaint( );
 	return safetyRemoveItem;
+}
+
+bool FavoriteItem::removeMusicLoad( MusicLoad *music_load ) {
+	bool resultBool = false;
+	if( this->musicLoad != nullptr ) {
+		if( music_load != this->musicLoad )
+			return resultBool;
+		resultBool = true;
+	} else if( music_load == nullptr )
+		resultBool = true;
+	// 判定是否继续
+	if( resultBool == false )
+		return resultBool;
+
+	if( MusicLoadTools::createMusicLoad( &this->musicLoad, this ) == false ) {
+		Create_Ptr_Resource_App_Core_Message_String_Ptr( this->musicLoad );
+		this->musicLoad = music_load;
+		return false;
+	}
+	if( musicLoad->initBefore( ) == false ) {
+		Before_Init_Resource_App_Core_Message_String_Ptr( musicLoad );
+		this->musicLoad = music_load;
+		return false;
+	}
+	if( musicLoad->init( ) == false ) {
+		Init_Resource_App_Core_Message_String_Ptr( musicLoad );
+		this->musicLoad = music_load;
+		return false;
+	}
+	if( musicLoad->initAfter( ) == false ) {
+		After_Init_Resource_App_Core_Message_String_Ptr( musicLoad );
+		this->musicLoad = music_load;
+		return false;
+	}
+	return true;
+}
+MusicLoad * FavoriteItem::getMusicLoad( ) const {
+	return musicLoad;
 }

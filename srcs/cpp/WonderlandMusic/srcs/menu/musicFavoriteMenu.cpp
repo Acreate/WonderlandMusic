@@ -3,21 +3,29 @@
 #include "../application/appMenuManage.h"
 #include "../application/translate/musicFavoriteMenuTranslate.h"
 
+#include "../component/musicWindow/musicWindow.h"
 #include "../component/musicWindow/Item/favoriteItem/favoriteItem.h"
+#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
+#include "../component/musicWindow/musicCentreWidget/musicFavoriteWidget/musicFavoriteWidget.h"
+#include "../component/musicWindow/musicLoad/musicLoad.h"
 
 #include "../head/release_macro.h"
 
 #include "../tools/appTranslateTools.h"
 #include "../tools/instanceTools.h"
+#include "../tools/pathInfoTools.h"
+#include "../tools/widgetTools.h"
 MusicFavoriteMenu::MusicFavoriteMenu( ) {
 }
 MusicFavoriteMenu::~MusicFavoriteMenu( ) {
 	deleteResource( );
 }
 bool MusicFavoriteMenu::deleteResource( ) {
+	Delete_Resource_App_Core_Ptr( createFavoriteItemAction );
+	Delete_Resource_App_Core_Ptr( renameFavoriteItemAction );
 	Delete_Resource_App_Core_Ptr( deleteFavoriteItemAction );
-	Delete_Resource_App_Core_Ptr( addMusicFile );
-	Delete_Resource_App_Core_Ptr( addMusicDir );
+	Delete_Resource_App_Core_Ptr( addMusicFileAction );
+	Delete_Resource_App_Core_Ptr( addMusicDirAction );
 	return true;
 }
 bool MusicFavoriteMenu::initBefore( ) {
@@ -25,8 +33,8 @@ bool MusicFavoriteMenu::initBefore( ) {
 	createFavoriteItemAction = addAction( "" );
 	renameFavoriteItemAction = addAction( "" );
 	deleteFavoriteItemAction = addAction( "" );
-	addMusicFile = addAction( "" );
-	addMusicDir = addAction( "" );
+	addMusicFileAction = addAction( "" );
+	addMusicDirAction = addAction( "" );
 	return true;
 }
 bool MusicFavoriteMenu::init( ) {
@@ -37,6 +45,12 @@ bool MusicFavoriteMenu::initAfter( ) {
 		createFavoriteItemAction->setText( translate.getCreateFavoriteItem( ) );
 	} ) == false )
 		return false;
+	auto signal = &QAction::triggered;
+	connect( createFavoriteItemAction, signal, this, &MusicFavoriteMenu::slot_createFavoriteItem );
+	connect( renameFavoriteItemAction, signal, this, &MusicFavoriteMenu::slot_renameFavoriteItem );
+	connect( deleteFavoriteItemAction, signal, this, &MusicFavoriteMenu::slot_deleteFavoriteItem );
+	connect( addMusicFileAction, signal, this, &MusicFavoriteMenu::slot_addMusicFile );
+	connect( addMusicDirAction, signal, this, &MusicFavoriteMenu::slot_addMusicDir );
 	return true;
 }
 bool MusicFavoriteMenu::execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) {
@@ -52,19 +66,19 @@ bool MusicFavoriteMenu::execMenu( MusicFavoriteWidget *music_favorite_widget, Fa
 			renameFavoriteItemAction->setEnabled( true );
 			deleteFavoriteItemAction->setText( translate.getDeleteFavoriteItem( ).arg( favoriteItemName ) );
 			deleteFavoriteItemAction->setEnabled( true );
-			addMusicFile->setText( translate.getAddMusicFileToFavoriteItem( ).arg( favoriteItemName ) );
-			addMusicFile->setEnabled( true );
-			addMusicDir->setText( translate.getAddMusicDirToFavoriteItem( ).arg( favoriteItemName ) );
-			addMusicDir->setEnabled( true );
+			addMusicFileAction->setText( translate.getAddMusicFileToFavoriteItem( ).arg( favoriteItemName ) );
+			addMusicFileAction->setEnabled( true );
+			addMusicDirAction->setText( translate.getAddMusicDirToFavoriteItem( ).arg( favoriteItemName ) );
+			addMusicDirAction->setEnabled( true );
 		} else {
 			renameFavoriteItemAction->setText( translate.getIllegalRenameFavoriteItem( ) );
 			renameFavoriteItemAction->setEnabled( false );
 			deleteFavoriteItemAction->setText( translate.getIllegalDeleteFavoriteItem( ) );
 			deleteFavoriteItemAction->setEnabled( false );
-			addMusicFile->setText( translate.getIllegalAddMusicFileToFavoriteItem( ) );
-			addMusicFile->setEnabled( false );
-			addMusicDir->setText( translate.getIllegalAddMusicDirToFavoriteItem( ) );
-			addMusicDir->setEnabled( false );
+			addMusicFileAction->setText( translate.getIllegalAddMusicFileToFavoriteItem( ) );
+			addMusicFileAction->setEnabled( false );
+			addMusicDirAction->setText( translate.getIllegalAddMusicDirToFavoriteItem( ) );
+			addMusicDirAction->setEnabled( false );
 		}
 	} ) == false )
 		return false;
@@ -73,9 +87,45 @@ bool MusicFavoriteMenu::execMenu( MusicFavoriteWidget *music_favorite_widget, Fa
 }
 void MusicFavoriteMenu::hideEvent( QHideEvent *hide_event ) {
 	QMenu::hideEvent( hide_event );
-	oldFavoriteItem = favoriteItem;
-	musicFavoriteWidget = nullptr;
-	favoriteItem = nullptr;
+}
+void MusicFavoriteMenu::slot_createFavoriteItem( ) {
+}
+void MusicFavoriteMenu::slot_renameFavoriteItem( ) {
+}
+void MusicFavoriteMenu::slot_deleteFavoriteItem( ) {
+}
+void MusicFavoriteMenu::slot_addMusicFile( ) {
+	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
+		if( favoriteItem == nullptr )
+			return;
+		auto musicLoad = favoriteItem->getMusicLoad( );
+		if( musicLoad == nullptr )
+			return;
+		std::vector< QString > resultFile;
+		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
+		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
+		QString filter;
+		if( PathInfoTools::getSupperDecodeFileSuffixFilter( filter ) == false )
+			return;
+		if( WidgetTools::showMultipleSelectFileDialog( resultFile, openSelecteMultiFileWidgetPath, openWidget, translate.getSelectMusicFile( ), filter ) == false )
+			return;
+		musicLoad->loadMusicFile( resultFile );
+	} );
+}
+void MusicFavoriteMenu::slot_addMusicDir( ) {
+	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
+		if( favoriteItem == nullptr )
+			return;
+		auto musicLoad = favoriteItem->getMusicLoad( );
+		if( musicLoad == nullptr )
+			return;
+		std::vector< QString > resultFile;
+		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
+		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
+		if( WidgetTools::showMultipleSelectDirDialog( resultFile, openSelecteMultiDirWidgetPath, openWidget, translate.getSelectMusicFile( ) ) == false )
+			return;
+		musicLoad->loadMusicFile( resultFile );
+	} );
 }
 QMenu * MusicFavoriteMenu::toMenu( ) {
 	return this;

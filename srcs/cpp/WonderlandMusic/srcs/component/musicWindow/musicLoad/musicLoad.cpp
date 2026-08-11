@@ -4,20 +4,14 @@
 
 #include "../../../tools/pathTools.h"
 
+#include "../Item/favoriteItem/favoriteItem.h"
 #include "../Item/musicItem/musicItem.h"
 
-#include "../musicCentreWidget/musicCentreWidget.h"
-#include "../musicCentreWidget/musicListWidget/musicListWidget.h"
-#include "../musicCentreWidget/musicfavoriteWidget/musicfavoriteWidget.h"
-
-MusicLoad::MusicLoad( MusicCentreWidget *music_centre_widget ) : musicCentreWidget( music_centre_widget ) {
+MusicLoad::MusicLoad( FavoriteItem *favorite_item ) : favoriteItem( favorite_item ) {
 }
 MusicLoad::~MusicLoad( ) {
-	if( musicCentreWidget ) {
-		auto musicFavoriteWidget = musicCentreWidget->getMusicFavoriteWidget( );
-		if( musicFavoriteWidget )
-			musicFavoriteWidget->removeMusicLoad( this );
-	}
+	if( favoriteItem )
+		favoriteItem->removeMusicLoad( this );
 	deleteResource( );
 }
 bool MusicLoad::deleteResource( ) {
@@ -75,28 +69,58 @@ bool MusicLoad::init( ) {
 bool MusicLoad::initAfter( ) {
 	return true;
 }
-bool MusicLoad::loadMusicFile( const QString &music_file_path ) {
-	auto currentFavoriteItem = getCurrentFavoriteItem( );
-	if( currentFavoriteItem == nullptr )
-		return false;
+size_t MusicLoad::loadMusicFile( const std::vector< QString > &music_file_path_vector ) {
+	size_t result = 0;
+	size_t count = music_file_path_vector.size( );
+	if( count == 0 )
+		return result;
+	size_t index = 0;
+	auto data = music_file_path_vector.data( );
+	for( ; index < count; index += 1 )
+		result += loadMusicFile( data[ index ] );
+	return result;
+}
+size_t MusicLoad::loadMusicFile( const std::list< QString > &music_file_path_list ) {
+	size_t result = 0;
+	auto iterator = music_file_path_list.begin( );
+	auto end = music_file_path_list.end( );
+	if( iterator == end )
+		return result;
+	for( ; iterator != end; ++iterator )
+		result += loadMusicFile( *iterator );
+	return result;
+}
+size_t MusicLoad::loadMusicFile( const QStringList &music_file_path_list ) {
+	size_t result = 0;
+	size_t count = music_file_path_list.size( );
+	if( count == 0 )
+		return result;
+	size_t index = 0;
+	auto data = music_file_path_list.data( );
+	for( ; index < count; index += 1 )
+		result += loadMusicFile( data[ index ] );
+	return result;
+}
+size_t MusicLoad::loadMusicFile( const QString &music_file_path ) {
+	if( favoriteItem == nullptr )
+		return 0;
 	QFileInfo info( music_file_path );
 	if( info.exists( ) == false )
-		return false;
+		return 0;
 	auto absoluteFilePath = info.absoluteFilePath( );
 	if( PathTools::isMusicFile( absoluteFilePath ) == false )
-		return false;
+		return 0;
 	userMutex->lock( );
-	auto musicItem = new MusicItem( currentFavoriteItem, music_file_path );
+	auto musicItem = new MusicItem( favoriteItem, music_file_path );
 	musicItem->loadPtr = this;
 	loadMusicItemsHistory.emplace_back( musicItem );
 	userMutex->unlock( );
-	return true;
+	return 1;
 }
 bool MusicLoad::loadMusicDir( const QString &music_dir_path ) {
 	bool result = false;
 
-	auto currentFavoriteItem = getCurrentFavoriteItem( );
-	if( currentFavoriteItem ) {
+	if( favoriteItem ) {
 		QStringList filterMusicFileList;
 		QStringList getFileList;
 		qsizetype musicFileCount;
@@ -109,7 +133,7 @@ bool MusicLoad::loadMusicDir( const QString &music_dir_path ) {
 					qsizetype index;
 					userMutex->lock( );
 					for( index = 0; index < musicFileCount; index += 1 ) {
-						auto musicItem = new MusicItem( currentFavoriteItem, data[ index ] );
+						auto musicItem = new MusicItem( favoriteItem, data[ index ] );
 						musicItem->loadPtr = this;
 						loadMusicItemsHistory.emplace_back( musicItem );
 					}
@@ -133,32 +157,6 @@ bool MusicLoad::hasMusicLoadMusicFileHistory( const QString &music_file ) {
 	userMutex->unlock( );
 	return result;
 }
-FavoriteItem * MusicLoad::getCurrentFavoriteItem( ) const {
-	if( musicCentreWidget == nullptr )
-		return nullptr;
-	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
-	if( musicListWidget == nullptr )
-		return nullptr;
-	auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
-	return currentFavoriteItem;
-}
-
-bool MusicLoadTools::createMusicLoad( MusicLoad **music_load, MusicCentreWidget *music_centre_widget ) {
-	if( music_centre_widget == nullptr )
-		return false;
-	*music_load = new MusicLoad( music_centre_widget );
-	return *music_load;
-}
-bool MusicLoadTools::releaseMusicLoad( MusicLoad **music_load ) {
-	if( *music_load == nullptr )
-		return false;
-	delete *music_load;
-	*music_load = nullptr;
-	return true;
-}
-bool MusicLoadTools::setMusicListWidget( MusicLoad *music_load, MusicCentreWidget *music_centre_widget ) {
-	if( music_load == nullptr )
-		return false;
-	music_load->musicCentreWidget = music_centre_widget;
-	return true;
+FavoriteItem * MusicLoad::getFavoriteItem( ) const {
+	return favoriteItem;
 }

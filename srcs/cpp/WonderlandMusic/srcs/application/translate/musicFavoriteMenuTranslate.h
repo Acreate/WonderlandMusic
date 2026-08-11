@@ -8,11 +8,15 @@ class MusicFavoriteMenuTranslate : public ITranslate {
 	QString deleteFavoriteItem;
 	QString addMusicFileToFavoriteItem;
 	QString addMusicDirToFavoriteItem;
-	
+
 	QString illegalRenameFavoriteItem;
 	QString illegalDeleteFavoriteItem;
 	QString illegalAddMusicFileToFavoriteItem;
 	QString illegalAddMusicDirToFavoriteItem;
+
+	QString selectMusicFile;
+	QString selectMusicDir;
+
 public:
 	bool init( ) override;
 	virtual const QString & getCreateFavoriteItem( ) const;
@@ -24,6 +28,8 @@ public:
 	virtual const QString & getIllegalDeleteFavoriteItem( ) const;
 	virtual const QString & getIllegalAddMusicFileToFavoriteItem( ) const;
 	virtual const QString & getIllegalAddMusicDirToFavoriteItem( ) const;
+	virtual const QString & getSelectMusicFile( ) const;
+	virtual const QString & getSelectMusicDir( ) const;
 };
 
 namespace AppTranslateTools {

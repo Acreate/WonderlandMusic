@@ -57,7 +57,9 @@ void StringEditorWidget::textEdited( const QString &text ) {
 }
 void StringEditorWidget::clickedOk( bool checked ) {
 	*resultClick = true;
+	close( );
 }
 void StringEditorWidget::clickedCancle( bool checked ) {
 	*resultClick = false;
+	close( );
 }

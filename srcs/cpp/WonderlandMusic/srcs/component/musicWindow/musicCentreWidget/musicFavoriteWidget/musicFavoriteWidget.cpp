@@ -147,8 +147,8 @@ bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 	if( count == 0 ) {
 		userMutex->lock( );
 		unSafetyClear( );
+		unSafetyCreateDefaultFavoriteItem( );
 		userMutex->unlock( );
-		createDefaultFavoriteItem( );
 		repaint( );
 		return true;
 	}
@@ -181,8 +181,8 @@ bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 		userMutex->lock( );
 		unSafetyClear( );
 		favoriteItemVector = jsonDataConverFavoriteItemItems;
+		unSafetyCreateDefaultFavoriteItem( );
 		userMutex->unlock( );
-		createDefaultFavoriteItem( );
 	} else {
 		userMutex->lock( );
 		for( index = 0; index < count; index += 1 )
@@ -194,8 +194,8 @@ bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 			favoriteItem->musicCentreWidget = nullptr;
 			delete favoriteItem;
 		}
+		unSafetyCreateDefaultFavoriteItem( );
 		userMutex->unlock( );
-		createDefaultFavoriteItem( );
 	}
 	return ok;
 }
@@ -239,7 +239,7 @@ bool MusicFavoriteWidget::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favori
 	musicFavoriteMenu = music_favorite_menu;
 	return true;
 }
-bool MusicFavoriteWidget::createDefaultFavoriteItem( ) {
+bool MusicFavoriteWidget::unSafetyCreateDefaultFavoriteItem( ) {
 	bool result = false;
 	auto appRenderImage = InstanceTools::getAppRenderImage( );
 	if( appRenderImage == nullptr )
@@ -247,7 +247,6 @@ bool MusicFavoriteWidget::createDefaultFavoriteItem( ) {
 	auto fontMetrics = appRenderImage->getFontMetrics( );
 	if( fontMetrics == nullptr )
 		return false;
-	userMutex->lock( );
 	size_t count = favoriteItemVector.size( );
 	if( count == 0 ) {
 		FavoriteItem *favoriteItem = new FavoriteItem( musicCentreWidget, tr( "默认" ) );
@@ -256,12 +255,50 @@ bool MusicFavoriteWidget::createDefaultFavoriteItem( ) {
 		resize( suggestWidth, fontMetrics->height( ) );
 		result = true;
 	}
-	userMutex->unlock( );
 
+	return result;
+}
+bool MusicFavoriteWidget::unSafetyAppendFavoriteItem( FavoriteItem *favorite_item ) {
+	size_t index;
+	if( unSafetyHasFavoriteItem( index, favorite_item ) == true )
+		return true;
+	if( favorite_item->musicCentreWidget == nullptr )
+		favorite_item->musicCentreWidget = musicCentreWidget;
+	else if( favorite_item->musicCentreWidget != musicCentreWidget ) {
+		auto musicFavoriteWidget = favorite_item->musicCentreWidget->getMusicFavoriteWidget( );
+		if( musicFavoriteWidget )
+			musicFavoriteWidget->removeItem( favorite_item );
+		favorite_item->musicCentreWidget = musicCentreWidget;
+	}
+	favoriteItemVector.emplace_back( favorite_item );
+	return true;
+}
+bool MusicFavoriteWidget::unSafetyHasFavoriteItem( size_t &index, FavoriteItem *favorite_item ) {
+	size_t count = favoriteItemVector.size( );
+	if( count == 0 )
+		return false;
+	index = 0;
+	auto favoriteItem = favoriteItemVector.data( );
+	for( ; index < count; index += 1 )
+		if( favoriteItem[ index ] == favorite_item )
+			return true;
+	return false;
+}
+bool MusicFavoriteWidget::createDefaultFavoriteItem( ) {
+	userMutex->lock( );
+	auto result = unSafetyCreateDefaultFavoriteItem( );
+	userMutex->unlock( );
+	return result;
+}
+bool MusicFavoriteWidget::hasFavoriteItem( size_t &index, FavoriteItem *favorite_item ) {
+	userMutex->lock( );
+	auto result = unSafetyHasFavoriteItem( index, favorite_item );
+	userMutex->unlock( );
 	return result;
 }
 
 bool MusicFavoriteWidget::getIndexFavoriteItem( FavoriteItem *&result_favorite_item, const size_t &index ) const {
+	result_favorite_item = nullptr;
 	userMutex->lock( );
 	size_t count = favoriteItemVector.size( );
 	auto result = count > index;
@@ -271,6 +308,7 @@ bool MusicFavoriteWidget::getIndexFavoriteItem( FavoriteItem *&result_favorite_i
 	return result;
 }
 bool MusicFavoriteWidget::getPosFavoriteItem( FavoriteItem *&result_favorite_item, const QPoint &widget_local_pos ) const {
+	result_favorite_item = nullptr;
 	if( contentsRect( ).contains( widget_local_pos ) == false )
 		return false;
 	auto appRenderImage = InstanceTools::getAppRenderImage( );
@@ -285,6 +323,7 @@ bool MusicFavoriteWidget::getPosFavoriteItem( FavoriteItem *&result_favorite_ite
 	return getIndexFavoriteItem( result_favorite_item, index );
 }
 bool MusicFavoriteWidget::getNameFavoriteItem( FavoriteItem *&result_favorite_item, const QString &favorite_item_name ) const {
+	result_favorite_item = nullptr;
 	auto result = false;
 	userMutex->lock( );
 	size_t count = favoriteItemVector.size( );
@@ -316,9 +355,13 @@ FavoriteItem * MusicFavoriteWidget::opendCreateFavoriteItemWidget( ) {
 	getFavoriteItemName( nosetName );
 	if( WidgetTools::showStringEditorWidget( okBtn, createName, musicWindow, nosetName ) == false )
 		return favoriteItem;
-	// todo : 实现输入创建新的收藏夹
-	if( okBtn )
-		favoriteItem = new FavoriteItem( musicCentreWidget, createName );
+	if( okBtn == false || createName.isEmpty( ) )
+		return favoriteItem;
+	favoriteItem = new FavoriteItem( musicCentreWidget, createName );
+	if( appendFavoriteItem( favoriteItem ) == false ) {
+		delete favoriteItem;
+		favoriteItem = nullptr;
+	}
 	return favoriteItem;
 }
 bool MusicFavoriteWidget::opendRenameFavoriteItemWidget( FavoriteItem *favorite_item ) {
@@ -337,4 +380,11 @@ size_t MusicFavoriteWidget::getFavoriteItemName( std::vector< QString > &result_
 	}
 	userMutex->unlock( );
 	return count;
+}
+bool MusicFavoriteWidget::appendFavoriteItem( FavoriteItem *favorite_item ) {
+	userMutex->lock( );
+	auto result = unSafetyAppendFavoriteItem( favorite_item );
+	userMutex->unlock( );
+	repaint( );
+	return result;
 }

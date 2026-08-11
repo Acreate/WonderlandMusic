@@ -33,7 +33,9 @@ protected:
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 	virtual bool unSafetyClear( );
 	virtual bool setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu );
-	virtual bool createDefaultFavoriteItem( );
+	virtual bool unSafetyCreateDefaultFavoriteItem( );
+	virtual bool unSafetyAppendFavoriteItem( FavoriteItem *favorite_item );
+	virtual bool unSafetyHasFavoriteItem( size_t &index, FavoriteItem *favorite_item );
 
 public:
 	bool initBefore( ) override;
@@ -51,6 +53,9 @@ public:
 	virtual FavoriteItem * opendCreateFavoriteItemWidget( );
 	virtual bool opendRenameFavoriteItemWidget( FavoriteItem *favorite_item );
 	virtual size_t getFavoriteItemName( std::vector< QString > &result_favorite_item_name_vector ) const;
+	virtual bool appendFavoriteItem( FavoriteItem *favorite_item );
+	virtual bool createDefaultFavoriteItem( );
+	virtual bool hasFavoriteItem( size_t &index, FavoriteItem *favorite_item );
 };
 
 #endif // MUSICFAVORITEWIDGET_H_H_HEAD__FILE__

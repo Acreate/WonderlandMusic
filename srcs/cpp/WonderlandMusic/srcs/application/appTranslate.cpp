@@ -19,6 +19,7 @@
 #include "translate/musicTitleWidgetTranslate.h"
 #include "translate/musicWindowTranslate.h"
 #include "translate/settingWidgetTranslate.h"
+#include "translate/stringEditorWidgetTranslate.h"
 #include "translate/systemTrayIconMenuTranslate.h"
 #include "translate/systemTrayIconTranslate.h"
 #include "translate/userMutexTranslate.h"
@@ -54,6 +55,7 @@ bool AppTranslate::initBefore( ) {
 	musicTitleWidget = new MusicTitleWidgetTranslate;
 	musicFavoriteMenu = new MusicFavoriteMenuTranslate;
 	musicListMenu = new MusicListMenuTranslate;
+	stringEditorWidget = new StringEditorWidgetTranslate;
 	return true;
 }
 
@@ -77,6 +79,7 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicTitleWidget );
 	Delete_Resource_App_Core_Ptr( musicFavoriteMenu );
 	Delete_Resource_App_Core_Ptr( musicListMenu );
+	Delete_Resource_App_Core_Ptr( stringEditorWidget );
 	return true;
 }
 
@@ -100,6 +103,7 @@ bool AppTranslate::init( ) {
 	Init_Resource_App_Core_Ptr( musicTitleWidget );
 	Init_Resource_App_Core_Ptr( musicFavoriteMenu );
 	Init_Resource_App_Core_Ptr( musicListMenu );
+	Init_Resource_App_Core_Ptr( stringEditorWidget );
 
 	return true;
 }
@@ -158,4 +162,7 @@ MusicFavoriteMenuTranslate * AppTranslate::getMusicFavoriteMenu( ) const {
 }
 MusicListMenuTranslate * AppTranslate::getMusicListMenu( ) const {
 	return musicListMenu;
+}
+StringEditorWidgetTranslate * AppTranslate::getStringEditorWidget( ) const {
+	return stringEditorWidget;
 }

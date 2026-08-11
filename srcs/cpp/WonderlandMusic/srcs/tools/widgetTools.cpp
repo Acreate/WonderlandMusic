@@ -9,6 +9,8 @@
 #include "../application/appInstance.h"
 #include "../application/applicationManage.h"
 
+#include "../widget/stringEditorWidget.h"
+
 void WidgetTools::moveWidgetToCenterPos( const QPoint &target_pos, QWidget *move_source_widget ) {
 	move_source_widget->adjustSize( );
 	int width = move_source_widget->width( );
@@ -107,5 +109,13 @@ bool WidgetTools::showMultipleSelectDirDialog( std::vector< QString > &result_se
 	qint64 index = 0;
 	for( ; index < qsizetype; index += 1 )
 		desData[ index ] = sourData[ index ];
+	return true;
+}
+bool WidgetTools::showStringEditorWidget( bool &result_click, QString &result_edit_string, QWidget *parent, const std::vector< QString > &not_set_string ) {
+	auto stringEditorWidget = new StringEditorWidget( &result_click, &result_edit_string, parent, not_set_string );
+	moveWidgetToCenterPos( parent, stringEditorWidget );
+	stringEditorWidget->exec( );
+	stringEditorWidget->hide( );
+	delete stringEditorWidget;
 	return true;
 }

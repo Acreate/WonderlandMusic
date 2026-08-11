@@ -50,6 +50,7 @@ public:
 	virtual IMusicFavoriteMenu * getMusicFavoriteMenu( ) const;
 	virtual FavoriteItem * opendCreateFavoriteItemWidget( );
 	virtual bool opendRenameFavoriteItemWidget( FavoriteItem *favorite_item );
+	virtual size_t getFavoriteItemName( std::vector< QString > &result_favorite_item_name_vector ) const;
 };
 
 #endif // MUSICFAVORITEWIDGET_H_H_HEAD__FILE__

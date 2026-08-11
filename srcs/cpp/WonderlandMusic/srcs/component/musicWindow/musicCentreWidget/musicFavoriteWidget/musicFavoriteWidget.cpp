@@ -6,11 +6,14 @@
 
 #include "../musicCentreWidget.h"
 
+#include "../../musicWindow.h"
+
 #include "../../../../application/appRenderImage.h"
 
 #include "../../../../mutex/userMutex.h"
 
 #include "../../../../tools/instanceTools.h"
+#include "../../../../tools/widgetTools.h"
 
 #include "../../Item/favoriteItem/favoriteItem.h"
 
@@ -305,8 +308,33 @@ IMusicFavoriteMenu * MusicFavoriteWidget::getMusicFavoriteMenu( ) const {
 	return musicFavoriteMenu;
 }
 FavoriteItem * MusicFavoriteWidget::opendCreateFavoriteItemWidget( ) {
-	return nullptr;
+	FavoriteItem *favoriteItem = nullptr;
+	bool okBtn;
+	QString createName;
+	auto musicWindow = musicCentreWidget->getMusicWindow( );
+	std::vector< QString > nosetName;
+	getFavoriteItemName( nosetName );
+	if( WidgetTools::showStringEditorWidget( okBtn, createName, musicWindow, nosetName ) == false )
+		return favoriteItem;
+	// todo : 实现输入创建新的收藏夹
+	if( okBtn )
+		favoriteItem = new FavoriteItem( musicCentreWidget, createName );
+	return favoriteItem;
 }
 bool MusicFavoriteWidget::opendRenameFavoriteItemWidget( FavoriteItem *favorite_item ) {
+	// todo : 实现输入重命名的收藏夹
 	return false;
+}
+size_t MusicFavoriteWidget::getFavoriteItemName( std::vector< QString > &result_favorite_item_name_vector ) const {
+	size_t count;
+	userMutex->lock( );
+	count = favoriteItemVector.size( );
+	if( count ) {
+		size_t index = 0;
+		auto data = favoriteItemVector.data( );
+		for( ; index < count; index += 1 )
+			result_favorite_item_name_vector.emplace_back( data[ index ]->favoriteItemName );
+	}
+	userMutex->unlock( );
+	return count;
 }

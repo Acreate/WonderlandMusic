@@ -32,7 +32,7 @@ namespace WidgetTools {
 	/// @param title_text 显示标题
 	/// @param filter 过滤器
 	/// @return 无法显示或选择异常则返回 false
-	bool showMultipleSelectFileDialog( std::vector<QString> &result_select_file, const QString &select_default_dir_path, QWidget *parent, const QString &title_text, const QString &filter );
+	bool showMultipleSelectFileDialog( std::vector< QString > &result_select_file, const QString &select_default_dir_path, QWidget *parent, const QString &title_text, const QString &filter );
 
 	/// @brief 显示一个目录多选对话框
 	/// @param result_select_file 返回的选择目录列表
@@ -40,7 +40,14 @@ namespace WidgetTools {
 	/// @param parent 父窗口，用于显示模式与定位
 	/// @param title_text 显示标题
 	/// @return 无法显示或选择异常则返回 false
-	bool showMultipleSelectDirDialog( std::vector<QString> &result_select_file, const QString &select_default_dir_path, QWidget *parent, const QString &title_text );
+	bool showMultipleSelectDirDialog( std::vector< QString > &result_select_file, const QString &select_default_dir_path, QWidget *parent, const QString &title_text );
+	/// @brief 显示字符串输入窗口
+	/// @param result_click 返回按钮
+	/// @param result_edit_string 返回输入字符串
+	/// @param parent 父窗口，用于定位
+	/// @param not_set_string 当该列表字符串任意字符串等于输入，则配置确认按钮处于非法状态
+	/// @return 无法显示或异常返回false
+	bool showStringEditorWidget( bool &result_click, QString &result_edit_string, QWidget *parent, const std::vector< QString > &not_set_string );
 }
 
 #endif // WIDGETTOOLS_H_H_HEAD__FILE__

@@ -18,6 +18,7 @@
 #include "../application/translate/musicTitleWidgetTranslate.h"
 #include "../application/translate/musicWindowTranslate.h"
 #include "../application/translate/settingWidgetTranslate.h"
+#include "../application/translate/stringEditorWidgetTranslate.h"
 #include "../application/translate/systemTrayIconMenuTranslate.h"
 #include "../application/translate/systemTrayIconTranslate.h"
 #include "../application/translate/userMutexTranslate.h"
@@ -54,3 +55,4 @@ Defininition_Get_Translate( SystemTrayIconMenu );
 Defininition_Get_Translate( SystemTrayIcon );
 
 Defininition_Get_Translate( UserMutex );
+Defininition_Get_Translate( StringEditorWidget );

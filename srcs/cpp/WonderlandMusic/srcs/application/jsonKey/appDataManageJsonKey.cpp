@@ -1,13 +1,6 @@
 ﻿#include "appDataManageJsonKey.h"
 
-#include "../appDataManage.h"
-#include "../appInstance.h"
-
-#include <head/defininition_get_json_key.h>
-
-#include <tools/appJsonKeyTools.h>
-#include "../appDataJsonKey.h"
-Defininition_Get_Json_Key( AppDataManage );
+#include "../../tools/pathInfoTools.h"
 
 bool AppDataManageJsonKey::init( ) {
 	jsonFilePath = "/json/app.data.manage.json";
@@ -17,9 +10,10 @@ bool AppDataManageJsonKey::init( ) {
 }
 
 QString AppDataManageJsonKey::getJsonFilePath( ) const {
-	auto appInstance = AppInstance::getAppInstance( );
-	auto applicationDirPath = appInstance->getAppDataManage( )->getAppSettingPath( );
-	return applicationDirPath + jsonFilePath;
+	QString applicationDirPath;
+	if( PathInfoTools::getAppSettintHomePath( applicationDirPath ) )
+		return applicationDirPath + jsonFilePath;
+	return jsonFilePath;
 }
 
 const QString & AppDataManageJsonKey::getAppMusicManage( ) const {

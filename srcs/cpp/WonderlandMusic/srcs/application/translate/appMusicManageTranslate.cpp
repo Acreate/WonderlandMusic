@@ -1,10 +1,5 @@
 ﻿#include "appMusicManageTranslate.h"
 
-#include <application/appTranslate.h>
-#include <head/defininition_get_translate.h>
-#include <tools/appTranslateTools.h>
-
-Defininition_Get_Translate( AppMusicManage );
 bool AppMusicManageTranslate::init( ) {
 	rootFavoriteName = QObject::tr( "默认" );
 	anyFileTypeName = QObject::tr( "任意" );

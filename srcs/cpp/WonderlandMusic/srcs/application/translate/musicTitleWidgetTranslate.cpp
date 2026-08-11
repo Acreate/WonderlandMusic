@@ -1,11 +1,5 @@
 ﻿#include "musicTitleWidgetTranslate.h"
 
-#include <application/appTranslate.h>
-#include <head/defininition_get_translate.h>
-#include <tools/appTranslateTools.h>
-
-Defininition_Get_Translate( MusicTitleWidget );
-
 bool MusicTitleWidgetTranslate::init( ) {
 	musicCode = QObject::tr( "编号" );
 	musicName = QObject::tr( "歌名" );

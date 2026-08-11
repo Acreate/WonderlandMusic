@@ -1,11 +1,5 @@
 ﻿#include "systemTrayIconMenuTranslate.h"
 
-#include <application/appTranslate.h>
-#include <head/defininition_get_translate.h>
-#include <tools/appTranslateTools.h>
-
-Defininition_Get_Translate( SystemTrayIconMenu );
-
 bool SystemTrayIconMenuTranslate::init( ) {
 	showMainMenu = QObject::tr( "显示窗口" );
 	quitApp = QObject::tr( "退出程序" );

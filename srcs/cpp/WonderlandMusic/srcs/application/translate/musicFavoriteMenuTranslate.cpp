@@ -1,10 +1,5 @@
 ﻿#include "musicFavoriteMenuTranslate.h"
-#include "../appTranslate.h"
 
-#include "../../head/defininition_get_translate.h"
-
-#include "../../tools/appTranslateTools.h"
-Defininition_Get_Translate( MusicFavoriteMenu );
 bool MusicFavoriteMenuTranslate::init( ) {
 	createFavoriteItem = QObject::tr( "新建收藏夹..." );
 	renameFavoriteItem = QObject::tr( "重命名收藏夹[%1]" );

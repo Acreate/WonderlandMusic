@@ -15,7 +15,7 @@ public:
 	~IMusicFavoriteMenu( ) override;
 
 protected:
-	virtual bool execMenu( MusicFavoriteWidget *music_list_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) = 0;
+	virtual bool execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) = 0;
 
 public:
 	virtual QMenu * toMenu( ) = 0;

@@ -8,6 +8,16 @@
 class MusicFavoriteMenu : public QMenu, public IMusicFavoriteMenu {
 	Q_OBJECT;
 
+protected:
+	MusicFavoriteWidget *musicFavoriteWidget = nullptr;
+	FavoriteItem *oldFavoriteItem = nullptr;
+	FavoriteItem *favoriteItem = nullptr;
+	QAction *createFavoriteItemAction = nullptr;
+	QAction *renameFavoriteItemAction = nullptr;
+	QAction *deleteFavoriteItemAction = nullptr;
+	QAction *addMusicFile = nullptr;
+	QAction *addMusicDir = nullptr;
+
 public:
 	MusicFavoriteMenu( );
 	~MusicFavoriteMenu( ) override;
@@ -21,7 +31,8 @@ public:
 	bool initAfter( ) override;
 
 protected:
-	bool execMenu( MusicFavoriteWidget *music_list_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) override;
+	bool execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) override;
+	void hideEvent( QHideEvent * ) override;
 
 public:
 	QMenu * toMenu( ) override;

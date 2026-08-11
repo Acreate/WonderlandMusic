@@ -135,13 +135,15 @@ bool MusicCentreWidget::calculateSize( ) {
 	if( thisCentreWidthWidth <= 0 )
 		return false;
 	// 组件建议宽度
-	int suggestWidth = musicfavoriteWidget->getSuggestWidth( );
+	auto verticalScrollBar = musicfavoriteWidgetScrollArea->verticalScrollBar( );
+	int modWidth = verticalScrollBar->width( );
+	int suggestWidth = musicfavoriteWidget->getSuggestWidth( ) + modWidth;
 	// 收藏组件的高度
 	musicfavoriteWidgetScrollArea->setGeometry( 0, 0, suggestWidth, thisCentreHeight );
 	musicfavoriteWidgetScrollArea->move( 0, 0 );
 
 	// 剩余宽度
-	int modWidth = thisCentreWidthWidth - suggestWidth;
+	modWidth = thisCentreWidthWidth - suggestWidth;
 	// 建议高度
 	int suggestHeight = musicTitleWidget->getSuggestHeight( );
 	// 标题宽度

@@ -31,6 +31,7 @@ bool MusicFavoriteWidget::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
+	unSafetyClear( );
 	musicFavoriteMenu = nullptr;
 	MusicLoadTools::setMusicListWidget( musicLoad, nullptr );
 	MusicLoadTools::releaseMusicLoad( &musicLoad );
@@ -39,9 +40,40 @@ bool MusicFavoriteWidget::deleteResource( ) {
 }
 void MusicFavoriteWidget::paintEvent( QPaintEvent *event ) {
 	QWidget::paintEvent( event );
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
+	if( appRenderImage == nullptr )
+		return;
+	if( userMutex == nullptr )
+		return;
 
 	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkBlue );
+
+	userMutex->lock( );
+
+	size_t count = favoriteItemVector.size( );
+	if( count ) {
+		auto renderFont = appRenderImage->getFont( );
+		auto fontMetrics = appRenderImage->getFontMetrics( );
+		int fontHeight = fontMetrics->height( );
+		auto pen = painter.pen( );
+		auto font = painter.font( );
+		painter.setFont( *renderFont );
+		auto data = favoriteItemVector.data( );
+		size_t index = 0;
+		int offsetY = 0;
+		int thisWidgetHeight = this->height( );
+		for( ; index < count; index += 1 ) {
+			int advance = fontMetrics->horizontalAdvance( data[ index ]->favoriteItemName );
+			painter.drawText( QRect( 0, offsetY, advance, fontHeight ), data[ index ]->favoriteItemName );
+			offsetY += fontHeight;
+			if( offsetY >= thisWidgetHeight )
+				break;
+		}
+		painter.setPen( pen );
+		painter.setFont( font );
+	}
+
+	userMutex->unlock( );
 }
 void MusicFavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	QWidget::mouseReleaseEvent( event );
@@ -78,11 +110,12 @@ bool MusicFavoriteWidget::init( ) {
 }
 bool MusicFavoriteWidget::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( musicLoad );
-	// todo ： 添加默认的收藏夹
+	if( createDefaultFavoriteItem( ) == false )
+		return false;
 	return true;
 }
 int MusicFavoriteWidget::getSuggestWidth( ) const {
-	return 50;
+	return suggestWidth;
 }
 bool MusicFavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
 	bool result = true;
@@ -130,6 +163,7 @@ bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 		userMutex->lock( );
 		unSafetyClear( );
 		userMutex->unlock( );
+		createDefaultFavoriteItem( );
 		repaint( );
 		return true;
 	}
@@ -159,9 +193,13 @@ bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 	}
 	// 如果数据正确，则回复数据
 	if( ok ) {
+		userMutex->lock( );
 		unSafetyClear( );
 		favoriteItemVector = jsonDataConverFavoriteItemItems;
+		userMutex->unlock( );
+		createDefaultFavoriteItem( );
 	} else {
+		userMutex->lock( );
 		for( index = 0; index < count; index += 1 )
 			if( data[ index ] ) {
 				data[ index ]->musicCentreWidget = nullptr;
@@ -171,6 +209,8 @@ bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 			favoriteItem->musicCentreWidget = nullptr;
 			delete favoriteItem;
 		}
+		userMutex->unlock( );
+		createDefaultFavoriteItem( );
 	}
 	return ok;
 }
@@ -207,6 +247,27 @@ bool MusicFavoriteWidget::unSafetyClear( ) {
 bool MusicFavoriteWidget::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
 	musicFavoriteMenu = music_favorite_menu;
 	return true;
+}
+bool MusicFavoriteWidget::createDefaultFavoriteItem( ) {
+	bool result = false;
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
+	if( appRenderImage == nullptr )
+		return false;
+	auto fontMetrics = appRenderImage->getFontMetrics( );
+	if( fontMetrics == nullptr )
+		return false;
+	userMutex->lock( );
+	size_t count = favoriteItemVector.size( );
+	if( count == 0 ) {
+		FavoriteItem *favoriteItem = new FavoriteItem( musicCentreWidget, tr( "默认" ) );
+		favoriteItemVector.emplace_back( favoriteItem );
+		suggestWidth = fontMetrics->horizontalAdvance( favoriteItem->favoriteItemName ) + 5;
+		resize( suggestWidth, fontMetrics->height( ) );
+		result = true;
+	}
+	userMutex->unlock( );
+
+	return result;
 }
 
 MusicLoad * MusicFavoriteWidget::getMusicLoad( ) const {

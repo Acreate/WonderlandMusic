@@ -14,6 +14,8 @@
 #include "translate/jsonTranslate.h"
 #include "translate/mainWindowTranslate.h"
 #include "translate/messageTranslate.h"
+#include "translate/musicFavoriteMenuTranslate.h"
+#include "translate/musicListMenuTranslate.h"
 #include "translate/musicTitleWidgetTranslate.h"
 #include "translate/musicWindowTranslate.h"
 #include "translate/settingWidgetTranslate.h"
@@ -50,6 +52,8 @@ bool AppTranslate::initBefore( ) {
 	musicWindow = new MusicWindowTranslate;
 	settingWidget = new SettingWidgetTranslate;
 	musicTitleWidget = new MusicTitleWidgetTranslate;
+	musicFavoriteMenu = new MusicFavoriteMenuTranslate;
+	musicListMenu = new MusicListMenuTranslate;
 	return true;
 }
 
@@ -71,6 +75,8 @@ bool AppTranslate::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicWindow );
 	Delete_Resource_App_Core_Ptr( settingWidget );
 	Delete_Resource_App_Core_Ptr( musicTitleWidget );
+	Delete_Resource_App_Core_Ptr( musicFavoriteMenu );
+	Delete_Resource_App_Core_Ptr( musicListMenu );
 	return true;
 }
 
@@ -92,6 +98,8 @@ bool AppTranslate::init( ) {
 	Init_Resource_App_Core_Ptr( musicWindow );
 	Init_Resource_App_Core_Ptr( settingWidget );
 	Init_Resource_App_Core_Ptr( musicTitleWidget );
+	Init_Resource_App_Core_Ptr( musicFavoriteMenu );
+	Init_Resource_App_Core_Ptr( musicListMenu );
 
 	return true;
 }
@@ -144,4 +152,10 @@ MusicWindowTranslate * AppTranslate::getMusicWindow( ) const {
 
 SettingWidgetTranslate * AppTranslate::getSettingWidget( ) const {
 	return settingWidget;
+}
+MusicFavoriteMenuTranslate * AppTranslate::getMusicFavoriteMenu( ) const {
+	return musicFavoriteMenu;
+}
+MusicListMenuTranslate * AppTranslate::getMusicListMenu( ) const {
+	return musicListMenu;
 }

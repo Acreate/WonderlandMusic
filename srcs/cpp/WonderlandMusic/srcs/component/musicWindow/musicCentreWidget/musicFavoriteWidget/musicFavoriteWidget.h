@@ -22,6 +22,7 @@ protected:
 	UserMutex *userMutex = nullptr;
 	std::vector< FavoriteItem * > favoriteItemVector;
 	IMusicFavoriteMenu *musicFavoriteMenu = nullptr;
+	int suggestWidth;
 
 public:
 	MusicFavoriteWidget( MusicCentreWidget *music_centre_widget );
@@ -33,6 +34,7 @@ protected:
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 	virtual bool unSafetyClear( );
 	virtual bool setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu );
+	virtual bool createDefaultFavoriteItem( );
 
 public:
 	bool initBefore( ) override;

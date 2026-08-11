@@ -11,7 +11,6 @@
 
 #include "../head/release_macro.h"
 
-#include "../tools/appTranslateTools.h"
 #include "../tools/instanceTools.h"
 #include "../tools/pathInfoTools.h"
 #include "../tools/widgetTools.h"
@@ -89,10 +88,22 @@ void MusicFavoriteMenu::hideEvent( QHideEvent *hide_event ) {
 	QMenu::hideEvent( hide_event );
 }
 void MusicFavoriteMenu::slot_createFavoriteItem( ) {
+	if( musicFavoriteWidget == nullptr )
+		return;
+	musicFavoriteWidget->opendCreateFavoriteItemWidget( );
 }
 void MusicFavoriteMenu::slot_renameFavoriteItem( ) {
+	if( musicFavoriteWidget == nullptr || favoriteItem == nullptr )
+		return;
+	musicFavoriteWidget->opendRenameFavoriteItemWidget( favoriteItem );
 }
 void MusicFavoriteMenu::slot_deleteFavoriteItem( ) {
+	if( musicFavoriteWidget == nullptr || favoriteItem == nullptr )
+		return;
+	if( musicFavoriteWidget->removeItem( favoriteItem ) == false )
+		return;
+	delete favoriteItem;
+	musicFavoriteWidget->repaint( );
 }
 void MusicFavoriteMenu::slot_addMusicFile( ) {
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {

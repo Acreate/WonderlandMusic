@@ -43,6 +43,7 @@ public:
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 	virtual void updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
 	virtual FavoriteItem * getCurrentFavoriteItem( ) const;
+	virtual void setCurrentFavoriteItem( FavoriteItem *favorite_item );
 	virtual IMusicListMenu * getMusicListMenu( ) const;
 };
 

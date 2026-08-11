@@ -48,6 +48,8 @@ public:
 	virtual bool getNameFavoriteItem( FavoriteItem *&result_favorite_item, const QString &favorite_item_name ) const;
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 	virtual IMusicFavoriteMenu * getMusicFavoriteMenu( ) const;
+	virtual FavoriteItem * opendCreateFavoriteItemWidget( );
+	virtual bool opendRenameFavoriteItemWidget( FavoriteItem *favorite_item );
 };
 
 #endif // MUSICFAVORITEWIDGET_H_H_HEAD__FILE__

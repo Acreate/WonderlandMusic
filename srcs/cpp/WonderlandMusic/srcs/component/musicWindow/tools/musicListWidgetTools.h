@@ -4,10 +4,13 @@
 class IMusicListMenu;
 class MusicTitleWidget;
 class MusicListWidget;
+class MusicFavoriteWidget;
+class FavoriteItem;
 
 class MusicListWidgetTools {
 private:
 	friend class MusicCentreWidget;
+	friend class MusicFavoriteWidget;
 	static void updateItemWidthInfo( MusicListWidget *targetr, MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
 	static bool setMusicListMenu( MusicListWidget *targetr, IMusicListMenu *music_list_menu );
 };

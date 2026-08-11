@@ -68,6 +68,10 @@ void MusicListWidget::updateItemWidthInfo( MusicTitleWidget *music_title_widget,
 FavoriteItem * MusicListWidget::getCurrentFavoriteItem( ) const {
 	return currentFavoriteItem;
 }
+void MusicListWidget::setCurrentFavoriteItem( FavoriteItem *favorite_item ) {
+	currentFavoriteItem = favorite_item;
+	repaint( );
+}
 IMusicListMenu * MusicListWidget::getMusicListMenu( ) const {
 	return musicListMenu;
 }

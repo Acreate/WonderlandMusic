@@ -16,6 +16,8 @@
 
 #include "../../interface/menu/iMusicFavoriteMenu.h"
 
+#include "../musicListWidget/musicListWidget.h"
+
 MusicFavoriteWidget::MusicFavoriteWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
 }
 MusicFavoriteWidget::~MusicFavoriteWidget( ) {
@@ -203,6 +205,12 @@ bool MusicFavoriteWidget::removeItem( FavoriteItem *favorite_item ) {
 		size_t index = 1;
 		for( ; index < count; index += 1 )
 			if( data[ index ] == favorite_item ) {
+				auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+				auto currentFavoriteItem = musicListWidget->getCurrentFavoriteItem( );
+				if( currentFavoriteItem == favorite_item ) {
+					index -= 1;
+					musicListWidget->setCurrentFavoriteItem( data[ index ] );
+				}
 				favoriteItemVector.erase( favoriteItemVector.begin( ) + index );
 				result = true;
 				break;
@@ -295,4 +303,10 @@ MusicCentreWidget * MusicFavoriteWidget::getMusicCentreWidget( ) const {
 }
 IMusicFavoriteMenu * MusicFavoriteWidget::getMusicFavoriteMenu( ) const {
 	return musicFavoriteMenu;
+}
+FavoriteItem * MusicFavoriteWidget::opendCreateFavoriteItemWidget( ) {
+	return nullptr;
+}
+bool MusicFavoriteWidget::opendRenameFavoriteItemWidget( FavoriteItem *favorite_item ) {
+	return false;
 }

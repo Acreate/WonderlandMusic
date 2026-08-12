@@ -13,6 +13,8 @@
 
 #include "../../musicLoad/musicLoad.h"
 
+#include "../../tools/musicLoadTools.h"
+
 #include "../favoriteItem/favoriteItem.h"
 
 MusicItem::MusicItem( ) : favoriteItem( nullptr ) {
@@ -21,7 +23,7 @@ MusicItem::MusicItem( FavoriteItem *favorite_item ) : favoriteItem( favorite_ite
 }
 MusicItem::~MusicItem( ) {
 	if( loadPtr )
-		loadPtr->removeMusicItemsHistory( this );
+		MusicLoadTools::removeMusicItemsHistory( loadPtr, this );
 	if( favoriteItem )
 		favoriteItem->removeMusicItem( this );
 	if( mediaPlayer ) {
@@ -49,6 +51,8 @@ MusicItem::MusicItem( FavoriteItem *favorite_item, const QString &file_path ) : 
 				return;
 		}
 
+		disconnect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, nullptr );
+		bool removeThis = true;
 		if( favoriteItem ) {
 			auto localFile = mediaPlayer->source( ).toLocalFile( );
 			QFileInfo info( localFile );
@@ -69,20 +73,18 @@ MusicItem::MusicItem( FavoriteItem *favorite_item, const QString &file_path ) : 
 				if( name.isEmpty( ) )
 					name = info.baseName( );
 				favoriteItem->updateMusicItem( this );
-				mediaPlayer->deleteLater( );
-				mediaPlayer = nullptr;
-				loadedOver = true;
-				loadPtr->removeMusicItemsHistory( this );
+				MusicLoadTools::removeMusicItemsHistory( loadPtr, this );
 				loadPtr = nullptr;
-				return; // 保存收藏夹引用
+				removeThis = false;
 			}
 		}
-		// 野指针时
-		mediaPlayer->disconnect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, nullptr );
-		delete mediaPlayer;
+		if( removeThis ) {
+			deleteLater( );
+		}
+		// 野指针时		
+		mediaPlayer->deleteLater( );
 		mediaPlayer = nullptr;
 		loadedOver = true;
-		delete this;
 	} );
 
 	auto source = QUrl::fromLocalFile( filePath );

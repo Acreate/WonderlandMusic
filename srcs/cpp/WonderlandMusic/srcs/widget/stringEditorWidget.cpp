@@ -8,19 +8,23 @@
 void StringEditorWidget::initComponent( ) {
 	setModal( true );          // 设置模态
 	setWindowModality( Qt::ApplicationModal ); // 模态类型
+	auto oldLayout = layout( );
+	if( oldLayout )
+		delete oldLayout;
 	auto mainLayout = new QVBoxLayout( this );
 	auto widgetPenel = new QWidget( this );
 	mainLayout->addWidget( widgetPenel );
+
 	auto vboxLayout = new QVBoxLayout( widgetPenel );
 
 	input = new QLineEdit( this );
 	vboxLayout->addWidget( input );
-	auto buttonLayout = new QHBoxLayout( widgetPenel );
-	vboxLayout->addLayout( buttonLayout );
+	auto buttonLayout = new QHBoxLayout( );
 	okBtn = new QPushButton( this );
 	buttonLayout->addWidget( okBtn );
 	cancel = new QPushButton( this );
 	buttonLayout->addWidget( cancel );
+	vboxLayout->addLayout( buttonLayout );
 
 	connect( input, &QLineEdit::textEdited, this, &StringEditorWidget::textEdited );
 	connect( okBtn, &QPushButton::clicked, this, &StringEditorWidget::clickedOk );

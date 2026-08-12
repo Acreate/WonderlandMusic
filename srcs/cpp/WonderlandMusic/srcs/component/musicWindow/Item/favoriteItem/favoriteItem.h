@@ -66,6 +66,11 @@ public:
 	virtual void updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
 	virtual bool removeMusicLoad( MusicLoad *music_load );
 	virtual MusicLoad * getMusicLoad( ) const;
+	virtual size_t loadMusicFile( const std::vector< QString > &music_file_path_vector );
+	virtual size_t loadMusicFile( const std::list< QString > &music_file_path_list );
+	virtual size_t loadMusicFile( const QStringList &music_file_path_list );
+	virtual size_t loadMusicFile( const QString &music_file_path );
+	virtual bool loadMusicDir( const QString &music_dir_path );
 };
 
 #endif // FAVORITEITEM_H_H_HEAD__FILE__

@@ -29,6 +29,11 @@
 #include "../musicItem/musicItem.h"
 
 FavoriteItem::FavoriteItem( MusicCentreWidget *music_centre_widget, const QString &favorite_item_name ) : QObject( music_centre_widget ), musicCentreWidget( music_centre_widget ), favoriteItemName( favorite_item_name ), userMutex( new UserMutex ), drawBuff( new QImage ) {
+	if( music_centre_widget == nullptr || qobject_cast< decltype(music_centre_widget) >( music_centre_widget ) == nullptr ) {
+		Message_Error_Out << tr( "%1 必须为有效指针对象 %2" ).arg( music_centre_widget->metaObject( )->className( ) ).arg( "0x" + QString::number( ( size_t ) music_centre_widget, 16 ).toUpper( ) );
+		deleteLater( );
+		return;
+	}
 	if( MusicLoadTools::createMusicLoad( &this->musicLoad, this ) ) {
 		if( this->musicLoad->initBefore( ) == false || this->musicLoad->init( ) == false || this->musicLoad->initAfter( ) == false ) {
 			MusicLoadTools::setMusicListWidget( this->musicLoad, nullptr );
@@ -561,4 +566,19 @@ bool FavoriteItem::removeMusicLoad( MusicLoad *music_load ) {
 }
 MusicLoad * FavoriteItem::getMusicLoad( ) const {
 	return musicLoad;
+}
+size_t FavoriteItem::loadMusicFile( const std::vector< QString > &music_file_path_vector ) {
+	return musicLoad->loadMusicFile( music_file_path_vector );
+}
+size_t FavoriteItem::loadMusicFile( const std::list< QString > &music_file_path_list ) {
+	return musicLoad->loadMusicFile( music_file_path_list );
+}
+size_t FavoriteItem::loadMusicFile( const QStringList &music_file_path_list ) {
+	return musicLoad->loadMusicFile( music_file_path_list );
+}
+size_t FavoriteItem::loadMusicFile( const QString &music_file_path ) {
+	return musicLoad->loadMusicFile( music_file_path );
+}
+bool FavoriteItem::loadMusicDir( const QString &music_dir_path ) {
+	return musicLoad->loadMusicDir( music_dir_path );
 }

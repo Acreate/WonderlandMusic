@@ -7,7 +7,6 @@
 #include "../component/musicWindow/Item/favoriteItem/favoriteItem.h"
 #include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 #include "../component/musicWindow/musicCentreWidget/musicFavoriteWidget/musicFavoriteWidget.h"
-#include "../component/musicWindow/musicLoad/musicLoad.h"
 
 #include "../head/release_macro.h"
 
@@ -109,9 +108,6 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		if( favoriteItem == nullptr )
 			return;
-		auto musicLoad = favoriteItem->getMusicLoad( );
-		if( musicLoad == nullptr )
-			return;
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
 		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
@@ -120,22 +116,19 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 			return;
 		if( WidgetTools::showMultipleSelectFileDialog( resultFile, openSelecteMultiFileWidgetPath, openWidget, translate.getSelectMusicFile( ), filter ) == false )
 			return;
-		musicLoad->loadMusicFile( resultFile );
+		favoriteItem->loadMusicFile( resultFile );
 	} );
 }
 void MusicFavoriteMenu::slot_addMusicDir( ) {
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		if( favoriteItem == nullptr )
 			return;
-		auto musicLoad = favoriteItem->getMusicLoad( );
-		if( musicLoad == nullptr )
-			return;
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
 		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
 		if( WidgetTools::showMultipleSelectDirDialog( resultFile, openSelecteMultiDirWidgetPath, openWidget, translate.getSelectMusicFile( ) ) == false )
 			return;
-		musicLoad->loadMusicFile( resultFile );
+		favoriteItem->loadMusicFile( resultFile );
 	} );
 }
 QMenu * MusicFavoriteMenu::toMenu( ) {

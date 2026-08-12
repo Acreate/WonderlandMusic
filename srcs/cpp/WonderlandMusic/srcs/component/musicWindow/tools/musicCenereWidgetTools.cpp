@@ -4,8 +4,6 @@
 #include "../musicCentreWidget/musicTitleWidget/musicTitleWidget.h"
 
 void MusicCentreWidgetTools::updateMusicCentreWidgetTitleWidthInfo( MusicCentreWidget *music_centre_widget, MusicTitleWidget *music_title_widget ) {
-	if( music_centre_widget == nullptr || music_title_widget == nullptr )
-		return;
 	int intervalWidth;
 	int separatorWidth;
 	int musicCodeWidth;

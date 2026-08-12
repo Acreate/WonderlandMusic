@@ -28,6 +28,9 @@ protected:
 	virtual bool unsafeHasMusicLoadMusicFileHistory( const QString &music_file ) const;
 	virtual bool unsafeRemoveMusicItemsHistory( const MusicItem *music_item );
 
+	virtual bool removeMusicItemsHistory( const MusicItem *music_item );
+	virtual bool hasMusicLoadMusicFileHistory( const QString &music_file );
+
 public:
 	bool initBefore( ) override;
 	bool init( ) override;
@@ -37,8 +40,6 @@ public:
 	virtual size_t loadMusicFile( const QStringList &music_file_path_list );
 	virtual size_t loadMusicFile( const QString &music_file_path );
 	virtual bool loadMusicDir( const QString &music_dir_path );
-	virtual bool removeMusicItemsHistory( const MusicItem *music_item );
-	virtual bool hasMusicLoadMusicFileHistory( const QString &music_file );
 	virtual FavoriteItem * getFavoriteItem( ) const;
 };
 

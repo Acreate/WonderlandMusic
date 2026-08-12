@@ -2,6 +2,7 @@
 #define APPTRANSLATE_H_H_HEAD__FILE__
 #include <interface/iAppCore.h>
 
+class MusicItemTranslate;
 class StringEditorWidgetTranslate;
 class MusicListMenuTranslate;
 class MusicFavoriteMenuTranslate;
@@ -37,6 +38,7 @@ protected:
 	MusicFavoriteMenuTranslate *musicFavoriteMenu = nullptr;
 	MusicListMenuTranslate *musicListMenu = nullptr;
 	StringEditorWidgetTranslate* stringEditorWidget = nullptr;
+	MusicItemTranslate* musicItem = nullptr;
 	bool deleteResource( ) override;
 
 public:
@@ -61,5 +63,6 @@ public:
 	virtual MusicFavoriteMenuTranslate * getMusicFavoriteMenu( ) const;
 	virtual MusicListMenuTranslate * getMusicListMenu( ) const;
 	virtual StringEditorWidgetTranslate * getStringEditorWidget( ) const;
+	virtual MusicItemTranslate * getMusicItem( ) const;
 };
 #endif // APPTRANSLATE_H_H_HEAD__FILE__

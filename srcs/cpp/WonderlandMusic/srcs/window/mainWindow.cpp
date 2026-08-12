@@ -2,10 +2,7 @@
 #include <QJsonObject>
 #include <qboxlayout.h>
 #include "../application/appDataJsonKey.h"
-#include "../application/appDataManage.h"
-#include "../application/appInstance.h"
 #include "../application/appMusicManage.h"
-#include "../application/appTranslate.h"
 #include "../application/applicationManage.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
 #include "../application/translate/mainWindowTranslate.h"
@@ -19,6 +16,8 @@
 #include "../head/release_macro.h"
 
 #include "../msgInfo/messageErrorOut.h"
+
+#include "../tools/instanceTools.h"
 #include "../tools/pathTools.h"
 #include "../widget/aboutWidget.h"
 #include "../widget/settingWidget.h"
@@ -38,8 +37,7 @@ OptionWindow * MainWindow::getOptionWindow( ) const {
 
 bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 	optionWindow->getJsonData( get_json_object );
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
+	auto jsonFileKey = InstanceTools::getAppDataJsonKey( );
 	auto geo = geometry( );
 	int windowX = geo.x( );
 	auto mainWindowJsonFileKey = jsonFileKey->getMainWindow( );
@@ -61,8 +59,7 @@ bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
 	optionWindow->setJsonData( set_json_object );
 	if( set_json_object.empty( ) )
 		return false;
-	auto appInstance = AppInstance::getAppInstance( );
-	auto jsonFileKey = appInstance->getAppDataManage( )->getAppDataJsonKey( );
+	auto jsonFileKey = InstanceTools::getAppDataJsonKey( );
 
 	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
 
@@ -120,10 +117,11 @@ bool MainWindow::init( ) {
 
 bool MainWindow::initBefore( ) {
 	deleteResource( );
-	auto appInstance = AppInstance::getAppInstance( );
-	auto appTranslate = appInstance->getAppDataManage( )->getTranslate( );
-	// 配置窗口顶部显示
-	setWindowTitle( appTranslate->getMainWindow( )->getAppWindowTitleName( ) );
+	if( AppTranslateTools::getMainWindow( [this] ( MainWindowTranslate &translate ) {
+		// 配置窗口顶部显示
+		setWindowTitle( translate.getAppWindowTitleName( ) );
+	} ) == false )
+		return false;
 
 	optionWindow = new OptionWindow( this );
 	Before_Init_Resource_App_Core_Ptr( optionWindow );
@@ -145,7 +143,8 @@ bool MainWindow::initAfter( ) {
 	if( optionWindow->addOptionPanel( aboutWidget ) == false )
 		return false;
 	QJsonObject musicJsonObject;
-	if( AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( )->getMusicWindowInfoJsonData( musicJsonObject ) )
+	auto appMusicManage = InstanceTools::getAppMusicManage( );
+	if( appMusicManage->getMusicWindowInfoJsonData( musicJsonObject ) )
 		musicWindow->setJsonData( musicJsonObject );
 	if( optionWindow->showOptionPanel( musicWindow ) == false )
 		return false;
@@ -169,7 +168,7 @@ bool MainWindow::deleteResource( ) {
 		if( musicWindow ) {
 			QJsonObject musicInfo;
 			if( musicWindow->getJsonData( musicInfo ) )
-				AppInstance::getAppInstance( )->getAppDataManage( )->getAppMusicManage( )->setMusicWindowInfoJsonData( musicInfo );
+				InstanceTools::getAppMusicManage( )->setMusicWindowInfoJsonData( musicInfo );
 		}
 		Delete_Resource_App_Core_Ptr( optionWindow );
 		musicWindow = nullptr;
@@ -188,8 +187,7 @@ bool MainWindow::event( QEvent *event ) {
 			//	event->ignore( );
 			//	return true;
 			//}
-			auto appInstance = AppInstance::getAppInstance( )->getApplicationManage( );
-			appInstance->quit( );
+			InstanceTools::getApplicationManage( )->quit( );
 	}
 	return QMainWindow::event( event );
 }

@@ -3,9 +3,7 @@
 #include <QObject>
 #include <qdatetime.h>
 
-#include "../application/appDataManage.h"
 #include "../application/appInstance.h"
-#include "../application/appTranslate.h"
 #include "../application/translate/dateTimeFormatTranslate.h"
 
 void DateTimeFormat::fillData( const QChar *source_data, const qsizetype &source_count, QChar *dest_data ) const {
@@ -34,34 +32,14 @@ QString & DateTimeFormat::formatData( QString &result_format, const QDate &forma
 	QString year;
 	QString month;
 	QString day;
-	DateTimeFormatTranslate *dateTimeFormatTranslate = nullptr;
-	auto appInstance = AppInstance::getAppInstance( );
-	if( appInstance ) {
-		auto appDataManage = appInstance->getAppDataManage( );
-		if( appDataManage ) {
-			auto appTranslate = appDataManage->getTranslate( );
-			if( appTranslate ) {
-				dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
-				if( dateTimeFormatTranslate ) {
-					year = dateTimeFormatTranslate->getYear( );
-					month = dateTimeFormatTranslate->getMonth( );
-					day = dateTimeFormatTranslate->getDay( );
-				}
-			}
-		}
-	}
-	if( dateTimeFormatTranslate == nullptr ) {
-		dateTimeFormatTranslate = new DateTimeFormatTranslate;
-		if( dateTimeFormatTranslate->init( ) ) {
-			year = dateTimeFormatTranslate->getYear( );
-			month = dateTimeFormatTranslate->getMonth( );
-			day = dateTimeFormatTranslate->getDay( );
-		} else {
-			year = QObject::tr( "年" );
-			month = QObject::tr( "月" );
-			day = QObject::tr( "日" );
-		}
-		delete dateTimeFormatTranslate;
+	if( AppTranslateTools::getDateTimeFormat( [&] ( DateTimeFormatTranslate &translate ) {
+		year = translate.getYear( );
+		month = translate.getMonth( );
+		day = translate.getDay( );
+	} ) == false ) {
+		year = QObject::tr( "年" );
+		month = QObject::tr( "月" );
+		day = QObject::tr( "日" );
 	}
 
 	// 测量年翻译的长度
@@ -120,37 +98,16 @@ QString & DateTimeFormat::formatTime( QString &result_format, const QTime &forma
 	QString second;
 	QString millsecond;
 
-	DateTimeFormatTranslate *dateTimeFormatTranslate = nullptr;
-	auto appInstance = AppInstance::getAppInstance( );
-	if( appInstance ) {
-		auto appDataManage = appInstance->getAppDataManage( );
-		if( appDataManage ) {
-			auto appTranslate = appDataManage->getTranslate( );
-			if( appTranslate ) {
-				dateTimeFormatTranslate = appTranslate->getDateTimeFormat( );
-				if( dateTimeFormatTranslate ) {
-					hour = dateTimeFormatTranslate->getHour( );
-					minute = dateTimeFormatTranslate->getMinute( );
-					second = dateTimeFormatTranslate->getSecond( );
-					millsecond = dateTimeFormatTranslate->getMillsecond( );
-				}
-			}
-		}
-	}
-	if( dateTimeFormatTranslate == nullptr ) {
-		dateTimeFormatTranslate = new DateTimeFormatTranslate;
-		if( dateTimeFormatTranslate->init( ) ) {
-			hour = dateTimeFormatTranslate->getHour( );
-			minute = dateTimeFormatTranslate->getMinute( );
-			second = dateTimeFormatTranslate->getSecond( );
-			millsecond = dateTimeFormatTranslate->getMillsecond( );
-		} else {
-			hour = QObject::tr( "时" );
-			minute = QObject::tr( "分" );
-			second = QObject::tr( "秒" );
-			millsecond = QObject::tr( "毫秒" );
-		}
-		delete dateTimeFormatTranslate;
+	if( AppTranslateTools::getDateTimeFormat( [&] ( DateTimeFormatTranslate &translate ) {
+		hour = translate.getHour( );
+		minute = translate.getMinute( );
+		second = translate.getSecond( );
+		millsecond = translate.getMillsecond( );
+	} ) == false ) {
+		hour = QObject::tr( "时" );
+		minute = QObject::tr( "分" );
+		second = QObject::tr( "秒" );
+		millsecond = QObject::tr( "毫秒" );
 	}
 
 	// 测量时翻译的长度

@@ -14,6 +14,7 @@
 #include "../application/translate/mainWindowTranslate.h"
 #include "../application/translate/messageTranslate.h"
 #include "../application/translate/musicFavoriteMenuTranslate.h"
+#include "../application/translate/musicItemTranslate.h"
 #include "../application/translate/musicListMenuTranslate.h"
 #include "../application/translate/musicTitleWidgetTranslate.h"
 #include "../application/translate/musicWindowTranslate.h"
@@ -56,3 +57,4 @@ Defininition_Get_Translate( SystemTrayIcon );
 
 Defininition_Get_Translate( UserMutex );
 Defininition_Get_Translate( StringEditorWidget );
+Defininition_Get_Translate( MusicItem );

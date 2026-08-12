@@ -1,9 +1,6 @@
 ﻿#include "systemTrayIconMenu.h"
 
 #include "../application/appDataManage.h"
-#include "../application/appInstance.h"
-#include "../application/appTranslate.h"
-#include "../application/appUserInterfaceManage.h"
 #include "../application/applicationManage.h"
 #include "../application/translate/systemTrayIconMenuTranslate.h"
 
@@ -13,12 +10,9 @@ bool SystemTrayIconMenu::deleteResource( ) {
 }
 
 bool SystemTrayIconMenu::init( ) {
-	AppInstance *instance = AppInstance::getAppInstance( );
-	auto systemTrayIconMenuTranslate = instance->getAppDataManage( )->getTranslate( )->getSystemTrayIconMenu( );
-
-	showMainWindowItem = addAction( systemTrayIconMenuTranslate->getShowMainMenu( ) );
+	showMainWindowItem = addAction( "" );
 	addSeparator( );
-	quitApp = addAction( systemTrayIconMenuTranslate->getQuitApp( ) );
+	quitApp = addAction( "" );
 	return true;
 }
 
@@ -29,6 +23,11 @@ bool SystemTrayIconMenu::initBefore( ) {
 }
 
 bool SystemTrayIconMenu::initAfter( ) {
+	if( AppTranslateTools::getSystemTrayIconMenu( [this] ( SystemTrayIconMenuTranslate &translate ) {
+		showMainWindowItem->setText( translate.getShowMainMenu( ) );
+		quitApp->setText( translate.getQuitApp( ) );
+	} ) == false )
+		return false;
 	connect( showMainWindowItem, &QAction::triggered, this, &SystemTrayIconMenu::signal_show_main_window );
 
 	connect( quitApp, &QAction::triggered, this, &SystemTrayIconMenu::signal_quit_app );

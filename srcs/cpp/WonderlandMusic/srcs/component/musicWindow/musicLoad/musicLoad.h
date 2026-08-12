@@ -41,6 +41,7 @@ public:
 	virtual size_t loadMusicFile( const QString &music_file_path );
 	virtual bool loadMusicDir( const QString &music_dir_path );
 	virtual FavoriteItem * getFavoriteItem( ) const;
+	virtual bool update( );
 };
 
 #endif // MUSICLOAD_H_H_HEAD__FILE__

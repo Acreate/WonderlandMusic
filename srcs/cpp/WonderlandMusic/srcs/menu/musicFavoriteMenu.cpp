@@ -117,6 +117,7 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 		if( WidgetTools::showMultipleSelectFileDialog( resultFile, openSelecteMultiFileWidgetPath, openWidget, translate.getSelectMusicFile( ), filter ) == false )
 			return;
 		favoriteItem->loadMusicFile( resultFile );
+		favoriteItem->update( );
 	} );
 }
 void MusicFavoriteMenu::slot_addMusicDir( ) {
@@ -129,6 +130,7 @@ void MusicFavoriteMenu::slot_addMusicDir( ) {
 		if( WidgetTools::showMultipleSelectDirDialog( resultFile, openSelecteMultiDirWidgetPath, openWidget, translate.getSelectMusicFile( ) ) == false )
 			return;
 		favoriteItem->loadMusicFile( resultFile );
+		favoriteItem->update( );
 	} );
 }
 QMenu * MusicFavoriteMenu::toMenu( ) {

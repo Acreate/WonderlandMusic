@@ -160,3 +160,6 @@ bool MusicLoad::hasMusicLoadMusicFileHistory( const QString &music_file ) {
 FavoriteItem * MusicLoad::getFavoriteItem( ) const {
 	return favoriteItem;
 }
+bool MusicLoad::update( ) {
+	return favoriteItem->update( );
+}

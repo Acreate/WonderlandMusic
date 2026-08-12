@@ -32,20 +32,21 @@ public:
 	virtual const QString & getFavoriteItemName( ) const;
 
 protected:
-	virtual bool unSafetySetMusicItemInfoVector( const std::vector< MusicItem * > &music_items );
+	virtual bool unsafetySetMusicItemInfoVector( const std::vector< MusicItem * > &music_items );
 
-	virtual bool unSafetyClearInfo( );
-	virtual bool unSafetyClearShow( );
-	virtual bool unSafetyUpdateInfo( );
-	virtual bool unSafetyUpdateShow( );
-	virtual bool unSafetyRepaint( );
-	virtual bool unSafetyUpdatePaint( );
+	virtual bool unsafetyClearInfo( );
+	virtual bool unsafetyClearShow( );
+	virtual bool unsafetyUpdateInfo( );
+	virtual bool unsafetyUpdateShow( );
+	virtual bool unsafetyWidgetRepaint( );
+	virtual bool unsafetyWidgetUpdate( );
+	virtual bool unsafetyUpdate( );
 
-	virtual void unSafetyClear( );
-	virtual bool unSafetyUpdateItem( MusicItem *music_item );
-	virtual bool unSafetyRemoveItem( MusicItem *music_item );
-	virtual bool unSafetyHasItem( size_t &result_index, const MusicItem *music_item ) const;
-	virtual bool unSafetyAddItem( MusicItem *music_item );
+	virtual void unsafetyClear( );
+	virtual bool unsafetyUpdateMusicItem( MusicItem *music_item );
+	virtual bool unsafetyRemoveMusicItem( MusicItem *music_item );
+	virtual bool unsafetyHasMusicItem( size_t &result_index, const MusicItem *music_item ) const;
+	virtual bool unsafetyAddMusicItem( MusicItem *music_item );
 
 	virtual bool renderImage( QPainter &painter, int intervalWidth, size_t index, MusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color ) const;
 	virtual bool renderImage( size_t index, MusicItem *music_item ) const;
@@ -56,8 +57,6 @@ public:
 	virtual bool removeMusicItem( MusicItem *music_item );
 	virtual bool hasMusicItem( size_t &result_index, const MusicItem *music_item ) const;
 	virtual bool addMusicItem( MusicItem *music_item );
-	virtual bool updateInfo( );
-	virtual bool updateShow( );
 	virtual void clear( );
 	virtual bool setMusicItemInfoVector( const std::vector< MusicItem * > &music_items );
 	virtual void getMusicItemVector( std::vector< MusicItem * > &result_music_item_vector );
@@ -71,6 +70,12 @@ public:
 	virtual size_t loadMusicFile( const QStringList &music_file_path_list );
 	virtual size_t loadMusicFile( const QString &music_file_path );
 	virtual bool loadMusicDir( const QString &music_dir_path );
+	virtual bool repaint( );
+	virtual bool update( );
+	virtual bool updateInfo( );
+	virtual bool updateShow( );
+	virtual bool widgetRepaint( );
+	virtual bool widgetUpdate( );
 };
 
 #endif // FAVORITEITEM_H_H_HEAD__FILE__

@@ -52,7 +52,7 @@ FavoriteItem::~FavoriteItem( ) {
 	}
 	setParent( nullptr );
 	userMutex->lock( );
-	unSafetyClear( );
+	unsafetyClear( );
 	MusicLoadTools::setMusicListWidget( musicLoad, nullptr );
 	MusicLoadTools::releaseMusicLoad( &musicLoad );
 	userMutex->unlock( );
@@ -167,19 +167,19 @@ const QString & FavoriteItem::getFavoriteItemName( ) const {
 	return favoriteItemName;
 }
 
-bool FavoriteItem::unSafetySetMusicItemInfoVector( const std::vector< MusicItem * > &music_items ) {
-	if( unSafetyClearInfo( ) == false )
+bool FavoriteItem::unsafetySetMusicItemInfoVector( const std::vector< MusicItem * > &music_items ) {
+	if( unsafetyClearInfo( ) == false )
 		return false;
 	this->musicItemVector = music_items;
-	if( unSafetyUpdateInfo( ) == false )
+	if( unsafetyUpdateInfo( ) == false )
 		return false;
-	if( unSafetyUpdateShow( ) == false )
+	if( unsafetyUpdateShow( ) == false )
 		return false;
 	return true;
 }
 bool FavoriteItem::setMusicItemInfoVector( const std::vector< MusicItem * > &music_items ) {
 	userMutex->lock( );
-	auto result = unSafetySetMusicItemInfoVector( music_items );
+	auto result = unsafetySetMusicItemInfoVector( music_items );
 	userMutex->unlock( );
 	return result;
 }
@@ -222,14 +222,14 @@ void FavoriteItem::updateItemWidthInfo( MusicTitleWidget *music_title_widget, in
 	musicSingerNameWidth = music_singer_name_width;
 	musicDurationTimeWidth = music_duration_time_width;
 	userMutex->lock( );
-	unSafetyUpdateInfo( );
-	unSafetyUpdateShow( );
+	unsafetyUpdateInfo( );
+	unsafetyUpdateShow( );
 	userMutex->unlock( );
 }
-bool FavoriteItem::unSafetyClearInfo( ) {
+bool FavoriteItem::unsafetyClearInfo( ) {
 	size_t count = musicItemVector.size( );
 	if( count ) {
-		if( unSafetyClearShow( ) == false )
+		if( unsafetyClearShow( ) == false )
 			return false;
 		auto musicItem = musicItemVector.data( );
 		size_t index;
@@ -241,10 +241,10 @@ bool FavoriteItem::unSafetyClearInfo( ) {
 	}
 	return true;
 }
-bool FavoriteItem::unSafetyClearShow( ) {
-	if( unSafetyUpdateInfo( ) == false )
+bool FavoriteItem::unsafetyClearShow( ) {
+	if( unsafetyUpdateInfo( ) == false )
 		return false;
-	if( unSafetyUpdateShow( ) == false )
+	if( unsafetyUpdateShow( ) == false )
 		return false;
 	return true;
 }
@@ -315,7 +315,7 @@ bool FavoriteItem::renderImage( QPainter &painter, int intervalWidth, size_t ind
 	painter.end( );
 	return true;
 }
-bool FavoriteItem::unSafetyUpdateInfo( ) {
+bool FavoriteItem::unsafetyUpdateInfo( ) {
 	size_t count = musicItemVector.size( );
 	if( count == 0 )
 		return true;
@@ -357,7 +357,7 @@ bool FavoriteItem::unSafetyUpdateInfo( ) {
 
 	return true;
 }
-bool FavoriteItem::unSafetyUpdateShow( ) {
+bool FavoriteItem::unsafetyUpdateShow( ) {
 	size_t count = musicItemVector.size( );
 	if( count == 0 ) {
 		*drawBuff = QImage( );
@@ -392,7 +392,7 @@ bool FavoriteItem::unSafetyUpdateShow( ) {
 	painter.end( );
 	return true;
 }
-bool FavoriteItem::unSafetyRepaint( ) {
+bool FavoriteItem::unsafetyWidgetRepaint( ) {
 	if( musicCentreWidget == nullptr )
 		return false;
 	MusicListWidget *musicListWidget = musicCentreWidget->getMusicListWidget( );
@@ -401,7 +401,7 @@ bool FavoriteItem::unSafetyRepaint( ) {
 	musicListWidget->repaint( );
 	return true;
 }
-bool FavoriteItem::unSafetyUpdatePaint( ) {
+bool FavoriteItem::unsafetyWidgetUpdate( ) {
 	if( musicCentreWidget == nullptr )
 		return false;
 	MusicListWidget *musicListWidget = musicCentreWidget->getMusicListWidget( );
@@ -410,7 +410,15 @@ bool FavoriteItem::unSafetyUpdatePaint( ) {
 	musicListWidget->update( );
 	return true;
 }
-void FavoriteItem::unSafetyClear( ) {
+bool FavoriteItem::unsafetyUpdate( ) {
+	if( unsafetyUpdateInfo( ) == false )
+		return false;
+	if( unsafetyUpdateShow( ) == false )
+		return false;
+	return true;
+}
+
+void FavoriteItem::unsafetyClear( ) {
 	auto count = musicItemVector.size( );
 	auto data = musicItemVector.data( );
 	size_t index;
@@ -419,17 +427,17 @@ void FavoriteItem::unSafetyClear( ) {
 			delete data[ index ];
 	musicItemVector.clear( );
 }
-bool FavoriteItem::unSafetyUpdateItem( MusicItem *music_item ) {
+bool FavoriteItem::unsafetyUpdateMusicItem( MusicItem *music_item ) {
 	size_t index;
-	if( unSafetyHasItem( index, music_item ) == false )
+	if( unsafetyHasMusicItem( index, music_item ) == false )
 		return false;
 	auto data = musicItemVector.data( );
 	if( renderImage( index, data[ index ] ) == false )
 		return false;
-	unSafetyUpdateShow( );
+	unsafetyUpdateShow( );
 	return true;
 }
-bool FavoriteItem::unSafetyRemoveItem( MusicItem *music_item ) {
+bool FavoriteItem::unsafetyRemoveMusicItem( MusicItem *music_item ) {
 	size_t index;
 	if( hasMusicItem( index, music_item ) == false )
 		return false;
@@ -437,11 +445,11 @@ bool FavoriteItem::unSafetyRemoveItem( MusicItem *music_item ) {
 	MusicItem *removeTarget = *iterator;
 	musicItemVector.erase( iterator );
 	removeTarget->favoriteItem = nullptr;
-	unSafetyUpdateInfo( );
-	unSafetyUpdateShow( );
+	unsafetyUpdateInfo( );
+	unsafetyUpdateShow( );
 	return true;
 }
-bool FavoriteItem::unSafetyHasItem( size_t &result_index, const MusicItem *music_item ) const {
+bool FavoriteItem::unsafetyHasMusicItem( size_t &result_index, const MusicItem *music_item ) const {
 	bool cond = false;
 	if( music_item->favoriteItem != this )
 		return cond;
@@ -454,10 +462,10 @@ bool FavoriteItem::unSafetyHasItem( size_t &result_index, const MusicItem *music
 			break;
 	return cond;
 }
-bool FavoriteItem::unSafetyAddItem( MusicItem *music_item ) {
+bool FavoriteItem::unsafetyAddMusicItem( MusicItem *music_item ) {
 	size_t index;
-	if( unSafetyHasItem( index, music_item ) == true )
-		return unSafetyUpdateItem( music_item );
+	if( unsafetyHasMusicItem( index, music_item ) == true )
+		return unsafetyUpdateMusicItem( music_item );
 	// 删除就有的项
 	if( music_item->favoriteItem ) {
 		if( music_item->favoriteItem != this ) {
@@ -469,65 +477,77 @@ bool FavoriteItem::unSafetyAddItem( MusicItem *music_item ) {
 	// 添加到该列表
 	music_item->favoriteItem = this;
 	musicItemVector.emplace_back( music_item );
-	unSafetyUpdateInfo( );
-	unSafetyUpdateShow( );
+	unsafetyUpdateInfo( );
+	unsafetyUpdateShow( );
 	return true;
 }
 bool FavoriteItem::updateInfo( ) {
 	userMutex->lock( );
-	auto result = unSafetyUpdateInfo( );
+	auto result = unsafetyUpdateInfo( );
 	userMutex->unlock( );
-	unSafetyRepaint( );
 	return result;
 }
 bool FavoriteItem::updateShow( ) {
 	userMutex->lock( );
-	auto result = unSafetyUpdateShow( );
+	auto result = unsafetyUpdateShow( );
 	userMutex->unlock( );
-	unSafetyRepaint( );
+	return result;
+}
+bool FavoriteItem::widgetRepaint( ) {
+	userMutex->lock( );
+	auto result = unsafetyWidgetRepaint( );
+	userMutex->unlock( );
+	return result;
+}
+bool FavoriteItem::widgetUpdate( ) {
+	userMutex->lock( );
+	auto result = unsafetyWidgetUpdate( );
+	userMutex->unlock( );
 	return result;
 }
 void FavoriteItem::clear( ) {
 	userMutex->lock( );
-	unSafetyClear( );
+	unsafetyClear( );
 	userMutex->unlock( );
-	unSafetyRepaint( );
+	unsafetyWidgetRepaint( );
 }
 bool FavoriteItem::hasMusicItem( size_t &result_index, const MusicItem *music_item ) const {
 	userMutex->lock( );
-	bool cond = unSafetyHasItem( result_index, music_item );
+	bool cond = unsafetyHasMusicItem( result_index, music_item );
 	userMutex->unlock( );
 	return cond;
 }
 bool FavoriteItem::addMusicItem( MusicItem *music_item ) {
 	userMutex->lock( );
-	auto result = unSafetyAddItem( music_item );
+	auto result = unsafetyAddMusicItem( music_item );
 	userMutex->unlock( );
-	unSafetyRepaint( );
+	if( result )
+		unsafetyWidgetRepaint( );
 	return result;
 }
 
 bool FavoriteItem::updateMusicItem( MusicItem *music_item ) {
 	userMutex->lock( );
-	bool safetyRemoveItem = unSafetyUpdateItem( music_item );
+	bool unsafetyRemoveItem = unsafetyUpdateMusicItem( music_item );
 	userMutex->unlock( );
-	if( safetyRemoveItem == false )
-		return false;
-	unSafetyRepaint( );
-	return safetyRemoveItem;
+	if( unsafetyRemoveItem )
+		unsafetyWidgetRepaint( );
+	return unsafetyRemoveItem;
 }
 bool FavoriteItem::removeMusicItem( MusicItem *music_item ) {
 	userMutex->lock( );
-	bool safetyRemoveItem = unSafetyRemoveItem( music_item );
+	bool unsafetyRemoveItem = unsafetyRemoveMusicItem( music_item );
 	userMutex->unlock( );
-	if( safetyRemoveItem == false )
+	if( unsafetyRemoveItem == false )
 		return false;
 	userMutex->lock( );
-	unSafetyUpdateInfo( );
-	unSafetyClearShow( );
+	unsafetyRemoveItem = unsafetyUpdateInfo( );
+	if( unsafetyRemoveItem )
+		unsafetyRemoveItem = unsafetyClearShow( );
 	userMutex->unlock( );
-	unSafetyRepaint( );
-	return safetyRemoveItem;
+	if( unsafetyRemoveItem )
+		unsafetyWidgetRepaint( );
+	return unsafetyRemoveItem;
 }
 
 bool FavoriteItem::removeMusicLoad( MusicLoad *music_load ) {
@@ -581,4 +601,18 @@ size_t FavoriteItem::loadMusicFile( const QString &music_file_path ) {
 }
 bool FavoriteItem::loadMusicDir( const QString &music_dir_path ) {
 	return musicLoad->loadMusicDir( music_dir_path );
+}
+bool FavoriteItem::repaint( ) {
+	userMutex->lock( );
+	bool update = unsafetyUpdate( );
+	userMutex->unlock( );
+	unsafetyWidgetRepaint( );
+	return update;
+}
+bool FavoriteItem::update( ) {
+	userMutex->lock( );
+	bool update = unsafetyUpdate( );
+	userMutex->unlock( );
+	unsafetyWidgetUpdate( );
+	return update;
 }

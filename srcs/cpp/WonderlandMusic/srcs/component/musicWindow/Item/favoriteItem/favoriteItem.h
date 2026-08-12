@@ -38,8 +38,6 @@ protected:
 	virtual bool unsafetyClearShow( );
 	virtual bool unsafetyUpdateInfo( );
 	virtual bool unsafetyUpdateShow( );
-	virtual bool unsafetyWidgetRepaint( );
-	virtual bool unsafetyWidgetUpdate( );
 	virtual bool unsafetyUpdate( );
 
 	virtual void unsafetyClear( );
@@ -72,10 +70,10 @@ public:
 	virtual bool loadMusicDir( const QString &music_dir_path );
 	virtual bool repaint( );
 	virtual bool update( );
+	virtual bool unsafetyMusicListWidgetRepaint( );
+	virtual bool unsafetyMusicListWidgetUpdate( );
 	virtual bool updateInfo( );
 	virtual bool updateShow( );
-	virtual bool widgetRepaint( );
-	virtual bool widgetUpdate( );
 };
 
 #endif // FAVORITEITEM_H_H_HEAD__FILE__

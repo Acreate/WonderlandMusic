@@ -3,6 +3,8 @@
 #include "../interface/iAppCore.h"
 #include <head/head_json_key_class.h>
 
+class MusicFavoriteMenuJsonKey;
+class MusicListMenuJsonKey;
 class MusicWindowJsonKey;
 
 class AppDataJsonKey : public IAppCore {
@@ -13,7 +15,10 @@ protected:
 	AppDataManageJsonKey *appDataManage = nullptr;
 	AppUserInterfaceManageJsonKey *appUserInterfaceManage = nullptr;
 	AppMusicManageJsonKey *appMusicManage = nullptr;
-	MusicWindowJsonKey* musicWindow = nullptr;
+	MusicWindowJsonKey *musicWindow = nullptr;
+	MusicListMenuJsonKey *musicListMenu = nullptr;
+	MusicFavoriteMenuJsonKey *musicFavoriteMenu = nullptr;
+
 protected:
 	bool deleteResource( ) override;
 
@@ -30,5 +35,7 @@ public:
 	virtual AppDataManageJsonKey * getAppDataManage( ) const;
 	virtual AppUserInterfaceManageJsonKey * getAppUserInterfaceManage( ) const;
 	virtual AppMusicManageJsonKey * getAppMusicManage( ) const;
+	virtual MusicListMenuJsonKey * getMusicListMenu( ) const;
+	virtual MusicFavoriteMenuJsonKey * getMusicFavoriteMenu( ) const;
 };
 #endif // APPDATAJSONKEY_H_H_HEAD__FILE__

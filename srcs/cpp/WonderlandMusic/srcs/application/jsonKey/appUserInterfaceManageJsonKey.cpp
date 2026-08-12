@@ -1,5 +1,4 @@
 ﻿#include "appUserInterfaceManageJsonKey.h"
-#include "../../tools/pathInfoTools.h"
 
 bool AppUserInterfaceManageJsonKey::init( ) {
 	filePath = "/json/app.ui.json";
@@ -11,13 +10,6 @@ bool AppUserInterfaceManageJsonKey::init( ) {
 
 const QString & AppUserInterfaceManageJsonKey::getMainWindow( ) const {
 	return mainWindow;
-}
-
-QString AppUserInterfaceManageJsonKey::getFilePath( ) const {
-	QString applicationDirPath;
-	if( PathInfoTools::getAppSettintHomePath( applicationDirPath ) )
-		return applicationDirPath + filePath;
-	return filePath;
 }
 
 const QString & AppUserInterfaceManageJsonKey::getMusicListTopWidget( ) const {

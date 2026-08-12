@@ -3,6 +3,9 @@
 #include <head/declaration_get_translate.h>
 #include "iAppCore.h"
 
+namespace AppTranslateTools {
+}
+
 class ITranslate : public IAppCore {
 protected:
 	bool deleteResource( ) override;

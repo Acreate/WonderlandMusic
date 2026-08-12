@@ -9,6 +9,8 @@
 #include "jsonKey/appMusicManageJsonKey.h"
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
+#include "jsonKey/musicFavoriteMenuJsonKey.h"
+#include "jsonKey/musicListMenuJsonKey.h"
 #include "jsonKey/musicWindowJsonKey.h"
 #include "jsonKey/systemTrayIconJsonKey.h"
 
@@ -20,6 +22,8 @@ bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( appUserInterfaceManage );
 	Delete_Resource_App_Core_Ptr( appMusicManage );
 	Delete_Resource_App_Core_Ptr( musicWindow );
+	Delete_Resource_App_Core_Ptr( musicListMenu );
+	Delete_Resource_App_Core_Ptr( musicFavoriteMenu );
 	return true;
 }
 
@@ -38,6 +42,8 @@ bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 	Init_Resource_App_Core_Ptr( appMusicManage );
 	Init_Resource_App_Core_Ptr( musicWindow );
+	Init_Resource_App_Core_Ptr( musicListMenu );
+	Init_Resource_App_Core_Ptr( musicFavoriteMenu );
 	return true;
 }
 
@@ -50,6 +56,8 @@ bool AppDataJsonKey::initBefore( ) {
 	appUserInterfaceManage = new AppUserInterfaceManageJsonKey;
 	appMusicManage = new AppMusicManageJsonKey;
 	musicWindow = new MusicWindowJsonKey;
+	musicListMenu = new MusicListMenuJsonKey;
+	musicFavoriteMenu = new MusicFavoriteMenuJsonKey;
 	return true;
 }
 
@@ -82,4 +90,10 @@ AppUserInterfaceManageJsonKey * AppDataJsonKey::getAppUserInterfaceManage( ) con
 
 AppMusicManageJsonKey * AppDataJsonKey::getAppMusicManage( ) const {
 	return appMusicManage;
+}
+MusicListMenuJsonKey * AppDataJsonKey::getMusicListMenu( ) const {
+	return musicListMenu;
+}
+MusicFavoriteMenuJsonKey * AppDataJsonKey::getMusicFavoriteMenu( ) const {
+	return musicFavoriteMenu;
 }

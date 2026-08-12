@@ -97,7 +97,7 @@ AppMusicManage * AppDataManage::getAppMusicManage( ) const {
 bool AppDataManage::readJsonData( ) {
 	// 从磁盘获取 json 数据
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
-	auto jsonFilePath = appDataManage->getJsonFilePath( );
+	auto jsonFilePath = appDataManage->getFilePath( );
 	QJsonObject appJsonObject;
 	if( PathTools::readJsonObject( appJsonObject, jsonFilePath ) == false )
 		return false;
@@ -119,7 +119,7 @@ bool AppDataManage::writeJsonData( ) {
 
 	// 写入 json 数据到磁盘
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
-	auto jsonFilePath = appDataManage->getJsonFilePath( );
+	auto jsonFilePath = appDataManage->getFilePath( );
 	PathTools::writeJsonObject( appJsonObject, jsonFilePath );
 	// 写入音频 json 到磁盘
 	appMusicManage->writeJsonData( );

@@ -392,7 +392,7 @@ bool FavoriteItem::unsafetyUpdateShow( ) {
 	painter.end( );
 	return true;
 }
-bool FavoriteItem::unsafetyWidgetRepaint( ) {
+bool FavoriteItem::unsafetyMusicListWidgetRepaint( ) {
 	if( musicCentreWidget == nullptr )
 		return false;
 	MusicListWidget *musicListWidget = musicCentreWidget->getMusicListWidget( );
@@ -401,7 +401,7 @@ bool FavoriteItem::unsafetyWidgetRepaint( ) {
 	musicListWidget->repaint( );
 	return true;
 }
-bool FavoriteItem::unsafetyWidgetUpdate( ) {
+bool FavoriteItem::unsafetyMusicListWidgetUpdate( ) {
 	if( musicCentreWidget == nullptr )
 		return false;
 	MusicListWidget *musicListWidget = musicCentreWidget->getMusicListWidget( );
@@ -493,23 +493,11 @@ bool FavoriteItem::updateShow( ) {
 	userMutex->unlock( );
 	return result;
 }
-bool FavoriteItem::widgetRepaint( ) {
-	userMutex->lock( );
-	auto result = unsafetyWidgetRepaint( );
-	userMutex->unlock( );
-	return result;
-}
-bool FavoriteItem::widgetUpdate( ) {
-	userMutex->lock( );
-	auto result = unsafetyWidgetUpdate( );
-	userMutex->unlock( );
-	return result;
-}
 void FavoriteItem::clear( ) {
 	userMutex->lock( );
 	unsafetyClear( );
 	userMutex->unlock( );
-	unsafetyWidgetRepaint( );
+	unsafetyMusicListWidgetRepaint( );
 }
 bool FavoriteItem::hasMusicItem( size_t &result_index, const MusicItem *music_item ) const {
 	userMutex->lock( );
@@ -522,7 +510,7 @@ bool FavoriteItem::addMusicItem( MusicItem *music_item ) {
 	auto result = unsafetyAddMusicItem( music_item );
 	userMutex->unlock( );
 	if( result )
-		unsafetyWidgetRepaint( );
+		unsafetyMusicListWidgetRepaint( );
 	return result;
 }
 
@@ -531,7 +519,7 @@ bool FavoriteItem::updateMusicItem( MusicItem *music_item ) {
 	bool unsafetyRemoveItem = unsafetyUpdateMusicItem( music_item );
 	userMutex->unlock( );
 	if( unsafetyRemoveItem )
-		unsafetyWidgetRepaint( );
+		unsafetyMusicListWidgetRepaint( );
 	return unsafetyRemoveItem;
 }
 bool FavoriteItem::removeMusicItem( MusicItem *music_item ) {
@@ -546,7 +534,7 @@ bool FavoriteItem::removeMusicItem( MusicItem *music_item ) {
 		unsafetyRemoveItem = unsafetyClearShow( );
 	userMutex->unlock( );
 	if( unsafetyRemoveItem )
-		unsafetyWidgetRepaint( );
+		unsafetyMusicListWidgetRepaint( );
 	return unsafetyRemoveItem;
 }
 
@@ -606,13 +594,13 @@ bool FavoriteItem::repaint( ) {
 	userMutex->lock( );
 	bool update = unsafetyUpdate( );
 	userMutex->unlock( );
-	unsafetyWidgetRepaint( );
+	unsafetyMusicListWidgetRepaint( );
 	return update;
 }
 bool FavoriteItem::update( ) {
 	userMutex->lock( );
 	bool update = unsafetyUpdate( );
 	userMutex->unlock( );
-	unsafetyWidgetUpdate( );
+	unsafetyMusicListWidgetUpdate( );
 	return update;
 }

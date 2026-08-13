@@ -36,6 +36,7 @@ QString & DateTimeFormat::formatData( QString &result_format, const QDate &forma
 		year = translate.getYear( );
 		month = translate.getMonth( );
 		day = translate.getDay( );
+		return true;
 	} ) == false ) {
 		year = QObject::tr( "年" );
 		month = QObject::tr( "月" );
@@ -103,6 +104,7 @@ QString & DateTimeFormat::formatTime( QString &result_format, const QTime &forma
 		minute = translate.getMinute( );
 		second = translate.getSecond( );
 		millsecond = translate.getMillsecond( );
+		return true;
 	} ) == false ) {
 		hour = QObject::tr( "时" );
 		minute = QObject::tr( "分" );

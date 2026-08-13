@@ -7,7 +7,6 @@
 #include "../msgInfo/messageErrorOut.h"
 
 #include "../tools/appJsonKeyTools.h"
-#include "../tools/appTranslateTools.h"
 #include "../tools/instanceTools.h"
 
 #include "../window/mainWindow.h"
@@ -58,9 +57,12 @@ bool SystemTrayIcon::initAfter( ) {
 				qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
 			else if( qImage.load( logoIconPath ) == false )
 				qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
+			else
+				return false;
 			auto pixmap = QPixmap::fromImage( qImage );
 			QIcon systemTrayIcon( pixmap );
 			setIcon( systemTrayIcon );
+			return true;
 		} ) == false ) {
 			QImage qImage;
 			qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
@@ -70,6 +72,7 @@ bool SystemTrayIcon::initAfter( ) {
 		}
 	if( AppTranslateTools::getSystemTrayIcon( [this] ( SystemTrayIconTranslate &translate ) {
 		setToolTip( translate.getAppName( ) );
+		return true;
 	} ) == false )
 		setToolTip( QObject::tr( "仙村音乐" ) );
 

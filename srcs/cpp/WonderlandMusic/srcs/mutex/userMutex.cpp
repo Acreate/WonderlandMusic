@@ -5,7 +5,6 @@
 #include "../application/translate/userMutexTranslate.h"
 #include "../msgInfo/messageErrorOut.h"
 
-#include "../tools/appTranslateTools.h"
 #include "../tools/sourceLocationTools.h"
 
 void UserMutex::out_debug_info( ) const {
@@ -17,6 +16,7 @@ void UserMutex::out_debug_info( ) const {
 		source_file = translate.getSourceFile( );
 		source_function = translate.getSourceFunction( );
 		source_line = translate.getSourceLine( );
+		return true;
 	} ) == false ) {
 		source_file = QObject::tr( "源文件" );
 		source_function = QObject::tr( "源函数" );
@@ -32,6 +32,7 @@ void UserMutex::out_debug_info( ) const {
 		lastTrylock = translate.getLastTrylock( );
 		lastLock = translate.getLastLock( );
 		lastUnlock = translate.getLastUnlock( );
+		return true;
 	} ) == false ) {
 		trylockError = QObject::tr( "锁异常" );
 		lastTrylock = QObject::tr( "最后一次尝试锁" );
@@ -115,7 +116,7 @@ bool UserMutex::tryLock( std::mutex *mutex_cor_ptr, const std::source_location &
 		tryLock = mutex_cor_ptr->try_lock( );
 	} catch( ... ) {
 		out_debug_info( );
-		tryLock = false;
+		//tryLock = false;
 		_STD _Throw_Cpp_error( std::_RESOURCE_DEADLOCK_WOULD_OCCUR );
 	}
 	*trylockSourceLocation = source_location;
@@ -132,7 +133,7 @@ bool UserMutex::lock( std::mutex *mutex_cor_ptr, const std::source_location &sou
 		tryLock = true;
 	} catch( ... ) {
 		out_debug_info( );
-		tryLock = false;
+		//tryLock = false;
 		_STD _Throw_Cpp_error( std::_RESOURCE_DEADLOCK_WOULD_OCCUR );
 	}
 	*lockSourceLocation = source_location;
@@ -148,7 +149,7 @@ bool UserMutex::unlock( std::mutex *mutex_cor_ptr, const std::source_location &s
 		tryLock = true;
 	} catch( ... ) {
 		out_debug_info( );
-		tryLock = false;
+		//tryLock = false;
 		_STD _Throw_Cpp_error( std::_RESOURCE_DEADLOCK_WOULD_OCCUR );
 	}
 	*unlockSourceLocation = source_location;

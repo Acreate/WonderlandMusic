@@ -121,6 +121,7 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 			QString createDirError;
 			if( AppTranslateTools::getMessage( [&createDirError] ( MessageTranslate &translate ) {
 				createDirError = translate.getCreateDirError( );
+				return true;
 			} ) == false )
 				createDirError = QObject::tr( "创建目录失败" );
 
@@ -136,6 +137,7 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 		QString openFileError;
 		if( AppTranslateTools::getMessage( [&openFileError] ( MessageTranslate &translate ) {
 			openFileError = translate.getOpenFileError( );
+			return true;
 		} ) == false )
 			openFileError = QObject::tr( "打开文件失败" );
 		SourceLocationTools::formatString( outString, date_time_format, std::source_location::current( ), openFileError + " : " + writeFilePath );

@@ -238,6 +238,7 @@ bool MusicTitleWidget::initAfter( ) {
 		musicNameWidth = fontMetrics->horizontalAdvance( musicName );
 		musicSingerNameWidth = fontMetrics->horizontalAdvance( musicSingeName );
 		musicDurationTimeWidth = fontMetrics->horizontalAdvance( musicDurationTime );
+		return true;
 	} ) == false )
 		return false;
 	suggestHeight = fontMetrics->height( );

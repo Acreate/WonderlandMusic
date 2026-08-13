@@ -41,6 +41,7 @@ bool MusicFavoriteMenu::init( ) {
 bool MusicFavoriteMenu::initAfter( ) {
 	if( AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		createFavoriteItemAction->setText( translate.getCreateFavoriteItem( ) );
+		return true;
 	} ) == false )
 		return false;
 	auto signal = &QAction::triggered;
@@ -78,6 +79,7 @@ bool MusicFavoriteMenu::execMenu( MusicFavoriteWidget *music_favorite_widget, Fa
 			addMusicDirAction->setText( translate.getIllegalAddMusicDirToFavoriteItem( ) );
 			addMusicDirAction->setEnabled( false );
 		}
+		return true;
 	} ) == false )
 		return false;
 
@@ -107,30 +109,32 @@ void MusicFavoriteMenu::slot_deleteFavoriteItem( ) {
 void MusicFavoriteMenu::slot_addMusicFile( ) {
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		if( favoriteItem == nullptr )
-			return;
+			return false;
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
 		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
 		QString filter;
 		if( PathInfoTools::getSupperDecodeFileSuffixFilter( filter ) == false )
-			return;
+			return false;
 		if( WidgetTools::showMultipleSelectFileDialog( resultFile, openSelecteMultiFileWidgetPath, openWidget, translate.getSelectMusicFile( ), filter ) == false )
-			return;
+			return false;
 		favoriteItem->loadMusicFile( resultFile );
 		favoriteItem->update( );
+		return true;
 	} );
 }
 void MusicFavoriteMenu::slot_addMusicDir( ) {
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		if( favoriteItem == nullptr )
-			return;
+			return false;
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
 		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
 		if( WidgetTools::showMultipleSelectDirDialog( resultFile, openSelecteMultiDirWidgetPath, openWidget, translate.getSelectMusicFile( ) ) == false )
-			return;
+			return false;
 		favoriteItem->loadMusicFile( resultFile );
 		favoriteItem->update( );
+		return true;
 	} );
 }
 QMenu * MusicFavoriteMenu::toMenu( ) {

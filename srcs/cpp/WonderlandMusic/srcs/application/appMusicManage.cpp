@@ -21,8 +21,9 @@ bool AppMusicManage::readJsonData( ) {
 	AppJsonKeyTools::getAppMusicManage( [this,&resultBool] ( const AppMusicManageJsonKey &json_key ) {
 		QJsonObject readJson;
 		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) == false )
-			return;
+			return false;
 		resultBool = setJsonData( readJson );
+		return true;
 	} );
 
 	return resultBool;
@@ -33,8 +34,9 @@ bool AppMusicManage::writeJsonData( ) {
 	AppJsonKeyTools::getAppMusicManage( [this,&resultBool] ( const AppMusicManageJsonKey &json_key ) {
 		QJsonObject getJson;
 		if( getJsonData( getJson ) == false )
-			return;
+			return false;
 		resultBool = PathTools::writeJsonObject( getJson, json_key.getFilePath( ) );
+		return true;
 	} );
 
 	return resultBool;
@@ -78,6 +80,7 @@ bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {
 		jsonObejctJsonKey = json_key.getJsonObejct( );
 		selectDirPathJsonKey = json_key.getSelectDirPath( );
 		selectFilePathJsonKey = json_key.getSelectFilePath( );
+		return true;
 	} ) == false )
 		return false;
 	QJsonObject object;
@@ -99,6 +102,7 @@ bool AppMusicManage::setJsonData( const QJsonObject &set_json_object ) {
 		jsonObejctJsonKey = json_key.getJsonObejct( );
 		selectDirPathJsonKey = json_key.getSelectDirPath( );
 		selectFilePathJsonKey = json_key.getSelectFilePath( );
+		return true;
 	} ) == false )
 		return false;
 	auto find = set_json_object.find( jsonObejctJsonKey );

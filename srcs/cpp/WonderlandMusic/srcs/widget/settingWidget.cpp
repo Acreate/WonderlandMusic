@@ -25,6 +25,7 @@ bool SettingWidget::deleteResource( ) {
 bool SettingWidget::initBefore( ) {
 	if( AppTranslateTools::getSettingWidget( [this] ( SettingWidgetTranslate &translate ) {
 		setName( translate.getTitleName( ) );
+		return true;
 	} ) == false )
 		setName( tr( "设置" ) );
 	return true;

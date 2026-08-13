@@ -45,8 +45,10 @@ bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 bool AppUserInterfaceManage::readJsonData( ) {
 	AppJsonKeyTools::getAppUserInterfaceManage( [this] ( const AppUserInterfaceManageJsonKey &json_key ) {
 		QJsonObject readJson;
-		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) )
-			setJsonData( readJson );
+		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) == false )
+			return false;
+		setJsonData( readJson );
+		return true;
 	} );
 	return true;
 }
@@ -54,9 +56,11 @@ bool AppUserInterfaceManage::readJsonData( ) {
 bool AppUserInterfaceManage::writeJsonData( ) {
 	AppJsonKeyTools::getAppUserInterfaceManage( [this] ( const AppUserInterfaceManageJsonKey &json_key ) {
 		QJsonObject writeJsonObject;
-		if( getJsonData( writeJsonObject ) ) {
-			PathTools::writeJsonObject( writeJsonObject, json_key.getFilePath( ) );
-		}
+		if( getJsonData( writeJsonObject ) == false )
+			return false;
+		PathTools::writeJsonObject( writeJsonObject, json_key.getFilePath( ) );
+
+		return true;
 	} );
 
 	return true;

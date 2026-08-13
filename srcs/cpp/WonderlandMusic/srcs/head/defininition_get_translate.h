@@ -2,21 +2,21 @@
 #define DEFININITION_GET_TRANSLATE_H_H_HEAD__FILE__
 
 #define Defininition_Get_Translate( type_name_ ) \
-	bool AppTranslateTools::get##type_name_(const std::function< void( type_name_##Translate & translate) > &translate_fun_call){\
+	bool AppTranslateTools::get##type_name_(const std::function< bool( type_name_##Translate & translate) > &translate_fun_call){\
 		type_name_##Translate *var = nullptr; \
 		AppTranslate *appTranslate = AppTranslateTools::getAppTranslate( ); \
 		if( appTranslate ){ \
 			var = appTranslate->get##type_name_( );\
 			if( var ) { \
-				translate_fun_call( *var ); \
-				return true; \
+				auto result = translate_fun_call( *var ); \
+				return result; \
 			}\
 		}\
 		var = new type_name_##Translate; \
 		if( var->init( ) ) { \
-			translate_fun_call( *var ); \
+			auto result = translate_fun_call( *var ); \
 			delete var; \
-			return true; \
+			return result; \
 		} \
 		return false;\
 	}

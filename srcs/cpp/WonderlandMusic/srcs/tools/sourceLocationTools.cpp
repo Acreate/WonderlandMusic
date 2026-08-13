@@ -25,6 +25,7 @@ void SourceLocationTools::formatString( QString &format_string, QString &source_
 		source_file = message_translate.getSourceFile( );
 		source_function = message_translate.getSourceFunction( );
 		source_line = message_translate.getSourceLine( );
+		return true;
 	} );
 	if( message == false ) {
 		source_file = QObject::tr( "源文件" );
@@ -72,6 +73,7 @@ void SourceLocationTools::formatString( QString &result_msg, const DateTimeForma
 		sourceFile = message_translate.getSourceFile( );
 		sourceFunction = message_translate.getSourceFunction( );
 		sourceLine = message_translate.getSourceLine( );
+		return true;
 	} );
 	if( message == false ) {
 		sourceFile = QObject::tr( "源文件" );

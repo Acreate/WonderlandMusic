@@ -2,6 +2,7 @@
 
 #include <QJsonObject>
 
+#include "../../application/jsonKey/appMusicManageJsonKey.h"
 #include "../../application/translate/musicWindowTranslate.h"
 
 #include "../../head/after_init_macro.h"
@@ -38,6 +39,7 @@ bool MusicWindow::initBefore( ) {
 bool MusicWindow::init( ) {
 	if( AppTranslateTools::getMusicWindow( [this] ( MusicWindowTranslate &translate ) {
 		setName( translate.getTitleName( ) );
+		return true;
 	} ) == false )
 		setName( tr( "音乐" ) );
 	Init_Resource_App_Core_Ptr( musicCentreWidget );
@@ -75,5 +77,16 @@ bool MusicWindow::readJsonData( ) {
 	return true;
 }
 bool MusicWindow::writeJsonData( ) {
+	if( AppJsonKeyTools::getAppMusicManage( [this] ( const AppMusicManageJsonKey &json_key ) {
+		QJsonObject jsonObject;
+		if( musicCentreWidget->getJsonData( jsonObject ) == false )
+			return false;
+		QJsonObject musicWindowJson;
+		musicWindowJson.insert( "musicCentreWidget", jsonObject );
+		if( PathTools::writeJsonObject( musicWindowJson, json_key.getFilePath( ) ) == false )
+			return false;
+		return true;
+	} ) == false )
+		return false;
 	return true;
 }

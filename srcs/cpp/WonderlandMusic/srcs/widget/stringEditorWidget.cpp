@@ -45,6 +45,7 @@ void StringEditorWidget::showEvent( QShowEvent *event ) {
 		cancel->setText( translate.getCancelString( ) );
 		okBtn->setText( translate.getOkString( ) );
 		hint = translate.getHint( );
+		return true;
 	} ) == false ) {
 		hide( );
 		deleteLater( );

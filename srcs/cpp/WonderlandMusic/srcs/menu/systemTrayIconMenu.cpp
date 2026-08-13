@@ -26,6 +26,7 @@ bool SystemTrayIconMenu::initAfter( ) {
 	if( AppTranslateTools::getSystemTrayIconMenu( [this] ( SystemTrayIconMenuTranslate &translate ) {
 		showMainWindowItem->setText( translate.getShowMainMenu( ) );
 		quitApp->setText( translate.getQuitApp( ) );
+		return true;
 	} ) == false )
 		return false;
 	connect( showMainWindowItem, &QAction::triggered, this, &SystemTrayIconMenu::signal_show_main_window );

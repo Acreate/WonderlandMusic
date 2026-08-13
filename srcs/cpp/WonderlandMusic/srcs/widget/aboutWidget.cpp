@@ -31,6 +31,7 @@ bool AboutWidget::init( ) {
 		auto applicationManage = InstanceTools::getApplicationManage( );
 
 		setWindowTitle( QString( applicationManage->applicationName( ) + " " + titleName ) );
+		return true;
 	} ) == false )
 		return false;
 	QImage qImage;
@@ -43,7 +44,9 @@ bool AboutWidget::init( ) {
 		} else if( qImage.load( logoIconPath ) == false ) {
 			Message_Error_Out << tr( "Qt 标识图像加载失败，重新使用 .rc 资源" ) + " : " + logoIconPath;
 			qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
-		}
+		} else
+			return false;
+		return true;
 	} ) == false )
 		return false;
 

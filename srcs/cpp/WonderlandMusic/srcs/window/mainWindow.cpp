@@ -120,6 +120,7 @@ bool MainWindow::initBefore( ) {
 	if( AppTranslateTools::getMainWindow( [this] ( MainWindowTranslate &translate ) {
 		// 配置窗口顶部显示
 		setWindowTitle( translate.getAppWindowTitleName( ) );
+		return true;
 	} ) == false )
 		return false;
 

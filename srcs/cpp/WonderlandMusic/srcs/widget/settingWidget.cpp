@@ -1,7 +1,6 @@
 ﻿#include "settingWidget.h"
 #include "../application/translate/settingWidgetTranslate.h"
 #include "../component/optionWindow/optionWindow.h"
-#include "../tools/appTranslateTools.h"
 
 SettingWidget::SettingWidget( OptionWindow *parent ) : QWidget( parent ), OptionPanel( ) {
 }
@@ -11,6 +10,12 @@ SettingWidget::~SettingWidget( ) {
 
 QWidget * SettingWidget::toWidget( ) {
 	return this;
+}
+bool SettingWidget::readJsonData( ) {
+	return true;
+}
+bool SettingWidget::writeJsonData( ) {
+	return true;
 }
 
 bool SettingWidget::deleteResource( ) {

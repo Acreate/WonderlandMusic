@@ -9,9 +9,6 @@
 
 #include "../musicCentreWidget.h"
 
-#include "../../../../head/defininition_get_json_key.h"
-#include "../../../../head/q_json_object.h"
-
 #include "../../Item/favoriteItem/favoriteItem.h"
 
 #include "../musicFavoriteWidget/musicFavoriteWidget.h"
@@ -28,6 +25,7 @@ bool MusicListWidget::deleteResource( ) {
 	currentFavoriteItem = nullptr;
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
+	Delete_Resource_App_Core_Ptr( drawBuff );
 	return true;
 }
 void MusicListWidget::paintEvent( QPaintEvent *event ) {
@@ -42,11 +40,26 @@ void MusicListWidget::paintEvent( QPaintEvent *event ) {
 		return;
 	if( userMutex->tryLock( ) == false )
 		return;
-	painter.drawImage( 0, 0, *currentFavoriteItem->getDrawBuff( ) );
+	painter.drawImage( 0, 0, *drawBuff );
 	userMutex->unlock( );
 }
 bool MusicListWidget::setMusicListMenu( IMusicListMenu *music_list_menu ) {
 	this->musicListMenu = music_list_menu;
+	return true;
+}
+bool MusicListWidget::updateMusicListInfo( ) {
+	if( currentFavoriteItem == nullptr )
+		return false;
+	if( userMutex == nullptr )
+		return false;
+	if( userMutex->tryLock( ) == false )
+		return false;
+
+	*drawBuff = *currentFavoriteItem->getDrawBuff( );
+	drawBuff->detach( );
+	auto size = drawBuff->size( );
+	userMutex->unlock( );
+	resize( size );
 	return true;
 }
 
@@ -61,7 +74,7 @@ void MusicListWidget::updateItemWidthInfo( MusicTitleWidget *music_title_widget,
 	if( newSize ) {
 		resize( *newSize );
 		delete newSize;
-		repaint( );
+		updateMusicListInfo( );
 	}
 }
 
@@ -70,7 +83,7 @@ FavoriteItem * MusicListWidget::getCurrentFavoriteItem( ) const {
 }
 void MusicListWidget::setCurrentFavoriteItem( FavoriteItem *favorite_item ) {
 	currentFavoriteItem = favorite_item;
-	repaint( );
+	updateMusicListInfo( );
 }
 IMusicListMenu * MusicListWidget::getMusicListMenu( ) const {
 	return musicListMenu;
@@ -78,6 +91,7 @@ IMusicListMenu * MusicListWidget::getMusicListMenu( ) const {
 bool MusicListWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
+	drawBuff = new QImage;
 	return true;
 }
 bool MusicListWidget::init( ) {

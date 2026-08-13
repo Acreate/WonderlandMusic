@@ -165,11 +165,6 @@ AboutWidget * MainWindow::getAboutWidget( ) const {
 
 bool MainWindow::deleteResource( ) {
 	if( optionWindow ) {
-		if( musicWindow ) {
-			QJsonObject musicInfo;
-			if( musicWindow->getJsonData( musicInfo ) )
-				InstanceTools::getAppMusicManage( )->setMusicWindowInfoJsonData( musicInfo );
-		}
 		Delete_Resource_App_Core_Ptr( optionWindow );
 		musicWindow = nullptr;
 		settingWidget = nullptr;

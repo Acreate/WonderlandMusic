@@ -71,3 +71,9 @@ bool MusicWindow::setMusicListMenu( IMusicListMenu *music_list_menu ) {
 		return false;
 	return musicCentreWidget->setMusicListMenu( music_list_menu );
 }
+bool MusicWindow::readJsonData( ) {
+	return true;
+}
+bool MusicWindow::writeJsonData( ) {
+	return true;
+}

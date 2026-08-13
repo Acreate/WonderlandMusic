@@ -89,27 +89,31 @@ void OptionWindow::deleteAllOptionPanel( ) {
 	size_t count = optionPanelVector.size( );
 	if( count == 0 )
 		return;
-	optionListDockWidget->optionListWidget->removeAllOptionButton( );
-	hideOptionPanel( currentOptionPanelWidget );
+	//hideOptionPanel( currentOptionPanelWidget );
 	decltype(optionPanelVector) deleteVector( count );
 	mutex->lock( );
+	takeCentralWidget( );
 	size_t index;
 	auto data = optionPanelVector.data( );
 	auto deletePtr = deleteVector.data( );
 	for( index = 0; index < count; index += 1 )
 		deletePtr[ index ] = data[ index ];
-
 	optionPanelVector.clear( );
 	mutex->unlock( );
 	updateWindow( );
+	for( index = 0; index < count; index += 1 )
+		data[ index ]->writeJsonData( );
 	for( index = 0; index < count; index += 1 ) {
 		auto optionPanel = deletePtr[ index ];
+		if( optionPanel == nullptr )
+			continue;
 		optionPanel->optionWindow = nullptr;
 		optionPanel->optionButton->optionWindow = nullptr;
 		optionPanel->optionButton->optionPanel = nullptr;
 		delete optionPanel->optionButton;
 		delete optionPanel;
 	}
+	optionListDockWidget->optionListWidget->removeAllOptionButton( );
 }
 OptionWindow::OptionWindow( QWidget *paretn ) : QMainWindow( paretn ) {
 }
@@ -152,8 +156,7 @@ bool OptionWindow::addOptionPanel( OptionPanel *option_panel ) {
 	optionListDockWidget->optionListWidget->addOptionButton( option_panel->optionButton );
 	updateWindow( );
 	currentOptionPanelWidget = option_panel;
-	showOptionPanel( option_panel );
-	return true;
+	return showOptionPanel( option_panel );
 }
 
 bool OptionWindow::getOptionPanelIndex( size_t &result_index, const OptionPanel *option_panel ) {
@@ -246,6 +249,7 @@ bool OptionWindow::hideOptionPanel( OptionPanel *option_panel ) {
 		return false;
 	if( currentOptionPanelWidget != option_panel )
 		return false;
+	option_panel->writeJsonData( );
 	mutex->lock( );
 	takeCentralWidget( );
 	currentOptionPanelWidget = nullptr;
@@ -259,6 +263,12 @@ bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 	size_t index;
 	if( getOptionPanelIndex( index, option_panel ) == false || option_panel->optionWindow != this )
 		return false;
+	if( currentOptionPanelWidget )
+		if( currentOptionPanelWidget->writeJsonData( ) == false )
+			return false;
+	if( option_panel )
+		if( option_panel->readJsonData( ) == false )
+			return false;
 	mutex->lock( );
 	currentOptionPanelWidget = option_panel;
 	takeCentralWidget( );
@@ -269,7 +279,6 @@ bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 		adjustSize( );
 	}
 	mutex->unlock( );
-
 	emit signal_show_OptionPanel( option_panel );
 	return true;
 }

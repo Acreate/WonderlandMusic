@@ -106,6 +106,12 @@ bool AboutWidget::getJsonData( QJsonObject &get_json_object ) const {
 bool AboutWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }
+bool AboutWidget::readJsonData( ) {
+	return true;
+}
+bool AboutWidget::writeJsonData( ) {
+	return true;
+}
 
 bool AboutWidget::getSoftwareProtocolInfo( QString &result_info ) {
 	// ===== 1. 软件基础信息（自定义）

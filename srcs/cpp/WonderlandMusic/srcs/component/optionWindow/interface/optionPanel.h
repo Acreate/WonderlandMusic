@@ -3,12 +3,12 @@
 #include <QWidget>
 
 #include "../../../interface/iAppCore.h"
-#include "../../../interface/iAppJsonData.h"
+#include "../../../interface/iAppDiskJsonData.h"
 class OptionButton;
 class CoreInfo;
 class OptionWindow;
 
-class OptionPanel : public IAppCore, public IAppJsonData {
+class OptionPanel : public IAppCore, public IAppDiskJsonData {
 private:
 	friend class OptionWindow;
 

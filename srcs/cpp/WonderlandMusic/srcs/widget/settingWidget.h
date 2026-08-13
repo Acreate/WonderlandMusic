@@ -20,5 +20,7 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	QWidget * toWidget( ) override;
+	bool readJsonData( ) override;
+	bool writeJsonData( ) override;
 };
 #endif // SETTINGWIDGET_H_H_HEAD__FILE__

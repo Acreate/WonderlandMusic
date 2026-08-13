@@ -24,6 +24,7 @@ protected:
 	MusicCentreWidget *musicCentreWidget;
 	FavoriteItem *currentFavoriteItem = nullptr;
 	IMusicListMenu *musicListMenu = nullptr;
+	QImage *drawBuff = nullptr;
 
 public:
 	MusicListWidget( MusicCentreWidget *music_centre_widget );
@@ -45,6 +46,7 @@ public:
 	virtual FavoriteItem * getCurrentFavoriteItem( ) const;
 	virtual void setCurrentFavoriteItem( FavoriteItem *favorite_item );
 	virtual IMusicListMenu * getMusicListMenu( ) const;
+	virtual bool updateMusicListInfo( );
 };
 
 #endif // MUSICLISTWIDGET_H_H_HEAD__FILE__

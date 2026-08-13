@@ -34,6 +34,8 @@ public:
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 	virtual bool setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu );
 	virtual bool setMusicListMenu( IMusicListMenu *music_list_menu );
+	bool readJsonData( ) override;
+	bool writeJsonData( ) override;
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

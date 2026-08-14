@@ -60,6 +60,7 @@ void OptionWindow::removeAllOptionPanel( ) {
 		for( ; index < count; index += 1 ) {
 			auto optionPanel = target[ index ];
 			optionPanel->hidePanelBefore( );
+			optionPanel->releasePanelBefore( );
 			optionPanel->optionWindow = nullptr;
 			optionPanel->optionButton->optionWindow = nullptr;
 			optionPanel->optionButton->optionPanel = nullptr;
@@ -120,6 +121,7 @@ void OptionWindow::deleteAllOptionPanel( ) {
 		for( ; index < count; index += 1 ) {
 			auto optionPanel = target[ index ];
 			optionPanel->hidePanelBefore( );
+			optionPanel->releasePanelBefore( );
 			optionPanel->optionWindow = nullptr;
 			optionPanel->optionButton->optionWindow = nullptr;
 			optionPanel->optionButton->optionPanel = nullptr;

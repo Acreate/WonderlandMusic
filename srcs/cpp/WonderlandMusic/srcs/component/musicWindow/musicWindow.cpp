@@ -2,13 +2,14 @@
 
 #include <QJsonObject>
 
-#include "../../application/jsonKey/appMusicManageJsonKey.h"
+#include "../../application/jsonKey/musicWindowJsonKey.h"
 #include "../../application/translate/musicWindowTranslate.h"
 
 #include "../../head/after_init_macro.h"
 #include "../../head/before_init_macro.h"
 #include "../../head/init_macro.h"
 #include "../../head/release_macro.h"
+#include "../../head/result_message_out.h"
 
 #include "../../mutex/userMutex.h"
 #include "../../tools/pathTools.h"
@@ -48,45 +49,51 @@ bool MusicWindow::init( ) {
 bool MusicWindow::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( musicCentreWidget );
 	setCentralWidget( musicCentreWidget );
+
+	if( AppJsonKeyTools::getMusicWindow( [this] ( const MusicWindowJsonKey &json_key ) {
+		const auto &filePath = json_key.getFilePath( );
+		QFileInfo info( filePath );
+		if( info.exists( ) ) {
+			QJsonObject readFileJsonObject;
+			if( PathTools::readJsonObject( readFileJsonObject, filePath ) == false )
+				return Result_Var_Messag_Ptr_Fcuntion_Out( false, this, readJsonObject );
+			if( setJsonData( readFileJsonObject ) == false )
+				return Result_Var_Messag_Ptr_Fcuntion_Out( false, this, setJsonData );
+		}
+
+		return true;
+	} ) == false )
+		return false;
 	return true;
 }
 bool MusicWindow::getJsonData( QJsonObject &get_json_object ) const {
-	if( AppJsonKeyTools::getAppMusicManage( [this, &get_json_object] ( const AppMusicManageJsonKey &json_key ) {
-		QJsonObject jsonObject;
-		if( musicCentreWidget->getJsonData( jsonObject ) == false )
-			return false;
-		get_json_object.insert( json_key.getMusicCentreWidgetKey( ), jsonObject );
+	if( AppJsonKeyTools::getMusicWindow( [this, &get_json_object] ( const MusicWindowJsonKey &json_key ) {
+		QJsonObject musicCenreJsonObject;
+		if( musicCentreWidget->getJsonData( musicCenreJsonObject ) == false )
+			return Result_Var_Messag_Ptr_Fcuntion_Out( false, musicCentreWidget, getJsonData );
+		get_json_object.insert( json_key.getMusicCentreWidgetKey( ), musicCenreJsonObject );
 		return true;
 	} ) == false )
 		return false;
-
 	return true;
 }
 bool MusicWindow::setJsonData( const QJsonObject &set_json_object ) {
-	if( AppJsonKeyTools::getAppMusicManage( [this, &set_json_object] ( const AppMusicManageJsonKey &json_key ) {
-		// 获取量
-		size_t getIndex = 0;
-		// 原始量
-		size_t count = 1;
-		auto end = set_json_object.end( );
+	if( AppJsonKeyTools::getMusicWindow( [&set_json_object, this] ( const MusicWindowJsonKey &json_key ) {
+		const auto &musicCentreWidgetKey = json_key.getMusicCentreWidgetKey( );
 		auto iterator = set_json_object.begin( );
-		auto &musicCentreWidgetKey = json_key.getMusicCentreWidgetKey( );
+		auto end = set_json_object.end( );
 		for( ; iterator != end; ++iterator ) {
 			auto key = iterator.key( );
 			if( key == musicCentreWidgetKey ) {
-				getIndex += 1;
-				auto jsonObejct = iterator.value( ).toObject( );
-				if( musicCentreWidget->setJsonData( jsonObejct ) == false )
-					return false;
+				auto jsonObject = iterator.value( ).toObject( );
+				if( musicCentreWidget->setJsonData( jsonObject ) == false )
+					return Result_Var_Messag_Ptr_Fcuntion_Out( false, musicCentreWidget, setJsonData );
 			}
 		}
 
-		if( getIndex != count )
-			return false;
 		return true;
 	} ) == false )
 		return false;
-
 	return true;
 }
 const char * MusicWindow::getTypeName( ) const {
@@ -116,5 +123,14 @@ bool MusicWindow::hidePanelBefore( ) {
 	return true;
 }
 bool MusicWindow::releasePanelBefore( ) {
+	if( AppJsonKeyTools::getMusicWindow( [this] ( const MusicWindowJsonKey &json_key ) {
+		QJsonObject jsonObject;
+		if( getJsonData( jsonObject ) == false )
+			return false;
+		if( PathTools::writeJsonObject( jsonObject, json_key.getFilePath( ) ) == false )
+			return false;
+		return true;
+	} ) == false )
+		return false;
 	return true;
 }

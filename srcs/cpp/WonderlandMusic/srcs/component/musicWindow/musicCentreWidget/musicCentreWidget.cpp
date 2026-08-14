@@ -12,8 +12,9 @@
 
 #include "../musicWindow.h"
 
+#include "../../../head/result_message_out.h"
+
 #include "../tools/MusicFavoriteWidgetTools.h"
-#include "../tools/musicCenereWidgetTools.h"
 #include "../tools/musicListWidgetTools.h"
 
 #include "../transparencyScrollBar/transparencyScrollBar.h"
@@ -113,7 +114,10 @@ bool MusicCentreWidget::initAfter( ) {
 	connect( scrollBar, &QScrollBar::rangeChanged, horizontalScrollBar, &QScrollBar::setRange );
 
 	calculateSize( );
-
+	FavoriteItem *defitem;
+	if( musicfavoriteWidget->getIndexFavoriteItem( defitem, 0 ) == false || defitem == nullptr )
+		return Result_Var_Messag_Ptr_Fcuntion_Out( false, musicfavoriteWidget, getIndexFavoriteItem );
+	musicListWidget->setCurrentFavoriteItem( defitem );
 	musicfavoriteWidgetScrollArea->show( );
 	musicTitleWidgetScrollArea->show( );
 	musicToolWidget->show( );

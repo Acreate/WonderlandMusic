@@ -31,7 +31,7 @@ static QDateTime *endDateTime = nullptr;
 #else
 	#define en_filter() return
 #endif
-void myCategoryFilter( QLoggingCategory *category ) {
+static void myCategoryFilter( QLoggingCategory *category ) {
 	QString name = category->categoryName( );
 	if( name == "qt.multimedia.ffmpeg" || name == "qt.multimedia.ffmpeg.metadata" || name == "qt.multimedia.audiodevice.probes" || name == "qt.multimedia.ffmpeg.mediadataholder" ) {
 		en_filter( );
@@ -55,7 +55,7 @@ void myCategoryFilter( QLoggingCategory *category ) {
 	}
 }
 
-void initTimeInfo( ) {
+static void initTimeInfo( ) {
 	messageErrorOut = new_ptr( messageErrorOut );
 	permit = new_ptr( permit );
 	screening = new_ptr( screening );
@@ -63,7 +63,7 @@ void initTimeInfo( ) {
 	endDateTime = new_ptr( endDateTime );
 }
 
-void satrtProcess( ) {
+static void satrtProcess( ) {
 	if( messageErrorOut ) {
 		*startDateTime = QDateTime::currentDateTime( );
 		*messageErrorOut << QObject::tr( "\t: <<<< == 程序日志 == >>>>" );
@@ -72,7 +72,7 @@ void satrtProcess( ) {
 	}
 }
 
-int endProcess( int exit_code ) {
+static int endProcess( int exit_code ) {
 	if( messageErrorOut ) {
 		permit->setJion( "\n" );
 		screening->setJion( "\n" );

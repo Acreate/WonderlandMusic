@@ -3,8 +3,11 @@
 #include "../../interface/iJsonKey.h"
 
 class MusicWindowJsonKey : public IJsonKey {
+	QString musicCentreWidgetKey;
+
 public:
 	bool init( ) override;
+	virtual const QString & getMusicCentreWidgetKey( ) const;
 };
 
 namespace AppJsonKeyTools {

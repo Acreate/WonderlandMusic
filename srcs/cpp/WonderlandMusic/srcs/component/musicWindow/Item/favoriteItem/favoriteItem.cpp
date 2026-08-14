@@ -75,13 +75,13 @@ bool FavoriteItem::getJsonData( QJsonObject &get_json_object ) const {
 			}
 			arrayJson.insert( QString::number( index ), itemJsonData );
 		}
-		if( result ) {
-			get_json_object.insert( "FavoriteItem", favoriteItemName );
-			get_json_object.insert( "count", QString::number( count ) );
-			get_json_object.insert( favoriteItemName, arrayJson );
-		}
+		get_json_object.insert( favoriteItemName, arrayJson );
 	}
 	userMutex->unlock( );
+	if( result ) {
+		get_json_object.insert( "FavoriteItem", favoriteItemName );
+		get_json_object.insert( "count", QString::number( count ) );
+	}
 	return result;
 }
 bool FavoriteItem::setJsonData( const QJsonObject &set_json_object ) {
@@ -101,17 +101,17 @@ bool FavoriteItem::setJsonData( const QJsonObject &set_json_object ) {
 	if( end == find )
 		return false;
 	auto name = find->toString( );
-
+	this->favoriteItemName = name;
+	if( count == 0 ) {
+		clear( );
+		return true;
+	}
 	find = set_json_object.find( name );
 	if( end == find )
 		return false;
 	auto jsonObject = find->toObject( );
 	if( jsonObject.size( ) != count )
 		return false;
-	if( count == 0 ) {
-		clear( );
-		return true;
-	}
 	std::vector< MusicItem * > jsonDataConverMusicItems( count, nullptr );
 	auto data = jsonDataConverMusicItems.data( );
 	auto iterator = jsonObject.begin( );

@@ -167,7 +167,7 @@ bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 		index = jsonKey.toULongLong( &ok );
 		if( ok == false )
 			break; // 转换失败
-		if( ok = index >= count, ok == false )
+		if( ok = ( index >= count ), ok )
 			break; // 下标溢出
 		auto jsonValue = iterator.value( );
 		auto jsonValueRefs = jsonValue.toObject( );

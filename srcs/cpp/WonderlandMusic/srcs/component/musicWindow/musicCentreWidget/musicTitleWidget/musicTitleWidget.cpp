@@ -244,14 +244,23 @@ bool MusicTitleWidget::initAfter( ) {
 	suggestHeight = fontMetrics->height( );
 	pen->setColor( fillSeparatorColor );
 	setMouseTracking( true );
-	setMinimumWidth( getCalculateMinWidth( ) );
+	setFixedWidth( getCalculateMinWidth( ) );
 	return true;
 }
 bool MusicTitleWidget::getJsonData( QJsonObject &get_json_object ) const {
-	return ItemWidthInfo::getJsonData( get_json_object );
+	bool result = ItemWidthInfo::getJsonData( get_json_object );
+	return result;
 }
 bool MusicTitleWidget::setJsonData( const QJsonObject &set_json_object ) {
-	return ItemWidthInfo::setJsonData( set_json_object );
+	bool result = ItemWidthInfo::setJsonData( set_json_object );
+	if( result ) {
+		int calculateMinWidth = getCalculateMinWidth( );
+
+		setFixedWidth( calculateMinWidth );
+		updateTitleWidthInfo( );
+		//repaint( );
+	}
+	return result;
 }
 MusicCentreWidget * MusicTitleWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;

@@ -65,8 +65,18 @@ bool ItemWidthInfo::setJsonData( const QJsonObject &set_json_object ) {
 	end = set_json_object.end( );
 
 	conver_string_find_var( set_json_object, musicCodeWidth, find, end, ok, toInt );
+	if( ok == false )
+		return false;
 	conver_string_find_var( set_json_object, musicNameWidth, find, end, ok, toInt );
+	if( ok == false )
+		return false;
 	conver_string_find_var( set_json_object, musicSingerNameWidth, find, end, ok, toInt );
+
+	if( ok == false )
+		return false;
 	conver_string_find_var( set_json_object, musicDurationTimeWidth, find, end, ok, toInt );
+
+	if( ok == false )
+		return false;
 	return true;
 }

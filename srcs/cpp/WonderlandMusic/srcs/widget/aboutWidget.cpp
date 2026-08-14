@@ -38,14 +38,20 @@ bool AboutWidget::init( ) {
 	if( AppJsonKeyTools::getAboutWidget( [&qImage] ( const AboutWidgetJsonKey &json_key ) {
 		auto logoIconPath = json_key.getQtLogoIconPath( );
 		QFileInfo fileInfo( logoIconPath );
-		if( fileInfo.exists( ) == false ) {
+		auto fileName = ":/qt-project.org/qmessagebox/images/qtlogo-64.png";
+		bool exists = fileInfo.exists( );
+		if( exists == false ) {
 			Message_Error_Out << tr( "Qt 标识图像不存在" ) + " : " + logoIconPath;
-			qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
-		} else if( qImage.load( logoIconPath ) == false ) {
+			exists = qImage.load( fileName );
+			if( exists == false )
+				return false;
+		}
+		if( qImage.load( logoIconPath ) == false ) {
 			Message_Error_Out << tr( "Qt 标识图像加载失败，重新使用 .rc 资源" ) + " : " + logoIconPath;
-			qImage.load( ":/qt-project.org/qmessagebox/images/qtlogo-64.png" );
-		} else
-			return false;
+			exists = qImage.load( fileName );
+			if( exists == false )
+				return false;
+		}
 		return true;
 	} ) == false )
 		return false;

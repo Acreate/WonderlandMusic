@@ -6,6 +6,7 @@ class AppMusicManageJsonKey : public IJsonKey {
 	QString jsonObejct;
 	QString selectFilePath;
 	QString selectDirPath;
+	QString musicCentreWidgetKey;
 
 public:
 	bool init( ) override;
@@ -15,6 +16,7 @@ public:
 	virtual const QString & getSelectFilePath( ) const;
 
 	virtual const QString & getSelectDirPath( ) const;
+	virtual const QString & getMusicCentreWidgetKey( ) const;
 };
 
 namespace AppJsonKeyTools {

@@ -4,12 +4,14 @@
 
 #include "../../component/optionWindow/interface/optionPanel.h"
 
+#include "../../interface/iAppJsonData.h"
+
 class IMusicListMenu;
 class IMusicFavoriteMenu;
 class MusicCentreWidget;
 class UserMutex;
 
-class MusicWindow : public QMainWindow, public OptionPanel {
+class MusicWindow : public QMainWindow, public OptionPanel, public IAppJsonData {
 	Q_OBJECT;
 	friend class MusicItem;
 
@@ -28,14 +30,16 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
-	bool getJsonData( QJsonObject &get_json_object ) const override;
-	bool setJsonData( const QJsonObject &set_json_object ) override;
 	QWidget * toWidget( ) override;
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 	virtual bool setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu );
 	virtual bool setMusicListMenu( IMusicListMenu *music_list_menu );
-	bool readJsonData( ) override;
-	bool writeJsonData( ) override;
+	bool showPanelBefore( ) override;
+	bool hidePanelBefore( ) override;
+	bool releasePanelBefore( ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
+	const char * getTypeName( ) const override;
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

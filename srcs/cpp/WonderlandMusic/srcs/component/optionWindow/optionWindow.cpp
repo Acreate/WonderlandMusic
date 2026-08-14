@@ -5,6 +5,7 @@
 #include "../../head/before_init_macro.h"
 #include "../../head/init_macro.h"
 #include "../../head/release_macro.h"
+#include "../../head/result_message_out.h"
 
 #include "../../mutex/userMutex.h"
 #include "interface/optionPanel.h"
@@ -19,6 +20,7 @@ void OptionWindow::removeOptionPanel( OptionPanel *option_panel ) {
 	size_t index;
 	if( getOptionPanelIndex( index, option_panel ) == false )
 		return;
+	option_panel->releasePanelBefore( );
 	OptionButton *optionButton = option_panel->optionButton;
 	optionListDockWidget->optionListWidget->removeOptionButton( optionButton );
 	mutex->lock( );
@@ -29,43 +31,61 @@ void OptionWindow::removeOptionPanel( OptionPanel *option_panel ) {
 	optionPanelVector.erase( optionPanelVector.begin( ) + index );
 	mutex->unlock( );
 	hideOptionPanel( option_panel );
-
 	updateWindow( );
 	delete optionButton;
 	//	goto : OptionWindow::deleteOptionPanel
 	//	delete option_item;
 }
 void OptionWindow::removeAllOptionPanel( ) {
-	size_t count = optionPanelVector.size( );
-	if( count == 0 )
-		return;
-	optionListDockWidget->optionListWidget->removeAllOptionButton( );
-	hideOptionPanel( currentOptionPanelWidget );
+	decltype(optionPanelVector) buff;
 	mutex->lock( );
-	size_t index = 0;
-	auto data = optionPanelVector.data( );
-	for( ; index < count; index += 1 ) {
-		auto optionPanel = data[ index ];
-		optionPanel->optionWindow = nullptr;
-		optionPanel->optionButton->optionWindow = nullptr;
-		optionPanel->optionButton->optionPanel = nullptr;
-		delete optionPanel->optionButton;
-		optionPanel->optionButton = nullptr;
-		//	goto : OptionWindow::deleteAllOptionPanel
-		//	delete optionPanel;
+	size_t count = optionPanelVector.size( );
+	if( count ) {
+		buff.resize( count );
+		auto target = buff.data( );
+		optionListDockWidget->optionListWidget->removeAllOptionButton( );
+		hideOptionPanel( currentOptionPanelWidget );
+		size_t index = 0;
+		auto data = optionPanelVector.data( );
+		for( ; index < count; index += 1 )
+			target[ index ] = data[ index ];
+		optionPanelVector.clear( );
+		takeCentralWidget( );
+		currentOptionPanelWidget = nullptr;
 	}
-	optionPanelVector.clear( );
 	mutex->unlock( );
+	if( count ) {
+		size_t index = 0;
+		auto target = buff.data( );
+		for( ; index < count; index += 1 ) {
+			auto optionPanel = target[ index ];
+			optionPanel->hidePanelBefore( );
+			optionPanel->optionWindow = nullptr;
+			optionPanel->optionButton->optionWindow = nullptr;
+			optionPanel->optionButton->optionPanel = nullptr;
+			delete optionPanel->optionButton;
+			optionPanel->optionButton = nullptr;
+			//	goto : OptionWindow::deleteAllOptionPanel
+			//	delete optionPanel;
+		}
+	}
 	updateWindow( );
 }
 void OptionWindow::deleteOptionPanel( OptionPanel *option_panel ) {
 	size_t index;
 	if( getOptionPanelIndex( index, option_panel ) == false )
 		return;
+	size_t count = optionPanelVector.size( );
+	if( count != 0 ) {
+		if( count <= index )
+			index = count - 1;
+		showOptionPanel( optionPanelVector.data( )[ index ] );
+	}
+	option_panel->hidePanelBefore( );
+	option_panel->releasePanelBefore( );
+	mutex->lock( );
 	OptionButton *optionButton = option_panel->optionButton;
 	optionListDockWidget->optionListWidget->removeOptionButton( optionButton );
-
-	mutex->lock( );
 	option_panel->optionWindow = nullptr;
 	optionButton->optionWindow = nullptr;
 	optionButton->optionPanel = nullptr;
@@ -74,46 +94,41 @@ void OptionWindow::deleteOptionPanel( OptionPanel *option_panel ) {
 	mutex->unlock( );
 
 	updateWindow( );
-	if( hideOptionPanel( option_panel ) ) {
-		size_t count = optionPanelVector.size( );
-		if( count != 0 ) {
-			if( count <= index )
-				index = count - 1;
-			showOptionPanel( optionPanelVector.data( )[ index ] );
-		}
-	}
 	delete optionButton;
 	delete option_panel;
 }
 void OptionWindow::deleteAllOptionPanel( ) {
-	size_t count = optionPanelVector.size( );
-	if( count == 0 )
-		return;
-	//hideOptionPanel( currentOptionPanelWidget );
-	decltype(optionPanelVector) deleteVector( count );
+	decltype(optionPanelVector) buff;
 	mutex->lock( );
-	takeCentralWidget( );
-	size_t index;
-	auto data = optionPanelVector.data( );
-	auto deletePtr = deleteVector.data( );
-	for( index = 0; index < count; index += 1 )
-		deletePtr[ index ] = data[ index ];
-	optionPanelVector.clear( );
-	mutex->unlock( );
-	updateWindow( );
-	for( index = 0; index < count; index += 1 )
-		data[ index ]->writeJsonData( );
-	for( index = 0; index < count; index += 1 ) {
-		auto optionPanel = deletePtr[ index ];
-		if( optionPanel == nullptr )
-			continue;
-		optionPanel->optionWindow = nullptr;
-		optionPanel->optionButton->optionWindow = nullptr;
-		optionPanel->optionButton->optionPanel = nullptr;
-		delete optionPanel->optionButton;
-		delete optionPanel;
+	size_t count = optionPanelVector.size( );
+	if( count ) {
+		buff.resize( count );
+		auto target = buff.data( );
+		optionListDockWidget->optionListWidget->removeAllOptionButton( );
+		takeCentralWidget( );
+		currentOptionPanelWidget = nullptr;
+		size_t index = 0;
+		auto data = optionPanelVector.data( );
+		for( ; index < count; index += 1 )
+			target[ index ] = data[ index ];
+		optionPanelVector.clear( );
 	}
-	optionListDockWidget->optionListWidget->removeAllOptionButton( );
+	mutex->unlock( );
+	if( count ) {
+		size_t index = 0;
+		auto target = buff.data( );
+		for( ; index < count; index += 1 ) {
+			auto optionPanel = target[ index ];
+			optionPanel->hidePanelBefore( );
+			optionPanel->optionWindow = nullptr;
+			optionPanel->optionButton->optionWindow = nullptr;
+			optionPanel->optionButton->optionPanel = nullptr;
+			delete optionPanel->optionButton;
+			optionPanel->optionButton = nullptr;
+			delete optionPanel;
+		}
+	}
+	updateWindow( );
 }
 OptionWindow::OptionWindow( QWidget *paretn ) : QMainWindow( paretn ) {
 }
@@ -227,11 +242,14 @@ bool OptionWindow::hideOptionPanel( ) {
 	mutex->lock( );
 	takeCentralWidget( );
 	mutex->unlock( );
+	currentOptionPanelWidget->hidePanelBefore( );
+	currentOptionPanelWidget = nullptr;
 	return true;
 }
 bool OptionWindow::showOptionPanel( ) {
 	if( currentOptionPanelWidget == nullptr )
 		return false;
+	currentOptionPanelWidget->showPanelBefore( );
 	mutex->lock( );
 	takeCentralWidget( );
 	auto widget = currentOptionPanelWidget->toWidget( );
@@ -249,7 +267,7 @@ bool OptionWindow::hideOptionPanel( OptionPanel *option_panel ) {
 		return false;
 	if( currentOptionPanelWidget != option_panel )
 		return false;
-	option_panel->writeJsonData( );
+	option_panel->hidePanelBefore( );
 	mutex->lock( );
 	takeCentralWidget( );
 	currentOptionPanelWidget = nullptr;
@@ -262,13 +280,13 @@ bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 		return showOptionPanel( );
 	size_t index;
 	if( getOptionPanelIndex( index, option_panel ) == false || option_panel->optionWindow != this )
-		return false;
+		return Result_Var_Messag_Call_Fcuntion_Out( false, option_panel, OptionWindow, getOptionPanelIndex );
 	if( currentOptionPanelWidget )
-		if( currentOptionPanelWidget->writeJsonData( ) == false )
-			return false;
+		if( currentOptionPanelWidget->hidePanelBefore( ) == false )
+			return Result_Var_Messag_Ptr_Fcuntion_Out( false, option_panel, hidePanelBefore );
 	if( option_panel )
-		if( option_panel->readJsonData( ) == false )
-			return false;
+		if( option_panel->showPanelBefore( ) == false )
+			return Result_Var_Messag_Ptr_Fcuntion_Out( false, option_panel, showPanelBefore );
 	mutex->lock( );
 	currentOptionPanelWidget = option_panel;
 	takeCentralWidget( );

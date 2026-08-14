@@ -51,10 +51,46 @@ bool MusicWindow::initAfter( ) {
 	return true;
 }
 bool MusicWindow::getJsonData( QJsonObject &get_json_object ) const {
+	if( AppJsonKeyTools::getAppMusicManage( [this, &get_json_object] ( const AppMusicManageJsonKey &json_key ) {
+		QJsonObject jsonObject;
+		if( musicCentreWidget->getJsonData( jsonObject ) == false )
+			return false;
+		get_json_object.insert( json_key.getMusicCentreWidgetKey( ), jsonObject );
+		return true;
+	} ) == false )
+		return false;
+
 	return true;
 }
 bool MusicWindow::setJsonData( const QJsonObject &set_json_object ) {
+	if( AppJsonKeyTools::getAppMusicManage( [this, &set_json_object] ( const AppMusicManageJsonKey &json_key ) {
+		// 获取量
+		size_t getIndex = 0;
+		// 原始量
+		size_t count = 1;
+		auto end = set_json_object.end( );
+		auto iterator = set_json_object.begin( );
+		auto &musicCentreWidgetKey = json_key.getMusicCentreWidgetKey( );
+		for( ; iterator != end; ++iterator ) {
+			auto key = iterator.key( );
+			if( key == musicCentreWidgetKey ) {
+				getIndex += 1;
+				auto jsonObejct = iterator.value( ).toObject( );
+				if( musicCentreWidget->setJsonData( jsonObejct ) == false )
+					return false;
+			}
+		}
+
+		if( getIndex != count )
+			return false;
+		return true;
+	} ) == false )
+		return false;
+
 	return true;
+}
+const char * MusicWindow::getTypeName( ) const {
+	return metaObject( )->className( );
 }
 QWidget * MusicWindow::toWidget( ) {
 	return this;
@@ -73,20 +109,12 @@ bool MusicWindow::setMusicListMenu( IMusicListMenu *music_list_menu ) {
 		return false;
 	return musicCentreWidget->setMusicListMenu( music_list_menu );
 }
-bool MusicWindow::readJsonData( ) {
+bool MusicWindow::showPanelBefore( ) {
 	return true;
 }
-bool MusicWindow::writeJsonData( ) {
-	if( AppJsonKeyTools::getAppMusicManage( [this] ( const AppMusicManageJsonKey &json_key ) {
-		QJsonObject jsonObject;
-		if( musicCentreWidget->getJsonData( jsonObject ) == false )
-			return false;
-		QJsonObject musicWindowJson;
-		musicWindowJson.insert( "musicCentreWidget", jsonObject );
-		if( PathTools::writeJsonObject( musicWindowJson, json_key.getFilePath( ) ) == false )
-			return false;
-		return true;
-	} ) == false )
-		return false;
+bool MusicWindow::hidePanelBefore( ) {
+	return true;
+}
+bool MusicWindow::releasePanelBefore( ) {
 	return true;
 }

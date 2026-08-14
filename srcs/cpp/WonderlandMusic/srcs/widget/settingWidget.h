@@ -17,10 +17,10 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
-	bool getJsonData( QJsonObject &get_json_object ) const override;
-	bool setJsonData( const QJsonObject &set_json_object ) override;
 	QWidget * toWidget( ) override;
-	bool readJsonData( ) override;
-	bool writeJsonData( ) override;
+	bool showPanelBefore( ) override;
+	bool hidePanelBefore( ) override;
+	bool releasePanelBefore( ) override;
+	const char * getTypeName( ) const override;
 };
 #endif // SETTINGWIDGET_H_H_HEAD__FILE__

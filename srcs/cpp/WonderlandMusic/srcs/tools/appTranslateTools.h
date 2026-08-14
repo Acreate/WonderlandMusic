@@ -1,7 +1,7 @@
 ﻿#ifndef APPTRANSLATETOOLS_H_H_HEAD__FILE__
 #define APPTRANSLATETOOLS_H_H_HEAD__FILE__
 
-#include <head/head_translate_class.h>
+class AppTranslate;
 
 namespace AppTranslateTools {
 	AppTranslate * getAppTranslate( );

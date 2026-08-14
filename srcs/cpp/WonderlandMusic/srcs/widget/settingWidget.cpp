@@ -11,11 +11,17 @@ SettingWidget::~SettingWidget( ) {
 QWidget * SettingWidget::toWidget( ) {
 	return this;
 }
-bool SettingWidget::readJsonData( ) {
+bool SettingWidget::showPanelBefore( ) {
 	return true;
 }
-bool SettingWidget::writeJsonData( ) {
+bool SettingWidget::hidePanelBefore( ) {
 	return true;
+}
+bool SettingWidget::releasePanelBefore( ) {
+	return true;
+}
+const char * SettingWidget::getTypeName( ) const {
+	return metaObject( )->className( );
 }
 
 bool SettingWidget::deleteResource( ) {
@@ -36,13 +42,5 @@ bool SettingWidget::init( ) {
 }
 
 bool SettingWidget::initAfter( ) {
-	return true;
-}
-
-bool SettingWidget::getJsonData( QJsonObject &get_json_object ) const {
-	return true;
-}
-
-bool SettingWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }

@@ -3,12 +3,11 @@
 #include <QWidget>
 
 #include "../../../interface/iAppCore.h"
-#include "../../../interface/iAppDiskJsonData.h"
 class OptionButton;
 class CoreInfo;
 class OptionWindow;
 
-class OptionPanel : public IAppCore, public IAppDiskJsonData {
+class OptionPanel : public IAppCore {
 private:
 	friend class OptionWindow;
 
@@ -33,5 +32,9 @@ public:
 	virtual void setName( const QString &name );
 	virtual void setIcon( const QImage &icon );
 	virtual QWidget * toWidget( ) = 0;
+	virtual bool showPanelBefore( ) = 0;
+	virtual bool hidePanelBefore( ) = 0;
+	virtual bool releasePanelBefore( ) = 0;
 };
+
 #endif // OPTIONPANEL_H_H_HEAD__FILE__

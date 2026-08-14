@@ -1,8 +1,13 @@
 ﻿#ifndef APPDATAJSONKEY_H_H_HEAD__FILE__
 #define APPDATAJSONKEY_H_H_HEAD__FILE__
 #include "../interface/iAppCore.h"
-#include <head/head_json_key_class.h>
 
+class AppMusicManageJsonKey;
+class AppUserInterfaceManageJsonKey;
+class AppDataManageJsonKey;
+class SystemTrayIconJsonKey;
+class MainWindowJsonKey;
+class AboutWidgetJsonKey;
 class MusicFavoriteMenuJsonKey;
 class MusicListMenuJsonKey;
 class MusicWindowJsonKey;

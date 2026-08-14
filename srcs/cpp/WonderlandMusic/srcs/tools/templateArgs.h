@@ -1,6 +1,11 @@
 ﻿#ifndef TEMPLATEARGS_H_H_HEAD__FILE__
 #define TEMPLATEARGS_H_H_HEAD__FILE__
 #include <utility>
+#include <typeinfo>
+
+class IAppCore;
+class OptionPanel;
+class QObject;
 
 namespace TemplateArgs {
 	/// @brief 创建指针对象
@@ -15,7 +20,17 @@ namespace TemplateArgs {
 		return ptr;
 	}
 
-
+	const char * getCaseTypeName( const void *ty );
+	template< typename type >
+	const char * getTypeName( const type *ty ) {
+		if( ty ) {
+			auto typeName = getCaseTypeName( ty );
+			if( typeName )
+				return typeName;
+			return typeid( type ).name( );
+		}
+		return "none_type";
+	}
 }
 
 #endif // TEMPLATEARGS_H_H_HEAD__FILE__

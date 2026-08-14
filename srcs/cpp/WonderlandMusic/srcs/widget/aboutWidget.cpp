@@ -107,19 +107,17 @@ bool AboutWidget::initBefore( ) {
 bool AboutWidget::initAfter( ) {
 	return true;
 }
-
-bool AboutWidget::getJsonData( QJsonObject &get_json_object ) const {
+bool AboutWidget::showPanelBefore( ) {
 	return true;
 }
-
-bool AboutWidget::setJsonData( const QJsonObject &set_json_object ) {
+bool AboutWidget::hidePanelBefore( ) {
 	return true;
 }
-bool AboutWidget::readJsonData( ) {
+bool AboutWidget::releasePanelBefore( ) {
 	return true;
 }
-bool AboutWidget::writeJsonData( ) {
-	return true;
+const char * AboutWidget::getTypeName( ) const {
+	return metaObject( )->className( );
 }
 
 bool AboutWidget::getSoftwareProtocolInfo( QString &result_info ) {

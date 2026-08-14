@@ -5,6 +5,7 @@ bool AppMusicManageJsonKey::init( ) {
 	jsonObejct = "app.music.manage";
 	selectFilePath = "select.file.path";
 	selectDirPath = "select.dir.path";
+	musicCentreWidgetKey = "music.centre.widget.json";
 	return true;
 }
 
@@ -18,4 +19,7 @@ const QString & AppMusicManageJsonKey::getSelectFilePath( ) const {
 
 const QString & AppMusicManageJsonKey::getSelectDirPath( ) const {
 	return selectDirPath;
+}
+const QString & AppMusicManageJsonKey::getMusicCentreWidgetKey( ) const {
+	return musicCentreWidgetKey;
 }

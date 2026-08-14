@@ -1,4 +1,6 @@
 ﻿#include "appMenuManage.h"
+
+#include <QJsonObject>
 #include <qscreen.h>
 
 #include "../head/after_init_macro.h"
@@ -88,4 +90,18 @@ IMusicFavoriteMenu * AppMenuManage::getMusicFavoriteMenu( ) const {
 }
 IMusicListMenu * AppMenuManage::getMusicListMenu( ) const {
 	return musicListMenu;
+}
+bool AppMenuManage::getJsonData( QJsonObject &get_json_object ) const {
+	QJsonObject musicFavoriteMenuJsonObject;
+	if( musicFavoriteMenu->getJsonData( musicFavoriteMenuJsonObject ) == false )
+		return false;
+	
+	QJsonObject musicListMenuJsonObject;
+	if( musicListMenu->getJsonData( musicListMenuJsonObject ) == false )
+		return false;
+	
+	return true;
+}
+bool AppMenuManage::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
 }

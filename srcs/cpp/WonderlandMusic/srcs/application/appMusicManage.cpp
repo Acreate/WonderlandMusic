@@ -7,39 +7,12 @@
 #include "../head/init_macro.h"
 
 #include "../mutex/userMutex.h"
-#include "../tools/appJsonKeyTools.h"
 #include "../tools/pathTools.h"
 #include "../window/mainWindow.h"
 #include "jsonKey/appMusicManageJsonKey.h"
 
 bool AppMusicManage::deleteResource( ) {
 	return true;
-}
-
-bool AppMusicManage::readJsonData( ) {
-	bool resultBool = false;
-	AppJsonKeyTools::getAppMusicManage( [this,&resultBool] ( const AppMusicManageJsonKey &json_key ) {
-		QJsonObject readJson;
-		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) == false )
-			return false;
-		resultBool = setJsonData( readJson );
-		return true;
-	} );
-
-	return resultBool;
-}
-
-bool AppMusicManage::writeJsonData( ) {
-	bool resultBool = false;
-	AppJsonKeyTools::getAppMusicManage( [this,&resultBool] ( const AppMusicManageJsonKey &json_key ) {
-		QJsonObject getJson;
-		if( getJsonData( getJson ) == false )
-			return false;
-		resultBool = PathTools::writeJsonObject( getJson, json_key.getFilePath( ) );
-		return true;
-	} );
-
-	return resultBool;
 }
 
 bool AppMusicManage::init( ) {

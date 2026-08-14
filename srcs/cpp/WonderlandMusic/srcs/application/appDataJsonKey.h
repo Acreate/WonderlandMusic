@@ -2,6 +2,7 @@
 #define APPDATAJSONKEY_H_H_HEAD__FILE__
 #include "../interface/iAppCore.h"
 
+class AppMenuManageJsonKey;
 class AppMusicManageJsonKey;
 class AppUserInterfaceManageJsonKey;
 class AppDataManageJsonKey;
@@ -23,7 +24,7 @@ protected:
 	MusicWindowJsonKey *musicWindow = nullptr;
 	MusicListMenuJsonKey *musicListMenu = nullptr;
 	MusicFavoriteMenuJsonKey *musicFavoriteMenu = nullptr;
-
+	AppMenuManageJsonKey* appMenuManage = nullptr;
 protected:
 	bool deleteResource( ) override;
 
@@ -42,5 +43,6 @@ public:
 	virtual AppMusicManageJsonKey * getAppMusicManage( ) const;
 	virtual MusicListMenuJsonKey * getMusicListMenu( ) const;
 	virtual MusicFavoriteMenuJsonKey * getMusicFavoriteMenu( ) const;
+	virtual AppMenuManageJsonKey * getAppMenuManage( ) const;
 };
 #endif // APPDATAJSONKEY_H_H_HEAD__FILE__

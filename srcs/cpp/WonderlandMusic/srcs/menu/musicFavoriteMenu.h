@@ -32,6 +32,8 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
 	bool execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) override;

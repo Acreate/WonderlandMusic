@@ -3,15 +3,14 @@
 #include "../../interface/iJsonKey.h"
 
 class AppDataManageJsonKey : public IJsonKey {
-	QString appMusicManage;
-	QString iniDirHomePath;
-
+	QString appMusicManageJsonObject;
+	QString uiJsonObject;
+	QString appSettingPath;
 public:
 	bool init( ) override;
-
-	virtual const QString & getAppMusicManage( ) const;
-
-	virtual const QString & getIniDirHomePath( ) const;
+	virtual const QString & getAppMusicManageJsonObject( ) const;
+	virtual const QString & getUiJsonObject( ) const;
+	virtual const QString & getAppSettingPath( ) const;
 };
 
 namespace AppJsonKeyTools {

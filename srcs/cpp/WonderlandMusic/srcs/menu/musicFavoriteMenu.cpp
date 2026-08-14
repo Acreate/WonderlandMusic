@@ -1,6 +1,9 @@
 ﻿#include "musicFavoriteMenu.h"
 
+#include <QJsonObject>
+
 #include "../application/appMenuManage.h"
+#include "../application/jsonKey/musicFavoriteMenuJsonKey.h"
 #include "../application/translate/musicFavoriteMenuTranslate.h"
 
 #include "../component/musicWindow/musicWindow.h"
@@ -10,6 +13,7 @@
 
 #include "../head/release_macro.h"
 
+#include "../tools/appJsonKeyTools.h"
 #include "../tools/instanceTools.h"
 #include "../tools/pathInfoTools.h"
 #include "../tools/widgetTools.h"
@@ -50,6 +54,31 @@ bool MusicFavoriteMenu::initAfter( ) {
 	connect( deleteFavoriteItemAction, signal, this, &MusicFavoriteMenu::slot_deleteFavoriteItem );
 	connect( addMusicFileAction, signal, this, &MusicFavoriteMenu::slot_addMusicFile );
 	connect( addMusicDirAction, signal, this, &MusicFavoriteMenu::slot_addMusicDir );
+	return true;
+}
+bool MusicFavoriteMenu::getJsonData( QJsonObject &get_json_object ) const {
+	if( AppJsonKeyTools::getMusicFavoriteMenu( [&get_json_object, this] ( const MusicFavoriteMenuJsonKey &json_key ) {
+		get_json_object.insert( json_key.getLoadMultDir( ), openSelecteMultiDirWidgetPath );
+		get_json_object.insert( json_key.getLoadMultFile( ), openSelecteMultiFileWidgetPath );
+		return true;
+	} ) == false )
+		return false;
+	return true;
+}
+bool MusicFavoriteMenu::setJsonData( const QJsonObject &set_json_object ) {
+	if( AppJsonKeyTools::getMusicFavoriteMenu( [&set_json_object, this] ( const MusicFavoriteMenuJsonKey &json_key ) {
+		auto end = set_json_object.end( );
+		auto iterator = set_json_object.find( json_key.getLoadMultDir( ) );
+		if( iterator == end )
+			return false;
+		openSelecteMultiDirWidgetPath = iterator.value( ).toString( );
+		iterator = set_json_object.find( json_key.getLoadMultFile( ) );
+		if( iterator == end )
+			return false;
+		openSelecteMultiFileWidgetPath = iterator.value( ).toString( );
+		return true;
+	} ) == false )
+		return false;
 	return true;
 }
 bool MusicFavoriteMenu::execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) {

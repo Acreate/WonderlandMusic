@@ -21,9 +21,14 @@ bool MusicListMenu::init( ) {
 bool MusicListMenu::initAfter( ) {
 	return true;
 }
+bool MusicListMenu::getJsonData( QJsonObject &get_json_object ) const {
+	return true;
+}
+bool MusicListMenu::setJsonData( const QJsonObject &set_json_object ) {
+	return true;
+}
 bool MusicListMenu::execMenu( MusicListWidget *music_list_widget, MusicItem *music_item, const QPoint &mouse_global_point ) {
-	
-	return InstanceTools::getAppMenuManage(  )->popMusicListMenu( mouse_global_point );
+	return InstanceTools::getAppMenuManage( )->popMusicListMenu( mouse_global_point );
 }
 QMenu * MusicListMenu::toMenu( ) {
 	return this;

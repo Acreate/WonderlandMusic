@@ -3,10 +3,12 @@
 
 #include <interface/iAppCore.h>
 
+#include <interface/iAppJsonData.h>
+
 class QMenu;
 class MusicItem;
 
-class IMusicListMenu : public IAppCore {
+class IMusicListMenu : public IAppCore, public IAppJsonData {
 	friend class MusicListWidget;
 
 public:

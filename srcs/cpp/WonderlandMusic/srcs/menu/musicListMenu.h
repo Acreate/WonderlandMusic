@@ -4,8 +4,9 @@
 
 #include "../component/musicWindow/interface/menu/iMusicListMenu.h"
 
-class MusicListMenu : public QMenu,public IMusicListMenu{
+class MusicListMenu : public QMenu, public IMusicListMenu {
 	Q_OBJECT;
+
 public:
 	MusicListMenu( );
 	~MusicListMenu( ) override;
@@ -17,6 +18,8 @@ public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
 	bool execMenu( MusicListWidget *music_list_widget, MusicItem *music_item, const QPoint &mouse_global_point ) override;

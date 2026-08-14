@@ -3,13 +3,14 @@
 #include <QObject>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppJsonData.h"
 
 class IMusicListMenu;
 class IMusicFavoriteMenu;
 class SystemTrayIconMenu;
 class QPoint;
 
-class AppMenuManage : public QObject, public IAppCore {
+class AppMenuManage : public QObject, public IAppCore, public IAppJsonData {
 	Q_OBJECT;
 
 protected:
@@ -39,6 +40,8 @@ public:
 	virtual SystemTrayIconMenu * getSystemTrayIconMenu( ) const;
 	virtual IMusicFavoriteMenu * getMusicFavoriteMenu( ) const;
 	virtual IMusicListMenu * getMusicListMenu( ) const;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
 };
 
 #endif // APPMENUMANAGE_H_H_HEAD__FILE__

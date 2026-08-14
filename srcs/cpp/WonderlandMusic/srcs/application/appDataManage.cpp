@@ -5,6 +5,7 @@
 #include "appInstance.h"
 #include "appMusicManage.h"
 #include "appTranslate.h"
+#include "appUserInterfaceManage.h"
 #include "applicationManage.h"
 
 #include "../head/after_init_macro.h"
@@ -12,6 +13,7 @@
 #include "../head/init_macro.h"
 #include "../head/release_macro.h"
 
+#include "../tools/instanceTools.h"
 #include "../tools/pathTools.h"
 #include "jsonKey/appDataManageJsonKey.h"
 
@@ -105,9 +107,6 @@ bool AppDataManage::readJsonData( ) {
 	if( setJsonData( appJsonObject ) == false )
 		return false;
 
-	// 把 json 数据加载到 AppMusicManage
-	appMusicManage->readJsonData( );
-
 	return true;
 }
 
@@ -121,16 +120,30 @@ bool AppDataManage::writeJsonData( ) {
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	auto jsonFilePath = appDataManage->getFilePath( );
 	PathTools::writeJsonObject( appJsonObject, jsonFilePath );
-	// 写入音频 json 到磁盘
-	appMusicManage->writeJsonData( );
 
 	return true;
 }
 
 bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {
-	auto appDataManage = appDataJsonKey->getAppDataManage( );
+	// 从 appUserInterfaceManage 获取数据
+	QJsonObject uiJsonObject;
+	auto appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
+	if( appUserInterfaceManage == nullptr )
+		return false;
+	if( appUserInterfaceManage->getJsonData( uiJsonObject ) == false )
+		return false;
+	// 从 appMusicManage 获取数据
+	QJsonObject appMusicManageJsonObject;
+	if( appMusicManage->getJsonData( appMusicManageJsonObject ) == false )
+		return false;
+	// 获取路径数据
 	auto writePath = PathTools::getAutoShortenPathName( appSettingPath );
-	get_json_object.insert( appDataManage->getIniDirHomePath( ), writePath );
+
+	// 写入 get_json_object
+	auto appDataManage = appDataJsonKey->getAppDataManage( );
+	get_json_object.insert( appDataManage->getAppSettingPath( ), writePath );
+	get_json_object.insert( appDataManage->getAppMusicManageJsonObject( ), appMusicManageJsonObject );
+	get_json_object.insert( appDataManage->getUiJsonObject( ), uiJsonObject );
 	return true;
 }
 
@@ -138,13 +151,31 @@ bool AppDataManage::setJsonData( const QJsonObject &set_json_object ) {
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	auto end = set_json_object.end( );
 
-	auto find = set_json_object.find( appDataManage->getIniDirHomePath( ) );
+	QJsonObject::const_iterator find;
+	// 把 json 数据加载到 appMusicManage
+	find = set_json_object.find( appDataManage->getAppMusicManageJsonObject( ) );
 	if( end != find ) {
-		appSettingPath = find.value( ).toString( appSettingPath );
-		appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
-		emit signal_change_setting_path( appSettingPath );
+		auto jsonObject = find.value( ).toObject( );
+		if( appMusicManage->setJsonData( jsonObject ) == false )
+			return false;
 	}
+	// 把 json 数据加载到 appUserInterfaceManage
+	find = set_json_object.find( appDataManage->getUiJsonObject( ) );
+	if( end != find ) {
+		auto jsonObject = find.value( ).toObject( );
+		auto appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
+		if( appUserInterfaceManage == nullptr )
+			return false;
+		if( appUserInterfaceManage->setJsonData( jsonObject ) == false )
+			return false;
+	}
+	find = set_json_object.find( appDataManage->getAppSettingPath( ) );
+	if( end == find )
+		return false;
 
+	appSettingPath = find.value( ).toString( appSettingPath );
+	appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
+	emit signal_change_setting_path( appSettingPath );
 	return true;
 }
 

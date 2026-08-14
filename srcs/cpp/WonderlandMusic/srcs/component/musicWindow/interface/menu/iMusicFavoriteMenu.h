@@ -3,11 +3,13 @@
 
 #include <interface/iAppCore.h>
 
+#include <interface/iAppJsonData.h>
+
 class QMenu;
 class FavoriteItem;
 class MusicFavoriteWidget;
 
-class IMusicFavoriteMenu : public IAppCore {
+class IMusicFavoriteMenu : public IAppCore, public IAppJsonData {
 	friend class MusicFavoriteWidget;
 
 public:

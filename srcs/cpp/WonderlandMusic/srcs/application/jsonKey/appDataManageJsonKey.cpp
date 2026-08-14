@@ -2,15 +2,17 @@
 
 bool AppDataManageJsonKey::init( ) {
 	filePath = "/json/app.data.manage.json";
-	iniDirHomePath = "app.ini.dir.home.path";
-	appMusicManage = "app.music.manage";
+	appMusicManageJsonObject = "app.music.manage";
+	uiJsonObject = "app.music.ui";
+	appSettingPath = "app.setting.path";
 	return true;
 }
-
-const QString & AppDataManageJsonKey::getAppMusicManage( ) const {
-	return appMusicManage;
+const QString & AppDataManageJsonKey::getAppMusicManageJsonObject( ) const {
+	return appMusicManageJsonObject;
 }
-
-const QString & AppDataManageJsonKey::getIniDirHomePath( ) const {
-	return iniDirHomePath;
+const QString & AppDataManageJsonKey::getUiJsonObject( ) const {
+	return uiJsonObject;
+}
+const QString & AppDataManageJsonKey::getAppSettingPath( ) const {
+	return appSettingPath;
 }

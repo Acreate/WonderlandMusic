@@ -3,8 +3,13 @@
 #include "../../interface/iJsonKey.h"
 
 class MusicFavoriteMenuJsonKey : public IJsonKey {
+	QString loadMultDir;
+	QString loadMultFile;
+
 public:
 	bool init( ) override;
+	virtual const QString & getLoadMultDir( ) const;
+	virtual const QString & getLoadMultFile( ) const;
 };
 
 namespace AppJsonKeyTools {

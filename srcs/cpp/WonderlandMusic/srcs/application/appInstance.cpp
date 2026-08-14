@@ -102,7 +102,6 @@ bool AppInstance::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( appDataManage );
 	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 	appDataManage->readJsonData( );
-	appUserInterfaceManage->readJsonData( );
 	auto appMenuManage = appUserInterfaceManage->getAppMenuManage( );
 	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
 	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_quit_app, this, []( ) {
@@ -120,6 +119,6 @@ bool AppInstance::initAfter( ) {
 
 int AppInstance::exec( ) {
 	int exec = applicationManage->exec( );
-
+	appDataManage->writeJsonData( );
 	return exec;
 }

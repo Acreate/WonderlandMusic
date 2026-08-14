@@ -6,6 +6,7 @@
 #include "../application/appDataJsonKey.h"
 #include "../application/jsonKey/aboutWidgetJsonKey.h"
 #include "../application/jsonKey/appDataManageJsonKey.h"
+#include "../application/jsonKey/appMenuManageJsonKey.h"
 #include "../application/jsonKey/appMusicManageJsonKey.h"
 #include "../application/jsonKey/appUserInterfaceManageJsonKey.h"
 #include "../application/jsonKey/mainWindowJsonKey.h"
@@ -29,3 +30,4 @@ Defininition_Get_Json_Key( MainWindow );
 Defininition_Get_Json_Key( MusicWindow );
 Defininition_Get_Json_Key( MusicFavoriteMenu );
 Defininition_Get_Json_Key( MusicListMenu );
+Defininition_Get_Json_Key( AppMenuManage );

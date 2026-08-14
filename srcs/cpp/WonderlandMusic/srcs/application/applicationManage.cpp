@@ -1,6 +1,5 @@
 ﻿#include "applicationManage.h"
 
-#include "appDataManage.h"
 #include "appUserInterfaceManage.h"
 
 #include "../tools/instanceTools.h"
@@ -38,10 +37,8 @@ bool ApplicationManage::notify( QObject *object, QEvent *event ) {
 		auto type = event->type( );
 		switch( type ) {
 			case QEvent::Close :
-				appUserInterfaceManage->writeJsonData( );
 				break;
 			case QEvent::Quit :
-				appDataManage->writeJsonData( );
 				emit signal_app_quit( );
 				break;
 		}

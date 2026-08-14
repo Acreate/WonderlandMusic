@@ -11,7 +11,6 @@
 #include "../menu/systemTrayIconMenu.h"
 #include "../systemTrayIcon/systemTrayIcon.h"
 
-#include "../tools/appJsonKeyTools.h"
 #include "../tools/instanceTools.h"
 #include "../tools/pathTools.h"
 #include "../window/mainWindow.h"
@@ -32,37 +31,27 @@ AppMenuManage * AppUserInterfaceManage::getAppMenuManage( ) const {
 }
 
 bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
-	mainWindow->getJsonData( get_json_object );
-
-	return true;
-}
-
-bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
-	mainWindow->setJsonData( set_json_object );
-	return true;
-}
-
-bool AppUserInterfaceManage::readJsonData( ) {
-	AppJsonKeyTools::getAppUserInterfaceManage( [this] ( const AppUserInterfaceManageJsonKey &json_key ) {
-		QJsonObject readJson;
-		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) == false )
-			return false;
-		setJsonData( readJson );
-		return true;
-	} );
-	return true;
-}
-
-bool AppUserInterfaceManage::writeJsonData( ) {
-	AppJsonKeyTools::getAppUserInterfaceManage( [this] ( const AppUserInterfaceManageJsonKey &json_key ) {
+	AppJsonKeyTools::getAppUserInterfaceManage( [this, &get_json_object] ( const AppUserInterfaceManageJsonKey &json_key ) {
 		QJsonObject writeJsonObject;
 		if( getJsonData( writeJsonObject ) == false )
 			return false;
 		PathTools::writeJsonObject( writeJsonObject, json_key.getFilePath( ) );
 
+		mainWindow->getJsonData( get_json_object );
 		return true;
 	} );
 
+	return true;
+}
+
+bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
+	AppJsonKeyTools::getAppUserInterfaceManage( [this, &set_json_object] ( const AppUserInterfaceManageJsonKey &json_key ) {
+		QJsonObject readJson;
+		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) == false )
+			return false;
+		mainWindow->setJsonData( set_json_object );
+		return true;
+	} );
 	return true;
 }
 

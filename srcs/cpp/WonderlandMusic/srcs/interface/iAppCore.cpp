@@ -26,8 +26,11 @@ void IAppCore::removePtr( IAppCore *ptr ) {
 	userMutex->unlock( );
 }
 IAppCore * IAppCore::case_ptr( void *ptr ) {
-	IAppCore *result = nullptr;
-	auto codePtr = ( ( IAppCore * ) ptr )->code_ptr;
+	IAppCore *result = ( ( IAppCore * ) ptr );
+	auto codePtr = result->code_ptr;
+	if( codePtr != result->getCodePtr( ) )
+		return nullptr;
+	result = nullptr;
 	userMutex->lock( );
 	size_t count = ptrVector.size( );
 	if( count ) {
@@ -43,8 +46,11 @@ IAppCore * IAppCore::case_ptr( void *ptr ) {
 	return result;
 }
 const IAppCore * IAppCore::case_ptr( const void *ptr ) {
-	const IAppCore *result = nullptr;
-	auto codePtr = ( ( const IAppCore * ) ptr )->code_ptr;
+	IAppCore *result = ( ( IAppCore * ) ptr );
+	auto codePtr = result->code_ptr;
+	if( codePtr != result->getCodePtr( ) )
+		return nullptr;
+	result = nullptr;
 	userMutex->lock( );
 	size_t count = ptrVector.size( );
 	if( count ) {

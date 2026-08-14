@@ -9,6 +9,7 @@ namespace StringTools {
 	/// @param file_name 文件
 	/// @return 匹配后缀位
 	QString getFileSuffix( const QString &file_name );
+	QString ptrToNumber( void *ptr );
 }
 
 #endif // STRINGTOOLS_H_H_HEAD__FILE__

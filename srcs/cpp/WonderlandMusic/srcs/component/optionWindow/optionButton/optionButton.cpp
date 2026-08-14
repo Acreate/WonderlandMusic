@@ -4,6 +4,9 @@
 #include "../optionWindow.h"
 
 #include "../../../application/appRenderImage.h"
+
+#include "../../../head/result_message_out.h"
+
 #include "../../../tools/instanceTools.h"
 #include "../interface/optionPanel.h"
 
@@ -114,7 +117,8 @@ void OptionButton::mousePressEvent( QMouseEvent *event ) {
 
 void OptionButton::mouseReleaseEvent( QMouseEvent *event ) {
 	if( click && optionWindow )
-		optionWindow->showOptionButton( this );
+		if( optionWindow->showOptionButton( this ) == false )
+			Result_Var_Messag_Out_Ptr_Function( optionWindow, showOptionButton( this ) );
 	click = false;
 }
 

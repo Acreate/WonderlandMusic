@@ -6,6 +6,7 @@
 
 #include <interface/iAppJsonData.h>
 
+class ItemWidthInfo;
 class IMusicListMenu;
 class IMusicFavoriteMenu;
 class MusicItem;
@@ -42,7 +43,7 @@ protected:
 	void resizeEvent( QResizeEvent *event ) override;
 	virtual QScrollArea * createControlScrollArea( QWidget *widget );
 
-	virtual void updateTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
+	virtual void updateTitleWidthInfo( const ItemWidthInfo &item_width_info );
 
 public:
 	bool initBefore( ) override;

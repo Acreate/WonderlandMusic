@@ -21,6 +21,8 @@ protected:
 
 public:
 	ItemWidthInfo( );
+	ItemWidthInfo( const ItemWidthInfo &other );
+	ItemWidthInfo & operator=( const ItemWidthInfo &other );
 	ItemWidthInfo( int suggest_height, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width, int min_item_width );
 	~ItemWidthInfo( ) override;
 	virtual int getSuggestHeight( ) const;
@@ -35,6 +37,8 @@ public:
 	virtual int getMinItemWidth( ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
+	virtual const ItemWidthInfo & setItemWidthInfo( const ItemWidthInfo &item_width_info );
+	virtual const ItemWidthInfo & getItemWidthInfo( ) const;
 };
 
 #endif // ITEMWIDTHINFO_H_H_HEAD__FILE__

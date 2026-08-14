@@ -5,6 +5,32 @@
 #include "../../../head/q_json_object.h"
 ItemWidthInfo::ItemWidthInfo( ) {
 }
+ItemWidthInfo::ItemWidthInfo( const ItemWidthInfo &other ) : IAppJsonData { other },
+	suggestHeight { other.suggestHeight },
+	clickWidth { other.clickWidth },
+	intervalWidth { other.intervalWidth },
+	separatorWidth { other.separatorWidth },
+	musicCodeWidth { other.musicCodeWidth },
+	musicNameWidth { other.musicNameWidth },
+	musicSingerNameWidth { other.musicSingerNameWidth },
+	musicDurationTimeWidth { other.musicDurationTimeWidth },
+	minItemWidth { other.minItemWidth } {
+}
+ItemWidthInfo & ItemWidthInfo::operator=( const ItemWidthInfo &other ) {
+	if( this == &other )
+		return *this;
+	IAppJsonData::operator =( other );
+	suggestHeight = other.suggestHeight;
+	clickWidth = other.clickWidth;
+	intervalWidth = other.intervalWidth;
+	separatorWidth = other.separatorWidth;
+	musicCodeWidth = other.musicCodeWidth;
+	musicNameWidth = other.musicNameWidth;
+	musicSingerNameWidth = other.musicSingerNameWidth;
+	musicDurationTimeWidth = other.musicDurationTimeWidth;
+	minItemWidth = other.minItemWidth;
+	return *this;
+}
 ItemWidthInfo::ItemWidthInfo( int suggest_height, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width, int min_item_width ) : suggestHeight( suggest_height ),
 	intervalWidth( interval_width ),
 	separatorWidth( separator_width ),
@@ -79,4 +105,19 @@ bool ItemWidthInfo::setJsonData( const QJsonObject &set_json_object ) {
 	if( ok == false )
 		return false;
 	return true;
+}
+const ItemWidthInfo & ItemWidthInfo::setItemWidthInfo( const ItemWidthInfo &item_width_info ) {
+	suggestHeight = item_width_info.suggestHeight;
+	clickWidth = item_width_info.clickWidth;
+	intervalWidth = item_width_info.intervalWidth;
+	separatorWidth = item_width_info.separatorWidth;
+	musicCodeWidth = item_width_info.musicCodeWidth;
+	musicNameWidth = item_width_info.musicNameWidth;
+	musicSingerNameWidth = item_width_info.musicSingerNameWidth;
+	musicDurationTimeWidth = item_width_info.musicDurationTimeWidth;
+	minItemWidth = item_width_info.minItemWidth;
+	return item_width_info;
+}
+const ItemWidthInfo & ItemWidthInfo::getItemWidthInfo( ) const {
+	return *this;
 }

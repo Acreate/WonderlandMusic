@@ -7,6 +7,7 @@
 
 #include <interface/iAppJsonData.h>
 
+class ItemWidthInfo;
 class IMusicListMenu;
 class MusicLoad;
 class FavoriteItem;
@@ -25,7 +26,7 @@ protected:
 	FavoriteItem *currentFavoriteItem = nullptr;
 	IMusicListMenu *musicListMenu = nullptr;
 	QImage *drawBuff = nullptr;
-
+	ItemWidthInfo* itemWidthInfo = nullptr;
 public:
 	MusicListWidget( MusicCentreWidget *music_centre_widget );
 	~MusicListWidget( ) override;
@@ -42,7 +43,7 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
-	virtual void updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
+	virtual void updateItemWidthInfo( const ItemWidthInfo &item_width_info );
 	virtual FavoriteItem * getCurrentFavoriteItem( ) const;
 	virtual void setCurrentFavoriteItem( FavoriteItem *favorite_item );
 	virtual IMusicListMenu * getMusicListMenu( ) const;

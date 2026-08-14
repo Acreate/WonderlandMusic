@@ -214,14 +214,9 @@ QImage * FavoriteItem::getDrawBuff( ) const {
 	return drawBuff;
 }
 
-void FavoriteItem::updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
-	intervalWidth = interval_width;
-	separatorWidth = separator_width;
-	musicCodeWidth = music_code_width;
-	musicNameWidth = music_name_width;
-	musicSingerNameWidth = music_singer_name_width;
-	musicDurationTimeWidth = music_duration_time_width;
+void FavoriteItem::updateItemWidthInfo( const ItemWidthInfo &item_width_info ) {
 	userMutex->lock( );
+	setItemWidthInfo( item_width_info );
 	unsafetyUpdateInfo( );
 	unsafetyUpdateShow( );
 	userMutex->unlock( );

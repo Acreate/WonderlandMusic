@@ -13,6 +13,8 @@
 
 #include "../musicFavoriteWidget/musicFavoriteWidget.h"
 
+#include "../musicTitleWidget/musicTitleWidget.h"
+
 MusicListWidget::MusicListWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {
 }
 MusicListWidget::~MusicListWidget( ) {
@@ -26,6 +28,7 @@ bool MusicListWidget::deleteResource( ) {
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
 	Delete_Resource_App_Core_Ptr( drawBuff );
+	Delete_Resource_App_Core_Ptr( itemWidthInfo );
 	return true;
 }
 void MusicListWidget::paintEvent( QPaintEvent *event ) {
@@ -54,7 +57,7 @@ bool MusicListWidget::updateMusicListInfo( ) {
 		return false;
 	if( userMutex->tryLock( ) == false )
 		return false;
-
+	currentFavoriteItem->updateItemWidthInfo( *itemWidthInfo );
 	*drawBuff = *currentFavoriteItem->getDrawBuff( );
 	drawBuff->detach( );
 	auto size = drawBuff->size( );
@@ -63,11 +66,12 @@ bool MusicListWidget::updateMusicListInfo( ) {
 	return true;
 }
 
-void MusicListWidget::updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
+void MusicListWidget::updateItemWidthInfo( const ItemWidthInfo &item_width_info ) {
 	userMutex->lock( );
+	*itemWidthInfo = item_width_info;
 	QSize *newSize = nullptr;
 	if( currentFavoriteItem ) {
-		currentFavoriteItem->updateItemWidthInfo( music_title_widget, interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
+		currentFavoriteItem->updateItemWidthInfo( *itemWidthInfo );
 		newSize = new QSize( currentFavoriteItem->getDrawBuff( )->size( ) );
 	}
 	userMutex->unlock( );
@@ -83,6 +87,7 @@ FavoriteItem * MusicListWidget::getCurrentFavoriteItem( ) const {
 }
 void MusicListWidget::setCurrentFavoriteItem( FavoriteItem *favorite_item ) {
 	currentFavoriteItem = favorite_item;
+
 	updateMusicListInfo( );
 }
 IMusicListMenu * MusicListWidget::getMusicListMenu( ) const {
@@ -92,6 +97,7 @@ bool MusicListWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
 	drawBuff = new QImage;
+	itemWidthInfo = new ItemWidthInfo;
 	return true;
 }
 bool MusicListWidget::init( ) {

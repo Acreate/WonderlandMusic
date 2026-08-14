@@ -60,7 +60,7 @@ public:
 	virtual void getMusicItemVector( std::vector< MusicItem * > &result_music_item_vector );
 	virtual void getMusicItemVector( size_t &result_count, std::vector< MusicItem * > &result_music_item_vector, const std::vector< size_t > &get_index );
 	virtual QImage * getDrawBuff( ) const;
-	virtual void updateItemWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
+	virtual void updateItemWidthInfo( const ItemWidthInfo &item_width_info );
 	virtual bool removeMusicLoad( MusicLoad *music_load );
 	virtual MusicLoad * getMusicLoad( ) const;
 	virtual size_t loadMusicFile( const std::vector< QString > &music_file_path_vector );

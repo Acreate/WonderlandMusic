@@ -66,10 +66,10 @@ QScrollArea * MusicCentreWidget::createControlScrollArea( QWidget *widget ) {
 	scrollArea->setWidget( widget );
 	return scrollArea;
 }
-void MusicCentreWidget::updateTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
+void MusicCentreWidget::updateTitleWidthInfo( const ItemWidthInfo &item_width_info ) {
 	if( musicListWidget == nullptr )
 		return;
-	MusicListWidgetTools::updateItemWidthInfo( musicListWidget, music_title_widget, interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
+	MusicListWidgetTools::updateItemWidthInfo( musicListWidget, item_width_info );
 }
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );
@@ -117,6 +117,7 @@ bool MusicCentreWidget::initAfter( ) {
 	FavoriteItem *defitem;
 	if( musicfavoriteWidget->getIndexFavoriteItem( defitem, 0 ) == false || defitem == nullptr )
 		return Result_Var_Messag_Ptr_Fcuntion_Out( false, musicfavoriteWidget, getIndexFavoriteItem );
+	updateTitleWidthInfo( musicTitleWidget->getItemWidthInfo( ) );
 	musicListWidget->setCurrentFavoriteItem( defitem );
 	musicfavoriteWidgetScrollArea->show( );
 	musicTitleWidgetScrollArea->show( );

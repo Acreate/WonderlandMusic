@@ -202,7 +202,10 @@ bool MusicTitleWidget::isDragSeparator( DragItemType &index, int x_pos ) const {
 	return false;
 }
 void MusicTitleWidget::updateTitleWidthInfo( ) {
-	MusicCentreWidgetTools::updateMusicCentreWidgetTitleWidthInfo( musicCentreWidget, this );
+	userMutex->lock( );
+	ItemWidthInfo itemWidthInfo = getItemWidthInfo( );
+	userMutex->unlock( );
+	MusicCentreWidgetTools::updateMusicCentreWidgetTitleWidthInfo( musicCentreWidget, itemWidthInfo );
 }
 bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );

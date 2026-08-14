@@ -2,8 +2,8 @@
 
 #include "../musicCentreWidget/musicListWidget/musicListWidget.h"
 
-void MusicListWidgetTools::updateItemWidthInfo( MusicListWidget *targetr, MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
-	targetr->updateItemWidthInfo( music_title_widget, interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
+void MusicListWidgetTools::updateItemWidthInfo( MusicListWidget *targetr, const ItemWidthInfo &item_width_info ) {
+	targetr->updateItemWidthInfo( item_width_info );
 }
 bool MusicListWidgetTools::setMusicListMenu( MusicListWidget *targetr, IMusicListMenu *music_list_menu ) {
 	targetr->setMusicListMenu( music_list_menu );

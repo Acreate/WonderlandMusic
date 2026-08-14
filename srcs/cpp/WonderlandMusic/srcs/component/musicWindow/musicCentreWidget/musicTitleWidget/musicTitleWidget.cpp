@@ -120,7 +120,8 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 
 		return;
 	}
-
+	if( dragTargetPtr == nullptr )
+		return;
 	*dragTargetPtr = dragTargetValue + event->pos( ).x( ) - dragPosX;
 	update( );
 }
@@ -211,7 +212,7 @@ bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );
 	pen = new QPen;
 	painter = new QPainter( );
-
+	userMutex = new UserMutex;
 	separatorWidth = 5;
 	intervalWidth = 2;
 	minItemWidth = intervalWidth * 2 + separatorWidth;

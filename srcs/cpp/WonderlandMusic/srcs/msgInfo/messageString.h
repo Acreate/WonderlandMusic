@@ -14,6 +14,7 @@ protected:
 
 public:
 	using void_ptr = void *;
+	using void_const_ptr = void const *;
 
 	virtual const QString & getJion( ) const;
 
@@ -36,6 +37,8 @@ public:
 	MessageString( const MessageString &message_string );
 
 	MessageString( const void_ptr &in_obj );
+	MessageString( const void_const_ptr &in_obj );
+	MessageString( const nullptr_t &in_obj );
 
 	MessageString( const uint8_t &in_obj );
 
@@ -84,6 +87,8 @@ public:
 	virtual MessageString & operator<<( const std::source_location &source_location );
 
 	virtual MessageString & operator<<( const void_ptr &in_obj );
+	virtual MessageString & operator<<( const void_const_ptr &in_obj );
+	virtual MessageString & operator<<( const nullptr_t &in_obj );
 
 	virtual MessageString & operator<<( const uint8_t &in_obj );
 
@@ -116,6 +121,7 @@ public:
 	virtual MessageString & operator<<( const QString &in_obj );
 
 	virtual MessageString & operator<<( const QStringList &in_obj );
+	virtual MessageString & operator<<( const MessageString &in_obj );
 
 	virtual MessageString & operator>>( QString &out_obj );
 

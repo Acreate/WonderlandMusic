@@ -6,6 +6,8 @@
 
 #include <head/release_macro.h>
 
+#include "../../../../head/result_message_out.h"
+
 bool AppRenderImage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( brackGroundColor );
 	Delete_Resource_App_Core_Ptr( drawPenColor );
@@ -36,15 +38,16 @@ bool AppRenderImage::init( ) {
 	font = new QFont( "Microsoft YaHei", 14 );
 	fontMetrics = new QFontMetrics( *font );
 
+	auto ttfFilePath = "./program/font/Alibaba/Alibaba-PuHuiTi-Medium.ttf";
 	// 使用外部字体，加载字体
-	int fontId = QFontDatabase::addApplicationFont( "./program/font/Alibaba/Alibaba-PuHuiTi-Medium.ttf" );
+	int fontId = QFontDatabase::addApplicationFont( ttfFilePath );
 
-	if( fontId == 1 )
-		return false;
+	if( fontId == -1 )
+		return Result_Var_Messag_Ptr_Out_Args( false, nullptr, QFontDatabase::addApplicationFont, QObject:: tr("配置文字路径异常: %1").arg( ttfFilePath ) );
 
 	QStringList familyList = QFontDatabase::applicationFontFamilies( fontId );
 	if( familyList.isEmpty( ) )
-		return false;
+		return Result_Var_Messag_Ptr_Out_Args( false, nullptr, QFontDatabase::applicationFontFamilies, QObject:: tr("配置文字异常: %1").arg( fontId ) );
 
 	QString familyName = familyList.first( );
 	*font = QFont( familyName, 14 );

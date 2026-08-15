@@ -5,6 +5,7 @@
 #include "../../head/before_init_macro.h"
 #include "../../head/init_macro.h"
 #include "../../head/release_macro.h"
+#include "../../head/result_message_out.h"
 
 #include "../../menu/systemTrayIconMenu.h"
 
@@ -37,11 +38,9 @@ AppMenuManage * AppUserInterfaceManage::getAppMenuManage( ) const {
 bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
 	AppJsonKeyTools::getAppUserInterfaceManage( [this, &get_json_object] ( const AppUserInterfaceManageJsonKey &json_key ) {
 		QJsonObject writeJsonObject;
-		if( getJsonData( writeJsonObject ) == false )
-			return false;
-		PathTools::writeJsonObject( writeJsonObject, json_key.getFilePath( ) );
-
-		mainWindow->getJsonData( get_json_object );
+		if( mainWindow->getJsonData( get_json_object ) == false )
+			return Result_Var_Messag_Ptr_Out_Args( false, mainWindow, getJsonData, tr( "获取 json 数据异常" ) );
+		get_json_object.insert( json_key.getMainWindow( ), writeJsonObject );
 		return true;
 	} );
 
@@ -50,10 +49,13 @@ bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
 
 bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 	AppJsonKeyTools::getAppUserInterfaceManage( [this, &set_json_object] ( const AppUserInterfaceManageJsonKey &json_key ) {
-		QJsonObject readJson;
-		if( PathTools::readJsonObject( readJson, json_key.getFilePath( ) ) == false )
-			return false;
-		mainWindow->setJsonData( set_json_object );
+		auto end = set_json_object.end( );
+		auto iterator = set_json_object.find( json_key.getMainWindow( ) );
+		if( end != iterator )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 数据异常: %1" ).arg( json_key.getMainWindow( )) );
+		auto jsonObject = iterator.value( ).toObject( );
+		if( mainWindow->setJsonData( jsonObject ) == false )
+			return Result_Var_Messag_Ptr_Out_Args( false, mainWindow, setJsonData, tr( "配置 json 数据异常" ) );
 		return true;
 	} );
 	return true;

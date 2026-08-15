@@ -6,6 +6,7 @@
 #include "../head/before_init_macro.h"
 #include "../head/init_macro.h"
 #include "../head/release_macro.h"
+#include "../head/result_message_out.h"
 
 #include "../menu/systemTrayIconMenu.h"
 
@@ -101,7 +102,8 @@ bool AppInstance::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( appDateTimerManage );
 	After_Init_Resource_App_Core_Ptr( appDataManage );
 	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
-	appDataManage->readJsonData( );
+	if( appDataManage->readJsonData( ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, appDataManage, readJsonData, tr( "json 读取异常" ) );
 	auto appMenuManage = appUserInterfaceManage->getAppMenuManage( );
 	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
 	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_quit_app, this, []( ) {
@@ -119,6 +121,7 @@ bool AppInstance::initAfter( ) {
 
 int AppInstance::exec( ) {
 	int exec = applicationManage->exec( );
-	appDataManage->writeJsonData( );
+	if( appDataManage->writeJsonData( ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( exec, appDataManage, writeJsonData, tr( "json 写入异常" ) );
 	return exec;
 }

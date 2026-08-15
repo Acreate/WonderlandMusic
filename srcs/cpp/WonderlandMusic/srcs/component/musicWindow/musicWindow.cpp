@@ -56,9 +56,9 @@ bool MusicWindow::initAfter( ) {
 		if( info.exists( ) ) {
 			QJsonObject readFileJsonObject;
 			if( PathTools::readJsonObject( readFileJsonObject, filePath ) == false )
-				return Result_Var_Messag_Ptr_Fcuntion_Out( false, this, readJsonObject );
+				return Result_Var_Messag_Ptr_Out_Args( false, this, readJsonObject, tr( "读取路径非法: %1" ).arg( filePath ) );
 			if( setJsonData( readFileJsonObject ) == false )
-				return Result_Var_Messag_Ptr_Fcuntion_Out( false, this, setJsonData );
+				return Result_Var_Messag_Ptr_Out_Args( false, this, setJsonData, tr( "配置对象 json 数据异常" ) );
 		}
 
 		return true;
@@ -70,7 +70,7 @@ bool MusicWindow::getJsonData( QJsonObject &get_json_object ) const {
 	if( AppJsonKeyTools::getMusicWindow( [this, &get_json_object] ( const MusicWindowJsonKey &json_key ) {
 		QJsonObject musicCenreJsonObject;
 		if( musicCentreWidget->getJsonData( musicCenreJsonObject ) == false )
-			return Result_Var_Messag_Ptr_Fcuntion_Out( false, musicCentreWidget, getJsonData );
+			return Result_Var_Messag_Ptr_Out_Args( false, musicCentreWidget, getJsonData, tr( "配置 json 数据异常" ) );
 		get_json_object.insert( json_key.getMusicCentreWidgetKey( ), musicCenreJsonObject );
 		return true;
 	} ) == false )
@@ -87,7 +87,7 @@ bool MusicWindow::setJsonData( const QJsonObject &set_json_object ) {
 			if( key == musicCentreWidgetKey ) {
 				auto jsonObject = iterator.value( ).toObject( );
 				if( musicCentreWidget->setJsonData( jsonObject ) == false )
-					return Result_Var_Messag_Ptr_Fcuntion_Out( false, musicCentreWidget, setJsonData );
+					return Result_Var_Messag_Ptr_Out_Args( false, musicCentreWidget, setJsonData, tr( "获取 json 数据异常" ) );
 			}
 		}
 

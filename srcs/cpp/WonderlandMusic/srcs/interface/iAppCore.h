@@ -6,7 +6,6 @@
 
 class IAppCore {
 private:
-	IAppCore *code_ptr;
 	static void appendPtr( IAppCore *ptr );
 	static void removePtr( IAppCore *ptr );
 
@@ -36,10 +35,5 @@ public:
 	/// @brief 获取类名称
 	/// @return 类名称
 	virtual const char * getTypeName( ) const;
-
-protected:
-	/// @brief 获取编号指针
-	/// @return 编号指针
-	virtual IAppCore * getCodePtr( );
 };
 #endif // IAPPCORE_H_H_HEAD__FILE__

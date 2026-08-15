@@ -282,13 +282,13 @@ bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 		return showOptionPanel( );
 	size_t index;
 	if( getOptionPanelIndex( index, option_panel ) == false || option_panel->optionWindow != this )
-		return Result_Var_Messag_Call_Fcuntion_Out( false, option_panel, OptionWindow, getOptionPanelIndex );
+		return Result_Var_Messag_Ptr_Out_Args( false, this, getOptionPanelIndex, tr( "不存在匹配的面板" ) );
 	if( currentOptionPanelWidget )
 		if( currentOptionPanelWidget->hidePanelBefore( ) == false )
-			return Result_Var_Messag_Ptr_Fcuntion_Out( false, option_panel, hidePanelBefore );
+			return Result_Var_Messag_Ptr_Out_Args( false, currentOptionPanelWidget, hidePanelBefore, tr( "面板调用隐藏功能失败" ) );
 	if( option_panel )
 		if( option_panel->showPanelBefore( ) == false )
-			return Result_Var_Messag_Ptr_Fcuntion_Out( false, option_panel, showPanelBefore );
+			return Result_Var_Messag_Ptr_Out_Args( false, currentOptionPanelWidget, hidePanelBefore, tr( "面板调用显示功能失败" ) );
 	mutex->lock( );
 	currentOptionPanelWidget = option_panel;
 	takeCentralWidget( );

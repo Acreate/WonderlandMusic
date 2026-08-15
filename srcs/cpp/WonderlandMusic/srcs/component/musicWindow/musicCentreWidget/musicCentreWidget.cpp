@@ -116,7 +116,7 @@ bool MusicCentreWidget::initAfter( ) {
 	calculateSize( );
 	FavoriteItem *defitem;
 	if( musicfavoriteWidget->getIndexFavoriteItem( defitem, 0 ) == false || defitem == nullptr )
-		return Result_Var_Messag_Ptr_Fcuntion_Out( false, musicfavoriteWidget, getIndexFavoriteItem );
+		return Result_Var_Messag_Ptr_Out_Args( false, musicfavoriteWidget, getIndexFavoriteItem, tr( "找不到匹配下标 %1 的元素" ).arg( 0 ) );
 	updateTitleWidthInfo( musicTitleWidget->getItemWidthInfo( ) );
 	musicListWidget->setCurrentFavoriteItem( defitem );
 	musicfavoriteWidgetScrollArea->show( );

@@ -1,25 +1,19 @@
 ﻿#include "templateArgs.h"
 
-#include "../component/optionWindow/interface/optionPanel.h"
-
-static const char * getTypeName( const QObject *ty );
-static const char * getTypeName( const IAppCore *ty );
-
-const char * TemplateArgs::getCaseTypeName( const void *ty ) {
+#include "../interface/iAppCore.h"
+const char * TemplateArgs::getCaseTypeName( void *ty ) {
+	if( ty == nullptr )
+		return nullptr;
 	auto casePtr = IAppCore::case_ptr( ty );
-	return getTypeName( casePtr );
+	if( casePtr )
+		return casePtr->getTypeName( );
+	return nullptr;
 }
-const char * getTypeName( const QObject *ty ) {
+const char * TemplateArgs::getCaseTypeName( const void *ty ) {
 	if( ty == nullptr )
 		return nullptr;
-	return ty->metaObject( )->className( );
-}
-
-const char * getTypeName( const IAppCore *ty ) {
-	if( ty == nullptr )
-		return nullptr;
-	auto typeName = ty->getTypeName( );
-	if( typeName == nullptr )
-		return getTypeName( qobject_cast< QObject * >( ( QObject * ) ty ) );
-	return typeName;
+	auto casePtr = IAppCore::case_ptr( ty );
+	if( casePtr )
+		return casePtr->getTypeName( );
+	return nullptr;
 }

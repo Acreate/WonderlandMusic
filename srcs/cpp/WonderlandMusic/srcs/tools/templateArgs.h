@@ -20,16 +20,17 @@ namespace TemplateArgs {
 		return ptr;
 	}
 
+	inline const char * getTypeName( nullptr_t ty ) {
+		return "void";
+	}
+	const char * getCaseTypeName( void *ty );
 	const char * getCaseTypeName( const void *ty );
 	template< typename type >
-	const char * getTypeName( const type *ty ) {
-		if( ty ) {
-			auto typeName = getCaseTypeName( ty );
-			if( typeName )
-				return typeName;
-			return typeid( type ).name( );
-		}
-		return "none_type";
+	const char * getTypeName( type *ty ) {
+		auto typeName = getCaseTypeName( ty );
+		if( typeName )
+			return typeName;
+		return typeid( type ).name( );
 	}
 }
 

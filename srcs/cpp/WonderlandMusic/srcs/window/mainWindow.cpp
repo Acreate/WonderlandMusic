@@ -16,6 +16,7 @@
 #include "../head/before_init_macro.h"
 #include "../head/init_macro.h"
 #include "../head/release_macro.h"
+#include "../head/result_message_out.h"
 
 #include "../msgInfo/messageErrorOut.h"
 
@@ -60,7 +61,7 @@ bool MainWindow::getJsonData( QJsonObject &get_json_object ) const {
 bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
 	optionWindow->setJsonData( set_json_object );
 	if( set_json_object.empty( ) )
-		return false;
+		return Result_Var_Messag_Ptr_Out_Args( false, this, setJsonData, tr( "json 数据是空的" ) );
 	auto jsonFileKey = InstanceTools::getAppDataJsonKey( );
 
 	auto windowJsonFileKey = jsonFileKey->getMainWindow( );
@@ -69,38 +70,38 @@ bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
 	auto end = set_json_object.end( );
 	// 查找返回
 	QJsonObject::const_iterator find = set_json_object.find( windowJsonFileKey->getObjectName( ) );
-	if( find != end ) {
-		auto jsonObject = find.value( ).toObject( );
-		if( jsonObject.empty( ) == false ) {
-			// 匹配 x
-			int x = this->x( );
-			// 匹配 y
-			int y = this->y( );
-			// 匹配 w
-			int width = this->width( );
-			// 匹配 h
-			int height = this->height( );
+	if( find == end )
+		return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 数据中无法找到 %1" ).arg( windowJsonFileKey->getObjectName( ) ) );
+	auto jsonObject = find.value( ).toObject( );
+	if( jsonObject.empty( ) == false ) {
+		// 匹配 x
+		int x = this->x( );
+		// 匹配 y
+		int y = this->y( );
+		// 匹配 w
+		int width = this->width( );
+		// 匹配 h
+		int height = this->height( );
 
-			end = jsonObject.end( );
-			// 查找 x 坐标
-			find = jsonObject.find( windowJsonFileKey->getPointXPos( ) );
-			if( find != end )
-				x = find.value( ).toInt( );
-			// 查找 y 坐标
-			find = jsonObject.find( windowJsonFileKey->getPointYPos( ) );
-			if( find != end )
-				y = find.value( ).toInt( );
-			// 查找 w 宽度
-			find = jsonObject.find( windowJsonFileKey->getSizeWidth( ) );
-			if( find != end )
-				width = find.value( ).toInt( );
-			// 查找 h 高度
-			find = jsonObject.find( windowJsonFileKey->getSizeHeight( ) );
-			if( find != end )
-				height = find.value( ).toInt( );
-			// 设置坐标与宽高
-			setGeometry( x, y, width, height );
-		}
+		end = jsonObject.end( );
+		// 查找 x 坐标
+		find = jsonObject.find( windowJsonFileKey->getPointXPos( ) );
+		if( find != end )
+			x = find.value( ).toInt( );
+		// 查找 y 坐标
+		find = jsonObject.find( windowJsonFileKey->getPointYPos( ) );
+		if( find != end )
+			y = find.value( ).toInt( );
+		// 查找 w 宽度
+		find = jsonObject.find( windowJsonFileKey->getSizeWidth( ) );
+		if( find != end )
+			width = find.value( ).toInt( );
+		// 查找 h 高度
+		find = jsonObject.find( windowJsonFileKey->getSizeHeight( ) );
+		if( find != end )
+			height = find.value( ).toInt( );
+		// 设置坐标与宽高
+		setGeometry( x, y, width, height );
 	}
 	return true;
 }

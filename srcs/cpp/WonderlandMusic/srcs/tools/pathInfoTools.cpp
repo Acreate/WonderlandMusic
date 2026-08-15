@@ -1,9 +1,12 @@
 ﻿#include "pathInfoTools.h"
 
+#include <QStringList>
+
 #include "instanceTools.h"
 
-#include "../application/appDataManage.h"
-#include "../application/appMusicDecoder.h"
+#include "../application/appInstance/appDataManage.h"
+#include "../application/appInstance/appDataManage/appMusicManage/appMusicDecoder.h"
+
 bool PathInfoTools::getAppSettintHomePath( QString &result_app_setting_home_path ) {
 	auto appDataManage = InstanceTools::getAppDataManage( );
 	if( appDataManage == nullptr )

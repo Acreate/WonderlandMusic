@@ -2,9 +2,9 @@
 
 #include <QJsonObject>
 
-#include "../application/appMenuManage.h"
-#include "../application/jsonKey/musicFavoriteMenuJsonKey.h"
-#include "../application/translate/musicFavoriteMenuTranslate.h"
+#include "../application/appInstance/appDataManage/jsonKey/musicFavoriteMenuJsonKey.h"
+#include "../application/appInstance/appDataManage/translate/musicFavoriteMenuTranslate.h"
+#include "../application/appInstance/appUserInterfaceManage/appMenuManage.h"
 
 #include "../component/musicWindow/musicWindow.h"
 #include "../component/musicWindow/Item/favoriteItem/favoriteItem.h"
@@ -13,7 +13,6 @@
 
 #include "../head/release_macro.h"
 
-#include "../tools/appJsonKeyTools.h"
 #include "../tools/instanceTools.h"
 #include "../tools/pathInfoTools.h"
 #include "../tools/widgetTools.h"

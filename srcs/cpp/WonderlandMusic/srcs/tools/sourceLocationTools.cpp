@@ -2,7 +2,9 @@
 #include <QFileInfo>
 #include <QString>
 #include <source_location>
-#include "../application/translate/messageTranslate.h"
+
+#include "../application/appInstance/appDataManage/translate/messageTranslate.h"
+
 #include "../dateTimeFormat/dateTimeFormat.h"
 
 #include "../msgInfo/cmakeInfo.h"

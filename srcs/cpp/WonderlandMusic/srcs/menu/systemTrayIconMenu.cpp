@@ -1,8 +1,6 @@
 ﻿#include "systemTrayIconMenu.h"
 
-#include "../application/appDataManage.h"
-#include "../application/applicationManage.h"
-#include "../application/translate/systemTrayIconMenuTranslate.h"
+#include "../application/appInstance/appDataManage/translate/systemTrayIconMenuTranslate.h"
 
 bool SystemTrayIconMenu::deleteResource( ) {
 	clear( );

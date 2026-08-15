@@ -2,8 +2,8 @@
 
 #include <QJsonObject>
 
-#include "../../application/jsonKey/musicWindowJsonKey.h"
-#include "../../application/translate/musicWindowTranslate.h"
+#include "../../application/appInstance/appDataManage/jsonKey/musicWindowJsonKey.h"
+#include "../../application/appInstance/appDataManage/translate/musicWindowTranslate.h"
 
 #include "../../head/after_init_macro.h"
 #include "../../head/before_init_macro.h"

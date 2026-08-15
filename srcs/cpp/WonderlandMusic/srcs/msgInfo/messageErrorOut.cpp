@@ -1,8 +1,10 @@
 ﻿#include "messageErrorOut.h"
 #include <qdir.h>
 #include "messageString.h"
-#include "../application/appDateTimerManage.h"
-#include "../application/translate/messageTranslate.h"
+
+#include "../application/appInstance/appDateTimerManage.h"
+#include "../application/appInstance/appDataManage/translate/messageTranslate.h"
+
 #include "../dateTimeFormat/dateTimeFormat.h"
 
 #include "../tools/instanceTools.h"

@@ -8,7 +8,7 @@
 
 #include "../../musicWindow.h"
 
-#include "../../../../application/appRenderImage.h"
+#include "../../../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
 
 #include "../../../../mutex/userMutex.h"
 

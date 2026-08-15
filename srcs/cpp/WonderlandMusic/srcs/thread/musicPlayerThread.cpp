@@ -2,7 +2,7 @@
 #include <QtConcurrent>
 
 #include "../application/appInstance.h"
-#include "../application/applicationManage.h"
+#include "../application/appInstance/applicationManage.h"
 
 bool MusicPlayerThread::startPlayerTread( ) {
 	if( this == nullptr )
@@ -39,7 +39,7 @@ MusicPlayerThread::MusicPlayerThread( const QString &music_file_path ) : musicFi
 MusicPlayerThread::~MusicPlayerThread( ) {
 	stopPlayerMusic( );
 	if( isRunOver == false ) {
-		auto appInstance = AppInstance::getAppInstance( )->getApplicationManage(  );
+		auto appInstance = AppInstance::getAppInstance( )->getApplicationManage( );
 		while( isRunOver == false )
 			appInstance->processEvents( );
 	}

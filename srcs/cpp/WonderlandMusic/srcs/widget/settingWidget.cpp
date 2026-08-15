@@ -1,5 +1,7 @@
 ﻿#include "settingWidget.h"
-#include "../application/translate/settingWidgetTranslate.h"
+
+#include "../application/appInstance/appDataManage/translate/settingWidgetTranslate.h"
+
 #include "../component/optionWindow/optionWindow.h"
 
 SettingWidget::SettingWidget( OptionWindow *parent ) : QWidget( parent ), OptionPanel( ) {

@@ -1,10 +1,10 @@
 ﻿#include "instanceTools.h"
 
-#include "../application/appDataManage.h"
-#include "../application/appDrawManage.h"
 #include "../application/appInstance.h"
-#include "../application/appMusicManage.h"
-#include "../application/appUserInterfaceManage.h"
+#include "../application/appInstance/appDataManage.h"
+#include "../application/appInstance/appUserInterfaceManage.h"
+#include "../application/appInstance/appDataManage/appMusicManage.h"
+#include "../application/appInstance/appUserInterfaceManage/appDrawManage.h"
 
 #define If_Nullptr_Result_Nullptr( ptr_ ) 	if( ptr_ == nullptr ) return nullptr
 AppDataManage * InstanceTools::getAppDataManage( ) {

@@ -1,6 +1,6 @@
 ﻿#include "musicListMenu.h"
 
-#include "../application/appMenuManage.h"
+#include "../application/appInstance/appUserInterfaceManage/appMenuManage.h"
 
 #include "../tools/instanceTools.h"
 MusicListMenu::MusicListMenu( ) {

@@ -6,14 +6,14 @@
 
 #include "../musicCentreWidget.h"
 
-#include <application/appRenderImage.h>
-#include <application/translate/musicTitleWidgetTranslate.h>
-
 #include <head/release_macro.h>
 
 #include <mutex/userMutex.h>
 
 #include <tools/instanceTools.h>
+
+#include "../../../../application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h"
+#include "../../../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
 
 #include "../../tools/musicCenereWidgetTools.h"
 MusicTitleWidget::MusicTitleWidget( MusicCentreWidget *music_centre_widget ) : QWidget( music_centre_widget ), musicCentreWidget( music_centre_widget ) {

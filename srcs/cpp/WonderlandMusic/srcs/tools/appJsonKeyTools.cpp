@@ -3,17 +3,18 @@
 #include <head/defininition_get_json_key.h>
 #include "instanceTools.h"
 
-#include "../application/appDataJsonKey.h"
-#include "../application/jsonKey/aboutWidgetJsonKey.h"
-#include "../application/jsonKey/appDataManageJsonKey.h"
-#include "../application/jsonKey/appMenuManageJsonKey.h"
-#include "../application/jsonKey/appMusicManageJsonKey.h"
-#include "../application/jsonKey/appUserInterfaceManageJsonKey.h"
-#include "../application/jsonKey/mainWindowJsonKey.h"
-#include "../application/jsonKey/musicFavoriteMenuJsonKey.h"
-#include "../application/jsonKey/musicListMenuJsonKey.h"
-#include "../application/jsonKey/musicWindowJsonKey.h"
-#include "../application/jsonKey/systemTrayIconJsonKey.h"
+#include "../application/appInstance/appDataManage/appDataJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/aboutWidgetJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/appDataManageJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/appMenuManageJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/appMusicManageJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/appUserInterfaceManageJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/mainWindowJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/musicFavoriteMenuJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/musicListMenuJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/musicWindowJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/systemTrayIconJsonKey.h"
+
 AppDataJsonKey * AppJsonKeyTools::getAppJsonKey( ) {
 	return InstanceTools::getAppDataJsonKey( );
 }

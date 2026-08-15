@@ -1,12 +1,13 @@
 ﻿#include "systemTrayIcon.h"
 #include <QFileInfo>
-#include "../application/appUserInterfaceManage.h"
-#include "../application/jsonKey/systemTrayIconJsonKey.h"
-#include "../application/translate/systemTrayIconTranslate.h"
+
+#include "../application/appInstance/appUserInterfaceManage.h"
+#include "../application/appInstance/appDataManage/jsonKey/systemTrayIconJsonKey.h"
+#include "../application/appInstance/appDataManage/translate/systemTrayIconTranslate.h"
+
 #include "../menu/systemTrayIconMenu.h"
 #include "../msgInfo/messageErrorOut.h"
 
-#include "../tools/appJsonKeyTools.h"
 #include "../tools/instanceTools.h"
 
 #include "../window/mainWindow.h"

@@ -4,7 +4,8 @@
 
 #include "instanceTools.h"
 
-#include "../application/appRenderImage.h"
+#include "../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+
 bool FontTools::getFontHeight( int &result_height, const QFont &font ) {
 	return getFontHeight( result_height, QFontMetrics( font ) );
 }

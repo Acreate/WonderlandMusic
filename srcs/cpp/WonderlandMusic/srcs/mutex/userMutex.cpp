@@ -1,8 +1,10 @@
 ﻿#include "userMutex.h"
 #include <mutex>
 #include <source_location>
-#include "../application/translate/messageTranslate.h"
-#include "../application/translate/userMutexTranslate.h"
+
+#include "../application/appInstance/appDataManage/translate/messageTranslate.h"
+#include "../application/appInstance/appDataManage/translate/userMutexTranslate.h"
+
 #include "../msgInfo/messageErrorOut.h"
 
 #include "../tools/sourceLocationTools.h"

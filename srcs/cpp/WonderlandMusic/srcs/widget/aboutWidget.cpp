@@ -6,9 +6,9 @@
 #include <QHBoxLayout>
 #include <QLibraryInfo>
 
-#include "../application/applicationManage.h"
-#include "../application/jsonKey/aboutWidgetJsonKey.h"
-#include "../application/translate/aboutWidgetTranslate.h"
+#include "../application/appInstance/applicationManage.h"
+#include "../application/appInstance/appDataManage/jsonKey/aboutWidgetJsonKey.h"
+#include "../application/appInstance/appDataManage/translate/aboutWidgetTranslate.h"
 
 #include "../head/release_macro.h"
 

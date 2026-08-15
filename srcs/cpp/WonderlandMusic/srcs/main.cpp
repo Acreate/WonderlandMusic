@@ -1,6 +1,5 @@
 ﻿#include <QLoggingCategory>
 #include "application/appInstance.h"
-#include "application/appUserInterfaceManage.h"
 #include "dateTimeFormat/dateTimeFormat.h"
 #include "msgInfo/messageErrorOut.h"
 #include "tools/pathTools.h"

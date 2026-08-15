@@ -3,7 +3,8 @@
 #include <qboxlayout.h>
 #include <QLineEdit>
 #include <QPushButton>
-#include "../application/translate/stringEditorWidgetTranslate.h"
+
+#include "../application/appInstance/appDataManage/translate/stringEditorWidgetTranslate.h"
 
 void StringEditorWidget::initComponent( ) {
 	setModal( true );          // 设置模态

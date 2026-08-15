@@ -4,7 +4,7 @@
 #include <QMediaPlayer>
 #include <QIODevice>
 
-#include "../application/applicationManage.h"
+#include "../application/appInstance/applicationManage.h"
 
 #include "../msgInfo/messageErrorOut.h"
 

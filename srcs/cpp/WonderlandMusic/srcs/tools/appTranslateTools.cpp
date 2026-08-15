@@ -1,28 +1,29 @@
 ﻿#include "appTranslateTools.h"
 
-#include <application/appTranslate.h>
 
 #include <head/defininition_get_translate.h>
 
-#include "../application/translate/aboutWidgetTranslate.h"
-#include "../application/translate/appMusicManageTranslate.h"
 #include "instanceTools.h"
 
-#include "../application/translate/dateTimeFormatTranslate.h"
-#include "../application/translate/deleteExceptionTranslate.h"
-#include "../application/translate/jsonTranslate.h"
-#include "../application/translate/mainWindowTranslate.h"
-#include "../application/translate/messageTranslate.h"
-#include "../application/translate/musicFavoriteMenuTranslate.h"
-#include "../application/translate/musicItemTranslate.h"
-#include "../application/translate/musicListMenuTranslate.h"
-#include "../application/translate/musicTitleWidgetTranslate.h"
-#include "../application/translate/musicWindowTranslate.h"
-#include "../application/translate/settingWidgetTranslate.h"
-#include "../application/translate/stringEditorWidgetTranslate.h"
-#include "../application/translate/systemTrayIconMenuTranslate.h"
-#include "../application/translate/systemTrayIconTranslate.h"
-#include "../application/translate/userMutexTranslate.h"
+#include "../application/appInstance/appDataManage/appTranslate.h"
+#include "../application/appInstance/appDataManage/translate/aboutWidgetTranslate.h"
+#include "../application/appInstance/appDataManage/translate/appMusicManageTranslate.h"
+#include "../application/appInstance/appDataManage/translate/dateTimeFormatTranslate.h"
+#include "../application/appInstance/appDataManage/translate/deleteExceptionTranslate.h"
+#include "../application/appInstance/appDataManage/translate/jsonTranslate.h"
+#include "../application/appInstance/appDataManage/translate/mainWindowTranslate.h"
+#include "../application/appInstance/appDataManage/translate/messageTranslate.h"
+#include "../application/appInstance/appDataManage/translate/musicFavoriteMenuTranslate.h"
+#include "../application/appInstance/appDataManage/translate/musicItemTranslate.h"
+#include "../application/appInstance/appDataManage/translate/musicListMenuTranslate.h"
+#include "../application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h"
+#include "../application/appInstance/appDataManage/translate/musicWindowTranslate.h"
+#include "../application/appInstance/appDataManage/translate/settingWidgetTranslate.h"
+#include "../application/appInstance/appDataManage/translate/stringEditorWidgetTranslate.h"
+#include "../application/appInstance/appDataManage/translate/systemTrayIconMenuTranslate.h"
+#include "../application/appInstance/appDataManage/translate/systemTrayIconTranslate.h"
+#include "../application/appInstance/appDataManage/translate/userMutexTranslate.h"
+
 AppTranslate * AppTranslateTools::getAppTranslate( ) {
 	return InstanceTools::getAppTranslate( );
 }

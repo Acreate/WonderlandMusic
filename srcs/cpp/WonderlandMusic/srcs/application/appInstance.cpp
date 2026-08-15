@@ -1,11 +1,5 @@
 ﻿#include "appInstance.h"
 
-#include "appDataManage.h"
-#include "appDateTimerManage.h"
-#include "appMenuManage.h"
-#include "appUserInterfaceManage.h"
-#include "applicationManage.h"
-
 #include "../component/musicWindow/musicWindow.h"
 
 #include "../head/after_init_macro.h"
@@ -16,6 +10,12 @@
 #include "../menu/systemTrayIconMenu.h"
 
 #include "../window/mainWindow.h"
+
+#include "appInstance/appDataManage.h"
+#include "appInstance/appDateTimerManage.h"
+#include "appInstance/appUserInterfaceManage.h"
+#include "appInstance/applicationManage.h"
+#include "appInstance/appUserInterfaceManage/appMenuManage.h"
 
 AppInstance *AppInstance::instance = nullptr;
 

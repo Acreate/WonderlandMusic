@@ -7,8 +7,8 @@
 #include "instanceTools.h"
 #include "vectorTools.h"
 
-#include "../application/appMusicDecoder.h"
-#include "../application/applicationManage.h"
+#include "../application/appInstance/applicationManage.h"
+#include "../application/appInstance/appDataManage/appMusicManage/appMusicDecoder.h"
 
 #include "../msgInfo/messageErrorOut.h"
 

@@ -7,7 +7,7 @@
 #include <qscreen.h>
 
 #include "../application/appInstance.h"
-#include "../application/applicationManage.h"
+#include "../application/appInstance/applicationManage.h"
 
 #include "../widget/stringEditorWidget.h"
 

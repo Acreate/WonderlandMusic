@@ -1,11 +1,13 @@
 ﻿#include "mainWindow.h"
 #include <QJsonObject>
 #include <qboxlayout.h>
-#include "../application/appDataJsonKey.h"
-#include "../application/appMusicManage.h"
-#include "../application/applicationManage.h"
-#include "../application/jsonKey/mainWindowJsonKey.h"
-#include "../application/translate/mainWindowTranslate.h"
+#include <qcoreevent.h>
+
+#include "../application/appInstance/applicationManage.h"
+#include "../application/appInstance/appDataManage/appDataJsonKey.h"
+#include "../application/appInstance/appDataManage/appMusicManage.h"
+#include "../application/appInstance/appDataManage/jsonKey/mainWindowJsonKey.h"
+#include "../application/appInstance/appDataManage/translate/mainWindowTranslate.h"
 
 #include "../component/musicWindow/musicWindow.h"
 #include "../component/optionWindow/optionWindow.h"

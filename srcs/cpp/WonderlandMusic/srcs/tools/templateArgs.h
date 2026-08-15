@@ -1,5 +1,7 @@
 ﻿#ifndef TEMPLATEARGS_H_H_HEAD__FILE__
 #define TEMPLATEARGS_H_H_HEAD__FILE__
+#include <QString>
+#include <string>
 #include <utility>
 #include <typeinfo>
 
@@ -20,17 +22,17 @@ namespace TemplateArgs {
 		return ptr;
 	}
 
-	inline const char * getTypeName( nullptr_t ty ) {
-		return "void";
-	}
-	const char * getCaseTypeName( void *ty );
-	const char * getCaseTypeName( const void *ty );
+	QString getTypeName( nullptr_t ty );
+	QString getCaseTypeName( void *ty );
+	QString getCaseTypeName( QObject *ty );
+	QString getCaseTypeName( const void *ty );
+	QString getCaseTypeName( const QObject *ty );
 	template< typename type >
-	const char * getTypeName( type *ty ) {
-		auto typeName = getCaseTypeName( ty );
-		if( typeName )
-			return typeName;
-		return typeid( type ).name( );
+	QString getTypeName( type *ty ) {
+		QString name = getCaseTypeName( ty );
+		if( name.isEmpty( ) )
+			return QString( typeid( type ).name( ) );
+		return name;
 	}
 }
 

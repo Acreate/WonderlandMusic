@@ -1,19 +1,29 @@
 ﻿#include "templateArgs.h"
 
 #include "../interface/iAppCore.h"
-const char * TemplateArgs::getCaseTypeName( void *ty ) {
-	if( ty == nullptr )
-		return nullptr;
-	auto casePtr = IAppCore::case_ptr( ty );
-	if( casePtr )
-		return casePtr->getTypeName( );
-	return nullptr;
+QString TemplateArgs::getTypeName( nullptr_t ty ) {
+	return QString( "void" );
 }
-const char * TemplateArgs::getCaseTypeName( const void *ty ) {
+QString TemplateArgs::getCaseTypeName( void *ty ) {
+	if( ty ) {
+		return QString( );
+		auto casePtr = IAppCore::case_ptr( ty );
+		if( casePtr )
+			return casePtr->getTypeName( );
+	}
+	return QString( );
+}
+QString TemplateArgs::getCaseTypeName( QObject *ty ) {
+	return ty->metaObject( )->className( );
+}
+QString TemplateArgs::getCaseTypeName( const QObject *ty ) {
+	return ty->metaObject( )->className( );
+}
+QString TemplateArgs::getCaseTypeName( const void *ty ) {
 	if( ty == nullptr )
-		return nullptr;
+		return QString( );
 	auto casePtr = IAppCore::case_ptr( ty );
 	if( casePtr )
 		return casePtr->getTypeName( );
-	return nullptr;
+	return QString( );
 }

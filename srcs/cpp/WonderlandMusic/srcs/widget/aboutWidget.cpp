@@ -116,7 +116,7 @@ bool AboutWidget::hidePanelBefore( ) {
 bool AboutWidget::releasePanelBefore( ) {
 	return true;
 }
-const char * AboutWidget::getTypeName( ) const {
+QString AboutWidget::getTypeName( ) const {
 	return metaObject( )->className( );
 }
 

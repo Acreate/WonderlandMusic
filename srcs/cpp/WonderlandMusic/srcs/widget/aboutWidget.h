@@ -34,6 +34,6 @@ public:
 	bool showPanelBefore( ) override;
 	bool hidePanelBefore( ) override;
 	bool releasePanelBefore( ) override;
-	const char * getTypeName( ) const override;
+	QString getTypeName( ) const override;
 };
 #endif // ABOUTAPPLICATIONWIDGET_H_H_HEAD__FILE__

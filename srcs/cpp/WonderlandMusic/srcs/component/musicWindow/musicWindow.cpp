@@ -96,7 +96,7 @@ bool MusicWindow::setJsonData( const QJsonObject &set_json_object ) {
 		return false;
 	return true;
 }
-const char * MusicWindow::getTypeName( ) const {
+QString MusicWindow::getTypeName( ) const {
 	return metaObject( )->className( );
 }
 QWidget * MusicWindow::toWidget( ) {

@@ -62,6 +62,6 @@ IAppCore::IAppCore( ) {
 IAppCore::~IAppCore( ) {
 	removePtr( this );
 }
-const char * IAppCore::getTypeName( ) const {
+QString IAppCore::getTypeName( ) const {
 	return nullptr;
 }

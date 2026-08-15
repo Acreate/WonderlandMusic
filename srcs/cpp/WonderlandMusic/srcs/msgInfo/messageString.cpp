@@ -67,6 +67,12 @@ MessageString::MessageString( const nullptr_t &in_obj ) {
 	constexpr size_t base = sizeof( void_ptr ) * 2;
 	this->messageList << QString( "0x%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( );
 }
+MessageString::MessageString( const char8_t *&in_obj ) {
+	messageList << QString::fromUtf8( in_obj );
+}
+MessageString::MessageString( const char8_t *const &in_obj ) {
+	messageList << QString::fromUtf8( in_obj );
+}
 
 MessageString::MessageString( const uint8_t &in_obj ) {
 	this->messageList << QString::number( in_obj );

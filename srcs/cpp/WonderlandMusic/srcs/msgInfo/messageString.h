@@ -61,6 +61,8 @@ public:
 	MessageString( const wchar_t in_obj[ ] );
 
 	MessageString( const char * &in_obj );
+	MessageString( const char8_t * &in_obj );
+	MessageString( const char8_t  *const &in_obj );
 
 	MessageString( const wchar_t * &in_obj );
 

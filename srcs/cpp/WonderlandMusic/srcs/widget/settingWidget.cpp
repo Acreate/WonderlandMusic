@@ -22,7 +22,7 @@ bool SettingWidget::hidePanelBefore( ) {
 bool SettingWidget::releasePanelBefore( ) {
 	return true;
 }
-const char * SettingWidget::getTypeName( ) const {
+QString SettingWidget::getTypeName( ) const {
 	return metaObject( )->className( );
 }
 

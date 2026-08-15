@@ -110,6 +110,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
 	satrtProcess( );
 	AppInstance *application = new AppInstance( argc, argv );
+
 	if( application->initBefore( ) == false )
 		return endProcess( -1 );
 

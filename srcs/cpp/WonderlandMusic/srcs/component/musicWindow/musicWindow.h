@@ -39,7 +39,7 @@ public:
 	bool releasePanelBefore( ) override;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
-	const char * getTypeName( ) const override;
+	QString getTypeName( ) const override;
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

@@ -1,0 +1,19 @@
+{
+    "app.music.manage": {
+        "app.music.manage": {
+            "select.dir.path": "",
+            "select.file.path": ""
+        }
+    },
+    "app.music.ui": {
+        "main.window.info": {
+            "app.main.window": {
+                "point.x": 640,
+                "point.y": 270,
+                "size.h": 667,
+                "size.w": 935
+            }
+        }
+    },
+    "app.setting.path": "./program"
+}

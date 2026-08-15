@@ -34,6 +34,6 @@ public:
 
 	/// @brief 获取类名称
 	/// @return 类名称
-	virtual const char * getTypeName( ) const;
+	virtual QString getTypeName( ) const;
 };
 #endif // IAPPCORE_H_H_HEAD__FILE__

@@ -138,17 +138,13 @@ bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {
 		return false;
 	if( appUserInterfaceManage->getJsonData( uiJsonObject ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, appUserInterfaceManage, getJsonData, tr( "获取 json 数据异常" ) );
-	// 从 appMusicManage 获取数据
-	QJsonObject appMusicManageJsonObject;
-	if( appMusicManage->getJsonData( appMusicManageJsonObject ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, appMusicManage, getJsonData, tr( "获取 json 数据异常" ) );
+
 	// 获取路径数据
 	auto writePath = PathTools::getAutoShortenPathName( appSettingPath );
 
 	// 写入 get_json_object
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	get_json_object.insert( appDataManage->getAppSettingPath( ), writePath );
-	get_json_object.insert( appDataManage->getAppMusicManageJsonObject( ), appMusicManageJsonObject );
 	get_json_object.insert( appDataManage->getUiJsonObject( ), uiJsonObject );
 	return true;
 }
@@ -161,12 +157,6 @@ bool AppDataManage::setJsonData( const QJsonObject &set_json_object ) {
 	auto end = set_json_object.end( );
 
 	QJsonObject::const_iterator find;
-	// 把 json 数据加载到 appMusicManage
-	find = set_json_object.find( appDataManage->getAppMusicManageJsonObject( ) );
-	if( end == find )
-		return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 找不到数据 %1" ).arg( appDataManage->getAppMusicManageJsonObject( ) ) );
-
-	auto appMusicManageJsonObject = find.value( ).toObject( );
 
 	// 把 json 数据加载到 appUserInterfaceManage
 	find = set_json_object.find( appDataManage->getUiJsonObject( ) );
@@ -182,8 +172,6 @@ bool AppDataManage::setJsonData( const QJsonObject &set_json_object ) {
 	appSettingPath = find.value( ).toString( appSettingPath );
 	appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
 
-	if( appMusicManage->setJsonData( appMusicManageJsonObject ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, appMusicManage, getJsonData, tr( "配置 json 数据异常" ) );
 	if( appUserInterfaceManage->setJsonData( appUserInterfaceManageJsonObject ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, appUserInterfaceManage, setJsonData, tr( "配置 json 数据异常" ) );
 

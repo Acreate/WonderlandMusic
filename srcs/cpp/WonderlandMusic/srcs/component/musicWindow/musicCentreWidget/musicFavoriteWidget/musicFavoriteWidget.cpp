@@ -8,10 +8,14 @@
 
 #include "../../musicWindow.h"
 
+#include "../../../../application/appInstance/appDataManage/jsonKey/musicFavoriteWidgetJsonKey.h"
 #include "../../../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+
+#include "../../../../head/result_message_out.h"
 
 #include "../../../../mutex/userMutex.h"
 
+#include "../../../../tools/appJsonKeyTools.h"
 #include "../../../../tools/instanceTools.h"
 #include "../../../../tools/widgetTools.h"
 
@@ -103,101 +107,124 @@ int MusicFavoriteWidget::getSuggestWidth( ) const {
 	return suggestWidth;
 }
 bool MusicFavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
-	bool result = true;
-	userMutex->lock( );
-	size_t count = favoriteItemVector.size( );
-	get_json_object.insert( "count", QString::number( count ) );
-	if( count ) {
-		QJsonObject arrayJson;
-		auto data = favoriteItemVector.data( );
-		size_t index = 0;
-		for( ; index < count; index += 1 ) {
-			QJsonObject itemJsonData;
-			if( data[ index ]->getJsonData( itemJsonData ) == false ) {
-				result = false;
-				break;
+	if( AppJsonKeyTools::getMusicFavoriteWidget( [this, &get_json_object] ( const MusicFavoriteWidgetJsonKey &json_key ) {
+		bool result = true;
+		userMutex->lock( );
+		size_t count = favoriteItemVector.size( );
+		auto &countKey = json_key.getCountKey( );
+		get_json_object.insert( countKey, QString::number( count ) );
+		if( count ) {
+			QJsonObject arrayJson;
+			auto data = favoriteItemVector.data( );
+			size_t index = 0;
+			for( ; index < count; index += 1 ) {
+				QJsonObject itemJsonData;
+				if( data[ index ]->getJsonData( itemJsonData ) == false ) {
+					result = false;
+					break;
+				}
+				arrayJson.insert( QString::number( index ), itemJsonData );
 			}
-			arrayJson.insert( QString::number( index ), itemJsonData );
+			if( result )
+				get_json_object.insert( json_key.getFavoriteVectorKey( ), arrayJson );
 		}
-		if( result )
-			get_json_object.insert( "favoriteItemVector", arrayJson );
-	}
-	userMutex->unlock( );
-	return result;
+		userMutex->unlock( );
+		return true;
+	} ) == false )
+		return false;
+	return true;
 }
 bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
-	auto end = set_json_object.end( );
-	QJsonObject::const_iterator find;
-	find = set_json_object.find( "count" );
-	if( end == find )
-		return false;
+	if( AppJsonKeyTools::getMusicFavoriteWidget( [this, &set_json_object] ( const MusicFavoriteWidgetJsonKey &json_key ) {
+		auto &countKey = json_key.getCountKey( );
+		auto end = set_json_object.end( );
+		QJsonObject::const_iterator find;
+		find = set_json_object.find( countKey );
+		if( end == find )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 数据失败: %1" ).arg( countKey ) );
 
-	auto string = find->toString( );
-	bool ok;
-	auto count = string.toULongLong( &ok );
-	if( ok == false )
-		return false;
-
-	find = set_json_object.find( "favoriteItemVector" );
-	if( end == find )
-		return false;
-	auto jsonObject = find->toObject( );
-	if( jsonObject.size( ) != count )
-		return false;
-	if( count == 0 ) {
-		userMutex->lock( );
-		unSafetyClear( );
-		unSafetyCreateDefaultFavoriteItem( );
-		userMutex->unlock( );
-		repaint( );
-		return true;
-	}
-	std::vector< FavoriteItem * > jsonDataConverFavoriteItemItems( count, nullptr );
-	auto data = jsonDataConverFavoriteItemItems.data( );
-	auto iterator = jsonObject.begin( );
-	auto endIt = jsonObject.end( );
-	size_t index;
-	FavoriteItem *favoriteItem = nullptr;
-	QString jsonKey;
-	QJsonObject musicItemJsonObject;
-	for( ; iterator != endIt; ++iterator ) {
-		jsonKey = iterator.key( );
-		if( ok = jsonKey.isEmpty( ), ok == true )
-			break; // 空
-		index = jsonKey.toULongLong( &ok );
+		auto string = find->toString( );
+		bool ok;
+		auto count = string.toULongLong( &ok );
 		if( ok == false )
-			break; // 转换失败
-		if( ok = ( index >= count ), ok )
-			break; // 下标溢出
-		auto jsonValue = iterator.value( );
-		auto jsonValueRefs = jsonValue.toObject( );
-		favoriteItem = new FavoriteItem( musicCentreWidget, "" );
-		if( ok = favoriteItem->setJsonData( jsonValueRefs ), ok == false )
-			break; // 数据无法恢复
-		data[ index ] = favoriteItem;
-	}
-	// 如果数据正确，则回复数据
-	if( ok ) {
-		userMutex->lock( );
-		unSafetyClear( );
-		favoriteItemVector = jsonDataConverFavoriteItemItems;
-		unSafetyCreateDefaultFavoriteItem( );
-		userMutex->unlock( );
-	} else {
-		userMutex->lock( );
-		for( index = 0; index < count; index += 1 )
-			if( data[ index ] ) {
-				data[ index ]->musicCentreWidget = nullptr;
-				delete data[ index ];
-			}
-		if( favoriteItem ) {
-			favoriteItem->musicCentreWidget = nullptr;
-			delete favoriteItem;
+			return Result_Var_Messag_Ptr_Out_Args( false, &string, toULongLong, tr( "类型转换失败: %1" ).arg( string ) );
+		auto &favoriteVectorKey = json_key.getFavoriteVectorKey( );
+		find = set_json_object.find( favoriteVectorKey );
+		if( end == find )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 数据失败: %1" ).arg( favoriteVectorKey ) );
+		auto jsonObject = find->toObject( );
+		qint64 objCount = jsonObject.size( );
+		if( objCount != count )
+			return Result_Var_Messag_Ptr_Out_Args( false, &jsonObject, size(), tr( "json 数据个数匹配失败: %1 != %2 " ).arg( objCount ).arg( count ) );
+		if( count == 0 ) {
+			userMutex->lock( );
+			unSafetyClear( );
+			unSafetyCreateDefaultFavoriteItem( );
+			userMutex->unlock( );
+			repaint( );
+			return true;
 		}
-		unSafetyCreateDefaultFavoriteItem( );
-		userMutex->unlock( );
-	}
-	return ok;
+		std::vector< FavoriteItem * > jsonDataConverFavoriteItemItems( count, nullptr );
+		auto data = jsonDataConverFavoriteItemItems.data( );
+		auto iterator = jsonObject.begin( );
+		auto endIt = jsonObject.end( );
+		size_t index;
+		FavoriteItem *favoriteItem = nullptr;
+		QString jsonKey;
+		QJsonObject musicItemJsonObject;
+		for( ; iterator != endIt; ++iterator ) {
+			jsonKey = iterator.key( );
+			if( jsonKey.isEmpty( ) ) {
+				ok = false;
+				Result_Var_Messag_Ptr_Out_Args( false, &iterator, key, tr( "key 为空" ) );
+				break; // 空
+			}
+			index = jsonKey.toULongLong( &ok );
+			if( ok == false ) {
+				Result_Var_Messag_Ptr_Out_Args( false, &jsonKey, toULongLong, tr( "类型转换失败: %1" ).arg( jsonKey ) );
+				break; // 转换失败
+			}
+			if( index >= count ) {
+				ok = false;
+				Result_Var_Messag_Ptr_Out_Args( false, &index, operator size_t, tr( "下标溢出: %1 >= %2" ).arg( index ).arg( count ) );
+				break; // 下标溢出
+			}
+			auto jsonValue = iterator.value( );
+			auto jsonValueRefs = jsonValue.toObject( );
+			favoriteItem = new FavoriteItem( musicCentreWidget, "" );
+			if( favoriteItem->setJsonData( jsonValueRefs ) == false ) {
+				ok = false;
+				break; // 数据无法恢复
+			}
+			data[ index ] = favoriteItem;
+		}
+		// 如果数据正确，则回复数据
+		if( ok ) {
+			userMutex->lock( );
+			unSafetyClear( );
+			favoriteItemVector = jsonDataConverFavoriteItemItems;
+			unSafetyCreateDefaultFavoriteItem( );
+			userMutex->unlock( );
+		} else {
+			userMutex->lock( );
+			for( index = 0; index < count; index += 1 )
+				if( data[ index ] ) {
+					data[ index ]->musicCentreWidget = nullptr;
+					delete data[ index ];
+				}
+			if( favoriteItem ) {
+				favoriteItem->musicCentreWidget = nullptr;
+				delete favoriteItem;
+			}
+			unSafetyCreateDefaultFavoriteItem( );
+			userMutex->unlock( );
+			return Result_Var_Messag_Ptr_Out_Args( ok, this, operator=, tr( "反序列化 json 数据失败" ) );
+		}
+
+		return ok;
+	} ) == false )
+		return false;
+	return true;
 }
 bool MusicFavoriteWidget::removeItem( FavoriteItem *favorite_item ) {
 	bool result = false;

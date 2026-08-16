@@ -12,10 +12,6 @@ class AppMusicManage : public QObject, public IAppCore, public IAppJsonData {
 protected:
 	UserMutex *loadMutex = nullptr;
 	AppMusicDecoder *appMusicDecoder = nullptr;
-	std::vector< QString > loadFileVector;
-	size_t loadCount;
-	QString openMultipleFilePath;
-	QString openMultipleDirPath;
 
 protected:
 	bool deleteResource( ) override;

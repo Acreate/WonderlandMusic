@@ -35,8 +35,6 @@ void MusicListWidget::paintEvent( QPaintEvent *event ) {
 	QWidget::paintEvent( event );
 
 	QPainter painter( this );
-	painter.fillRect( contentsRect( ), Qt::GlobalColor::darkGreen );
-
 	if( currentFavoriteItem == nullptr )
 		return;
 	if( userMutex == nullptr )
@@ -45,6 +43,7 @@ void MusicListWidget::paintEvent( QPaintEvent *event ) {
 		return;
 	painter.drawImage( 0, 0, *drawBuff );
 	userMutex->unlock( );
+	qDebug( ) << __func__;
 }
 bool MusicListWidget::setMusicListMenu( IMusicListMenu *music_list_menu ) {
 	this->musicListMenu = music_list_menu;

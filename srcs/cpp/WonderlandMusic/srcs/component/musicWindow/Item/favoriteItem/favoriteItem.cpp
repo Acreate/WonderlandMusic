@@ -6,6 +6,7 @@
 
 #include <mutex/userMutex.h>
 
+#include "../../../../application/appInstance/appDataManage/jsonKey/favoriteItemJsonKey.h"
 #include "../../../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
 
 #include "../../../../dateTimeFormat/dateTimeFormat.h"
@@ -14,7 +15,9 @@
 #include "../../../../head/before_init_macro.h"
 #include "../../../../head/create_ptr_macro.h"
 #include "../../../../head/init_macro.h"
+#include "../../../../head/result_message_out.h"
 
+#include "../../../../tools/appJsonKeyTools.h"
 #include "../../../../tools/instanceTools.h"
 
 #include "../../musicCentreWidget/musicCentreWidget.h"
@@ -60,108 +63,127 @@ FavoriteItem::~FavoriteItem( ) {
 	delete drawBuff;
 }
 bool FavoriteItem::getJsonData( QJsonObject &get_json_object ) const {
-	bool result = true;
-	userMutex->lock( );
-	size_t count = musicItemVector.size( );
-	if( count ) {
-		QJsonObject arrayJson;
-		auto data = musicItemVector.data( );
-		size_t index = 0;
-		for( ; index < count; index += 1 ) {
-			QJsonObject itemJsonData;
-			if( data[ index ]->getJsonData( itemJsonData ) == false ) {
-				result = false;
-				break;
+	if( AppJsonKeyTools::getFavoriteItem( [&get_json_object, this] ( const FavoriteItemJsonKey &json_key ) {
+		bool result = true;
+		auto &musicCountKey = json_key.getMusicCountKey( );
+		auto &favoriteNameKey = json_key.getFavoriteNameKey( );
+		userMutex->lock( );
+		size_t count = musicItemVector.size( );
+		if( count ) {
+			QJsonObject arrayJson;
+			auto data = musicItemVector.data( );
+			size_t index = 0;
+			for( ; index < count; index += 1 ) {
+				QJsonObject itemJsonData;
+				if( data[ index ]->getJsonData( itemJsonData ) == false ) {
+					result = false;
+					break;
+				}
+				arrayJson.insert( QString::number( index ), itemJsonData );
 			}
-			arrayJson.insert( QString::number( index ), itemJsonData );
+			get_json_object.insert( favoriteItemName, arrayJson );
 		}
-		get_json_object.insert( favoriteItemName, arrayJson );
-	}
-	userMutex->unlock( );
-	if( result ) {
-		get_json_object.insert( "FavoriteItem", favoriteItemName );
-		get_json_object.insert( "count", QString::number( count ) );
-	}
-	return result;
+		userMutex->unlock( );
+		if( result ) {
+			get_json_object.insert( favoriteNameKey, favoriteItemName );
+			get_json_object.insert( musicCountKey, QString::number( count ) );
+		}
+		return result;
+	} ) == false )
+		return false;
+	return true;
 }
 bool FavoriteItem::setJsonData( const QJsonObject &set_json_object ) {
-	auto end = set_json_object.end( );
-	QJsonObject::const_iterator find;
-	find = set_json_object.find( "count" );
-	if( end == find )
-		return false;
+	if( AppJsonKeyTools::getFavoriteItem( [this, &set_json_object] ( const FavoriteItemJsonKey &json_key ) {
+		auto &musicCountKey = json_key.getMusicCountKey( );
+		auto &favoriteNameKey = json_key.getFavoriteNameKey( );
+		auto end = set_json_object.end( );
+		QJsonObject::const_iterator find;
+		find = set_json_object.find( musicCountKey );
+		if( end == find )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 失败: %1" ).arg( musicCountKey ) );
 
-	auto string = find->toString( );
-	bool ok;
-	auto count = string.toULongLong( &ok );
-	if( ok == false )
-		return false;
-
-	find = set_json_object.find( "FavoriteItem" );
-	if( end == find )
-		return false;
-	auto name = find->toString( );
-	this->favoriteItemName = name;
-	if( count == 0 ) {
-		clear( );
-		return true;
-	}
-	find = set_json_object.find( name );
-	if( end == find )
-		return false;
-	auto jsonObject = find->toObject( );
-	if( jsonObject.size( ) != count )
-		return false;
-	std::vector< MusicItem * > jsonDataConverMusicItems( count, nullptr );
-	auto data = jsonDataConverMusicItems.data( );
-	auto iterator = jsonObject.begin( );
-	auto endIt = jsonObject.end( );
-	size_t index;
-	MusicItem *musicItem;
-	QString jsonKey;
-	QJsonObject musicItemJsonObject;
-	for( ; iterator != endIt; ++iterator ) {
-		musicItemJsonObject = iterator.value( ).toObject( );
-		musicItem = new MusicItem( this );
-		if( musicItem->setJsonData( musicItemJsonObject ) == false ) {
-			delete musicItem;
-			ok = false;
-			break;
-		}
-		jsonKey = iterator.key( );
-		if( jsonKey.isEmpty( ) ) {
-			ok = false;
-			break;
-		}
-		index = jsonKey.toULongLong( &ok );
+		auto string = find->toString( );
+		bool ok;
+		auto count = string.toULongLong( &ok );
 		if( ok == false )
-			break;
-		if( index >= count ) {
-			ok = false;
-			break;
+			return Result_Var_Messag_Ptr_Out_Args( false, &string, toULongLong, tr( "类型转换失败: %1" ).arg( string ) );
+
+		find = set_json_object.find( favoriteNameKey );
+		if( end == find )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 失败: %1" ).arg( favoriteNameKey ) );
+		auto name = find->toString( );
+		this->favoriteItemName = name;
+		if( count == 0 ) {
+			clear( );
+			return true;
 		}
-		data[ index ] = musicItem;
-		auto jsonValue = iterator.value( );
-		auto jsonValueRefs = jsonValue.toObject( );
-		if( musicItem->setJsonData( jsonValueRefs ) == false ) {
-			ok = false;
-			break;
+		find = set_json_object.find( name );
+		if( end == find )
+			return Result_Var_Messag_Ptr_Out_Args( false, &name, find, tr( "查找 json 失败: %1" ).arg( name ) );
+		auto jsonObject = find->toObject( );
+		qint64 jsonCount = jsonObject.size( );
+		if( jsonCount != count )
+			return Result_Var_Messag_Ptr_Out_Args( false, &jsonObject, size, tr( "数量不匹配: %1 != %2" ).arg( jsonCount ).arg( count) );
+		std::vector< MusicItem * > jsonDataConverMusicItems( count, nullptr );
+		auto data = jsonDataConverMusicItems.data( );
+		auto iterator = jsonObject.begin( );
+		auto endIt = jsonObject.end( );
+		size_t index;
+		MusicItem *musicItem;
+		QString jsonKey;
+		QJsonObject musicItemJsonObject;
+		for( ; iterator != endIt; ++iterator ) {
+			musicItemJsonObject = iterator.value( ).toObject( );
+			musicItem = new MusicItem( this );
+			if( musicItem->setJsonData( musicItemJsonObject ) == false ) {
+				delete musicItem;
+				ok = false;
+				break;
+			}
+			jsonKey = iterator.key( );
+			if( jsonKey.isEmpty( ) ) {
+				ok = false;
+				Result_Var_Messag_Ptr_Out_Args( false, &iterator, key, tr( "key 为空" ) );
+				break;
+			}
+			index = jsonKey.toULongLong( &ok );
+			if( ok == false ) {
+				Result_Var_Messag_Ptr_Out_Args( false, &jsonKey, toULongLong, tr( "类型转换失败: %1" ).arg( jsonKey ) );
+				break;
+			}
+			if( index >= count ) {
+				ok = false;
+				Result_Var_Messag_Ptr_Out_Args( false, &index, operator size_t, tr( "下标溢出: %1 >= %2" ).arg( index ).arg( count ) );
+				break;
+			}
+			data[ index ] = musicItem;
+			auto jsonValue = iterator.value( );
+			auto jsonValueRefs = jsonValue.toObject( );
+			if( musicItem->setJsonData( jsonValueRefs ) == false ) {
+				ok = false;
+				break;
+			}
 		}
-	}
-	// 如果数据正确，则回复数据
-	if( ok ) {
-		count = musicItemVector.size( );
-		data = musicItemVector.data( );
-		for( index = 0; index < count; index += 1 )
-			if( data[ index ] )
-				delete data[ index ];
-		musicItemVector = jsonDataConverMusicItems;
-		favoriteItemName = name;
-	} else
-		for( index = 0; index < count; index += 1 )
-			if( data[ index ] )
-				delete data[ index ];
-	return ok;
+		// 如果数据正确，则回复数据
+		if( ok ) {
+			count = musicItemVector.size( );
+			data = musicItemVector.data( );
+			for( index = 0; index < count; index += 1 )
+				if( data[ index ] )
+					delete data[ index ];
+			musicItemVector = jsonDataConverMusicItems;
+			favoriteItemName = name;
+		} else {
+			for( index = 0; index < count; index += 1 )
+				if( data[ index ] )
+					delete data[ index ];
+			return Result_Var_Messag_Ptr_Out_Args( false, this, setJsonData, tr( "数据反序列化失败" ) );
+		}
+		return ok;
+	} ) == false )
+		return false;
+	return true;
 }
 const QString & FavoriteItem::getFavoriteItemName( ) const {
 	return favoriteItemName;
@@ -274,7 +296,7 @@ bool FavoriteItem::renderImage( QPainter &painter, int intervalWidth, size_t ind
 	music_item->idCode = index;
 	if( music_item->rendBuff )
 		delete music_item->rendBuff;
-	music_item->rendBuff = new QImage( calculate_min_width, calculate_height, QImage::Format_RGB888 );
+	music_item->rendBuff = new QImage( calculate_min_width, calculate_height, QImage::Format_RGBA8888 );
 	music_item->rendBuff->fill( 0 );
 	painter.begin( music_item->rendBuff );
 	painter.setFont( font );
@@ -334,9 +356,9 @@ bool FavoriteItem::unsafetyUpdateInfo( ) {
 			return false;
 		else if( data[ index ]->rendBuff == nullptr ) {
 			renderImage( painter, intervalWidth, index, data[ index ], calculateMinWidth, fontHeight, *font, fillSeparatorColor );
-		} else if( data[ index ]->idCode != index ) {
+		} else {
 			if( data[ index ]->rendBuff->width( ) != calculateMinWidth || data[ index ]->rendBuff->height( ) != fontHeight ) {
-				data[ index ]->rendBuff = new QImage( calculateMinWidth, fontHeight, QImage::Format_RGB888 );
+				data[ index ]->rendBuff = new QImage( calculateMinWidth, fontHeight, QImage::Format_RGBA8888 );
 				data[ index ]->rendBuff->fill( 0 );
 				renderImage( painter, intervalWidth, index, data[ index ], calculateMinWidth, fontHeight, *font, fillSeparatorColor );
 				continue;
@@ -374,7 +396,7 @@ bool FavoriteItem::unsafetyUpdateShow( ) {
 	size_t index;
 	if( imageHeight != drawBuffHeight ) {
 		calculateMinWidth = musicCentreWidget->getMusicTitleWidget( )->getCalculateMinWidth( );
-		*drawBuff = QImage( calculateMinWidth, imageHeight, QImage::Format_RGB888 );
+		*drawBuff = QImage( calculateMinWidth, imageHeight, QImage::Format_RGBA8888 );
 		drawBuff->fill( 0 );
 	}
 	offsetX = 0;
@@ -385,7 +407,14 @@ bool FavoriteItem::unsafetyUpdateShow( ) {
 		offsetY += fontHeight;
 	}
 	painter.end( );
-	return true;
+
+	if( musicCentreWidget == nullptr )
+		return false;
+
+	auto musicListWidget = musicCentreWidget->getMusicListWidget( );
+	if( musicListWidget == nullptr )
+		return false;
+	return musicListWidget->updateMusicListInfo( );
 }
 bool FavoriteItem::unsafetyMusicListWidgetRepaint( ) {
 	if( musicCentreWidget == nullptr )
@@ -418,8 +447,10 @@ void FavoriteItem::unsafetyClear( ) {
 	auto data = musicItemVector.data( );
 	size_t index;
 	for( index = 0; index < count; index += 1 )
-		if( data[ index ] )
+		if( data[ index ] ) {
+			data[ index ]->favoriteItem = nullptr;
 			delete data[ index ];
+		}
 	musicItemVector.clear( );
 }
 bool FavoriteItem::unsafetyUpdateMusicItem( MusicItem *music_item ) {

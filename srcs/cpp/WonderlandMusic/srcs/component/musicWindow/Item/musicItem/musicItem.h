@@ -25,10 +25,10 @@ private:
 	QString absoluteFilePath;
 	QString elapsedTimeString;
 	qint64 elapsedTime;
-	QMediaPlayer *mediaPlayer;
 	bool loadedOver;
+	QMediaPlayer *mediaPlayer = nullptr;
 	QImage *rendBuff = nullptr;
-	FavoriteItem *favoriteItem;
+	FavoriteItem *favoriteItem = nullptr;
 	MusicLoad *loadPtr = nullptr;
 
 protected:

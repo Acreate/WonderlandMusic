@@ -3,8 +3,13 @@
 #include <interface/iJsonKey.h>
 
 class AppMenuManageJsonKey : public IJsonKey {
+	QString musicFavoriteMenuJsonObjectKey;
+	QString musicListMenuJsonObjectKey;
+
 public:
 	bool init( ) override;
+	virtual const QString & getMusicFavoriteMenuJsonObjectKey( ) const;
+	virtual const QString & getMusicListMenuJsonObjectKey( ) const;
 };
 
 namespace AppJsonKeyTools {

@@ -1,5 +1,6 @@
 ﻿#include "musicFavoriteMenu.h"
 
+#include <QDir>
 #include <QJsonObject>
 
 #include "../application/appInstance/appDataManage/jsonKey/musicFavoriteMenuJsonKey.h"
@@ -12,9 +13,11 @@
 #include "../component/musicWindow/musicCentreWidget/musicFavoriteWidget/musicFavoriteWidget.h"
 
 #include "../head/release_macro.h"
+#include "../head/result_message_out.h"
 
 #include "../tools/instanceTools.h"
 #include "../tools/pathInfoTools.h"
+#include "../tools/pathTools.h"
 #include "../tools/widgetTools.h"
 MusicFavoriteMenu::MusicFavoriteMenu( ) {
 }
@@ -57,8 +60,8 @@ bool MusicFavoriteMenu::initAfter( ) {
 }
 bool MusicFavoriteMenu::getJsonData( QJsonObject &get_json_object ) const {
 	if( AppJsonKeyTools::getMusicFavoriteMenu( [&get_json_object, this] ( const MusicFavoriteMenuJsonKey &json_key ) {
-		get_json_object.insert( json_key.getLoadMultDir( ), openSelecteMultiDirWidgetPath );
-		get_json_object.insert( json_key.getLoadMultFile( ), openSelecteMultiFileWidgetPath );
+		get_json_object.insert( json_key.getLoadMultDir( ), PathTools::getAutoShortenPathName( openSelecteMultiDirWidgetPath ) );
+		get_json_object.insert( json_key.getLoadMultFile( ), PathTools::getAutoShortenPathName( openSelecteMultiFileWidgetPath ) );
 		return true;
 	} ) == false )
 		return false;
@@ -69,12 +72,17 @@ bool MusicFavoriteMenu::setJsonData( const QJsonObject &set_json_object ) {
 		auto end = set_json_object.end( );
 		auto iterator = set_json_object.find( json_key.getLoadMultDir( ) );
 		if( iterator == end )
-			return false;
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "找不到匹配的目录路径" ) );
 		openSelecteMultiDirWidgetPath = iterator.value( ).toString( );
 		iterator = set_json_object.find( json_key.getLoadMultFile( ) );
 		if( iterator == end )
-			return false;
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "找不到匹配的文件路径" ) );
+
 		openSelecteMultiFileWidgetPath = iterator.value( ).toString( );
+		if( openSelecteMultiFileWidgetPath.isEmpty( ) )
+			openSelecteMultiFileWidgetPath = QDir::currentPath( );
+		if( openSelecteMultiDirWidgetPath.isEmpty( ) )
+			openSelecteMultiDirWidgetPath = QDir::currentPath( );
 		return true;
 	} ) == false )
 		return false;
@@ -146,8 +154,10 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 			return false;
 		if( WidgetTools::showMultipleSelectFileDialog( resultFile, openSelecteMultiFileWidgetPath, openWidget, translate.getSelectMusicFile( ), filter ) == false )
 			return false;
+		QFileInfo info( resultFile[ 0 ] );
+		auto dir = info.dir( );
+		openSelecteMultiFileWidgetPath = dir.path( );
 		favoriteItem->loadMusicFile( resultFile );
-		favoriteItem->update( );
 		return true;
 	} );
 }
@@ -160,8 +170,11 @@ void MusicFavoriteMenu::slot_addMusicDir( ) {
 		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
 		if( WidgetTools::showMultipleSelectDirDialog( resultFile, openSelecteMultiDirWidgetPath, openWidget, translate.getSelectMusicFile( ) ) == false )
 			return false;
+		QFileInfo info( resultFile[ 0 ] );
+
+		auto dir = info.dir( );
+		openSelecteMultiDirWidgetPath = dir.path( );
 		favoriteItem->loadMusicFile( resultFile );
-		favoriteItem->update( );
 		return true;
 	} );
 }

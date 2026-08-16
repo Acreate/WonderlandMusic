@@ -56,10 +56,8 @@ bool WidgetTools::showMultipleSelectFileDialog( std::vector< QString > &result_s
 	if( multipleSelectDialog == nullptr )
 		return false;
 	//multipleSelectDialog->setParent( parent );
-	multipleSelectDialog->setWindowTitle( title_text );
-	multipleSelectDialog->setNameFilter( filter );
-	multipleSelectDialog->setDirectory( select_default_dir_path );
 	multipleSelectDialog->setFileMode( QFileDialog::ExistingFiles );
+	// 该窗口路径并没有更新
 	multipleSelectDialog->setOption( QFileDialog::DontUseNativeDialog );
 	multipleSelectDialog->setOption( QFileDialog::DontResolveSymlinks, true );
 	multipleSelectDialog->setOption( QFileDialog::DontConfirmOverwrite, true );
@@ -67,6 +65,11 @@ bool WidgetTools::showMultipleSelectFileDialog( std::vector< QString > &result_s
 	multipleSelectDialog->setOption( QFileDialog::ReadOnly, true );
 	// 3. 视图强制列表模式（详情模式加载更多列，更卡）
 	multipleSelectDialog->setViewMode( QFileDialog::List );
+	multipleSelectDialog->setWindowTitle( title_text );
+	multipleSelectDialog->setNameFilter( filter );
+	QFileInfo info( select_default_dir_path );
+	auto absoluteFilePath = info.absoluteFilePath( );
+	multipleSelectDialog->setDirectory( absoluteFilePath );
 	moveWidgetToCenterPos( parent, multipleSelectDialog );
 	multipleSelectDialog->exec( );
 	auto selectList = multipleSelectDialog->selectedFiles( );
@@ -89,7 +92,6 @@ bool WidgetTools::showMultipleSelectDirDialog( std::vector< QString > &result_se
 		return false;
 	//multipleSelectDialog->setParent( parent );
 	multipleSelectDialog->setWindowTitle( title_text );
-	multipleSelectDialog->setDirectory( select_default_dir_path );
 	multipleSelectDialog->setFileMode( QFileDialog::Directory );
 	multipleSelectDialog->setOption( QFileDialog::DontUseNativeDialog );
 	multipleSelectDialog->setOption( QFileDialog::DontResolveSymlinks, true );
@@ -97,6 +99,9 @@ bool WidgetTools::showMultipleSelectDirDialog( std::vector< QString > &result_se
 	multipleSelectDialog->setOption( QFileDialog::DontUseCustomDirectoryIcons, true );
 	multipleSelectDialog->setOption( QFileDialog::ShowDirsOnly, true );
 	moveWidgetToCenterPos( parent, multipleSelectDialog );
+	QFileInfo info( select_default_dir_path );
+	auto absoluteFilePath = info.absoluteFilePath( );
+	multipleSelectDialog->setDirectory( absoluteFilePath );
 	multipleSelectDialog->exec( );
 	auto selectList = multipleSelectDialog->selectedFiles( );
 	delete multipleSelectDialog;

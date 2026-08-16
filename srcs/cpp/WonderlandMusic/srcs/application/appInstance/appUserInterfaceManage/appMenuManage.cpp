@@ -6,12 +6,16 @@
 #include "../../../head/before_init_macro.h"
 #include "../../../head/init_macro.h"
 #include "../../../head/release_macro.h"
+#include "../../../head/result_message_out.h"
 
 #include "../../../menu/musicFavoriteMenu.h"
 #include "../../../menu/musicListMenu.h"
 #include "../../../menu/systemTrayIconMenu.h"
 
+#include "../../../tools/appJsonKeyTools.h"
 #include "../../../tools/widgetTools.h"
+
+#include "../appDataManage/jsonKey/appMenuManageJsonKey.h"
 
 AppMenuManage::AppMenuManage( ) {
 }
@@ -91,16 +95,48 @@ IMusicListMenu * AppMenuManage::getMusicListMenu( ) const {
 	return musicListMenu;
 }
 bool AppMenuManage::getJsonData( QJsonObject &get_json_object ) const {
-	QJsonObject musicFavoriteMenuJsonObject;
-	if( musicFavoriteMenu->getJsonData( musicFavoriteMenuJsonObject ) == false )
-		return false;
+	if( AppJsonKeyTools::getAppMenuManage( [&get_json_object, this] ( const AppMenuManageJsonKey &json_key ) {
+		QJsonObject musicFavoriteMenuJsonObject;
+		if( musicFavoriteMenu->getJsonData( musicFavoriteMenuJsonObject ) == false )
+			return false;
 
-	QJsonObject musicListMenuJsonObject;
-	if( musicListMenu->getJsonData( musicListMenuJsonObject ) == false )
+		QJsonObject musicListMenuJsonObject;
+		if( musicListMenu->getJsonData( musicListMenuJsonObject ) == false )
+			return false;
+
+		get_json_object.insert( json_key.getMusicFavoriteMenuJsonObjectKey( ), musicFavoriteMenuJsonObject );
+		get_json_object.insert( json_key.getMusicListMenuJsonObjectKey( ), musicListMenuJsonObject );
+
+		return true;
+	} ) == false )
 		return false;
 
 	return true;
 }
 bool AppMenuManage::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	if( AppJsonKeyTools::getAppMenuManage( [&set_json_object, this] ( const AppMenuManageJsonKey &json_key ) {
+		auto end = set_json_object.end( );
+
+		auto &favoriteMenuJsonObjectKey = json_key.getMusicFavoriteMenuJsonObjectKey( );
+		auto find = set_json_object.find( favoriteMenuJsonObjectKey );
+		if( find == end )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 失败: %1" ).arg(favoriteMenuJsonObjectKey ) );
+
+		QJsonObject musicFavoriteMenuJsonObject = find.value( ).toObject( );
+
+		auto &listMenuJsonObjectKey = json_key.getMusicListMenuJsonObjectKey( );
+
+		find = set_json_object.find( listMenuJsonObjectKey );
+		if( find == end )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 失败: %1" ).arg(listMenuJsonObjectKey ) );
+		QJsonObject musicListMenuJsonObject = find.value( ).toObject( );
+		if( musicFavoriteMenu->setJsonData( musicFavoriteMenuJsonObject ) == false )
+			return Result_Var_Messag_Ptr_Out_Args( false, musicFavoriteMenu, setJsonData, tr( "配置 json 数据错误" ) );
+		if( musicListMenu->setJsonData( musicListMenuJsonObject ) == false )
+			return Result_Var_Messag_Ptr_Out_Args( false, musicListMenu, setJsonData, tr( "配置 json 数据错误" ) );
+		return true;
+	} ) == false )
+		return false;
+
+	return true;
 }

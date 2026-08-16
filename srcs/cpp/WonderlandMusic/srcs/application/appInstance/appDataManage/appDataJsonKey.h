@@ -13,6 +13,9 @@ class AboutWidgetJsonKey;
 class MusicFavoriteMenuJsonKey;
 class MusicListMenuJsonKey;
 class MusicWindowJsonKey;
+class MusicItemJsonKey;
+class MusicFavoriteWidgetJsonKey;
+class FavoriteItemJsonKey;
 
 class AppDataJsonKey : public IAppCore {
 protected:
@@ -26,6 +29,9 @@ protected:
 	MusicListMenuJsonKey *musicListMenu = nullptr;
 	MusicFavoriteMenuJsonKey *musicFavoriteMenu = nullptr;
 	AppMenuManageJsonKey *appMenuManage = nullptr;
+	MusicItemJsonKey *musicItem = nullptr;
+	MusicFavoriteWidgetJsonKey *musicFavoriteWidget = nullptr;
+	FavoriteItemJsonKey *favoriteItem = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -46,5 +52,8 @@ public:
 	virtual MusicListMenuJsonKey * getMusicListMenu( ) const;
 	virtual MusicFavoriteMenuJsonKey * getMusicFavoriteMenu( ) const;
 	virtual AppMenuManageJsonKey * getAppMenuManage( ) const;
+	virtual MusicItemJsonKey * getMusicItem( ) const;
+	virtual MusicFavoriteWidgetJsonKey * getMusicFavoriteWidget( ) const;
+	virtual FavoriteItemJsonKey * getFavoriteItem( ) const;
 };
 #endif // APPDATAJSONKEY_H_H_HEAD__FILE__

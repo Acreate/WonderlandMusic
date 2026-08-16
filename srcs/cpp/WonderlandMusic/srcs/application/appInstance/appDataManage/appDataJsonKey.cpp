@@ -9,8 +9,11 @@
 #include "jsonKey/appMenuManageJsonKey.h"
 #include "jsonKey/appMusicManageJsonKey.h"
 #include "jsonKey/appUserInterfaceManageJsonKey.h"
+#include "jsonKey/favoriteItemJsonKey.h"
 #include "jsonKey/mainWindowJsonKey.h"
 #include "jsonKey/musicFavoriteMenuJsonKey.h"
+#include "jsonKey/musicFavoriteWidgetJsonKey.h"
+#include "jsonKey/musicItemJsonKey.h"
 #include "jsonKey/musicListMenuJsonKey.h"
 #include "jsonKey/musicWindowJsonKey.h"
 #include "jsonKey/systemTrayIconJsonKey.h"
@@ -26,6 +29,9 @@ bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicListMenu );
 	Delete_Resource_App_Core_Ptr( musicFavoriteMenu );
 	Delete_Resource_App_Core_Ptr( appMenuManage );
+	Delete_Resource_App_Core_Ptr( musicItem );
+	Delete_Resource_App_Core_Ptr( musicFavoriteWidget );
+	Delete_Resource_App_Core_Ptr( favoriteItem );
 	return true;
 }
 
@@ -47,6 +53,9 @@ bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( musicListMenu );
 	Init_Resource_App_Core_Ptr( musicFavoriteMenu );
 	Init_Resource_App_Core_Ptr( appMenuManage );
+	Init_Resource_App_Core_Ptr( musicItem );
+	Init_Resource_App_Core_Ptr( musicFavoriteWidget );
+	Init_Resource_App_Core_Ptr( favoriteItem );
 	return true;
 }
 
@@ -62,6 +71,11 @@ bool AppDataJsonKey::initBefore( ) {
 	musicListMenu = new MusicListMenuJsonKey;
 	musicFavoriteMenu = new MusicFavoriteMenuJsonKey;
 	appMenuManage = new AppMenuManageJsonKey;
+
+	musicItem = new MusicItemJsonKey;
+	musicFavoriteWidget = new MusicFavoriteWidgetJsonKey;
+	favoriteItem = new FavoriteItemJsonKey;
+
 	return true;
 }
 
@@ -103,4 +117,13 @@ MusicFavoriteMenuJsonKey * AppDataJsonKey::getMusicFavoriteMenu( ) const {
 }
 AppMenuManageJsonKey * AppDataJsonKey::getAppMenuManage( ) const {
 	return appMenuManage;
+}
+MusicItemJsonKey * AppDataJsonKey::getMusicItem( ) const {
+	return musicItem;
+}
+MusicFavoriteWidgetJsonKey * AppDataJsonKey::getMusicFavoriteWidget( ) const {
+	return musicFavoriteWidget;
+}
+FavoriteItemJsonKey * AppDataJsonKey::getFavoriteItem( ) const {
+	return favoriteItem;
 }

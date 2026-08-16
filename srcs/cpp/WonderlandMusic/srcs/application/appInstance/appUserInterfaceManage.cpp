@@ -37,10 +37,14 @@ AppMenuManage * AppUserInterfaceManage::getAppMenuManage( ) const {
 
 bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
 	AppJsonKeyTools::getAppUserInterfaceManage( [this, &get_json_object] ( const AppUserInterfaceManageJsonKey &json_key ) {
-		QJsonObject writeJsonObject;
-		if( mainWindow->getJsonData( writeJsonObject ) == false )
+		QJsonObject mainWindowJsonObject;
+		if( mainWindow->getJsonData( mainWindowJsonObject ) == false )
 			return Result_Var_Messag_Ptr_Out_Args( false, mainWindow, getJsonData, tr( "获取 json 数据异常" ) );
-		get_json_object.insert( json_key.getMainWindow( ), writeJsonObject );
+		QJsonObject mainMenuJsonObject;
+		if( appMenuManage->getJsonData( mainMenuJsonObject ) == false )
+			return Result_Var_Messag_Ptr_Out_Args( false, appMenuManage, getJsonData, tr( "获取 json 数据异常" ) );
+		get_json_object.insert( json_key.getMainWindowJsonObject( ), mainWindowJsonObject );
+		get_json_object.insert( json_key.getMainMenuJsonObject( ), mainMenuJsonObject );
 		return true;
 	} );
 
@@ -50,12 +54,23 @@ bool AppUserInterfaceManage::getJsonData( QJsonObject &get_json_object ) const {
 bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 	AppJsonKeyTools::getAppUserInterfaceManage( [this, &set_json_object] ( const AppUserInterfaceManageJsonKey &json_key ) {
 		auto end = set_json_object.end( );
-		auto iterator = set_json_object.find( json_key.getMainWindow( ) );
+		auto &mainWindowJsonObjectKey = json_key.getMainWindowJsonObject( );
+		auto iterator = set_json_object.find( mainWindowJsonObjectKey );
 		if( end == iterator )
-			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 数据异常: %1" ).arg( json_key.getMainWindow( )) );
-		auto jsonObject = iterator.value( ).toObject( );
-		if( mainWindow->setJsonData( jsonObject ) == false )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 数据异常: %1" ).arg( mainWindowJsonObjectKey) );
+		auto mainWindowJsonObject = iterator.value( ).toObject( );
+
+		auto &mainMenuJsonObjectKey = json_key.getMainMenuJsonObject( );
+		iterator = set_json_object.find( mainMenuJsonObjectKey );
+		if( end == iterator )
+			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 数据异常: %1" ).arg( mainMenuJsonObjectKey) );
+
+		auto mainMenuJsonObject = iterator.value( ).toObject( );
+
+		if( mainWindow->setJsonData( mainWindowJsonObject ) == false )
 			return Result_Var_Messag_Ptr_Out_Args( false, mainWindow, setJsonData, tr( "配置 json 数据异常" ) );
+		if( appMenuManage->setJsonData( mainMenuJsonObject ) == false )
+			return Result_Var_Messag_Ptr_Out_Args( false, appMenuManage, setJsonData, tr( "配置 json 数据异常" ) );
 		return true;
 	} );
 	return true;

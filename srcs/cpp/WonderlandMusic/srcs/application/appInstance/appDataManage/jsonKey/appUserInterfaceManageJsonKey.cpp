@@ -2,20 +2,13 @@
 
 bool AppUserInterfaceManageJsonKey::init( ) {
 	filePath = "/json/app.ui.json";
-	mainWindow = "main.window.info";
-	musicListTopWidget = "music.window.list.top.info";
-	musicFavoriteWidget = "music.window.favorite.info";
+	mainMenuJsonObject = "main.menu.json.object";
+	mainWindowJsonObject = "main.window.json.object";
 	return true;
 }
-
-const QString & AppUserInterfaceManageJsonKey::getMainWindow( ) const {
-	return mainWindow;
+const QString & AppUserInterfaceManageJsonKey::getMainWindowJsonObject( ) const {
+	return mainWindowJsonObject;
 }
-
-const QString & AppUserInterfaceManageJsonKey::getMusicListTopWidget( ) const {
-	return musicListTopWidget;
-}
-
-const QString & AppUserInterfaceManageJsonKey::getMusicFavoriteWidget( ) const {
-	return musicFavoriteWidget;
+const QString & AppUserInterfaceManageJsonKey::getMainMenuJsonObject( ) const {
+	return mainMenuJsonObject;
 }

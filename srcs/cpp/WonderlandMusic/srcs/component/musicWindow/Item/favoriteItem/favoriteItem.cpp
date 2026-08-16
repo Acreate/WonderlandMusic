@@ -4,21 +4,20 @@
 #include <QPainter>
 #include <qfontmetrics.h>
 
+#include <application/appInstance/appDataManage/jsonKey/favoriteItemJsonKey.h>
+#include <application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h>
+
+#include <dateTimeFormat/dateTimeFormat.h>
+
+#include <head/after_init_macro.h>
+#include <head/before_init_macro.h>
+#include <head/create_ptr_macro.h>
+#include <head/init_macro.h>
+#include <head/result_message_out.h>
+
 #include <mutex/userMutex.h>
 
-#include "../../../../application/appInstance/appDataManage/jsonKey/favoriteItemJsonKey.h"
-#include "../../../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
-
-#include "../../../../dateTimeFormat/dateTimeFormat.h"
-
-#include "../../../../head/after_init_macro.h"
-#include "../../../../head/before_init_macro.h"
-#include "../../../../head/create_ptr_macro.h"
-#include "../../../../head/init_macro.h"
-#include "../../../../head/result_message_out.h"
-
-#include "../../../../tools/appJsonKeyTools.h"
-#include "../../../../tools/instanceTools.h"
+#include <tools/instanceTools.h>
 
 #include "../../musicCentreWidget/musicCentreWidget.h"
 #include "../../musicCentreWidget/musicListWidget/musicListWidget.h"

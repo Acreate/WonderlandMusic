@@ -3,13 +3,13 @@
 #include <interface/iJsonKey.h>
 
 class AppUserInterfaceManageJsonKey : public IJsonKey {
-	QString mainWindow;
-	QString menu;
+	QString mainWindowJsonObject;
+	QString mainMenuJsonObject;
 
 public:
 	bool init( ) override;
-
-	virtual const QString & getMainWindow( ) const;
+	virtual const QString & getMainWindowJsonObject( ) const;
+	virtual const QString & getMainMenuJsonObject( ) const;
 };
 
 namespace AppJsonKeyTools {

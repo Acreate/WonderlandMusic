@@ -134,7 +134,7 @@ bool MainWindow::initBefore( ) {
 
 bool MainWindow::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( optionWindow );
-
+	resize( 1024, 768 );
 	setCentralWidget( optionWindow );
 	optionWindow->show( );
 	musicWindow = new MusicWindow( );

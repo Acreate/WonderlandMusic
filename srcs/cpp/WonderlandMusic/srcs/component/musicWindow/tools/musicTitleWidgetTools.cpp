@@ -1,7 +1,0 @@
-﻿#include "musicTitleWidgetTools.h"
-
-#include "../musicCentreWidget/musicTitleWidget/musicTitleWidget.h"
-
-void MusicTitleWidgetTools::updateMusicTitleWidgetTitleWidthInfo( MusicTitleWidget *music_title_widget, int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width ) {
-	music_title_widget->setTitleWidthInfo( interval_width, separator_width, music_code_width, music_name_width, music_singer_name_width, music_duration_time_width );
-}

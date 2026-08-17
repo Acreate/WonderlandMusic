@@ -1,13 +1,13 @@
 ﻿#ifndef IMUSICFAVORITEITEM_H_H_HEAD__FILE__
 #define IMUSICFAVORITEITEM_H_H_HEAD__FILE__
+#include "../musicCentreWidgetChild/iMusicCentreWidgetChild.h"
 
 class IMusicItem;
 class QString;
 class QImage;
 
-class IMusicFavoriteItem {
+class IMusicFavoriteItem : public IMusicCentreWidgetChild {
 public:
-	virtual ~IMusicFavoriteItem( ) = default;
 	virtual bool getName( QString &result_name ) const = 0;
 	virtual bool addMusicItem( IMusicItem *music_item ) = 0;
 	virtual bool removeMusicItem( IMusicItem *music_item ) = 0;

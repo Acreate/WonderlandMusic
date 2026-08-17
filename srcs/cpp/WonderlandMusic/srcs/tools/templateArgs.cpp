@@ -6,7 +6,6 @@ QString TemplateArgs::getTypeName( nullptr_t ty ) {
 }
 QString TemplateArgs::getCaseTypeName( void *ty ) {
 	if( ty ) {
-		return QString( );
 		auto casePtr = IAppCore::case_ptr( ty );
 		if( casePtr )
 			return casePtr->getTypeName( );
@@ -20,10 +19,10 @@ QString TemplateArgs::getCaseTypeName( const QObject *ty ) {
 	return ty->metaObject( )->className( );
 }
 QString TemplateArgs::getCaseTypeName( const void *ty ) {
-	if( ty == nullptr )
-		return QString( );
-	auto casePtr = IAppCore::case_ptr( ty );
-	if( casePtr )
-		return casePtr->getTypeName( );
+	if( ty ) {
+		auto casePtr = IAppCore::case_ptr( ty );
+		if( casePtr )
+			return casePtr->getTypeName( );
+	}
 	return QString( );
 }

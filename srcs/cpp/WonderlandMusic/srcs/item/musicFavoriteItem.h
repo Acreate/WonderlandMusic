@@ -1,0 +1,8 @@
+﻿#ifndef MUSICFAVORITEITEM_H_H_HEAD__FILE__
+#define MUSICFAVORITEITEM_H_H_HEAD__FILE__
+
+
+class MusicFavoriteItem {
+};
+
+#endif // MUSICFAVORITEITEM_H_H_HEAD__FILE__

@@ -1,6 +1,8 @@
 ﻿#include "iAppCore.h"
 
-#include "../mutex/userMutex.h"
+#include <classTypeInfo/classTypeInfo.h>
+
+#include <mutex/userMutex.h>
 
 static std::vector< IAppCore * > ptrVector;
 static std::shared_ptr< UserMutex > userMutex( new UserMutex );
@@ -23,6 +25,18 @@ void IAppCore::removePtr( IAppCore *ptr ) {
 			}
 	}
 	userMutex->unlock( );
+}
+ClassTypeInfo * IAppCore::appendClassTypeInfo( const type_info &type_info ) {
+	return classTypeInfo->appendClassTypeInfo( type_info );
+}
+ClassTypeInfo * IAppCore::appendClassTypeInfo( const type_info &type_info, const QString &type_name ) {
+	return classTypeInfo->appendClassTypeInfo( type_info, type_name );
+}
+bool IAppCore::isClassType( const type_info &type_info ) const {
+	return classTypeInfo->isClassType( type_info );
+}
+bool IAppCore::isClassType( const QString &type_name ) const {
+	return classTypeInfo->isClassType( type_name );
 }
 IAppCore * IAppCore::case_ptr( void *ptr ) {
 	IAppCore *result = nullptr;
@@ -57,9 +71,13 @@ const IAppCore * IAppCore::case_ptr( const void *ptr ) {
 	return result;
 }
 IAppCore::IAppCore( ) {
+	typeInfoUserMutex = new UserMutex;
+	classTypeInfo = new ClassTypeInfo( typeid( IAppCore ) );
 	appendPtr( this );
 }
 IAppCore::~IAppCore( ) {
+	delete classTypeInfo;
+	delete classTypeInfo;
 	removePtr( this );
 }
 QString IAppCore::getTypeName( ) const {

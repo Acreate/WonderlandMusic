@@ -1,10 +1,8 @@
 ﻿#ifndef IMUSICCENTREWIDGETCHILD_H_H_HEAD__FILE__
 #define IMUSICCENTREWIDGETCHILD_H_H_HEAD__FILE__
+#include <interface/iAppCore.h>
 
-class IMusicCentreWidgetChild {
-public:
-	virtual ~IMusicCentreWidgetChild( ) = default;
-
+class IMusicCentreWidgetChild : public IAppCore {
 private:
 	friend class MusicCentreWidget;
 

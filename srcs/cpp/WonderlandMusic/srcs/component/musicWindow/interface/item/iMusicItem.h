@@ -7,6 +7,7 @@ class QString;
 
 class IMusicItem : public IMusicCentreWidgetChild {
 public:
+	IMusicItem( );
 	virtual bool isLoadedOver( ) = 0;
 	virtual bool getIdCode( size_t &result_id_code ) const = 0;
 	virtual bool getName( QString &result_name ) const = 0;

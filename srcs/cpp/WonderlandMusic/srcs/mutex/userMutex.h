@@ -27,6 +27,30 @@ public:
 	virtual LockGuard getLockGuard( ) const;
 	virtual ~UserMutex( );
 
+	template< typename TResult_Type >
+	TResult_Type && result_unlock( TResult_Type &&result, const std::source_location &source_location = std::source_location::current( ) ) {
+		unlock( source_location );
+		return result;
+	}
+
+	template< typename TResult_Type >
+	TResult_Type && result_lock( TResult_Type &&result, const std::source_location &source_location = std::source_location::current( ) ) {
+		lock( source_location );
+		return result;
+	}
+
+	template< typename TResult_Type >
+	TResult_Type & result_unlock( TResult_Type &result, const std::source_location &source_location = std::source_location::current( ) ) {
+		unlock( source_location );
+		return result;
+	}
+
+	template< typename TResult_Type >
+	TResult_Type & result_lock( TResult_Type &result, const std::source_location &source_location = std::source_location::current( ) ) {
+		lock( source_location );
+		return result;
+	}
+
 protected:
 	virtual bool tryLock( std::mutex *mutex_cor_ptr, const std::source_location &source_location = std::source_location::current( ) ) const;
 	virtual bool lock( std::mutex *mutex_cor_ptr, const std::source_location &source_location = std::source_location::current( ) ) const;

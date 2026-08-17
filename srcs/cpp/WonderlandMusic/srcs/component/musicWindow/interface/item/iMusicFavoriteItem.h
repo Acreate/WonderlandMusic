@@ -8,6 +8,7 @@ class QImage;
 
 class IMusicFavoriteItem : public IMusicCentreWidgetChild {
 public:
+	IMusicFavoriteItem( );
 	virtual bool getName( QString &result_name ) const = 0;
 	virtual bool addMusicItem( IMusicItem *music_item ) = 0;
 	virtual bool removeMusicItem( IMusicItem *music_item ) = 0;

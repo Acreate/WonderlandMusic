@@ -1,9 +1,12 @@
 ﻿#ifndef IMUSICITEMWIDTHINFO_H_H_HEAD__FILE__
 #define IMUSICITEMWIDTHINFO_H_H_HEAD__FILE__
+
 #include "../musicCentreWidgetChild/iMusicCentreWidgetChild.h"
 
 class IMusicItemWidthInfo : public IMusicCentreWidgetChild {
 public:
+	IMusicItemWidthInfo( );
+
 	virtual int getSuggestHeight( ) const = 0;
 	virtual int getClickWidth( ) const = 0;
 	virtual int getCalculateMinWidth( ) const = 0;

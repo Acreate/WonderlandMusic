@@ -4,6 +4,7 @@
 
 class IMusicWidgetSizeInfo : public IMusicCentreWidgetChild {
 public:
+	IMusicWidgetSizeInfo( );
 	virtual int getFavoriteWidth( ) const = 0;
 	virtual int getTitleHeight( ) const = 0;
 	virtual bool updateMusicWidgetLayout( ) =0;

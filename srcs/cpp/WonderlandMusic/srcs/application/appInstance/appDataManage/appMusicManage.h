@@ -3,9 +3,10 @@
 
 #include <interface/iAppCore.h>
 #include <interface/iAppJsonData.h>
-class IMusicFavoriteItem;
 class IMusicItemWidthInfo;
-class IItemWidthInfo;
+class MusicFavoriteItem;
+class MusicInfoItem;
+
 class IMusicItem;
 class QPainter;
 class UserMutex;
@@ -18,8 +19,8 @@ protected:
 	UserMutex *userMutex = nullptr;
 	AppMusicDecoder *appMusicDecoder = nullptr;
 	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
-	std::vector< IMusicItem * > musicItemVector;
-	std::vector< IMusicFavoriteItem * > musicFavoriteItemVector;
+	std::vector< MusicInfoItem * > musicItemVector;
+	std::vector< MusicFavoriteItem * > musicFavoriteItemVector;
 
 protected:
 	bool deleteResource( ) override;

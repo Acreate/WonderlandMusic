@@ -3,6 +3,9 @@
 
 #include <interface/iAppCore.h>
 
+class FavoriteItem;
+class ItemWidthInfo;
+class MusicItem;
 class QSize;
 class QWidget;
 class QPen;
@@ -46,5 +49,7 @@ public:
 	virtual bool getTxtSize( QSize &result_txt_size, const QString &render_txt, const QFont &font ) const;
 	virtual bool getTxtSize( QSize &result_txt_size, const QString &render_txt ) const;
 	virtual bool renderWidget( QImage &result_render_image, QWidget *render_widget ) const;
+	virtual bool renderMusicItem( MusicItem *music_item, const ItemWidthInfo &item_width_info ) const;
+	virtual bool renderMusicItem( FavoriteItem *favorite_item, const ItemWidthInfo &item_width_info ) const;
 };
 #endif // APPRENDERIMAGE_H_H_HEAD__FILE__

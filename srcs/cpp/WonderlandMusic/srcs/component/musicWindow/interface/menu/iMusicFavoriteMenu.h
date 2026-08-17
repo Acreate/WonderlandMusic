@@ -5,19 +5,22 @@
 
 #include <interface/iAppJsonData.h>
 
-class QMenu;
-class FavoriteItem;
-class MusicFavoriteWidget;
+#include "../musicWidgetChild/musicWidgetChild.h"
 
-class IMusicFavoriteMenu : public IAppCore, public IAppJsonData {
-	friend class MusicFavoriteWidget;
+class IMusicFavoriteItem;
+class IMusicFavoriteWidget;
+class MusicCentreWidget;
+class QMenu;
+
+class IMusicFavoriteMenu : public IAppCore, public IAppJsonData, public MusicWidgetChild {
+	friend class MusicCentreWidget;
 
 public:
 	IMusicFavoriteMenu( );
 	~IMusicFavoriteMenu( ) override;
 
 protected:
-	virtual bool execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) = 0;
+	virtual bool execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point ) = 0;
 
 public:
 	virtual QMenu * toMenu( ) = 0;

@@ -1,0 +1,8 @@
+﻿#ifndef IMUSICWIDGETSIZEINFO_H_H_HEAD__FILE__
+#define IMUSICWIDGETSIZEINFO_H_H_HEAD__FILE__
+
+
+class IMusicWidgetSizeInfo {
+};
+
+#endif // IMUSICWIDGETSIZEINFO_H_H_HEAD__FILE__

@@ -14,18 +14,16 @@
 
 #include "../../../head/result_message_out.h"
 
+#include "../interface/menu/iMusicFavoriteMenu.h"
+#include "../interface/menu/iMusicListMenu.h"
+#include "../interface/widget/iMusicFavoriteWidget.h"
+#include "../interface/widget/iMusicListWidget.h"
+#include "../interface/widget/iMusicTitleWidget.h"
+
 #include "../tools/MusicFavoriteWidgetTools.h"
 #include "../tools/musicListWidgetTools.h"
 
 #include "../transparencyScrollBar/transparencyScrollBar.h"
-
-#include "musicListWidget/musicListWidget.h"
-
-#include "musicTitleWidget/musicTitleWidget.h"
-
-#include "musicToolWidget/musicToolWidget.h"
-
-#include "musicfavoriteWidget/musicfavoriteWidget.h"
 
 MusicCentreWidget::MusicCentreWidget( MusicWindow *parent ) : QWidget( parent ), musicWindow( parent ) {
 }
@@ -43,10 +41,11 @@ bool MusicCentreWidget::deleteResource( ) {
 	musicTitleWidgetScrollArea->takeWidget( );
 	Delete_Resource_App_Core_Ptr( musicTitleWidgetScrollArea );
 
-	Delete_Resource_App_Core_Ptr( musicfavoriteWidget );
+	Delete_Resource_App_Core_Ptr( musicFavoriteWidget );
 	Delete_Resource_App_Core_Ptr( musicTitleWidget );
 	Delete_Resource_App_Core_Ptr( musicListWidget );
-	Delete_Resource_App_Core_Ptr( musicToolWidget );
+	Delete_Resource_App_Core_Ptr( musicListMenu );
+	Delete_Resource_App_Core_Ptr( musicFavoriteMenu );
 
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
@@ -58,48 +57,27 @@ void MusicCentreWidget::resizeEvent( QResizeEvent *event ) {
 
 	calculateSize( );
 }
-QScrollArea * MusicCentreWidget::createControlScrollArea( QWidget *widget ) {
+QScrollArea * MusicCentreWidget::createControlScrollArea( ) {
 	auto scrollArea = new QScrollArea( this );
 	scrollArea->setWidgetResizable( true );
 	scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 	scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	scrollArea->setWidget( widget );
 	return scrollArea;
 }
-void MusicCentreWidget::updateTitleWidthInfo( const ItemWidthInfo &item_width_info ) {
-	if( musicListWidget == nullptr )
-		return;
-	MusicListWidgetTools::updateItemWidthInfo( musicListWidget, item_width_info );
-}
+
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
-	musicfavoriteWidget = new MusicFavoriteWidget( this );
-	musicTitleWidget = new MusicTitleWidget( this );
-	musicListWidget = new MusicListWidget( this );
-	musicToolWidget = new MusicToolWidget( this );
-	Before_Init_Resource_App_Core_Ptr( musicfavoriteWidget );
-	Before_Init_Resource_App_Core_Ptr( musicTitleWidget );
-	Before_Init_Resource_App_Core_Ptr( musicListWidget );
-	Before_Init_Resource_App_Core_Ptr( musicToolWidget );
 	return true;
 }
 bool MusicCentreWidget::init( ) {
-	Init_Resource_App_Core_Ptr( musicfavoriteWidget );
-	Init_Resource_App_Core_Ptr( musicTitleWidget );
-	Init_Resource_App_Core_Ptr( musicListWidget );
-	Init_Resource_App_Core_Ptr( musicToolWidget );
 	return true;
 }
 bool MusicCentreWidget::initAfter( ) {
-	After_Init_Resource_App_Core_Ptr( musicfavoriteWidget );
-	After_Init_Resource_App_Core_Ptr( musicTitleWidget );
-	After_Init_Resource_App_Core_Ptr( musicListWidget );
-	After_Init_Resource_App_Core_Ptr( musicToolWidget );
+	musicfavoriteWidgetScrollArea = createControlScrollArea( );
 
-	musicfavoriteWidgetScrollArea = createControlScrollArea( musicfavoriteWidget );
-	musicTitleWidgetScrollArea = createControlScrollArea( musicTitleWidget );
-	musicListWidgetScrollArea = createControlScrollArea( musicListWidget );
+	musicTitleWidgetScrollArea = createControlScrollArea( );
+	musicListWidgetScrollArea = createControlScrollArea( );
 
 	musicTitleWidgetScrollArea->setVerticalScrollBar( new TransparencyScrollBar( this ) );
 	musicTitleWidgetScrollArea->setMouseTracking( true );
@@ -114,20 +92,13 @@ bool MusicCentreWidget::initAfter( ) {
 	connect( scrollBar, &QScrollBar::rangeChanged, horizontalScrollBar, &QScrollBar::setRange );
 
 	calculateSize( );
-	FavoriteItem *defitem;
-	if( musicfavoriteWidget->getIndexFavoriteItem( defitem, 0 ) == false || defitem == nullptr )
-		return Result_Var_Messag_Ptr_Out_Args( false, musicfavoriteWidget, getIndexFavoriteItem, tr( "找不到匹配下标 %1 的元素" ).arg( 0 ) );
-	updateTitleWidthInfo( musicTitleWidget->getItemWidthInfo( ) );
-	musicListWidget->setCurrentFavoriteItem( defitem );
+
+	musicListWidgetScrollArea->show( );
 	musicfavoriteWidgetScrollArea->show( );
 	musicTitleWidgetScrollArea->show( );
-	musicToolWidget->show( );
-	musicListWidgetScrollArea->show( );
-
 	return true;
 }
-void MusicCentreWidget::clearShowMusic( ) {
-}
+
 bool MusicCentreWidget::calculateSize( ) {
 	if( userMutex == nullptr )
 		return false;
@@ -142,7 +113,7 @@ bool MusicCentreWidget::calculateSize( ) {
 	// 组件建议宽度
 	auto verticalScrollBar = musicfavoriteWidgetScrollArea->verticalScrollBar( );
 	int modWidth = verticalScrollBar->width( );
-	int suggestWidth = musicfavoriteWidget->getSuggestWidth( ) + modWidth;
+	int suggestWidth = musicFavoriteWidget->toWidget( )->width( ) + modWidth;
 	// 收藏组件的高度
 	musicfavoriteWidgetScrollArea->setGeometry( 0, 0, suggestWidth, thisCentreHeight );
 	musicfavoriteWidgetScrollArea->move( 0, 0 );
@@ -150,19 +121,13 @@ bool MusicCentreWidget::calculateSize( ) {
 	// 剩余宽度
 	modWidth = thisCentreWidthWidth - suggestWidth;
 	// 建议高度
-	int suggestHeight = musicTitleWidget->getSuggestHeight( );
+	int suggestHeight = musicTitleWidget->toWidget( )->height( );
 	// 标题宽度
 	musicTitleWidgetScrollArea->setGeometry( suggestWidth, 0, modWidth, suggestHeight );
 
-	// 工具面板高度
-	int musicToolHeight = musicToolWidget->getSuggestHeight( );
 	// 中心面板
-	int modHeight = thisCentreHeight - ( musicToolHeight + suggestHeight );
 	musicListWidgetScrollArea->setGeometry( suggestWidth, suggestHeight, modWidth, modHeight );
 
-	modHeight = musicListWidgetScrollArea->y( ) + musicListWidgetScrollArea->height( );
-	// 工具宽度
-	musicToolWidget->setGeometry( suggestWidth, modHeight, modWidth, musicToolHeight );
 	return true;
 }
 bool MusicCentreWidget::getJsonData( QJsonObject &get_json_object ) const {
@@ -170,33 +135,33 @@ bool MusicCentreWidget::getJsonData( QJsonObject &get_json_object ) const {
 	if( musicTitleWidget->getJsonData( musicTitleJson ) == false )
 		return false;
 	QJsonObject musicFavoriteJson;
-	if( musicfavoriteWidget->getJsonData( musicFavoriteJson ) == false )
+	if( musicFavoriteWidget->getJsonData( musicFavoriteJson ) == false )
 		return false;
 	QJsonObject musicListJson;
 	if( musicListWidget->getJsonData( musicListJson ) == false )
 		return false;
-	get_json_object.insert( musicTitleWidget->metaObject( )->className( ), musicTitleJson );
-	get_json_object.insert( musicListWidget->metaObject( )->className( ), musicListJson );
-	get_json_object.insert( musicfavoriteWidget->metaObject( )->className( ), musicFavoriteJson );
+	get_json_object.insert( musicTitleWidget->getTypeName( ), musicTitleJson );
+	get_json_object.insert( musicListWidget->getTypeName( ), musicListJson );
+	get_json_object.insert( musicFavoriteWidget->getTypeName( ), musicFavoriteJson );
 	return true;
 }
 bool MusicCentreWidget::setJsonData( const QJsonObject &set_json_object ) {
 	auto end = set_json_object.end( );
-	auto iterator = set_json_object.find( musicTitleWidget->metaObject( )->className( ) );
+	auto iterator = set_json_object.find( musicTitleWidget->getTypeName( ) );
 	if( iterator == end )
 		return false;
 	QJsonObject musicTitleJson = iterator->toObject( );
-	iterator = set_json_object.find( musicListWidget->metaObject( )->className( ) );
+	iterator = set_json_object.find( musicListWidget->getTypeName( ) );
 	if( iterator == end )
 		return false;
 	QJsonObject musicListJson = iterator->toObject( );
-	iterator = set_json_object.find( musicfavoriteWidget->metaObject( )->className( ) );
+	iterator = set_json_object.find( musicFavoriteWidget->getTypeName( ) );
 	if( iterator == end )
 		return false;
 	QJsonObject musicFavoriteJson = iterator->toObject( );
 	if( musicTitleWidget->setJsonData( musicTitleJson ) == false )
 		return false;
-	if( musicfavoriteWidget->setJsonData( musicFavoriteJson ) == false )
+	if( musicFavoriteWidget->setJsonData( musicFavoriteJson ) == false )
 		return false;
 	if( musicListWidget->setJsonData( musicListJson ) == false )
 		return false;
@@ -206,21 +171,66 @@ bool MusicCentreWidget::setJsonData( const QJsonObject &set_json_object ) {
 MusicWindow * MusicCentreWidget::getMusicWindow( ) const {
 	return musicWindow;
 }
-MusicFavoriteWidget * MusicCentreWidget::getMusicFavoriteWidget( ) const {
-	return musicfavoriteWidget;
+IMusicFavoriteWidget * MusicCentreWidget::getMusicFavoriteWidget( ) const {
+	return musicFavoriteWidget;
 }
-MusicTitleWidget * MusicCentreWidget::getMusicTitleWidget( ) const {
-	return musicTitleWidget;
-}
-MusicListWidget * MusicCentreWidget::getMusicListWidget( ) const {
+
+IMusicListWidget * MusicCentreWidget::getMusicListWidget( ) const {
 	return musicListWidget;
 }
-MusicToolWidget * MusicCentreWidget::getMusicToolWidget( ) const {
-	return musicToolWidget;
+
+IMusicTitleWidget * MusicCentreWidget::getMusicTitleWidget( ) const {
+	return musicTitleWidget;
 }
-bool MusicCentreWidget::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
-	return MusicFavoriteWidgetTools::setMusicFavoriteMenu( musicfavoriteWidget, music_favorite_menu );
+IMusicFavoriteMenu * MusicCentreWidget::getMusicFavoriteMenu( ) const {
+	return musicFavoriteMenu;
 }
-bool MusicCentreWidget::setMusicListMenu( IMusicListMenu *music_list_menu ) {
-	return MusicListWidgetTools::setMusicListMenu( musicListWidget, music_list_menu );
+IMusicListMenu * MusicCentreWidget::getMusicListMenu( ) const {
+	return musicListMenu;
+}
+IMusicFavoriteWidget * MusicCentreWidget::setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) {
+	if( music_favorite_widget->setMusicCentreWidget( this ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_favorite_widget, music_favorite_widget, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
+	if( musicFavoriteWidget->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_favorite_widget, musicFavoriteWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	auto oldMenu = this->musicFavoriteWidget;
+	this->musicFavoriteWidget = music_favorite_widget;
+	return oldMenu;
+}
+IMusicListWidget * MusicCentreWidget::setMusicListWidget( IMusicListWidget *const music_list_widget ) {
+	if( music_list_widget->setMusicCentreWidget( this ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_list_widget, music_list_widget, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
+	if( musicListWidget->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_list_widget, musicListWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	auto oldMenu = this->musicListWidget;
+	this->musicListWidget = music_list_widget;
+	return oldMenu;
+}
+IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) {
+	if( music_title_widget->setMusicCentreWidget( this ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_title_widget, music_title_widget, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
+	if( musicTitleWidget->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_title_widget, musicTitleWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	auto oldMenu = this->musicTitleWidget;
+	this->musicTitleWidget = music_title_widget;
+	return oldMenu;
+}
+
+IMusicFavoriteMenu * MusicCentreWidget::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
+	if( music_favorite_menu->setMusicCentreWidget( this ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_favorite_menu, music_favorite_menu, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
+	if( musicFavoriteMenu->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_favorite_menu, musicFavoriteMenu, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	auto oldMenu = this->musicFavoriteMenu;
+	this->musicFavoriteMenu = music_favorite_menu;
+	return oldMenu;
+}
+IMusicListMenu * MusicCentreWidget::setMusicListMenu( IMusicListMenu *music_list_menu ) {
+	if( music_list_menu->setMusicCentreWidget( this ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_list_menu, music_list_menu, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
+	if( this->musicListMenu->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_list_menu, musicListMenu, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	auto oldMenu = this->musicListMenu;
+	this->musicListMenu = music_list_menu;;
+	return oldMenu;
 }

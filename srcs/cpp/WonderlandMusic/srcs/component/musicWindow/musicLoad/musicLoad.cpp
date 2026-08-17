@@ -1,5 +1,7 @@
 ﻿#include "musicLoad.h"
 
+#include "../../../application/appInstance/appDataManage/appMusicManage.h"
+
 #include "../../../mutex/userMutex.h"
 
 #include "../../../tools/pathTools.h"
@@ -7,11 +9,11 @@
 #include "../Item/favoriteItem/favoriteItem.h"
 #include "../Item/musicItem/musicItem.h"
 
-MusicLoad::MusicLoad( FavoriteItem *favorite_item ) : favoriteItem( favorite_item ) {
+MusicLoad::MusicLoad( AppMusicManage *app_music_manage ) : appMusicManage( app_music_manage ) {
 }
 MusicLoad::~MusicLoad( ) {
-	if( favoriteItem )
-		favoriteItem->removeMusicLoad( this );
+	if( appMusicManage )
+		appMusicManage->removeMusicLoad( this );
 	deleteResource( );
 }
 bool MusicLoad::deleteResource( ) {
@@ -102,7 +104,7 @@ size_t MusicLoad::loadMusicFile( const QStringList &music_file_path_list ) {
 	return result;
 }
 size_t MusicLoad::loadMusicFile( const QString &music_file_path ) {
-	if( favoriteItem == nullptr )
+	if( appMusicManage == nullptr )
 		return 0;
 	QFileInfo info( music_file_path );
 	if( info.exists( ) == false )
@@ -111,7 +113,7 @@ size_t MusicLoad::loadMusicFile( const QString &music_file_path ) {
 	if( PathTools::isMusicFile( absoluteFilePath ) == false )
 		return 0;
 	userMutex->lock( );
-	auto musicItem = new MusicItem( favoriteItem, music_file_path );
+	auto musicItem = new MusicItem( appMusicManage, music_file_path );
 	musicItem->loadPtr = this;
 	loadMusicItemsHistory.emplace_back( musicItem );
 	userMutex->unlock( );

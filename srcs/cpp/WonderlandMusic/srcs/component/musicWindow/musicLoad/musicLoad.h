@@ -3,23 +3,18 @@
 
 #include <interface/iAppCore.h>
 
-class FavoriteItem;
-class MusicCentreWidget;
-class MusicFavoriteWidget;
 class UserMutex;
 class MusicItem;
-class MusicListWidget;
-class QString;
-class MusicLoadTools;
+class AppMusicManage;
 
 class MusicLoad : public IAppCore {
-	friend class MusicLoadTools;
-
 protected:
 	std::vector< MusicItem * > loadMusicItemsHistory;
-	FavoriteItem *favoriteItem;
+	AppMusicManage *appMusicManage;
 	UserMutex *userMutex = nullptr;
-	MusicLoad( FavoriteItem *favorite_item );
+
+public:
+	MusicLoad( AppMusicManage *app_music_manage );
 	~MusicLoad( ) override;
 
 protected:

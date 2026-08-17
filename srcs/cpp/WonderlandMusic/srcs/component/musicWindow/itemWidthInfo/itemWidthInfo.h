@@ -4,6 +4,9 @@
 #include <interface/iAppJsonData.h>
 
 class ItemWidthInfo : public IAppJsonData {
+	friend class AppDataManage;
+	friend class AppUserInterfaceManage;
+
 protected:
 	int suggestHeight;
 	int clickWidth;
@@ -16,9 +19,6 @@ protected:
 	int minItemWidth;
 
 protected:
-	virtual void getItemWidthInfo( int &result_interval_width, int &result_separator_width, int &result_music_code_width, int &result_music_name_width, int &result_music_singer_name_width, int &result_music_duration_time_width ) const;
-	virtual void setItemWidthInfo( int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
-
 public:
 	ItemWidthInfo( );
 	ItemWidthInfo( const ItemWidthInfo &other );
@@ -38,7 +38,9 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	virtual const ItemWidthInfo & setItemWidthInfo( const ItemWidthInfo &item_width_info );
+	virtual void setItemWidthInfo( int interval_width, int separator_width, int music_code_width, int music_name_width, int music_singer_name_width, int music_duration_time_width );
 	virtual const ItemWidthInfo & getItemWidthInfo( ) const;
+	virtual void getItemWidthInfo( int &result_interval_width, int &result_separator_width, int &result_music_code_width, int &result_music_name_width, int &result_music_singer_name_width, int &result_music_duration_time_width ) const;
 };
 
 #endif // ITEMWIDTHINFO_H_H_HEAD__FILE__

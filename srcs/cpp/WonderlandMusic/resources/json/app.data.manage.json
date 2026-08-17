@@ -1,0 +1,21 @@
+{
+    "app.music.ui": {
+        "main.menu.json.object": {
+            "menu.music.favorite.json": {
+                "menu.music.favorite.load.mult.dir.path": "./",
+                "menu.music.favorite.load.mult.file.path": "./"
+            },
+            "menu.music.list.json": {
+            }
+        },
+        "main.window.json.object": {
+            "app.main.window": {
+                "point.x": 292,
+                "point.y": 148,
+                "size.h": 768,
+                "size.w": 1024
+            }
+        }
+    },
+    "app.setting.path": "./program"
+}

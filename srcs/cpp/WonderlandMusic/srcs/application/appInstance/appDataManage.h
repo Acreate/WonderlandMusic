@@ -4,6 +4,8 @@
 #include <interface/iAppCore.h>
 #include <interface/iAppDiskJsonData.h>
 
+class ItemWidthInfo;
+class FavoriteItem;
 class MusicItem;
 class AppMusicManage;
 class AppDataJsonKey;
@@ -27,6 +29,10 @@ protected:
 	QTranslator *appTranslator = nullptr;
 	/// @brief 音频管理
 	AppMusicManage *appMusicManage = nullptr;
+	/// @brief 收藏夹
+	std::vector< FavoriteItem * > favoriteItemVector;
+	/// @brief 项宽度信息
+	ItemWidthInfo *itemWidthInfo = nullptr;
 
 public:
 	bool init( ) override;
@@ -46,8 +52,8 @@ public:
 	virtual AppMusicManage * getAppMusicManage( ) const;
 	bool readJsonData( ) override;
 	bool writeJsonData( ) override;
+	virtual const ItemWidthInfo & getItemWidthInfo( ) const;
 
-public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 Q_SIGNALS:

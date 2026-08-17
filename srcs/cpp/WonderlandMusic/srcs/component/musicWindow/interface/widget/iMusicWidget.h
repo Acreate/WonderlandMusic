@@ -1,0 +1,14 @@
+﻿#ifndef IMUSICWIDGET_H_H_HEAD__FILE__
+#define IMUSICWIDGET_H_H_HEAD__FILE__
+
+#include "../musicWidgetChild/musicWidgetChild.h"
+
+class QWidget;
+
+class IMusicWidget : public MusicWidgetChild {
+public:
+	virtual QWidget * toWidget( ) = 0;
+	virtual bool drawWidgeTarget( QWidget *widget ) = 0;
+};
+
+#endif // IMUSICWIDGET_H_H_HEAD__FILE__

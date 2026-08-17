@@ -7,6 +7,8 @@
 
 #include "../appInstance.h"
 
+#include "../../component/musicWindow/itemWidthInfo/ItemWidthInfo.h"
+
 #include "../../head/after_init_macro.h"
 #include "../../head/before_init_macro.h"
 #include "../../head/init_macro.h"
@@ -41,7 +43,7 @@ bool AppDataManage::initBefore( ) {
 	translate = new AppTranslate;
 	appDataJsonKey = new AppDataJsonKey;
 	appMusicManage = new AppMusicManage;
-
+	itemWidthInfo = new ItemWidthInfo;
 	Before_Init_Resource_App_Core_Ptr( translate );
 	Before_Init_Resource_App_Core_Ptr( appDataJsonKey );
 	Before_Init_Resource_App_Core_Ptr( appMusicManage );
@@ -62,6 +64,7 @@ AppDataManage::~AppDataManage( ) {
 }
 
 bool AppDataManage::deleteResource( ) {
+	Delete_Resource_App_Core_Ptr( itemWidthInfo );
 	Delete_Resource_App_Core_Ptr( translate );
 	Delete_Resource_App_Core_Ptr( appDataJsonKey );
 	Delete_Resource_App_Core_Ptr( appMusicManage );
@@ -128,6 +131,9 @@ bool AppDataManage::writeJsonData( ) {
 	if( PathTools::writeJsonObject( appJsonObject, jsonFilePath ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, nullptr, PathTools::writeJsonObject, tr( "写入路径失败: %1" ).arg( jsonFilePath ) );
 	return true;
+}
+const ItemWidthInfo & AppDataManage::getItemWidthInfo( ) const {
+	return *itemWidthInfo;
 }
 
 bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {

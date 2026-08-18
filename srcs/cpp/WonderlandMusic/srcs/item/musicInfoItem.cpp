@@ -8,22 +8,26 @@
 #include "../application/appInstance/appDataManage/appMusicManage.h"
 
 #include "../dateTimeFormat/dateTimeFormat.h"
+
+#include "../mutex/userMutex.h"
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManage( app_music_manage ) {
+	userMutex = new UserMutex;
+	rendBuff = new QImage;
 	if( appMusicManage == nullptr ) {
 		deleteLater( );
 		return;
 	}
 	loadedOver = false;
-	rendBuff = new QImage;
 	appendTypeInfo( this );
 }
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path ) : appMusicManage( app_music_manage ) {
+	userMutex = new UserMutex;
+	rendBuff = new QImage;
 	QFileInfo fileInfo( disk_file_path );
 	if( appMusicManage == nullptr || fileInfo.exists( ) == false ) {
 		deleteLater( );
 		return;
 	}
-	rendBuff = new QImage;
 	appendTypeInfo( this );
 	filePath = fileInfo.absoluteFilePath( );
 	mediaPlayer = new QMediaPlayer( );
@@ -37,6 +41,7 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &d
 		}
 
 		disconnect( mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, nullptr );
+		userMutex->lock( );
 		bool removeThis = true;
 		if( appMusicManage ) {
 			auto localFile = mediaPlayer->source( ).toLocalFile( );
@@ -62,82 +67,102 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &d
 				appMusicManage->updateMusicItem( this );
 			removeThis = false;
 		}
-		if( removeThis ) {
-			deleteLater( );
-		}
 		// 野指针时		
 		mediaPlayer->deleteLater( );
 		mediaPlayer = nullptr;
 		loadedOver = true;
+		userMutex->unlock( );
+		if( removeThis )
+			deleteLater( );
 	} );
 
 	auto source = QUrl::fromLocalFile( filePath );
 	mediaPlayer->setSource( source );
 }
 MusicInfoItem::~MusicInfoItem( ) {
+	userMutex->lock( );
 	if( mediaPlayer )
 		delete mediaPlayer;
-	if( rendBuff )
-		delete rendBuff;
+	mediaPlayer = nullptr;
+	delete rendBuff;
+	rendBuff = nullptr;
+	userMutex->unlock( );
+	delete userMutex;
+	userMutex = nullptr;
 }
 bool MusicInfoItem::isLoadedOver( ) {
-	return loadedOver;
+	userMutex->lock( );
+	return userMutex->result_unlock( loadedOver );
 }
 bool MusicInfoItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+	userMutex->lock( );
 	musicCentreWidget = music_centre_widget;
-	return true;
+	return userMutex->result_unlock( true );
+}
+bool MusicInfoItem::getRefDrawBuff( QImage &result_buff ) const {
+	userMutex->lock( );
+	result_buff = *rendBuff;
+	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getElapsedTimeString( QString &result_elapsed_time_string ) const {
+	userMutex->lock( );
 	if( loadedOver == false )
-		return false;
+		return userMutex->result_unlock( false );
 	result_elapsed_time_string = elapsedTimeString;
-	return true;
+	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getIdCode( size_t &result_id_code ) const {
+	userMutex->lock( );
 	if( loadedOver == false )
-		return false;
+		return userMutex->result_unlock( false );
 	result_id_code = idCode;
-	return true;
+	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getName( QString &result_name ) const {
+	userMutex->lock( );
 	if( loadedOver == false )
-		return false;
+		return userMutex->result_unlock( false );
 	result_name = name;
-	return true;
+	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getSinger( QString &result_singer ) const {
+	userMutex->lock( );
 	if( loadedOver == false )
-		return false;
+		return userMutex->result_unlock( false );
 	result_singer = singer;
-	return true;
+	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getFilePath( QString &result_file_path ) const {
+	userMutex->lock( );
 	if( loadedOver == false )
-		return false;
+		return userMutex->result_unlock( false );
 	result_file_path = absoluteFilePath;
-	return true;
+	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getElapsedTime( size_t &result_elapsed_time ) const {
+	userMutex->lock( );
 	if( loadedOver == false )
-		return false;
+		return userMutex->result_unlock( false );
 	result_elapsed_time = elapsedTime;
 	if( result_elapsed_time != elapsedTime )
-		return false;
-	return true;
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getDrawBuff( QImage &result_buff ) const {
+	userMutex->lock( );
 	if( loadedOver == false )
-		return false;
+		return userMutex->result_unlock( false );
 	if( rendBuff == nullptr )
-		return false;
+		return userMutex->result_unlock( false );
 	result_buff = *rendBuff;
-	return true;
+	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::setDrawBuff( QImage &image ) {
+	userMutex->lock( );
 	if( loadedOver == false )
-		return false;
+		return userMutex->result_unlock( false );
 	if( rendBuff == nullptr )
-		return false;
+		return userMutex->result_unlock( false );
 	*rendBuff = image;
-	return true;
+	return userMutex->result_unlock( true );
 }

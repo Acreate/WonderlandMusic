@@ -10,6 +10,7 @@ class IMusicItem : public IMusicCentreWidgetChild {
 
 protected:
 	virtual bool setDrawBuff( QImage &image ) = 0;
+	virtual bool getRefDrawBuff( QImage &result_buff ) const = 0;
 
 public:
 	IMusicItem( );

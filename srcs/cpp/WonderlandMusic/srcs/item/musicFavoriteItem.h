@@ -22,6 +22,8 @@ protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
 	bool setNameDrawBuff( QImage &image ) override;
 	bool setMusicItemVectorDrawBuff( QImage &image ) override;
+	bool getRefNameDrawBuff( QImage &result_buff ) const override;
+	bool getRefMusicItemVectorDrawBuff( QImage &result_buff ) const override;
 
 public:
 	bool getMusicItemVectorDrawBuff( QImage &result_buff ) const override;

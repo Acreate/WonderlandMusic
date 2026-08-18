@@ -139,7 +139,7 @@ void MusicFavoriteMenu::slot_deleteFavoriteItem( ) {
 }
 void MusicFavoriteMenu::slot_addMusicFile( ) {
 	if( musicFavoriteItem == nullptr )
-		Result_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
+		Result_Void_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
@@ -161,7 +161,7 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 }
 void MusicFavoriteMenu::slot_addMusicDir( ) {
 	if( musicFavoriteItem == nullptr )
-		Result_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
+		Result_Void_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );

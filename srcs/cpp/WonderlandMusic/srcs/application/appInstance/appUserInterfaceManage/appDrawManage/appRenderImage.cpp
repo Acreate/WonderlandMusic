@@ -9,6 +9,7 @@
 #include "../../appDataManage.h"
 
 #include "../../../../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
+#include "../../../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
 #include "../../../../component/musicWindow/interface/item/iMusicItem.h"
 
 #include "../../../../head/result_message_out.h"
@@ -193,15 +194,38 @@ bool AppRenderImage::renderMusicItem( IMusicItem *music_item, const IMusicItemWi
 bool AppRenderImage::renderMusicItem( IMusicItem *music_item ) const {
 	return false;
 }
-bool AppRenderImage::renderMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) const {
-	auto appDataManage = InstanceTools::getAppDataManage( );
-	if( appDataManage == nullptr )
+bool AppRenderImage::renderCompositeMusicItemBuff( QImage &result_image, const std::vector< IMusicItem * > &music_item ) const {
+	size_t count = music_item.size( );
+	if( count == 0 )
 		return false;
-	auto musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
-	if( renderMusicFavoriteItem( music_favorite_item, musicItemWidthInfo ) == false )
+	auto data = music_item.data( );
+	size_t index = 0;
+	QImage buff;
+	if( data[ index ]->getRefDrawBuff( buff ) == false )
 		return false;
+	index = 1;
+
 	return true;
 }
-bool AppRenderImage::renderMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item, const IMusicItemWidthInfo *item_width_info ) const {
-	return false;
+bool AppRenderImage::renderMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) const {
+	QString name;
+	if( music_favorite_item->getName( name ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, music_favorite_item, getName, QObject::tr( "获取名称失败" ) );
+	int height = fontMetrics->height( );
+	int width = fontMetrics->horizontalAdvance( name );
+	QImage textDrawBuff = QImage( width, height, QImage::Format_RGBA8888 );
+	if( textDrawBuff.isNull( ) )
+		return Result_Var_Messag_Ptr_Out_Args( false, &textDrawBuff, isNull, QObject::tr( "创建绘制缓存失败" ) );
+
+	QImage vectroDrawBuff;
+	std::vector< IMusicItem * > cloneVector;
+	size_t musicVectorClone = music_favorite_item->getMusicVectorClone( cloneVector );
+	if( musicVectorClone )
+		if( renderCompositeMusicItemBuff( vectroDrawBuff, cloneVector ) == false )
+			return Result_Var_Messag_Ptr_Out_Args( false, this, renderCompositeMusicItemBuff, QObject::tr( "合成音频列表缓存失败" ) );
+	if( music_favorite_item->setNameDrawBuff( textDrawBuff ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, music_favorite_item, setNameDrawBuff, QObject::tr( "配置名称绘制缓存失败" ) );
+	if( music_favorite_item->setMusicItemVectorDrawBuff( vectroDrawBuff ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, music_favorite_item, setMusicItemVectorDrawBuff, QObject::tr( "配置音频信息列表绘制缓存失败" ) );
+	return true;
 }

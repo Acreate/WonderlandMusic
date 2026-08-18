@@ -56,7 +56,7 @@ public:
 	virtual bool renderWidget( QImage &result_render_image, QWidget *render_widget ) const;
 	virtual bool renderMusicItem( IMusicItem *music_item, const IMusicItemWidthInfo *item_width_info ) const;
 	virtual bool renderMusicItem( IMusicItem *music_item ) const;
-	virtual bool renderMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item, const IMusicItemWidthInfo *item_width_info ) const;
+	virtual bool renderCompositeMusicItemBuff( QImage &result_image, const std::vector< IMusicItem * > &music_item ) const;
 	virtual bool renderMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) const;
 };
 #endif // APPRENDERIMAGE_H_H_HEAD__FILE__

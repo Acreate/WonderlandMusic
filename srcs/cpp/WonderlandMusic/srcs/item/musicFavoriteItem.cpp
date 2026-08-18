@@ -18,12 +18,26 @@ bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_wi
 bool MusicFavoriteItem::setNameDrawBuff( QImage &image ) {
 	musicFavoriteItemUserMutex->lock( );
 	*nameDrawBuff = image;
+	nameDrawBuff->detach( );
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
 bool MusicFavoriteItem::setMusicItemVectorDrawBuff( QImage &image ) {
 	musicFavoriteItemUserMutex->lock( );
 	*musicItemVectorDrawBuff = image;
+	musicItemVectorDrawBuff->detach( );
+	musicFavoriteItemUserMutex->unlock( );
+	return true;
+}
+bool MusicFavoriteItem::getRefNameDrawBuff( QImage &result_buff ) const {
+	musicFavoriteItemUserMutex->lock( );
+	result_buff = *nameDrawBuff;
+	musicFavoriteItemUserMutex->unlock( );
+	return true;
+}
+bool MusicFavoriteItem::getRefMusicItemVectorDrawBuff( QImage &result_buff ) const {
+	musicFavoriteItemUserMutex->lock( );
+	result_buff = *musicItemVectorDrawBuff;
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }

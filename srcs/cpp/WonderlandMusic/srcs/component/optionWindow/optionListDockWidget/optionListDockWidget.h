@@ -4,6 +4,7 @@
 #include <QDockWidget>
 
 #include "../../../interface/iAppCore.h"
+#include "../../../interface/iAppResourceCore.h"
 
 class OptionListWidget;
 class OptionItem;
@@ -11,7 +12,7 @@ class QScrollArea;
 class OptionContentsWidget;
 class OptionWindow;
 
-class OptionListDockWidget : public QDockWidget, public IAppCore {
+class OptionListDockWidget : public QDockWidget, public IAppCore, public IAppResourceCore {
 	Q_OBJECT;
 	friend class OptionWindow;
 

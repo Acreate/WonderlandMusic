@@ -3,8 +3,9 @@
 #include <QMenu>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppResourceCore.h"
 
-class SystemTrayIconMenu : public QMenu, public IAppCore {
+class SystemTrayIconMenu : public QMenu, public IAppCore, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:

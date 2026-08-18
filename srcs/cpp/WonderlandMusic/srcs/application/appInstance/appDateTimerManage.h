@@ -3,9 +3,11 @@
 
 #include <interface/iAppCore.h>
 
+#include "../../interface/iAppResourceCore.h"
+
 class QDateTime;
 
-class AppDateTimerManage : public QObject, public IAppCore {
+class AppDateTimerManage : public QObject, public IAppCore, public IAppResourceCore {
 protected:
 	/// @brief 起始时间
 	QDateTime *startDateTime = nullptr;

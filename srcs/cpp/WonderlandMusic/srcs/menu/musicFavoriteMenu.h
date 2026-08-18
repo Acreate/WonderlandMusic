@@ -9,9 +9,8 @@ class MusicFavoriteMenu : public QMenu, public IMusicFavoriteMenu {
 	Q_OBJECT;
 
 protected:
-	MusicFavoriteWidget *musicFavoriteWidget = nullptr;
-	FavoriteItem *oldFavoriteItem = nullptr;
-	FavoriteItem *favoriteItem = nullptr;
+	IMusicFavoriteWidget *musicFavoriteWidget = nullptr;
+	IMusicFavoriteItem *musicFavoriteItem = nullptr;
 	QAction *createFavoriteItemAction = nullptr;
 	QAction *renameFavoriteItemAction = nullptr;
 	QAction *deleteFavoriteItemAction = nullptr;
@@ -36,7 +35,8 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
-	bool execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) override;
+	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point ) override;
 	void hideEvent( QHideEvent * ) override;
 
 private Q_SLOTS :

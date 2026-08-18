@@ -2,7 +2,7 @@
 #define OPTIONPANEL_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../../../interface/iAppCore.h"
+#include <interface/iAppCore.h>
 class OptionButton;
 class CoreInfo;
 class OptionWindow;

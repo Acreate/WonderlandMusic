@@ -4,11 +4,13 @@
 
 #include <interface/iAppCore.h>
 
+#include "../../interface/iAppResourceCore.h"
+
 class AppDataManage;
 class AppUserInterfaceManage;
 class MainWindow;
 
-class ApplicationManage : public QApplication, public IAppCore {
+class ApplicationManage : public QApplication, public IAppCore, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:

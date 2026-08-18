@@ -1,11 +1,13 @@
 ﻿#ifndef ABOUTAPPLICATIONWIDGET_H_H_HEAD__FILE__
 #define ABOUTAPPLICATIONWIDGET_H_H_HEAD__FILE__
 #include "../component/optionWindow/interface/optionPanel.h"
+
+#include "../interface/iAppResourceCore.h"
 class QTextEdit;
 class QHBoxLayout;
 class OptionStackWidget;
 
-class AboutWidget : public QWidget, public OptionPanel {
+class AboutWidget : public QWidget, public OptionPanel, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:
@@ -19,7 +21,7 @@ protected:
 	virtual bool getSoftwareProtocolInfo( QString &result_info );
 
 public:
-	AboutWidget( OptionWindow *parent );
+	AboutWidget( );
 	bool init( ) override;
 	~AboutWidget( ) override;
 

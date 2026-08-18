@@ -13,6 +13,7 @@
 
 #include "../../../head/result_message_out.h"
 
+#include "../interface/info/iMusicItemWidthInfo.h"
 #include "../interface/info/iMusicWidgetSizeInfo.h"
 #include "../interface/menu/iMusicFavoriteMenu.h"
 #include "../interface/menu/iMusicListMenu.h"
@@ -201,7 +202,7 @@ IMusicWidgetSizeInfo * MusicCentreWidget::getMusicWidgetSizeInfo( ) const {
 IMusicFavoriteWidget * MusicCentreWidget::setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) {
 	if( music_favorite_widget->setMusicCentreWidget( this ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_favorite_widget, music_favorite_widget, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicFavoriteWidget->setMusicCentreWidget( nullptr ) == false )
+	if( musicFavoriteWidget && musicFavoriteWidget->setMusicCentreWidget( nullptr ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_favorite_widget, musicFavoriteWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 	auto old = this->musicFavoriteWidget;
 	this->musicFavoriteWidget = music_favorite_widget;
@@ -212,7 +213,7 @@ IMusicFavoriteWidget * MusicCentreWidget::setMusicFavoriteWidget( IMusicFavorite
 IMusicListWidget * MusicCentreWidget::setMusicListWidget( IMusicListWidget *const music_list_widget ) {
 	if( music_list_widget->setMusicCentreWidget( this ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_list_widget, music_list_widget, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicListWidget->setMusicCentreWidget( nullptr ) == false )
+	if( musicListWidget && musicListWidget->setMusicCentreWidget( nullptr ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_list_widget, musicListWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 	auto old = this->musicListWidget;
 	this->musicListWidget = music_list_widget;
@@ -223,7 +224,7 @@ IMusicListWidget * MusicCentreWidget::setMusicListWidget( IMusicListWidget *cons
 IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) {
 	if( music_title_widget->setMusicCentreWidget( this ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_title_widget, music_title_widget, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicTitleWidget->setMusicCentreWidget( nullptr ) == false )
+	if( musicTitleWidget && musicTitleWidget->setMusicCentreWidget( nullptr ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_title_widget, musicTitleWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 	auto old = this->musicTitleWidget;
 	this->musicTitleWidget = music_title_widget;
@@ -235,7 +236,7 @@ IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *c
 IMusicFavoriteMenu * MusicCentreWidget::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
 	if( music_favorite_menu->setMusicCentreWidget( this ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_favorite_menu, music_favorite_menu, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicFavoriteMenu->setMusicCentreWidget( nullptr ) == false )
+	if( musicFavoriteMenu && musicFavoriteMenu->setMusicCentreWidget( nullptr ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_favorite_menu, musicFavoriteMenu, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 	auto old = this->musicFavoriteMenu;
 	this->musicFavoriteMenu = music_favorite_menu;
@@ -244,7 +245,7 @@ IMusicFavoriteMenu * MusicCentreWidget::setMusicFavoriteMenu( IMusicFavoriteMenu
 IMusicListMenu * MusicCentreWidget::setMusicListMenu( IMusicListMenu *music_list_menu ) {
 	if( music_list_menu->setMusicCentreWidget( this ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_list_menu, music_list_menu, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( this->musicListMenu->setMusicCentreWidget( nullptr ) == false )
+	if( musicListMenu && musicListMenu->setMusicCentreWidget( nullptr ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_list_menu, musicListMenu, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 	auto old = this->musicListMenu;
 	this->musicListMenu = music_list_menu;;
@@ -253,9 +254,18 @@ IMusicListMenu * MusicCentreWidget::setMusicListMenu( IMusicListMenu *music_list
 IMusicWidgetSizeInfo * MusicCentreWidget::setMusicWidgetSizeInfo( IMusicWidgetSizeInfo *const music_widget_size_info ) {
 	if( music_widget_size_info->setMusicCentreWidget( this ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_widget_size_info, music_widget_size_info, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicWidgetSizeInfo->setMusicCentreWidget( nullptr ) == false )
+	if( musicWidgetSizeInfo && musicWidgetSizeInfo->setMusicCentreWidget( nullptr ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( music_widget_size_info, musicWidgetSizeInfo, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 	auto old = this->musicWidgetSizeInfo;
 	this->musicWidgetSizeInfo = music_widget_size_info;
+	return old;
+}
+IMusicItemWidthInfo * MusicCentreWidget::setMusicItemWidthInfo( IMusicItemWidthInfo *const music_item_width_info ) {
+	if( music_item_width_info->setMusicCentreWidget( this ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_item_width_info, music_item_width_info, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
+	if( musicItemWidthInfo && musicItemWidthInfo->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( music_item_width_info, musicWidgetSizeInfo, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	auto old = this->musicItemWidthInfo;
+	this->musicItemWidthInfo = music_item_width_info;
 	return old;
 }

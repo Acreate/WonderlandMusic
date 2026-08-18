@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "../../../interface/iAppCore.h"
+#include "../../../interface/iAppResourceCore.h"
 class OptionListDockWidget;
 class QDockWidget;
 class OptionWindow;
@@ -11,7 +12,7 @@ class OptionButton;
 class OptionItem;
 class QScrollArea;
 
-class OptionListWidget : public QWidget, public IAppCore {
+class OptionListWidget : public QWidget, public IAppCore, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:

@@ -22,7 +22,8 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
-	bool execMenu( MusicListWidget *music_list_widget, MusicItem *music_item, const QPoint &mouse_global_point ) override;
+	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool execMenu( IMusicListWidget *music_list_widget, IMusicItem *music_item, const QPoint &mouse_global_point ) override;
 
 public:
 	QMenu * toMenu( ) override;

@@ -7,13 +7,14 @@
 
 #include "../appInstance.h"
 
-#include "../../component/musicWindow/itemWidthInfo/ItemWidthInfo.h"
-
 #include "../../head/after_init_macro.h"
 #include "../../head/before_init_macro.h"
 #include "../../head/init_macro.h"
 #include "../../head/release_macro.h"
 #include "../../head/result_message_out.h"
+
+#include "../../info/musicItemWidthInfo.h"
+#include "../../info/musicWidgetSizeInfo.h"
 
 #include "../../tools/instanceTools.h"
 #include "../../tools/pathTools.h"
@@ -27,11 +28,11 @@ bool AppDataManage::init( ) {
 	Init_Resource_App_Core_Ptr( translate );
 	Init_Resource_App_Core_Ptr( appDataJsonKey );
 	Init_Resource_App_Core_Ptr( appMusicManage );
-
 	return true;
 }
 
 bool AppDataManage::initBefore( ) {
+	deleteResource( );
 	auto appInstance = AppInstance::getAppInstance( );
 	QString dirPath = appInstance->getApplicationManage( )->applicationDirPath( );
 	appSettingPath = dirPath + "/program/";
@@ -43,11 +44,11 @@ bool AppDataManage::initBefore( ) {
 	translate = new AppTranslate;
 	appDataJsonKey = new AppDataJsonKey;
 	appMusicManage = new AppMusicManage;
-	itemWidthInfo = new ItemWidthInfo;
+	musicItemWidthInfo = new MusicItemWidthInfo;
+	musicWidgetSizeInfo = new MusicWidgetSizeInfo;
 	Before_Init_Resource_App_Core_Ptr( translate );
 	Before_Init_Resource_App_Core_Ptr( appDataJsonKey );
 	Before_Init_Resource_App_Core_Ptr( appMusicManage );
-
 	return true;
 }
 
@@ -55,7 +56,6 @@ bool AppDataManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( translate );
 	After_Init_Resource_App_Core_Ptr( appDataJsonKey );
 	After_Init_Resource_App_Core_Ptr( appMusicManage );
-
 	return true;
 }
 
@@ -64,10 +64,12 @@ AppDataManage::~AppDataManage( ) {
 }
 
 bool AppDataManage::deleteResource( ) {
-	Delete_Resource_App_Core_Ptr( itemWidthInfo );
 	Delete_Resource_App_Core_Ptr( translate );
 	Delete_Resource_App_Core_Ptr( appDataJsonKey );
 	Delete_Resource_App_Core_Ptr( appMusicManage );
+	Delete_Resource_App_Core_Ptr( musicItemWidthInfo );
+	Delete_Resource_App_Core_Ptr( musicWidgetSizeInfo );
+
 	return true;
 }
 
@@ -132,8 +134,11 @@ bool AppDataManage::writeJsonData( ) {
 		return Result_Var_Messag_Ptr_Out_Args( false, nullptr, PathTools::writeJsonObject, tr( "写入路径失败: %1" ).arg( jsonFilePath ) );
 	return true;
 }
-const ItemWidthInfo & AppDataManage::getItemWidthInfo( ) const {
-	return *itemWidthInfo;
+MusicItemWidthInfo * AppDataManage::getMusicItemWidthInfo( ) const {
+	return musicItemWidthInfo;
+}
+MusicWidgetSizeInfo * AppDataManage::getMusicWidgetSizeInfo( ) const {
+	return musicWidgetSizeInfo;
 }
 
 bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {

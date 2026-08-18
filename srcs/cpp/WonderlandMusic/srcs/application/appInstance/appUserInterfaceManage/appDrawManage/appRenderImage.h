@@ -3,6 +3,11 @@
 
 #include <interface/iAppCore.h>
 
+#include "../../../../interface/iAppResourceCore.h"
+
+class IMusicItemWidthInfo;
+class IMusicItem;
+class IMusicFavoriteItem;
 class FavoriteItem;
 class ItemWidthInfo;
 class MusicItem;
@@ -15,7 +20,7 @@ class QImage;
 class QFontMetrics;
 class QFont;
 
-class AppRenderImage : public IAppCore {
+class AppRenderImage : public IAppCore, public IAppResourceCore {
 protected:
 	QFont *font = nullptr;
 	QFontMetrics *fontMetrics = nullptr;
@@ -49,7 +54,7 @@ public:
 	virtual bool getTxtSize( QSize &result_txt_size, const QString &render_txt, const QFont &font ) const;
 	virtual bool getTxtSize( QSize &result_txt_size, const QString &render_txt ) const;
 	virtual bool renderWidget( QImage &result_render_image, QWidget *render_widget ) const;
-	virtual bool renderMusicItem( MusicItem *music_item, const ItemWidthInfo &item_width_info ) const;
-	virtual bool renderMusicItem( FavoriteItem *favorite_item, const ItemWidthInfo &item_width_info ) const;
+	virtual bool renderMusicItem( QImage &result_render_image, IMusicItem *music_item, const IMusicItemWidthInfo *item_width_info ) const;
+	virtual bool renderMusicItem( QImage &result_render_image, IMusicFavoriteItem *music_favorite_item, const IMusicItemWidthInfo *item_width_info ) const;
 };
 #endif // APPRENDERIMAGE_H_H_HEAD__FILE__

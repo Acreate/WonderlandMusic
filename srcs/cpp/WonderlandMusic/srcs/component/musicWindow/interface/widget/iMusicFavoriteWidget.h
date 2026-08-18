@@ -3,14 +3,13 @@
 
 #include "iMusicWidget.h"
 
-#include <interface/iAppCore.h>
 class QString;
 class QPoint;
 class QPainter;
 class IMusicFavoriteItem;
 class QWidget;
 
-class IMusicFavoriteWidget : public IAppCore, public IMusicWidget {
+class IMusicFavoriteWidget : public IMusicWidget {
 public:
 	QString getTypeName( ) const override;
 	virtual bool fromYPosGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &pos_y ) const = 0;

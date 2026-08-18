@@ -5,9 +5,11 @@
 
 #include <interface/iAppCore.h>
 
+#include <interface/iAppResourceCore.h>
+
 class QMediaPlayer;
 
-class AppMusicDecoder : public IAppCore {
+class AppMusicDecoder : public IAppCore, public IAppResourceCore {
 protected:
 	class StringOperator {
 		QStringList *stringList;

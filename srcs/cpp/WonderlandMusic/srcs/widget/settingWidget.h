@@ -3,11 +3,13 @@
 #include <QWidget>
 #include "../component/optionWindow/interface/optionPanel.h"
 
-class SettingWidget : public QWidget, public OptionPanel {
+#include "../interface/iAppResourceCore.h"
+
+class SettingWidget : public QWidget, public OptionPanel, public IAppResourceCore {
 	Q_OBJECT;
 
 public:
-	SettingWidget( OptionWindow *parent );
+	SettingWidget( );
 	~SettingWidget( ) override;
 
 protected:

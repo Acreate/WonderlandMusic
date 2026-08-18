@@ -1,6 +1,7 @@
 ﻿#include "appInstance.h"
 
 #include "../component/musicWindow/musicWindow.h"
+#include "../component/optionWindow/optionWindow.h"
 
 #include "../head/after_init_macro.h"
 #include "../head/before_init_macro.h"
@@ -8,7 +9,20 @@
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
+#include "../info/musicItemWidthInfo.h"
+#include "../info/musicWidgetSizeInfo.h"
+
 #include "../menu/systemTrayIconMenu.h"
+
+#include "../systemTrayIcon/systemTrayIcon.h"
+
+#include "../tools/instanceTools.h"
+
+#include "../widget/aboutWidget.h"
+#include "../widget/musicFavoriteWidget.h"
+#include "../widget/musicListWidget.h"
+#include "../widget/musicTitleWidget.h"
+#include "../widget/settingWidget.h"
 
 #include "../window/mainWindow.h"
 
@@ -102,24 +116,67 @@ bool AppInstance::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( appDateTimerManage );
 	After_Init_Resource_App_Core_Ptr( appDataManage );
 	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
+
+	auto musicWindow = appUserInterfaceManage->getMusicWindow( );
+	auto musicFavoriteWidget = appUserInterfaceManage->getMusicFavoriteWidget( );
+	if( musicWindow->setMusicFavoriteWidget( musicFavoriteWidget ) == musicFavoriteWidget )
+		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicFavoriteWidget( musicFavoriteWidget ), tr( "设置音频收藏夹组件失败" ) );
+	auto musicListWidget = appUserInterfaceManage->getMusicListWidget( );
+	if( musicWindow->setMusicListWidget( musicListWidget ) == musicListWidget )
+		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicListWidget( musicListWidget ), tr( "设置音频信息列表组件失败" ) );
+	auto musicTitleWidget = appUserInterfaceManage->getMusicTitleWidget( );
+	if( musicWindow->setMusicTitleWidget( musicTitleWidget ) == musicTitleWidget )
+		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicTitleWidget( musicTitleWidget ), tr( "设置音频标题组件失败" ) );
+
+	auto musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
+	if( musicWindow->setMusicItemWidthInfo( musicItemWidthInfo ) == musicItemWidthInfo )
+		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicItemWidthInfo( musicTitleWidget ), tr( "设置音频项宽度信息组件失败" ) );
+	auto musicWidgetSizeInfo = appDataManage->getMusicWidgetSizeInfo( );
+	if( musicWindow->setMusicWidgetSizeInfo( musicWidgetSizeInfo ) == musicWidgetSizeInfo )
+		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicWidgetSizeInfo( musicWidgetSizeInfo ), tr( "设置音频窗口大小信息组件失败" ) );
+
+	auto optionWindow = appUserInterfaceManage->getOptionWindow( );
+	if( optionWindow->addOptionPanel( musicWindow ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( musicWindow ), tr( "添加音乐播放面板失败" ) );
+	auto settingWidget = appUserInterfaceManage->getSettingWidget( );
+	if( optionWindow->addOptionPanel( settingWidget ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( settingWidget ), tr( "添加设置面板失败" ) );
+	auto aboutWidget = appUserInterfaceManage->getAboutWidget( );
+	if( optionWindow->addOptionPanel( aboutWidget ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( aboutWidget ), tr( "添加关于面板失败" ) );
+
+	auto appMenuManage = InstanceTools::getAppMenuManage( );
+
+	auto musicFavoriteMenu = appMenuManage->getMusicFavoriteMenu( );
+	if( musicWindow->setMusicFavoriteMenu( musicFavoriteMenu ) == musicFavoriteMenu )
+		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicFavoriteMenu( musicFavoriteMenu ), tr( "设置音频收藏夹菜单失败" ) );
+	auto musicListMenu = appMenuManage->getMusicListMenu( );
+	if( musicWindow->setMusicListMenu( musicListMenu ) == musicListMenu )
+		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicListMenu( musicListMenu ), tr( "设置音频列表菜单失败" ) );
+
+	auto mainWindow = appUserInterfaceManage->getMainWindow( );
+	mainWindow->setCentralWidget( optionWindow );
+
+	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
+	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_show_main_window, this, [this]( ) {
+		appUserInterfaceManage->showMainWindow( );
+	} );
+
 	if( appDataManage->readJsonData( ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, appDataManage, readJsonData, tr( "json 读取异常" ) );
-	auto appMenuManage = appUserInterfaceManage->getAppMenuManage( );
-	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
 	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_quit_app, this, []( ) {
 		AppInstance::getAppInstance( )->getApplicationManage( )->quit( );
 	} );
-	auto menuManage = appUserInterfaceManage->getAppMenuManage( );
-
-	auto mainWindow = appUserInterfaceManage->getMainWindow( );
-	auto musicWindow = mainWindow->getMusicWindow( );
-	musicWindow->setMusicFavoriteMenu( menuManage->getMusicFavoriteMenu( ) );
-	musicWindow->setMusicListMenu( menuManage->getMusicListMenu( ) );
 
 	return true;
 }
 
 int AppInstance::exec( ) {
+	if( appUserInterfaceManage->showMainWindow( ) == false )
+		return false;
+	auto systemTrayIcon = appUserInterfaceManage->getSystemTrayIcon( );
+	systemTrayIcon->show( );
+
 	int exec = applicationManage->exec( );
 	if( appDataManage->writeJsonData( ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( exec, appDataManage, writeJsonData, tr( "json 写入异常" ) );

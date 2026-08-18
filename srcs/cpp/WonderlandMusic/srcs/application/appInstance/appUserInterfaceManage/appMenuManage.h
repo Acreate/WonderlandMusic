@@ -3,12 +3,14 @@
 #include <interface/iAppCore.h>
 #include <interface/iAppJsonData.h>
 
+#include "../../../interface/iAppResourceCore.h"
+
 class IMusicListMenu;
 class IMusicFavoriteMenu;
 class SystemTrayIconMenu;
 class QPoint;
 
-class AppMenuManage : public QObject, public IAppCore, public IAppJsonData {
+class AppMenuManage : public QObject, public IAppCore, public IAppJsonData, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:

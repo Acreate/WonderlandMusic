@@ -17,7 +17,7 @@
 
 #include "../tools/instanceTools.h"
 
-AboutWidget::AboutWidget( OptionWindow *parent ) : OptionPanel( ) {
+AboutWidget::AboutWidget( ) : OptionPanel( ) {
 }
 
 bool AboutWidget::init( ) {

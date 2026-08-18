@@ -3,6 +3,9 @@
 
 #include <interface/iAppCore.h>
 #include <interface/iAppJsonData.h>
+
+#include "../../../interface/iAppResourceCore.h"
+class IMusicFavoriteItem;
 class IMusicItemWidthInfo;
 class MusicFavoriteItem;
 class MusicInfoItem;
@@ -12,7 +15,7 @@ class QPainter;
 class UserMutex;
 class AppMusicDecoder;
 
-class AppMusicManage : public QObject, public IAppCore, public IAppJsonData {
+class AppMusicManage : public QObject, public IAppCore, public IAppJsonData, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:
@@ -27,9 +30,6 @@ protected:
 	virtual bool unsafeClearMusicItemVector( );
 	virtual bool unsafeClearMusicFavoriteItem( );
 
-	virtual bool renderImage( QPainter &painter, int intervalWidth, size_t index, IMusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color ) const;
-	virtual bool renderImage( size_t index, IMusicItem *music_item ) const;
-
 public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
@@ -41,17 +41,18 @@ public:
 	virtual AppMusicDecoder * getAppMusicDecoder( ) const;
 
 public:
-	virtual size_t loadMusicFile( const std::vector< QString > &music_file_path_vector );
-	virtual size_t loadMusicFile( const std::list< QString > &music_file_path_list );
-	virtual size_t loadMusicFile( const QStringList &music_file_path_list );
-	virtual size_t loadMusicFile( const QString &music_file_path );
-	virtual bool loadMusicDir( const QString &music_dir_path );
+	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector );
+	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::list< QString > &music_file_path_list );
+	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QStringList &music_file_path_list );
+	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QString &music_file_path );
+	virtual size_t loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path );
 	virtual bool unsafeClear( );
 
 public:
 	virtual bool getMusicWindowInfoJsonData( QJsonObject &result_json_object );
 	virtual bool setMusicWindowInfoJsonData( const QJsonObject &result_json_object );
 	virtual bool hasMusicFile( const QString &file_path ) const;
+	virtual bool addMusicItem( IMusicItem *music_item );
 	virtual bool updateMusicItem( IMusicItem *music_item );
 	virtual bool removeMusicItem( IMusicItem *music_item );
 	virtual bool hasMusicItem( size_t &result_index, const IMusicItem *music_item ) const;

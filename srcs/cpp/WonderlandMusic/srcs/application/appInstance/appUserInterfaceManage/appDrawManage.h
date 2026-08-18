@@ -3,9 +3,11 @@
 
 #include <interface/iAppCore.h>
 
+#include "../../../interface/iAppResourceCore.h"
+
 class AppRenderImage;
 
-class AppDrawManage : public IAppCore {
+class AppDrawManage : public IAppCore, public IAppResourceCore {
 protected:
 	/// @brief 渲染对象
 	AppRenderImage *appRenderImage = nullptr;

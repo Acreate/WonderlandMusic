@@ -4,7 +4,7 @@
 
 #include "../component/optionWindow/optionWindow.h"
 
-SettingWidget::SettingWidget( OptionWindow *parent ) : QWidget( parent ), OptionPanel( ) {
+SettingWidget::SettingWidget( ) : QWidget( ), OptionPanel( ) {
 }
 
 SettingWidget::~SettingWidget( ) {

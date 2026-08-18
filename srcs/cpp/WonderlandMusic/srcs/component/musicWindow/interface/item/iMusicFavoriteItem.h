@@ -7,6 +7,11 @@ class QString;
 class QImage;
 
 class IMusicFavoriteItem : public IMusicCentreWidgetChild {
+	friend class AppRenderImage;
+
+protected:
+	virtual bool setDrawBuff( QImage &image ) = 0;
+
 public:
 	IMusicFavoriteItem( );
 	virtual bool getName( QString &result_name ) const = 0;

@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QMediaMetaData>
 #include <QMediaPlayer>
+#include <qimage.h>
 
 #include "../application/appInstance/appDataManage/appMusicManage.h"
 
@@ -12,6 +13,9 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManag
 		deleteLater( );
 		return;
 	}
+	loadedOver = false;
+	rendBuff = new QImage;
+	appendTypeInfo( this );
 }
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path ) : appMusicManage( app_music_manage ) {
 	QFileInfo fileInfo( disk_file_path );
@@ -19,6 +23,8 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &d
 		deleteLater( );
 		return;
 	}
+	rendBuff = new QImage;
+	appendTypeInfo( this );
 	filePath = fileInfo.absoluteFilePath( );
 	mediaPlayer = new QMediaPlayer( );
 
@@ -54,8 +60,6 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &d
 				appMusicManage->addMusicItem( this );
 			else
 				appMusicManage->updateMusicItem( this );
-			MusicLoadTools::removeMusicItemsHistory( loadPtr, this );
-			loadPtr = nullptr;
 			removeThis = false;
 		}
 		if( removeThis ) {
@@ -70,35 +74,70 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &d
 	auto source = QUrl::fromLocalFile( filePath );
 	mediaPlayer->setSource( source );
 }
-bool MusicInfoItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
-	return false;
-}
-bool MusicInfoItem::getElapsedTimeString( QString &result_elapsed_time_string ) const {
-	return false;
-}
-QImage * MusicInfoItem::createResizeBuff( const int &width, const int &height ) {
-	return nullptr;
-}
 MusicInfoItem::~MusicInfoItem( ) {
+	if( mediaPlayer )
+		delete mediaPlayer;
+	if( rendBuff )
+		delete rendBuff;
 }
 bool MusicInfoItem::isLoadedOver( ) {
-	return false;
+	return loadedOver;
+}
+bool MusicInfoItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+	musicCentreWidget = music_centre_widget;
+	return true;
+}
+bool MusicInfoItem::getElapsedTimeString( QString &result_elapsed_time_string ) const {
+	if( loadedOver == false )
+		return false;
+	result_elapsed_time_string = elapsedTimeString;
+	return true;
 }
 bool MusicInfoItem::getIdCode( size_t &result_id_code ) const {
-	return false;
+	if( loadedOver == false )
+		return false;
+	result_id_code = idCode;
+	return true;
 }
 bool MusicInfoItem::getName( QString &result_name ) const {
-	return false;
+	if( loadedOver == false )
+		return false;
+	result_name = name;
+	return true;
 }
 bool MusicInfoItem::getSinger( QString &result_singer ) const {
-	return false;
+	if( loadedOver == false )
+		return false;
+	result_singer = singer;
+	return true;
 }
 bool MusicInfoItem::getFilePath( QString &result_file_path ) const {
-	return false;
+	if( loadedOver == false )
+		return false;
+	result_file_path = absoluteFilePath;
+	return true;
 }
 bool MusicInfoItem::getElapsedTime( size_t &result_elapsed_time ) const {
-	return false;
+	if( loadedOver == false )
+		return false;
+	result_elapsed_time = elapsedTime;
+	if( result_elapsed_time != elapsedTime )
+		return false;
+	return true;
 }
-bool MusicInfoItem::getRendBuff( QImage &result_buff ) const {
-	return false;
+bool MusicInfoItem::getDrawBuff( QImage &result_buff ) const {
+	if( loadedOver == false )
+		return false;
+	if( rendBuff == nullptr )
+		return false;
+	result_buff = *rendBuff;
+	return true;
+}
+bool MusicInfoItem::setDrawBuff( QImage &image ) {
+	if( loadedOver == false )
+		return false;
+	if( rendBuff == nullptr )
+		return false;
+	*rendBuff = image;
+	return true;
 }

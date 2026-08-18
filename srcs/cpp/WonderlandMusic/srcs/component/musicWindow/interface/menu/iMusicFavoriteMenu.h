@@ -3,6 +3,8 @@
 
 #include <interface/iAppJsonData.h>
 
+#include "../../../../interface/iAppResourceCore.h"
+
 #include "../musicWidgetChild/musicWidgetChild.h"
 
 class IMusicFavoriteItem;
@@ -10,7 +12,7 @@ class IMusicFavoriteWidget;
 class MusicCentreWidget;
 class QMenu;
 
-class IMusicFavoriteMenu : public MusicWidgetChild, public IAppJsonData {
+class IMusicFavoriteMenu : public MusicWidgetChild, public IAppResourceCore {
 	friend class MusicCentreWidget;
 
 public:

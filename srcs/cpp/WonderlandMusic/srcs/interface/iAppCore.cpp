@@ -26,11 +26,17 @@ void IAppCore::removePtr( IAppCore *ptr ) {
 	}
 	userMutex->unlock( );
 }
-ClassTypeInfo * IAppCore::appendClassTypeInfo( const type_info &type_info ) {
-	return classTypeInfo->appendClassTypeInfo( type_info );
+ClassTypeInfo * IAppCore::appendClassTypeInfo( void *ptr, const type_info &type_info ) {
+	return classTypeInfo->appendClassTypeInfo( ptr, type_info );
 }
-ClassTypeInfo * IAppCore::appendClassTypeInfo( const type_info &type_info, const QString &type_name ) {
-	return classTypeInfo->appendClassTypeInfo( type_info, type_name );
+ClassTypeInfo * IAppCore::appendClassTypeInfo( void *ptr, const type_info &type_info, const QString &type_name ) {
+	return classTypeInfo->appendClassTypeInfo( ptr, type_info, type_name );
+}
+bool IAppCore::isClassType( const void *&ptr ) const {
+	return classTypeInfo->isClassType( ptr );
+}
+bool IAppCore::isClassType( const void *&&ptr ) const {
+	return classTypeInfo->isClassType( ptr );
 }
 bool IAppCore::isClassType( const type_info &type_info ) const {
 	return classTypeInfo->isClassType( type_info );
@@ -72,7 +78,7 @@ const IAppCore * IAppCore::case_ptr( const void *ptr ) {
 }
 IAppCore::IAppCore( ) {
 	typeInfoUserMutex = new UserMutex;
-	classTypeInfo = new ClassTypeInfo( typeid( IAppCore ) );
+	classTypeInfo = new ClassTypeInfo( this, typeid( IAppCore ) );
 	appendPtr( this );
 }
 IAppCore::~IAppCore( ) {

@@ -4,13 +4,14 @@
 #include <QApplication>
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppResourceCore.h"
 
 class ApplicationManage;
 class AppDateTimerManage;
 class AppUserInterfaceManage;
 class AppDataManage;
 
-class AppInstance : public QObject, public IAppCore {
+class AppInstance : public QObject, public IAppCore, public IAppResourceCore {
 	Q_OBJECT;
 
 private:

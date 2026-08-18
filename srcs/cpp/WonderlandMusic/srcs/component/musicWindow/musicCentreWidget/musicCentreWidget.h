@@ -6,6 +6,9 @@
 
 #include <interface/iAppJsonData.h>
 
+#include "../../../interface/iAppResourceCore.h"
+
+class IMusicItemWidthInfo;
 class IMusicWidgetSizeInfo;
 class IMusicTitleWidget;
 class IMusicListWidget;
@@ -17,7 +20,7 @@ class QScrollArea;
 class UserMutex;
 class MusicWindow;
 
-class MusicCentreWidget : public QWidget, public IAppCore, public IAppJsonData {
+class MusicCentreWidget : public QWidget, public IAppCore, public IAppJsonData, public IAppResourceCore {
 	Q_OBJECT;
 	friend class MusicCentreWidgetTools;
 
@@ -33,7 +36,7 @@ private:
 	IMusicFavoriteMenu *musicFavoriteMenu = nullptr;
 	IMusicListMenu *musicListMenu = nullptr;
 	IMusicWidgetSizeInfo *musicWidgetSizeInfo = nullptr;
-
+	IMusicItemWidthInfo* musicItemWidthInfo = nullptr;
 public:
 	MusicCentreWidget( MusicWindow *parent );
 	~MusicCentreWidget( ) override;
@@ -64,6 +67,7 @@ public:
 	virtual IMusicListMenu * setMusicListMenu( IMusicListMenu *music_list_menu );
 
 	virtual IMusicWidgetSizeInfo * setMusicWidgetSizeInfo( IMusicWidgetSizeInfo *const music_widget_size_info );
+	virtual IMusicItemWidthInfo * setMusicItemWidthInfo( IMusicItemWidthInfo *const music_item_width_info );
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

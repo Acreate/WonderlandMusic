@@ -99,22 +99,51 @@ bool MusicWindow::setJsonData( const QJsonObject &set_json_object ) {
 QString MusicWindow::getTypeName( ) const {
 	return metaObject( )->className( );
 }
+IMusicFavoriteWidget * MusicWindow::getMusicFavoriteWidget( ) const {
+	return musicCentreWidget->getMusicFavoriteWidget( );
+}
+IMusicListWidget * MusicWindow::getMusicListWidget( ) const {
+	return musicCentreWidget->getMusicListWidget( );
+}
+IMusicTitleWidget * MusicWindow::getMusicTitleWidget( ) const {
+	return musicCentreWidget->getMusicTitleWidget( );
+}
+IMusicFavoriteMenu * MusicWindow::getMusicFavoriteMenu( ) const {
+	return musicCentreWidget->getMusicFavoriteMenu( );
+}
+IMusicListMenu * MusicWindow::getMusicListMenu( ) const {
+	return musicCentreWidget->getMusicListMenu( );
+}
+IMusicWidgetSizeInfo * MusicWindow::getMusicWidgetSizeInfo( ) const {
+	return musicCentreWidget->getMusicWidgetSizeInfo( );
+}
+IMusicFavoriteWidget * MusicWindow::setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) {
+	return musicCentreWidget->setMusicFavoriteWidget( music_favorite_widget );
+}
+IMusicListWidget * MusicWindow::setMusicListWidget( IMusicListWidget *const music_list_widget ) {
+	return musicCentreWidget->setMusicListWidget( music_list_widget );
+}
+IMusicTitleWidget * MusicWindow::setMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) {
+	return musicCentreWidget->setMusicTitleWidget( music_title_widget );
+}
+IMusicFavoriteMenu * MusicWindow::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
+	return musicCentreWidget->setMusicFavoriteMenu( music_favorite_menu );
+}
+IMusicListMenu * MusicWindow::setMusicListMenu( IMusicListMenu *music_list_menu ) {
+	return musicCentreWidget->setMusicListMenu( music_list_menu );
+}
+IMusicWidgetSizeInfo * MusicWindow::setMusicWidgetSizeInfo( IMusicWidgetSizeInfo *const music_widget_size_info ) {
+	return musicCentreWidget->setMusicWidgetSizeInfo( music_widget_size_info );
+}
+IMusicItemWidthInfo * MusicWindow::setMusicItemWidthInfo( IMusicItemWidthInfo *const music_item_width_info ) {
+	return musicCentreWidget->setMusicItemWidthInfo( music_item_width_info );
+}
 QWidget * MusicWindow::toWidget( ) {
 	return this;
 }
 
 MusicCentreWidget * MusicWindow::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
-}
-bool MusicWindow::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
-	if( musicCentreWidget == nullptr )
-		return false;
-	return musicCentreWidget->setMusicFavoriteMenu( music_favorite_menu );
-}
-bool MusicWindow::setMusicListMenu( IMusicListMenu *music_list_menu ) {
-	if( musicCentreWidget == nullptr )
-		return false;
-	return musicCentreWidget->setMusicListMenu( music_list_menu );
 }
 bool MusicWindow::showPanelBefore( ) {
 	return true;

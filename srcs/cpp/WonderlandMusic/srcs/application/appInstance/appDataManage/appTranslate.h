@@ -2,6 +2,8 @@
 #define APPTRANSLATE_H_H_HEAD__FILE__
 #include <interface/iAppCore.h>
 
+#include "../../../interface/iAppResourceCore.h"
+
 class MusicItemTranslate;
 class StringEditorWidgetTranslate;
 class MusicListMenuTranslate;
@@ -20,7 +22,7 @@ class AboutWidgetTranslate;
 class DateTimeFormatTranslate;
 class JsonTranslate;
 
-class AppTranslate : public IAppCore {
+class AppTranslate : public IAppCore, public IAppResourceCore {
 protected:
 	JsonTranslate *json = nullptr;
 	DateTimeFormatTranslate *dateTimeFormat = nullptr;
@@ -37,8 +39,8 @@ protected:
 	MusicTitleWidgetTranslate *musicTitleWidget = nullptr;
 	MusicFavoriteMenuTranslate *musicFavoriteMenu = nullptr;
 	MusicListMenuTranslate *musicListMenu = nullptr;
-	StringEditorWidgetTranslate* stringEditorWidget = nullptr;
-	MusicItemTranslate* musicItem = nullptr;
+	StringEditorWidgetTranslate *stringEditorWidget = nullptr;
+	MusicItemTranslate *musicItem = nullptr;
 	bool deleteResource( ) override;
 
 public:

@@ -2,6 +2,7 @@
 #define MUSICPLAYER_H_H_HEAD__FILE__
 
 #include "../interface/iAppCore.h"
+#include "../interface/iAppResourceCore.h"
 
 class QAudioDevice;
 class QAudioBuffer;
@@ -13,7 +14,7 @@ class QAudioFormat;
 class QAudioDecoder;
 class QAudioSink;
 
-class MusicPlayer : public QObject, public IAppCore {
+class MusicPlayer : public QObject, public IAppCore, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:

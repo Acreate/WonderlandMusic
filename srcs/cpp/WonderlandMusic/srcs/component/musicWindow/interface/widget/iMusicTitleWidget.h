@@ -2,12 +2,10 @@
 #define IMUSICTITLEWIDGET_H_H_HEAD__FILE__
 #include "iMusicWidget.h"
 
-#include <interface/iAppCore.h>
-
 class QMouseEvent;
 class QPoint;
 
-class IMusicTitleWidget : public IAppCore, public IMusicWidget {
+class IMusicTitleWidget : public IMusicWidget {
 public:
 	QString getTypeName( ) const override;
 	virtual bool sendMouseMoveEvent( const QMouseEvent &mouse_event ) = 0;

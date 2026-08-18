@@ -2,15 +2,13 @@
 #define IMUSICLISTWIDGET_H_H_HEAD__FILE__
 #include "iMusicWidget.h"
 
-#include <interface/iAppCore.h>
-
 class IMusicFavoriteItem;
 class QString;
 class IMusicItem;
 
-class IMusicListWidget : public IAppCore, public IMusicWidget {
+class IMusicListWidget : public IMusicWidget {
 public:
-	QString getTypeName() const override;
+	QString getTypeName( ) const override;
 	virtual IMusicFavoriteItem * getCurrentMusicFavoriteItem( ) const =0;
 	virtual bool setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) =0;
 	virtual bool fromYPosGetMusicItem( IMusicItem * &result_music_item, const size_t &y_pos ) = 0;

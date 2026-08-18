@@ -24,6 +24,7 @@
 
 #include "appMusicManage/appMusicDecoder.h"
 
+class IMusicFavoriteItem;
 bool AppMusicManage::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
@@ -41,75 +42,6 @@ bool AppMusicManage::unsafeClearMusicItemVector( ) {
 }
 bool AppMusicManage::unsafeClearMusicFavoriteItem( ) {
 	return false;
-}
-bool AppMusicManage::renderImage( QPainter &painter, int intervalWidth, size_t index, IMusicItem *music_item, int calculate_min_width, int calculate_height, const QFont &font, const QColor &fill_separator_color ) const {
-	size_t idCode;
-	if( music_item->getIdCode( idCode ) == false )
-		return false;
-	QString name;
-	if( music_item->getName( name ) == false )
-		return false;
-	QString singer;
-	if( music_item->getSinger( singer ) == false )
-		return false;
-	QString elapsedTimeString;
-	if( music_item->getElapsedTimeString( elapsedTimeString ) == false )
-		return false;
-	auto buff = music_item->createResizeBuff( calculate_min_width, calculate_height );
-	if( buff == nullptr )
-		return false;
-	buff->fill( 0 );
-	painter.begin( buff );
-	painter.setFont( font );
-	int separatorWidth = this->musicItemWidthInfo->getSeparatorWidth( );
-	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
-
-	intervalWidth += intervalWidth + separatorWidth;
-
-	QString text = QString::number( idCode );
-	int musicCodeWidth = this->musicItemWidthInfo->getMusicCodeWidth( );
-	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), text );
-
-	intervalWidth += intervalWidth + musicCodeWidth;
-	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
-
-	intervalWidth += intervalWidth + separatorWidth;
-	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), name );
-
-	int musicNameWidth = this->musicItemWidthInfo->getMusicNameWidth( );
-	intervalWidth += intervalWidth + musicNameWidth;
-	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
-
-	intervalWidth += intervalWidth + separatorWidth;
-	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), singer );
-
-	int musicSingerNameWidth = this->musicItemWidthInfo->getMusicSingerNameWidth( );
-	intervalWidth += intervalWidth + musicSingerNameWidth;
-	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
-
-	intervalWidth += intervalWidth + separatorWidth;
-	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculate_height ), elapsedTimeString );
-
-	int musicDurationTimeWidth = this->musicItemWidthInfo->getMusicDurationTimeWidth( );
-	intervalWidth += intervalWidth + musicDurationTimeWidth;
-	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculate_height ), fill_separator_color );
-
-	painter.end( );
-	return true;
-}
-bool AppMusicManage::renderImage( size_t index, IMusicItem *music_item ) const {
-	auto appRenderImage = InstanceTools::getAppRenderImage( );
-	if( appRenderImage == nullptr )
-		return false;
-	auto fontMetrics = appRenderImage->getFontMetrics( );
-	int fontHeight = fontMetrics->height( );
-	QPainter painter;
-
-	QColor fillSeparatorColor = QColor( 255, 255, 255 );
-	auto calculateMinWidth = musicItemWidthInfo->getCalculateMinWidth( );
-	auto font = appRenderImage->getFont( );
-	int intervalWidth = musicItemWidthInfo->getIntervalWidth( );
-	return renderImage( painter, intervalWidth, index, music_item, calculateMinWidth, fontHeight, *font, fillSeparatorColor );
 }
 
 bool AppMusicManage::init( ) {
@@ -132,7 +64,7 @@ bool AppMusicManage::initAfter( ) {
 AppMusicDecoder * AppMusicManage::getAppMusicDecoder( ) const {
 	return appMusicDecoder;
 }
-size_t AppMusicManage::loadMusicFile( const std::vector< QString > &music_file_path_vector ) {
+size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector ) {
 	size_t result = 0;
 	size_t count = music_file_path_vector.size( );
 	if( count == 0 )
@@ -140,20 +72,20 @@ size_t AppMusicManage::loadMusicFile( const std::vector< QString > &music_file_p
 	size_t index = 0;
 	auto data = music_file_path_vector.data( );
 	for( ; index < count; index += 1 )
-		result += loadMusicFile( data[ index ] );
+		result += loadMusicFile( music_favorite_item, data[ index ] );
 	return result;
 }
-size_t AppMusicManage::loadMusicFile( const std::list< QString > &music_file_path_list ) {
+size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::list< QString > &music_file_path_list ) {
 	size_t result = 0;
 	auto iterator = music_file_path_list.begin( );
 	auto end = music_file_path_list.end( );
 	if( iterator == end )
 		return result;
 	for( ; iterator != end; ++iterator )
-		result += loadMusicFile( *iterator );
+		result += loadMusicFile( music_favorite_item, *iterator );
 	return result;
 }
-size_t AppMusicManage::loadMusicFile( const QStringList &music_file_path_list ) {
+size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QStringList &music_file_path_list ) {
 	size_t result = 0;
 	size_t count = music_file_path_list.size( );
 	if( count == 0 )
@@ -161,10 +93,10 @@ size_t AppMusicManage::loadMusicFile( const QStringList &music_file_path_list ) 
 	size_t index = 0;
 	auto data = music_file_path_list.data( );
 	for( ; index < count; index += 1 )
-		result += loadMusicFile( data[ index ] );
+		result += loadMusicFile( music_favorite_item, data[ index ] );
 	return result;
 }
-size_t AppMusicManage::loadMusicFile( const QString &music_file_path ) {
+size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QString &music_file_path ) {
 	QFileInfo info( music_file_path );
 	if( info.exists( ) == false )
 		return 0;
@@ -177,8 +109,8 @@ size_t AppMusicManage::loadMusicFile( const QString &music_file_path ) {
 	userMutex->unlock( );
 	return 1;
 }
-bool AppMusicManage::loadMusicDir( const QString &music_dir_path ) {
-	bool result = false;
+size_t AppMusicManage::loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path ) {
+	size_t result = 0;
 
 	QStringList filterMusicFileList;
 	QStringList getFileList;
@@ -190,13 +122,8 @@ bool AppMusicManage::loadMusicDir( const QString &music_dir_path ) {
 			if( musicFileCount ) {
 				auto data = filterMusicFileList.data( );
 				qsizetype index;
-				userMutex->lock( );
-				for( index = 0; index < musicFileCount; index += 1 ) {
-					auto musicItem = new MusicInfoItem( this, data[ index ] );
-					musicItemVector.emplace_back( musicItem );
-				}
-				userMutex->unlock( );
-				result = true;
+				for( index = 0; index < musicFileCount; index += 1 )
+					result += loadMusicFile( music_favorite_item, data[ index ] );
 			}
 		}
 	}
@@ -215,6 +142,9 @@ bool AppMusicManage::setMusicWindowInfoJsonData( const QJsonObject &result_json_
 }
 
 bool AppMusicManage::hasMusicFile( const QString &file_path ) const {
+	return false;
+}
+bool AppMusicManage::addMusicItem( IMusicItem *music_item ) {
 	return false;
 }
 bool AppMusicManage::updateMusicItem( IMusicItem *music_item ) {

@@ -1,18 +1,24 @@
 ﻿#include "appUserInterfaceManage.h"
 #include <QJsonObject>
 
+#include "../../component/musicWindow/musicWindow.h"
+#include "../../component/optionWindow/optionWindow.h"
+
 #include "../../head/after_init_macro.h"
 #include "../../head/before_init_macro.h"
 #include "../../head/init_macro.h"
 #include "../../head/release_macro.h"
 #include "../../head/result_message_out.h"
 
-#include "../../menu/systemTrayIconMenu.h"
-
 #include "../../systemTrayIcon/systemTrayIcon.h"
 
-#include "../../tools/instanceTools.h"
 #include "../../tools/pathTools.h"
+
+#include "../../widget/aboutWidget.h"
+#include "../../widget/musicFavoriteWidget.h"
+#include "../../widget/musicListWidget.h"
+#include "../../widget/musicTitleWidget.h"
+#include "../../widget/settingWidget.h"
 
 #include "../../window/mainWindow.h"
 
@@ -25,7 +31,19 @@ bool AppUserInterfaceManage::deleteResource( ) {
 	if( systemTrayIcon )
 		systemTrayIcon->hide( );
 	Delete_Resource_App_Core_Ptr( appMenuManage );
+	Delete_Resource_App_Core_Ptr( optionWindow );
 	Delete_Resource_App_Core_Ptr( mainWindow );
+
+	Delete_Resource_App_Core_Ptr( musicFavoriteWidget );
+	Delete_Resource_App_Core_Ptr( musicListWidget );
+	Delete_Resource_App_Core_Ptr( musicTitleWidget );
+	Delete_Resource_App_Core_Ptr( musicWindow );
+
+	Delete_Resource_App_Core_Ptr( settingWidget );
+	Delete_Resource_App_Core_Ptr( aboutWidget );
+
+
+
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 	Delete_Resource_App_Core_Ptr( appDrawManage );
 	return true;
@@ -79,6 +97,13 @@ bool AppUserInterfaceManage::setJsonData( const QJsonObject &set_json_object ) {
 bool AppUserInterfaceManage::init( ) {
 	Init_Resource_App_Core_Ptr( appDrawManage );
 	Init_Resource_App_Core_Ptr( mainWindow );
+	Init_Resource_App_Core_Ptr( optionWindow );
+	Init_Resource_App_Core_Ptr( musicWindow );
+	Init_Resource_App_Core_Ptr( settingWidget );
+	Init_Resource_App_Core_Ptr( aboutWidget );
+	Init_Resource_App_Core_Ptr( musicFavoriteWidget );
+	Init_Resource_App_Core_Ptr( musicListWidget );
+	Init_Resource_App_Core_Ptr( musicTitleWidget );
 	Init_Resource_App_Core_Ptr( systemTrayIcon );
 	Init_Resource_App_Core_Ptr( appMenuManage );
 
@@ -89,10 +114,28 @@ bool AppUserInterfaceManage::initBefore( ) {
 	deleteResource( );
 	appDrawManage = new AppDrawManage;
 	mainWindow = new MainWindow;
+	optionWindow = new OptionWindow;
+	musicWindow = new MusicWindow;
+	settingWidget = new SettingWidget;
+
+	aboutWidget = new AboutWidget;
+	musicFavoriteWidget = new MusicFavoriteWidget;
+	musicListWidget = new MusicListWidget;
+	musicTitleWidget = new MusicTitleWidget;
+
 	systemTrayIcon = new SystemTrayIcon;
 	appMenuManage = new AppMenuManage;
 	Before_Init_Resource_App_Core_Ptr( appDrawManage );
+
 	Before_Init_Resource_App_Core_Ptr( mainWindow );
+	Before_Init_Resource_App_Core_Ptr( optionWindow );
+	Before_Init_Resource_App_Core_Ptr( musicWindow );
+	Before_Init_Resource_App_Core_Ptr( settingWidget );
+	Before_Init_Resource_App_Core_Ptr( aboutWidget );
+	Before_Init_Resource_App_Core_Ptr( musicFavoriteWidget );
+	Before_Init_Resource_App_Core_Ptr( musicListWidget );
+	Before_Init_Resource_App_Core_Ptr( musicTitleWidget );
+
 	Before_Init_Resource_App_Core_Ptr( systemTrayIcon );
 	Before_Init_Resource_App_Core_Ptr( appMenuManage );
 	return true;
@@ -100,19 +143,18 @@ bool AppUserInterfaceManage::initBefore( ) {
 
 bool AppUserInterfaceManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( appDrawManage );
+
 	After_Init_Resource_App_Core_Ptr( mainWindow );
+	After_Init_Resource_App_Core_Ptr( optionWindow );
+	After_Init_Resource_App_Core_Ptr( musicWindow );
+	After_Init_Resource_App_Core_Ptr( settingWidget );
+	After_Init_Resource_App_Core_Ptr( aboutWidget );
+	After_Init_Resource_App_Core_Ptr( musicFavoriteWidget );
+	After_Init_Resource_App_Core_Ptr( musicListWidget );
+	After_Init_Resource_App_Core_Ptr( musicTitleWidget );
+
 	After_Init_Resource_App_Core_Ptr( systemTrayIcon );
 	After_Init_Resource_App_Core_Ptr( appMenuManage );
-	if( showMainWindow( ) == false )
-		return false;
-	systemTrayIcon->show( );
-
-	auto appMenuManage = InstanceTools::getAppMenuManage( );
-	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
-
-	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_show_main_window, this, [this]( ) {
-		showMainWindow( );
-	} );
 
 	return true;
 }
@@ -147,4 +189,25 @@ SystemTrayIcon * AppUserInterfaceManage::getSystemTrayIcon( ) const {
 
 AppDrawManage * AppUserInterfaceManage::getAppDrawManage( ) const {
 	return appDrawManage;
+}
+OptionWindow * AppUserInterfaceManage::getOptionWindow( ) const {
+	return optionWindow;
+}
+MusicWindow * AppUserInterfaceManage::getMusicWindow( ) const {
+	return musicWindow;
+}
+SettingWidget * AppUserInterfaceManage::getSettingWidget( ) const {
+	return settingWidget;
+}
+AboutWidget * AppUserInterfaceManage::getAboutWidget( ) const {
+	return aboutWidget;
+}
+MusicFavoriteWidget * AppUserInterfaceManage::getMusicFavoriteWidget( ) const {
+	return musicFavoriteWidget;
+}
+MusicListWidget * AppUserInterfaceManage::getMusicListWidget( ) const {
+	return musicListWidget;
+}
+MusicTitleWidget * AppUserInterfaceManage::getMusicTitleWidget( ) const {
+	return musicTitleWidget;
 }

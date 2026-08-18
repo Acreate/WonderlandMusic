@@ -4,10 +4,12 @@
 #include "iAppCore.h"
 #include <head/declaration_get_jsonkey.h>
 
+#include "iAppResourceCore.h"
+
 namespace AppJsonKeyTools {
 }
 
-class IJsonKey : public IAppCore {
+class IJsonKey : public IAppCore, public IAppResourceCore {
 protected:
 	QString filePath;
 	bool deleteResource( ) override;

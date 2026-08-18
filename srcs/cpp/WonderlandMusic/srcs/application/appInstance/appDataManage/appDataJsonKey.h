@@ -3,6 +3,8 @@
 
 #include <interface/iAppCore.h>
 
+#include "../../../interface/iAppResourceCore.h"
+
 class AppMenuManageJsonKey;
 class AppMusicManageJsonKey;
 class AppUserInterfaceManageJsonKey;
@@ -17,7 +19,7 @@ class MusicItemJsonKey;
 class MusicFavoriteWidgetJsonKey;
 class FavoriteItemJsonKey;
 
-class AppDataJsonKey : public IAppCore {
+class AppDataJsonKey : public IAppCore, public IAppResourceCore {
 protected:
 	AboutWidgetJsonKey *aboutWidget = nullptr;
 	MainWindowJsonKey *mainWindow = nullptr;

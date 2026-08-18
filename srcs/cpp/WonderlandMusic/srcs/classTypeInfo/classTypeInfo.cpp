@@ -3,6 +3,32 @@
 #include <QString>
 
 #include "../mutex/userMutex.h"
+bool ClassTypeInfo::unsafeIsType( const void *&&ptr ) const {
+	if( ptr == this->ptr )
+		return true;
+	size_t count = aliasTypeInfos.size( );
+	if( count == 0 )
+		return false;
+	auto data = aliasTypeInfos.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ]->unsafeIsType( ptr ) )
+			return true;
+	return false;
+}
+bool ClassTypeInfo::unsafeIsType( const void *&ptr ) const {
+	if( ptr == this->ptr )
+		return true;
+	size_t count = aliasTypeInfos.size( );
+	if( count == 0 )
+		return false;
+	auto data = aliasTypeInfos.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ]->unsafeIsType( ptr ) )
+			return true;
+	return false;
+}
 bool ClassTypeInfo::unsafeIsType( const type_info &type_info ) const {
 	if( typeInfo == type_info )
 		return true;
@@ -17,7 +43,7 @@ bool ClassTypeInfo::unsafeIsType( const type_info &type_info ) const {
 	auto data = aliasTypeInfos.data( );
 	size_t index = 0;
 	for( ; index < count; index += 1 )
-		if( data[ index ]->isClassType( type_info ) )
+		if( data[ index ]->unsafeIsType( type_info ) )
 			return true;
 	return false;
 }
@@ -32,13 +58,13 @@ bool ClassTypeInfo::unsafeIsType( const QString &type_name ) const {
 	auto data = aliasTypeInfos.data( );
 	size_t index = 0;
 	for( ; index < count; index += 1 )
-		if( data[ index ]->isClassType( type_name ) )
+		if( data[ index ]->unsafeIsType( type_name ) )
 			return true;
 	return false;
 }
-ClassTypeInfo::ClassTypeInfo( const type_info &type_info ) : ClassTypeInfo( type_info, type_info.name( ) ) {
+ClassTypeInfo::ClassTypeInfo( void *ptr, const type_info &type_info ) : ClassTypeInfo( ptr, type_info, type_info.name( ) ) {
 }
-ClassTypeInfo::ClassTypeInfo( const type_info &type_info, const QString &name ) : typeInfo( type_info ), name( new QString( name ) ) {
+ClassTypeInfo::ClassTypeInfo( void *ptr, const type_info &type_info, const QString &name ) : typeInfo( type_info ), name( new QString( name ) ), ptr( ptr ) {
 	userMutex = new UserMutex;
 }
 ClassTypeInfo::~ClassTypeInfo( ) {
@@ -56,6 +82,18 @@ ClassTypeInfo::~ClassTypeInfo( ) {
 	delete userMutex;
 	userMutex = nullptr;
 }
+bool ClassTypeInfo::isClassType( const void *&&ptr ) const {
+	userMutex->lock( );
+	auto result = unsafeIsType( ptr );
+	userMutex->unlock( );
+	return result;
+}
+bool ClassTypeInfo::isClassType( const void *&ptr ) const {
+	userMutex->lock( );
+	auto result = unsafeIsType( ptr );
+	userMutex->unlock( );
+	return result;
+}
 bool ClassTypeInfo::isClassType( const type_info &type_info ) const {
 	userMutex->lock( );
 	auto result = unsafeIsType( type_info );
@@ -68,23 +106,23 @@ bool ClassTypeInfo::isClassType( const QString &type_name ) const {
 	userMutex->unlock( );
 	return result;
 }
-ClassTypeInfo * ClassTypeInfo::appendClassTypeInfo( const type_info &type_info, const QString &name ) {
+ClassTypeInfo * ClassTypeInfo::appendClassTypeInfo( void *ptr, const type_info &type_info, const QString &name ) {
 	ClassTypeInfo *typeInfo = nullptr;
 	userMutex->lock( );
 	auto result = unsafeIsType( type_info );
 	if( result == false ) {
-		typeInfo = new ClassTypeInfo( type_info, name );
+		typeInfo = new ClassTypeInfo( ptr, type_info, name );
 		aliasTypeInfos.emplace_back( typeInfo );
 	}
 	userMutex->unlock( );
 	return typeInfo;
 }
-ClassTypeInfo * ClassTypeInfo::appendClassTypeInfo( const type_info &type_info ) {
+ClassTypeInfo * ClassTypeInfo::appendClassTypeInfo( void *ptr, const type_info &type_info ) {
 	ClassTypeInfo *typeInfo = nullptr;
 	userMutex->lock( );
 	auto result = unsafeIsType( type_info );
 	if( result == false ) {
-		typeInfo = new ClassTypeInfo( type_info );
+		typeInfo = new ClassTypeInfo( ptr, type_info );
 		aliasTypeInfos.emplace_back( typeInfo );
 	}
 	userMutex->unlock( );

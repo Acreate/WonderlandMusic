@@ -1,7 +1,6 @@
 ﻿#ifndef MUSICINFOITEM_H_H_HEAD__FILE__
 #define MUSICINFOITEM_H_H_HEAD__FILE__
-#include <QObject>
-#include <QString>
+
 #include <qtypes.h>
 
 #include "../component/musicWindow/interface/item/iMusicItem.h"
@@ -24,6 +23,7 @@ protected:
 	QMediaPlayer *mediaPlayer = nullptr;
 	QImage *rendBuff = nullptr;
 	AppMusicManage *appMusicManage;
+	MusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
 	explicit MusicInfoItem( AppMusicManage *app_music_manage );
@@ -33,7 +33,6 @@ protected:
 
 public:
 	bool getElapsedTimeString( QString &result_elapsed_time_string ) const override;
-	QImage * createResizeBuff( const int &width, const int &height ) override;
 	~MusicInfoItem( ) override;
 	bool isLoadedOver( ) override;
 	bool getIdCode( size_t &result_id_code ) const override;
@@ -41,7 +40,10 @@ public:
 	bool getSinger( QString &result_singer ) const override;
 	bool getFilePath( QString &result_file_path ) const override;
 	bool getElapsedTime( size_t &result_elapsed_time ) const override;
-	bool getRendBuff( QImage &result_buff ) const override;
+	bool getDrawBuff( QImage &result_buff ) const override;
+
+protected:
+	bool setDrawBuff( QImage &image ) override;
 };
 
 #endif // MUSICINFOITEM_H_H_HEAD__FILE__

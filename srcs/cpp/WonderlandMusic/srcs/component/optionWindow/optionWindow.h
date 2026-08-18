@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include "../../interface/iAppCore.h"
 #include "../../interface/iAppJsonData.h"
+#include "../../interface/iAppResourceCore.h"
 class OptionButton;
 class OptionListDockWidget;
 class OptionListWidget;
@@ -10,7 +11,7 @@ class UserMutex;
 class OptionPanel;
 class OptionItem;
 
-class OptionWindow : public QMainWindow, public IAppCore, public IAppJsonData {
+class OptionWindow : public QMainWindow, public IAppCore, public IAppJsonData, public IAppResourceCore {
 	Q_OBJECT;
 	friend class OptionPanel;
 	friend class OptionButton;
@@ -23,12 +24,17 @@ protected:
 
 protected :
 	virtual void removeOptionPanel( OptionPanel *option_panel );
-	virtual void removeAllOptionPanel( );
-	virtual void deleteOptionPanel( OptionPanel *option_panel );
-	virtual void deleteAllOptionPanel( );
+	virtual size_t removeAllOptionPanel( std::vector< OptionPanel * > &result_remove_panel );
+	virtual size_t removeAllOptionPanel( ) {
+		std::vector< OptionPanel * > resultRemovePanel;
+		return removeAllOptionPanel( resultRemovePanel );
+	}
+
+	virtual bool hideOptionPanel( );
+	virtual bool hideOptionPanel( OptionPanel *option_panel );
 
 public:
-	OptionWindow( QWidget *paretn );
+	OptionWindow( );
 	~OptionWindow( ) override;
 	virtual void updateOptionPanelInfo( OptionPanel *option_panel );
 	virtual bool addOptionPanel( OptionPanel *option_panel );
@@ -40,9 +46,7 @@ public:
 	virtual bool setOptionPanelName( OptionPanel *option_panel, const QString &name );
 	virtual bool setOptionPanelIcon( OptionPanel *option_panel, const QImage &icon );
 
-	virtual bool hideOptionPanel( );
 	virtual bool showOptionPanel( );
-	virtual bool hideOptionPanel( OptionPanel *option_panel );
 	virtual bool showOptionPanel( OptionPanel *option_panel );
 
 protected:

@@ -6,7 +6,12 @@
 
 #include <head/release_macro.h>
 
+#include "../../../../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
+#include "../../../../component/musicWindow/interface/item/iMusicItem.h"
+
 #include "../../../../head/result_message_out.h"
+
+#include "../../../../tools/instanceTools.h"
 
 bool AppRenderImage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( brackGroundColor );
@@ -118,4 +123,69 @@ bool AppRenderImage::renderWidget( QImage &result_render_image, QWidget *render_
 	painter.end( );
 
 	return true;
+}
+bool AppRenderImage::renderMusicItem( QImage &result_render_image, IMusicItem *music_item, const IMusicItemWidthInfo *item_width_info ) const {
+	size_t idCode;
+	if( music_item->getIdCode( idCode ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, music_item, getIdCode, QObject::tr( "获取歌曲id失败" ) );
+	QString name;
+	if( music_item->getName( name ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, music_item, getName, QObject::tr( "获取歌曲名称失败" ) );
+	QString singer;
+	if( music_item->getSinger( singer ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, music_item, getSinger, QObject::tr( "获取歌曲歌手失败" ) );
+	QString elapsedTimeString;
+	if( music_item->getElapsedTimeString( elapsedTimeString ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, music_item, getElapsedTimeString, QObject::tr( "获取时间字符串失败" ) );
+	int calculateMinWidth = item_width_info->getCalculateMinWidth( );
+	int calculateMinHeight = fontMetrics->height( );
+	QImage buff( calculateMinWidth, calculateMinHeight, QImage::Format_RGBA8888 );
+	if( buff.isNull( ) )
+		return Result_Var_Messag_Ptr_Out_Args( false, &buff, isNull, QObject::tr( "创建绘制缓存失败" ) );
+	buff.fill( 0 );
+	QPainter painter;
+	painter.begin( &buff );
+	painter.setFont( *font );
+	int separatorWidth = item_width_info->getSeparatorWidth( );
+	int intervalWidth = item_width_info->getIntervalWidth( );
+	QColor fillSeparatorColor( 255, 255, 255, 255 );
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculateMinHeight ), fillSeparatorColor );
+
+	intervalWidth += intervalWidth + separatorWidth;
+
+	QString text = QString::number( idCode );
+	int musicCodeWidth = item_width_info->getMusicCodeWidth( );
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculateMinHeight ), text );
+
+	intervalWidth += intervalWidth + musicCodeWidth;
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculateMinHeight ), fillSeparatorColor );
+
+	intervalWidth += intervalWidth + separatorWidth;
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculateMinHeight ), name );
+
+	int musicNameWidth = item_width_info->getMusicNameWidth( );
+	intervalWidth += intervalWidth + musicNameWidth;
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculateMinHeight ), fillSeparatorColor );
+
+	intervalWidth += intervalWidth + separatorWidth;
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculateMinHeight ), singer );
+
+	int musicSingerNameWidth = item_width_info->getMusicSingerNameWidth( );
+	intervalWidth += intervalWidth + musicSingerNameWidth;
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculateMinHeight ), fillSeparatorColor );
+
+	intervalWidth += intervalWidth + separatorWidth;
+	painter.drawText( QRect( intervalWidth, 0, musicCodeWidth, calculateMinHeight ), elapsedTimeString );
+
+	int musicDurationTimeWidth = item_width_info->getMusicDurationTimeWidth( );
+	intervalWidth += intervalWidth + musicDurationTimeWidth;
+	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculateMinHeight ), fillSeparatorColor );
+
+	painter.end( );
+	if( music_item->setDrawBuff( buff ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, music_item, setDrawBuff, QObject::tr( "配置绘制缓存失败" ) );
+	return true;
+}
+bool AppRenderImage::renderMusicItem( QImage &result_render_image, IMusicFavoriteItem *music_favorite_item, const IMusicItemWidthInfo *item_width_info ) const {
+	return false;
 }

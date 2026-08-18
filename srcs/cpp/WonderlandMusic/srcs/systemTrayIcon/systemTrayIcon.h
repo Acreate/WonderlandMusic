@@ -2,9 +2,10 @@
 #define SYSTEMTRAYICON_H_H_HEAD__FILE__
 #include <QSystemTrayIcon>
 #include "../interface/iAppCore.h"
+#include "../interface/iAppResourceCore.h"
 class SystemTrayIconMenu;
 
-class SystemTrayIcon : public QSystemTrayIcon, public IAppCore {
+class SystemTrayIcon : public QSystemTrayIcon, public IAppCore, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:

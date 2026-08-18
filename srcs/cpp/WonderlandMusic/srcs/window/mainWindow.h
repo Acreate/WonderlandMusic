@@ -3,6 +3,11 @@
 #include <QMainWindow>
 #include "../interface/iAppCore.h"
 #include "../interface/iAppJsonData.h"
+#include "../interface/iAppResourceCore.h"
+class MusicTitleWidget;
+class MusicListWidget;
+class MusicFavoriteWidget;
+class IMusicFavoriteWidget;
 class MusicWindow;
 class OptionWindow;
 class JsonFileKey;
@@ -13,14 +18,10 @@ class AboutWidget;
 class AppTranslate;
 class AppInstance;
 
-class MainWindow : public QMainWindow, public IAppCore, public IAppJsonData {
+class MainWindow : public QMainWindow, public IAppCore, public IAppJsonData, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:
-	OptionWindow *optionWindow = nullptr;
-	MusicWindow *musicWindow = nullptr;
-	SettingWidget *settingWidget = nullptr;
-	AboutWidget *aboutWidget = nullptr;
 
 public:
 	~MainWindow( ) override;
@@ -28,16 +29,11 @@ public:
 	MainWindow( QWidget *parent );
 	MainWindow( Qt::WindowFlags flags );
 	MainWindow( );
-	virtual OptionWindow * getOptionWindow( ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
-	virtual OptionWindow * getOptionWindow1( ) const;
-	virtual MusicWindow * getMusicWindow( ) const;
-	virtual SettingWidget * getSettingWidget( ) const;
-	virtual AboutWidget * getAboutWidget( ) const;
 
 protected:
 	bool deleteResource( ) override;

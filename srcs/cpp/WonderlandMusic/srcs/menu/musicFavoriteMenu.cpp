@@ -3,14 +3,15 @@
 #include <QDir>
 #include <QJsonObject>
 
+#include "../application/appInstance/appDataManage/appMusicManage.h"
 #include "../application/appInstance/appDataManage/jsonKey/musicFavoriteMenuJsonKey.h"
 #include "../application/appInstance/appDataManage/translate/musicFavoriteMenuTranslate.h"
 #include "../application/appInstance/appUserInterfaceManage/appMenuManage.h"
 
 #include "../component/musicWindow/musicWindow.h"
-#include "../component/musicWindow/Item/favoriteItem/favoriteItem.h"
+#include "../component/musicWindow/interface/item/iMusicFavoriteItem.h"
+#include "../component/musicWindow/interface/widget/iMusicFavoriteWidget.h"
 #include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
-#include "../component/musicWindow/musicCentreWidget/musicFavoriteWidget/musicFavoriteWidget.h"
 
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
@@ -88,22 +89,27 @@ bool MusicFavoriteMenu::setJsonData( const QJsonObject &set_json_object ) {
 		return false;
 	return true;
 }
-bool MusicFavoriteMenu::execMenu( MusicFavoriteWidget *music_favorite_widget, FavoriteItem *favorite_item, const QPoint &mouse_global_point ) {
+bool MusicFavoriteMenu::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+	return false;
+}
+bool MusicFavoriteMenu::execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point ) {
 	if( music_favorite_widget == nullptr )
 		return false;
 	musicFavoriteWidget = music_favorite_widget;
-	favoriteItem = favorite_item;
+	musicFavoriteItem = favorite_item;
 
 	if( AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
-		if( favoriteItem ) {
-			auto &favoriteItemName = favoriteItem->getFavoriteItemName( );
-			renameFavoriteItemAction->setText( translate.getRenameFavoriteItem( ).arg( favoriteItemName ) );
+		if( musicFavoriteItem ) {
+			QString name;
+			if( musicFavoriteItem->getName( name ) == false )
+				return false;
+			renameFavoriteItemAction->setText( translate.getRenameFavoriteItem( ).arg( name ) );
 			renameFavoriteItemAction->setEnabled( true );
-			deleteFavoriteItemAction->setText( translate.getDeleteFavoriteItem( ).arg( favoriteItemName ) );
+			deleteFavoriteItemAction->setText( translate.getDeleteFavoriteItem( ).arg( name ) );
 			deleteFavoriteItemAction->setEnabled( true );
-			addMusicFileAction->setText( translate.getAddMusicFileToFavoriteItem( ).arg( favoriteItemName ) );
+			addMusicFileAction->setText( translate.getAddMusicFileToFavoriteItem( ).arg( name ) );
 			addMusicFileAction->setEnabled( true );
-			addMusicDirAction->setText( translate.getAddMusicDirToFavoriteItem( ).arg( favoriteItemName ) );
+			addMusicDirAction->setText( translate.getAddMusicDirToFavoriteItem( ).arg( name ) );
 			addMusicDirAction->setEnabled( true );
 		} else {
 			renameFavoriteItemAction->setText( translate.getIllegalRenameFavoriteItem( ) );
@@ -121,34 +127,25 @@ bool MusicFavoriteMenu::execMenu( MusicFavoriteWidget *music_favorite_widget, Fa
 
 	return InstanceTools::getAppMenuManage( )->popMusicFavoriteMenu( mouse_global_point );
 }
+
 void MusicFavoriteMenu::hideEvent( QHideEvent *hide_event ) {
 	QMenu::hideEvent( hide_event );
 }
 void MusicFavoriteMenu::slot_createFavoriteItem( ) {
-	if( musicFavoriteWidget == nullptr )
-		return;
-	musicFavoriteWidget->opendCreateFavoriteItemWidget( );
 }
 void MusicFavoriteMenu::slot_renameFavoriteItem( ) {
-	if( musicFavoriteWidget == nullptr || favoriteItem == nullptr )
-		return;
-	musicFavoriteWidget->opendRenameFavoriteItemWidget( favoriteItem );
 }
 void MusicFavoriteMenu::slot_deleteFavoriteItem( ) {
-	if( musicFavoriteWidget == nullptr || favoriteItem == nullptr )
-		return;
-	if( musicFavoriteWidget->removeItem( favoriteItem ) == false )
-		return;
-	delete favoriteItem;
-	musicFavoriteWidget->repaint( );
 }
 void MusicFavoriteMenu::slot_addMusicFile( ) {
+	if( musicFavoriteItem == nullptr )
+		Result_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
-		if( favoriteItem == nullptr )
-			return false;
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
-		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
+		auto musicWindow = musicCentreWidget->getMusicWindow( );
+		QWidget *openWidget = musicWindow->toWidget( );
+
 		QString filter;
 		if( PathInfoTools::getSupperDecodeFileSuffixFilter( filter ) == false )
 			return false;
@@ -157,14 +154,15 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 		QFileInfo info( resultFile[ 0 ] );
 		auto dir = info.dir( );
 		openSelecteMultiFileWidgetPath = dir.path( );
-		favoriteItem->loadMusicFile( resultFile );
+		auto appMusicManage = InstanceTools::getAppMusicManage( );
+		appMusicManage->loadMusicFile( musicFavoriteItem, resultFile );
 		return true;
 	} );
 }
 void MusicFavoriteMenu::slot_addMusicDir( ) {
+	if( musicFavoriteItem == nullptr )
+		Result_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
-		if( favoriteItem == nullptr )
-			return false;
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
 		QWidget *openWidget = musicCentreWidget->getMusicWindow( );
@@ -174,7 +172,8 @@ void MusicFavoriteMenu::slot_addMusicDir( ) {
 
 		auto dir = info.dir( );
 		openSelecteMultiDirWidgetPath = dir.path( );
-		favoriteItem->loadMusicFile( resultFile );
+		auto appMusicManage = InstanceTools::getAppMusicManage( );
+		appMusicManage->loadMusicFile( musicFavoriteItem, resultFile );
 		return true;
 	} );
 }

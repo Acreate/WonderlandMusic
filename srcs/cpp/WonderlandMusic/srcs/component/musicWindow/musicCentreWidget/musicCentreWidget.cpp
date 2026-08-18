@@ -241,6 +241,7 @@ IMusicListWidget * MusicCentreWidget::setMusicListWidget( IMusicListWidget *cons
 	this->musicListWidget = music_list_widget;
 	musicListWidgetScrollArea->takeWidget( );
 	musicListWidgetScrollArea->setWidget( widget );
+	repaintListWidget( );
 	return old;
 }
 IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) {
@@ -249,6 +250,7 @@ IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *c
 		if( musicTitleWidget && musicTitleWidget->setMusicCentreWidget( nullptr ) == false )
 			return Result_Var_Messag_Ptr_Out_Args( music_title_widget, musicTitleWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 		this->musicTitleWidget = music_title_widget;
+		musicTitleWidget->setIMusicItemWidthInfo( nullptr );
 		musicTitleWidgetScrollArea->takeWidget( );
 		return old;
 	}
@@ -263,6 +265,9 @@ IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *c
 	this->musicTitleWidget = music_title_widget;
 	musicTitleWidgetScrollArea->takeWidget( );
 	musicTitleWidgetScrollArea->setWidget( widget );
+	if( musicItemWidthInfo )
+		musicTitleWidget->setIMusicItemWidthInfo( musicItemWidthInfo );
+	repaintTitleWidget( );
 	return old;
 }
 
@@ -320,6 +325,7 @@ IMusicItemWidthInfo * MusicCentreWidget::setMusicItemWidthInfo( IMusicItemWidthI
 		if( musicItemWidthInfo && musicItemWidthInfo->setMusicCentreWidget( nullptr ) == false )
 			return Result_Var_Messag_Ptr_Out_Args( music_item_width_info, musicWidgetSizeInfo, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 		this->musicItemWidthInfo = music_item_width_info;
+		musicTitleWidget->setIMusicItemWidthInfo( nullptr );
 		return old;
 	}
 	if( music_item_width_info->setMusicCentreWidget( this ) == false )
@@ -328,5 +334,15 @@ IMusicItemWidthInfo * MusicCentreWidget::setMusicItemWidthInfo( IMusicItemWidthI
 		return Result_Var_Messag_Ptr_Out_Args( music_item_width_info, musicWidgetSizeInfo, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 	auto old = this->musicItemWidthInfo;
 	this->musicItemWidthInfo = music_item_width_info;
+	if( musicTitleWidget )
+		musicTitleWidget->setIMusicItemWidthInfo( musicItemWidthInfo );
+	repaintTitleWidget( );
+	repaintListWidget( );
 	return old;
+}
+bool MusicCentreWidget::repaintListWidget( ) {
+	return false;
+}
+bool MusicCentreWidget::repaintTitleWidget( ) {
+	return false;
 }

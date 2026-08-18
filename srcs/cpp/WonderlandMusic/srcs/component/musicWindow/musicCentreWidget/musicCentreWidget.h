@@ -36,7 +36,8 @@ private:
 	IMusicFavoriteMenu *musicFavoriteMenu = nullptr;
 	IMusicListMenu *musicListMenu = nullptr;
 	IMusicWidgetSizeInfo *musicWidgetSizeInfo = nullptr;
-	IMusicItemWidthInfo* musicItemWidthInfo = nullptr;
+	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
+
 public:
 	MusicCentreWidget( MusicWindow *parent );
 	~MusicCentreWidget( ) override;
@@ -68,6 +69,9 @@ public:
 
 	virtual IMusicWidgetSizeInfo * setMusicWidgetSizeInfo( IMusicWidgetSizeInfo *const music_widget_size_info );
 	virtual IMusicItemWidthInfo * setMusicItemWidthInfo( IMusicItemWidthInfo *const music_item_width_info );
+
+	virtual bool repaintListWidget( );
+	virtual bool repaintTitleWidget( );
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

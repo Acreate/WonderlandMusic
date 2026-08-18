@@ -2,15 +2,15 @@
 #define IMUSICTITLEWIDGET_H_H_HEAD__FILE__
 #include "iMusicWidget.h"
 
+class IMusicItemWidthInfo;
 class QMouseEvent;
 class QPoint;
 
 class IMusicTitleWidget : public IMusicWidget {
 public:
 	QString getTypeName( ) const override;
-	virtual bool sendMouseMoveEvent( const QMouseEvent &mouse_event ) = 0;
-	virtual bool sendMouseRelaseEvent( const QMouseEvent &mouse_event ) =0;
-	virtual bool sendMousePressEvent( const QMouseEvent &mouse_event ) = 0;
+	virtual bool setIMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) = 0;
+	virtual IMusicItemWidthInfo * getIMusicItemWidthInfo( ) const = 0;
 };
 
 #endif // IMUSICTITLEWIDGET_H_H_HEAD__FILE__

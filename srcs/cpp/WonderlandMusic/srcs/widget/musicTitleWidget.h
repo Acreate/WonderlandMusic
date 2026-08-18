@@ -11,6 +11,7 @@ class MusicTitleWidget : public QWidget, public IMusicTitleWidget, public IAppRe
 
 protected:
 	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
 
 public:
 	MusicTitleWidget( );
@@ -30,9 +31,8 @@ public:
 	QWidget * toWidget( ) override;
 	bool drawWidgeTarget( QWidget *widget ) override;
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
-	bool sendMouseMoveEvent( const QMouseEvent &mouse_event ) override;
-	bool sendMouseRelaseEvent( const QMouseEvent &mouse_event ) override;
-	bool sendMousePressEvent( const QMouseEvent &mouse_event ) override;
+	bool setIMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) override;
+	IMusicItemWidthInfo * getIMusicItemWidthInfo( ) const override;
 };
 
 #endif // MUSICTITLEWIDGET_H_H_HEAD__FILE__

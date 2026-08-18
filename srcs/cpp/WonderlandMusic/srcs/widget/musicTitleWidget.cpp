@@ -36,12 +36,10 @@ bool MusicTitleWidget::drawWidgeTarget( QWidget *widget ) {
 MusicCentreWidget * MusicTitleWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
-bool MusicTitleWidget::sendMouseMoveEvent( const QMouseEvent &mouse_event ) {
+bool MusicTitleWidget::setIMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) {
+	musicItemWidthInfo = music_item_width_info;
 	return true;
 }
-bool MusicTitleWidget::sendMouseRelaseEvent( const QMouseEvent &mouse_event ) {
-	return true;
-}
-bool MusicTitleWidget::sendMousePressEvent( const QMouseEvent &mouse_event ) {
-	return true;
+IMusicItemWidthInfo * MusicTitleWidget::getIMusicItemWidthInfo( ) const {
+	return musicItemWidthInfo;
 }

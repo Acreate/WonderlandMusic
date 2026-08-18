@@ -6,17 +6,11 @@
 
 #include <head/release_macro.h>
 
-#include "../../appDataManage.h"
+#include <component/musicWindow/interface/info/iMusicItemWidthInfo.h>
+#include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
+#include <component/musicWindow/interface/item/iMusicItem.h>
 
-#include "../../../../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
-#include "../../../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
-#include "../../../../component/musicWindow/interface/item/iMusicItem.h"
-
-#include "../../../../head/result_message_out.h"
-
-#include "../../../../info/musicItemWidthInfo.h"
-
-#include "../../../../tools/instanceTools.h"
+#include <head/result_message_out.h>
 
 bool AppRenderImage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( brackGroundColor );
@@ -203,8 +197,24 @@ bool AppRenderImage::renderCompositeMusicItemBuff( QImage &result_image, const s
 	QImage buff;
 	if( data[ index ]->getRefDrawBuff( buff ) == false )
 		return false;
-	index = 1;
 
+	int singleWidth = buff.width( );
+	int singleHeight = buff.height( );
+	auto minHeight = count * singleHeight;
+	result_image = QImage( singleWidth, minHeight, QImage::Format_RGBA8888 );
+	result_image.fill( 0 );
+	QPainter painter;
+	painter.begin( &result_image );
+	int offsetY = 0;
+	painter.drawImage( 0, offsetY, buff );
+	for( index = 1; index < count; index += 1 )
+		if( data[ index ]->getRefDrawBuff( buff ) == false )
+			return false;
+		else {
+			offsetY += singleHeight;
+			painter.drawImage( 0, offsetY, buff );
+		}
+	painter.end( );
 	return true;
 }
 bool AppRenderImage::renderMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) const {

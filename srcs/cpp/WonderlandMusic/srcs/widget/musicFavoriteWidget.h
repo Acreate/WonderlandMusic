@@ -9,6 +9,9 @@
 class MusicFavoriteWidget : public QWidget, public IMusicFavoriteWidget, public IAppResourceCore {
 	Q_OBJECT;
 
+protected:
+	MusicCentreWidget *musicCentreWidget = nullptr;
+
 public:
 	MusicFavoriteWidget( );
 	~MusicFavoriteWidget( ) override;

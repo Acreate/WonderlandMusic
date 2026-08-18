@@ -6,56 +6,57 @@ MusicListWidget::~MusicListWidget( ) {
 	deleteLater( );
 }
 bool MusicListWidget::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	return true;
 }
 bool MusicListWidget::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
-	return false;
+	musicCentreWidget = music_centre_widget;
+	return true;
 }
 bool MusicListWidget::deleteResource( ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::initBefore( ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::init( ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::initAfter( ) {
-	return false;
+	return true;
 }
 QWidget * MusicListWidget::toWidget( ) {
-	return nullptr;
+	return this;
 }
 bool MusicListWidget::drawWidgeTarget( QWidget *widget ) {
-	return false;
+	return true;
 }
 MusicCentreWidget * MusicListWidget::getMusicCentreWidget( ) const {
-	return nullptr;
+	return musicCentreWidget;
 }
 IMusicFavoriteItem * MusicListWidget::getCurrentMusicFavoriteItem( ) const {
 	return nullptr;
 }
 bool MusicListWidget::setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::fromIndexGetMusicItem( IMusicItem *&result_music_item, const size_t &index ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) {
-	return false;
+	return true;
 }
 bool MusicListWidget::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) {
-	return false;
+	return true;
 }

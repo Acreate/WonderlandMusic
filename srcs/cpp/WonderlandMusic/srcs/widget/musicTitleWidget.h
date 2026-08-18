@@ -9,6 +9,9 @@
 class MusicTitleWidget : public QWidget, public IMusicTitleWidget, public IAppResourceCore {
 	Q_OBJECT;
 
+protected:
+	MusicCentreWidget *musicCentreWidget = nullptr;
+
 public:
 	MusicTitleWidget( );
 	~MusicTitleWidget( ) override;

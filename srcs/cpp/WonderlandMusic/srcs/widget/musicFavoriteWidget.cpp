@@ -6,41 +6,42 @@ MusicFavoriteWidget::~MusicFavoriteWidget( ) {
 	deleteResource( );
 }
 bool MusicFavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	return true;
 }
 bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	return true;
 }
 bool MusicFavoriteWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
-	return false;
+	musicCentreWidget = music_centre_widget;
+	return true;
 }
 QWidget * MusicFavoriteWidget::toWidget( ) {
-	return nullptr;
+	return this;
 }
 bool MusicFavoriteWidget::drawWidgeTarget( QWidget *widget ) {
-	return false;
+	return true;
 }
 MusicCentreWidget * MusicFavoriteWidget::getMusicCentreWidget( ) const {
-	return nullptr;
+	return musicCentreWidget;
 }
 bool MusicFavoriteWidget::deleteResource( ) {
-	return false;
+	return true;
 }
 bool MusicFavoriteWidget::initBefore( ) {
-	return false;
+	return true;
 }
 bool MusicFavoriteWidget::init( ) {
-	return false;
+	return true;
 }
 bool MusicFavoriteWidget::initAfter( ) {
-	return false;
+	return true;
 }
 bool MusicFavoriteWidget::fromYPosGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &pos_y ) const {
-	return false;
+	return true;
 }
 bool MusicFavoriteWidget::fromIndexGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &index ) const {
-	return false;
+	return true;
 }
 bool MusicFavoriteWidget::fromNameGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const QString &index ) const {
-	return false;
+	return true;
 }

@@ -6,41 +6,42 @@ MusicTitleWidget::~MusicTitleWidget( ) {
 	deleteLater( );
 }
 bool MusicTitleWidget::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
-	return false;
+	musicCentreWidget = music_centre_widget;
+	return true;
 }
 bool MusicTitleWidget::deleteResource( ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::initBefore( ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::init( ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::initAfter( ) {
-	return false;
+	return true;
 }
 QWidget * MusicTitleWidget::toWidget( ) {
-	return nullptr;
+	return this;
 }
 bool MusicTitleWidget::drawWidgeTarget( QWidget *widget ) {
-	return false;
+	return true;
 }
 MusicCentreWidget * MusicTitleWidget::getMusicCentreWidget( ) const {
-	return nullptr;
+	return musicCentreWidget;
 }
 bool MusicTitleWidget::sendMouseMoveEvent( const QMouseEvent &mouse_event ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::sendMouseRelaseEvent( const QMouseEvent &mouse_event ) {
-	return false;
+	return true;
 }
 bool MusicTitleWidget::sendMousePressEvent( const QMouseEvent &mouse_event ) {
-	return false;
+	return true;
 }

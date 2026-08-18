@@ -19,6 +19,8 @@ protected:
 	virtual bool unsafeIsType( const void *&ptr ) const;
 	virtual bool unsafeIsType( const type_info &type_info ) const;
 	virtual bool unsafeIsType( const QString &type_name ) const;
+	virtual bool unsafeGetClassTypeName( const void *&ptr, QString &result_name ) const;
+	virtual bool unsafeGetClassTypeName( const void *&&ptr, QString &result_name ) const;
 
 public:
 	explicit ClassTypeInfo( void *ptr, const type_info &type_info );
@@ -26,6 +28,8 @@ public:
 	virtual ~ClassTypeInfo( );
 
 public:
+	virtual bool getClassTypeName( const void *&ptr, QString &result_name ) const;
+	virtual bool getClassTypeName( const void *&&ptr, QString &result_name ) const;
 	virtual bool isClassType( const void *&&ptr ) const;
 	virtual bool isClassType( const void *&ptr ) const;
 	virtual bool isClassType( const type_info &type_info ) const;

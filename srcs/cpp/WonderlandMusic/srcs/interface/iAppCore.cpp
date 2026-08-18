@@ -87,5 +87,11 @@ IAppCore::~IAppCore( ) {
 	removePtr( this );
 }
 QString IAppCore::getTypeName( ) const {
+	auto casePtr = case_ptr( this );
+	if( casePtr == nullptr )
+		return nullptr;
+	QString typeName;
+	if( classTypeInfo->getClassTypeName( this, typeName ) )
+		return typeName;
 	return nullptr;
 }

@@ -33,10 +33,6 @@ private:
 	IMusicFavoriteWidget *musicFavoriteWidget = nullptr;
 	IMusicListWidget *musicListWidget = nullptr;
 	IMusicTitleWidget *musicTitleWidget = nullptr;
-	IMusicFavoriteMenu *musicFavoriteMenu = nullptr;
-	IMusicListMenu *musicListMenu = nullptr;
-	IMusicWidgetSizeInfo *musicWidgetSizeInfo = nullptr;
-	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
 
 public:
 	MusicCentreWidget( MusicWindow *parent );
@@ -64,14 +60,10 @@ public:
 	virtual IMusicFavoriteWidget * setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget );
 	virtual IMusicListWidget * setMusicListWidget( IMusicListWidget *const music_list_widget );
 	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *const music_title_widget );
-	virtual IMusicFavoriteMenu * setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu );
-	virtual IMusicListMenu * setMusicListMenu( IMusicListMenu *music_list_menu );
-
-	virtual IMusicWidgetSizeInfo * setMusicWidgetSizeInfo( IMusicWidgetSizeInfo *const music_widget_size_info );
-	virtual IMusicItemWidthInfo * setMusicItemWidthInfo( IMusicItemWidthInfo *const music_item_width_info );
 
 	virtual bool repaintListWidget( );
 	virtual bool repaintTitleWidget( );
+	virtual bool repaintFavoriteWidget( );
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

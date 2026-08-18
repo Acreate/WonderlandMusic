@@ -62,6 +62,40 @@ bool ClassTypeInfo::unsafeIsType( const QString &type_name ) const {
 			return true;
 	return false;
 }
+bool ClassTypeInfo::unsafeGetClassTypeName( const void *&ptr, QString &result_name ) const {
+	size_t count = aliasTypeInfos.size( );
+	if( count == 0 )
+		return false;
+	auto data = aliasTypeInfos.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ]->ptr == ptr ) {
+			result_name = *name;
+			return true;
+		}
+
+	for( ; index < count; index += 1 )
+		if( data[ index ]->unsafeGetClassTypeName( ptr, result_name ) )
+			return true;
+	return false;
+}
+bool ClassTypeInfo::unsafeGetClassTypeName( const void *&&ptr, QString &result_name ) const {
+	size_t count = aliasTypeInfos.size( );
+	if( count == 0 )
+		return false;
+	auto data = aliasTypeInfos.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ]->ptr == ptr ) {
+			result_name = *name;
+			return true;
+		}
+
+	for( ; index < count; index += 1 )
+		if( data[ index ]->unsafeGetClassTypeName( ptr, result_name ) )
+			return true;
+	return false;
+}
 ClassTypeInfo::ClassTypeInfo( void *ptr, const type_info &type_info ) : ClassTypeInfo( ptr, type_info, type_info.name( ) ) {
 }
 ClassTypeInfo::ClassTypeInfo( void *ptr, const type_info &type_info, const QString &name ) : typeInfo( type_info ), name( new QString( name ) ), ptr( ptr ) {
@@ -77,12 +111,29 @@ ClassTypeInfo::~ClassTypeInfo( ) {
 			delete data[ index ];
 		aliasTypeInfos.clear( );
 	}
-
+	delete name;
+	name = nullptr;
 	userMutex->unlock( );
 	delete userMutex;
 	userMutex = nullptr;
 }
+bool ClassTypeInfo::getClassTypeName( const void *&ptr, QString &result_name ) const {
+	userMutex->lock( );
+	auto result = unsafeGetClassTypeName( ptr, result_name );
+	userMutex->unlock( );
+	return result;
+}
+bool ClassTypeInfo::getClassTypeName( const void *&&ptr, QString &result_name ) const {
+	if( ptr == nullptr )
+		return false;
+	userMutex->lock( );
+	auto result = unsafeGetClassTypeName( ptr, result_name );
+	userMutex->unlock( );
+	return result;
+}
 bool ClassTypeInfo::isClassType( const void *&&ptr ) const {
+	if( ptr == nullptr )
+		return false;
 	userMutex->lock( );
 	auto result = unsafeIsType( ptr );
 	userMutex->unlock( );

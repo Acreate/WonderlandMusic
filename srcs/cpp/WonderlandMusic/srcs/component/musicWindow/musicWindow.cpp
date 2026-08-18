@@ -126,18 +126,6 @@ IMusicListWidget * MusicWindow::setMusicListWidget( IMusicListWidget *const musi
 IMusicTitleWidget * MusicWindow::setMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) {
 	return musicCentreWidget->setMusicTitleWidget( music_title_widget );
 }
-IMusicFavoriteMenu * MusicWindow::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
-	return musicCentreWidget->setMusicFavoriteMenu( music_favorite_menu );
-}
-IMusicListMenu * MusicWindow::setMusicListMenu( IMusicListMenu *music_list_menu ) {
-	return musicCentreWidget->setMusicListMenu( music_list_menu );
-}
-IMusicWidgetSizeInfo * MusicWindow::setMusicWidgetSizeInfo( IMusicWidgetSizeInfo *const music_widget_size_info ) {
-	return musicCentreWidget->setMusicWidgetSizeInfo( music_widget_size_info );
-}
-IMusicItemWidthInfo * MusicWindow::setMusicItemWidthInfo( IMusicItemWidthInfo *const music_item_width_info ) {
-	return musicCentreWidget->setMusicItemWidthInfo( music_item_width_info );
-}
 QWidget * MusicWindow::toWidget( ) {
 	return this;
 }

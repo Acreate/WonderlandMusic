@@ -9,14 +9,9 @@
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
-#include "../info/musicItemWidthInfo.h"
-#include "../info/musicWidgetSizeInfo.h"
-
 #include "../menu/systemTrayIconMenu.h"
 
 #include "../systemTrayIcon/systemTrayIcon.h"
-
-#include "../tools/instanceTools.h"
 
 #include "../widget/aboutWidget.h"
 #include "../widget/musicFavoriteWidget.h"
@@ -30,7 +25,6 @@
 #include "appInstance/appDateTimerManage.h"
 #include "appInstance/appUserInterfaceManage.h"
 #include "appInstance/applicationManage.h"
-#include "appInstance/appUserInterfaceManage/appMenuManage.h"
 
 AppInstance *AppInstance::instance = nullptr;
 
@@ -128,13 +122,6 @@ bool AppInstance::initAfter( ) {
 	if( musicWindow->setMusicTitleWidget( musicTitleWidget ) == musicTitleWidget )
 		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicTitleWidget( musicTitleWidget ), tr( "设置音频标题组件失败" ) );
 
-	auto musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
-	if( musicWindow->setMusicItemWidthInfo( musicItemWidthInfo ) == musicItemWidthInfo )
-		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicItemWidthInfo( musicTitleWidget ), tr( "设置音频项宽度信息组件失败" ) );
-	auto musicWidgetSizeInfo = appDataManage->getMusicWidgetSizeInfo( );
-	if( musicWindow->setMusicWidgetSizeInfo( musicWidgetSizeInfo ) == musicWidgetSizeInfo )
-		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicWidgetSizeInfo( musicWidgetSizeInfo ), tr( "设置音频窗口大小信息组件失败" ) );
-
 	auto optionWindow = appUserInterfaceManage->getOptionWindow( );
 	if( optionWindow->addOptionPanel( musicWindow ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( musicWindow ), tr( "添加音乐播放面板失败" ) );
@@ -145,28 +132,11 @@ bool AppInstance::initAfter( ) {
 	if( optionWindow->addOptionPanel( aboutWidget ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( aboutWidget ), tr( "添加关于面板失败" ) );
 
-	auto appMenuManage = InstanceTools::getAppMenuManage( );
-
-	auto musicFavoriteMenu = appMenuManage->getMusicFavoriteMenu( );
-	if( musicWindow->setMusicFavoriteMenu( musicFavoriteMenu ) == musicFavoriteMenu )
-		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicFavoriteMenu( musicFavoriteMenu ), tr( "设置音频收藏夹菜单失败" ) );
-	auto musicListMenu = appMenuManage->getMusicListMenu( );
-	if( musicWindow->setMusicListMenu( musicListMenu ) == musicListMenu )
-		return Result_Var_Messag_Ptr_Out_Args( false, musicWindow, setMusicListMenu( musicListMenu ), tr( "设置音频列表菜单失败" ) );
-
 	auto mainWindow = appUserInterfaceManage->getMainWindow( );
 	mainWindow->setCentralWidget( optionWindow );
 
-	auto systemTrayIconMenu = appMenuManage->getSystemTrayIconMenu( );
-	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_show_main_window, this, [this]( ) {
-		appUserInterfaceManage->showMainWindow( );
-	} );
-
 	if( appDataManage->readJsonData( ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, appDataManage, readJsonData, tr( "json 读取异常" ) );
-	connect( systemTrayIconMenu, &SystemTrayIconMenu::signal_quit_app, this, []( ) {
-		AppInstance::getAppInstance( )->getApplicationManage( )->quit( );
-	} );
 
 	return true;
 }

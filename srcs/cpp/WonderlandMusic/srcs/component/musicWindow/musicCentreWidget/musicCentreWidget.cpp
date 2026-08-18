@@ -3,20 +3,24 @@
 #include <QJsonObject>
 #include <QScrollArea>
 
+#include <application/appInstance/appDataManage.h>
+#include <application/appInstance/appUserInterfaceManage/appMenuManage.h>
+
 #include <head/after_init_macro.h>
 #include <head/before_init_macro.h>
 #include <head/release_macro.h>
+#include <head/result_message_out.h>
+
+#include <info/musicWidgetSizeInfo.h>
 
 #include <mutex/userMutex.h>
 
 #include "../musicWindow.h"
 
-#include "../../../head/result_message_out.h"
+#include <tools/instanceTools.h>
 
 #include "../interface/info/iMusicItemWidthInfo.h"
 #include "../interface/info/iMusicWidgetSizeInfo.h"
-#include "../interface/menu/iMusicFavoriteMenu.h"
-#include "../interface/menu/iMusicListMenu.h"
 #include "../interface/widget/iMusicFavoriteWidget.h"
 #include "../interface/widget/iMusicListWidget.h"
 #include "../interface/widget/iMusicTitleWidget.h"
@@ -24,6 +28,7 @@
 #include "../transparencyScrollBar/transparencyScrollBar.h"
 
 MusicCentreWidget::MusicCentreWidget( MusicWindow *parent ) : QWidget( parent ), musicWindow( parent ) {
+	appendTypeInfo( this );
 }
 MusicCentreWidget::~MusicCentreWidget( ) {
 	deleteResource( );
@@ -38,14 +43,6 @@ bool MusicCentreWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicListWidgetScrollArea );
 	musicTitleWidgetScrollArea->takeWidget( );
 	Delete_Resource_App_Core_Ptr( musicTitleWidgetScrollArea );
-
-	Delete_Resource_App_Core_Ptr( musicFavoriteWidget );
-	Delete_Resource_App_Core_Ptr( musicTitleWidget );
-	Delete_Resource_App_Core_Ptr( musicListWidget );
-	Delete_Resource_App_Core_Ptr( musicListMenu );
-	Delete_Resource_App_Core_Ptr( musicFavoriteMenu );
-
-	Delete_Resource_App_Core_Ptr( musicWidgetSizeInfo );
 
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
@@ -100,10 +97,11 @@ bool MusicCentreWidget::initAfter( ) {
 }
 
 bool MusicCentreWidget::calculateSize( ) {
+	auto musicWidgetSizeInfo = getMusicWidgetSizeInfo( );
 	if( musicWidgetSizeInfo == nullptr )
-		return false;
+		return Result_Var_Messag_Ptr_Out_Args( false, this, getMusicWidgetSizeInfo, tr( "找不到窗口大小组件" ) );
 	if( userMutex == nullptr )
-		return false;
+		return Result_Var_Messag_Ptr_Out_Args( false, this, userMutex, tr( "锁未能确定指向有效对象" ) );
 	userMutex->lock( );
 	// 当前组件高度
 	int thisCentreHeight = this->height( );
@@ -118,11 +116,11 @@ bool MusicCentreWidget::calculateSize( ) {
 			musicTitleWidgetScrollArea->setGeometry( favoriteWidth, 0, modeWidth, titleHeight );
 			int modHeight = thisCentreHeight - titleHeight;
 			musicListWidgetScrollArea->setGeometry( favoriteWidth, titleHeight, modeWidth, modHeight );
+			return true;
 		}
+		return Result_Var_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "宽度失效:%1" ).arg(thisCentreWidthWidth ) );
 	}
-	return false;
-
-	return true;
+	return Result_Var_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "高度失效:%1" ).arg( thisCentreHeight ) );
 }
 bool MusicCentreWidget::getJsonData( QJsonObject &get_json_object ) const {
 	if( musicTitleWidget == nullptr )
@@ -190,13 +188,13 @@ IMusicTitleWidget * MusicCentreWidget::getMusicTitleWidget( ) const {
 	return musicTitleWidget;
 }
 IMusicFavoriteMenu * MusicCentreWidget::getMusicFavoriteMenu( ) const {
-	return musicFavoriteMenu;
+	return InstanceTools::getAppMenuManage( )->getMusicFavoriteMenu( );
 }
 IMusicListMenu * MusicCentreWidget::getMusicListMenu( ) const {
-	return musicListMenu;
+	return InstanceTools::getAppMenuManage( )->getMusicListMenu( );
 }
 IMusicWidgetSizeInfo * MusicCentreWidget::getMusicWidgetSizeInfo( ) const {
-	return musicWidgetSizeInfo;
+	return InstanceTools::getAppDataManage( )->getMusicWidgetSizeInfo( );
 }
 
 IMusicFavoriteWidget * MusicCentreWidget::setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) {
@@ -265,84 +263,16 @@ IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *c
 	this->musicTitleWidget = music_title_widget;
 	musicTitleWidgetScrollArea->takeWidget( );
 	musicTitleWidgetScrollArea->setWidget( widget );
-	if( musicItemWidthInfo )
-		musicTitleWidget->setIMusicItemWidthInfo( musicItemWidthInfo );
 	repaintTitleWidget( );
 	return old;
 }
 
-IMusicFavoriteMenu * MusicCentreWidget::setMusicFavoriteMenu( IMusicFavoriteMenu *music_favorite_menu ) {
-	if( music_favorite_menu == nullptr ) {
-		auto old = this->musicFavoriteMenu;
-		if( musicFavoriteMenu && musicFavoriteMenu->setMusicCentreWidget( nullptr ) == false )
-			return Result_Var_Messag_Ptr_Out_Args( music_favorite_menu, musicFavoriteMenu, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
-		this->musicFavoriteMenu = music_favorite_menu;
-		return old;
-	}
-	if( music_favorite_menu->setMusicCentreWidget( this ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( music_favorite_menu, music_favorite_menu, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicFavoriteMenu && musicFavoriteMenu->setMusicCentreWidget( nullptr ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( music_favorite_menu, musicFavoriteMenu, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
-	auto old = this->musicFavoriteMenu;
-	this->musicFavoriteMenu = music_favorite_menu;
-	return old;
-}
-IMusicListMenu * MusicCentreWidget::setMusicListMenu( IMusicListMenu *music_list_menu ) {
-	if( music_list_menu == nullptr ) {
-		auto old = this->musicListMenu;
-		if( musicListMenu && musicListMenu->setMusicCentreWidget( nullptr ) == false )
-			return Result_Var_Messag_Ptr_Out_Args( music_list_menu, musicListMenu, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
-		this->musicListMenu = music_list_menu;
-		return old;
-	}
-	if( music_list_menu->setMusicCentreWidget( this ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( music_list_menu, music_list_menu, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicListMenu && musicListMenu->setMusicCentreWidget( nullptr ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( music_list_menu, musicListMenu, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
-	auto old = this->musicListMenu;
-	this->musicListMenu = music_list_menu;;
-	return old;
-}
-IMusicWidgetSizeInfo * MusicCentreWidget::setMusicWidgetSizeInfo( IMusicWidgetSizeInfo *const music_widget_size_info ) {
-	if( music_widget_size_info == nullptr ) {
-		auto old = this->musicWidgetSizeInfo;
-		if( musicWidgetSizeInfo && musicWidgetSizeInfo->setMusicCentreWidget( nullptr ) == false )
-			return Result_Var_Messag_Ptr_Out_Args( music_widget_size_info, musicWidgetSizeInfo, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
-		this->musicWidgetSizeInfo = music_widget_size_info;
-		return old;
-	}
-	if( music_widget_size_info->setMusicCentreWidget( this ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( music_widget_size_info, music_widget_size_info, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicWidgetSizeInfo && musicWidgetSizeInfo->setMusicCentreWidget( nullptr ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( music_widget_size_info, musicWidgetSizeInfo, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
-	auto old = this->musicWidgetSizeInfo;
-	this->musicWidgetSizeInfo = music_widget_size_info;
-	return old;
-}
-IMusicItemWidthInfo * MusicCentreWidget::setMusicItemWidthInfo( IMusicItemWidthInfo *const music_item_width_info ) {
-	if( music_item_width_info == nullptr ) {
-		auto old = this->musicItemWidthInfo;
-		if( musicItemWidthInfo && musicItemWidthInfo->setMusicCentreWidget( nullptr ) == false )
-			return Result_Var_Messag_Ptr_Out_Args( music_item_width_info, musicWidgetSizeInfo, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
-		this->musicItemWidthInfo = music_item_width_info;
-		musicTitleWidget->setIMusicItemWidthInfo( nullptr );
-		return old;
-	}
-	if( music_item_width_info->setMusicCentreWidget( this ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( music_item_width_info, music_item_width_info, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
-	if( musicItemWidthInfo && musicItemWidthInfo->setMusicCentreWidget( nullptr ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( music_item_width_info, musicWidgetSizeInfo, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
-	auto old = this->musicItemWidthInfo;
-	this->musicItemWidthInfo = music_item_width_info;
-	if( musicTitleWidget )
-		musicTitleWidget->setIMusicItemWidthInfo( musicItemWidthInfo );
-	repaintTitleWidget( );
-	repaintListWidget( );
-	return old;
-}
 bool MusicCentreWidget::repaintListWidget( ) {
-	return false;
+	return true;
 }
 bool MusicCentreWidget::repaintTitleWidget( ) {
-	return false;
+	return true;
+}
+bool MusicCentreWidget::repaintFavoriteWidget( ) {
+	return true;
 }

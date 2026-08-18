@@ -12,6 +12,10 @@ protected:
 	QAction *showMainWindowItem;
 	QAction *quitApp;
 
+private:
+	void slot_showMainWindow( );
+	void slot_quitApp( );
+
 protected:
 	bool deleteResource( ) override;
 
@@ -27,9 +31,6 @@ public:
 	bool initAfter( ) override;
 
 	~SystemTrayIconMenu( ) override;
-Q_SIGNALS:
-	void signal_show_main_window( );
-	void signal_quit_app( );
 };
 
 #endif // SYSTEMTRAYICONMENU_H_H_HEAD__FILE__

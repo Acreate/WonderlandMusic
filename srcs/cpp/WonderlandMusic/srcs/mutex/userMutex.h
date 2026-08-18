@@ -1,5 +1,6 @@
 ﻿#ifndef USERMUTEX_H_H_HEAD__FILE__
 #define USERMUTEX_H_H_HEAD__FILE__
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <source_location>
@@ -28,27 +29,30 @@ public:
 	virtual ~UserMutex( );
 
 	template< typename TResult_Type >
-	TResult_Type && result_unlock( TResult_Type &&result, const std::source_location &source_location = std::source_location::current( ) ) {
+	TResult_Type result_unlock( TResult_Type result, const std::source_location &source_location = std::source_location::current( ) ) {
 		unlock( source_location );
 		return result;
 	}
 
 	template< typename TResult_Type >
-	TResult_Type && result_lock( TResult_Type &&result, const std::source_location &source_location = std::source_location::current( ) ) {
+	TResult_Type result_lock( TResult_Type result, const std::source_location &source_location = std::source_location::current( ) ) {
 		lock( source_location );
 		return result;
 	}
 
 	template< typename TResult_Type >
-	TResult_Type & result_unlock( TResult_Type &result, const std::source_location &source_location = std::source_location::current( ) ) {
+	TResult_Type auto_job( const std::function< TResult_Type ( ) > &job, const std::source_location &source_location = std::source_location::current( ) ) {
+		lock( source_location );
+		TResult_Type result = job( );
 		unlock( source_location );
 		return result;
 	}
 
-	template< typename TResult_Type >
-	TResult_Type & result_lock( TResult_Type &result, const std::source_location &source_location = std::source_location::current( ) ) {
+	void auto_job( const std::function< void( ) > &job, const std::source_location &source_location = std::source_location::current( ) ) {
 		lock( source_location );
-		return result;
+		job( );
+		unlock( source_location );
+		return;
 	}
 
 protected:

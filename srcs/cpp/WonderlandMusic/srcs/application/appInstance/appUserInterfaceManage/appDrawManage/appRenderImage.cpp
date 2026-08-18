@@ -6,10 +6,14 @@
 
 #include <head/release_macro.h>
 
+#include "../../appDataManage.h"
+
 #include "../../../../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
 #include "../../../../component/musicWindow/interface/item/iMusicItem.h"
 
 #include "../../../../head/result_message_out.h"
+
+#include "../../../../info/musicItemWidthInfo.h"
 
 #include "../../../../tools/instanceTools.h"
 
@@ -124,7 +128,7 @@ bool AppRenderImage::renderWidget( QImage &result_render_image, QWidget *render_
 
 	return true;
 }
-bool AppRenderImage::renderMusicItem( QImage &result_render_image, IMusicItem *music_item, const IMusicItemWidthInfo *item_width_info ) const {
+bool AppRenderImage::renderMusicItem( IMusicItem *music_item, const IMusicItemWidthInfo *item_width_info ) const {
 	size_t idCode;
 	if( music_item->getIdCode( idCode ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, music_item, getIdCode, QObject::tr( "获取歌曲id失败" ) );
@@ -186,6 +190,18 @@ bool AppRenderImage::renderMusicItem( QImage &result_render_image, IMusicItem *m
 		return Result_Var_Messag_Ptr_Out_Args( false, music_item, setDrawBuff, QObject::tr( "配置绘制缓存失败" ) );
 	return true;
 }
-bool AppRenderImage::renderMusicItem( QImage &result_render_image, IMusicFavoriteItem *music_favorite_item, const IMusicItemWidthInfo *item_width_info ) const {
+bool AppRenderImage::renderMusicItem( IMusicItem *music_item ) const {
+	return false;
+}
+bool AppRenderImage::renderMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) const {
+	auto appDataManage = InstanceTools::getAppDataManage( );
+	if( appDataManage == nullptr )
+		return false;
+	auto musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
+	if( renderMusicFavoriteItem( music_favorite_item, musicItemWidthInfo ) == false )
+		return false;
+	return true;
+}
+bool AppRenderImage::renderMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item, const IMusicItemWidthInfo *item_width_info ) const {
 	return false;
 }

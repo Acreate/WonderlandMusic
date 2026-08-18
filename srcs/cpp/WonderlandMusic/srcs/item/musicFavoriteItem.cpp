@@ -1,49 +1,135 @@
 ﻿#include "musicFavoriteItem.h"
 
+#include <qimage.h>
+
+#include "../application/appInstance/appDataManage.h"
+#include "../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+
+#include "../mutex/userMutex.h"
+
+#include "../tools/instanceTools.h"
+
 bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+	musicFavoriteItemUserMutex->lock( );
+	musicCentreWidget = music_centre_widget;
+	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
-bool MusicFavoriteItem::setDrawBuff( QImage &image ) {
+bool MusicFavoriteItem::setNameDrawBuff( QImage &image ) {
+	musicFavoriteItemUserMutex->lock( );
+	*nameDrawBuff = image;
+	musicFavoriteItemUserMutex->unlock( );
+	return true;
+}
+bool MusicFavoriteItem::setMusicItemVectorDrawBuff( QImage &image ) {
+	musicFavoriteItemUserMutex->lock( );
+	*musicItemVectorDrawBuff = image;
+	musicFavoriteItemUserMutex->unlock( );
+	return true;
+}
+bool MusicFavoriteItem::getMusicItemVectorDrawBuff( QImage &result_buff ) const {
+	musicFavoriteItemUserMutex->lock( );
+	result_buff = *musicItemVectorDrawBuff;
+	result_buff.detach( );
+	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
 bool MusicFavoriteItem::getName( QString &result_name ) const {
+	musicFavoriteItemUserMutex->lock( );
+	result_name = name;
+	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
 bool MusicFavoriteItem::addMusicItem( IMusicItem *music_item ) {
+	musicFavoriteItemUserMutex->lock( );
+	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
 bool MusicFavoriteItem::removeMusicItem( IMusicItem *music_item ) {
+	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
 bool MusicFavoriteItem::clear( ) {
+	musicFavoriteItemUserMutex->lock( );
+	musicItemVector.clear( );
+	*musicItemVectorDrawBuff = QImage( );
+	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
-bool MusicFavoriteItem::getDrawBuff( QImage &result_buff ) const {
+bool MusicFavoriteItem::getNameDrawBuff( QImage &result_buff ) const {
+	musicFavoriteItemUserMutex->lock( );
+	result_buff = *nameDrawBuff;
+	result_buff.detach( );
+	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
 bool MusicFavoriteItem::update( ) {
+	musicFavoriteItemUserMutex->lock( );
+	auto appRenderImage = InstanceTools::getAppRenderImage( );
+	if( appRenderImage == nullptr )
+		return musicFavoriteItemUserMutex->result_unlock( false );
+	if( appRenderImage->renderMusicFavoriteItem( this ) == false )
+		return musicFavoriteItemUserMutex->result_unlock( false );
+	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
 bool MusicFavoriteItem::fromIndexGetMusicItem( IMusicItem *&result_music_item_vector, const size_t &result_count ) {
-	return true;
+	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) ->bool {
+		return true;
+	} );
 }
 bool MusicFavoriteItem::fromMusicItemGetIndex( size_t &result_index, const IMusicItem *music_item ) {
-	return true;
+	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
+		return true;
+	} );
 }
 bool MusicFavoriteItem::fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) {
-	return true;
+	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
+		return true;
+	} );
 }
 bool MusicFavoriteItem::fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) {
-	return true;
+	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
+		return true;
+	} );
 }
 bool MusicFavoriteItem::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) {
-	return true;
+	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
+		return true;
+	} );
 }
 bool MusicFavoriteItem::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) {
-	return true;
+	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
+		return true;
+	} );
+}
+size_t MusicFavoriteItem::getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const {
+	return musicFavoriteItemUserMutex->auto_job< size_t >( [this, &result_clone_vector]( ) {
+		size_t resultCount = musicItemVector.size( );
+		result_clone_vector.resize( resultCount );
+		if( resultCount == 0 )
+			return resultCount;
+		auto source = musicItemVector.data( );
+		auto dest = result_clone_vector.data( );
+		size_t index = 0;
+		for( ; index < resultCount; index += 1 )
+			dest[ index ] = source[ index ];
+		return resultCount;
+	} );
 }
 MusicFavoriteItem::MusicFavoriteItem( ) {
 	appendTypeInfo( this );
+	nameDrawBuff = new QImage;
+	musicItemVectorDrawBuff = new QImage;
+	musicFavoriteItemUserMutex = new UserMutex;
 }
 MusicFavoriteItem::~MusicFavoriteItem( ) {
+	musicFavoriteItemUserMutex->lock( );
+	musicItemVector.clear( );
+	delete nameDrawBuff;
+	delete musicItemVectorDrawBuff;
+	musicItemVectorDrawBuff = nameDrawBuff = nullptr;
+	musicFavoriteItemUserMutex->unlock( );
+	delete musicFavoriteItemUserMutex;
+	musicFavoriteItemUserMutex = nullptr;
 }

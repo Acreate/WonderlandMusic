@@ -9,6 +9,8 @@ class QPoint;
 class IMusicTitleWidget : public IMusicWidget {
 public:
 	QString getTypeName( ) const override;
+	IMusicTitleWidget( );
+	~IMusicTitleWidget( ) override;
 	virtual bool setIMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) = 0;
 	virtual IMusicItemWidthInfo * getIMusicItemWidthInfo( ) const = 0;
 };

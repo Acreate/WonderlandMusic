@@ -1,4 +1,6 @@
 ﻿#include "musicFavoriteWidget.h"
+
+#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 MusicFavoriteWidget::MusicFavoriteWidget( ) {
 	appendTypeInfo( this );
 }
@@ -25,6 +27,9 @@ MusicCentreWidget * MusicFavoriteWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 bool MusicFavoriteWidget::deleteResource( ) {
+	auto musicCentreWidget = getMusicCentreWidget( );
+	if( musicCentreWidget )
+		musicCentreWidget->removeMusicFavoriteWidget( this );
 	return true;
 }
 bool MusicFavoriteWidget::initBefore( ) {

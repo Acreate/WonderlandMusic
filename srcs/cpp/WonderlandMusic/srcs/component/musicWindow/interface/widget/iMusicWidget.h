@@ -6,6 +6,8 @@
 class QWidget;
 
 class IMusicWidget : public MusicWidgetChild {
+protected:
+
 public:
 	virtual QWidget * toWidget( ) = 0;
 	virtual bool drawWidgeTarget( QWidget *widget ) = 0;

@@ -266,6 +266,48 @@ IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *c
 	repaintTitleWidget( );
 	return old;
 }
+IMusicFavoriteWidget * MusicCentreWidget::removeMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) {
+	if( music_favorite_widget == nullptr )
+		return nullptr;
+	if( musicFavoriteWidget == nullptr )
+		return nullptr;
+	auto thisFavoriteWidget = musicFavoriteWidget->toWidget( );
+	auto removeFavoriteWidget = music_favorite_widget->toWidget( );
+	if( thisFavoriteWidget != removeFavoriteWidget )
+		return nullptr;
+	if( musicFavoriteWidget->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( musicFavoriteWidget, musicFavoriteWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	musicFavoriteWidget = nullptr;
+	return music_favorite_widget;
+}
+IMusicListWidget * MusicCentreWidget::removeMusicListWidget( IMusicListWidget *const music_list_widget ) {
+	if( music_list_widget == nullptr )
+		return nullptr;
+	if( musicListWidget == nullptr )
+		return nullptr;
+	auto thisWidget = musicListWidget->toWidget( );
+	auto removeWidget = music_list_widget->toWidget( );
+	if( thisWidget != removeWidget )
+		return nullptr;
+	if( musicListWidget->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( musicListWidget, musicListWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	musicListWidget = nullptr;
+	return music_list_widget;
+}
+IMusicTitleWidget * MusicCentreWidget::removeMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) {
+	if( music_title_widget == nullptr )
+		return nullptr;
+	if( musicTitleWidget == nullptr )
+		return nullptr;
+	auto thisWidget = musicTitleWidget->toWidget( );
+	auto removeWidget = music_title_widget->toWidget( );
+	if( thisWidget != removeWidget )
+		return nullptr;
+	if( musicTitleWidget->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( musicTitleWidget, musicTitleWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	musicTitleWidget = nullptr;
+	return music_title_widget;
+}
 
 bool MusicCentreWidget::repaintListWidget( ) {
 	return true;

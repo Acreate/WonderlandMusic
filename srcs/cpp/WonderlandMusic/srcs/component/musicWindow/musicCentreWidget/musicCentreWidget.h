@@ -61,6 +61,10 @@ public:
 	virtual IMusicListWidget * setMusicListWidget( IMusicListWidget *const music_list_widget );
 	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *const music_title_widget );
 
+	virtual IMusicFavoriteWidget * removeMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget );
+	virtual IMusicListWidget * removeMusicListWidget( IMusicListWidget *const music_list_widget );
+	virtual IMusicTitleWidget * removeMusicTitleWidget( IMusicTitleWidget *const music_title_widget );
+
 	virtual bool repaintListWidget( );
 	virtual bool repaintTitleWidget( );
 	virtual bool repaintFavoriteWidget( );

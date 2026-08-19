@@ -11,6 +11,8 @@ class QWidget;
 
 class IMusicFavoriteWidget : public IMusicWidget {
 public:
+	IMusicFavoriteWidget( );
+	~IMusicFavoriteWidget( ) override;
 	QString getTypeName( ) const override;
 	virtual bool fromYPosGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &pos_y ) const = 0;
 	virtual bool fromIndexGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &index ) const = 0;

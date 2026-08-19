@@ -1,9 +1,11 @@
 ﻿#include "musicListWidget.h"
+
+#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 MusicListWidget::MusicListWidget( ) {
 	appendTypeInfo( this );
 }
 MusicListWidget::~MusicListWidget( ) {
-	deleteLater( );
+	deleteResource( );
 }
 bool MusicListWidget::getJsonData( QJsonObject &get_json_object ) const {
 	return true;
@@ -16,6 +18,9 @@ bool MusicListWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widg
 	return true;
 }
 bool MusicListWidget::deleteResource( ) {
+	auto musicCentreWidget = getMusicCentreWidget( );
+	if( musicCentreWidget )
+		musicCentreWidget->removeMusicListWidget( this );
 	return true;
 }
 bool MusicListWidget::initBefore( ) {

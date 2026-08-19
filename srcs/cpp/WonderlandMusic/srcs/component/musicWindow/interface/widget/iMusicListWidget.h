@@ -9,6 +9,8 @@ class IMusicItem;
 class IMusicListWidget : public IMusicWidget {
 public:
 	QString getTypeName( ) const override;
+	IMusicListWidget( );
+	~IMusicListWidget( ) override;
 	virtual IMusicFavoriteItem * getCurrentMusicFavoriteItem( ) const =0;
 	virtual bool setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) =0;
 	virtual bool fromYPosGetMusicItem( IMusicItem * &result_music_item, const size_t &y_pos ) = 0;

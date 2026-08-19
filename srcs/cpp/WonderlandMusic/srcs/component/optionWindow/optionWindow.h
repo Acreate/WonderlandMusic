@@ -43,8 +43,6 @@ public:
 	virtual bool moveOptionPanelIndex( const OptionPanel *option_panel, const size_t &target_index );
 	virtual void updateWindow( );
 	virtual bool showOptionButton( OptionButton *option_button );
-	virtual bool setOptionPanelName( OptionPanel *option_panel, const QString &name );
-	virtual bool setOptionPanelIcon( OptionPanel *option_panel, const QImage &icon );
 
 	virtual bool showOptionPanel( );
 	virtual bool showOptionPanel( OptionPanel *option_panel );

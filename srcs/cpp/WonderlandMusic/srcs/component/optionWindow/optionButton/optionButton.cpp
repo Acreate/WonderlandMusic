@@ -57,6 +57,7 @@ QSize OptionButton::updateSize( ) {
 	}
 	result = QSize( result.width( ) + startOffsetX * 2, result.height( ) + startOffsetY * 2 );
 	setFixedSize( result );
+	repaint( );
 	return result;
 }
 

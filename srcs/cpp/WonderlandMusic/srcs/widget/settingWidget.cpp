@@ -4,6 +4,8 @@
 
 #include "../component/optionWindow/optionWindow.h"
 
+#include "../head/result_message_out.h"
+
 SettingWidget::SettingWidget( ) : QWidget( ), OptionPanel( ) {
 }
 
@@ -31,15 +33,15 @@ bool SettingWidget::deleteResource( ) {
 }
 
 bool SettingWidget::initBefore( ) {
-	if( AppTranslateTools::getSettingWidget( [this] ( SettingWidgetTranslate &translate ) {
-		setName( translate.getTitleName( ) );
-		return true;
-	} ) == false )
-		setName( tr( "设置" ) );
 	return true;
 }
 
 bool SettingWidget::init( ) {
+	if( AppTranslateTools::getSettingWidget( [this] ( SettingWidgetTranslate &translate ) {
+		setName( translate.getTitleName( ) );
+		return true;
+	} ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, this, init(), tr( "无法获取翻译实例" ) );
 	return true;
 }
 

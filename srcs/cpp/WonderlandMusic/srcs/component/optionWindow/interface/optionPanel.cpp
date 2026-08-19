@@ -2,6 +2,8 @@
 
 #include "../optionWindow.h"
 
+#include "../optionButton/optionButton.h"
+
 OptionPanel::OptionPanel( ) : OptionPanel( "", QImage( ) ) {
 }
 
@@ -21,14 +23,16 @@ OptionPanel::~OptionPanel( ) {
 	delete icon;
 }
 void OptionPanel::setName( const QString &name ) {
-	if( optionWindow == nullptr )
+	*this->name = name;
+	if( optionButton == nullptr )
 		return;
-	optionWindow->setOptionPanelName( this, name );
+	optionButton->updateSize( );
 }
 void OptionPanel::setIcon( const QImage &icon ) {
-	if( optionWindow == nullptr )
+	*this->icon = icon;
+	if( optionButton == nullptr )
 		return;
-	optionWindow->setOptionPanelIcon( this, icon );
+	optionButton->updateSize( );
 }
 const QString & OptionPanel::getName( ) const {
 	return *name;

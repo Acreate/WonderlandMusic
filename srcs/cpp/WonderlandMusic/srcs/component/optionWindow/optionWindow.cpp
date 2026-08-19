@@ -94,7 +94,6 @@ bool OptionWindow::addOptionPanel( OptionPanel *option_panel ) {
 
 	mutex->lock( );
 	optionPanelVector.emplace_back( option_panel );
-	mutex->unlock( );
 
 	auto widget = option_panel->toWidget( );
 	if( widget == nullptr ) {
@@ -102,13 +101,13 @@ bool OptionWindow::addOptionPanel( OptionPanel *option_panel ) {
 		option_panel->optionButton->optionPanel = nullptr;
 		delete option_panel->optionButton;
 		option_panel->optionButton = nullptr;
-		if( getOptionPanelIndex( index, option_panel ) )
-			optionPanelVector.erase( index + optionPanelVector.begin( ) );
-		return false;
+		optionPanelVector.erase( index + optionPanelVector.begin( ) );
+		return mutex->result_unlock( false );
 	}
 	optionListDockWidget->optionListWidget->addOptionButton( option_panel->optionButton );
 	updateWindow( );
 	currentOptionPanelWidget = option_panel;
+	mutex->unlock( );
 	return showOptionPanel( option_panel );
 }
 
@@ -241,21 +240,6 @@ bool OptionWindow::showOptionPanel( OptionPanel *option_panel ) {
 bool OptionWindow::showOptionButton( OptionButton *option_button ) {
 	return showOptionPanel( option_button->optionPanel );
 }
-bool OptionWindow::setOptionPanelName( OptionPanel *option_panel, const QString &name ) {
-	size_t index;
-	if( getOptionPanelIndex( index, option_panel ) == false || option_panel->optionWindow != this )
-		return false;
-	*option_panel->name = name;
-	return true;
-}
-bool OptionWindow::setOptionPanelIcon( OptionPanel *option_panel, const QImage &icon ) {
-	size_t index;
-	if( getOptionPanelIndex( index, option_panel ) == false || option_panel->optionWindow != this )
-		return false;
-	*option_panel->icon = icon;
-	return true;
-}
-
 bool OptionWindow::deleteResource( ) {
 	if( mutex == nullptr )
 		return true;

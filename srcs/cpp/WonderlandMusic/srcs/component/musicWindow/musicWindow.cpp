@@ -39,10 +39,11 @@ bool MusicWindow::initBefore( ) {
 }
 bool MusicWindow::init( ) {
 	if( AppTranslateTools::getMusicWindow( [this] ( MusicWindowTranslate &translate ) {
-		setName( translate.getTitleName( ) );
+		auto &titleName = translate.getTitleName( );
+		setName( titleName );
 		return true;
 	} ) == false )
-		setName( tr( "音乐" ) );
+		return Result_Var_Messag_Ptr_Out_Args( false, this, init, tr( "无法获取翻译实例" ) );
 	Init_Resource_App_Core_Ptr( musicCentreWidget );
 	return true;
 }

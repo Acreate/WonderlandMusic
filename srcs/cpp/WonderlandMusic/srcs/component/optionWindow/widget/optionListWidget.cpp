@@ -94,6 +94,7 @@ void OptionListWidget::addOptionButton( OptionButton *option_item ) {
 	mutex->lock( );
 	optionButtonVector.emplace_back( option_item );
 	mutex->unlock( );
+	option_item->updateSize(  );
 	updateOptionButtonLayout( );
 }
 void OptionListWidget::removeOptionButton( OptionButton *option_item ) {

@@ -131,12 +131,13 @@ bool AppInstance::initAfter( ) {
 	auto aboutWidget = appUserInterfaceManage->getAboutWidget( );
 	if( optionWindow->addOptionPanel( aboutWidget ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( aboutWidget ), tr( "添加关于面板失败" ) );
-
+	if( optionWindow->showOptionPanel( musicWindow ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, showOptionPanel( musicWindow ), tr( "显示音乐播放面板失败" ) );
 	auto mainWindow = appUserInterfaceManage->getMainWindow( );
 	mainWindow->setCentralWidget( optionWindow );
 
-	if( appDataManage->readJsonData( ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, appDataManage, readJsonData, tr( "json 读取异常" ) );
+	/*if( appDataManage->readJsonData( ) == false )
+		return Result_Var_Messag_Ptr_Out_Args( false, appDataManage, readJsonData, tr( "json 读取异常" ) );*/
 
 	return true;
 }

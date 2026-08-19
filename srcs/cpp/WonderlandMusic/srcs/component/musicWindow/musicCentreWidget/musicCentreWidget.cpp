@@ -116,11 +116,11 @@ bool MusicCentreWidget::calculateSize( ) {
 			musicTitleWidgetScrollArea->setGeometry( favoriteWidth, 0, modeWidth, titleHeight );
 			int modHeight = thisCentreHeight - titleHeight;
 			musicListWidgetScrollArea->setGeometry( favoriteWidth, titleHeight, modeWidth, modHeight );
-			return true;
+			return userMutex->result_unlock( true );
 		}
-		return Result_Var_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "宽度失效:%1" ).arg(thisCentreWidthWidth ) );
+		return userMutex->result_unlock( Result_Var_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "宽度失效:%1" ).arg(thisCentreWidthWidth ) ) );
 	}
-	return Result_Var_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "高度失效:%1" ).arg( thisCentreHeight ) );
+	return userMutex->result_unlock( Result_Var_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "高度失效:%1" ).arg( thisCentreHeight ) ) );
 }
 bool MusicCentreWidget::getJsonData( QJsonObject &get_json_object ) const {
 	if( musicTitleWidget == nullptr )

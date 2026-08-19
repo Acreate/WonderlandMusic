@@ -49,21 +49,6 @@ bool MusicWindow::init( ) {
 bool MusicWindow::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( musicCentreWidget );
 	setCentralWidget( musicCentreWidget );
-
-	if( AppJsonKeyTools::getMusicWindow( [this] ( const MusicWindowJsonKey &json_key ) {
-		const auto &filePath = json_key.getFilePath( );
-		QFileInfo info( filePath );
-		if( info.exists( ) ) {
-			QJsonObject readFileJsonObject;
-			if( PathTools::readJsonObject( readFileJsonObject, filePath ) == false )
-				return Result_Var_Messag_Ptr_Out_Args( false, this, readJsonObject, tr( "读取路径非法: %1" ).arg( filePath ) );
-			if( setJsonData( readFileJsonObject ) == false )
-				return Result_Var_Messag_Ptr_Out_Args( false, this, setJsonData, tr( "配置对象 json 数据异常" ) );
-		}
-
-		return true;
-	} ) == false )
-		return false;
 	return true;
 }
 bool MusicWindow::getJsonData( QJsonObject &get_json_object ) const {

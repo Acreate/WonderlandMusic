@@ -83,7 +83,6 @@ IAppCore::IAppCore( ) {
 }
 IAppCore::~IAppCore( ) {
 	delete classTypeInfo;
-	delete classTypeInfo;
 	removePtr( this );
 }
 QString IAppCore::getTypeName( ) const {

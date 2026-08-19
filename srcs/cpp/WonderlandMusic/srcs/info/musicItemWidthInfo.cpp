@@ -40,3 +40,18 @@ int MusicItemWidthInfo::getMinItemWidth( ) const {
 bool MusicItemWidthInfo::setIMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) {
 	return false;
 }
+bool MusicItemWidthInfo::getJsonData( QJsonObject &get_json_object ) const {
+	return false;
+}
+bool MusicItemWidthInfo::setJsonData( const QJsonObject &set_json_object ) {
+	return false;
+}
+bool MusicItemWidthInfo::updateInfo( ) {
+	return false;
+}
+IMusicTitleWidget * MusicItemWidthInfo::setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) {
+	return nullptr;
+}
+IMusicTitleWidget * MusicItemWidthInfo::getMusicTitleWidget( ) {
+	return nullptr;
+}

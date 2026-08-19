@@ -22,6 +22,11 @@ public:
 	int getMusicDurationTimeWidth( ) const override;
 	int getMinItemWidth( ) const override;
 	bool setIMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
+	bool updateInfo( ) override;
+	IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) override;
+	IMusicTitleWidget * getMusicTitleWidget( ) override;
 };
 
 #endif // MUSICITEMWIDTHINFO_H_H_HEAD__FILE__

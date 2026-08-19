@@ -14,6 +14,12 @@ public:
 	int getFavoriteWidth( ) const override;
 	int getTitleHeight( ) const override;
 	bool updateMusicWidgetLayout( ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
+
+protected:
+	int setFavoriteWidth( const int &favoriet_width ) override;
+	int setTitleHeight( const int &favoriet_width ) override;
 };
 
 #endif // MUSICWIDGETSIZEINFO_H_H_HEAD__FILE__

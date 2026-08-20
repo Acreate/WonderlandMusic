@@ -159,3 +159,6 @@ void MusicInfoItem::setElapsedTime( const qint64 elapsed_time ) {
 	elapsedTime = elapsed_time;
 	elapsedTimeString = DateTimeFormat::millsecondToHourMinSecFrom( elapsed_time );
 }
+void MusicInfoItem::setLoadedOver( const bool loaded_over ) {
+	loadedOver = loaded_over;
+}

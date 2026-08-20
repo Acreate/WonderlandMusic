@@ -119,7 +119,7 @@ bool AppMenuManage::setJsonData( const QJsonObject &set_json_object ) {
 		auto &favoriteMenuJsonObjectKey = json_key.getMusicFavoriteMenuJsonObjectKey( );
 		auto find = set_json_object.find( favoriteMenuJsonObjectKey );
 		if( find == end )
-			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 失败: %1" ).arg(favoriteMenuJsonObjectKey ) );
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 失败: %1" ).arg(favoriteMenuJsonObjectKey ) );
 
 		QJsonObject musicFavoriteMenuJsonObject = find.value( ).toObject( );
 
@@ -127,12 +127,12 @@ bool AppMenuManage::setJsonData( const QJsonObject &set_json_object ) {
 
 		find = set_json_object.find( listMenuJsonObjectKey );
 		if( find == end )
-			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 失败: %1" ).arg(listMenuJsonObjectKey ) );
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "查找 json 失败: %1" ).arg(listMenuJsonObjectKey ) );
 		QJsonObject musicListMenuJsonObject = find.value( ).toObject( );
 		if( musicFavoriteMenu->setJsonData( musicFavoriteMenuJsonObject ) == false )
-			return Result_Var_Messag_Ptr_Out_Args( false, musicFavoriteMenu, setJsonData, tr( "配置 json 数据错误" ) );
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteMenu, setJsonData, tr( "配置 json 数据错误" ) );
 		if( musicListMenu->setJsonData( musicListMenuJsonObject ) == false )
-			return Result_Var_Messag_Ptr_Out_Args( false, musicListMenu, setJsonData, tr( "配置 json 数据错误" ) );
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, musicListMenu, setJsonData, tr( "配置 json 数据错误" ) );
 		return true;
 	} ) == false )
 		return false;

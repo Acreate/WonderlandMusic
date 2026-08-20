@@ -56,7 +56,7 @@ bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
 	// 查找返回
 	QJsonObject::const_iterator find = set_json_object.find( windowJsonFileKey->getObjectName( ) );
 	if( find == end )
-		return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 数据中无法找到 %1" ).arg( windowJsonFileKey->getObjectName( ) ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 数据中无法找到 %1" ).arg( windowJsonFileKey->getObjectName( ) ) );
 	auto jsonObject = find.value( ).toObject( );
 	if( jsonObject.empty( ) == false ) {
 		// 匹配 x

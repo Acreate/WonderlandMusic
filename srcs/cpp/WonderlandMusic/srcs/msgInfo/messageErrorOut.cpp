@@ -9,7 +9,10 @@
 
 #include "../tools/instanceTools.h"
 #include "../tools/sourceLocationTools.h"
-#ifdef Q_OS_WIN
+
+#define To_WriteConsoleW_Out 0
+
+#if To_WriteConsoleW_Out == 1
 #include <windows.h>
 // 核心：直接输出 UTF-16，不走 qDebug、不走本地编码
 static void StdErrorConsoleOut( const QString &text ) {
@@ -23,7 +26,7 @@ static void StdErrorConsoleOut( const QString &text ) {
 	WriteConsoleW( h, L"\r\n", 2, nullptr, nullptr );
 }
 #else
-	#define StdErrorConsoleOut( text ) qDebug( ) << text.toUtf8( ).constData( )
+	#define StdErrorConsoleOut( text ) qDebug( ) << text.toStdString( ).c_str( )
 #endif
 MessageErrorOut::MessageErrorOut( bool is_write_file, const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ), isWriteFile( is_write_file ) {
 }

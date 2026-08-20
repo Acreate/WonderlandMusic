@@ -41,7 +41,7 @@ bool SettingWidget::init( ) {
 		setName( translate.getTitleName( ) );
 		return true;
 	} ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, this, init(), tr( "无法获取翻译实例" ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, init(), tr( "无法获取翻译实例" ) );
 	return true;
 }
 

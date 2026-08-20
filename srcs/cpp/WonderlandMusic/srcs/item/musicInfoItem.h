@@ -26,12 +26,11 @@ protected:
 	MusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
-	explicit MusicInfoItem( AppMusicManage *app_music_manage );
-	explicit MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path );
-
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
 
 public:
+	explicit MusicInfoItem( AppMusicManage *app_music_manage );
+	explicit MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path );
 	bool getElapsedTimeString( QString &result_elapsed_time_string ) const override;
 	~MusicInfoItem( ) override;
 	bool isLoadedOver( ) override;
@@ -45,8 +44,7 @@ public:
 	virtual void setSinger( const QString &singer );
 	virtual void setAbsoluteFilePath( const QString &absolute_file_path );
 	virtual void setElapsedTime( const qint64 elapsed_time );
-
-protected:
+	virtual void setLoadedOver( const bool loaded_over );
 };
 
 #endif // MUSICINFOITEM_H_H_HEAD__FILE__

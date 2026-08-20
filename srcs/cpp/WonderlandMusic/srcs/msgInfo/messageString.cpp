@@ -1,5 +1,7 @@
 ﻿#include "messageString.h"
 
+#include <QDebug>
+#include <QRect>
 #include <source_location>
 
 #include "../tools/sourceLocationTools.h"
@@ -50,7 +52,58 @@ MessageString::MessageString( const QStringList &message_list ) : messageList( m
 MessageString::MessageString( const QString &message ) {
 	messageList << message;
 }
-
+MessageString::MessageString( const QRect &message ) {
+	messageList << ( QStringList( ) << "QRect { " <<
+		QString::number( message.left( ) ) << ", "
+		<< QString::number( message.right( ) ) << ", "
+		<< QString::number( message.width( ) ) << ", "
+		<< QString::number( message.height( ) ) << " };" ).join( "" );
+}
+MessageString::MessageString( const QRectF &message ) {
+	messageList << ( QStringList( ) << "QRectF { " <<
+		QString::number( message.left( ) ) << ", "
+		<< QString::number( message.right( ) ) << ", "
+		<< QString::number( message.width( ) ) << ", "
+		<< QString::number( message.height( ) ) << " };" ).join( "" );
+}
+MessageString::MessageString( const QPoint &message ) {
+	messageList << ( QStringList( ) << "QPoint { " <<
+		QString::number( message.x( ) ) << ", "
+		<< QString::number( message.y( ) ) << " };" ).join( "" );
+}
+MessageString::MessageString( const QPointF &message ) {
+	messageList << ( QStringList( ) << "QPointF { " <<
+		QString::number( message.x( ) ) << ", "
+		<< QString::number( message.y( ) ) << " };" ).join( "" );
+}
+MessageString & MessageString::operator<<( const QRect &message ) {
+	messageList << ( QStringList( ) << "QRect { " <<
+		QString::number( message.left( ) ) << ", "
+		<< QString::number( message.right( ) ) << ", "
+		<< QString::number( message.width( ) ) << ", "
+		<< QString::number( message.height( ) ) << " };" ).join( "" );
+	return *this;
+}
+MessageString & MessageString::operator<<( const QRectF &message ) {
+	messageList << ( QStringList( ) << "QRectF { " <<
+		QString::number( message.left( ) ) << ", "
+		<< QString::number( message.right( ) ) << ", "
+		<< QString::number( message.width( ) ) << ", "
+		<< QString::number( message.height( ) ) << " };" ).join( "" );
+	return *this;
+}
+MessageString & MessageString::operator<<( const QPoint &message ) {
+	messageList << ( QStringList( ) << "QPoint { " <<
+		QString::number( message.x( ) ) << ", "
+		<< QString::number( message.y( ) ) << " };" ).join( "" );
+	return *this;
+}
+MessageString & MessageString::operator<<( const QPointF &message ) {
+	messageList << ( QStringList( ) << "QPointF { " <<
+		QString::number( message.x( ) ) << ", "
+		<< QString::number( message.y( ) ) << " };" ).join( "" );
+	return *this;
+}
 MessageString::MessageString( const MessageString &message_string ) {
 	operator=( message_string );
 }
@@ -107,27 +160,27 @@ MessageString::MessageString( const int64_t &in_obj ) {
 }
 
 MessageString::MessageString( const char in_obj[ ] ) {
-	messageList << QString::fromLocal8Bit( in_obj );
+	messageList << QString( in_obj );
 }
 
 MessageString::MessageString( const wchar_t in_obj[ ] ) {
-	messageList << QString::fromWCharArray( in_obj );
+	messageList << QString( in_obj );
 }
 
 MessageString::MessageString( const char *&in_obj ) {
-	messageList << QString::fromLocal8Bit( in_obj );
+	messageList << QString( in_obj );
 }
 
 MessageString::MessageString( const wchar_t *&in_obj ) {
-	messageList << QString::fromWCharArray( in_obj );
+	messageList << QString( in_obj );
 }
 
 MessageString::MessageString( const std::wstring &in_obj ) {
-	messageList << QString::fromStdWString( in_obj );
+	messageList << QString( in_obj );
 }
 
 MessageString::MessageString( const std::string &in_obj ) {
-	messageList << QString::fromStdString( in_obj );
+	messageList << QString( in_obj.c_str( ) );
 }
 
 const QStringList & MessageString::getMessageList( ) const {
@@ -293,4 +346,11 @@ MessageString & MessageString::operator>>( QString &out_obj ) {
 
 QString MessageString::toQString( ) const {
 	return operator QString( );
+}
+std::string MessageString::toStdString( ) const {
+	return toQString( ).toStdString( );
+}
+QDebug & operator<<( QDebug &q_debug, const MessageString &message_string ) {
+	q_debug << message_string.toQString( ).toStdString( ).c_str( );
+	return q_debug;
 }

@@ -2,6 +2,8 @@
 #define MESSAGESTRING_H_H_HEAD__FILE__
 #include <QObject>
 
+class MessageErrorOut;
+
 namespace std {
 	struct source_location;
 }
@@ -33,6 +35,10 @@ public:
 	MessageString( const QStringList &message_list );
 
 	MessageString( const QString &message );
+	MessageString( const QRect &message );
+	MessageString( const QRectF &message );
+	MessageString( const QPoint &message );
+	MessageString( const QPointF &message );
 
 	MessageString( const MessageString &message_string );
 
@@ -62,7 +68,7 @@ public:
 
 	MessageString( const char * &in_obj );
 	MessageString( const char8_t * &in_obj );
-	MessageString( const char8_t  *const &in_obj );
+	MessageString( const char8_t *const &in_obj );
 
 	MessageString( const wchar_t * &in_obj );
 
@@ -122,12 +128,20 @@ public:
 
 	virtual MessageString & operator<<( const QString &in_obj );
 
+	virtual MessageString & operator<<( const QRect &message );
+	virtual MessageString & operator<<( const QRectF &message );
+	virtual MessageString & operator<<( const QPoint &message );
+	virtual MessageString & operator<<( const QPointF &message );
 	virtual MessageString & operator<<( const QStringList &in_obj );
 	virtual MessageString & operator<<( const MessageString &in_obj );
 
 	virtual MessageString & operator>>( QString &out_obj );
 
 	virtual QString toQString( ) const;
+	virtual std::string toStdString( ) const;
+	friend QDebug & operator<<( QDebug &q_debug, const MessageString &message_string );
 };
 
+#define Var_Name_MessageString( _var ) ( MessageString( #_var ) << " = " << _var )
+#define Q_Debug_Var_Nmae_MessageString( _var ) qDebug() <<( Var_Name_MessageString( _var ) ).toStdString( ).c_str( )
 #endif // MESSAGESTRING_H_H_HEAD__FILE__

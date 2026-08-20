@@ -47,11 +47,11 @@ bool AppRenderImage::init( ) {
 	int fontId = QFontDatabase::addApplicationFont( ttfFilePath );
 
 	if( fontId == -1 )
-		return Result_Var_Messag_Ptr_Out_Args( false, nullptr, QFontDatabase::addApplicationFont, QObject:: tr("配置文字路径异常: %1").arg( ttfFilePath ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, nullptr, QFontDatabase::addApplicationFont, QObject:: tr("配置文字路径异常: %1").arg( ttfFilePath ) );
 
 	QStringList familyList = QFontDatabase::applicationFontFamilies( fontId );
 	if( familyList.isEmpty( ) )
-		return Result_Var_Messag_Ptr_Out_Args( false, nullptr, QFontDatabase::applicationFontFamilies, QObject:: tr("配置文字异常: %1").arg( fontId ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, nullptr, QFontDatabase::applicationFontFamilies, QObject:: tr("配置文字异常: %1").arg( fontId ) );
 
 	QString familyName = familyList.first( );
 	*font = QFont( familyName, 14 );

@@ -71,11 +71,11 @@ bool MusicFavoriteMenu::setJsonData( const QJsonObject &set_json_object ) {
 		auto end = set_json_object.end( );
 		auto iterator = set_json_object.find( json_key.getLoadMultDir( ) );
 		if( iterator == end )
-			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "找不到匹配的目录路径" ) );
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "找不到匹配的目录路径" ) );
 		openSelecteMultiDirWidgetPath = iterator.value( ).toString( );
 		iterator = set_json_object.find( json_key.getLoadMultFile( ) );
 		if( iterator == end )
-			return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "找不到匹配的文件路径" ) );
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "找不到匹配的文件路径" ) );
 
 		openSelecteMultiFileWidgetPath = iterator.value( ).toString( );
 		if( openSelecteMultiFileWidgetPath.isEmpty( ) )
@@ -137,7 +137,7 @@ void MusicFavoriteMenu::slot_deleteFavoriteItem( ) {
 }
 void MusicFavoriteMenu::slot_addMusicFile( ) {
 	if( musicFavoriteItem == nullptr )
-		Result_Void_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
+		Result_Void_Function_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );
@@ -159,7 +159,7 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 }
 void MusicFavoriteMenu::slot_addMusicDir( ) {
 	if( musicFavoriteItem == nullptr )
-		Result_Void_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
+		Result_Void_Function_Messag_Ptr_Out_Args( this, addMusicDir, tr( "" ) );
 	AppTranslateTools::getMusicFavoriteMenu( [this] ( MusicFavoriteMenuTranslate &translate ) {
 		std::vector< QString > resultFile;
 		auto musicCentreWidget = musicFavoriteWidget->getMusicCentreWidget( );

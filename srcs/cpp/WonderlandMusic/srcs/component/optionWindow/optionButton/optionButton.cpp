@@ -119,7 +119,7 @@ void OptionButton::mousePressEvent( QMouseEvent *event ) {
 void OptionButton::mouseReleaseEvent( QMouseEvent *event ) {
 	if( click && optionWindow )
 		if( optionWindow->showOptionButton( this ) == false )
-			Result_Var_Messag_Ptr_Out_Args( false, optionWindow, showOptionButton( this ), tr( "%1 显示匹配的内容失败" ).arg( this->optionPanel->getName( ) ) );
+			Result_Var_Function_Messag_Ptr_Out_Args( false, optionWindow, showOptionButton( this ), tr( "%1 显示匹配的内容失败" ).arg( this->optionPanel->getName( ) ) );
 	click = false;
 }
 

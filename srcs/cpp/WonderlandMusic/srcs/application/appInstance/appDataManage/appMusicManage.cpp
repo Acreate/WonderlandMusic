@@ -168,7 +168,7 @@ const IMusicItemWidthInfo & AppMusicManage::getMusicItemWidthInfo( ) const {
 }
 bool AppMusicManage::setMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) {
 	if( musicItemWidthInfo->setIMusicItemWidthInfo( music_item_width_info ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, musicItemWidthInfo, setIMusicItemWidthInfo, tr( "配置项的宽度信息异常" ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, setIMusicItemWidthInfo, tr( "配置项的宽度信息异常" ) );
 	return true;
 }
 

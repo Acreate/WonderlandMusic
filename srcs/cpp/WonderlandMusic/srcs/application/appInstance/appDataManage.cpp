@@ -56,6 +56,8 @@ bool AppDataManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( translate );
 	After_Init_Resource_App_Core_Ptr( appDataJsonKey );
 	After_Init_Resource_App_Core_Ptr( appMusicManage );
+	if( musicItemWidthInfo->updateInfo( ) == false )
+		return false;
 	return true;
 }
 
@@ -114,10 +116,10 @@ bool AppDataManage::readJsonData( ) {
 		return true;
 	QJsonObject appJsonObject;
 	if( PathTools::readJsonObject( appJsonObject, jsonFilePath ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, nullptr, PathTools::readJsonObject( ), tr( "读取路径失败: %1" ).arg( jsonFilePath ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, nullptr, PathTools::readJsonObject( ), tr( "读取路径失败: %1" ).arg( jsonFilePath ) );
 	// 把 json 数据加载到 AppDataManage
 	if( setJsonData( appJsonObject ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, this, setJsonData( ), tr( "json 数据配置失败" ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, setJsonData( ), tr( "json 数据配置失败" ) );
 	return true;
 }
 
@@ -125,13 +127,13 @@ bool AppDataManage::writeJsonData( ) {
 	// 转换 AppDataManage 到 json 数据
 	QJsonObject appJsonObject;
 	if( getJsonData( appJsonObject ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, this, getJsonData, tr( "获取 json 数据失败" ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, getJsonData, tr( "获取 json 数据失败" ) );
 
 	// 写入 json 数据到磁盘
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	auto jsonFilePath = appDataManage->getFilePath( );
 	if( PathTools::writeJsonObject( appJsonObject, jsonFilePath ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, nullptr, PathTools::writeJsonObject, tr( "写入路径失败: %1" ).arg( jsonFilePath ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, nullptr, PathTools::writeJsonObject, tr( "写入路径失败: %1" ).arg( jsonFilePath ) );
 	return true;
 }
 MusicItemWidthInfo * AppDataManage::getMusicItemWidthInfo( ) const {
@@ -148,7 +150,7 @@ bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {
 	if( appUserInterfaceManage == nullptr )
 		return false;
 	if( appUserInterfaceManage->getJsonData( uiJsonObject ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, appUserInterfaceManage, getJsonData, tr( "获取 json 数据异常" ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, appUserInterfaceManage, getJsonData, tr( "获取 json 数据异常" ) );
 
 	// 获取路径数据
 	auto writePath = PathTools::getAutoShortenPathName( appSettingPath );
@@ -163,7 +165,7 @@ bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {
 bool AppDataManage::setJsonData( const QJsonObject &set_json_object ) {
 	auto appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
 	if( appUserInterfaceManage == nullptr )
-		return Result_Var_Messag_Ptr_Out_Args( false, appUserInterfaceManage, setJsonData, tr( "获取失败" ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, appUserInterfaceManage, setJsonData, tr( "获取失败" ) );
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	auto end = set_json_object.end( );
 
@@ -172,19 +174,19 @@ bool AppDataManage::setJsonData( const QJsonObject &set_json_object ) {
 	// 把 json 数据加载到 appUserInterfaceManage
 	find = set_json_object.find( appDataManage->getUiJsonObject( ) );
 	if( end == find )
-		return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 找不到数据 %1" ).arg( appDataManage->getUiJsonObject( ) ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 找不到数据 %1" ).arg( appDataManage->getUiJsonObject( ) ) );
 
 	auto appUserInterfaceManageJsonObject = find.value( ).toObject( );
 
 	find = set_json_object.find( appDataManage->getAppSettingPath( ) );
 	if( end == find )
-		return Result_Var_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 找不到数据 %1" ).arg( appDataManage->getAppSettingPath( ) ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 找不到数据 %1" ).arg( appDataManage->getAppSettingPath( ) ) );
 
 	appSettingPath = find.value( ).toString( appSettingPath );
 	appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
 
 	if( appUserInterfaceManage->setJsonData( appUserInterfaceManageJsonObject ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, appUserInterfaceManage, setJsonData, tr( "配置 json 数据异常" ) );
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, appUserInterfaceManage, setJsonData, tr( "配置 json 数据异常" ) );
 
 	emit signal_change_setting_path( appSettingPath );
 	return true;

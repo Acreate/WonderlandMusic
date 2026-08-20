@@ -1,6 +1,5 @@
 ﻿#include "musicFavoriteMenu.h"
 
-#include <QDir>
 #include <QJsonObject>
 
 #include "../application/appInstance/appDataManage/appMusicManage.h"
@@ -17,7 +16,6 @@
 #include "../head/result_message_out.h"
 
 #include "../tools/instanceTools.h"
-#include "../tools/pathInfoTools.h"
 #include "../tools/pathTools.h"
 #include "../tools/widgetTools.h"
 MusicFavoriteMenu::MusicFavoriteMenu( ) {
@@ -147,7 +145,7 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 		QWidget *openWidget = musicWindow->toWidget( );
 
 		QString filter;
-		if( PathInfoTools::getSupperDecodeFileSuffixFilter( filter ) == false )
+		if( PathTools::getSupperDecodeFileSuffixFilter( filter ) == false )
 			return false;
 		if( WidgetTools::showMultipleSelectFileDialog( resultFile, openSelecteMultiFileWidgetPath, openWidget, translate.getSelectMusicFile( ), filter ) == false )
 			return false;

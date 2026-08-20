@@ -15,7 +15,6 @@ public:
 	virtual bool getFilePath( QString &result_file_path ) const = 0;
 	virtual bool getElapsedTime( size_t &result_elapsed_time ) const = 0;
 	virtual bool getElapsedTimeString( QString &result_elapsed_time_string ) const = 0;
-	virtual bool getDrawBuff( QImage &result_buff ) const = 0;
 };
 
 #endif // IMUSICITEM_H_H_HEAD__FILE__

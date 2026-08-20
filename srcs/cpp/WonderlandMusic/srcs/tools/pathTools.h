@@ -44,6 +44,9 @@ namespace PathTools {
 	bool entryFinalPath( QStringList &result_final_path, const QString &entry_path );
 
 	bool copyPath( const QString &source_path, const QString &destination_path );
+	bool getAppSettintHomePath( QString &result_app_setting_home_path );
+	bool getSupperDecodeFileSuffixFilter( QString &result_supper_decode_music_file_suffix_filter );
+	bool getSupperDecodeFileSuffix( std::vector< QString > &result_supper_decode_music_file_suffix );
 }
 
 #endif // PATHTOOLS_H_H_HEAD__FILE__

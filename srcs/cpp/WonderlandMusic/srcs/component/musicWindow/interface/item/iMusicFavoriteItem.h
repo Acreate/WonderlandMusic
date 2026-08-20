@@ -13,8 +13,6 @@ public:
 	virtual bool addMusicItem( IMusicItem *music_item ) = 0;
 	virtual bool removeMusicItem( IMusicItem *music_item ) = 0;
 	virtual bool clear( ) = 0;
-	virtual bool getNameDrawBuff( QImage &result_buff ) const = 0;
-	virtual bool getMusicItemVectorDrawBuff( QImage &result_buff ) const = 0;
 	virtual bool update( ) = 0;
 	virtual bool fromIndexGetMusicItem( IMusicItem * &result_music_item_vector, const size_t &result_count ) = 0;
 	virtual bool fromMusicItemGetIndex( size_t &result_index, const IMusicItem *music_item ) = 0;

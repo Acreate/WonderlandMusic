@@ -3,24 +3,14 @@
 #include <qimage.h>
 
 #include "../application/appInstance/appDataManage.h"
-#include "../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
 
 #include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 
 #include "../mutex/userMutex.h"
 
-#include "../tools/instanceTools.h"
-
 bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicCentreWidget = music_centre_widget;
-	musicFavoriteItemUserMutex->unlock( );
-	return true;
-}
-bool MusicFavoriteItem::getMusicItemVectorDrawBuff( QImage &result_buff ) const {
-	musicFavoriteItemUserMutex->lock( );
-	result_buff = *musicItemVectorDrawBuff;
-	result_buff.detach( );
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
@@ -42,14 +32,6 @@ bool MusicFavoriteItem::removeMusicItem( IMusicItem *music_item ) {
 bool MusicFavoriteItem::clear( ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicItemVector.clear( );
-	*musicItemVectorDrawBuff = QImage( );
-	musicFavoriteItemUserMutex->unlock( );
-	return true;
-}
-bool MusicFavoriteItem::getNameDrawBuff( QImage &result_buff ) const {
-	musicFavoriteItemUserMutex->lock( );
-	result_buff = *nameDrawBuff;
-	result_buff.detach( );
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
@@ -103,18 +85,16 @@ size_t MusicFavoriteItem::getMusicVectorClone( std::vector< IMusicItem * > &resu
 		return resultCount;
 	} );
 }
+void MusicFavoriteItem::setName( const QString &name ) {
+	this->name = name;
+}
 MusicFavoriteItem::MusicFavoriteItem( ) {
 	appendTypeInfo( this );
-	nameDrawBuff = new QImage;
-	musicItemVectorDrawBuff = new QImage;
 	musicFavoriteItemUserMutex = new UserMutex;
 }
 MusicFavoriteItem::~MusicFavoriteItem( ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicItemVector.clear( );
-	delete nameDrawBuff;
-	delete musicItemVectorDrawBuff;
-	musicItemVectorDrawBuff = nameDrawBuff = nullptr;
 	musicFavoriteItemUserMutex->unlock( );
 	delete musicFavoriteItemUserMutex;
 	musicFavoriteItemUserMutex = nullptr;

@@ -10,9 +10,10 @@
 #include "../dateTimeFormat/dateTimeFormat.h"
 
 #include "../mutex/userMutex.h"
+
+#include "../tools/pathTools.h"
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManage( app_music_manage ) {
 	userMutex = new UserMutex;
-	rendBuff = new QImage;
 	if( appMusicManage == nullptr ) {
 		deleteLater( );
 		return;
@@ -22,7 +23,6 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManag
 }
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path ) : appMusicManage( app_music_manage ) {
 	userMutex = new UserMutex;
-	rendBuff = new QImage;
 	QFileInfo fileInfo( disk_file_path );
 	if( appMusicManage == nullptr || fileInfo.exists( ) == false ) {
 		deleteLater( );
@@ -84,8 +84,6 @@ MusicInfoItem::~MusicInfoItem( ) {
 	if( mediaPlayer )
 		delete mediaPlayer;
 	mediaPlayer = nullptr;
-	delete rendBuff;
-	rendBuff = nullptr;
 	userMutex->unlock( );
 	delete userMutex;
 	userMutex = nullptr;
@@ -143,12 +141,21 @@ bool MusicInfoItem::getElapsedTime( size_t &result_elapsed_time ) const {
 		return userMutex->result_unlock( false );
 	return userMutex->result_unlock( true );
 }
-bool MusicInfoItem::getDrawBuff( QImage &result_buff ) const {
-	userMutex->lock( );
-	if( loadedOver == false )
-		return userMutex->result_unlock( false );
-	if( rendBuff == nullptr )
-		return userMutex->result_unlock( false );
-	result_buff = *rendBuff;
-	return userMutex->result_unlock( true );
+void MusicInfoItem::setIdCode( const size_t id_code ) {
+	idCode = id_code;
+}
+void MusicInfoItem::setName( const QString &name ) {
+	this->name = name;
+}
+void MusicInfoItem::setSinger( const QString &singer ) {
+	this->singer = singer;
+}
+void MusicInfoItem::setAbsoluteFilePath( const QString &absolute_file_path ) {
+	QFileInfo info( absolute_file_path );
+	absoluteFilePath = info.absoluteFilePath( );
+	filePath = PathTools::getAutoShortenPathName( absolute_file_path );
+}
+void MusicInfoItem::setElapsedTime( const qint64 elapsed_time ) {
+	elapsedTime = elapsed_time;
+	elapsedTimeString = DateTimeFormat::millsecondToHourMinSecFrom( elapsed_time );
 }

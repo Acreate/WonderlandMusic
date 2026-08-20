@@ -9,6 +9,8 @@
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
+#include "../item/musicFavoriteItem.h"
+
 #include "../menu/systemTrayIconMenu.h"
 
 #include "../systemTrayIcon/systemTrayIcon.h"
@@ -139,7 +141,7 @@ bool AppInstance::initAfter( ) {
 	
 	auto mainWindow = appUserInterfaceManage->getMainWindow( );
 	mainWindow->setCentralWidget( optionWindow );
-
+	auto musicFavoriteItem = new MusicFavoriteItem();
 	/*if( appDataManage->readJsonData( ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, appDataManage, readJsonData, tr( "json 读取异常" ) );*/
 

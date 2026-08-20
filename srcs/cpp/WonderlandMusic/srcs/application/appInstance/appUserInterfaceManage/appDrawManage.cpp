@@ -124,6 +124,7 @@ bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, c
 
 	painter.setFont( font );
 	int separatorWidth = music_item_width_info->getSeparatorWidth( );
+	int offsetY = pos_y + separatorWidth;
 	int intervalWidth = music_item_width_info->getIntervalWidth( ) + pos_x;
 	QColor fillSeparatorColor( 255, 255, 255, 255 );
 	painter.fillRect( QRect( intervalWidth, 0, separatorWidth, calculateMinHeight ), fillSeparatorColor );

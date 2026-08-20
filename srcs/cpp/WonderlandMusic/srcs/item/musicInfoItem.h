@@ -31,7 +31,6 @@ protected:
 	explicit MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path );
 
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
-	bool getRefDrawBuff( QImage &result_buff ) const override;
 
 public:
 	bool getElapsedTimeString( QString &result_elapsed_time_string ) const override;
@@ -45,7 +44,6 @@ public:
 	bool getDrawBuff( QImage &result_buff ) const override;
 
 protected:
-	bool setDrawBuff( QImage &image ) override;
 };
 
 #endif // MUSICINFOITEM_H_H_HEAD__FILE__

@@ -6,12 +6,6 @@ class QImage;
 class QString;
 
 class IMusicItem : public IMusicCentreWidgetChild {
-	friend class AppRenderImage;
-
-protected:
-	virtual bool setDrawBuff( QImage &image ) = 0;
-	virtual bool getRefDrawBuff( QImage &result_buff ) const = 0;
-
 public:
 	IMusicItem( );
 	virtual bool isLoadedOver( ) = 0;

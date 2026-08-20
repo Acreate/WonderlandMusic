@@ -7,15 +7,6 @@ class QString;
 class QImage;
 
 class IMusicFavoriteItem : public IMusicCentreWidgetChild {
-	friend class AppRenderImage;
-
-protected:
-	virtual bool setNameDrawBuff( QImage &image ) = 0;
-	virtual bool setMusicItemVectorDrawBuff( QImage &image ) = 0;
-
-	virtual bool getRefNameDrawBuff( QImage &result_buff ) const = 0;
-	virtual bool getRefMusicItemVectorDrawBuff( QImage &result_buff ) const = 0;
-
 public:
 	IMusicFavoriteItem( );
 	virtual bool getName( QString &result_name ) const = 0;

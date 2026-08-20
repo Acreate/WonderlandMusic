@@ -5,6 +5,8 @@
 #include "../application/appInstance/appDataManage.h"
 #include "../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
 
+#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
+
 #include "../mutex/userMutex.h"
 
 #include "../tools/instanceTools.h"
@@ -12,32 +14,6 @@
 bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicCentreWidget = music_centre_widget;
-	musicFavoriteItemUserMutex->unlock( );
-	return true;
-}
-bool MusicFavoriteItem::setNameDrawBuff( QImage &image ) {
-	musicFavoriteItemUserMutex->lock( );
-	*nameDrawBuff = image;
-	nameDrawBuff->detach( );
-	musicFavoriteItemUserMutex->unlock( );
-	return true;
-}
-bool MusicFavoriteItem::setMusicItemVectorDrawBuff( QImage &image ) {
-	musicFavoriteItemUserMutex->lock( );
-	*musicItemVectorDrawBuff = image;
-	musicItemVectorDrawBuff->detach( );
-	musicFavoriteItemUserMutex->unlock( );
-	return true;
-}
-bool MusicFavoriteItem::getRefNameDrawBuff( QImage &result_buff ) const {
-	musicFavoriteItemUserMutex->lock( );
-	result_buff = *nameDrawBuff;
-	musicFavoriteItemUserMutex->unlock( );
-	return true;
-}
-bool MusicFavoriteItem::getRefMusicItemVectorDrawBuff( QImage &result_buff ) const {
-	musicFavoriteItemUserMutex->lock( );
-	result_buff = *musicItemVectorDrawBuff;
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
@@ -78,13 +54,9 @@ bool MusicFavoriteItem::getNameDrawBuff( QImage &result_buff ) const {
 	return true;
 }
 bool MusicFavoriteItem::update( ) {
-	musicFavoriteItemUserMutex->lock( );
-	auto appRenderImage = InstanceTools::getAppRenderImage( );
-	if( appRenderImage == nullptr )
-		return musicFavoriteItemUserMutex->result_unlock( false );
-	if( appRenderImage->renderMusicFavoriteItem( this ) == false )
-		return musicFavoriteItemUserMutex->result_unlock( false );
-	musicFavoriteItemUserMutex->unlock( );
+	if( musicCentreWidget == nullptr )
+		return false;
+	musicCentreWidget->update( );
 	return true;
 }
 bool MusicFavoriteItem::fromIndexGetMusicItem( IMusicItem *&result_music_item_vector, const size_t &result_count ) {

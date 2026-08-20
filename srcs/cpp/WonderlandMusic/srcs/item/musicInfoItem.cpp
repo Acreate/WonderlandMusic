@@ -99,11 +99,6 @@ bool MusicInfoItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget
 	musicCentreWidget = music_centre_widget;
 	return userMutex->result_unlock( true );
 }
-bool MusicInfoItem::getRefDrawBuff( QImage &result_buff ) const {
-	userMutex->lock( );
-	result_buff = *rendBuff;
-	return userMutex->result_unlock( true );
-}
 bool MusicInfoItem::getElapsedTimeString( QString &result_elapsed_time_string ) const {
 	userMutex->lock( );
 	if( loadedOver == false )
@@ -155,14 +150,5 @@ bool MusicInfoItem::getDrawBuff( QImage &result_buff ) const {
 	if( rendBuff == nullptr )
 		return userMutex->result_unlock( false );
 	result_buff = *rendBuff;
-	return userMutex->result_unlock( true );
-}
-bool MusicInfoItem::setDrawBuff( QImage &image ) {
-	userMutex->lock( );
-	if( loadedOver == false )
-		return userMutex->result_unlock( false );
-	if( rendBuff == nullptr )
-		return userMutex->result_unlock( false );
-	*rendBuff = image;
 	return userMutex->result_unlock( true );
 }

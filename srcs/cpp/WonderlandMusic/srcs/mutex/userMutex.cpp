@@ -6,6 +6,7 @@
 #include "../application/appInstance/appDataManage/translate/userMutexTranslate.h"
 
 #include "../msgInfo/messageErrorOut.h"
+#include "../msgInfo/messageString.h"
 
 #include "../tools/sourceLocationTools.h"
 

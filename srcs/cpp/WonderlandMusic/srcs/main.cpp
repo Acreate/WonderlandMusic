@@ -2,6 +2,7 @@
 #include "application/appInstance.h"
 #include "dateTimeFormat/dateTimeFormat.h"
 #include "msgInfo/messageErrorOut.h"
+#include "msgInfo/messageString.h"
 #include "tools/pathTools.h"
 static MessageErrorOut *messageErrorOut = nullptr;
 static MessageString *permit = nullptr;

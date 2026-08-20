@@ -12,6 +12,7 @@
 #include "../application/appInstance/appDataManage/appMusicManage/appMusicDecoder.h"
 
 #include "../msgInfo/messageErrorOut.h"
+#include "../msgInfo/messageString.h"
 
 qsizetype PathTools::filterFile( QStringList &result_get_path, const std::vector< QString > &entry_path ) {
 	qsizetype resultDataIndex = 0;
@@ -373,7 +374,7 @@ bool PathTools::copyPath( const QString &source_path, const QString &destination
 			// 覆盖目标文件
 			if( QFile::exists( sourceAbsoluteFilePath ) )
 				if( QFile::remove( sourceAbsoluteFilePath ) == false ) {
-					Message_Error_Out << removeFileError + " : " << sourceAbsoluteFilePath;
+					Message_Error_Out << ( MessageString( ) << removeFileError + " : " << sourceAbsoluteFilePath );
 					continue;
 				}
 			info.setFile( sourceAbsoluteFilePath );

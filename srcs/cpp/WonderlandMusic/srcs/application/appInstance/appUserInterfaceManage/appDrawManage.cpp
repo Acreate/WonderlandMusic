@@ -11,6 +11,7 @@
 #include "../../../head/after_init_macro.h"
 #include "../../../head/before_init_macro.h"
 #include "../../../head/init_macro.h"
+#include "../../../head/q_debug_message_var_out.h"
 #include "../../../head/release_macro.h"
 #include "../../../head/result_message_out.h"
 
@@ -94,7 +95,6 @@ bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem *
 	return drawItem( painter, music_item_vector, music_item_width_info, 0, 0 );
 }
 
-#define debug_rect_info( rect_var )  "" << #rect_var << " = " << rect_var
 bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const {
 	size_t idCode;
 	if( music_item->getIdCode( idCode ) == false )
@@ -155,6 +155,7 @@ bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, c
 	fillRect = QRect( intervalWidth, pos_y, separatorWidth, calculateMinHeight );
 	painter.fillRect( fillRect, fillSeparatorColor );
 	
+	Q_Debug_Var_Nmae_MessageString( fillRect );
 	return true;
 }
 bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const {

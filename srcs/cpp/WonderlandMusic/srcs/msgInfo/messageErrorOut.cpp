@@ -38,7 +38,7 @@ MessageErrorOut::MessageErrorOut( const std::source_location &source_location ) 
 }
 
 MessageErrorOut & MessageErrorOut::operator<<( const MessageString &msg ) {
-	outMsgVector.emplace_back( msg.toQString( ) );
+	outMsgVector.emplace_back( new MessageString( msg.toQString( ) ) );
 	return *this;
 }
 
@@ -66,12 +66,20 @@ void MessageErrorOut::setEndString( const QString &end_string ) {
 	endString = end_string;
 }
 
-const std::vector< MessageString > & MessageErrorOut::getOutMsgVector( ) const {
+const std::vector< MessageString * > & MessageErrorOut::getOutMsgVector( ) const {
 	return this->outMsgVector;
 }
 
 MessageErrorOut::~MessageErrorOut( ) {
 	writeLog( );
+	size_t count = outMsgVector.size( );
+	if( count ) {
+		auto data = outMsgVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			delete data[ index ];
+		outMsgVector.clear( );
+	}
 }
 
 QString MessageErrorOut::toQString( ) const {
@@ -87,8 +95,8 @@ QString MessageErrorOut::toQString( const DateTimeFormat &date_time_format ) con
 		auto data = outMsgVector.data( );
 		count -= 1;
 		for( index = 0; index < count; ++index )
-			complete += data[ index ].toQString( ) + jointString;
-		complete += data[ index ].toQString( ) + endString;
+			complete += data[ index ]->toQString( ) + jointString;
+		complete += data[ index ]->toQString( ) + endString;
 	}
 	SourceLocationTools::formatString( outString, date_time_format, location, complete );
 	return outString;

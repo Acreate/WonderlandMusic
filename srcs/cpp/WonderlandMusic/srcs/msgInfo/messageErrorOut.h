@@ -2,9 +2,9 @@
 #define MESSAGEERROROUT_H_H_HEAD__FILE__
 #include <qstring.h>
 #include <source_location>
-#include "messageString.h"
 /// @brief 临时创建一个 MessageErrorOut 对象
 #define Message_Error_Out MessageErrorOut()
+class MessageString;
 class MessageTranslate;
 class QDateTime;
 class DateTimeFormat;
@@ -27,7 +27,7 @@ protected:
 	QString openFileError;
 
 protected:
-	std::vector< MessageString > outMsgVector;
+	std::vector< MessageString * > outMsgVector;
 	std::source_location location;
 	QString logHomePtah;
 	QString jointString;
@@ -37,6 +37,7 @@ protected:
 
 public:
 	using void_ptr = void *;
+	using void_const_ptr = void const *;
 
 public:
 	virtual ~MessageErrorOut( );
@@ -44,13 +45,14 @@ public:
 	MessageErrorOut( const QString &log_home_path, const std::source_location &source_location );
 	MessageErrorOut( const std::source_location &source_location );
 	MessageErrorOut & operator<<( const MessageString &msg );
+
 	virtual const QString & getJoinString( ) const;
 	virtual void setJoinString( const QString &join );
 	virtual const QString & getStartString( ) const;
 	virtual void setStartString( const QString &start_string );
 	virtual const QString & getEndString( ) const;
 	virtual void setEndString( const QString &end_string );
-	virtual const std::vector< MessageString > & getOutMsgVector( ) const;
+	virtual const std::vector< MessageString * > & getOutMsgVector( ) const;
 	virtual QString toQString( ) const;
 	virtual QString toQString( const DateTimeFormat &date_time_format ) const;
 	virtual QString writeLog( const QString &wirte_log_path, const DateTimeFormat &date_time_format ) const;

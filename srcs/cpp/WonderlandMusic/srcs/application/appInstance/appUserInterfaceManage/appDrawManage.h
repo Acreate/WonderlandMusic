@@ -32,7 +32,6 @@ public:
 	virtual AppRenderImage * getAppRenderImage( ) const;
 	virtual bool drawItem( QPainter &painter, const IMusicFavoriteItem *music_favorite_item, const int &pos_x, const int &pos_y ) const;
 	virtual bool drawItem( QPainter &painter, const IMusicFavoriteItem *music_favorite_item ) const;
-	virtual bool drawItem( QPainter &painter, const IMusicFavoriteItem *music_favorite_item, const QFont &font, const int &pos_x, const int &pos_y ) const;
 	virtual bool drawItem( QPainter &painter, const IMusicItem *music_item, const int &pos_x, const int &pos_y ) const;
 	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const int &pos_x, const int &pos_y ) const;
 	virtual bool drawItem( QPainter &painter, const IMusicItem *music_item ) const;
@@ -42,8 +41,6 @@ public:
 	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info ) const;
 	virtual bool drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const;
 	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const;
-	virtual bool drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const QFont &font, const int &pos_x, const int &pos_y ) const;
-	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info, const QFont &font, const int &pos_x, const int &pos_y ) const;
 };
 
 #endif // APPDRAWMANAGE_H_H_HEAD__FILE__

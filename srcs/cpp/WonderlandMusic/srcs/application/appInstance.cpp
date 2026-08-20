@@ -1,5 +1,7 @@
 ﻿#include "appInstance.h"
 
+#include <QPainter>
+
 #include "../component/musicWindow/musicWindow.h"
 #include "../component/optionWindow/optionWindow.h"
 
@@ -27,6 +29,7 @@
 #include "appInstance/appDateTimerManage.h"
 #include "appInstance/appUserInterfaceManage.h"
 #include "appInstance/applicationManage.h"
+#include "appInstance/appUserInterfaceManage/appDrawManage.h"
 
 AppInstance *AppInstance::instance = nullptr;
 
@@ -127,23 +130,20 @@ bool AppInstance::initAfter( ) {
 	auto optionWindow = appUserInterfaceManage->getOptionWindow( );
 	if( optionWindow->addOptionPanel( musicWindow ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( musicWindow ), tr( "添加音乐播放面板失败" ) );
-	
+
 	auto settingWidget = appUserInterfaceManage->getSettingWidget( );
 	if( optionWindow->addOptionPanel( settingWidget ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( settingWidget ), tr( "添加设置面板失败" ) );
-	
+
 	auto aboutWidget = appUserInterfaceManage->getAboutWidget( );
 	if( optionWindow->addOptionPanel( aboutWidget ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel( aboutWidget ), tr( "添加关于面板失败" ) );
-	
+
 	if( optionWindow->showOptionPanel( musicWindow ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, optionWindow, showOptionPanel( musicWindow ), tr( "显示音乐播放面板失败" ) );
-	
+
 	auto mainWindow = appUserInterfaceManage->getMainWindow( );
 	mainWindow->setCentralWidget( optionWindow );
-	auto musicFavoriteItem = new MusicFavoriteItem();
-	/*if( appDataManage->readJsonData( ) == false )
-		return Result_Var_Messag_Ptr_Out_Args( false, appDataManage, readJsonData, tr( "json 读取异常" ) );*/
 
 	return true;
 }

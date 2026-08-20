@@ -154,8 +154,7 @@ bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, c
 	intervalWidth = intervalWidth + musicDurationTimeWidth;
 	fillRect = QRect( intervalWidth, pos_y, separatorWidth, calculateMinHeight );
 	painter.fillRect( fillRect, fillSeparatorColor );
-	
-	Q_Debug_Var_Nmae_MessageString( fillRect );
+
 	return true;
 }
 bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const {

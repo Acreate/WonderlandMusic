@@ -331,10 +331,10 @@ QString MessageString::toQString( ) const {
 		decltype(count) index = 0;
 		auto data = messageList.data( );
 		if( isTranslate ) {
-			QString jionTranslate = QObject::tr( jion.toUtf8( ).data( ) );
+			QString jionTranslate = QObject::tr( jion.toStdString( ).c_str( ) );
 			for( ; index < count; index += 1 )
-				result = result + QObject::tr( data[ index ].toUtf8( ).data( ) ) + jionTranslate;
-			result = result + QObject::tr( data[ index ].toUtf8( ).data( ) );
+				result = result + QObject::tr( data[ index ].toStdString( ).c_str( ) ) + jionTranslate;
+			result = result + QObject::tr( data[ index ].toStdString( ).c_str( ) );
 		} else {
 			for( ; index < count; index += 1 )
 				result = result + data[ index ] + jion;

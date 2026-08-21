@@ -1,9 +1,12 @@
 ﻿#include "musicItemWidthInfo.h"
 
+#include <QWidget>
 #include <qfontmetrics.h>
 
 #include "../application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h"
 #include "../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+
+#include "../component/musicWindow/interface/widget/iMusicTitleWidget.h"
 
 #include "../head/result_message_out.h"
 
@@ -67,7 +70,21 @@ void MusicItemWidthInfo::setMinItemWidth( const int min_item_width ) {
 	minItemWidth = min_item_width;
 }
 bool MusicItemWidthInfo::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
-	return false;
+	musicCentreWidget = music_centre_widget;
+	return true;
+}
+int MusicItemWidthInfo::defaultHeight( ) const {
+	int height = 0;
+	AppRenderImage *appRenderImage = InstanceTools::getAppRenderImage( );
+	const QFontMetrics *fontMetrics = nullptr;
+	if( appRenderImage ) {
+		fontMetrics = appRenderImage->getFontMetrics( );
+		if( fontMetrics )
+			height = fontMetrics->height( );
+	}
+	if( fontMetrics == nullptr )
+		return QFontMetrics( QFont( ) ).height( );
+	return height;
 }
 int MusicItemWidthInfo::getSuggestHeight( ) const {
 	return suggestHeight;
@@ -143,9 +160,18 @@ bool MusicItemWidthInfo::updateInfo( ) {
 	clickWidth = intervalWidth * 2 + separatorWidth;
 	return true;
 }
+int MusicItemWidthInfo::getCalculateHeight( ) const {
+	if( musicTitleWidget == nullptr )
+		return defaultHeight( );
+	auto widget = musicTitleWidget->toWidget( );
+	if( widget == nullptr )
+		return defaultHeight( );
+	return widget->height( );
+}
 IMusicTitleWidget * MusicItemWidthInfo::setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) {
+	this->musicTitleWidget = music_title_widget;
 	return nullptr;
 }
 IMusicTitleWidget * MusicItemWidthInfo::getMusicTitleWidget( ) {
-	return nullptr;
+	return musicTitleWidget;
 }

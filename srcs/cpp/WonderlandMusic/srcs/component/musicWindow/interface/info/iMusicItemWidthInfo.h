@@ -14,6 +14,7 @@ public:
 	virtual int getSuggestHeight( ) const = 0;
 	virtual int getClickWidth( ) const = 0;
 	virtual int getCalculateMinWidth( ) const = 0;
+	virtual int getCalculateHeight( ) const = 0;
 	virtual int getIntervalWidth( ) const = 0;
 	virtual int getSeparatorWidth( ) const = 0;
 	virtual int getMusicCodeWidth( ) const = 0;

@@ -143,20 +143,6 @@ bool AppInstance::initAfter( ) {
 	auto mainWindow = appUserInterfaceManage->getMainWindow( );
 	mainWindow->setCentralWidget( optionWindow );
 
-	auto musicInfoItem = MusicInfoItem( appDataManage->getAppMusicManage( ) );
-	musicInfoItem.setIdCode( 0 );
-	musicInfoItem.setName( "123" );
-	musicInfoItem.setAbsoluteFilePath( "45.mp3" );
-	musicInfoItem.setSinger( "777" );
-	musicInfoItem.setElapsedTime( 234 );
-	musicInfoItem.setLoadedOver( true );
-	QImage image = QImage( 1024, 768, QImage::Format_RGBA8888 );
-	image.fill( 0 );
-	QPainter painter;
-	painter.begin( &image );
-	appUserInterfaceManage->getAppDrawManage( )->drawItem( painter, &musicInfoItem );
-	painter.end( );
-	image.save( "test.png" );
 	return false;
 }
 

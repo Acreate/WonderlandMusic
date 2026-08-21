@@ -21,7 +21,7 @@
 #include "appDrawManage/appRenderImage.h"
 
 namespace appDrawTools {
-	bool drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y );
+	static bool drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y );
 }
 
 AppDrawManage::~AppDrawManage( ) {
@@ -112,8 +112,7 @@ bool appDrawTools::drawItem( QPainter &painter, const IMusicItem *music_item, co
 	if( music_item->getElapsedTimeString( elapsedTimeString ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getElapsedTimeString, QObject::tr( "获取时间字符串失败" ) );
 
-	QFontMetrics fontMetrics = painter.fontMetrics( );
-	const int calculateMinHeight = fontMetrics.height( );
+	const int calculateMinHeight = music_item_width_info->getSuggestHeight( );
 
 	const int separatorWidth = music_item_width_info->getSeparatorWidth( );
 	int intervalWidth = music_item_width_info->getIntervalWidth( ) + pos_x + separatorWidth;
@@ -208,7 +207,7 @@ bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem *
 
 	auto data = music_item_vector.data( );
 	auto fontMetrics = painter.fontMetrics( );
-	int height = fontMetrics.height( );
+	int height = music_item_width_info->getSuggestHeight( );
 	size_t index = 0;
 	int offsetY = 0;
 	for( ; index < count; index += 1 ) {

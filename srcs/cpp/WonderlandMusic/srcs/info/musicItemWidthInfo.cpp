@@ -3,14 +3,14 @@
 #include <QWidget>
 #include <qfontmetrics.h>
 
-#include "../application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h"
-#include "../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+#include <application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h>
+#include <application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h>
 
-#include "../component/musicWindow/interface/widget/iMusicTitleWidget.h"
+#include <component/musicWindow/interface/widget/iMusicTitleWidget.h>
 
-#include "../head/result_message_out.h"
+#include <head/result_message_out.h>
 
-#include "../tools/instanceTools.h"
+#include <tools/instanceTools.h>
 MusicItemWidthInfo::MusicItemWidthInfo( ) {
 	appendTypeInfo( this );
 }
@@ -73,19 +73,6 @@ bool MusicItemWidthInfo::setMusicCentreWidget( MusicCentreWidget *music_centre_w
 	musicCentreWidget = music_centre_widget;
 	return true;
 }
-int MusicItemWidthInfo::defaultHeight( ) const {
-	int height = 0;
-	AppRenderImage *appRenderImage = InstanceTools::getAppRenderImage( );
-	const QFontMetrics *fontMetrics = nullptr;
-	if( appRenderImage ) {
-		fontMetrics = appRenderImage->getFontMetrics( );
-		if( fontMetrics )
-			height = fontMetrics->height( );
-	}
-	if( fontMetrics == nullptr )
-		return QFontMetrics( QFont( ) ).height( );
-	return height;
-}
 int MusicItemWidthInfo::getSuggestHeight( ) const {
 	return suggestHeight;
 }
@@ -141,7 +128,6 @@ bool MusicItemWidthInfo::updateInfo( ) {
 	auto fontMetrics = appRenderImage->getFontMetrics( );
 	if( fontMetrics == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, appRenderImage, getFontMetrics, QObject::tr( "获取 QFontMetrics* 失败" ) );
-	suggestHeight = fontMetrics->height( );
 	if( AppTranslateTools::getMusicTitleWidget( [&fontMetrics, this] ( MusicTitleWidgetTranslate &translate ) {
 		const QString &musicCode = translate.getMusicCode( );
 		const QString &musicName = translate.getMusicName( );
@@ -151,6 +137,7 @@ bool MusicItemWidthInfo::updateInfo( ) {
 		musicNameWidth = fontMetrics->horizontalAdvance( musicName );
 		musicSingerNameWidth = fontMetrics->horizontalAdvance( musicSingeName );
 		musicDurationTimeWidth = fontMetrics->horizontalAdvance( musicDurationTime );
+		suggestHeight = fontMetrics->height( );
 		return true;
 	} ) == false )
 		return Result_Var_Messag_Ptr_Out_Args( false, appRenderImage, QObject::tr( "AppTranslateTools::getMusicTitleWidget 异常" ) );
@@ -159,14 +146,6 @@ bool MusicItemWidthInfo::updateInfo( ) {
 	minItemWidth = intervalWidth * 2 + separatorWidth;
 	clickWidth = intervalWidth * 2 + separatorWidth;
 	return true;
-}
-int MusicItemWidthInfo::getCalculateHeight( ) const {
-	if( musicTitleWidget == nullptr )
-		return defaultHeight( );
-	auto widget = musicTitleWidget->toWidget( );
-	if( widget == nullptr )
-		return defaultHeight( );
-	return widget->height( );
 }
 IMusicTitleWidget * MusicItemWidthInfo::setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) {
 	this->musicTitleWidget = music_title_widget;

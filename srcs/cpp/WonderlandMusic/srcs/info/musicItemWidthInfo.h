@@ -3,7 +3,7 @@
 #include "../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
 
 class MusicItemWidthInfo : public IMusicItemWidthInfo {
-protected:
+private:
 	int suggestHeight;
 	int clickWidth;
 	int intervalWidth;
@@ -13,21 +13,25 @@ protected:
 	int musicSingerNameWidth;
 	int musicDurationTimeWidth;
 	int minItemWidth;
+	IMusicTitleWidget *musicTitleWidget = nullptr;
+	MusicCentreWidget *musicCentreWidget = nullptr;
+
+protected:
+	void setClickWidth( const int click_width ) override;
+	void setIntervalWidth( const int interval_width ) override;
+	void setMinItemWidth( const int min_item_width ) override;
+	void setMusicCodeWidth( const int music_code_width ) override;
+	void setMusicDurationTimeWidth( const int music_duration_time_width ) override;
+	void setMusicNameWidth( const int music_name_width ) override;
+	void setMusicSingerNameWidth( const int music_singer_name_width ) override;
+	void setSeparatorWidth( const int separator_width ) override;
+	void setSuggestHeight( const int suggest_height ) override;
 
 public:
 	MusicItemWidthInfo( );
 	~MusicItemWidthInfo( ) override;
 	MusicItemWidthInfo( const MusicItemWidthInfo &other );
 	MusicItemWidthInfo & operator=( const MusicItemWidthInfo &other );
-	virtual void setSuggestHeight( const int suggest_height );
-	virtual void setClickWidth( const int click_width );
-	virtual void setIntervalWidth( const int interval_width );
-	virtual void setSeparatorWidth( const int separator_width );
-	virtual void setMusicCodeWidth( const int music_code_width );
-	virtual void setMusicNameWidth( const int music_name_width );
-	virtual void setMusicSingerNameWidth( const int music_singer_name_width );
-	virtual void setMusicDurationTimeWidth( const int music_duration_time_width );
-	virtual void setMinItemWidth( const int min_item_width );
 
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;

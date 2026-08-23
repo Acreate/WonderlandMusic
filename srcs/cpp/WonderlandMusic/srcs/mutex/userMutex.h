@@ -29,26 +29,35 @@ public:
 	virtual ~UserMutex( );
 
 	template< typename TResult_Type >
-	TResult_Type result_unlock( TResult_Type result, const std::source_location &source_location = std::source_location::current( ) ) {
+	const TResult_Type & result_unlock( const TResult_Type &result, const std::source_location &source_location = std::source_location::current( ) ) {
 		unlock( source_location );
 		return result;
 	}
 
 	template< typename TResult_Type >
-	TResult_Type result_lock( TResult_Type result, const std::source_location &source_location = std::source_location::current( ) ) {
+	const TResult_Type & result_lock( const TResult_Type &result, const std::source_location &source_location = std::source_location::current( ) ) {
 		lock( source_location );
 		return result;
 	}
 
 	template< typename TResult_Type >
-	TResult_Type auto_job( const std::function< TResult_Type ( ) > &job, const std::source_location &source_location = std::source_location::current( ) ) {
-		lock( source_location );
-		TResult_Type result = job( );
+	const TResult_Type & result_unlock( const TResult_Type &&result, const std::source_location &source_location = std::source_location::current( ) ) {
 		unlock( source_location );
 		return result;
 	}
 
-	void auto_job( const std::function< void( ) > &job, const std::source_location &source_location = std::source_location::current( ) ) {
+	template< typename TResult_Type >
+	const TResult_Type & result_lock( const TResult_Type &&result, const std::source_location &source_location = std::source_location::current( ) ) {
+		lock( source_location );
+		return result;
+	}
+	template< typename TResult_Type >
+	const TResult_Type & auto_job( const std::function< const TResult_Type &( ) > &&job, const std::source_location &source_location = std::source_location::current( ) ) {
+		lock( source_location );
+		return result_unlock( job( ), source_location );
+	}
+
+	void auto_job( const std::function< void( ) > &&job, const std::source_location &source_location = std::source_location::current( ) ) {
 		lock( source_location );
 		job( );
 		unlock( source_location );

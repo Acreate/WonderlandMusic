@@ -318,3 +318,6 @@ bool MusicCentreWidget::repaintTitleWidget( ) {
 bool MusicCentreWidget::repaintFavoriteWidget( ) {
 	return true;
 }
+bool MusicCentreWidget::synchronizationChildrenWidgetSize( ) {
+	return calculateSize( );
+}

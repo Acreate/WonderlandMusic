@@ -68,6 +68,7 @@ public:
 	virtual bool repaintListWidget( );
 	virtual bool repaintTitleWidget( );
 	virtual bool repaintFavoriteWidget( );
+	virtual bool synchronizationChildrenWidgetSize( );
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

@@ -19,6 +19,7 @@ bool ApplicationManage::init( ) {
 }
 
 bool ApplicationManage::initAfter( ) {
+	deleteResource( );
 	appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
 	mainWindow = appUserInterfaceManage->getMainWindow( );
 	appDataManage = InstanceTools::getAppDataManage( );

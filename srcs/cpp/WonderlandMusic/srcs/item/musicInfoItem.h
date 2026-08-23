@@ -45,6 +45,7 @@ public:
 	virtual void setAbsoluteFilePath( const QString &absolute_file_path );
 	virtual void setElapsedTime( const qint64 elapsed_time );
 	virtual void setLoadedOver( const bool loaded_over );
+	MusicCentreWidget * getMusicCentreWidget( ) const override;
 };
 
 #endif // MUSICINFOITEM_H_H_HEAD__FILE__

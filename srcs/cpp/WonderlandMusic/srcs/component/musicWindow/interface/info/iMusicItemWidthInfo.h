@@ -35,7 +35,8 @@ public:
 	virtual int getMusicDurationTimeWidth( ) const = 0;
 	virtual int getMinItemWidth( ) const = 0;
 	virtual bool setIMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) = 0;
-	virtual bool updateInfo( ) = 0;
+	virtual bool initInfo( ) = 0;
+	virtual bool synchronization( ) = 0;
 	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) = 0;
 	virtual IMusicTitleWidget * getMusicTitleWidget( ) = 0;
 };

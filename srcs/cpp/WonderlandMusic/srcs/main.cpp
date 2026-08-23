@@ -1,6 +1,9 @@
 ﻿#include <QLoggingCategory>
 #include "application/appInstance.h"
 #include "dateTimeFormat/dateTimeFormat.h"
+
+#include "head/result_message_out.h"
+
 #include "msgInfo/messageErrorOut.h"
 #include "msgInfo/messageString.h"
 #include "tools/pathTools.h"
@@ -62,7 +65,6 @@ static void initTimeInfo( ) {
 	startDateTime = new_ptr( startDateTime );
 	endDateTime = new_ptr( endDateTime );
 }
-
 static void satrtProcess( ) {
 	if( messageErrorOut ) {
 		*startDateTime = QDateTime::currentDateTime( );
@@ -106,21 +108,39 @@ static int endProcess( int exit_code ) {
 }
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {
+	int exec = 0;
 	initTimeInfo( );
 
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
 	satrtProcess( );
 	AppInstance *application = new AppInstance( argc, argv );
 
-	if( application->initBefore( ) == false )
-		return endProcess( -1 );
+	if( application->initBefore( ) == false ) {
+		exec = -1;
+		Result_Var_Function_Messag_Ptr_Out_Args( exec, application, initBefore, QObject::tr( "预备初始化失败" ) );
+		exec = endProcess( exec );
+		delete application;
+		return exec;
+	}
 
-	if( application->init( ) == false )
-		return endProcess( -2 );
-	if( application->initAfter( ) == false )
-		return endProcess( -3 );
+	if( application->init( ) == false ) {
+		exec = -2;
+		Result_Var_Function_Messag_Ptr_Out_Args( exec, application, init, QObject::tr( "初始化失败" ) );
 
-	auto exec = application->exec( );
+		exec = endProcess( exec );
+		delete application;
+		return exec;
+	}
+
+	if( application->initAfter( ) == false ) {
+		exec = -3;
+		Result_Var_Function_Messag_Ptr_Out_Args( exec, application, initAfter, QObject::tr( "后置初始化失败" ) );
+		exec = endProcess( exec );
+		delete application;
+		return exec;
+	}
+
+	exec = application->exec( );
 	endProcess( exec );
 
 	delete application;

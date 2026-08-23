@@ -56,7 +56,7 @@ bool AppDataManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( translate );
 	After_Init_Resource_App_Core_Ptr( appDataJsonKey );
 	After_Init_Resource_App_Core_Ptr( appMusicManage );
-	if( musicItemWidthInfo->updateInfo( ) == false )
+	if( musicItemWidthInfo->initInfo( ) == false )
 		return false;
 	return true;
 }

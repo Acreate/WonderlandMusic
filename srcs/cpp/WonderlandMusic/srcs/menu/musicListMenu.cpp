@@ -28,8 +28,12 @@ bool MusicListMenu::getJsonData( QJsonObject &get_json_object ) const {
 bool MusicListMenu::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }
+MusicCentreWidget * MusicListMenu::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
+}
 bool MusicListMenu::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
-	return false;
+	musicCentreWidget = music_centre_widget;
+	return true;
 }
 bool MusicListMenu::execMenu( IMusicListWidget *music_list_widget, IMusicItem *music_item, const QPoint &mouse_global_point ) {
 	return InstanceTools::getAppMenuManage( )->popMusicListMenu( mouse_global_point );

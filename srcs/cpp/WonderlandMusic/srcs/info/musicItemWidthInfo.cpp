@@ -1,6 +1,5 @@
 ﻿#include "musicItemWidthInfo.h"
 
-#include <QWidget>
 #include <qfontmetrics.h>
 
 #include <application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h>
@@ -11,6 +10,8 @@
 #include <head/result_message_out.h>
 
 #include <tools/instanceTools.h>
+
+#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 MusicItemWidthInfo::MusicItemWidthInfo( ) {
 	appendTypeInfo( this );
 }
@@ -121,7 +122,7 @@ bool MusicItemWidthInfo::getJsonData( QJsonObject &get_json_object ) const {
 bool MusicItemWidthInfo::setJsonData( const QJsonObject &set_json_object ) {
 	return false;
 }
-bool MusicItemWidthInfo::updateInfo( ) {
+bool MusicItemWidthInfo::initInfo( ) {
 	auto appRenderImage = InstanceTools::getAppRenderImage( );
 	if( appRenderImage == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, getSuggestHeight, QObject::tr( "获取 AppRenderImage* 失败" ) );
@@ -148,9 +149,18 @@ bool MusicItemWidthInfo::updateInfo( ) {
 	return true;
 }
 IMusicTitleWidget * MusicItemWidthInfo::setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) {
+	auto old = this->musicTitleWidget;
 	this->musicTitleWidget = music_title_widget;
-	return nullptr;
+	return old;
 }
 IMusicTitleWidget * MusicItemWidthInfo::getMusicTitleWidget( ) {
 	return musicTitleWidget;
+}
+bool MusicItemWidthInfo::synchronization( ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	return musicCentreWidget->repaintListWidget( );
+}
+MusicCentreWidget * MusicItemWidthInfo::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
 }

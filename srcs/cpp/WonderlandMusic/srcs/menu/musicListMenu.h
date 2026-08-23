@@ -6,7 +6,8 @@
 
 class MusicListMenu : public QMenu, public IMusicListMenu {
 	Q_OBJECT;
-
+	
+	MusicCentreWidget* musicCentreWidget = nullptr;
 public:
 	MusicListMenu( );
 	~MusicListMenu( ) override;
@@ -20,6 +21,7 @@ public:
 	bool initAfter( ) override;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
+	MusicCentreWidget * getMusicCentreWidget( ) const override;
 
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;

@@ -16,7 +16,7 @@ protected:
 	QAction *deleteFavoriteItemAction = nullptr;
 	QAction *addMusicFileAction = nullptr;
 	QAction *addMusicDirAction = nullptr;
-
+	MusicCentreWidget* musicCentreWidget = nullptr;
 	QString openSelecteMultiFileWidgetPath;
 	QString openSelecteMultiDirWidgetPath;
 
@@ -33,6 +33,7 @@ public:
 	bool initAfter( ) override;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
+	MusicCentreWidget * getMusicCentreWidget( ) const override;
 
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;

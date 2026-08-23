@@ -87,8 +87,12 @@ bool MusicFavoriteMenu::setJsonData( const QJsonObject &set_json_object ) {
 		return false;
 	return true;
 }
+MusicCentreWidget * MusicFavoriteMenu::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
+}
 bool MusicFavoriteMenu::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
-	return false;
+	musicCentreWidget = music_centre_widget;
+	return true;
 }
 bool MusicFavoriteMenu::execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point ) {
 	if( music_favorite_widget == nullptr )

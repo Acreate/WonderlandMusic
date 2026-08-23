@@ -11,8 +11,6 @@
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
-#include "../item/musicInfoItem.h"
-
 #include "../systemTrayIcon/systemTrayIcon.h"
 
 #include "../widget/aboutWidget.h"
@@ -27,7 +25,6 @@
 #include "appInstance/appDateTimerManage.h"
 #include "appInstance/appUserInterfaceManage.h"
 #include "appInstance/applicationManage.h"
-#include "appInstance/appUserInterfaceManage/appDrawManage.h"
 
 AppInstance *AppInstance::instance = nullptr;
 
@@ -143,7 +140,7 @@ bool AppInstance::initAfter( ) {
 	auto mainWindow = appUserInterfaceManage->getMainWindow( );
 	mainWindow->setCentralWidget( optionWindow );
 
-	return false;
+	return true;
 }
 
 int AppInstance::exec( ) {

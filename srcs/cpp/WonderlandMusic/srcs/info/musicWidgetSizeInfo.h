@@ -3,6 +3,7 @@
 #include "../component/musicWindow/interface/info/iMusicWidgetSizeInfo.h"
 
 class MusicWidgetSizeInfo : public IMusicWidgetSizeInfo {
+	MusicCentreWidget* musicCentreWidget = nullptr;
 public:
 	MusicWidgetSizeInfo( );
 	~MusicWidgetSizeInfo( ) override;
@@ -16,6 +17,7 @@ public:
 	bool updateMusicWidgetLayout( ) override;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
+	MusicCentreWidget * getMusicCentreWidget( ) const override;
 
 protected:
 	int setFavoriteWidth( const int &favoriet_width ) override;

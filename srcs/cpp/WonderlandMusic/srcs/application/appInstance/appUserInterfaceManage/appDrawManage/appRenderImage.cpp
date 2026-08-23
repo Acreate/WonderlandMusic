@@ -5,11 +5,6 @@
 #include <QWidget>
 
 #include <head/release_macro.h>
-
-#include <component/musicWindow/interface/info/iMusicItemWidthInfo.h>
-#include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
-#include <component/musicWindow/interface/item/iMusicItem.h>
-
 #include <head/result_message_out.h>
 
 bool AppRenderImage::deleteResource( ) {
@@ -25,6 +20,7 @@ AppRenderImage::AppRenderImage( ) {
 }
 
 AppRenderImage::~AppRenderImage( ) {
+	deleteResource( );
 }
 
 bool AppRenderImage::initBefore( ) {
@@ -32,6 +28,7 @@ bool AppRenderImage::initBefore( ) {
 }
 
 bool AppRenderImage::initAfter( ) {
+	deleteResource( );
 	return true;
 }
 

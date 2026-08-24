@@ -2,25 +2,20 @@
 
 #include <QPainter>
 
-#include <head/init_macro.h>
+#include <component/musicWindow/interface/info/iMusicItemWidthInfo.h>
+#include <component/musicWindow/interface/item/iMusicItem.h>
 
 #include <head/after_init_macro.h>
 #include <head/before_init_macro.h>
+#include <head/init_macro.h>
+#include <head/release_macro.h>
+#include <head/result_message_out.h>
 
-#include "../../../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
-#include "../../../component/musicWindow/interface/item/iMusicItem.h"
+#include <item/musicInfoItem.h>
 
-#include "../../../head/release_macro.h"
-#include "../../../head/result_message_out.h"
+#include <mutex/userMutex.h>
 
-#include "../../../item/musicInfoItem.h"
-
-#include "../../../mutex/userMutex.h"
-
-#include "../../../tools/instanceTools.h"
-#include "../../../tools/pathTools.h"
-
-#include "../appUserInterfaceManage/appDrawManage/appRenderImage.h"
+#include <tools/pathTools.h>
 
 #include "appMusicManage/appMusicDecoder.h"
 
@@ -29,7 +24,9 @@ bool AppMusicManage::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
-	Delete_Resource_App_Core_Ptr( appMusicDecoder );
+	if( musicCentreWidget )
+
+		Delete_Resource_App_Core_Ptr( appMusicDecoder );
 	Delete_Resource_App_Core_Ptr( musicItemWidthInfo );
 	auto clearMusicItemVectorResult = unsafeClearMusicItemVector( );
 	auto clearMusicFavoriteItemResult = unsafeClearMusicFavoriteItem( );
@@ -170,6 +167,43 @@ bool AppMusicManage::setMusicItemWidthInfo( const IMusicItemWidthInfo &music_ite
 	if( musicItemWidthInfo->setIMusicItemWidthInfo( music_item_width_info ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, setIMusicItemWidthInfo, tr( "配置项的宽度信息异常" ) );
 	return true;
+}
+bool AppMusicManage::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+	musicCentreWidget = music_centre_widget;
+	return true;
+}
+MusicCentreWidget * AppMusicManage::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
+}
+bool AppMusicManage::getDefaultMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const {
+	return false;
+}
+bool AppMusicManage::getIndexMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &index ) const {
+	return false;
+}
+bool AppMusicManage::getPosYMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &pos_x ) const {
+	return false;
+}
+bool AppMusicManage::getNameMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const QString &music_favorite_name ) const {
+	return false;
+}
+size_t AppMusicManage::getMusicNameVector( QString &result_default_music_favorite_name, std::vector< QString > &result_music_favorite_name_vector ) const {
+	return 0;
+}
+size_t AppMusicManage::findMusicItemAtFavoriteItem( const IMusicItem *music_item, std::vector< IMusicFavoriteItem * > &result_find_favorite_vector ) const {
+	return 0;
+}
+size_t AppMusicManage::findNameAtMusicItem( const QString &music_name, std::vector< IMusicItem * > &result_find_music_vector ) const {
+	return 0;
+}
+size_t AppMusicManage::findSingerAtMusicItem( const QString &music_singer, std::vector< IMusicItem * > &result_find_music_vector ) const {
+	return 0;
+}
+size_t AppMusicManage::findFileAtMusicItem( const QString &file_path, std::vector< IMusicItem * > &result_find_music_vector ) const {
+	return 0;
+}
+bool AppMusicManage::initDefaultMusicFavoriteItem( ) {
+	return false;
 }
 
 bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {

@@ -19,6 +19,7 @@
 
 #include <tools/instanceTools.h>
 
+#include "../interface/info/iMusicDataManage.h"
 #include "../interface/info/iMusicItemWidthInfo.h"
 #include "../interface/info/iMusicWidgetSizeInfo.h"
 #include "../interface/widget/iMusicFavoriteWidget.h"
@@ -186,6 +187,19 @@ IMusicListWidget * MusicCentreWidget::getMusicListWidget( ) const {
 
 IMusicTitleWidget * MusicCentreWidget::getMusicTitleWidget( ) const {
 	return musicTitleWidget;
+}
+IMusicDataManage * MusicCentreWidget::getMusicDataManage( ) const {
+	return musicDataManage;
+}
+IMusicDataManage * MusicCentreWidget::setMusicDataManage( IMusicDataManage *const music_data_manage ) {
+	if( music_data_manage->setMusicCentreWidget( this ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( music_data_manage, music_data_manage, setMusicCentreWidget, tr( "配置 MusicCentreWidget 组件失败" ) );
+	if( musicDataManage && musicDataManage->setMusicCentreWidget( nullptr ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( musicDataManage, musicDataManage, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
+	auto old = musicDataManage;
+	musicDataManage = music_data_manage;
+	repaintFavoriteWidget( );
+	return old;
 }
 IMusicFavoriteMenu * MusicCentreWidget::getMusicFavoriteMenu( ) const {
 	return InstanceTools::getAppMenuManage( )->getMusicFavoriteMenu( );

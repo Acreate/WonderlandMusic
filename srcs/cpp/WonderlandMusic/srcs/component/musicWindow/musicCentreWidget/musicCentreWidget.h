@@ -8,6 +8,7 @@
 
 #include "../../../interface/iAppResourceCore.h"
 
+class IMusicDataManage;
 class IMusicItemWidthInfo;
 class IMusicWidgetSizeInfo;
 class IMusicTitleWidget;
@@ -33,7 +34,7 @@ private:
 	IMusicFavoriteWidget *musicFavoriteWidget = nullptr;
 	IMusicListWidget *musicListWidget = nullptr;
 	IMusicTitleWidget *musicTitleWidget = nullptr;
-
+	IMusicDataManage* musicDataManage = nullptr;
 public:
 	MusicCentreWidget( MusicWindow *parent );
 	~MusicCentreWidget( ) override;
@@ -54,12 +55,14 @@ public:
 	virtual IMusicFavoriteWidget * getMusicFavoriteWidget( ) const;
 	virtual IMusicListWidget * getMusicListWidget( ) const;
 	virtual IMusicTitleWidget * getMusicTitleWidget( ) const;
+	virtual IMusicDataManage * getMusicDataManage( ) const;
 	virtual IMusicFavoriteMenu * getMusicFavoriteMenu( ) const;
 	virtual IMusicListMenu * getMusicListMenu( ) const;
 	virtual IMusicWidgetSizeInfo * getMusicWidgetSizeInfo( ) const;
 	virtual IMusicFavoriteWidget * setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget );
 	virtual IMusicListWidget * setMusicListWidget( IMusicListWidget *const music_list_widget );
 	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *const music_title_widget );
+	virtual IMusicDataManage * setMusicDataManage( IMusicDataManage *const music_data_manage );
 
 	virtual IMusicFavoriteWidget * removeMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget );
 	virtual IMusicListWidget * removeMusicListWidget( IMusicListWidget *const music_list_widget );

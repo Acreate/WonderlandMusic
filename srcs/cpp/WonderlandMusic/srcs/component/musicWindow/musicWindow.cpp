@@ -112,6 +112,12 @@ IMusicListWidget * MusicWindow::setMusicListWidget( IMusicListWidget *const musi
 IMusicTitleWidget * MusicWindow::setMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) {
 	return musicCentreWidget->setMusicTitleWidget( music_title_widget );
 }
+IMusicDataManage * MusicWindow::setMusicDataManage( IMusicDataManage *const music_data_manage ) {
+	return musicCentreWidget->setMusicDataManage( music_data_manage );
+}
+IMusicDataManage * MusicWindow::getMusicDataManage( ) const {
+	return musicCentreWidget->getMusicDataManage( );
+}
 QWidget * MusicWindow::toWidget( ) {
 	return this;
 }

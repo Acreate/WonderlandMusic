@@ -7,6 +7,7 @@
 #include "../../interface/iAppJsonData.h"
 #include "../../interface/iAppResourceCore.h"
 
+class IMusicDataManage;
 class IMusicItemWidthInfo;
 class IMusicWidgetSizeInfo;
 class IMusicFavoriteWidget;
@@ -53,6 +54,8 @@ public:
 	virtual IMusicFavoriteWidget * setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget );
 	virtual IMusicListWidget * setMusicListWidget( IMusicListWidget *const music_list_widget );
 	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *const music_title_widget );
+	virtual IMusicDataManage * setMusicDataManage( IMusicDataManage *const music_data_manage );
+	virtual IMusicDataManage * getMusicDataManage( ) const;
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

@@ -2,6 +2,7 @@
 
 #include <qfontmetrics.h>
 
+#include "../application/appInstance/applicationManage.h"
 #include "../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
 
 #include "../tools/instanceTools.h"
@@ -15,15 +16,32 @@ bool MusicWidgetSizeInfo::setMusicCentreWidget( MusicCentreWidget *music_centre_
 	return false;
 }
 int MusicWidgetSizeInfo::getFavoriteWidth( ) const {
+	QString defaultWidth = QObject::tr( "默认" );
 	auto appRenderImage = InstanceTools::getAppRenderImage( );
-	auto fontMetrics = appRenderImage->getFontMetrics( );
-	int horizontalAdvance = fontMetrics->horizontalAdvance( QObject::tr( "默认" ) );
-	return horizontalAdvance;
+	if( appRenderImage ) {
+		auto fontMetrics = appRenderImage->getFontMetrics( );
+		if( fontMetrics )
+			return fontMetrics->horizontalAdvance( defaultWidth );
+	}
+	auto applicationManage = InstanceTools::getApplicationManage( );
+	if( applicationManage == nullptr )
+		return 50;
+	auto metrics = applicationManage->fontMetrics( );
+	return metrics.horizontalAdvance( defaultWidth );
 }
 int MusicWidgetSizeInfo::getTitleHeight( ) const {
+	QString defaultWidth = QObject::tr( "默认" );
 	auto appRenderImage = InstanceTools::getAppRenderImage( );
-	auto fontMetrics = appRenderImage->getFontMetrics( );
-	return fontMetrics->height( );
+	if( appRenderImage ) {
+		auto fontMetrics = appRenderImage->getFontMetrics( );
+		if( fontMetrics )
+			return fontMetrics->height( );
+	}
+	auto applicationManage = InstanceTools::getApplicationManage( );
+	if( applicationManage == nullptr )
+		return 50;
+	auto metrics = applicationManage->fontMetrics( );
+	return metrics.height( );
 }
 bool MusicWidgetSizeInfo::updateMusicWidgetLayout( ) {
 	return false;

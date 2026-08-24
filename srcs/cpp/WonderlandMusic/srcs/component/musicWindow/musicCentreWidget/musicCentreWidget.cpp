@@ -53,7 +53,7 @@ bool MusicCentreWidget::deleteResource( ) {
 void MusicCentreWidget::resizeEvent( QResizeEvent *event ) {
 	QWidget::resizeEvent( event );
 
-	calculateSize( );
+	synchronizationChildrenWidgetSize( );
 }
 QScrollArea * MusicCentreWidget::createControlScrollArea( ) {
 	auto scrollArea = new QScrollArea( this );
@@ -89,7 +89,7 @@ bool MusicCentreWidget::initAfter( ) {
 	connect( scrollBar, &QScrollBar::valueChanged, horizontalScrollBar, &QScrollBar::setValue );
 	connect( scrollBar, &QScrollBar::rangeChanged, horizontalScrollBar, &QScrollBar::setRange );
 
-	calculateSize( );
+	synchronizationChildrenWidgetSize( );
 
 	musicListWidgetScrollArea->show( );
 	musicfavoriteWidgetScrollArea->show( );
@@ -97,32 +97,6 @@ bool MusicCentreWidget::initAfter( ) {
 	return true;
 }
 
-bool MusicCentreWidget::calculateSize( ) {
-	auto musicWidgetSizeInfo = getMusicWidgetSizeInfo( );
-	if( musicWidgetSizeInfo == nullptr )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, getMusicWidgetSizeInfo, tr( "找不到窗口大小组件" ) );
-	if( userMutex == nullptr )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, userMutex, tr( "锁未能确定指向有效对象" ) );
-	userMutex->lock( );
-	// 当前组件高度
-	int thisCentreHeight = this->height( );
-	if( thisCentreHeight > 0 ) {
-		// 当前组件宽度
-		int thisCentreWidthWidth = this->width( );
-		if( thisCentreWidthWidth > 0 ) {
-			int favoriteWidth = musicWidgetSizeInfo->getFavoriteWidth( );
-			int titleHeight = musicWidgetSizeInfo->getTitleHeight( );
-			musicfavoriteWidgetScrollArea->setGeometry( 0, 0, favoriteWidth, thisCentreHeight );
-			int modeWidth = thisCentreWidthWidth - favoriteWidth;
-			musicTitleWidgetScrollArea->setGeometry( favoriteWidth, 0, modeWidth, titleHeight );
-			int modHeight = thisCentreHeight - titleHeight;
-			musicListWidgetScrollArea->setGeometry( favoriteWidth, titleHeight, modeWidth, modHeight );
-			return userMutex->result_unlock( true );
-		}
-		return userMutex->result_unlock( Result_Var_Function_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "宽度失效:%1" ).arg(thisCentreWidthWidth ) ) );
-	}
-	return userMutex->result_unlock( Result_Var_Function_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "高度失效:%1" ).arg( thisCentreHeight ) ) );
-}
 bool MusicCentreWidget::getJsonData( QJsonObject &get_json_object ) const {
 	if( musicTitleWidget == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicTitleWidget, getJsonData, tr( "未配置组件" ) );
@@ -340,5 +314,28 @@ bool MusicCentreWidget::repaintMusicCentreWidget( ) {
 	return true;
 }
 bool MusicCentreWidget::synchronizationChildrenWidgetSize( ) {
-	return calculateSize( );
+	auto musicWidgetSizeInfo = getMusicWidgetSizeInfo( );
+	if( musicWidgetSizeInfo == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, getMusicWidgetSizeInfo, tr( "找不到窗口大小组件" ) );
+	if( userMutex == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, userMutex, tr( "锁未能确定指向有效对象" ) );
+	userMutex->lock( );
+	// 当前组件高度
+	int thisCentreHeight = this->height( );
+	if( thisCentreHeight > 0 ) {
+		// 当前组件宽度
+		int thisCentreWidthWidth = this->width( );
+		if( thisCentreWidthWidth > 0 ) {
+			int favoriteWidth = musicWidgetSizeInfo->getFavoriteWidth( );
+			int titleHeight = musicWidgetSizeInfo->getTitleHeight( );
+			musicfavoriteWidgetScrollArea->setGeometry( 0, 0, favoriteWidth, thisCentreHeight );
+			int modeWidth = thisCentreWidthWidth - favoriteWidth;
+			musicTitleWidgetScrollArea->setGeometry( favoriteWidth, 0, modeWidth, titleHeight );
+			int modHeight = thisCentreHeight - titleHeight;
+			musicListWidgetScrollArea->setGeometry( favoriteWidth, titleHeight, modeWidth, modHeight );
+			return userMutex->result_unlock( true );
+		}
+		return userMutex->result_unlock( Result_Var_Function_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "宽度失效:%1" ).arg(thisCentreWidthWidth ) ) );
+	}
+	return userMutex->result_unlock( Result_Var_Function_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "高度失效:%1" ).arg( thisCentreHeight ) ) );
 }

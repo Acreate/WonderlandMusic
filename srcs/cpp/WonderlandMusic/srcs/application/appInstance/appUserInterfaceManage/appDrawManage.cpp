@@ -41,7 +41,6 @@ bool AppDrawManage::init( ) {
 bool AppDrawManage::initBefore( ) {
 	deleteResource( );
 	appRenderImage = new AppRenderImage;
-
 	Before_Init_Resource_App_Core_Ptr( appRenderImage );
 	return true;
 }

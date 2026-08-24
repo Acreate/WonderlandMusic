@@ -46,7 +46,6 @@ protected:
 	virtual QScrollArea * createControlScrollArea( );
 
 public:
-	bool calculateSize( );
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;

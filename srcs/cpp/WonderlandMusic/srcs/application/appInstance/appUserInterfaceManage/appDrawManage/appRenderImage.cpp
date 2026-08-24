@@ -24,11 +24,11 @@ AppRenderImage::~AppRenderImage( ) {
 }
 
 bool AppRenderImage::initBefore( ) {
+	deleteResource( );
 	return true;
 }
 
 bool AppRenderImage::initAfter( ) {
-	deleteResource( );
 	return true;
 }
 
@@ -38,7 +38,6 @@ bool AppRenderImage::init( ) {
 	drawPen = new QPen( *drawPenColor );
 	font = new QFont( "Microsoft YaHei", 14 );
 	fontMetrics = new QFontMetrics( *font );
-
 	auto ttfFilePath = "./program/font/Alibaba/Alibaba-PuHuiTi-Medium.ttf";
 	// 使用外部字体，加载字体
 	int fontId = QFontDatabase::addApplicationFont( ttfFilePath );
@@ -66,16 +65,17 @@ const QFontMetrics * AppRenderImage::getFontMetrics( ) const {
 
 bool AppRenderImage::renderTxt( QImage &result_render_image, const QString &render_txt, const QFont &font, const QFontMetrics &font_metrics ) const {
 	int renderWidth = font_metrics.horizontalAdvance( render_txt );
-	auto buffImage = QImage( renderWidth, fontMetrics->height( ), QImage::Format_RGBA8888 );
+	int fontHeight = font_metrics.height( );
+	auto buffImage = QImage( renderWidth, fontHeight, QImage::Format_RGBA8888 );
 	if( buffImage.isNull( ) )
 		return false;
 	buffImage.fill( 0 );
 	QPainter painter;
 	painter.begin( &buffImage );
-	painter.fillRect( 0, 0, renderWidth, fontMetrics->height( ), *brackGroundColor );
+	painter.fillRect( 0, 0, renderWidth, fontHeight, *brackGroundColor );
 	painter.setPen( *drawPen );
 	painter.setFont( font );
-	painter.drawText( 0, fontMetrics->ascent( ), render_txt );
+	painter.drawText( 0, font_metrics.ascent( ), render_txt );
 	painter.end( );
 	result_render_image = buffImage;
 	return true;
@@ -83,7 +83,7 @@ bool AppRenderImage::renderTxt( QImage &result_render_image, const QString &rend
 bool AppRenderImage::getTxtSize( QSize &result_txt_size, const QString &render_txt, const QFontMetrics &font_metrics ) const {
 	if( render_txt.isEmpty( ) )
 		return false;
-	result_txt_size = QSize( font_metrics.horizontalAdvance( render_txt ), fontMetrics->height( ) );
+	result_txt_size = QSize( font_metrics.horizontalAdvance( render_txt ), font_metrics.height( ) );
 	return true;
 }
 bool AppRenderImage::renderTxt( QImage &result_render_image, const QString &render_txt ) const {

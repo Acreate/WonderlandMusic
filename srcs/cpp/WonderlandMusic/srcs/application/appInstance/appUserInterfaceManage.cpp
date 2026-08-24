@@ -10,14 +10,15 @@
 #include "../../head/release_macro.h"
 #include "../../head/result_message_out.h"
 
+#include "../../musicImpement/widget/musicFavoriteWidget.h"
+#include "../../musicImpement/widget/musicListWidget.h"
+#include "../../musicImpement/widget/musicTitleWidget.h"
+
 #include "../../systemTrayIcon/systemTrayIcon.h"
 
 #include "../../tools/pathTools.h"
 
 #include "../../widget/aboutWidget.h"
-#include "../../widget/musicFavoriteWidget.h"
-#include "../../widget/musicListWidget.h"
-#include "../../widget/musicTitleWidget.h"
 #include "../../widget/settingWidget.h"
 
 #include "../../window/mainWindow.h"
@@ -41,8 +42,6 @@ bool AppUserInterfaceManage::deleteResource( ) {
 
 	Delete_Resource_App_Core_Ptr( settingWidget );
 	Delete_Resource_App_Core_Ptr( aboutWidget );
-
-
 
 	Delete_Resource_App_Core_Ptr( systemTrayIcon );
 	Delete_Resource_App_Core_Ptr( appDrawManage );

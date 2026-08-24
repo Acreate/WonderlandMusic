@@ -11,12 +11,13 @@
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
+#include "../musicImpement/widget/musicFavoriteWidget.h"
+#include "../musicImpement/widget/musicListWidget.h"
+#include "../musicImpement/widget/musicTitleWidget.h"
+
 #include "../systemTrayIcon/systemTrayIcon.h"
 
 #include "../widget/aboutWidget.h"
-#include "../widget/musicFavoriteWidget.h"
-#include "../widget/musicListWidget.h"
-#include "../widget/musicTitleWidget.h"
 #include "../widget/settingWidget.h"
 
 #include "../window/mainWindow.h"

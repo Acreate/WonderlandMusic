@@ -2,9 +2,9 @@
 #define MUSICTITLEWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../component/musicWindow/interface/widget/iMusicTitleWidget.h"
+#include <component/musicWindow/interface/widget/iMusicTitleWidget.h>
 
-#include "../interface/iAppResourceCore.h"
+#include <interface/iAppResourceCore.h>
 
 class MusicTitleWidget : public QWidget, public IMusicTitleWidget, public IAppResourceCore {
 	Q_OBJECT;

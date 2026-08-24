@@ -2,9 +2,9 @@
 #define MUSICFAVORITEWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../component/musicWindow/interface/widget/iMusicFavoriteWidget.h"
+#include <component/musicWindow/interface/widget/iMusicFavoriteWidget.h>
 
-#include "../interface/iAppResourceCore.h"
+#include <interface/iAppResourceCore.h>
 
 class MusicFavoriteWidget : public QWidget, public IMusicFavoriteWidget, public IAppResourceCore {
 	Q_OBJECT;

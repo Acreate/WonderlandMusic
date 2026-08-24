@@ -5,15 +5,16 @@
 #include <QMediaPlayer>
 #include <qimage.h>
 
-#include "../application/appInstance/appDataManage/appMusicManage.h"
+#include <mutex/userMutex.h>
 
-#include "../dateTimeFormat/dateTimeFormat.h"
+#include <musicImpement/itemWidget/musicItemWidget.h>
 
-#include "../mutex/userMutex.h"
+#include <application/appInstance/appDataManage/appMusicManage.h>
 
-#include "../tools/pathTools.h"
+#include <dateTimeFormat/dateTimeFormat.h>
 
-#include "widget/musicItemWidget.h"
+#include <tools/pathTools.h>
+
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManage( app_music_manage ) {
 	musicItemWidget = new MusicItemWidget;
 	userMutex = new UserMutex;

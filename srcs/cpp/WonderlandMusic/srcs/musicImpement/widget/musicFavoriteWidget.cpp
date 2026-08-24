@@ -1,6 +1,7 @@
 ﻿#include "musicFavoriteWidget.h"
 
-#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
+#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
+
 MusicFavoriteWidget::MusicFavoriteWidget( ) {
 	appendTypeInfo( this );
 }

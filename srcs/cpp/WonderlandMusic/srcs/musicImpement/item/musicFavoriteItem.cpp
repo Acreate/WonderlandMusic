@@ -10,7 +10,7 @@
 
 #include <mutex/userMutex.h>
 
-#include <item/widget/musicFavoriteItemWidget.h>
+#include "../itemWidget/musicFavoriteItemWidget.h"
 
 bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );

@@ -2,9 +2,9 @@
 #define MUSICLISTWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../component/musicWindow/interface/widget/iMusicListWidget.h"
+#include <component/musicWindow/interface/widget/iMusicListWidget.h>
 
-#include "../interface/iAppResourceCore.h"
+#include <interface/iAppResourceCore.h>
 
 class MusicListWidget : public QWidget, public IMusicListWidget, public IAppResourceCore {
 	Q_OBJECT;

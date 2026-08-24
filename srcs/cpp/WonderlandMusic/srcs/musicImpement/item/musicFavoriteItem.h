@@ -1,7 +1,6 @@
 ﻿#ifndef MUSICFAVORITEITEM_H_H_HEAD__FILE__
 #define MUSICFAVORITEITEM_H_H_HEAD__FILE__
-
-#include "../component/musicWindow/interface/item/iMusicFavoriteItem.h"
+#include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
 
 class MusicFavoriteItemWidget;
 

@@ -11,11 +11,11 @@
 #include <head/release_macro.h>
 #include <head/result_message_out.h>
 
-#include <item/musicInfoItem.h>
-
 #include <mutex/userMutex.h>
 
 #include <tools/pathTools.h>
+
+#include <musicImpement/item/musicInfoItem.h>
 
 #include "appMusicManage/appMusicDecoder.h"
 

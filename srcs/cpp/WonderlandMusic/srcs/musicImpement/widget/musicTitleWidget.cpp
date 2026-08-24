@@ -1,6 +1,7 @@
 ﻿#include "musicTitleWidget.h"
 
-#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
+#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
+
 MusicTitleWidget::MusicTitleWidget( ) {
 	appendTypeInfo( this );
 }

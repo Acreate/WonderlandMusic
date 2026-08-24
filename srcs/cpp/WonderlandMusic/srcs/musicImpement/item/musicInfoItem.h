@@ -1,9 +1,7 @@
 ﻿#ifndef MUSICINFOITEM_H_H_HEAD__FILE__
 #define MUSICINFOITEM_H_H_HEAD__FILE__
 
-#include <qtypes.h>
-
-#include "../component/musicWindow/interface/item/iMusicItem.h"
+#include <component/musicWindow/interface/item/iMusicItem.h>
 
 class MusicItemWidget;
 class QMediaPlayer;
@@ -25,7 +23,8 @@ protected:
 	QMediaPlayer *mediaPlayer = nullptr;
 	AppMusicManage *appMusicManage;
 	MusicCentreWidget *musicCentreWidget = nullptr;
-	MusicItemWidget* musicItemWidget = nullptr;
+	MusicItemWidget *musicItemWidget = nullptr;
+
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
 

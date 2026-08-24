@@ -8,6 +8,11 @@ class QString;
 class QImage;
 
 class IMusicFavoriteItem : public IMusicCentreWidgetChild {
+protected:
+	virtual bool setMusicFavoriteItemWidgetBindMusicFavoriteItem( );
+	virtual bool setMusicFavoriteItemWidgetMusicCentreWidget( );
+	virtual bool setMusicItemMusicCentreWidget( );
+
 public:
 	IMusicFavoriteItem( );
 	virtual bool getName( QString &result_name ) const = 0;
@@ -23,8 +28,6 @@ public:
 	virtual bool fromSingerGetFirstMusicItem( IMusicItem * &result_music_item, const QString &singer ) = 0;
 	virtual size_t getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const = 0;
 	virtual IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const = 0;
-	virtual bool setMusicFavoriteItemWidgetMusicCentreWidget( MusicCentreWidget *music_centre_widget );
-	virtual bool setMusicItemMusicCentreWidget( MusicCentreWidget *music_centre_widget );
 };
 
 #endif // IMUSICFAVORITEITEM_H_H_HEAD__FILE__

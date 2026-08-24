@@ -100,6 +100,8 @@ bool MusicInfoItem::isLoadedOver( ) {
 bool MusicInfoItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	userMutex->lock( );
 	musicCentreWidget = music_centre_widget;
+	setMusicItemWidgetMusicCentreWidget( );
+	setMusicItemWidgetBindMusicItem( );
 	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getElapsedTimeString( QString &result_elapsed_time_string ) const {

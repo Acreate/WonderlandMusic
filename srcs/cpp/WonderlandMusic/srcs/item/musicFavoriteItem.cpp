@@ -2,20 +2,22 @@
 
 #include <qimage.h>
 
-#include "../application/appInstance/appDataManage.h"
+#include <application/appInstance/appDataManage.h>
 
-#include "../component/musicWindow/interface/item/iMusicItem.h"
-#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
+#include <component/musicWindow/interface/item/iMusicItem.h>
 
-#include "../mutex/userMutex.h"
+#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 
-#include "widget/musicFavoriteItemWidget.h"
+#include <mutex/userMutex.h>
+
+#include <item/widget/musicFavoriteItemWidget.h>
 
 bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicCentreWidget = music_centre_widget;
-	setMusicFavoriteItemWidgetMusicCentreWidget( music_centre_widget );
-	setMusicItemMusicCentreWidget( music_centre_widget );
+	setMusicFavoriteItemWidgetMusicCentreWidget( );
+	setMusicItemMusicCentreWidget( );
+	setMusicFavoriteItemWidgetBindMusicFavoriteItem( );
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
@@ -47,48 +49,56 @@ bool MusicFavoriteItem::update( ) {
 	return true;
 }
 bool MusicFavoriteItem::fromIndexGetMusicItem( IMusicItem *&result_music_item_vector, const size_t &result_count ) {
-	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) ->bool {
-		return true;
+	bool result = true;
+	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
 	} );
+	return result;
 }
 bool MusicFavoriteItem::fromMusicItemGetIndex( size_t &result_index, const IMusicItem *music_item ) {
-	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
-		return true;
+	bool result = true;
+	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
 	} );
+	return result;
 }
 bool MusicFavoriteItem::fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) {
-	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
-		return true;
+	bool result = true;
+	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
 	} );
+	return result;
 }
 bool MusicFavoriteItem::fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) {
-	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
-		return true;
+	bool result = true;
+	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
 	} );
+	return result;
 }
 bool MusicFavoriteItem::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) {
-	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
-		return true;
+	bool result = true;
+	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
 	} );
+	return result;
 }
 bool MusicFavoriteItem::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) {
-	return musicFavoriteItemUserMutex->auto_job< bool >( []( ) {
-		return true;
+	bool result = true;
+	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
 	} );
+	return result;
 }
 size_t MusicFavoriteItem::getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const {
-	return musicFavoriteItemUserMutex->auto_job< size_t >( [this, &result_clone_vector]( ) {
-		size_t resultCount = musicItemVector.size( );
-		result_clone_vector.resize( resultCount );
-		if( resultCount == 0 )
-			return resultCount;
+	size_t result = 0;
+	musicFavoriteItemUserMutex->auto_job( [&result, this, &result_clone_vector]( ) {
+		result = musicItemVector.size( );
+		result_clone_vector.resize( result );
+		if( result == 0 )
+			return;
 		auto source = musicItemVector.data( );
 		auto dest = result_clone_vector.data( );
 		size_t index = 0;
-		for( ; index < resultCount; index += 1 )
+		for( ; index < result; index += 1 )
 			dest[ index ] = source[ index ];
-		return resultCount;
+		return;
 	} );
+	return result;
 }
 void MusicFavoriteItem::setName( const QString &name ) {
 	this->name = name;

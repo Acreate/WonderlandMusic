@@ -51,11 +51,6 @@ public:
 		lock( source_location );
 		return result;
 	}
-	template< typename TResult_Type >
-	const TResult_Type & auto_job( const std::function< const TResult_Type &( ) > &&job, const std::source_location &source_location = std::source_location::current( ) ) {
-		lock( source_location );
-		return result_unlock( job( ), source_location );
-	}
 
 	void auto_job( const std::function< void( ) > &&job, const std::source_location &source_location = std::source_location::current( ) ) {
 		lock( source_location );

@@ -4,9 +4,16 @@
 IMusicItem::IMusicItem( ) {
 	appendTypeInfo( this );
 }
-bool IMusicItem::setMusicItemWidgetMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool IMusicItem::setMusicItemWidgetMusicCentreWidget( ) {
 	auto musicItemWidget = getMusicItemWidget( );
 	if( musicItemWidget == nullptr )
 		return false;
-	return musicItemWidget->setMusicCentreWidget( music_centre_widget );
+	auto musicCentreWidget = getMusicCentreWidget( );
+	return musicItemWidget->setMusicCentreWidget( musicCentreWidget );
+}
+bool IMusicItem::setMusicItemWidgetBindMusicItem( ) {
+	auto musicItemWidget = getMusicItemWidget( );
+	if( musicItemWidget == nullptr )
+		return false;
+	return musicItemWidget->setBindMusicItem( this );
 }

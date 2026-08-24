@@ -9,7 +9,7 @@ class MusicItemWidget : public QWidget, public IMusicItemWidget {
 
 private:
 	MusicCentreWidget *musicCentreWidget = nullptr;
-
+	IMusicItem* musicItem = nullptr;
 public:
 	MusicItemWidget( );
 	~MusicItemWidget( ) override;
@@ -22,6 +22,12 @@ public:
 	bool mousePress( const QMouseEvent &mouse_event ) const override;
 	bool mouseRelease( const QMouseEvent &mouse_event ) const override;
 	bool drawWidget( ) override;
+
+protected:
+	bool setBindMusicItem( IMusicItem *music_item ) override;
+
+public:
+	IMusicItem * getBindMusicItem( ) const override;
 };
 
 #endif // MUSICITEMWIDGET_H_H_HEAD__FILE__

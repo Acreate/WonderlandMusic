@@ -9,6 +9,10 @@ class QString;
 class IMusicItem : public IMusicCentreWidgetChild {
 	friend class IMusicFavoriteItem;
 
+protected:
+	virtual bool setMusicItemWidgetMusicCentreWidget( );
+	virtual bool setMusicItemWidgetBindMusicItem( );
+
 public:
 	IMusicItem( );
 	virtual bool isLoadedOver( ) = 0;
@@ -19,7 +23,6 @@ public:
 	virtual bool getElapsedTime( size_t &result_elapsed_time ) const = 0;
 	virtual bool getElapsedTimeString( QString &result_elapsed_time_string ) const = 0;
 	virtual IMusicItemWidget * getMusicItemWidget( ) const = 0;
-	virtual bool setMusicItemWidgetMusicCentreWidget( MusicCentreWidget *music_centre_widget );
 };
 
 #endif // IMUSICITEM_H_H_HEAD__FILE__

@@ -3,10 +3,13 @@
 #include "../../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 MusicItemWidget::MusicItemWidget( ) {
 	appendTypeInfo( this );
+	hide( );
 }
 MusicItemWidget::~MusicItemWidget( ) {
 }
 bool MusicItemWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+	if( music_centre_widget == nullptr )
+		hide( );
 	setParent( music_centre_widget );
 	musicCentreWidget = music_centre_widget;
 	return true;
@@ -22,4 +25,11 @@ bool MusicItemWidget::mouseRelease( const QMouseEvent &mouse_event ) const {
 }
 bool MusicItemWidget::drawWidget( ) {
 	return false;
+}
+bool MusicItemWidget::setBindMusicItem( IMusicItem *music_item ) {
+	musicItem = music_item;
+	return true;
+}
+IMusicItem * MusicItemWidget::getBindMusicItem( ) const {
+	return musicItem;
 }

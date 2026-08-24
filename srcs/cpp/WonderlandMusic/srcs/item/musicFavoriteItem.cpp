@@ -4,13 +4,18 @@
 
 #include "../application/appInstance/appDataManage.h"
 
+#include "../component/musicWindow/interface/item/iMusicItem.h"
 #include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 
 #include "../mutex/userMutex.h"
 
+#include "widget/musicFavoriteItemWidget.h"
+
 bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicCentreWidget = music_centre_widget;
+	setMusicFavoriteItemWidgetMusicCentreWidget( music_centre_widget );
+	setMusicItemMusicCentreWidget( music_centre_widget );
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
@@ -87,6 +92,12 @@ size_t MusicFavoriteItem::getMusicVectorClone( std::vector< IMusicItem * > &resu
 }
 void MusicFavoriteItem::setName( const QString &name ) {
 	this->name = name;
+}
+MusicCentreWidget * MusicFavoriteItem::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
+}
+IMusicFavoriteItemWidget * MusicFavoriteItem::getMusicFavoriteItemWidget( ) const {
+	return musicFavoriteItemWidget;
 }
 MusicFavoriteItem::MusicFavoriteItem( ) {
 	appendTypeInfo( this );

@@ -11,6 +11,8 @@ protected:
 	virtual bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) = 0;
 
 public:
+	IMusicCentreWidgetChild( );
+	~IMusicCentreWidgetChild( ) override;
 	virtual MusicCentreWidget * getMusicCentreWidget( ) const = 0;
 };
 

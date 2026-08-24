@@ -5,6 +5,7 @@
 
 #include "../component/musicWindow/interface/item/iMusicItem.h"
 
+class MusicItemWidget;
 class QMediaPlayer;
 
 class MusicInfoItem : public QObject, public IMusicItem {
@@ -24,7 +25,7 @@ protected:
 	QMediaPlayer *mediaPlayer = nullptr;
 	AppMusicManage *appMusicManage;
 	MusicCentreWidget *musicCentreWidget = nullptr;
-
+	MusicItemWidget* musicItemWidget = nullptr;
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
 
@@ -46,6 +47,7 @@ public:
 	virtual void setElapsedTime( const qint64 elapsed_time );
 	virtual void setLoadedOver( const bool loaded_over );
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicItemWidget * getMusicItemWidget( ) const override;
 };
 
 #endif // MUSICINFOITEM_H_H_HEAD__FILE__

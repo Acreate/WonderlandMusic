@@ -2,6 +2,7 @@
 #define IMUSICFAVORITEITEM_H_H_HEAD__FILE__
 #include "../musicCentreWidgetChild/iMusicCentreWidgetChild.h"
 
+class IMusicFavoriteItemWidget;
 class IMusicItem;
 class QString;
 class QImage;
@@ -21,6 +22,9 @@ public:
 	virtual bool fromFileAbsPathGetFirstMusicItem( IMusicItem * &result_music_item, const QString &path ) = 0;
 	virtual bool fromSingerGetFirstMusicItem( IMusicItem * &result_music_item, const QString &singer ) = 0;
 	virtual size_t getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const = 0;
+	virtual IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const = 0;
+	virtual bool setMusicFavoriteItemWidgetMusicCentreWidget( MusicCentreWidget *music_centre_widget );
+	virtual bool setMusicItemMusicCentreWidget( MusicCentreWidget *music_centre_widget );
 };
 
 #endif // IMUSICFAVORITEITEM_H_H_HEAD__FILE__

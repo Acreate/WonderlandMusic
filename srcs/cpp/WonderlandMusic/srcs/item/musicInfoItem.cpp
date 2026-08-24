@@ -12,7 +12,10 @@
 #include "../mutex/userMutex.h"
 
 #include "../tools/pathTools.h"
+
+#include "widget/musicItemWidget.h"
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManage( app_music_manage ) {
+	musicItemWidget = new MusicItemWidget;
 	userMutex = new UserMutex;
 	if( appMusicManage == nullptr ) {
 		deleteLater( );
@@ -22,6 +25,7 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManag
 	appendTypeInfo( this );
 }
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path ) : appMusicManage( app_music_manage ) {
+	musicItemWidget = new MusicItemWidget;
 	userMutex = new UserMutex;
 	QFileInfo fileInfo( disk_file_path );
 	if( appMusicManage == nullptr || fileInfo.exists( ) == false ) {
@@ -84,6 +88,7 @@ MusicInfoItem::~MusicInfoItem( ) {
 	if( mediaPlayer )
 		delete mediaPlayer;
 	mediaPlayer = nullptr;
+	delete musicItemWidget;
 	userMutex->unlock( );
 	delete userMutex;
 	userMutex = nullptr;
@@ -164,4 +169,7 @@ void MusicInfoItem::setLoadedOver( const bool loaded_over ) {
 }
 MusicCentreWidget * MusicInfoItem::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
+}
+IMusicItemWidget * MusicInfoItem::getMusicItemWidget( ) const {
+	return musicItemWidget;
 }

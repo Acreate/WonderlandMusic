@@ -17,6 +17,8 @@
 
 #include <musicImpement/item/musicInfoItem.h>
 
+#include "../../../musicImpement/item/musicFavoriteItem.h"
+
 #include "appMusicManage/appMusicDecoder.h"
 
 class IMusicFavoriteItem;
@@ -160,14 +162,16 @@ bool AppMusicManage::clear( ) {
 	userMutex->unlock( );
 	return result;
 }
-bool AppMusicManage::getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector<IMusicFavoriteItem *> &result_music_favorite_item ) const {
+bool AppMusicManage::getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const {
 	return false;
 }
-bool AppMusicManage::setCurrentSelectFavoriteItem( const IMusicFavoriteItem *set_select_music_favorite_item ) {
-	return false;
+bool AppMusicManage::setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) {
+	currenstFavoriteItem = set_select_music_favorite_item;
+	return true;
 }
 bool AppMusicManage::getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const {
-	return false;
+	result_current_select_music_favorite_item = currenstFavoriteItem;
+	return true;
 }
 const IMusicItemWidthInfo & AppMusicManage::getMusicItemWidthInfo( ) const {
 	return *musicItemWidthInfo;
@@ -185,7 +189,8 @@ MusicCentreWidget * AppMusicManage::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 bool AppMusicManage::getDefaultMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const {
-	return false;
+	result_default_music_favorite_item = defaultFavoriteItem;
+	return true;
 }
 bool AppMusicManage::getIndexMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &index ) const {
 	return false;
@@ -195,9 +200,6 @@ bool AppMusicManage::getPosYMusicFavoriteItem( IMusicFavoriteItem *&result_defau
 }
 bool AppMusicManage::getNameMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const QString &music_favorite_name ) const {
 	return false;
-}
-size_t AppMusicManage::getMusicNameVector( QString &result_default_music_favorite_name, std::vector< QString > &result_music_favorite_name_vector ) const {
-	return 0;
 }
 size_t AppMusicManage::findMusicItemAtFavoriteItem( const IMusicItem *music_item, std::vector< IMusicFavoriteItem * > &result_find_favorite_vector ) const {
 	return 0;

@@ -108,6 +108,8 @@ IMusicFavoriteItemWidget * MusicFavoriteItem::getMusicFavoriteItemWidget( ) cons
 MusicFavoriteItem::MusicFavoriteItem( ) {
 	appendTypeInfo( this );
 	musicFavoriteItemUserMutex = new UserMutex;
+	musicFavoriteItemWidget = new MusicFavoriteItemWidget;
+	bindMusicFavoriteItem( musicFavoriteItemWidget, this );
 }
 MusicFavoriteItem::~MusicFavoriteItem( ) {
 	musicFavoriteItemUserMutex->lock( );

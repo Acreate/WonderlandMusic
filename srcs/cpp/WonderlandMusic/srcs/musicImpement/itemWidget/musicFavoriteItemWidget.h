@@ -9,8 +9,9 @@ class MusicFavoriteItemWidget : public QWidget, public IMusicFavoriteItemWidget 
 
 private:
 	MusicCentreWidget *musicCentreWidget = nullptr;
-	IMusicFavoriteItem* musicFavoriteItem = nullptr;
-	IMusicFavoriteWidget* musicFavoriteWidget = nullptr;
+	IMusicFavoriteItem *musicFavoriteItem = nullptr;
+	IMusicFavoriteWidget *musicFavoriteWidget = nullptr;
+	QLabel* nameLabel = nullptr;
 public:
 	MusicFavoriteItemWidget( );
 	~MusicFavoriteItemWidget( ) override;

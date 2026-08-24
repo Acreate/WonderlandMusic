@@ -2,15 +2,20 @@
 #define MUSICITEMWIDGET_H_H_HEAD__FILE__
 #include <QWidget>
 
-#include "../../component/musicWindow/interface/ItemWidget/iMusicItemWidget.h"
+#include <component/musicWindow/interface/ItemWidget/iMusicItemWidget.h>
 
 class MusicItemWidget : public QWidget, public IMusicItemWidget {
 	Q_OBJECT;
 
 private:
 	MusicCentreWidget *musicCentreWidget = nullptr;
-	IMusicItem* musicItem = nullptr;
-	IMusicListWidget * musicListWidget = nullptr;
+	IMusicItem *musicItem = nullptr;
+	IMusicListWidget *musicListWidget = nullptr;
+	QLabel *idLabel = nullptr;
+	QLabel *nameLabel = nullptr;
+	QLabel *singerLabel = nullptr;
+	QLabel *elapsedTimeLabel = nullptr;
+
 public:
 	MusicItemWidget( );
 	~MusicItemWidget( ) override;
@@ -25,6 +30,7 @@ public:
 
 protected:
 	bool bindMusicItem( IMusicItem *music_item ) override;
+	void paintEvent( QPaintEvent *event ) override;
 
 public:
 	IMusicItem * getBindMusicItem( ) const override;

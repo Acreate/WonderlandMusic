@@ -17,6 +17,7 @@
 
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManage( app_music_manage ) {
 	musicItemWidget = new MusicItemWidget;
+	binMusicItemWidget( musicItemWidget, this );
 	userMutex = new UserMutex;
 	if( appMusicManage == nullptr ) {
 		deleteLater( );
@@ -27,6 +28,7 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManag
 }
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path ) : appMusicManage( app_music_manage ) {
 	musicItemWidget = new MusicItemWidget;
+	binMusicItemWidget( musicItemWidget, this );
 	userMutex = new UserMutex;
 	QFileInfo fileInfo( disk_file_path );
 	if( appMusicManage == nullptr || fileInfo.exists( ) == false ) {

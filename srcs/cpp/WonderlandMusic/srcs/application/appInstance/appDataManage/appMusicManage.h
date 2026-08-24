@@ -24,8 +24,10 @@ protected:
 	UserMutex *userMutex = nullptr;
 	AppMusicDecoder *appMusicDecoder = nullptr;
 	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
-	std::vector< MusicInfoItem * > musicItemVector;
-	std::vector< MusicFavoriteItem * > musicFavoriteItemVector;
+	std::vector< IMusicItem * > musicItemVector;
+	std::vector< IMusicFavoriteItem * > musicFavoriteItemVector;
+	IMusicFavoriteItem *currenstFavoriteItem = nullptr;
+	IMusicFavoriteItem *defaultFavoriteItem = nullptr;
 	MusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
@@ -72,15 +74,14 @@ public:
 	bool getIndexMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &index ) const override;
 	bool getPosYMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &pos_x ) const override;
 	bool getNameMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const QString &music_favorite_name ) const override;
-	size_t getMusicNameVector( QString &result_default_music_favorite_name, std::vector< QString > &result_music_favorite_name_vector ) const override;
 	size_t findMusicItemAtFavoriteItem( const IMusicItem *music_item, std::vector< IMusicFavoriteItem * > &result_find_favorite_vector ) const override;
 	size_t findNameAtMusicItem( const QString &music_name, std::vector< IMusicItem * > &result_find_music_vector ) const override;
 	size_t findSingerAtMusicItem( const QString &music_singer, std::vector< IMusicItem * > &result_find_music_vector ) const override;
 	size_t findFileAtMusicItem( const QString &file_path, std::vector< IMusicItem * > &result_find_music_vector ) const override;
 	bool initDefaultMusicFavoriteItem( ) override;
 	bool clear( ) override;
-	bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector<IMusicFavoriteItem *> &result_music_favorite_item ) const override;
-	bool setCurrentSelectFavoriteItem( const IMusicFavoriteItem *set_select_music_favorite_item ) override;
+	bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const override;
+	bool setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) override;
 	bool getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const override;
 };
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

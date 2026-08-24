@@ -10,6 +10,7 @@ class MusicFavoriteItemWidget : public QWidget, public IMusicFavoriteItemWidget 
 private:
 	MusicCentreWidget *musicCentreWidget = nullptr;
 	IMusicFavoriteItem* musicFavoriteItem = nullptr;
+	IMusicFavoriteWidget* musicFavoriteWidget = nullptr;
 public:
 	MusicFavoriteItemWidget( );
 	~MusicFavoriteItemWidget( ) override;
@@ -19,15 +20,20 @@ protected:
 
 public:
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
-	bool mousePress( const QMouseEvent &mouse_event ) const override;
-	bool mouseRelease( const QMouseEvent &mouse_event ) const override;
-	bool drawWidget( ) override;
+	bool updateLayout( ) override;
 
 protected:
 	bool setBindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
 
 public:
 	IMusicFavoriteItem * getBindMusicFavoriteItem( ) const override;
+
+protected:
+	bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) override;
+
+public:
+	QImage * getDrawBuff( ) override;
+	IMusicFavoriteWidget * getMusicFavoriteWidget( ) const override;
 };
 
 #endif // MUSICFAVORITEITEMWIDGET_H_H_HEAD__FILE__

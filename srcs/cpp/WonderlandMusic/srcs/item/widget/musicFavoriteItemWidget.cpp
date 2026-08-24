@@ -2,6 +2,8 @@
 
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 #include <QMouseEvent>
+
+#include "../../component/musicWindow/interface/widget/iMusicFavoriteWidget.h"
 MusicFavoriteItemWidget::MusicFavoriteItemWidget( ) {
 	appendTypeInfo( this );
 	hide( );
@@ -18,33 +20,7 @@ bool MusicFavoriteItemWidget::setMusicCentreWidget( MusicCentreWidget *music_cen
 MusicCentreWidget * MusicFavoriteItemWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
-bool MusicFavoriteItemWidget::mousePress( const QMouseEvent &mouse_event ) const {
-	auto mouseButton = mouse_event.button( );
-	switch( mouseButton ) {
-		case Qt::LeftButton :
-			if( geometry( ).contains( mouse_event.pos( ) ) == false )
-				return false;
-			return true;
-			break;
-		default :
-			return false;
-	}
-	return false;
-}
-bool MusicFavoriteItemWidget::mouseRelease( const QMouseEvent &mouse_event ) const {
-	auto mouseButton = mouse_event.button( );
-	switch( mouseButton ) {
-		case Qt::LeftButton :
-			if( geometry( ).contains( mouse_event.pos( ) ) == false )
-				return false;
-			return true;
-			break;
-		default :
-			return false;
-	}
-	return false;
-}
-bool MusicFavoriteItemWidget::drawWidget( ) {
+bool MusicFavoriteItemWidget::updateLayout( ) {
 	repaint( );
 	return true;
 }
@@ -54,4 +30,23 @@ bool MusicFavoriteItemWidget::setBindMusicFavoriteItem( IMusicFavoriteItem *musi
 }
 IMusicFavoriteItem * MusicFavoriteItemWidget::getBindMusicFavoriteItem( ) const {
 	return musicFavoriteItem;
+}
+bool MusicFavoriteItemWidget::setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) {
+	musicFavoriteWidget = music_favorite_widget;
+	QWidget *widget = nullptr;
+	if( music_favorite_widget == nullptr )
+		hide( );
+	else {
+		widget = music_favorite_widget->toWidget( );
+		if( widget == nullptr )
+			hide( );
+	}
+	setParent( widget );
+	return false;
+}
+QImage * MusicFavoriteItemWidget::getDrawBuff( ) {
+	return nullptr;
+}
+IMusicFavoriteWidget * MusicFavoriteItemWidget::getMusicFavoriteWidget( ) const {
+	return musicFavoriteWidget;
 }

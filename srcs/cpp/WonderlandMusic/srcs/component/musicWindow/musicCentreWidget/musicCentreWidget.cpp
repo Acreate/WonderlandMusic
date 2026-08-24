@@ -198,7 +198,7 @@ IMusicDataManage * MusicCentreWidget::setMusicDataManage( IMusicDataManage *cons
 		return Result_Var_Function_Messag_Ptr_Out_Args( musicDataManage, musicDataManage, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 	auto old = musicDataManage;
 	musicDataManage = music_data_manage;
-	repaintFavoriteWidget( );
+	repaintMusicCentreWidget( );
 	return old;
 }
 IMusicFavoriteMenu * MusicCentreWidget::getMusicFavoriteMenu( ) const {
@@ -231,6 +231,7 @@ IMusicFavoriteWidget * MusicCentreWidget::setMusicFavoriteWidget( IMusicFavorite
 	this->musicFavoriteWidget = music_favorite_widget;
 	musicfavoriteWidgetScrollArea->takeWidget( );
 	musicfavoriteWidgetScrollArea->setWidget( widget );
+	repaintFavoriteWidget( );
 	return old;
 }
 IMusicListWidget * MusicCentreWidget::setMusicListWidget( IMusicListWidget *const music_list_widget ) {
@@ -330,6 +331,12 @@ bool MusicCentreWidget::repaintTitleWidget( ) {
 	return true;
 }
 bool MusicCentreWidget::repaintFavoriteWidget( ) {
+	return true;
+}
+bool MusicCentreWidget::repaintMusicCentreWidget( ) {
+	repaintTitleWidget( );
+	repaintListWidget( );
+	repaintFavoriteWidget( );
 	return true;
 }
 bool MusicCentreWidget::synchronizationChildrenWidgetSize( ) {

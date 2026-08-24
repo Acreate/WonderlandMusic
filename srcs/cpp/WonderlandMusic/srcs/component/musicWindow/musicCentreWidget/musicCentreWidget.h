@@ -34,7 +34,8 @@ private:
 	IMusicFavoriteWidget *musicFavoriteWidget = nullptr;
 	IMusicListWidget *musicListWidget = nullptr;
 	IMusicTitleWidget *musicTitleWidget = nullptr;
-	IMusicDataManage* musicDataManage = nullptr;
+	IMusicDataManage *musicDataManage = nullptr;
+
 public:
 	MusicCentreWidget( MusicWindow *parent );
 	~MusicCentreWidget( ) override;
@@ -71,6 +72,7 @@ public:
 	virtual bool repaintListWidget( );
 	virtual bool repaintTitleWidget( );
 	virtual bool repaintFavoriteWidget( );
+	virtual bool repaintMusicCentreWidget( );
 	virtual bool synchronizationChildrenWidgetSize( );
 };
 

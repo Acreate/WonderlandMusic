@@ -8,20 +8,19 @@
 IMusicFavoriteItem::IMusicFavoriteItem( ) {
 	appendTypeInfo( this );
 }
-bool IMusicFavoriteItem::setMusicFavoriteItemWidgetBindMusicFavoriteItem( ) {
+bool IMusicFavoriteItem::setMusicFavoriteItemWidgetBindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) {
 	auto musicFavoriteItemWidget = getMusicFavoriteItemWidget( );
 	if( musicFavoriteItemWidget == nullptr )
 		return false;
-	return musicFavoriteItemWidget->setBindMusicFavoriteItem( this );
+	return musicFavoriteItemWidget->setBindMusicFavoriteItem( music_favorite_item );
 }
-bool IMusicFavoriteItem::setMusicFavoriteItemWidgetMusicCentreWidget( ) {
+bool IMusicFavoriteItem::setMusicFavoriteItemWidgetMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	auto widget = getMusicFavoriteItemWidget( );
 	if( widget == nullptr )
 		return false;
-	auto musicCentreWidget = getMusicCentreWidget( );
-	return widget->setMusicCentreWidget( musicCentreWidget );
+	return widget->setMusicCentreWidget( music_centre_widget );
 }
-bool IMusicFavoriteItem::setMusicItemMusicCentreWidget( ) {
+bool IMusicFavoriteItem::setMusicItemMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	std::vector< IMusicItem * > result;
 	size_t size = getMusicVectorClone( result );
 	if( size == 0 )

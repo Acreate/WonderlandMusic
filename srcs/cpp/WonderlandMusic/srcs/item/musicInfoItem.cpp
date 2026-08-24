@@ -88,7 +88,8 @@ MusicInfoItem::~MusicInfoItem( ) {
 	if( mediaPlayer )
 		delete mediaPlayer;
 	mediaPlayer = nullptr;
-	delete musicItemWidget;
+	if( musicItemWidget )
+		delete musicItemWidget;
 	userMutex->unlock( );
 	delete userMutex;
 	userMutex = nullptr;
@@ -100,8 +101,8 @@ bool MusicInfoItem::isLoadedOver( ) {
 bool MusicInfoItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	userMutex->lock( );
 	musicCentreWidget = music_centre_widget;
-	setMusicItemWidgetMusicCentreWidget( );
-	setMusicItemWidgetBindMusicItem( );
+	setMusicItemWidgetMusicCentreWidget( musicCentreWidget );
+	setMusicItemWidgetBindMusicItem( this );
 	return userMutex->result_unlock( true );
 }
 bool MusicInfoItem::getElapsedTimeString( QString &result_elapsed_time_string ) const {

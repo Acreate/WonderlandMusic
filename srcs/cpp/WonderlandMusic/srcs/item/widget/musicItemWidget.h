@@ -10,6 +10,7 @@ class MusicItemWidget : public QWidget, public IMusicItemWidget {
 private:
 	MusicCentreWidget *musicCentreWidget = nullptr;
 	IMusicItem* musicItem = nullptr;
+	IMusicListWidget * musicListWidget = nullptr;
 public:
 	MusicItemWidget( );
 	~MusicItemWidget( ) override;
@@ -19,15 +20,20 @@ protected:
 
 public:
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
-	bool mousePress( const QMouseEvent &mouse_event ) const override;
-	bool mouseRelease( const QMouseEvent &mouse_event ) const override;
-	bool drawWidget( ) override;
+	bool updateLayout( ) override;
 
 protected:
 	bool setBindMusicItem( IMusicItem *music_item ) override;
 
 public:
 	IMusicItem * getBindMusicItem( ) const override;
+	QImage * getDrawBuff( ) override;
+
+protected:
+	bool setMusicListWidget( IMusicListWidget *music_list_widget ) override;
+
+public:
+	IMusicListWidget * getMusicListWidget( ) const override;
 };
 
 #endif // MUSICITEMWIDGET_H_H_HEAD__FILE__

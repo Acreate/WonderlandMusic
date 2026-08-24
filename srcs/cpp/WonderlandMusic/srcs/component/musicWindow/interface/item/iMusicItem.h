@@ -10,8 +10,7 @@ class IMusicItem : public IMusicCentreWidgetChild {
 	friend class IMusicFavoriteItem;
 
 protected:
-	virtual bool setMusicItemWidgetMusicCentreWidget( MusicCentreWidget *music_centre_widget );
-	virtual bool setMusicItemWidgetBindMusicItem( IMusicItem *music_item );
+	static bool binMusicItemWidget( IMusicItemWidget *bind_target, IMusicItem *bind_source );
 
 public:
 	IMusicItem( );

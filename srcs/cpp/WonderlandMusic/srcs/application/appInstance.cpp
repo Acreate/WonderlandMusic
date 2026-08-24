@@ -145,7 +145,10 @@ bool AppInstance::initAfter( ) {
 
 	auto mainWindow = appUserInterfaceManage->getMainWindow( );
 	mainWindow->setCentralWidget( optionWindow );
-
+	if( musicWindow->repaintMusicCentreWidget( ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWindow, repaintMusicCentreWidget, tr( "刷新音频组件失败" ) );
+	if( musicWindow->synchronizationChildrenWidgetSize( ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWindow, synchronizationChildrenWidgetSize, tr( "调整音频组件失败" ) );
 	return true;
 }
 

@@ -28,7 +28,6 @@ public:
 	bool initAfter( ) override;
 
 	QWidget * toWidget( ) override;
-	bool drawWidgeTarget( QWidget *widget ) override;
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicFavoriteItem * getCurrentMusicFavoriteItem( ) const override;
 	bool setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
@@ -38,6 +37,7 @@ public:
 	bool fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) override;
 	bool fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) override;
 	bool fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) override;
+	bool autoLayout( ) override;
 };
 
 #endif // MUSICLISTWIDGET_H_H_HEAD__FILE__

@@ -9,9 +9,7 @@ class QImage;
 
 class IMusicFavoriteItem : public IMusicCentreWidgetChild {
 protected:
-	virtual bool setMusicFavoriteItemWidgetBindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item );
-	virtual bool setMusicFavoriteItemWidgetMusicCentreWidget( MusicCentreWidget *music_centre_widget );
-	virtual bool setMusicItemMusicCentreWidget( MusicCentreWidget *music_centre_widget );
+	static bool bindMusicFavoriteItem( IMusicFavoriteItemWidget *bind_target, IMusicFavoriteItem *bind_source );
 
 public:
 	IMusicFavoriteItem( );

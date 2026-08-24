@@ -36,9 +36,6 @@ bool MusicTitleWidget::initAfter( ) {
 QWidget * MusicTitleWidget::toWidget( ) {
 	return this;
 }
-bool MusicTitleWidget::drawWidgeTarget( QWidget *widget ) {
-	return true;
-}
 MusicCentreWidget * MusicTitleWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
@@ -48,4 +45,7 @@ bool MusicTitleWidget::setIMusicItemWidthInfo( IMusicItemWidthInfo *music_item_w
 }
 IMusicItemWidthInfo * MusicTitleWidget::getIMusicItemWidthInfo( ) const {
 	return musicItemWidthInfo;
+}
+bool MusicTitleWidget::autoLayout( ) {
+	return true;
 }

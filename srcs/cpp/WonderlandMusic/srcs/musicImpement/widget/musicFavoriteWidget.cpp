@@ -2,6 +2,9 @@
 
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 
+#include "../../component/musicWindow/interface/info/iMusicDataManage.h"
+#include "../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
+
 MusicFavoriteWidget::MusicFavoriteWidget( ) {
 	appendTypeInfo( this );
 }
@@ -20,9 +23,6 @@ bool MusicFavoriteWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_
 }
 QWidget * MusicFavoriteWidget::toWidget( ) {
 	return this;
-}
-bool MusicFavoriteWidget::drawWidgeTarget( QWidget *widget ) {
-	return true;
 }
 MusicCentreWidget * MusicFavoriteWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
@@ -49,5 +49,19 @@ bool MusicFavoriteWidget::fromIndexGetMusicFavoriteItem( IMusicFavoriteItem *&re
 	return true;
 }
 bool MusicFavoriteWidget::fromNameGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const QString &index ) const {
+	return true;
+}
+bool MusicFavoriteWidget::autoLayout( ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	auto musicDataManage = musicCentreWidget->getMusicDataManage( );
+	if( musicDataManage == nullptr )
+		return false;
+	IMusicFavoriteItem *defaultItem;
+	std::vector< IMusicFavoriteItem * > musicFavoriteItems;
+	if( musicDataManage->getMusicFavoriteItem( defaultItem, musicFavoriteItems ) == false )
+		return false;
+	auto musicFavoriteItemWidget = defaultItem->getMusicFavoriteItemWidget(  );
+	
 	return true;
 }

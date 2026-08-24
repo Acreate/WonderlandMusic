@@ -56,6 +56,11 @@ public:
 	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *const music_title_widget );
 	virtual IMusicDataManage * setMusicDataManage( IMusicDataManage *const music_data_manage );
 	virtual IMusicDataManage * getMusicDataManage( ) const;
+	virtual bool repaintListWidget( );
+	virtual bool repaintTitleWidget( );
+	virtual bool repaintFavoriteWidget( );
+	virtual bool repaintMusicCentreWidget( );
+	virtual bool synchronizationChildrenWidgetSize( );
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

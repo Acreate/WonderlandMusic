@@ -11,16 +11,14 @@ class IMusicFavoriteItemWidget : public IMusicCentreWidgetChild {
 	friend class MusicCentreWidget;
 
 protected:
-	virtual bool setBindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) =0;
-	virtual bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) = 0;
+	virtual bool bindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) = 0;
 
 public:
 	IMusicFavoriteItemWidget( );
 	~IMusicFavoriteItemWidget( ) override;
-	virtual QImage * getDrawBuff( ) =0;
+	virtual bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) = 0;
 	virtual bool updateLayout( ) =0;
-	virtual IMusicFavoriteItem * getBindMusicFavoriteItem( ) const =0;
-	virtual IMusicFavoriteWidget * getMusicFavoriteWidget( ) const = 0;
+	virtual IMusicFavoriteItem * getBindMusicFavoriteItem( ) const = 0;
 };
 
 #endif // IMUSICFAVORITEITEMWIDGET_H_H_HEAD__FILE__

@@ -23,7 +23,6 @@ protected:
 
 public:
 	QWidget * toWidget( ) override;
-	bool drawWidgeTarget( QWidget *widget ) override;
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
 
 protected:
@@ -36,6 +35,7 @@ public:
 	bool fromYPosGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &pos_y ) const override;
 	bool fromIndexGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &index ) const override;
 	bool fromNameGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const QString &index ) const override;
+	bool autoLayout( ) override;
 };
 
 #endif // MUSICFAVORITEWIDGET_H_H_HEAD__FILE__

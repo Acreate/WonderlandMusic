@@ -299,18 +299,27 @@ IMusicTitleWidget * MusicCentreWidget::removeMusicTitleWidget( IMusicTitleWidget
 }
 
 bool MusicCentreWidget::repaintListWidget( ) {
-	return true;
+	if( musicListWidget == nullptr )
+		return false;
+	return musicListWidget->autoLayout( );
 }
 bool MusicCentreWidget::repaintTitleWidget( ) {
-	return true;
+	if( musicTitleWidget == nullptr )
+		return false;
+	return musicTitleWidget->autoLayout( );
 }
 bool MusicCentreWidget::repaintFavoriteWidget( ) {
-	return true;
+	if( musicFavoriteWidget == nullptr )
+		return false;
+	return musicFavoriteWidget->autoLayout( );
 }
 bool MusicCentreWidget::repaintMusicCentreWidget( ) {
-	repaintTitleWidget( );
-	repaintListWidget( );
-	repaintFavoriteWidget( );
+	if( repaintTitleWidget( ) == false )
+		return false;
+	if( repaintListWidget( ) == false )
+		return false;
+	if( repaintFavoriteWidget( ) == false )
+		return false;
 	return true;
 }
 bool MusicCentreWidget::synchronizationChildrenWidgetSize( ) {

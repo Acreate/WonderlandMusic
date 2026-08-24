@@ -10,8 +10,7 @@ protected:
 
 public:
 	virtual QWidget * toWidget( ) = 0;
-	virtual bool drawWidgeTarget( QWidget *widget ) = 0;
-	virtual MusicCentreWidget * getMusicCentreWidget( ) const = 0;
+	virtual bool autoLayout( ) = 0;
 };
 
 #endif // IMUSICWIDGET_H_H_HEAD__FILE__

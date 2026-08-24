@@ -79,5 +79,8 @@ public:
 	size_t findFileAtMusicItem( const QString &file_path, std::vector< IMusicItem * > &result_find_music_vector ) const override;
 	bool initDefaultMusicFavoriteItem( ) override;
 	bool clear( ) override;
+	bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector<IMusicFavoriteItem *> &result_music_favorite_item ) const override;
+	bool setCurrentSelectFavoriteItem( const IMusicFavoriteItem *set_select_music_favorite_item ) override;
+	bool getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const override;
 };
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

@@ -21,19 +21,13 @@ protected:
 public:
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool updateLayout( ) override;
+	bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) override;
 
 protected:
-	bool setBindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
+	bool bindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
 
 public:
 	IMusicFavoriteItem * getBindMusicFavoriteItem( ) const override;
-
-protected:
-	bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) override;
-
-public:
-	QImage * getDrawBuff( ) override;
-	IMusicFavoriteWidget * getMusicFavoriteWidget( ) const override;
 };
 
 #endif // MUSICFAVORITEITEMWIDGET_H_H_HEAD__FILE__

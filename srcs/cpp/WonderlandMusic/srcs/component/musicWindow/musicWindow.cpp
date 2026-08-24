@@ -118,6 +118,31 @@ IMusicDataManage * MusicWindow::setMusicDataManage( IMusicDataManage *const musi
 IMusicDataManage * MusicWindow::getMusicDataManage( ) const {
 	return musicCentreWidget->getMusicDataManage( );
 }
+bool MusicWindow::repaintListWidget( ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	return musicCentreWidget->repaintListWidget( );
+}
+bool MusicWindow::repaintTitleWidget( ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	return musicCentreWidget->repaintTitleWidget( );
+}
+bool MusicWindow::repaintFavoriteWidget( ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	return musicCentreWidget->repaintFavoriteWidget( );
+}
+bool MusicWindow::repaintMusicCentreWidget( ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	return musicCentreWidget->repaintMusicCentreWidget( );
+}
+bool MusicWindow::synchronizationChildrenWidgetSize( ) {
+	if( musicCentreWidget == nullptr )
+		return false;
+	return musicCentreWidget->synchronizationChildrenWidgetSize( );
+}
 QWidget * MusicWindow::toWidget( ) {
 	return this;
 }

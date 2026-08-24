@@ -160,6 +160,15 @@ bool AppMusicManage::clear( ) {
 	userMutex->unlock( );
 	return result;
 }
+bool AppMusicManage::getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector<IMusicFavoriteItem *> &result_music_favorite_item ) const {
+	return false;
+}
+bool AppMusicManage::setCurrentSelectFavoriteItem( const IMusicFavoriteItem *set_select_music_favorite_item ) {
+	return false;
+}
+bool AppMusicManage::getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const {
+	return false;
+}
 const IMusicItemWidthInfo & AppMusicManage::getMusicItemWidthInfo( ) const {
 	return *musicItemWidthInfo;
 }

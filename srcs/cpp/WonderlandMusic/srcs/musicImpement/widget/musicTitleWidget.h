@@ -29,10 +29,10 @@ public:
 	bool initAfter( ) override;
 
 	QWidget * toWidget( ) override;
-	bool drawWidgeTarget( QWidget *widget ) override;
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool setIMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) override;
 	IMusicItemWidthInfo * getIMusicItemWidthInfo( ) const override;
+	bool autoLayout( ) override;
 };
 
 #endif // MUSICTITLEWIDGET_H_H_HEAD__FILE__

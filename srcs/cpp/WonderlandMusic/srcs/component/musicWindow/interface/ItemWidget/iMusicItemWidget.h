@@ -10,16 +10,14 @@ class IMusicItemWidget : public IMusicCentreWidgetChild {
 	friend class MusicCentreWidget;
 
 protected:
-	virtual bool setBindMusicItem( IMusicItem *music_item ) = 0;
-	virtual bool setMusicListWidget( IMusicListWidget *music_list_widget ) = 0;
+	virtual bool bindMusicItem( IMusicItem *music_item ) = 0;
 
 public:
 	IMusicItemWidget( );
 	~IMusicItemWidget( ) override;
-	virtual QImage * getDrawBuff( ) =0;
+	virtual bool setMusicListWidget( IMusicListWidget *music_list_widget ) = 0;
 	virtual bool updateLayout( ) =0;
 	virtual IMusicItem * getBindMusicItem( ) const = 0;
-	virtual IMusicListWidget * getMusicListWidget( ) const = 0;
 };
 
 #endif // IMUSICITEMWIDGET_H_H_HEAD__FILE__

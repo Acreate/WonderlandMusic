@@ -36,9 +36,6 @@ bool MusicListWidget::initAfter( ) {
 QWidget * MusicListWidget::toWidget( ) {
 	return this;
 }
-bool MusicListWidget::drawWidgeTarget( QWidget *widget ) {
-	return true;
-}
 MusicCentreWidget * MusicListWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
@@ -64,5 +61,8 @@ bool MusicListWidget::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_musi
 	return true;
 }
 bool MusicListWidget::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) {
+	return true;
+}
+bool MusicListWidget::autoLayout( ) {
 	return true;
 }

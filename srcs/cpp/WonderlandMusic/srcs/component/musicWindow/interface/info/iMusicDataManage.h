@@ -8,6 +8,9 @@ class IMusicFavoriteItem;
 
 class IMusicDataManage : public IMusicCentreWidgetChild {
 public:
+	virtual bool setCurrentSelectFavoriteItem( const IMusicFavoriteItem *set_select_music_favorite_item ) = 0;
+	virtual bool getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const = 0;
+	virtual bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const = 0;
 	virtual bool getDefaultMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const = 0;
 	virtual bool getIndexMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &index ) const = 0;
 	virtual bool getPosYMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &pos_x ) const = 0;

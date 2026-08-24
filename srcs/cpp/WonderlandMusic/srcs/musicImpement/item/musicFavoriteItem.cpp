@@ -15,9 +15,6 @@
 bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicCentreWidget = music_centre_widget;
-	setMusicFavoriteItemWidgetMusicCentreWidget( music_centre_widget );
-	setMusicItemMusicCentreWidget( music_centre_widget );
-	setMusicFavoriteItemWidgetBindMusicFavoriteItem( this );
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
@@ -116,7 +113,6 @@ MusicFavoriteItem::~MusicFavoriteItem( ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicItemVector.clear( );
 	if( musicFavoriteItemWidget ) {
-		setMusicFavoriteItemWidgetMusicCentreWidget( nullptr );
 		delete musicFavoriteItemWidget;
 	}
 	musicFavoriteItemUserMutex->unlock( );

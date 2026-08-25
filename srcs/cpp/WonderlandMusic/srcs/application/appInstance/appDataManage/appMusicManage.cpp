@@ -55,6 +55,7 @@ bool AppMusicManage::init( ) {
 bool AppMusicManage::initBefore( ) {
 	deleteResource( );
 	appMusicDecoder = new AppMusicDecoder;
+	userMutex = new UserMutex;
 	Before_Init_Resource_App_Core_Ptr( appMusicDecoder );
 	return true;
 }
@@ -258,7 +259,9 @@ bool AppMusicManage::unsafeGetMusicFavoriteItem( std::vector< IMusicFavoriteItem
 }
 
 bool AppMusicManage::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+	userMutex->lock( );
 	musicCentreWidget = music_centre_widget;
+	userMutex->unlock( );
 	return true;
 }
 MusicCentreWidget * AppMusicManage::getMusicCentreWidget( ) const {

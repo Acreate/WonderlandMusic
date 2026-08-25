@@ -17,6 +17,10 @@
 
 #include <musicImpement/item/musicInfoItem.h>
 
+#include "../../../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
+
+#include "../../../info/musicItemWidthInfo.h"
+
 #include "../../../musicImpement/item/musicFavoriteItem.h"
 
 #include "appMusicManage/appMusicDecoder.h"
@@ -162,25 +166,97 @@ bool AppMusicManage::clear( ) {
 	userMutex->unlock( );
 	return result;
 }
-bool AppMusicManage::getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const {
-	return false;
-}
 bool AppMusicManage::setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) {
-	currenstFavoriteItem = set_select_music_favorite_item;
+	if( currenstFavoriteItem == set_select_music_favorite_item )
+		return true;
+	userMutex->lock( );
+	auto old = currenstFavoriteItem;
+	currenstFavoriteItem = nullptr;
+	if( set_select_music_favorite_item == defaultFavoriteItem )
+		currenstFavoriteItem = defaultFavoriteItem;
+	else {
+		size_t count = musicFavoriteItemVector.size( );
+		if( count ) {
+			auto sourceData = musicFavoriteItemVector.data( );
+			size_t index = 0;
+			for( ; index < count; index += 1 )
+				if( sourceData[ index ] == set_select_music_favorite_item ) {
+					currenstFavoriteItem = defaultFavoriteItem;
+					break;
+				}
+		}
+	}
+	// 不在列表当中，重置
+	if( currenstFavoriteItem == nullptr ) {
+		currenstFavoriteItem = old;
+		userMutex->unlock( );
+		return false;
+	}
+	userMutex->unlock( );
+	if( musicCentreWidget )
+		return musicCentreWidget->repaintMusicCentreWidget( );
 	return true;
 }
 bool AppMusicManage::getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const {
 	result_current_select_music_favorite_item = currenstFavoriteItem;
 	return true;
 }
-const IMusicItemWidthInfo & AppMusicManage::getMusicItemWidthInfo( ) const {
-	return *musicItemWidthInfo;
+bool AppMusicManage::getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const {
+	userMutex->lock( );
+	bool getMusicFavoriteItem = unsafeGetMusicFavoriteItem( result_default_music_favorite_item, result_music_favorite_item );
+	userMutex->unlock( );
+	return getMusicFavoriteItem;
+}
+bool AppMusicManage::getMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const {
+	userMutex->lock( );
+	bool getMusicFavoriteItem = unsafeGetMusicFavoriteItem( result_music_favorite_item );
+	return userMutex->result_unlock( getMusicFavoriteItem );
+}
+bool AppMusicManage::getMusicItemVector( std::vector< IMusicItem * > &result_music_item_vector ) const {
+	userMutex->lock( );
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		result_music_item_vector.resize( count );
+		auto setData = result_music_item_vector.data( );
+		auto sourceData = musicItemVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			setData[ index ] = sourceData[ index ];
+	}
+	return userMutex->result_unlock( true );
+}
+IMusicItemWidthInfo * AppMusicManage::getMusicItemWidthInfo( ) const {
+	return musicItemWidthInfo;
 }
 bool AppMusicManage::setMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) {
 	if( musicItemWidthInfo->setIMusicItemWidthInfo( music_item_width_info ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, setIMusicItemWidthInfo, tr( "配置项的宽度信息异常" ) );
 	return true;
 }
+bool AppMusicManage::unsafeGetMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const {
+	result_default_music_favorite_item = defaultFavoriteItem;
+	return true;
+}
+bool AppMusicManage::unsafeGetMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const {
+	if( unsafeGetMusicFavoriteItem( result_default_music_favorite_item ) == false )
+		return false;
+	if( unsafeGetMusicFavoriteItem( result_music_favorite_item ) == false )
+		return false;
+	return true;
+}
+bool AppMusicManage::unsafeGetMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const {
+	size_t count = musicFavoriteItemVector.size( );
+	if( count )
+		return true;
+	result_music_favorite_item.resize( count );
+	auto setData = result_music_favorite_item.data( );
+	auto sourceData = musicFavoriteItemVector.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		setData[ index ] = sourceData[ index ];
+	return true;
+}
+
 bool AppMusicManage::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
@@ -188,33 +264,19 @@ bool AppMusicManage::setMusicCentreWidget( MusicCentreWidget *music_centre_widge
 MusicCentreWidget * AppMusicManage::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
-bool AppMusicManage::getDefaultMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const {
-	result_default_music_favorite_item = defaultFavoriteItem;
-	return true;
-}
-bool AppMusicManage::getIndexMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &index ) const {
-	return false;
-}
-bool AppMusicManage::getPosYMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &pos_x ) const {
-	return false;
-}
-bool AppMusicManage::getNameMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const QString &music_favorite_name ) const {
-	return false;
-}
-size_t AppMusicManage::findMusicItemAtFavoriteItem( const IMusicItem *music_item, std::vector< IMusicFavoriteItem * > &result_find_favorite_vector ) const {
-	return 0;
-}
-size_t AppMusicManage::findNameAtMusicItem( const QString &music_name, std::vector< IMusicItem * > &result_find_music_vector ) const {
-	return 0;
-}
-size_t AppMusicManage::findSingerAtMusicItem( const QString &music_singer, std::vector< IMusicItem * > &result_find_music_vector ) const {
-	return 0;
-}
-size_t AppMusicManage::findFileAtMusicItem( const QString &file_path, std::vector< IMusicItem * > &result_find_music_vector ) const {
-	return 0;
+bool AppMusicManage::getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const {
+	userMutex->lock( );
+	bool getMusicFavoriteItem = unsafeGetMusicFavoriteItem( result_default_music_favorite_item );
+	return userMutex->result_unlock( getMusicFavoriteItem );
 }
 bool AppMusicManage::initDefaultMusicFavoriteItem( ) {
-	return false;
+	userMutex->lock( );
+	if( defaultFavoriteItem )
+		delete defaultFavoriteItem;
+	defaultFavoriteItem = new MusicFavoriteItem;
+	defaultFavoriteItem->setName( tr( "默认" ) );
+	userMutex->unlock( );
+	return true;
 }
 
 bool AppMusicManage::getJsonData( QJsonObject &get_json_object ) const {

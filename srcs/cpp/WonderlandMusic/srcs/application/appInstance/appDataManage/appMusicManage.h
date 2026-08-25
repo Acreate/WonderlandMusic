@@ -7,6 +7,7 @@
 #include "../../../component/musicWindow/interface/info/iMusicDataManage.h"
 
 #include "../../../interface/iAppResourceCore.h"
+class MusicItemWidthInfo;
 class IMusicFavoriteItem;
 class IMusicItemWidthInfo;
 class MusicFavoriteItem;
@@ -23,11 +24,11 @@ class AppMusicManage : public QObject, public IMusicDataManage, public IAppJsonD
 protected:
 	UserMutex *userMutex = nullptr;
 	AppMusicDecoder *appMusicDecoder = nullptr;
-	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
-	std::vector< IMusicItem * > musicItemVector;
-	std::vector< IMusicFavoriteItem * > musicFavoriteItemVector;
-	IMusicFavoriteItem *currenstFavoriteItem = nullptr;
-	IMusicFavoriteItem *defaultFavoriteItem = nullptr;
+	MusicItemWidthInfo *musicItemWidthInfo = nullptr;
+	std::vector< MusicInfoItem * > musicItemVector;
+	std::vector< MusicFavoriteItem * > musicFavoriteItemVector;
+	MusicFavoriteItem *currenstFavoriteItem = nullptr;
+	MusicFavoriteItem *defaultFavoriteItem = nullptr;
 	MusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
@@ -62,26 +63,27 @@ public:
 	virtual bool removeMusicItem( IMusicItem *music_item );
 	virtual bool hasMusicItem( size_t &result_index, const IMusicItem *music_item ) const;
 
-	virtual const IMusicItemWidthInfo & getMusicItemWidthInfo( ) const;
+	virtual IMusicItemWidthInfo * getMusicItemWidthInfo( ) const;
 	virtual bool setMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info );
+
+private:
+	virtual bool unsafeGetMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const;
+	virtual bool unsafeGetMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const;
+	virtual bool unsafeGetMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const;
 
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
 
+	bool setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) override;
+
 public:
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
-	bool getDefaultMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const override;
-	bool getIndexMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &index ) const override;
-	bool getPosYMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const size_t &pos_x ) const override;
-	bool getNameMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, const QString &music_favorite_name ) const override;
-	size_t findMusicItemAtFavoriteItem( const IMusicItem *music_item, std::vector< IMusicFavoriteItem * > &result_find_favorite_vector ) const override;
-	size_t findNameAtMusicItem( const QString &music_name, std::vector< IMusicItem * > &result_find_music_vector ) const override;
-	size_t findSingerAtMusicItem( const QString &music_singer, std::vector< IMusicItem * > &result_find_music_vector ) const override;
-	size_t findFileAtMusicItem( const QString &file_path, std::vector< IMusicItem * > &result_find_music_vector ) const override;
 	bool initDefaultMusicFavoriteItem( ) override;
 	bool clear( ) override;
+	bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const override;
 	bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const override;
-	bool setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) override;
+	bool getMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const override;
 	bool getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const override;
+	bool getMusicItemVector( std::vector< IMusicItem * > &result_music_item_vector ) const override;
 };
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

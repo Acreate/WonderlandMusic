@@ -11,13 +11,13 @@
 #include <head/release_macro.h>
 #include <head/result_message_out.h>
 
-#include <info/musicWidgetSizeInfo.h>
-
 #include <mutex/userMutex.h>
 
 #include "../musicWindow.h"
 
 #include <tools/instanceTools.h>
+
+#include <musicImpement/info/musicWidgetSizeInfo.h>
 
 #include "../interface/info/iMusicDataManage.h"
 #include "../interface/info/iMusicItemWidthInfo.h"

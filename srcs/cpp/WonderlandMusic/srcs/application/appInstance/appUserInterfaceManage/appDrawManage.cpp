@@ -5,18 +5,18 @@
 
 #include "../appDataManage.h"
 
-#include "../../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
-#include "../../../component/musicWindow/interface/item/iMusicItem.h"
+#include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
+#include <component/musicWindow/interface/item/iMusicItem.h>
 
-#include "../../../head/after_init_macro.h"
-#include "../../../head/before_init_macro.h"
-#include "../../../head/init_macro.h"
-#include "../../../head/release_macro.h"
-#include "../../../head/result_message_out.h"
+#include <head/after_init_macro.h>
+#include <head/before_init_macro.h>
+#include <head/init_macro.h>
+#include <head/release_macro.h>
+#include <head/result_message_out.h>
 
-#include "../../../info/musicItemWidthInfo.h"
+#include <musicImpement/info/musicItemWidthInfo.h>
 
-#include "../../../tools/instanceTools.h"
+#include <tools/instanceTools.h>
 
 #include "../appDataManage/translate/musicTitleWidgetTranslate.h"
 

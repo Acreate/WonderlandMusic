@@ -13,8 +13,8 @@
 #include "../../head/release_macro.h"
 #include "../../head/result_message_out.h"
 
-#include "../../info/musicItemWidthInfo.h"
-#include "../../info/musicWidgetSizeInfo.h"
+#include "../../musicImpement/info/musicItemWidthInfo.h"
+#include "../../musicImpement/info/musicWidgetSizeInfo.h"
 
 #include "../../tools/instanceTools.h"
 #include "../../tools/pathTools.h"

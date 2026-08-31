@@ -9,13 +9,15 @@
 #include "../../application/appInstance/appUserInterfaceManage/appDrawManage.h"
 #include "../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
 
-#include "../../head/release_macro.h"
+#include "../../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
 
-#include "../../info/musicItemWidthInfo.h"
+#include "../../head/release_macro.h"
 
 #include "../../mutex/userMutex.h"
 
 #include "../../tools/instanceTools.h"
+
+#include "../info/musicItemWidthInfo.h"
 
 MusicTitleWidget::MusicTitleWidget( ) {
 	appendTypeInfo( this );

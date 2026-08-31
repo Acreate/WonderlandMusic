@@ -5,6 +5,8 @@
 
 #include "../../../interface/iAppResourceCore.h"
 
+class MusicItemWidthInfoJsonKey;
+class MusicWidgetSizeInfoJsonKey;
 class AppMenuManageJsonKey;
 class AppMusicManageJsonKey;
 class AppUserInterfaceManageJsonKey;
@@ -35,6 +37,9 @@ protected:
 	MusicFavoriteWidgetJsonKey *musicFavoriteWidget = nullptr;
 	FavoriteItemJsonKey *favoriteItem = nullptr;
 
+	MusicWidgetSizeInfoJsonKey *musicWidgetSizeInfo = nullptr;
+	MusicItemWidthInfoJsonKey *musicItemWidthInfo = nullptr;
+
 protected:
 	bool deleteResource( ) override;
 
@@ -57,5 +62,7 @@ public:
 	virtual MusicItemJsonKey * getMusicItem( ) const;
 	virtual MusicFavoriteWidgetJsonKey * getMusicFavoriteWidget( ) const;
 	virtual FavoriteItemJsonKey * getFavoriteItem( ) const;
+	virtual MusicWidgetSizeInfoJsonKey * getMusicWidgetSizeInfo( ) const;
+	virtual MusicItemWidthInfoJsonKey * getMusicItemWidthInfo( ) const;
 };
 #endif // APPDATAJSONKEY_H_H_HEAD__FILE__

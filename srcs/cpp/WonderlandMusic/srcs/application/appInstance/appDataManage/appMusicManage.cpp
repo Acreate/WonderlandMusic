@@ -19,8 +19,7 @@
 
 #include "../../../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 
-#include "../../../info/musicItemWidthInfo.h"
-
+#include "../../../musicImpement/info/musicItemWidthInfo.h"
 #include "../../../musicImpement/item/musicFavoriteItem.h"
 
 #include "appMusicManage/appMusicDecoder.h"

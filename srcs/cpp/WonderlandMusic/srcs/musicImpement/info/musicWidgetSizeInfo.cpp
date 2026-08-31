@@ -2,10 +2,13 @@
 
 #include <qfontmetrics.h>
 
-#include "../application/appInstance/applicationManage.h"
-#include "../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+#include <application/appInstance/applicationManage.h>
+#include <application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h>
 
-#include "../tools/instanceTools.h"
+#include <tools/instanceTools.h>
+
+#include "../../application/appInstance/appDataManage/jsonKey/appDataManageJsonKey.h"
+#include "../../application/appInstance/appDataManage/jsonKey/musicWidgetSizeInfoJsonKey.h"
 MusicWidgetSizeInfo::MusicWidgetSizeInfo( ) {
 	appendTypeInfo( this );
 }
@@ -47,10 +50,18 @@ bool MusicWidgetSizeInfo::updateMusicWidgetLayout( ) {
 	return false;
 }
 bool MusicWidgetSizeInfo::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	if( AppJsonKeyTools::getMusicWidgetSizeInfo( [] ( const MusicWidgetSizeInfoJsonKey &json_key ) {
+		return true;
+	} ) == false )
+		return false;
+	return true;
 }
 bool MusicWidgetSizeInfo::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	if( AppJsonKeyTools::getMusicWidgetSizeInfo( [] ( const MusicWidgetSizeInfoJsonKey &json_key ) {
+		return true;
+	} ) == false )
+		return false;
+	return true;
 }
 MusicCentreWidget * MusicWidgetSizeInfo::getMusicCentreWidget( ) const {
 	return musicCentreWidget;

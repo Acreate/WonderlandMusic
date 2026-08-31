@@ -1,6 +1,6 @@
 ﻿#ifndef MUSICWIDGETSIZEINFO_H_H_HEAD__FILE__
 #define MUSICWIDGETSIZEINFO_H_H_HEAD__FILE__
-#include "../component/musicWindow/interface/info/iMusicWidgetSizeInfo.h"
+#include <component/musicWindow/interface/info/iMusicWidgetSizeInfo.h>
 
 class MusicWidgetSizeInfo : public IMusicWidgetSizeInfo {
 	MusicCentreWidget* musicCentreWidget = nullptr;

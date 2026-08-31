@@ -14,7 +14,9 @@
 #include "jsonKey/musicFavoriteMenuJsonKey.h"
 #include "jsonKey/musicFavoriteWidgetJsonKey.h"
 #include "jsonKey/musicItemJsonKey.h"
+#include "jsonKey/musicItemWidthInfoJsonKey.h"
 #include "jsonKey/musicListMenuJsonKey.h"
+#include "jsonKey/musicWidgetSizeInfoJsonKey.h"
 #include "jsonKey/musicWindowJsonKey.h"
 #include "jsonKey/systemTrayIconJsonKey.h"
 
@@ -32,6 +34,8 @@ bool AppDataJsonKey::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicItem );
 	Delete_Resource_App_Core_Ptr( musicFavoriteWidget );
 	Delete_Resource_App_Core_Ptr( favoriteItem );
+	Delete_Resource_App_Core_Ptr( musicWidgetSizeInfo );
+	Delete_Resource_App_Core_Ptr( musicItemWidthInfo );
 	return true;
 }
 
@@ -56,6 +60,8 @@ bool AppDataJsonKey::init( ) {
 	Init_Resource_App_Core_Ptr( musicItem );
 	Init_Resource_App_Core_Ptr( musicFavoriteWidget );
 	Init_Resource_App_Core_Ptr( favoriteItem );
+	Init_Resource_App_Core_Ptr( musicWidgetSizeInfo );
+	Init_Resource_App_Core_Ptr( musicItemWidthInfo );
 	return true;
 }
 
@@ -75,7 +81,8 @@ bool AppDataJsonKey::initBefore( ) {
 	musicItem = new MusicItemJsonKey;
 	musicFavoriteWidget = new MusicFavoriteWidgetJsonKey;
 	favoriteItem = new FavoriteItemJsonKey;
-
+	musicWidgetSizeInfo = new MusicWidgetSizeInfoJsonKey;
+	musicItemWidthInfo = new MusicItemWidthInfoJsonKey;
 	return true;
 }
 
@@ -126,4 +133,10 @@ MusicFavoriteWidgetJsonKey * AppDataJsonKey::getMusicFavoriteWidget( ) const {
 }
 FavoriteItemJsonKey * AppDataJsonKey::getFavoriteItem( ) const {
 	return favoriteItem;
+}
+MusicWidgetSizeInfoJsonKey * AppDataJsonKey::getMusicWidgetSizeInfo( ) const {
+	return musicWidgetSizeInfo;
+}
+MusicItemWidthInfoJsonKey * AppDataJsonKey::getMusicItemWidthInfo( ) const {
+	return musicItemWidthInfo;
 }

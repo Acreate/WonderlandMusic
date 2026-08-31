@@ -14,7 +14,9 @@
 #include "../application/appInstance/appDataManage/jsonKey/musicFavoriteMenuJsonKey.h"
 #include "../application/appInstance/appDataManage/jsonKey/musicFavoriteWidgetJsonKey.h"
 #include "../application/appInstance/appDataManage/jsonKey/musicItemJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/musicItemWidthInfoJsonKey.h"
 #include "../application/appInstance/appDataManage/jsonKey/musicListMenuJsonKey.h"
+#include "../application/appInstance/appDataManage/jsonKey/musicWidgetSizeInfoJsonKey.h"
 #include "../application/appInstance/appDataManage/jsonKey/musicWindowJsonKey.h"
 #include "../application/appInstance/appDataManage/jsonKey/systemTrayIconJsonKey.h"
 
@@ -39,3 +41,6 @@ Defininition_Get_Json_Key( AppMenuManage );
 Defininition_Get_Json_Key( MusicItem );
 Defininition_Get_Json_Key( MusicFavoriteWidget );
 Defininition_Get_Json_Key( FavoriteItem );
+
+Defininition_Get_Json_Key( MusicWidgetSizeInfo );
+Defininition_Get_Json_Key( MusicItemWidthInfo );

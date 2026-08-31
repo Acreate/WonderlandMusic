@@ -1,5 +1,6 @@
 ﻿#include "musicItemWidthInfo.h"
 
+#include <QJsonObject>
 #include <qfontmetrics.h>
 
 #include <application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h>
@@ -11,7 +12,10 @@
 
 #include <tools/instanceTools.h>
 
-#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
+#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
+
+#include "../../application/appInstance/appDataManage/jsonKey/appDataManageJsonKey.h"
+#include "../../application/appInstance/appDataManage/jsonKey/musicItemWidthInfoJsonKey.h"
 MusicItemWidthInfo::MusicItemWidthInfo( ) {
 	appendTypeInfo( this );
 }
@@ -43,6 +47,7 @@ MusicItemWidthInfo & MusicItemWidthInfo::operator=( const MusicItemWidthInfo &ot
 	minItemWidth = other.minItemWidth;
 	return *this;
 }
+
 void MusicItemWidthInfo::setSuggestHeight( const int suggest_height ) {
 	suggestHeight = suggest_height;
 }
@@ -117,10 +122,49 @@ bool MusicItemWidthInfo::setIMusicItemWidthInfo( const IMusicItemWidthInfo &musi
 	return true;
 }
 bool MusicItemWidthInfo::getJsonData( QJsonObject &get_json_object ) const {
-	return false;
+	if( AppJsonKeyTools::getMusicItemWidthInfo( [&get_json_object, this] ( const MusicItemWidthInfoJsonKey &json_key ) {
+		get_json_object.insert( json_key.getClickWidth( ), clickWidth );
+		get_json_object.insert( json_key.getIntervalWidth( ), intervalWidth );
+		get_json_object.insert( json_key.getMinItemWidth( ), minItemWidth );
+		get_json_object.insert( json_key.getMusicCodeWidth( ), musicCodeWidth );
+		get_json_object.insert( json_key.getMusicDurationTimeWidth( ), musicDurationTimeWidth );
+		get_json_object.insert( json_key.getMusicSingerNameWidth( ), musicSingerNameWidth );
+		get_json_object.insert( json_key.getSeparatorWidth( ), separatorWidth );
+		get_json_object.insert( json_key.getSuggestHeight( ), suggestHeight );
+		return true;
+	} ) == false )
+		return false;
+
+	return true;
 }
 bool MusicItemWidthInfo::setJsonData( const QJsonObject &set_json_object ) {
-	return false;
+	if( AppJsonKeyTools::getMusicItemWidthInfo( [&set_json_object, this] ( const MusicItemWidthInfoJsonKey &json_key ) {
+		#define find_over( _equ_var, _find_key, _conver_function, _find_result, _find_end, _json_object ) \
+			_find_result = _json_object.find( _find_key ); \
+			if( _find_result == _find_end ) \
+				return false; \
+			_equ_var = _find_result->_conver_function( _equ_var );
+
+		QJsonObject::const_iterator find;
+		auto end = set_json_object.end( );
+		#define find_integer_over(  _equ_var, _find_key ) \
+			find_over( _equ_var, _find_key, toInteger, find, end, set_json_object )
+
+		find_integer_over( clickWidth, json_key.getClickWidth( ) )
+		find_integer_over( intervalWidth, json_key.getIntervalWidth( ) )
+		find_integer_over( intervalWidth, json_key.getIntervalWidth( ) )
+		find_integer_over( minItemWidth, json_key.getMinItemWidth( ) )
+		find_integer_over( musicCodeWidth, json_key.getMusicCodeWidth( ) )
+		find_integer_over( musicDurationTimeWidth, json_key.getMusicDurationTimeWidth( ) )
+		find_integer_over( musicSingerNameWidth, json_key.getMusicSingerNameWidth( ) )
+		find_integer_over( separatorWidth, json_key.getSeparatorWidth( ) )
+		find_integer_over( suggestHeight, json_key.getSuggestHeight( ) )
+
+		return true;
+	} ) == false )
+		return false;
+
+	return true;
 }
 bool MusicItemWidthInfo::initInfo( ) {
 	auto appRenderImage = InstanceTools::getAppRenderImage( );

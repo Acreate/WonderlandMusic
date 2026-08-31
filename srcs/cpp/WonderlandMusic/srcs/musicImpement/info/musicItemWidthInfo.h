@@ -1,6 +1,6 @@
 ﻿#ifndef MUSICITEMWIDTHINFO_H_H_HEAD__FILE__
 #define MUSICITEMWIDTHINFO_H_H_HEAD__FILE__
-#include "../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
+#include <component/musicWindow/interface/info/iMusicItemWidthInfo.h>
 
 class MusicItemWidthInfo : public IMusicItemWidthInfo {
 private:

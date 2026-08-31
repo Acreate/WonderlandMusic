@@ -12,9 +12,6 @@ class IMusicItemWidthInfo : public IMusicCentreWidgetChild, public IAppJsonData 
 
 protected:
 	virtual void setSuggestHeight( const int suggest_height ) = 0;
-	virtual void setClickWidth( const int click_width ) = 0;
-	virtual void setIntervalWidth( const int interval_width ) = 0;
-	virtual void setSeparatorWidth( const int separator_width ) = 0;
 	virtual void setMusicCodeWidth( const int music_code_width ) = 0;
 	virtual void setMusicNameWidth( const int music_name_width ) = 0;
 	virtual void setMusicSingerNameWidth( const int music_singer_name_width ) = 0;
@@ -26,7 +23,6 @@ public:
 	IMusicItemWidthInfo( );
 
 	virtual int getSuggestHeight( ) const = 0;
-	virtual int getClickWidth( ) const = 0;
 	virtual int getCalculateMinWidth( ) const = 0;
 	virtual int getIntervalWidth( ) const = 0;
 	virtual int getSeparatorWidth( ) const = 0;
@@ -34,7 +30,6 @@ public:
 	virtual int getMusicNameWidth( ) const = 0;
 	virtual int getMusicSingerNameWidth( ) const = 0;
 	virtual int getMusicDurationTimeWidth( ) const = 0;
-	virtual int getMinItemWidth( ) const = 0;
 	virtual bool isSuggestHeight( const int *width_var_ptr ) const = 0;
 	virtual bool isClickWidth( const int *width_var_ptr ) const = 0;
 	virtual bool isIntervalWidth( const int *width_var_ptr ) const = 0;

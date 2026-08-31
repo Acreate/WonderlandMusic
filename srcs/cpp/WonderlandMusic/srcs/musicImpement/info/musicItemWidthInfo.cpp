@@ -74,15 +74,6 @@ bool MusicItemWidthInfo::setPosItemWidthPtrVar( const int *&result_width_var_ptr
 	}
 	return false;
 }
-void MusicItemWidthInfo::setClickWidth( const int click_width ) {
-	clickWidth = click_width;
-}
-void MusicItemWidthInfo::setIntervalWidth( const int interval_width ) {
-	intervalWidth = interval_width;
-}
-void MusicItemWidthInfo::setSeparatorWidth( const int separator_width ) {
-	separatorWidth = separator_width;
-}
 void MusicItemWidthInfo::setMusicCodeWidth( const int music_code_width ) {
 	musicCodeWidth = music_code_width;
 }
@@ -105,9 +96,6 @@ bool MusicItemWidthInfo::setMusicCentreWidget( MusicCentreWidget *music_centre_w
 int MusicItemWidthInfo::getSuggestHeight( ) const {
 	return suggestHeight;
 }
-int MusicItemWidthInfo::getClickWidth( ) const {
-	return clickWidth;
-}
 int MusicItemWidthInfo::getCalculateMinWidth( ) const {
 	return clickWidth * 5 + musicCodeWidth + musicNameWidth + musicSingerNameWidth + musicDurationTimeWidth;
 }
@@ -129,30 +117,21 @@ int MusicItemWidthInfo::getMusicSingerNameWidth( ) const {
 int MusicItemWidthInfo::getMusicDurationTimeWidth( ) const {
 	return musicDurationTimeWidth;
 }
-int MusicItemWidthInfo::getMinItemWidth( ) const {
-	return minItemWidth;
-}
 bool MusicItemWidthInfo::setIMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) {
 	suggestHeight = music_item_width_info.getSuggestHeight( );
-	clickWidth = music_item_width_info.getClickWidth( );
 	intervalWidth = music_item_width_info.getIntervalWidth( );
 	separatorWidth = music_item_width_info.getSeparatorWidth( );
 	musicCodeWidth = music_item_width_info.getMusicCodeWidth( );
 	musicNameWidth = music_item_width_info.getMusicNameWidth( );
 	musicSingerNameWidth = music_item_width_info.getMusicSingerNameWidth( );
 	musicDurationTimeWidth = music_item_width_info.getMusicDurationTimeWidth( );
-	minItemWidth = music_item_width_info.getMinItemWidth( );
 	return true;
 }
 bool MusicItemWidthInfo::getJsonData( QJsonObject &get_json_object ) const {
 	if( AppJsonKeyTools::getMusicItemWidthInfo( [&get_json_object, this] ( const MusicItemWidthInfoJsonKey &json_key ) {
-		get_json_object.insert( json_key.getClickWidth( ), clickWidth );
-		get_json_object.insert( json_key.getIntervalWidth( ), intervalWidth );
-		get_json_object.insert( json_key.getMinItemWidth( ), minItemWidth );
 		get_json_object.insert( json_key.getMusicCodeWidth( ), musicCodeWidth );
 		get_json_object.insert( json_key.getMusicDurationTimeWidth( ), musicDurationTimeWidth );
 		get_json_object.insert( json_key.getMusicSingerNameWidth( ), musicSingerNameWidth );
-		get_json_object.insert( json_key.getSeparatorWidth( ), separatorWidth );
 		get_json_object.insert( json_key.getSuggestHeight( ), suggestHeight );
 		return true;
 	} ) == false )
@@ -173,21 +152,14 @@ bool MusicItemWidthInfo::setJsonData( const QJsonObject &set_json_object ) {
 		#define find_integer_over(  _equ_var, _find_key ) \
 			find_over( (_equ_var), (_find_key), toInteger, find, end, set_json_object )
 
-		find_integer_over( clickWidth, json_key.getClickWidth( ) )
-		find_integer_over( intervalWidth, json_key.getIntervalWidth( ) )
-		find_integer_over( intervalWidth, json_key.getIntervalWidth( ) )
-		find_integer_over( minItemWidth, json_key.getMinItemWidth( ) )
 		find_integer_over( musicCodeWidth, json_key.getMusicCodeWidth( ) )
 		find_integer_over( musicDurationTimeWidth, json_key.getMusicDurationTimeWidth( ) )
 		find_integer_over( musicSingerNameWidth, json_key.getMusicSingerNameWidth( ) )
-		find_integer_over( separatorWidth, json_key.getSeparatorWidth( ) )
 		find_integer_over( suggestHeight, json_key.getSuggestHeight( ) )
 
 		return true;
 	} ) == false )
 		return false;
-	if( musicTitleWidget )
-		musicTitleWidget->autoLayout( );
 	return true;
 }
 bool MusicItemWidthInfo::initInfo( ) {
@@ -258,28 +230,37 @@ bool MusicItemWidthInfo::isMusicDurationTimeWidth( const int *width_var_ptr ) co
 	return width_var_ptr == &musicDurationTimeWidth;
 }
 bool MusicItemWidthInfo::getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, const int x ) const {
-	int leftX = minItemWidth;
+	int leftX = clickWidth + musicCodeWidth;
 	if( x < leftX )
 		return false;
-	leftX = leftX + musicCodeWidth;
+	leftX = leftX + clickWidth;
 	if( x < leftX ) {
 		result_width_var_ptr = &musicCodeWidth;
 		result_index = 0;
 		return true;
 	}
-	leftX = leftX + minItemWidth + musicNameWidth;
+	leftX = leftX + musicNameWidth;
+	if( x < leftX )
+		return false;
+	leftX = leftX + clickWidth;
 	if( x < leftX ) {
 		result_width_var_ptr = &musicNameWidth;
 		result_index = 1;
 		return true;
 	}
-	leftX = leftX + minItemWidth + musicSingerNameWidth;
+	leftX = leftX + musicSingerNameWidth;
+	if( x < leftX )
+		return false;
+	leftX = leftX + clickWidth;
 	if( x < leftX ) {
 		result_width_var_ptr = &musicSingerNameWidth;
 		result_index = 2;
 		return true;
 	}
-	leftX = leftX + minItemWidth + musicDurationTimeWidth;
+	leftX = leftX + musicDurationTimeWidth;
+	if( x < leftX )
+		return false;
+	leftX = leftX + clickWidth;
 	if( x < leftX ) {
 		result_width_var_ptr = &musicDurationTimeWidth;
 		result_index = 3;

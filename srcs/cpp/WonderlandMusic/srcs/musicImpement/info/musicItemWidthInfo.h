@@ -4,27 +4,24 @@
 
 class MusicItemWidthInfo : public IMusicItemWidthInfo {
 private:
-	int suggestHeight;
+	int minItemWidth;
 	int clickWidth;
+	int suggestHeight;
 	int intervalWidth;
 	int separatorWidth;
 	int musicCodeWidth;
 	int musicNameWidth;
 	int musicSingerNameWidth;
 	int musicDurationTimeWidth;
-	int minItemWidth;
 	IMusicTitleWidget *musicTitleWidget = nullptr;
 	MusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
-	void setClickWidth( const int click_width ) override;
-	void setIntervalWidth( const int interval_width ) override;
 	void setMinItemWidth( const int min_item_width ) override;
 	void setMusicCodeWidth( const int music_code_width ) override;
 	void setMusicDurationTimeWidth( const int music_duration_time_width ) override;
 	void setMusicNameWidth( const int music_name_width ) override;
 	void setMusicSingerNameWidth( const int music_singer_name_width ) override;
-	void setSeparatorWidth( const int separator_width ) override;
 	void setSuggestHeight( const int suggest_height ) override;
 	bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) override;
 
@@ -39,7 +36,6 @@ protected:
 
 public:
 	int getSuggestHeight( ) const override;
-	int getClickWidth( ) const override;
 	int getCalculateMinWidth( ) const override;
 	int getIntervalWidth( ) const override;
 	int getSeparatorWidth( ) const override;
@@ -47,7 +43,6 @@ public:
 	int getMusicNameWidth( ) const override;
 	int getMusicSingerNameWidth( ) const override;
 	int getMusicDurationTimeWidth( ) const override;
-	int getMinItemWidth( ) const override;
 	bool setIMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) override;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;

@@ -16,7 +16,7 @@ protected:
 	UserMutex *userMutex = nullptr;
 	const int *resuntIndexVarPtr = nullptr;
 	int resultIndex;
-
+	int orgX;
 public:
 	MusicTitleWidget( );
 	~MusicTitleWidget( ) override;

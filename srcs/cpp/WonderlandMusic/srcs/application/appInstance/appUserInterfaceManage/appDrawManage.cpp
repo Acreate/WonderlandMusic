@@ -63,46 +63,47 @@ bool AppDrawManage::drawTitle( QPainter &painter, const IMusicItemWidthInfo *mus
 		const int calculateMinHeight = fontMetrics.height( );
 
 		const int separatorWidth = music_item_width_info->getSeparatorWidth( );
-		int intervalWidth = music_item_width_info->getIntervalWidth( ) + offset_pos_x;
+		int intervalwidth = music_item_width_info->getIntervalWidth( );
+		int currentX = intervalwidth + offset_pos_x;
 
 		QColor fillSeparatorColor = painter.brush( ).color( );
-		QRect fillRect = QRect( intervalWidth, offset_pos_y, separatorWidth, calculateMinHeight );
+		QRect fillRect = QRect( currentX, offset_pos_y, separatorWidth, calculateMinHeight );
 		painter.fillRect( fillRect, fillSeparatorColor );
 
-		intervalWidth = intervalWidth + separatorWidth;
+		currentX = currentX + separatorWidth + intervalwidth;
 		int musicCodeWidth = music_item_width_info->getMusicCodeWidth( );
-		QRect codeRect = QRect( intervalWidth, offset_pos_y, musicCodeWidth, calculateMinHeight );
+		QRect codeRect = QRect( currentX, offset_pos_y, musicCodeWidth, calculateMinHeight );
 		painter.drawText( codeRect, translate.getMusicCode( ) );
 
-		intervalWidth = intervalWidth + musicCodeWidth;
-		fillRect = QRect( intervalWidth, offset_pos_y, separatorWidth, calculateMinHeight );
+		currentX = currentX + musicCodeWidth + intervalwidth;
+		fillRect = QRect( currentX, offset_pos_y, separatorWidth, calculateMinHeight );
 		painter.fillRect( fillRect, fillSeparatorColor );
 
-		intervalWidth = intervalWidth + separatorWidth;
+		currentX = currentX + separatorWidth + intervalwidth;
 		int musicNameWidth = music_item_width_info->getMusicNameWidth( );
-		QRect nameRect( intervalWidth, offset_pos_y, musicNameWidth, calculateMinHeight );
+		QRect nameRect( currentX, offset_pos_y, musicNameWidth, calculateMinHeight );
 		painter.drawText( nameRect, translate.getMusicName( ) );
 
-		intervalWidth = intervalWidth + musicNameWidth;
-		fillRect = QRect( intervalWidth, offset_pos_y, separatorWidth, calculateMinHeight );
+		currentX = currentX + musicNameWidth + intervalwidth;
+		fillRect = QRect( currentX, offset_pos_y, separatorWidth, calculateMinHeight );
 		painter.fillRect( fillRect, fillSeparatorColor );
 
-		intervalWidth = intervalWidth + separatorWidth;
+		currentX = currentX + separatorWidth + intervalwidth;
 		int musicSingerNameWidth = music_item_width_info->getMusicSingerNameWidth( );
-		QRect singerRect( intervalWidth, offset_pos_y, musicSingerNameWidth, calculateMinHeight );
+		QRect singerRect( currentX, offset_pos_y, musicSingerNameWidth, calculateMinHeight );
 		painter.drawText( singerRect, translate.getMusicSingeName( ) );
 
-		intervalWidth = intervalWidth + musicSingerNameWidth;
-		fillRect = QRect( intervalWidth, offset_pos_y, separatorWidth, calculateMinHeight );
+		currentX = currentX + musicSingerNameWidth + intervalwidth;
+		fillRect = QRect( currentX, offset_pos_y, separatorWidth, calculateMinHeight );
 		painter.fillRect( fillRect, fillSeparatorColor );
 
-		intervalWidth = intervalWidth + separatorWidth;
+		currentX = currentX + separatorWidth + intervalwidth;
 		int musicDurationTimeWidth = music_item_width_info->getMusicDurationTimeWidth( );
-		QRect elapsedTimeRect( intervalWidth, offset_pos_y, musicDurationTimeWidth, calculateMinHeight );
+		QRect elapsedTimeRect( currentX, offset_pos_y, musicDurationTimeWidth, calculateMinHeight );
 		painter.drawText( elapsedTimeRect, translate.getMusicDurationTime( ) );
 
-		intervalWidth = intervalWidth + musicDurationTimeWidth;
-		fillRect = QRect( intervalWidth, offset_pos_y, separatorWidth, calculateMinHeight );
+		currentX = currentX + musicDurationTimeWidth + intervalwidth;
+		fillRect = QRect( currentX, offset_pos_y, separatorWidth, calculateMinHeight );
 		painter.fillRect( fillRect, fillSeparatorColor );
 
 		return true;
@@ -171,25 +172,28 @@ bool appDrawTools::drawItem( QPainter &painter, const IMusicItem *music_item, co
 	const int calculateMinHeight = music_item_width_info->getSuggestHeight( );
 
 	const int separatorWidth = music_item_width_info->getSeparatorWidth( );
-	int intervalWidth = music_item_width_info->getIntervalWidth( ) + offset_pos_x + separatorWidth;
+	int intervalWidth = music_item_width_info->getIntervalWidth( );
+	intervalWidth *= 2;
+	int drawItemWidth = intervalWidth + separatorWidth;
+	int currentX = drawItemWidth;
 	QString text = QString::number( idCode );
 	int musicCodeWidth = music_item_width_info->getMusicCodeWidth( );
-	QRect codeRect = QRect( intervalWidth, offset_pos_y, musicCodeWidth, calculateMinHeight );
+	QRect codeRect = QRect( currentX, offset_pos_y, musicCodeWidth, calculateMinHeight );
 	painter.drawText( codeRect, text );
 
-	intervalWidth = intervalWidth + musicCodeWidth + separatorWidth;
+	currentX = currentX + musicCodeWidth + drawItemWidth;
 	int musicNameWidth = music_item_width_info->getMusicNameWidth( );
-	QRect nameRect( intervalWidth, offset_pos_y, musicNameWidth, calculateMinHeight );
+	QRect nameRect( currentX, offset_pos_y, musicNameWidth, calculateMinHeight );
 	painter.drawText( nameRect, name );
 
-	intervalWidth = intervalWidth + musicNameWidth + separatorWidth;
+	currentX = currentX + musicNameWidth + drawItemWidth;
 	int musicSingerNameWidth = music_item_width_info->getMusicSingerNameWidth( );
-	QRect singerRect( intervalWidth, offset_pos_y, musicSingerNameWidth, calculateMinHeight );
+	QRect singerRect( currentX, offset_pos_y, musicSingerNameWidth, calculateMinHeight );
 	painter.drawText( singerRect, singer );
 
-	intervalWidth = intervalWidth + musicSingerNameWidth + separatorWidth;
+	currentX = currentX + musicSingerNameWidth + drawItemWidth;
 	int musicDurationTimeWidth = music_item_width_info->getMusicDurationTimeWidth( );
-	QRect elapsedTimeRect( intervalWidth, offset_pos_y, musicDurationTimeWidth, calculateMinHeight );
+	QRect elapsedTimeRect( currentX, offset_pos_y, musicDurationTimeWidth, calculateMinHeight );
 	painter.drawText( elapsedTimeRect, elapsedTimeString );
 
 	return true;
@@ -212,46 +216,47 @@ bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, c
 	const int calculateMinHeight = fontMetrics.height( );
 
 	const int separatorWidth = music_item_width_info->getSeparatorWidth( );
-	int intervalWidth = music_item_width_info->getIntervalWidth( ) + pos_x;
+	int intervalWidth = music_item_width_info->getIntervalWidth( );
+	int currentX = intervalWidth + pos_x;
 	QColor fillSeparatorColor = painter.brush( ).color( );;
-	QRect fillRect = QRect( intervalWidth, pos_y, separatorWidth, calculateMinHeight );
+	QRect fillRect = QRect( currentX, pos_y, separatorWidth, calculateMinHeight );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
-	intervalWidth = intervalWidth + separatorWidth;
+	currentX = currentX + separatorWidth;
 	QString text = QString::number( idCode );
 	int musicCodeWidth = music_item_width_info->getMusicCodeWidth( );
-	QRect codeRect = QRect( intervalWidth, pos_y, musicCodeWidth, calculateMinHeight );
+	QRect codeRect = QRect( currentX, pos_y, musicCodeWidth, calculateMinHeight );
 	painter.drawText( codeRect, text );
 
-	intervalWidth = intervalWidth + musicCodeWidth;
-	fillRect = QRect( intervalWidth, pos_y, separatorWidth, calculateMinHeight );
+	currentX = currentX + musicCodeWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, calculateMinHeight );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
-	intervalWidth = intervalWidth + separatorWidth;
+	currentX = currentX + separatorWidth + intervalWidth;
 	int musicNameWidth = music_item_width_info->getMusicNameWidth( );
-	QRect nameRect( intervalWidth, pos_y, musicNameWidth, calculateMinHeight );
+	QRect nameRect( currentX, pos_y, musicNameWidth, calculateMinHeight );
 	painter.drawText( nameRect, name );
 
-	intervalWidth = intervalWidth + musicNameWidth;
-	fillRect = QRect( intervalWidth, pos_y, separatorWidth, calculateMinHeight );
+	currentX = currentX + musicNameWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, calculateMinHeight );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
-	intervalWidth = intervalWidth + separatorWidth;
+	currentX = currentX + separatorWidth + intervalWidth;
 	int musicSingerNameWidth = music_item_width_info->getMusicSingerNameWidth( );
-	QRect singerRect( intervalWidth, pos_y, musicSingerNameWidth, calculateMinHeight );
+	QRect singerRect( currentX, pos_y, musicSingerNameWidth, calculateMinHeight );
 	painter.drawText( singerRect, singer );
 
-	intervalWidth = intervalWidth + musicSingerNameWidth;
-	fillRect = QRect( intervalWidth, pos_y, separatorWidth, calculateMinHeight );
+	currentX = currentX + musicSingerNameWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, calculateMinHeight );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
-	intervalWidth = intervalWidth + separatorWidth;
+	currentX = currentX + separatorWidth + intervalWidth;
 	int musicDurationTimeWidth = music_item_width_info->getMusicDurationTimeWidth( );
-	QRect elapsedTimeRect( intervalWidth, pos_y, musicDurationTimeWidth, calculateMinHeight );
+	QRect elapsedTimeRect( currentX, pos_y, musicDurationTimeWidth, calculateMinHeight );
 	painter.drawText( elapsedTimeRect, elapsedTimeString );
 
-	intervalWidth = intervalWidth + musicDurationTimeWidth;
-	fillRect = QRect( intervalWidth, pos_y, separatorWidth, calculateMinHeight );
+	currentX = currentX + musicDurationTimeWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, calculateMinHeight );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
 	return true;
@@ -276,37 +281,30 @@ bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem *
 	}
 
 	const int separatorWidth = music_item_width_info->getSeparatorWidth( );
-	int intervalWidth = music_item_width_info->getIntervalWidth( ) + pos_x;
+	int intervalWidth = music_item_width_info->getIntervalWidth( );
+	int currentX = intervalWidth + pos_x;
 	QColor fillSeparatorColor = painter.brush( ).color( );
-	QRect fillRect = QRect( intervalWidth, pos_y, separatorWidth, offsetY );
+	QRect fillRect = QRect( currentX, pos_y, separatorWidth, offsetY );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
-	intervalWidth = intervalWidth + separatorWidth;
 	int musicCodeWidth = music_item_width_info->getMusicCodeWidth( );
-
-	intervalWidth = intervalWidth + musicCodeWidth;
-	fillRect = QRect( intervalWidth, pos_y, separatorWidth, offsetY );
+	currentX = currentX + separatorWidth + musicCodeWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, offsetY );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
-	intervalWidth = intervalWidth + separatorWidth;
 	int musicNameWidth = music_item_width_info->getMusicNameWidth( );
-
-	intervalWidth = intervalWidth + musicNameWidth;
-	fillRect = QRect( intervalWidth, pos_y, separatorWidth, offsetY );
+	currentX = currentX + separatorWidth + musicNameWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, offsetY );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
-	intervalWidth = intervalWidth + separatorWidth;
 	int musicSingerNameWidth = music_item_width_info->getMusicSingerNameWidth( );
-
-	intervalWidth = intervalWidth + musicSingerNameWidth;
-	fillRect = QRect( intervalWidth, pos_y, separatorWidth, offsetY );
+	currentX = currentX + separatorWidth + musicSingerNameWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, offsetY );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
-	intervalWidth = intervalWidth + separatorWidth;
 	int musicDurationTimeWidth = music_item_width_info->getMusicDurationTimeWidth( );
-
-	intervalWidth = intervalWidth + musicDurationTimeWidth;
-	fillRect = QRect( intervalWidth, pos_y, separatorWidth, offsetY );
+	currentX = currentX + separatorWidth + musicDurationTimeWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, offsetY );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
 	return true;

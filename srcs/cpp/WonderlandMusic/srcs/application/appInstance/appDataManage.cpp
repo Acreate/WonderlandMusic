@@ -36,7 +36,6 @@ bool AppDataManage::initBefore( ) {
 	auto appInstance = AppInstance::getAppInstance( );
 	QString dirPath = appInstance->getApplicationManage( )->applicationDirPath( );
 	appSettingPath = dirPath + "/program/";
-	emit signal_change_setting_path( appSettingPath );
 	constAppDefaultTranslatePath = appSettingPath + "/translations/WonderlandMusic.qm";
 	appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
 	setAppStringTranslate( constAppDefaultTranslatePath );
@@ -100,7 +99,6 @@ void AppDataManage::setAppSettingPath( const QString &new_set_path, bool is_move
 		PathTools::copyPath( oldFileAbsoluteFilePath, newFileAbsoluteFilePath );
 	// 赋值
 	appSettingPath = PathTools::getAutoShortenPathName( new_set_path );
-	emit signal_change_setting_path( appSettingPath );
 }
 
 AppMusicManage * AppDataManage::getAppMusicManage( ) const {
@@ -144,14 +142,24 @@ MusicWidgetSizeInfo * AppDataManage::getMusicWidgetSizeInfo( ) const {
 }
 
 bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {
+	if( musicItemWidthInfo == nullptr )
+		return false;
+	if( musicWidgetSizeInfo == nullptr )
+		return false;
 	// 从 appUserInterfaceManage 获取数据
-	QJsonObject uiJsonObject;
 	auto appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
 	if( appUserInterfaceManage == nullptr )
 		return false;
+	QJsonObject uiJsonObject;
 	if( appUserInterfaceManage->getJsonData( uiJsonObject ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, appUserInterfaceManage, getJsonData, tr( "获取 json 数据异常" ) );
 
+	QJsonObject musicItemWidthJsonObject;
+	if( musicItemWidthInfo->getJsonData( musicItemWidthJsonObject ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, getJsonData, tr( "获取 json 数据异常" ) );
+	QJsonObject musicWidgetWidthJsonObject;
+	if( musicWidgetSizeInfo->getJsonData( musicItemWidthJsonObject ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, getJsonData, tr( "获取 json 数据异常" ) );
 	// 获取路径数据
 	auto writePath = PathTools::getAutoShortenPathName( appSettingPath );
 
@@ -159,10 +167,16 @@ bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {
 	auto appDataManage = appDataJsonKey->getAppDataManage( );
 	get_json_object.insert( appDataManage->getAppSettingPath( ), writePath );
 	get_json_object.insert( appDataManage->getUiJsonObject( ), uiJsonObject );
+	get_json_object.insert( appDataManage->getMusicItemWidthInfo( ), musicItemWidthJsonObject );
+	get_json_object.insert( appDataManage->getMusicWidgetSizetInfo( ), musicWidgetWidthJsonObject );
 	return true;
 }
 
 bool AppDataManage::setJsonData( const QJsonObject &set_json_object ) {
+	if( musicItemWidthInfo == nullptr )
+		return false;
+	if( musicWidgetSizeInfo == nullptr )
+		return false;
 	auto appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
 	if( appUserInterfaceManage == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, appUserInterfaceManage, setJsonData, tr( "获取失败" ) );
@@ -183,12 +197,26 @@ bool AppDataManage::setJsonData( const QJsonObject &set_json_object ) {
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 找不到数据 %1" ).arg( appDataManage->getAppSettingPath( ) ) );
 
 	appSettingPath = find.value( ).toString( appSettingPath );
-	appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
+
+	QJsonObject musicItemWidthJsonObject;
+	find = set_json_object.find( appDataManage->getMusicItemWidthInfo( ) );
+	if( end == find )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 找不到数据 %1" ).arg( appDataManage->getMusicItemWidthInfo( ) ) );
+	musicItemWidthJsonObject = find.value( ).toObject( );
+
+	QJsonObject musicWidgetWidthJsonObject;
+	find = set_json_object.find( appDataManage->getMusicWidgetSizetInfo( ) );
+	if( end == find )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, tr( "json 找不到数据 %1" ).arg( appDataManage->getMusicWidgetSizetInfo( ) ) );
+	musicWidgetWidthJsonObject = find.value( ).toObject( );
 
 	if( appUserInterfaceManage->setJsonData( appUserInterfaceManageJsonObject ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, appUserInterfaceManage, setJsonData, tr( "配置 json 数据异常" ) );
-
-	emit signal_change_setting_path( appSettingPath );
+	if( musicItemWidthInfo->setJsonData( musicItemWidthJsonObject ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, setJsonData, tr( "配置 json 数据异常" ) );
+	if( musicWidgetSizeInfo->setJsonData( musicWidgetWidthJsonObject ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWidgetSizeInfo, setJsonData, tr( "配置 json 数据异常" ) );
+	appSettingPath = PathTools::getAutoShortenPathName( appSettingPath );
 	return true;
 }
 

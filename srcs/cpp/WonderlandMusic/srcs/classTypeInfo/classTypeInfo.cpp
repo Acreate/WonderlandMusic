@@ -67,16 +67,20 @@ bool ClassTypeInfo::unsafeGetClassTypeName( const void *&ptr, QString &result_na
 	if( count == 0 )
 		return false;
 	auto data = aliasTypeInfos.data( );
-	size_t index = 0;
-	for( ; index < count; index += 1 )
-		if( data[ index ]->ptr == ptr ) {
-			result_name = *name;
+	size_t index = count;
+	do
+		if( index -= 1, data[ index ]->ptr == ptr ) {
+			result_name = *data[ index ]->name;
 			return true;
 		}
-
-	for( ; index < count; index += 1 )
-		if( data[ index ]->unsafeGetClassTypeName( ptr, result_name ) )
+	while( index != 0 );
+	index = count;
+	do
+		if( index -= 1, data[ index ]->unsafeGetClassTypeName( ptr, result_name ) ) {
+			result_name = *data[ index ]->name;
 			return true;
+		}
+	while( index != 0 );
 	return false;
 }
 bool ClassTypeInfo::unsafeGetClassTypeName( const void *&&ptr, QString &result_name ) const {
@@ -84,16 +88,20 @@ bool ClassTypeInfo::unsafeGetClassTypeName( const void *&&ptr, QString &result_n
 	if( count == 0 )
 		return false;
 	auto data = aliasTypeInfos.data( );
-	size_t index = 0;
-	for( ; index < count; index += 1 )
-		if( data[ index ]->ptr == ptr ) {
-			result_name = *name;
+	size_t index = count;
+	do
+		if( index -= 1, data[ index ]->ptr == ptr ) {
+			result_name = *data[ index ]->name;
 			return true;
 		}
-
-	for( ; index < count; index += 1 )
-		if( data[ index ]->unsafeGetClassTypeName( ptr, result_name ) )
+	while( index != 0 );
+	index = count;
+	do
+		if( index -= 1, data[ index ]->unsafeGetClassTypeName( ptr, result_name ) ) {
+			result_name = *data[ index ]->name;
 			return true;
+		}
+	while( index != 0 );
 	return false;
 }
 ClassTypeInfo::ClassTypeInfo( void *ptr, const type_info &type_info ) : ClassTypeInfo( ptr, type_info, type_info.name( ) ) {

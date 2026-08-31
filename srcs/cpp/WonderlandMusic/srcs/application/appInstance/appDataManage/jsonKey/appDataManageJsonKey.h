@@ -5,11 +5,15 @@
 class AppDataManageJsonKey : public IJsonKey {
 	QString uiJsonObject;
 	QString appSettingPath;
+	QString musicItemWidthInfo;
+	QString musicWidgetSizetInfo;
 
 public:
 	bool init( ) override;
 	virtual const QString & getUiJsonObject( ) const;
 	virtual const QString & getAppSettingPath( ) const;
+	virtual const QString & getMusicItemWidthInfo( ) const;
+	virtual const QString & getMusicWidgetSizetInfo( ) const;
 };
 
 namespace AppJsonKeyTools {

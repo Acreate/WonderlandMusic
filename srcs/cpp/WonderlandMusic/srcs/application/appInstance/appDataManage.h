@@ -61,7 +61,5 @@ public:
 	virtual MusicWidgetSizeInfo * getMusicWidgetSizeInfo( ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
-Q_SIGNALS:
-	void signal_change_setting_path( const QString &new_setting_home_path );
 };
 #endif // APPDATAMANAGE_H_H_HEAD__FILE__

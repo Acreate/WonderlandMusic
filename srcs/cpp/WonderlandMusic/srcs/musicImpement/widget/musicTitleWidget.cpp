@@ -65,8 +65,7 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 	if( musicItemWidthInfo == nullptr )
 		return;
 	userMutex->lock( );
-	if( musicItemWidthInfo->getPosItemWidthPtr( resuntIndexVarPtr, resultIndex, event->pos( ) ) == false )
-		resuntIndexVarPtr = nullptr;
+
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
@@ -75,6 +74,8 @@ void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 	if( musicItemWidthInfo == nullptr )
 		return;
 	userMutex->lock( );
+	if( musicItemWidthInfo->getPosItemWidthPtr( resuntIndexVarPtr, resultIndex, event->pos( ) ) == false )
+		resuntIndexVarPtr = nullptr;
 	if( resuntIndexVarPtr ) {
 		setCursor( Qt::SizeHorCursor );
 	}
@@ -96,6 +97,7 @@ bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
 	renderBuff = new QImage;
+	setMouseTracking( true );
 	return true;
 }
 bool MusicTitleWidget::init( ) {

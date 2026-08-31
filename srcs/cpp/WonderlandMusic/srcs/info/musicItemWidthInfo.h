@@ -63,7 +63,7 @@ public:
 	bool isMusicNameWidth( const int *width_var_ptr ) const override;
 	bool isMusicSingerNameWidth( const int *width_var_ptr ) const override;
 	bool isMusicDurationTimeWidth( const int *width_var_ptr ) const override;
-	bool getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const int x ) const override;
+	bool getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, int x ) const override;
 };
 
 #endif // MUSICITEMWIDTHINFO_H_H_HEAD__FILE__

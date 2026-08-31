@@ -189,6 +189,36 @@ bool MusicItemWidthInfo::isMusicSingerNameWidth( const int *width_var_ptr ) cons
 bool MusicItemWidthInfo::isMusicDurationTimeWidth( const int *width_var_ptr ) const {
 	return width_var_ptr == &musicDurationTimeWidth;
 }
-bool MusicItemWidthInfo::getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const int x ) const {
-	return true;
+bool MusicItemWidthInfo::getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, const int x ) const {
+	int leftX = minItemWidth;
+	if( x < leftX ) {
+		result_width_var_ptr = &minItemWidth;
+		result_index = 0;
+		return true;
+	}
+	leftX = leftX + musicCodeWidth;
+	if( x < leftX ) {
+		result_width_var_ptr = &musicCodeWidth;
+		result_index = 1;
+		return true;
+	}
+	leftX = leftX + minItemWidth + musicNameWidth;
+	if( x < leftX ) {
+		result_width_var_ptr = &musicNameWidth;
+		result_index = 2;
+		return true;
+	}
+	leftX = leftX + minItemWidth + musicSingerNameWidth;
+	if( x < leftX ) {
+		result_width_var_ptr = &musicSingerNameWidth;
+		result_index = 3;
+		return true;
+	}
+	leftX = leftX + minItemWidth + musicDurationTimeWidth;
+	if( x < leftX ) {
+		result_width_var_ptr = &musicDurationTimeWidth;
+		result_index = 4;
+		return true;
+	}
+	return false;
 }

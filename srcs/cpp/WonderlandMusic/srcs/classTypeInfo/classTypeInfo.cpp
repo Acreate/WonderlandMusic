@@ -81,6 +81,10 @@ bool ClassTypeInfo::unsafeGetClassTypeName( const void *&ptr, QString &result_na
 			return true;
 		}
 	while( index != 0 );
+	if( this == ptr ) {
+		result_name = *name;
+		return true;
+	}
 	return false;
 }
 bool ClassTypeInfo::unsafeGetClassTypeName( const void *&&ptr, QString &result_name ) const {
@@ -102,6 +106,10 @@ bool ClassTypeInfo::unsafeGetClassTypeName( const void *&&ptr, QString &result_n
 			return true;
 		}
 	while( index != 0 );
+	if( this == ptr ) {
+		result_name = *name;
+		return true;
+	}
 	return false;
 }
 ClassTypeInfo::ClassTypeInfo( void *ptr, const type_info &type_info ) : ClassTypeInfo( ptr, type_info, type_info.name( ) ) {

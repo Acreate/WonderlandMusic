@@ -20,6 +20,7 @@ protected:
 	virtual void setMusicSingerNameWidth( const int music_singer_name_width ) = 0;
 	virtual void setMusicDurationTimeWidth( const int music_duration_time_width ) = 0;
 	virtual void setMinItemWidth( const int min_item_width ) = 0;
+	virtual bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) = 0;
 
 public:
 	IMusicItemWidthInfo( );

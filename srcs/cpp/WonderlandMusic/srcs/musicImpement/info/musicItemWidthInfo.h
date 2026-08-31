@@ -26,6 +26,7 @@ protected:
 	void setMusicSingerNameWidth( const int music_singer_name_width ) override;
 	void setSeparatorWidth( const int separator_width ) override;
 	void setSuggestHeight( const int suggest_height ) override;
+	bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) override;
 
 public:
 	MusicItemWidthInfo( );

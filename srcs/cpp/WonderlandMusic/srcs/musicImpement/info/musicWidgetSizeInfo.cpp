@@ -7,7 +7,6 @@
 
 #include <tools/instanceTools.h>
 
-#include "../../application/appInstance/appDataManage/jsonKey/appDataManageJsonKey.h"
 #include "../../application/appInstance/appDataManage/jsonKey/musicWidgetSizeInfoJsonKey.h"
 MusicWidgetSizeInfo::MusicWidgetSizeInfo( ) {
 	appendTypeInfo( this );

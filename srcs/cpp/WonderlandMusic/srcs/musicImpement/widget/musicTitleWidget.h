@@ -17,6 +17,8 @@ protected:
 	const int *resuntIndexVarPtr = nullptr;
 	int resultIndex;
 	int orgX;
+	Qt::CursorShape currentCursor;
+
 public:
 	MusicTitleWidget( );
 	~MusicTitleWidget( ) override;

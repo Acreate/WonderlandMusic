@@ -39,6 +39,8 @@ bool MusicTitleWidget::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
+	currentCursor = Qt::ArrowCursor;
+	setCursor( currentCursor );
 	resuntIndexVarPtr = nullptr;
 	orgX = resultIndex = 0;
 	auto musicCentreWidget = getMusicCentreWidget( );
@@ -67,16 +69,22 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 	if( musicItemWidthInfo == nullptr )
 		return;
 	userMutex->lock( );
-	if( resuntIndexVarPtr == nullptr ) {
-		auto point = event->pos( );
-		if( musicItemWidthInfo->getPosItemWidthPtr( resuntIndexVarPtr, resultIndex, point ) == true ) {
-			setCursor( Qt::SizeHorCursor );
-			userMutex->unlock( );
-			return;
+	auto point = event->pos( );
+	orgX = point.x( );
+	if( musicItemWidthInfo->getPosItemWidthPtr( resuntIndexVarPtr, resultIndex, orgX ) == true ) {
+		if( currentCursor != Qt::SizeHorCursor ) {
+			currentCursor = Qt::SizeHorCursor;
+			setCursor( currentCursor );
 		}
+		userMutex->unlock( );
+		return;
 	}
+
 	resuntIndexVarPtr = nullptr;
-	setCursor( Qt::ArrowCursor );
+	if( currentCursor != Qt::ArrowCursor ) {
+		currentCursor = Qt::ArrowCursor;
+		setCursor( Qt::ArrowCursor );
+	}
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {

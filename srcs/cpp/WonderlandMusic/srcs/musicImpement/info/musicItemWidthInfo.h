@@ -4,8 +4,6 @@
 
 class MusicItemWidthInfo : public IMusicItemWidthInfo {
 private:
-	int minItemWidth;
-	int clickWidth;
 	int suggestHeight;
 	int intervalWidth;
 	int separatorWidth;
@@ -17,7 +15,6 @@ private:
 	MusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
-	void setMinItemWidth( const int min_item_width ) override;
 	void setMusicCodeWidth( const int music_code_width ) override;
 	void setMusicDurationTimeWidth( const int music_duration_time_width ) override;
 	void setMusicNameWidth( const int music_name_width ) override;
@@ -52,9 +49,6 @@ public:
 	bool synchronization( ) override;
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool isSuggestHeight( const int *width_var_ptr ) const override;
-	bool isClickWidth( const int *width_var_ptr ) const override;
-	bool isIntervalWidth( const int *width_var_ptr ) const override;
-	bool isSeparatorWidth( const int *width_var_ptr ) const override;
 	bool isMusicCodeWidth( const int *width_var_ptr ) const override;
 	bool isMusicNameWidth( const int *width_var_ptr ) const override;
 	bool isMusicSingerNameWidth( const int *width_var_ptr ) const override;

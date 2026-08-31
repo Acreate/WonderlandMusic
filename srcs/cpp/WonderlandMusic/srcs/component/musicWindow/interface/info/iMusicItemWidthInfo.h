@@ -16,7 +16,6 @@ protected:
 	virtual void setMusicNameWidth( const int music_name_width ) = 0;
 	virtual void setMusicSingerNameWidth( const int music_singer_name_width ) = 0;
 	virtual void setMusicDurationTimeWidth( const int music_duration_time_width ) = 0;
-	virtual void setMinItemWidth( const int min_item_width ) = 0;
 	virtual bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) = 0;
 
 public:
@@ -31,9 +30,6 @@ public:
 	virtual int getMusicSingerNameWidth( ) const = 0;
 	virtual int getMusicDurationTimeWidth( ) const = 0;
 	virtual bool isSuggestHeight( const int *width_var_ptr ) const = 0;
-	virtual bool isClickWidth( const int *width_var_ptr ) const = 0;
-	virtual bool isIntervalWidth( const int *width_var_ptr ) const = 0;
-	virtual bool isSeparatorWidth( const int *width_var_ptr ) const = 0;
 	virtual bool isMusicCodeWidth( const int *width_var_ptr ) const = 0;
 	virtual bool isMusicNameWidth( const int *width_var_ptr ) const = 0;
 	virtual bool isMusicSingerNameWidth( const int *width_var_ptr ) const = 0;

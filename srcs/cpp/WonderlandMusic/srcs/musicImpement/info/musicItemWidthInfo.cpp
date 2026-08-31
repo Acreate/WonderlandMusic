@@ -22,28 +22,24 @@ MusicItemWidthInfo::~MusicItemWidthInfo( ) {
 }
 MusicItemWidthInfo::MusicItemWidthInfo( const MusicItemWidthInfo &other ) : IMusicItemWidthInfo { other },
 	suggestHeight { other.suggestHeight },
-	clickWidth { other.clickWidth },
 	intervalWidth { other.intervalWidth },
 	separatorWidth { other.separatorWidth },
 	musicCodeWidth { other.musicCodeWidth },
 	musicNameWidth { other.musicNameWidth },
 	musicSingerNameWidth { other.musicSingerNameWidth },
-	musicDurationTimeWidth { other.musicDurationTimeWidth },
-	minItemWidth { other.minItemWidth } {
+	musicDurationTimeWidth { other.musicDurationTimeWidth } {
 }
 MusicItemWidthInfo & MusicItemWidthInfo::operator=( const MusicItemWidthInfo &other ) {
 	if( this == &other )
 		return *this;
 	IMusicItemWidthInfo::operator =( other );
 	suggestHeight = other.suggestHeight;
-	clickWidth = other.clickWidth;
 	intervalWidth = other.intervalWidth;
 	separatorWidth = other.separatorWidth;
 	musicCodeWidth = other.musicCodeWidth;
 	musicNameWidth = other.musicNameWidth;
 	musicSingerNameWidth = other.musicSingerNameWidth;
 	musicDurationTimeWidth = other.musicDurationTimeWidth;
-	minItemWidth = other.minItemWidth;
 	return *this;
 }
 
@@ -86,9 +82,6 @@ void MusicItemWidthInfo::setMusicSingerNameWidth( const int music_singer_name_wi
 void MusicItemWidthInfo::setMusicDurationTimeWidth( const int music_duration_time_width ) {
 	musicDurationTimeWidth = music_duration_time_width;
 }
-void MusicItemWidthInfo::setMinItemWidth( const int min_item_width ) {
-	minItemWidth = min_item_width;
-}
 bool MusicItemWidthInfo::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
@@ -97,6 +90,7 @@ int MusicItemWidthInfo::getSuggestHeight( ) const {
 	return suggestHeight;
 }
 int MusicItemWidthInfo::getCalculateMinWidth( ) const {
+	int clickWidth = intervalWidth * 2 + separatorWidth;
 	return clickWidth * 5 + musicCodeWidth + musicNameWidth + musicSingerNameWidth + musicDurationTimeWidth;
 }
 int MusicItemWidthInfo::getIntervalWidth( ) const {
@@ -184,8 +178,6 @@ bool MusicItemWidthInfo::initInfo( ) {
 		return Result_Var_Messag_Ptr_Out_Args( false, appRenderImage, QObject::tr( "AppTranslateTools::getMusicTitleWidget 异常" ) );
 	separatorWidth = 5;
 	intervalWidth = 2;
-	minItemWidth = intervalWidth * 2 + separatorWidth;
-	clickWidth = intervalWidth * 2 + separatorWidth;
 	return true;
 }
 IMusicTitleWidget * MusicItemWidthInfo::setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) {
@@ -207,16 +199,7 @@ MusicCentreWidget * MusicItemWidthInfo::getMusicCentreWidget( ) const {
 bool MusicItemWidthInfo::isSuggestHeight( const int *width_var_ptr ) const {
 	return width_var_ptr == &suggestHeight;
 }
-bool MusicItemWidthInfo::isClickWidth( const int *width_var_ptr ) const {
-	return width_var_ptr == &clickWidth;
-}
 
-bool MusicItemWidthInfo::isIntervalWidth( const int *width_var_ptr ) const {
-	return width_var_ptr == &intervalWidth;
-}
-bool MusicItemWidthInfo::isSeparatorWidth( const int *width_var_ptr ) const {
-	return width_var_ptr == &separatorWidth;
-}
 bool MusicItemWidthInfo::isMusicCodeWidth( const int *width_var_ptr ) const {
 	return width_var_ptr == &musicCodeWidth;
 }
@@ -230,6 +213,7 @@ bool MusicItemWidthInfo::isMusicDurationTimeWidth( const int *width_var_ptr ) co
 	return width_var_ptr == &musicDurationTimeWidth;
 }
 bool MusicItemWidthInfo::getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, const int x ) const {
+	int clickWidth = intervalWidth * 2 + separatorWidth;
 	int leftX = clickWidth + musicCodeWidth;
 	if( x < leftX )
 		return false;

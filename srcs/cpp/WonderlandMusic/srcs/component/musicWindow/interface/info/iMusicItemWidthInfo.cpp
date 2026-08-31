@@ -1,5 +1,5 @@
 ﻿#include "iMusicItemWidthInfo.h"
-
+#include <qdebug.h>
 #include <qpoint.h>
 IMusicItemWidthInfo::IMusicItemWidthInfo( ) {
 	appendTypeInfo( this );

@@ -1,7 +1,6 @@
 ﻿#include <QLoggingCategory>
 #include "application/appInstance.h"
 #include "dateTimeFormat/dateTimeFormat.h"
-
 #include "head/result_message_out.h"
 
 #include "msgInfo/messageErrorOut.h"
@@ -108,7 +107,7 @@ static int endProcess( int exit_code ) {
 }
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {
-	int exec = 0;
+	int exec;
 	initTimeInfo( );
 
 	oldCategoryFilter = QLoggingCategory::installFilter( myCategoryFilter );
@@ -141,7 +140,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 	}
 
 	exec = application->exec( );
-	endProcess( exec );
+	exec = endProcess( exec );
 
 	delete application;
 	return exec;

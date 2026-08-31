@@ -14,7 +14,7 @@ protected:
 	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
 	QImage *renderBuff = nullptr;
 	UserMutex *userMutex = nullptr;
-	int *resuntIndexVarPtr = nullptr;
+	const int *resuntIndexVarPtr = nullptr;
 	int resultIndex;
 
 public:

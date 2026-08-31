@@ -2,6 +2,12 @@
 
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 
+#include "../../application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h"
+#include "../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+
+#include "../../tools/appTranslateTools.h"
+#include "../../tools/instanceTools.h"
+
 MusicListWidget::MusicListWidget( ) {
 	appendTypeInfo( this );
 }
@@ -25,12 +31,15 @@ bool MusicListWidget::deleteResource( ) {
 	return true;
 }
 bool MusicListWidget::initBefore( ) {
+	deleteResource( );
 	return true;
 }
 bool MusicListWidget::init( ) {
 	return true;
 }
 bool MusicListWidget::initAfter( ) {
+	if( autoLayout( ) == false )
+		return false;
 	return true;
 }
 QWidget * MusicListWidget::toWidget( ) {

@@ -9,7 +9,7 @@
 class MusicListWidget : public QWidget, public IMusicListWidget, public IAppResourceCore {
 	Q_OBJECT;
 
-protected:
+private:
 	MusicCentreWidget *musicCentreWidget = nullptr;
 
 public:

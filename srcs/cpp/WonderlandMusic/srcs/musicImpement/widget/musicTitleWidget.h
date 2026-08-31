@@ -12,6 +12,7 @@ class MusicTitleWidget : public QWidget, public IMusicTitleWidget, public IAppRe
 protected:
 	MusicCentreWidget *musicCentreWidget = nullptr;
 	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
+	QImage *renderBuff = nullptr;
 
 public:
 	MusicTitleWidget( );
@@ -22,7 +23,7 @@ public:
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
 	bool deleteResource( ) override;
-
+	void paintEvent(QPaintEvent *event) override;
 public:
 	bool initBefore( ) override;
 	bool init( ) override;

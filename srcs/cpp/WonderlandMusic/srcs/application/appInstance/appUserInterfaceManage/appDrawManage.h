@@ -30,10 +30,11 @@ public:
 	bool initAfter( ) override;
 
 	virtual AppRenderImage * getAppRenderImage( ) const;
-	virtual bool drawItem( QPainter &painter, const IMusicFavoriteItem *music_favorite_item, const int &pos_x, const int &pos_y ) const;
+	virtual bool drawTitle( QPainter &painter, const IMusicItemWidthInfo *music_item_width_info, int offset_pos_x, int offset_pos_y ) const;
+	virtual bool drawItem( QPainter &painter, const IMusicFavoriteItem *music_favorite_item, const int &offset_pos_x, const int &offset_pos_y ) const;
 	virtual bool drawItem( QPainter &painter, const IMusicFavoriteItem *music_favorite_item ) const;
-	virtual bool drawItem( QPainter &painter, const IMusicItem *music_item, const int &pos_x, const int &pos_y ) const;
-	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const int &pos_x, const int &pos_y ) const;
+	virtual bool drawItem( QPainter &painter, const IMusicItem *music_item, const int &offset_pos_x, const int &offset_pos_y ) const;
+	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const int &offset_pos_x, const int &offset_pos_y ) const;
 	virtual bool drawItem( QPainter &painter, const IMusicItem *music_item ) const;
 	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector ) const;
 

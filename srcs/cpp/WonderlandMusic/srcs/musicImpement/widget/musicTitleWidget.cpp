@@ -1,6 +1,19 @@
 ﻿#include "musicTitleWidget.h"
 
+#include <QPainter>
+#include <qevent.h>
+
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
+
+#include "../../application/appInstance/appDataManage.h"
+#include "../../application/appInstance/appUserInterfaceManage/appDrawManage.h"
+#include "../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+
+#include "../../head/release_macro.h"
+
+#include "../../info/musicItemWidthInfo.h"
+
+#include "../../tools/instanceTools.h"
 
 MusicTitleWidget::MusicTitleWidget( ) {
 	appendTypeInfo( this );
@@ -22,15 +35,28 @@ bool MusicTitleWidget::deleteResource( ) {
 	auto musicCentreWidget = getMusicCentreWidget( );
 	if( musicCentreWidget )
 		musicCentreWidget->removeMusicTitleWidget( this );
+	Delete_Resource_App_Core_Ptr( renderBuff );
 	return true;
 }
+void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
+	if( renderBuff == nullptr )
+		return;
+	QPainter painter( this );
+	painter.setClipRect( event->rect( ) );
+	painter.drawImage( 0, 0, *renderBuff );
+	painter.setClipping( false );
+}
 bool MusicTitleWidget::initBefore( ) {
+	deleteResource( );
+	renderBuff = new QImage;
 	return true;
 }
 bool MusicTitleWidget::init( ) {
 	return true;
 }
 bool MusicTitleWidget::initAfter( ) {
+	if( autoLayout( ) == false )
+		return false;
 	return true;
 }
 QWidget * MusicTitleWidget::toWidget( ) {
@@ -47,5 +73,26 @@ IMusicItemWidthInfo * MusicTitleWidget::getIMusicItemWidthInfo( ) const {
 	return musicItemWidthInfo;
 }
 bool MusicTitleWidget::autoLayout( ) {
+	auto appDrawManage = InstanceTools::getAppDrawManage( );
+	if( appDrawManage == nullptr )
+		return false;
+	if( musicItemWidthInfo == nullptr ) {
+		AppDataManage *appDataManage = InstanceTools::getAppDataManage( );
+		if( appDataManage == nullptr )
+			return false;
+		musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
+	}
+	auto calculateMinWidth = musicItemWidthInfo->getCalculateMinWidth( );
+	auto suggestHeight = musicItemWidthInfo->getSuggestHeight( );
+	*renderBuff = QImage( calculateMinWidth, suggestHeight, QImage::Format_RGBA8888 );
+	if( renderBuff->isNull( ) )
+		return false;
+	renderBuff->fill( 0 );
+	QPainter painter( renderBuff );
+	auto appRenderImage = appDrawManage->getAppRenderImage( );
+	painter.setFont( *appRenderImage->getFont( ) );
+	if( appDrawManage->drawTitle( painter, musicItemWidthInfo, 0, 0 ) == false )
+		return false;
+	repaint( );
 	return true;
 }

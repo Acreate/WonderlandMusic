@@ -13,6 +13,9 @@ protected:
 	MusicCentreWidget *musicCentreWidget = nullptr;
 	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
 	QImage *renderBuff = nullptr;
+	UserMutex *userMutex = nullptr;
+	int *resuntIndexVarPtr = nullptr;
+	int resultIndex;
 
 public:
 	MusicTitleWidget( );
@@ -23,7 +26,11 @@ public:
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
 	bool deleteResource( ) override;
-	void paintEvent(QPaintEvent *event) override;
+	void paintEvent( QPaintEvent *event ) override;
+	void mouseMoveEvent( QMouseEvent *event ) override;
+	void mousePressEvent( QMouseEvent *event ) override;
+	void mouseReleaseEvent( QMouseEvent *event ) override;
+
 public:
 	bool initBefore( ) override;
 	bool init( ) override;

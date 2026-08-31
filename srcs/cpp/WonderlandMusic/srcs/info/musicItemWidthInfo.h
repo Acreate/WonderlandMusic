@@ -55,6 +55,15 @@ public:
 	IMusicTitleWidget * getMusicTitleWidget( ) override;
 	bool synchronization( ) override;
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	bool isSuggestHeight( const int *width_var_ptr ) const override;
+	bool isClickWidth( const int *width_var_ptr ) const override;
+	bool isIntervalWidth( const int *width_var_ptr ) const override;
+	bool isSeparatorWidth( const int *width_var_ptr ) const override;
+	bool isMusicCodeWidth( const int *width_var_ptr ) const override;
+	bool isMusicNameWidth( const int *width_var_ptr ) const override;
+	bool isMusicSingerNameWidth( const int *width_var_ptr ) const override;
+	bool isMusicDurationTimeWidth( const int *width_var_ptr ) const override;
+	bool getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const int x ) const override;
 };
 
 #endif // MUSICITEMWIDTHINFO_H_H_HEAD__FILE__

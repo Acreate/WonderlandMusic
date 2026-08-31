@@ -34,11 +34,22 @@ public:
 	virtual int getMusicSingerNameWidth( ) const = 0;
 	virtual int getMusicDurationTimeWidth( ) const = 0;
 	virtual int getMinItemWidth( ) const = 0;
+	virtual bool isSuggestHeight( const int *width_var_ptr ) const = 0;
+	virtual bool isClickWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isIntervalWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isSeparatorWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isMusicCodeWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isMusicNameWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isMusicSingerNameWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isMusicDurationTimeWidth( const int *width_var_ptr ) const = 0;
 	virtual bool setIMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) = 0;
 	virtual bool initInfo( ) = 0;
 	virtual bool synchronization( ) = 0;
 	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) = 0;
 	virtual IMusicTitleWidget * getMusicTitleWidget( ) = 0;
+	virtual bool getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const QPoint &pos ) const;
+	virtual bool getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const int x, const int y ) const;
+	virtual bool getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const int x ) const = 0;
 };
 
 #endif // IMUSICITEMWIDTHINFO_H_H_HEAD__FILE__

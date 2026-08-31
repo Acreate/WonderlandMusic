@@ -164,3 +164,31 @@ bool MusicItemWidthInfo::synchronization( ) {
 MusicCentreWidget * MusicItemWidthInfo::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
+bool MusicItemWidthInfo::isSuggestHeight( const int *width_var_ptr ) const {
+	return width_var_ptr == &suggestHeight;
+}
+bool MusicItemWidthInfo::isClickWidth( const int *width_var_ptr ) const {
+	return width_var_ptr == &clickWidth;
+}
+
+bool MusicItemWidthInfo::isIntervalWidth( const int *width_var_ptr ) const {
+	return width_var_ptr == &intervalWidth;
+}
+bool MusicItemWidthInfo::isSeparatorWidth( const int *width_var_ptr ) const {
+	return width_var_ptr == &separatorWidth;
+}
+bool MusicItemWidthInfo::isMusicCodeWidth( const int *width_var_ptr ) const {
+	return width_var_ptr == &musicCodeWidth;
+}
+bool MusicItemWidthInfo::isMusicNameWidth( const int *width_var_ptr ) const {
+	return width_var_ptr == &musicNameWidth;
+}
+bool MusicItemWidthInfo::isMusicSingerNameWidth( const int *width_var_ptr ) const {
+	return width_var_ptr == &musicSingerNameWidth;
+}
+bool MusicItemWidthInfo::isMusicDurationTimeWidth( const int *width_var_ptr ) const {
+	return width_var_ptr == &musicDurationTimeWidth;
+}
+bool MusicItemWidthInfo::getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const int x ) const {
+	return true;
+}

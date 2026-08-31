@@ -2,8 +2,11 @@
 
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 
+#include "../../component/musicWindow/interface/ItemWidget/iMusicFavoriteItemWidget.h"
 #include "../../component/musicWindow/interface/info/iMusicDataManage.h"
 #include "../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
+
+#include "../../head/result_message_out.h"
 
 MusicFavoriteWidget::MusicFavoriteWidget( ) {
 	appendTypeInfo( this );
@@ -59,9 +62,44 @@ bool MusicFavoriteWidget::autoLayout( ) {
 		return false;
 	IMusicFavoriteItem *defaultItem;
 	std::vector< IMusicFavoriteItem * > musicFavoriteItems;
+	int width, height;
+	int offsetX, offsetY;
 	if( musicDataManage->getMusicFavoriteItem( defaultItem, musicFavoriteItems ) == false )
 		return false;
-	auto musicFavoriteItemWidget = defaultItem->getMusicFavoriteItemWidget(  );
-	
+	auto musicFavoriteItemWidget = defaultItem->getMusicFavoriteItemWidget( );
+	if( musicFavoriteItemWidget->setMusicFavoriteWidget( this ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "默认项目配置收藏组件异常" ) );
+	if( musicFavoriteItemWidget->setPos( 0, 0 ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "默认项目配置位置异常" ) );
+	if( musicFavoriteItemWidget->updateLayout( ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "默认项目配置更新布局异常" ) );
+	if( musicFavoriteItemWidget->showItemWidget( ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "默认项目配置显示异常" ) );
+	if( musicFavoriteItemWidget->getSize( width, height ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "默认项目获取大小异常" ) );
+	offsetX = width;
+	offsetY = height;
+	size_t count = musicFavoriteItems.size( );
+	if( count ) {
+		auto data = musicFavoriteItems.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 ) {
+			musicFavoriteItemWidget = data[ index ]->getMusicFavoriteItemWidget( );
+			if( musicFavoriteItemWidget->setMusicFavoriteWidget( this ) == false )
+				return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "下标[%1]配置收藏组件异常" ).arg( index ) );
+			if( musicFavoriteItemWidget->setPos( 0, 0 ) == false )
+				return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "下标[%1]配置位置异常" ).arg( index ) );
+			if( musicFavoriteItemWidget->updateLayout( ) == false )
+				return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "下标[%1]配置更新布局异常" ).arg( index ) );
+			if( musicFavoriteItemWidget->showItemWidget( ) == false )
+				return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "下标[%1]配置显示异常" ).arg( index ) );
+			if( musicFavoriteItemWidget->getSize( width, height ) == false )
+				return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItemWidget, setMusicFavoriteWidget, tr( "下标[%1]获取大小异常" ).arg( index ) );
+			offsetY += height;
+			if( offsetX < width )
+				offsetX = width;
+		}
+	}
+	resize( offsetX, offsetY );
 	return true;
 }

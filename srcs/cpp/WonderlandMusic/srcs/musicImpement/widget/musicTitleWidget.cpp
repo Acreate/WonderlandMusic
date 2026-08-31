@@ -5,20 +5,20 @@
 
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 
-#include "../../application/appInstance/appDataManage.h"
-#include "../../application/appInstance/appUserInterfaceManage/appDrawManage.h"
-#include "../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
+#include <application/appInstance/appDataManage.h>
+#include <application/appInstance/appUserInterfaceManage/appDrawManage.h>
+#include <application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h>
 
-#include "../../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
+#include <component/musicWindow/interface/info/iMusicItemWidthInfo.h>
 
-#include "../../head/release_macro.h"
-#include "../../head/result_message_out.h"
+#include <head/release_macro.h>
+#include <head/result_message_out.h>
 
-#include "../../mutex/userMutex.h"
+#include <mutex/userMutex.h>
 
-#include "../../tools/instanceTools.h"
+#include <tools/instanceTools.h>
 
-#include "../info/musicItemWidthInfo.h"
+#include <musicImpement/info/musicItemWidthInfo.h>
 
 MusicTitleWidget::MusicTitleWidget( ) {
 	appendTypeInfo( this );

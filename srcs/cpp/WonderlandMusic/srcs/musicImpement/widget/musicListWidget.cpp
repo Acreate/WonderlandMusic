@@ -2,12 +2,6 @@
 
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 
-#include "../../application/appInstance/appDataManage/translate/musicTitleWidgetTranslate.h"
-#include "../../application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h"
-
-#include "../../tools/appTranslateTools.h"
-#include "../../tools/instanceTools.h"
-
 MusicListWidget::MusicListWidget( ) {
 	appendTypeInfo( this );
 }

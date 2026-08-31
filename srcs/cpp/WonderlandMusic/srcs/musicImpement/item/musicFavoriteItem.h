@@ -37,6 +37,7 @@ public:
 	virtual void setName( const QString &name );
 	MusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const override;
+	
 };
 
 #endif // MUSICFAVORITEITEM_H_H_HEAD__FILE__

@@ -29,6 +29,7 @@ else( )
 	init_qt_dir_event( "${Qt6_DIR}" )
 endif( )
 
+
 printf_qt_cmake_out( )
 
 qt_standard_project_setup( )
@@ -77,7 +78,6 @@ else( )
 endif( )
 
 target_link_libraries( ${prject_name} PRIVATE ${qt_link_lib_list} )
-
 
 if( ${QT_VERSION} VERSION_LESS 6.1.0 )
 	set( BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.${prject_name} )

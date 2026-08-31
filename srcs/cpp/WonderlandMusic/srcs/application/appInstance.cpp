@@ -155,12 +155,18 @@ bool AppInstance::initAfter( ) {
 }
 
 int AppInstance::exec( ) {
-	if( appUserInterfaceManage->showMainWindow( ) == false )
-		return false;
+	int exec = -1;
+	if( appDataManage->readJsonData( ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( exec, appDataManage, readJsonData, tr( "json 读取异常" ) );
 	auto systemTrayIcon = appUserInterfaceManage->getSystemTrayIcon( );
+	exec = -2;
+	if( systemTrayIcon == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( exec, appUserInterfaceManage, getSystemTrayIcon, tr( "无法获取右下角功能菜单" ) );
 	systemTrayIcon->show( );
-
-	int exec = applicationManage->exec( );
+	exec = -2;
+	if( appUserInterfaceManage->showMainWindow( ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( exec, appUserInterfaceManage, showMainWindow, tr( "主窗口显示异常" ) );
+	exec = applicationManage->exec( );
 	if( appDataManage->writeJsonData( ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( exec, appDataManage, writeJsonData, tr( "json 写入异常" ) );
 	return exec;

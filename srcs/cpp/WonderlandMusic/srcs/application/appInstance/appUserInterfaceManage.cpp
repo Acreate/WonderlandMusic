@@ -165,6 +165,8 @@ AppUserInterfaceManage::~AppUserInterfaceManage( ) {
 bool AppUserInterfaceManage::showMainWindow( ) const {
 	if( mainWindow == nullptr )
 		return false;
+	if( musicWindow->repaintChildrenWidget( ) == false )
+		return false;
 	mainWindow->show( );
 	mainWindow->raise( );
 	mainWindow->activateWindow( );

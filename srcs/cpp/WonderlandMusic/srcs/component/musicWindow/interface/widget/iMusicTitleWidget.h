@@ -7,6 +7,9 @@ class QMouseEvent;
 class QPoint;
 
 class IMusicTitleWidget : public IMusicWidget {
+protected:
+	virtual bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width );
+
 public:
 	QString getTypeName( ) const override;
 	IMusicTitleWidget( );

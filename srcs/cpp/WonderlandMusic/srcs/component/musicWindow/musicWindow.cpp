@@ -138,6 +138,15 @@ bool MusicWindow::repaintMusicCentreWidget( ) {
 		return false;
 	return musicCentreWidget->repaintMusicCentreWidget( );
 }
+bool MusicWindow::repaintChildrenWidget( ) {
+	if( repaintTitleWidget( ) == false )
+		return false;
+	if( repaintFavoriteWidget( ) == false )
+		return false;
+	if( repaintListWidget( ) == false )
+		return false;
+	return true;
+}
 bool MusicWindow::synchronizationChildrenWidgetSize( ) {
 	if( musicCentreWidget == nullptr )
 		return false;

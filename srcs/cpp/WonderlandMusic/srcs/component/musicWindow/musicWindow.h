@@ -60,6 +60,7 @@ public:
 	virtual bool repaintTitleWidget( );
 	virtual bool repaintFavoriteWidget( );
 	virtual bool repaintMusicCentreWidget( );
+	virtual bool repaintChildrenWidget( );
 	virtual bool synchronizationChildrenWidgetSize( );
 };
 

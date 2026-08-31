@@ -17,7 +17,9 @@ protected:
 	const int *resuntIndexVarPtr = nullptr;
 	int resultIndex;
 	int orgX;
+	int orgWidth;
 	Qt::CursorShape currentCursor;
+	bool isDrag = false;
 
 public:
 	MusicTitleWidget( );

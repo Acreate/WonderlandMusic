@@ -12,6 +12,7 @@
 #include "../../component/musicWindow/interface/info/iMusicItemWidthInfo.h"
 
 #include "../../head/release_macro.h"
+#include "../../head/result_message_out.h"
 
 #include "../../mutex/userMutex.h"
 
@@ -39,6 +40,7 @@ bool MusicTitleWidget::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
+	isDrag = false;
 	currentCursor = Qt::ArrowCursor;
 	setCursor( currentCursor );
 	resuntIndexVarPtr = nullptr;
@@ -69,21 +71,35 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 	if( musicItemWidthInfo == nullptr )
 		return;
 	userMutex->lock( );
-	auto point = event->pos( );
-	orgX = point.x( );
-	if( musicItemWidthInfo->getPosItemWidthPtr( resuntIndexVarPtr, resultIndex, orgX ) == true ) {
-		if( currentCursor != Qt::SizeHorCursor ) {
-			currentCursor = Qt::SizeHorCursor;
-			setCursor( currentCursor );
+	if( isDrag == false ) {
+		auto point = event->pos( );
+		orgX = point.x( );
+		if( musicItemWidthInfo->getPosItemWidthPtr( resuntIndexVarPtr, resultIndex, orgX ) == true ) {
+			if( currentCursor != Qt::SizeHorCursor ) {
+				currentCursor = Qt::SizeHorCursor;
+				setCursor( currentCursor );
+			}
+			userMutex->unlock( );
+			return;
+		}
+
+		resuntIndexVarPtr = nullptr;
+		if( currentCursor != Qt::ArrowCursor ) {
+			currentCursor = Qt::ArrowCursor;
+			setCursor( Qt::ArrowCursor );
 		}
 		userMutex->unlock( );
 		return;
-	}
-
-	resuntIndexVarPtr = nullptr;
-	if( currentCursor != Qt::ArrowCursor ) {
-		currentCursor = Qt::ArrowCursor;
-		setCursor( Qt::ArrowCursor );
+	} else if( resuntIndexVarPtr != nullptr ) {
+		auto point = event->pos( );
+		int newWidth = point.x( ) - orgX + orgWidth;
+		bool posItemWidthPtrVar = setPosItemWidthPtrVar( resuntIndexVarPtr, resultIndex, newWidth );
+		if( posItemWidthPtrVar == false )
+			Result_Void_Messag_Ptr_Out_Args( this, tr( "设置 %1 下标宽度异常" ).arg( resultIndex ) );
+		userMutex->unlock( );
+		if( posItemWidthPtrVar )
+			autoLayout( );
+		return;
 	}
 	userMutex->unlock( );
 }
@@ -94,7 +110,9 @@ void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 		return;
 	userMutex->lock( );
 	if( resuntIndexVarPtr ) {
+		orgWidth = *resuntIndexVarPtr;
 		orgX = event->pos( ).x( );
+		isDrag = true;
 	}
 	userMutex->unlock( );
 }
@@ -108,6 +126,8 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		setCursor( Qt::ArrowCursor );
 	}
 	resuntIndexVarPtr = nullptr;
+	isDrag = false;
+	orgWidth = 0;
 	userMutex->unlock( );
 }
 bool MusicTitleWidget::initBefore( ) {

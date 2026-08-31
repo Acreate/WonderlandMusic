@@ -49,7 +49,7 @@ public:
 	virtual IMusicTitleWidget * getMusicTitleWidget( ) = 0;
 	virtual bool getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const QPoint &pos ) const;
 	virtual bool getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const int x, const int y ) const;
-	virtual bool getPosItemWidthPtr( int *&result_width_var_ptr, int &result_index, const int x ) const = 0;
+	virtual bool getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, int x ) const = 0;
 };
 
 #endif // IMUSICITEMWIDTHINFO_H_H_HEAD__FILE__

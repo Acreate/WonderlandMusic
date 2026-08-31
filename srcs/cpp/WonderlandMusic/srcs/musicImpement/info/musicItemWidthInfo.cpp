@@ -124,6 +124,7 @@ bool MusicItemWidthInfo::setIMusicItemWidthInfo( const IMusicItemWidthInfo &musi
 bool MusicItemWidthInfo::getJsonData( QJsonObject &get_json_object ) const {
 	if( AppJsonKeyTools::getMusicItemWidthInfo( [&get_json_object, this] ( const MusicItemWidthInfoJsonKey &json_key ) {
 		get_json_object.insert( json_key.getMusicCodeWidth( ), musicCodeWidth );
+		get_json_object.insert( json_key.getMusicNameWidth( ), musicNameWidth );
 		get_json_object.insert( json_key.getMusicDurationTimeWidth( ), musicDurationTimeWidth );
 		get_json_object.insert( json_key.getMusicSingerNameWidth( ), musicSingerNameWidth );
 		get_json_object.insert( json_key.getSuggestHeight( ), suggestHeight );
@@ -147,6 +148,7 @@ bool MusicItemWidthInfo::setJsonData( const QJsonObject &set_json_object ) {
 			find_over( (_equ_var), (_find_key), toInteger, find, end, set_json_object )
 
 		find_integer_over( musicCodeWidth, json_key.getMusicCodeWidth( ) )
+		find_integer_over( musicNameWidth, json_key.getMusicNameWidth( ) )
 		find_integer_over( musicDurationTimeWidth, json_key.getMusicDurationTimeWidth( ) )
 		find_integer_over( musicSingerNameWidth, json_key.getMusicSingerNameWidth( ) )
 		find_integer_over( suggestHeight, json_key.getSuggestHeight( ) )

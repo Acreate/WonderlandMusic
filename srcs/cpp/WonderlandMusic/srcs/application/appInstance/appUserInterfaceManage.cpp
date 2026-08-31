@@ -166,7 +166,7 @@ bool AppUserInterfaceManage::showMainWindow( ) const {
 	if( mainWindow == nullptr )
 		return false;
 	if( musicWindow->repaintChildrenWidget( ) == false )
-		return false;
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWindow, repaintChildrenWidget, tr( "更新异常" ) );
 	mainWindow->show( );
 	mainWindow->raise( );
 	mainWindow->activateWindow( );

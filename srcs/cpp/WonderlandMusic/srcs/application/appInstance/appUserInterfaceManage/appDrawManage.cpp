@@ -1,10 +1,9 @@
 ﻿#include "appDrawManage.h"
 
-#include <QPainter>
 #include <QDebug>
+#include <QPainter>
 
-#include "../appDataManage.h"
-
+#include <component/musicWindow/interface/info/iMusicItemWidthInfo.h>
 #include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
 #include <component/musicWindow/interface/item/iMusicItem.h>
 
@@ -14,9 +13,9 @@
 #include <head/release_macro.h>
 #include <head/result_message_out.h>
 
-#include <musicImpement/info/musicItemWidthInfo.h>
-
 #include <tools/instanceTools.h>
+
+#include "../appDataManage.h"
 
 #include "../appDataManage/translate/musicTitleWidgetTranslate.h"
 
@@ -115,7 +114,7 @@ bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, c
 	AppDataManage *appDataManage = InstanceTools::getAppDataManage( );
 	if( appDataManage == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, drawItem, QObject::tr( "AppDataManage * 获取失败" ) );
-	MusicItemWidthInfo *musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
+	auto musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
 	if( musicItemWidthInfo == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, appDataManage, getMusicItemWidthInfo, QObject::tr( "MusicItemWidthInfo * 获取失败" ) );
 	return drawItem( painter, music_item, musicItemWidthInfo, offset_pos_x, offset_pos_y );
@@ -124,7 +123,7 @@ bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem *
 	AppDataManage *appDataManage = InstanceTools::getAppDataManage( );
 	if( appDataManage == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, drawItem, QObject::tr( "AppDataManage * 获取失败" ) );
-	MusicItemWidthInfo *musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
+	auto musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
 	if( musicItemWidthInfo == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, appDataManage, getMusicItemWidthInfo, QObject::tr( "MusicItemWidthInfo * 获取失败" ) );
 	return drawItem( painter, music_item_vector, musicItemWidthInfo, offset_pos_x, offset_pos_y );

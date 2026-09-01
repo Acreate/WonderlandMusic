@@ -3,6 +3,7 @@
 #include <QPainter>
 
 #include "../component/musicWindow/musicWindow.h"
+#include "../component/musicWindow/interface/widget/iMusicCentreWidget.h"
 #include "../component/optionWindow/optionWindow.h"
 
 #include "../head/after_init_macro.h"
@@ -11,10 +12,6 @@
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
-#include "../musicImpement/widget/musicCentreWidget.h"
-#include "../musicImpement/widget/musicFavoriteWidget.h"
-#include "../musicImpement/widget/musicListWidget.h"
-#include "../musicImpement/widget/musicTitleWidget.h"
 
 #include "../systemTrayIcon/systemTrayIcon.h"
 

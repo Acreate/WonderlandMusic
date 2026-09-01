@@ -135,10 +135,10 @@ bool AppDataManage::writeJsonData( ) {
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, nullptr, PathTools::writeJsonObject, tr( "写入路径失败: %1" ).arg( jsonFilePath ) );
 	return true;
 }
-MusicItemWidthInfo * AppDataManage::getMusicItemWidthInfo( ) const {
+IMusicItemWidthInfo * AppDataManage::getMusicItemWidthInfo( ) const {
 	return musicItemWidthInfo;
 }
-MusicWidgetSizeInfo * AppDataManage::getMusicWidgetSizeInfo( ) const {
+IMusicWidgetSizeInfo * AppDataManage::getMusicWidgetSizeInfo( ) const {
 	return musicWidgetSizeInfo;
 }
 

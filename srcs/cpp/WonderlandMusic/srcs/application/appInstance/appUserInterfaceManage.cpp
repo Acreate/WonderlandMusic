@@ -208,15 +208,15 @@ SettingWidget * AppUserInterfaceManage::getSettingWidget( ) const {
 AboutWidget * AppUserInterfaceManage::getAboutWidget( ) const {
 	return aboutWidget;
 }
-MusicCentreWidget * AppUserInterfaceManage::getMusicCentreWidget( ) const {
+IMusicCentreWidget * AppUserInterfaceManage::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
-MusicFavoriteWidget * AppUserInterfaceManage::getMusicFavoriteWidget( ) const {
+IMusicFavoriteWidget * AppUserInterfaceManage::getMusicFavoriteWidget( ) const {
 	return musicFavoriteWidget;
 }
-MusicListWidget * AppUserInterfaceManage::getMusicListWidget( ) const {
+IMusicListWidget * AppUserInterfaceManage::getMusicListWidget( ) const {
 	return musicListWidget;
 }
-MusicTitleWidget * AppUserInterfaceManage::getMusicTitleWidget( ) const {
+IMusicTitleWidget * AppUserInterfaceManage::getMusicTitleWidget( ) const {
 	return musicTitleWidget;
 }

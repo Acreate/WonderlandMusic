@@ -6,6 +6,8 @@
 
 #include "../../interface/iAppResourceCore.h"
 
+class IMusicItemWidthInfo;
+class IMusicWidgetSizeInfo;
 class MusicItemWidthInfo;
 class MusicWidgetSizeInfo;
 class FavoriteItem;
@@ -57,8 +59,8 @@ public:
 	virtual AppMusicManage * getAppMusicManage( ) const;
 	bool readJsonData( ) override;
 	bool writeJsonData( ) override;
-	virtual MusicItemWidthInfo * getMusicItemWidthInfo( ) const;
-	virtual MusicWidgetSizeInfo * getMusicWidgetSizeInfo( ) const;
+	virtual IMusicItemWidthInfo * getMusicItemWidthInfo( ) const;
+	virtual IMusicWidgetSizeInfo * getMusicWidgetSizeInfo( ) const;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 };

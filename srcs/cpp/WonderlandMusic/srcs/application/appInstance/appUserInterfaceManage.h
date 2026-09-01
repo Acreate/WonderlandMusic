@@ -5,6 +5,10 @@
 
 #include "../../interface/iAppResourceCore.h"
 
+class IMusicTitleWidget;
+class IMusicListWidget;
+class IMusicFavoriteWidget;
+class IMusicCentreWidget;
 class MusicCentreWidget;
 class OptionWindow;
 class MusicWindow;
@@ -67,9 +71,9 @@ public:
 	virtual MusicWindow * getMusicWindow( ) const;
 	virtual SettingWidget * getSettingWidget( ) const;
 	virtual AboutWidget * getAboutWidget( ) const;
-	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
-	virtual MusicFavoriteWidget * getMusicFavoriteWidget( ) const;
-	virtual MusicListWidget * getMusicListWidget( ) const;
-	virtual MusicTitleWidget * getMusicTitleWidget( ) const;
+	virtual IMusicCentreWidget * getMusicCentreWidget( ) const;
+	virtual IMusicFavoriteWidget * getMusicFavoriteWidget( ) const;
+	virtual IMusicListWidget * getMusicListWidget( ) const;
+	virtual IMusicTitleWidget * getMusicTitleWidget( ) const;
 };
 #endif // APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__

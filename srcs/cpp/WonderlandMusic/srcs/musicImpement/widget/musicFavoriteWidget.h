@@ -28,6 +28,9 @@ public:
 protected:
 	bool deleteResource( ) override;
 
+private:
+	bool updateChildItem( IMusicFavoriteItem *music_favorite_item, int &offset_x, int &offset_y );
+
 public:
 	bool initBefore( ) override;
 	bool init( ) override;

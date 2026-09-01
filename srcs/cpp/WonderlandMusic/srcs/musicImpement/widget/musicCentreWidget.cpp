@@ -81,7 +81,6 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 			if( musicFavoriteWidget ) {
 				int x = point.x( );
 				if( x > favoriteLeft && x < favoriteRight ) {
-					qDebug( ) << "musicFavoriteWidget " << event->pos( );
 					dragStatus = Drag_Status::MusicFavoriteWidget;
 					if( cursorShape != Qt::CursorShape::SizeHorCursor ) {
 						cursorShape = Qt::CursorShape::SizeHorCursor;
@@ -96,7 +95,6 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 			if( musicTitleWidget ) {
 				int y = point.y( );
 				if( y > titleTop && y < titleBottom ) {
-					qDebug( ) << "musicTitleWidget " << event->pos( );
 					dragStatus = Drag_Status::MusicTitleWidget;
 					if( cursorShape != Qt::CursorShape::SizeVerCursor ) {
 						cursorShape = Qt::CursorShape::SizeVerCursor;
@@ -108,7 +106,6 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 					return;
 				}
 			}
-			qDebug( ) << "None " << event->pos( );
 			dragStatus = Drag_Status::None;
 			if( cursorShape != Qt::CursorShape::ArrowCursor ) {
 				cursorShape = Qt::CursorShape::ArrowCursor;

@@ -159,7 +159,7 @@ bool AppDataManage::getJsonData( QJsonObject &get_json_object ) const {
 	if( musicItemWidthInfo->getJsonData( musicItemWidthJsonObject ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, getJsonData, tr( "获取 json 数据异常" ) );
 	QJsonObject musicWidgetWidthJsonObject;
-	if( musicWidgetSizeInfo->getJsonData( musicItemWidthJsonObject ) == false )
+	if( musicWidgetSizeInfo->getJsonData( musicWidgetWidthJsonObject ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, getJsonData, tr( "获取 json 数据异常" ) );
 	// 获取路径数据
 	auto writePath = PathTools::getAutoShortenPathName( appSettingPath );

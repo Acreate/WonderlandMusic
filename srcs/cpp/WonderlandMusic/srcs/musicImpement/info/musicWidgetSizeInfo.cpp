@@ -1,5 +1,6 @@
 ﻿#include "musicWidgetSizeInfo.h"
 
+#include <QJsonObject>
 #include <qfontmetrics.h>
 
 #include <application/appInstance/applicationManage.h>
@@ -8,6 +9,8 @@
 #include <tools/instanceTools.h>
 
 #include "../../application/appInstance/appDataManage/jsonKey/musicWidgetSizeInfoJsonKey.h"
+
+#include "../../head/result_message_out.h"
 MusicWidgetSizeInfo::MusicWidgetSizeInfo( ) {
 	appendTypeInfo( this );
 }
@@ -25,13 +28,9 @@ bool MusicWidgetSizeInfo::initInfo( ) {
 	auto fontMetrics = appRenderImage->getFontMetrics( );
 	if( fontMetrics == nullptr )
 		return false;
-	auto applicationManage = InstanceTools::getApplicationManage( );
-	if( applicationManage == nullptr )
-		return false;
-	auto metrics = applicationManage->fontMetrics( );
 	QString defaultWidth = QObject::tr( "默认" );
-	favoriteWidth = metrics.horizontalAdvance( defaultWidth );
-	titleHeight = metrics.height( );
+	favoriteWidth = fontMetrics->horizontalAdvance( defaultWidth );
+	titleHeight = fontMetrics->height( );
 	return true;
 }
 
@@ -45,14 +44,25 @@ bool MusicWidgetSizeInfo::updateMusicWidgetLayout( ) {
 	return false;
 }
 bool MusicWidgetSizeInfo::getJsonData( QJsonObject &get_json_object ) const {
-	if( AppJsonKeyTools::getMusicWidgetSizeInfo( [] ( const MusicWidgetSizeInfoJsonKey &json_key ) {
+	if( AppJsonKeyTools::getMusicWidgetSizeInfo( [&get_json_object, this] ( const MusicWidgetSizeInfoJsonKey &json_key ) {
+		get_json_object.insert( json_key.getFavoriteWidth( ), favoriteWidth );
+		get_json_object.insert( json_key.getTitleHeight( ), titleHeight );
 		return true;
 	} ) == false )
 		return false;
 	return true;
 }
 bool MusicWidgetSizeInfo::setJsonData( const QJsonObject &set_json_object ) {
-	if( AppJsonKeyTools::getMusicWidgetSizeInfo( [] ( const MusicWidgetSizeInfoJsonKey &json_key ) {
+	if( AppJsonKeyTools::getMusicWidgetSizeInfo( [&set_json_object, this] ( const MusicWidgetSizeInfoJsonKey &json_key ) {
+		auto end = set_json_object.end( );
+		auto find = set_json_object.find( json_key.getFavoriteWidth( ) );
+		if( end == find )
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, QObject::tr("无法匹配 [%1]").arg( json_key.getFavoriteWidth( )) );
+		favoriteWidth = find->toInteger( favoriteWidth );
+		find = set_json_object.find( json_key.getTitleHeight( ) );
+		if( end == find )
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, &set_json_object, find, QObject::tr("无法匹配 [%1]").arg( json_key.getTitleHeight( )) );
+		titleHeight = find->toInteger( titleHeight );
 		return true;
 	} ) == false )
 		return false;

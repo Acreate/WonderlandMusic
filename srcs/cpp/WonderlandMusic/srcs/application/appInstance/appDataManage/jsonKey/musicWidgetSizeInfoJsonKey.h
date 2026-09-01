@@ -4,8 +4,13 @@
 #include <interface/iJsonKey.h>
 
 class MusicWidgetSizeInfoJsonKey : public IJsonKey {
+	QString favoriteWidth;
+	QString titleHeight;
+
 public:
 	bool init( ) override;
+	virtual const QString & getFavoriteWidth( ) const;
+	virtual const QString & getTitleHeight( ) const;
 };
 
 namespace AppJsonKeyTools {

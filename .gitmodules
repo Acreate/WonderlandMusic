@@ -4,3 +4,6 @@
 [submodule "srcs/cpp/WonderlandMusic/qrc/music/766e6"]
 	path = srcs/cpp/WonderlandMusic/qrc/music/766e6
 	url = https://gitcode.com/open-source-toolkit/766e6.git
+[submodule "srcs/lib/ffmpeg_9_lgpl"]
+	path = srcs/lib/ffmpeg_9_lgpl
+	url = https://gitee.com/ChenYLhuman/ffmpeg_9_lgpl.git

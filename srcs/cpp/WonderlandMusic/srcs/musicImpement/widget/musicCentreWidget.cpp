@@ -75,7 +75,6 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 	event->accept( );
 
 	userMutex->lock( );
-
 	switch( readDragStatus ) {
 		case Drag_Status::None : {
 			auto point = event->pos( );

@@ -47,24 +47,11 @@ void MusicFavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->ignore( );
 }
 bool MusicFavoriteWidget::event( QEvent *event ) {
-	switch( event->type( ) ) {
-		case QEvent::MouseButtonPress :
-		case QEvent::MouseButtonRelease :
-		case QEvent::MouseMove :
-		case QEvent::MouseButtonDblClick :
-		case QEvent::Wheel : {
-			event->ignore( );
-			return true;
-		}
-		default :
-			break;
-	}
 	return QWidget::event( event );
 }
 
 bool MusicFavoriteWidget::initBefore( ) {
 	deleteResource( );
-	setAttribute( Qt::WA_TransparentForMouseEvents, true );
 	setMouseTracking( true );
 	return true;
 }

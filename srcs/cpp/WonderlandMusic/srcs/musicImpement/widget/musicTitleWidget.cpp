@@ -157,25 +157,12 @@ void MusicTitleWidget::leaveEvent( QEvent *event ) {
 		musicCentreWidget->toWidget( )->setFocus( );
 }
 bool MusicTitleWidget::event( QEvent *event ) {
-	switch( event->type( ) ) {
-		case QEvent::MouseButtonPress :
-		case QEvent::MouseButtonRelease :
-		case QEvent::MouseMove :
-		case QEvent::MouseButtonDblClick :
-		case QEvent::Wheel : {
-			event->ignore( );
-			return true;
-		}
-		default :
-			break;
-	}
 	return QWidget::event( event );
 }
 bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
 	renderBuff = new QImage;
-	setAttribute( Qt::WA_TransparentForMouseEvents, true );
 	setMouseTracking( true );
 	return true;
 }

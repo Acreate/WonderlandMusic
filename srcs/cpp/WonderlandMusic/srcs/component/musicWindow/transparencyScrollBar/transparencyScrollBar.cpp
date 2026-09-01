@@ -12,16 +12,20 @@ TransparencyScrollBar::TransparencyScrollBar( QWidget *widget ) : QScrollBar( wi
 }
 TransparencyScrollBar::~TransparencyScrollBar( ) {
 }
+void TransparencyScrollBar::mouseMoveEvent( QMouseEvent *mouse_event ) {
+	QScrollBar::mouseMoveEvent( mouse_event );
+	mouse_event->ignore( );
+}
+void TransparencyScrollBar::mousePressEvent( QMouseEvent *mouse_event ) {
+	QScrollBar::mousePressEvent( mouse_event );
+	mouse_event->ignore( );
+}
+void TransparencyScrollBar::mouseReleaseEvent( QMouseEvent *mouse_event ) {
+	QScrollBar::mouseReleaseEvent( mouse_event );
+	mouse_event->ignore( );
+}
 bool TransparencyScrollBar::event( QEvent *event ) {
 	switch( event->type( ) ) {
-		case QEvent::MouseButtonPress :
-		case QEvent::MouseButtonRelease :
-		case QEvent::MouseMove :
-		case QEvent::MouseButtonDblClick :
-		case QEvent::Wheel : {
-			event->ignore( );
-			return true;
-		}
 		case QEvent::Paint : {
 			event->accept( );
 			return true;

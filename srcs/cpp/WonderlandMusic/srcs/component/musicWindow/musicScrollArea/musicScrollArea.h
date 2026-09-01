@@ -9,6 +9,10 @@ public:
 	MusicScrollArea( QWidget *parent );
 
 protected:
+	void mouseMoveEvent( QMouseEvent * ) override;
+	void mousePressEvent( QMouseEvent * ) override;
+	void mouseReleaseEvent( QMouseEvent * ) override;
+
 	bool event( QEvent * ) override;
 };
 

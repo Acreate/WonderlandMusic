@@ -9,6 +9,11 @@ public:
 	TransparencyScrollBar( QWidget *widget );
 	~TransparencyScrollBar( ) override;
 
+protected:
+	void mouseMoveEvent( QMouseEvent * ) override;
+	void mousePressEvent( QMouseEvent * ) override;
+	void mouseReleaseEvent( QMouseEvent * ) override;
+
 public:
 	bool event( QEvent *event ) override;
 };

@@ -39,7 +39,12 @@ private:
 	IMusicDataManage *musicDataManage = nullptr;
 	bool isOverMouseEvent = false;
 	Qt::CursorShape cursorShape;
+	int clickWidth = 5;
+	int favoriteLeft = 0;
+	int favoriteRight = 0;
 	int favoriteWidth = 0;
+	int titleTop = 0;
+	int titleBottom = 0;
 	int titleHeight = 0;
 	bool isDrag = false;
 	int dragOrgX = 0;

@@ -69,7 +69,7 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 	auto point = event->pos( );
 	if( musicFavoriteWidget ) {
 		int x = point.x( );
-		if( x > favoriteWidth - 5 && x < favoriteWidth + 5 ) {
+		if( x > favoriteLeft && x < favoriteRight ) {
 			if( cursorShape != Qt::CursorShape::SizeHorCursor ) {
 				cursorShape = Qt::CursorShape::SizeHorCursor;
 				setCursor( cursorShape );
@@ -79,7 +79,7 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 	}
 	if( musicTitleWidget ) {
 		int y = point.y( );
-		if( y > titleHeight - 5 && y < titleHeight + 5 ) {
+		if( y > titleTop && y < titleBottom ) {
 			if( cursorShape != Qt::CursorShape::SizeVerCursor ) {
 				cursorShape = Qt::CursorShape::SizeVerCursor;
 				setCursor( cursorShape );
@@ -408,7 +408,11 @@ bool MusicCentreWidget::synchronizationChildrenWidgetSize( ) {
 		int thisCentreWidthWidth = this->width( );
 		if( thisCentreWidthWidth > 0 ) {
 			favoriteWidth = musicWidgetSizeInfo->getFavoriteWidth( );
+			favoriteLeft = favoriteWidth - clickWidth;
+			favoriteRight = favoriteWidth + clickWidth;
 			titleHeight = musicWidgetSizeInfo->getTitleHeight( );
+			titleTop = titleHeight - clickWidth;
+			titleBottom = titleHeight + clickWidth;
 			musicfavoriteWidgetScrollArea->setGeometry( 0, 0, favoriteWidth, thisCentreHeight );
 			int modeWidth = thisCentreWidthWidth - favoriteWidth;
 			musicTitleWidgetScrollArea->setGeometry( favoriteWidth, 0, modeWidth, titleHeight );

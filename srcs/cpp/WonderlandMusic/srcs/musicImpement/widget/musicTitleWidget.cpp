@@ -90,6 +90,7 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 			setCursor( Qt::ArrowCursor );
 		}
 		userMutex->unlock( );
+		event->accept( );
 		return;
 	} else if( resuntIndexVarPtr != nullptr ) {
 		auto point = event->pos( );
@@ -98,11 +99,13 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 		if( posItemWidthPtrVar == false )
 			Result_Void_Messag_Ptr_Out_Args( this, tr( "设置 %1 下标宽度异常" ).arg( resultIndex ) );
 		userMutex->unlock( );
+		event->accept( );
 		if( posItemWidthPtrVar )
 			autoLayout( );
 		return;
 	}
 	userMutex->unlock( );
+	event->accept( );
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 	event->ignore( );
@@ -117,6 +120,7 @@ void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 		isDrag = true;
 	}
 	userMutex->unlock( );
+	event->accept( );
 }
 void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->ignore( );
@@ -132,6 +136,7 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	isDrag = false;
 	orgWidth = 0;
 	userMutex->unlock( );
+	event->accept( );
 }
 bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );

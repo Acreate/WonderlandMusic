@@ -44,7 +44,9 @@ bool MusicCentreWidget::deleteResource( ) {
 	readDragStatus = Drag_Status::None;
 	cursorShape = Qt::CursorShape::ArrowCursor;
 	setCursor( cursorShape );
+	isContainsMusicScrollArea = false;
 	isDrag = false;
+	isContainsViewport = false;
 	clickWidth = 5;
 	favoriteLeft = 0;
 	favoriteRight = 0;
@@ -173,10 +175,11 @@ void MusicCentreWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				auto widget = musicFavoriteWidget->toWidget( );
 				if( widget == nullptr )
 					break;
-				auto geometry = widget->geometry( );
-				auto pos = event->pos( );
-				if( geometry.contains( pos ) == false )
+				auto pos = event->globalPos( );
+				if( musicfavoriteWidgetScrollArea->containsPosInView( isContainsMusicScrollArea, isContainsViewport, pos ) == false )
 					break;
+				if( isContainsViewport == false )
+					return;
 				auto appMusicManage = InstanceTools::getAppMusicManage( );
 				IMusicFavoriteItem *musicFavoriteItem;
 				if( appMusicManage->getMusicFavoriteItem( musicFavoriteItem ) == false )
@@ -189,9 +192,11 @@ void MusicCentreWidget::mouseReleaseEvent( QMouseEvent *event ) {
 				auto widget = musicListWidget->toWidget( );
 				if( widget == nullptr )
 					break;
-				auto geometry = widget->geometry( );
-				if( geometry.contains( event->pos( ) ) == false )
+				auto pos = event->globalPos( );
+				if( musicListWidgetScrollArea->containsPosInView( isContainsMusicScrollArea, isContainsViewport, pos ) == false )
 					break;
+				if( isContainsViewport == false )
+					return;
 				auto appMusicManage = InstanceTools::getAppMusicManage( );
 				std::vector< IMusicItem * > result;
 				if( appMusicManage->getMusicItemVector( result ) == false )
@@ -245,6 +250,9 @@ bool MusicCentreWidget::initBefore( ) {
 	titleTop = 0;
 	titleBottom = 0;
 	titleHeight = 0;
+	isContainsMusicScrollArea = false;
+	isContainsViewport = false;
+
 	isDrag = false;
 	minWidth = clickWidth * 4;
 	musicfavoriteWidgetScrollArea = new MusicScrollArea( this );

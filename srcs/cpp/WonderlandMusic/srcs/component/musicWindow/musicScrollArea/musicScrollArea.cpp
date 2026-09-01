@@ -28,3 +28,14 @@ void MusicScrollArea::mouseReleaseEvent( QMouseEvent *mouse_event ) {
 bool MusicScrollArea::event( QEvent *event ) {
 	return QScrollArea::event( event );
 }
+bool MusicScrollArea::containsPosInView( bool &result_is_contains_music_scroll_area, bool &result_is_contains_viewport, const QPoint &global_pos ) const {
+	auto widget = viewport( );
+	if( widget == nullptr )
+		return false;
+	auto geometry = widget->geometry( );
+	auto fromGlobal = mapFromGlobal( global_pos );
+	result_is_contains_music_scroll_area = contentsRect( ).contains( fromGlobal );
+	fromGlobal = widget->mapFromGlobal( global_pos );
+	result_is_contains_viewport = geometry.contains( fromGlobal );
+	return result_is_contains_viewport || result_is_contains_music_scroll_area;
+}

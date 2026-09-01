@@ -7,7 +7,17 @@
 class MusicListMenu : public QMenu, public IMusicListMenu {
 	Q_OBJECT;
 
+private:
+	UserMutex* userMutex = nullptr;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
+
+	QAction *playMusicItem = nullptr;
+	QAction *removeMusicItem = nullptr;
+	QAction *deleteMusicItem = nullptr;
+	QAction *moveToTopMusicItem = nullptr;
+	QAction *moveToBottomMusicItem = nullptr;
+	QAction *moveToPlayTopMusicItem = nullptr;
+	QAction *moveToPlayBottomMusicItem = nullptr;
 
 public:
 	MusicListMenu( );

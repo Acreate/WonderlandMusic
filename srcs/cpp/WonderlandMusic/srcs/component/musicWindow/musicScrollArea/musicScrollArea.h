@@ -14,6 +14,9 @@ protected:
 	void mouseReleaseEvent( QMouseEvent * ) override;
 
 	bool event( QEvent * ) override;
+
+public:
+	virtual bool containsPosInView( bool &result_is_contains_music_scroll_area, bool &result_is_contains_viewport, const QPoint &global_pos ) const;
 };
 
 #endif // MUSICSCROLLAREA_H_H_HEAD__FILE__

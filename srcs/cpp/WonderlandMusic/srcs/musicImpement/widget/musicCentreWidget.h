@@ -44,6 +44,8 @@ private:
 	IMusicListWidget *musicListWidget = nullptr;
 	IMusicTitleWidget *musicTitleWidget = nullptr;
 	IMusicDataManage *musicDataManage = nullptr;
+	bool isContainsMusicScrollArea = false;
+	bool isContainsViewport = false;
 	bool isOverMouseEvent = false;
 	Qt::CursorShape cursorShape;
 	Drag_Status dragStatus = Drag_Status::None;

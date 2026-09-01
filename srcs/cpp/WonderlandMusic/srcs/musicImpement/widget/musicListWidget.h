@@ -11,7 +11,7 @@ class MusicListWidget : public QWidget, public IMusicListWidget, public IAppReso
 
 private:
 	MusicCentreWidget *musicCentreWidget = nullptr;
-
+	UserMutex* userMutex = nullptr;
 public:
 	MusicListWidget( );
 	~MusicListWidget( ) override;
@@ -21,6 +21,9 @@ public:
 protected:
 	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
 	bool deleteResource( ) override;
+	void mouseMoveEvent( QMouseEvent *event ) override;
+	void mousePressEvent( QMouseEvent *event ) override;
+	void mouseReleaseEvent( QMouseEvent *event ) override;
 
 public:
 	bool initBefore( ) override;

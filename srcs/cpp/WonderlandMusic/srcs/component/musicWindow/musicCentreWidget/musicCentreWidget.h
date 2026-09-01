@@ -8,6 +8,8 @@
 
 #include "../../../interface/iAppResourceCore.h"
 
+class MusicScrollArea;
+class IMusicWidget;
 class IMusicDataManage;
 class IMusicItemWidthInfo;
 class IMusicWidgetSizeInfo;
@@ -28,13 +30,22 @@ class MusicCentreWidget : public QWidget, public IAppCore, public IAppJsonData, 
 private:
 	MusicWindow *musicWindow;
 	UserMutex *userMutex = nullptr;
-	QScrollArea *musicfavoriteWidgetScrollArea = nullptr;
-	QScrollArea *musicTitleWidgetScrollArea = nullptr;
-	QScrollArea *musicListWidgetScrollArea = nullptr;
+	MusicScrollArea *musicfavoriteWidgetScrollArea = nullptr;
+	MusicScrollArea *musicTitleWidgetScrollArea = nullptr;
+	MusicScrollArea *musicListWidgetScrollArea = nullptr;
 	IMusicFavoriteWidget *musicFavoriteWidget = nullptr;
 	IMusicListWidget *musicListWidget = nullptr;
 	IMusicTitleWidget *musicTitleWidget = nullptr;
 	IMusicDataManage *musicDataManage = nullptr;
+	bool isOverMouseEvent = false;
+	Qt::CursorShape cursorShape;
+	int favoriteWidth = 0;
+	int titleHeight = 0;
+	bool isDrag = false;
+	int dragOrgX = 0;
+	int dragOrgY = 0;
+	int dragOffsetX = 0;
+	int dragOffsetY = 0;
 
 public:
 	MusicCentreWidget( MusicWindow *parent );
@@ -43,7 +54,13 @@ public:
 protected:
 	bool deleteResource( ) override;
 	void resizeEvent( QResizeEvent *event ) override;
-	virtual QScrollArea * createControlScrollArea( );
+	void mouseMoveEvent( QMouseEvent *event ) override;
+	void mousePressEvent( QMouseEvent *event ) override;
+	void mouseReleaseEvent( QMouseEvent *event ) override;
+	virtual bool sendMouseEventChildWidget( IMusicWidget *music_widget, QMouseEvent *parent_mouse_event );
+
+private:
+	bool sendMouseEventChildWidget( QWidget *music_widget, QMouseEvent *event );
 
 public:
 	bool initBefore( ) override;

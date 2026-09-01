@@ -1,6 +1,10 @@
 ﻿#include "musicListWidget.h"
 
+#include <QMouseEvent>
+
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
+
+#include "../../mutex/userMutex.h"
 
 MusicListWidget::MusicListWidget( ) {
 	appendTypeInfo( this );
@@ -19,13 +23,28 @@ bool MusicListWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widg
 	return true;
 }
 bool MusicListWidget::deleteResource( ) {
+	if( userMutex == nullptr )
+		return true;
+	userMutex->lock( );
 	auto musicCentreWidget = getMusicCentreWidget( );
 	if( musicCentreWidget )
 		musicCentreWidget->removeMusicListWidget( this );
+	userMutex->unlock( );
 	return true;
+}
+void MusicListWidget::mouseMoveEvent( QMouseEvent *event ) {
+	event->ignore( );
+}
+void MusicListWidget::mousePressEvent( QMouseEvent *event ) {
+	event->ignore( );
+}
+void MusicListWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	event->ignore( );
 }
 bool MusicListWidget::initBefore( ) {
 	deleteResource( );
+	userMutex = new UserMutex;
+	setMouseTracking( true );
 	return true;
 }
 bool MusicListWidget::init( ) {

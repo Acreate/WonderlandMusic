@@ -1,5 +1,7 @@
 ﻿#include "musicFavoriteWidget.h"
 
+#include <QMouseEvent>
+
 #include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 
 #include "../../component/musicWindow/interface/ItemWidget/iMusicFavoriteItemWidget.h"
@@ -35,6 +37,15 @@ bool MusicFavoriteWidget::deleteResource( ) {
 	if( musicCentreWidget )
 		musicCentreWidget->removeMusicFavoriteWidget( this );
 	return true;
+}
+void MusicFavoriteWidget::mouseMoveEvent( QMouseEvent *event ) {
+	event->ignore( );
+}
+void MusicFavoriteWidget::mousePressEvent( QMouseEvent *event ) {
+	event->ignore( );
+}
+void MusicFavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	event->ignore( );
 }
 
 bool MusicFavoriteWidget::initBefore( ) {

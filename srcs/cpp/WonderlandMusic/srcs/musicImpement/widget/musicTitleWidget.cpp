@@ -66,6 +66,7 @@ void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
+	event->ignore( );
 	if( userMutex == nullptr )
 		return;
 	if( musicItemWidthInfo == nullptr )
@@ -104,6 +105,7 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
+	event->ignore( );
 	if( userMutex == nullptr )
 		return;
 	if( musicItemWidthInfo == nullptr )
@@ -117,6 +119,7 @@ void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	event->ignore( );
 	if( userMutex == nullptr )
 		return;
 	if( musicItemWidthInfo == nullptr )

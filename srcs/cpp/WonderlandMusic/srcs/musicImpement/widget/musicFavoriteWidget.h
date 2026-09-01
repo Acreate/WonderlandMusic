@@ -27,6 +27,9 @@ public:
 
 protected:
 	bool deleteResource( ) override;
+	void mouseMoveEvent( QMouseEvent *event ) override;
+	void mousePressEvent( QMouseEvent *event ) override;
+	void mouseReleaseEvent( QMouseEvent *event ) override;
 
 private:
 	bool updateChildItem( IMusicFavoriteItem *music_favorite_item, int &offset_x, int &offset_y );

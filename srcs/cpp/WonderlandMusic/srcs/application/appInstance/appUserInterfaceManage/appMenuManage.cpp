@@ -8,9 +8,10 @@
 #include "../../../head/release_macro.h"
 #include "../../../head/result_message_out.h"
 
-#include "../../../menu/musicFavoriteMenu.h"
-#include "../../../menu/musicListMenu.h"
 #include "../../../menu/systemTrayIconMenu.h"
+
+#include "../../../musicImpement/menu/musicFavoriteMenu.h"
+#include "../../../musicImpement/menu/musicListMenu.h"
 
 #include "../../../tools/widgetTools.h"
 

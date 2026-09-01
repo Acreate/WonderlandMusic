@@ -2,7 +2,7 @@
 #define MUSICLISTMENU_H_H_HEAD__FILE__
 #include <QMenu>
 
-#include "../component/musicWindow/interface/menu/iMusicListMenu.h"
+#include <component/musicWindow/interface/menu/iMusicListMenu.h>
 
 class MusicListMenu : public QMenu, public IMusicListMenu {
 	Q_OBJECT;

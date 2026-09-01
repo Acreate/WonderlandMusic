@@ -4,6 +4,8 @@
 MusicHScrollBar::MusicHScrollBar( QWidget *parent ) : QScrollBar( Qt::Horizontal, parent ) {
 	setMouseTracking( true );
 }
+MusicHScrollBar::~MusicHScrollBar( ) {
+}
 void MusicHScrollBar::mouseMoveEvent( QMouseEvent *mouse_event ) {
 	QScrollBar::mouseMoveEvent( mouse_event );
 	mouse_event->ignore( );

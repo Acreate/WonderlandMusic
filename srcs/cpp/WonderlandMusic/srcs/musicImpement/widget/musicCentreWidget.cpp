@@ -26,6 +26,10 @@
 
 #include <tools/instanceTools.h>
 
+#include "../../application/appInstance/appDataManage/appMusicManage.h"
+
+#include "../../component/musicWindow/interface/menu/iMusicFavoriteMenu.h"
+
 MusicCentreWidget::MusicCentreWidget( ) : QWidget( ), musicWindow( nullptr ) {
 	appendTypeInfo( this );
 }
@@ -121,39 +125,84 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 }
 void MusicCentreWidget::mousePressEvent( QMouseEvent *event ) {
 	event->accept( );
-	userMutex->lock( );
-	readDragStatus = dragStatus;
-	switch( dragStatus ) {
-		case Drag_Status::None :
+	auto mouseButton = event->button( );
+	switch( mouseButton ) {
+		case Qt::MouseButton::LeftButton : {
+			userMutex->lock( );
+			readDragStatus = dragStatus;
+			switch( dragStatus ) {
+				case Drag_Status::None :
+					userMutex->unlock( );
+					return;
+				case Drag_Status::MusicFavoriteWidget : {
+					dragOffsetX = event->x( );
+					dragOrgX = favoriteWidth;
+					userMutex->unlock( );
+					return;
+				}
+				case Drag_Status::MusicTitleWidget : {
+					dragOffsetY = event->y( );
+					dragOrgY = titleHeight;
+					userMutex->unlock( );
+					return;
+				}
+			}
 			userMutex->unlock( );
-			return;
-		case Drag_Status::MusicFavoriteWidget : {
-			dragOffsetX = event->x( );
-			dragOrgX = favoriteWidth;
-			userMutex->unlock( );
-			return;
 		}
-		case Drag_Status::MusicTitleWidget : {
-			dragOffsetY = event->y( );
-			dragOrgY = titleHeight;
-			userMutex->unlock( );
-			return;
-		}
+		break;
 	}
-
-	userMutex->unlock( );
 }
 void MusicCentreWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->accept( );
-	userMutex->lock( );
-	readDragStatus = dragStatus = Drag_Status::None;
-	if( cursorShape != Qt::CursorShape::ArrowCursor ) {
-		cursorShape = Qt::CursorShape::ArrowCursor;
-		userMutex->unlock( );
-		setCursor( cursorShape );
-		return;
+	auto mouseButton = event->button( );
+	switch( mouseButton ) {
+		case Qt::MouseButton::LeftButton : {
+			userMutex->lock( );
+			readDragStatus = dragStatus = Drag_Status::None;
+			if( cursorShape != Qt::CursorShape::ArrowCursor ) {
+				cursorShape = Qt::CursorShape::ArrowCursor;
+				userMutex->unlock( );
+				setCursor( cursorShape );
+				return;
+			}
+			userMutex->unlock( );
+		}
+		break;
+		case Qt::MouseButton::RightButton : {
+			while( musicFavoriteWidget ) {
+				auto widget = musicFavoriteWidget->toWidget( );
+				if( widget == nullptr )
+					break;
+				auto geometry = widget->geometry( );
+				auto pos = event->pos( );
+				if( geometry.contains( pos ) == false )
+					break;
+				auto appMusicManage = InstanceTools::getAppMusicManage( );
+				IMusicFavoriteItem *musicFavoriteItem;
+				if( appMusicManage->getMusicFavoriteItem( musicFavoriteItem ) == false )
+					break;
+				if( execMenu( musicFavoriteWidget, musicFavoriteItem, event->globalPos( ) ) == false )
+					Result_Void_Function_Messag_Ptr_Out_Args( this, execMenu, tr( "收藏夹菜单显示异常" ) );
+				break;
+			}
+			while( musicListWidget ) {
+				auto widget = musicListWidget->toWidget( );
+				if( widget == nullptr )
+					break;
+				auto geometry = widget->geometry( );
+				if( geometry.contains( event->pos( ) ) == false )
+					break;
+				auto appMusicManage = InstanceTools::getAppMusicManage( );
+				std::vector< IMusicItem * > result;
+				if( appMusicManage->getMusicItemVector( result ) == false )
+					break;
+				if( execMenu( musicListWidget, nullptr, event->globalPos( ) ) == false )
+					Result_Void_Function_Messag_Ptr_Out_Args( this, execMenu, tr( "列表菜单显示异常" ) );
+				break;
+			}
+		}
+		break;
 	}
-	userMutex->unlock( );
 }
 bool MusicCentreWidget::setMusicWindow( MusicWindow *music_window ) {
 	musicWindow = music_window;

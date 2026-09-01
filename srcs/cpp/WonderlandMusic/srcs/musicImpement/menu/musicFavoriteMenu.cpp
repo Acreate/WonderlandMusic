@@ -2,22 +2,22 @@
 
 #include <QJsonObject>
 
-#include "../application/appInstance/appDataManage/appMusicManage.h"
-#include "../application/appInstance/appDataManage/jsonKey/musicFavoriteMenuJsonKey.h"
-#include "../application/appInstance/appDataManage/translate/musicFavoriteMenuTranslate.h"
-#include "../application/appInstance/appUserInterfaceManage/appMenuManage.h"
+#include <application/appInstance/appDataManage/appMusicManage.h>
+#include <application/appInstance/appDataManage/jsonKey/musicFavoriteMenuJsonKey.h>
+#include <application/appInstance/appDataManage/translate/musicFavoriteMenuTranslate.h>
+#include <application/appInstance/appUserInterfaceManage/appMenuManage.h>
 
-#include "../component/musicWindow/musicWindow.h"
-#include "../component/musicWindow/interface/item/iMusicFavoriteItem.h"
-#include "../component/musicWindow/interface/widget/iMusicCentreWidget.h"
-#include "../component/musicWindow/interface/widget/iMusicFavoriteWidget.h"
+#include <component/musicWindow/musicWindow.h>
+#include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
+#include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
+#include <component/musicWindow/interface/widget/iMusicFavoriteWidget.h>
 
-#include "../head/release_macro.h"
-#include "../head/result_message_out.h"
+#include <head/release_macro.h>
+#include <head/result_message_out.h>
 
-#include "../tools/instanceTools.h"
-#include "../tools/pathTools.h"
-#include "../tools/widgetTools.h"
+#include <tools/instanceTools.h>
+#include <tools/pathTools.h>
+#include <tools/widgetTools.h>
 MusicFavoriteMenu::MusicFavoriteMenu( ) {
 }
 MusicFavoriteMenu::~MusicFavoriteMenu( ) {

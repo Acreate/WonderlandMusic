@@ -3,7 +3,7 @@
 
 #include <QMenu>
 
-#include "../component/musicWindow/interface/menu/iMusicFavoriteMenu.h"
+#include <component/musicWindow/interface/menu/iMusicFavoriteMenu.h>
 
 class MusicFavoriteMenu : public QMenu, public IMusicFavoriteMenu {
 	Q_OBJECT;

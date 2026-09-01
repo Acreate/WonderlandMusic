@@ -1,9 +1,8 @@
 ﻿#ifndef IMUSICLISTMENU_H_H_HEAD__FILE__
 #define IMUSICLISTMENU_H_H_HEAD__FILE__
 
-#include <interface/iAppJsonData.h>
 
-#include "../../../../interface/iAppResourceCore.h"
+#include <interface/iAppResourceCore.h>
 
 #include "../musicWidgetChild/musicWidgetChild.h"
 
@@ -13,7 +12,7 @@ class MusicCentreWidget;
 class QMenu;
 
 class IMusicListMenu : public MusicWidgetChild, public IAppResourceCore {
-	friend class MusicCentreWidget;
+	friend class IMusicCentreWidget;
 
 public:
 	IMusicListMenu( );

@@ -1,8 +1,8 @@
 ﻿#include "musicListMenu.h"
 
-#include "../application/appInstance/appUserInterfaceManage/appMenuManage.h"
+#include <application/appInstance/appUserInterfaceManage/appMenuManage.h>
 
-#include "../tools/instanceTools.h"
+#include <tools/instanceTools.h>
 MusicListMenu::MusicListMenu( ) {
 	appendTypeInfo( this );
 }

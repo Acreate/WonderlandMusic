@@ -30,6 +30,10 @@ else( )
 endif( )
 
 
+# # 加载 ffmpeg 9.0 lgpl 模块
+find_package( ffmpeg REQUIRED PATHS "${CMAKE_HOME_DIRECTORY}/srcs/lib/ffmpeg_9_lgpl" )
+
+
 printf_qt_cmake_out( )
 
 qt_standard_project_setup( )
@@ -64,6 +68,7 @@ if( ${QT_VERSION_MAJOR} GREATER_EQUAL 6 )
 	set_target_static_lib_out_path_property( "${prject_name}" "${app_static_lib_bin}" )
 	set_target_pdb_out_path_property( "${prject_name}" "${app_pdb_bin}" )
 	set_target_bin_out_name_property( "${prject_name}" "${prject_name}" )
+	copy_ffmpeg_dll_to_target( "${app_run_bin}" )
 	# target_obj_PDB_propertie( "${prject_name}" )
 else( )
 	if( ANDROID )
@@ -119,6 +124,7 @@ if( MSVC )
 endif( )
 
 target_include_directories( "${prject_name}" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/srcs" )
+link_ffmpeg_lib_to_target( "${prject_name}" )
 
 set( app_resouce_path "${app_run_bin}/program/" )
 get_filename_component( app_resouce_path "${app_resouce_path}" ABSOLUTE ) # 全路径

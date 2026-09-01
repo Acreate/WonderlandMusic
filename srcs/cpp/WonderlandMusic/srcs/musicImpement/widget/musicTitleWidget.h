@@ -34,8 +34,7 @@ protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
-	void leaveEvent( QEvent *event ) override;
-	bool event(QEvent *event) override;
+
 public:
 	bool initBefore( ) override;
 	bool init( ) override;

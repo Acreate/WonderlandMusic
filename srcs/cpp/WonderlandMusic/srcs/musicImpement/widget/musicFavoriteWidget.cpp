@@ -46,9 +46,6 @@ void MusicFavoriteWidget::mousePressEvent( QMouseEvent *event ) {
 void MusicFavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->ignore( );
 }
-bool MusicFavoriteWidget::event( QEvent *event ) {
-	return QWidget::event( event );
-}
 
 bool MusicFavoriteWidget::initBefore( ) {
 	deleteResource( );

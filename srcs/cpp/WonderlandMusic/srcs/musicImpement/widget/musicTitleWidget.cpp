@@ -66,7 +66,6 @@ void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
-	QWidget::mouseMoveEvent( event );
 	event->ignore( );
 	if( userMutex == nullptr )
 		return;
@@ -113,7 +112,6 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
-	QWidget::mousePressEvent( event );
 	event->ignore( );
 	if( userMutex == nullptr )
 		return;
@@ -129,7 +127,6 @@ void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	QWidget::mouseReleaseEvent( event );
 	event->ignore( );
 	if( userMutex == nullptr )
 		return;
@@ -147,24 +144,7 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	userMutex->unlock( );
 	setCursor( currentCursor );
 }
-void MusicTitleWidget::leaveEvent( QEvent *event ) {
-	QWidget::leaveEvent( event );
-	event->ignore( );
-	userMutex->lock( );
-	isDrag = false;
-	if( currentCursor != Qt::ArrowCursor ) {
-		currentCursor = Qt::ArrowCursor;
-		userMutex->unlock( );
-		setCursor( Qt::ArrowCursor );
-		return;
-	}
-	userMutex->unlock( );
-	if( musicCentreWidget )
-		musicCentreWidget->toWidget( )->setFocus( );
-}
-bool MusicTitleWidget::event( QEvent *event ) {
-	return QWidget::event( event );
-}
+
 bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;

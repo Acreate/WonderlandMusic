@@ -41,9 +41,7 @@ void MusicListWidget::mousePressEvent( QMouseEvent *event ) {
 void MusicListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->ignore( );
 }
-bool MusicListWidget::event( QEvent *event ) {
-	return QWidget::event( event );
-}
+
 bool MusicListWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;

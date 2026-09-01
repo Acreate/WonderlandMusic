@@ -91,6 +91,9 @@ bool MusicFavoriteWidget::autoLayout( ) {
 	resize( offsetX, offsetY );
 	return true;
 }
+int MusicFavoriteWidget::setAdapiveWidth( const int &adaptive_width ) {
+	return 0;
+}
 bool MusicFavoriteWidget::updateChildItem( IMusicFavoriteItem *music_favorite_item, int &offset_x, int &offset_y ) {
 	int width, height;
 	auto musicFavoriteItemWidget = music_favorite_item->getMusicFavoriteItemWidget( );

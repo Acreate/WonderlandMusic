@@ -45,6 +45,7 @@ public:
 	bool setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) override;
 	IMusicItemWidthInfo * getIMusicItemWidthInfo( ) const override;
 	bool autoLayout( ) override;
+	int setAdapiveHeight( const int &adaptive_height ) override;
 };
 
 #endif // MUSICTITLEWIDGET_H_H_HEAD__FILE__

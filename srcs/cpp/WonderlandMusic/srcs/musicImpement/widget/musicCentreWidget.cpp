@@ -91,20 +91,6 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 					return;
 				}
 			}
-			if( musicTitleWidget ) {
-				int y = point.y( );
-				if( y > titleTop && y < titleBottom ) {
-					dragStatus = Drag_Status::MusicTitleWidget;
-					if( cursorShape != Qt::CursorShape::SizeVerCursor ) {
-						cursorShape = Qt::CursorShape::SizeVerCursor;
-						userMutex->unlock( );
-						setCursor( cursorShape );
-						return;
-					}
-					userMutex->unlock( );
-					return;
-				}
-			}
 			dragStatus = Drag_Status::None;
 			if( cursorShape != Qt::CursorShape::ArrowCursor ) {
 				cursorShape = Qt::CursorShape::ArrowCursor;
@@ -117,15 +103,8 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 		}
 		case Drag_Status::MusicFavoriteWidget : {
 			favoriteWidth = dragOrgX + event->x( ) - dragOffsetX;
+			favoriteWidth = std::max( favoriteWidth, minWidth );
 			setFavoriteWidth( favoriteWidth );
-			userMutex->unlock( );
-			synchronizationChildrenWidgetSize( );
-			return;
-		}
-
-		case Drag_Status::MusicTitleWidget : {
-			titleHeight = dragOrgY + event->y( ) - dragOffsetY;
-			setTitleHeight( titleHeight );
 			userMutex->unlock( );
 			synchronizationChildrenWidgetSize( );
 			return;
@@ -184,28 +163,41 @@ bool MusicCentreWidget::setMusicWindow( MusicWindow *music_window ) {
 QWidget * MusicCentreWidget::toWidget( ) {
 	return this;
 }
-bool MusicCentreWidget::sendMouseEventChildWidget( QWidget *music_widget, QMouseEvent *event ) {
-	if( music_widget == nullptr )
-		return false;
-	// 1. 把父控件的全局坐标，转为子控件的本地坐标
-	QPointF childLocalPos = music_widget->mapFromGlobal( event->globalPos( ) );
-	// 2. 构造新的QMouseEvent
-	QMouseEvent newEvent(
-		event->type( ),
-		childLocalPos,
-		music_widget->mapFromGlobal( event->globalPos( ) ), // windowPos，子窗口内坐标
-		event->globalPos( ),
-		event->button( ),
-		event->buttons( ),
-		event->modifiers( )
-		);
-	// 3. 发送事件给子控件
-	QCoreApplication::sendEvent( music_widget, &newEvent );
-	return true;
+bool MusicCentreWidget::event( QEvent *event ) {
+	auto type = event->type( );
+	switch( type ) {
+		case QEvent::FocusOut :
+		case QEvent::FocusIn :
+		case QEvent::Enter :
+		case QEvent::Leave :
+			do {
+				userMutex->lock( );
+				readDragStatus = dragStatus = Drag_Status::None;
+				if( cursorShape != Qt::CursorShape::ArrowCursor ) {
+					cursorShape = Qt::CursorShape::ArrowCursor;
+					userMutex->unlock( );
+					setCursor( cursorShape );
+					break;
+				}
+				userMutex->unlock( );
+			} while( false );
+
+			break;
+	}
+	return QWidget::event( event );
 }
 
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );
+	clickWidth = 5;
+	favoriteLeft = 0;
+	favoriteRight = 0;
+	favoriteWidth = 0;
+	titleTop = 0;
+	titleBottom = 0;
+	titleHeight = 0;
+	isDrag = false;
+	minWidth = clickWidth * 4;
 	musicfavoriteWidgetScrollArea = new MusicScrollArea( this );
 	musicTitleWidgetScrollArea = new MusicScrollArea( this );
 	musicListWidgetScrollArea = new MusicScrollArea( this );

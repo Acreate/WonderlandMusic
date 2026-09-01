@@ -44,6 +44,7 @@ public:
 	bool fromIndexGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &index ) const override;
 	bool fromNameGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const QString &index ) const override;
 	bool autoLayout( ) override;
+	int setAdapiveWidth( const int &adaptive_width ) override;
 };
 
 #endif // MUSICFAVORITEWIDGET_H_H_HEAD__FILE__

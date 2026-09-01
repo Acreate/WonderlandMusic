@@ -48,13 +48,14 @@ private:
 	Qt::CursorShape cursorShape;
 	Drag_Status dragStatus = Drag_Status::None;
 	Drag_Status readDragStatus = Drag_Status::None;
-	int clickWidth = 5;
-	int favoriteLeft = 0;
-	int favoriteRight = 0;
-	int favoriteWidth = 0;
-	int titleTop = 0;
-	int titleBottom = 0;
-	int titleHeight = 0;
+	int clickWidth;
+	int minWidth;
+	int favoriteLeft;
+	int favoriteRight;
+	int favoriteWidth;
+	int titleTop;
+	int titleBottom;
+	int titleHeight;
 	bool isDrag = false;
 	int dragOrgX = 0;
 	int dragOrgY = 0;
@@ -76,8 +77,8 @@ protected:
 public:
 	QWidget * toWidget( ) override;
 
-private:
-	bool sendMouseEventChildWidget( QWidget *music_widget, QMouseEvent *event );
+protected:
+	bool event( QEvent *event ) override;
 
 public:
 	bool initBefore( ) override;

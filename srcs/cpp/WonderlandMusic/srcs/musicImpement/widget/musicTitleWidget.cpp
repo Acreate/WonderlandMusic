@@ -203,3 +203,6 @@ bool MusicTitleWidget::autoLayout( ) {
 	repaint( );
 	return true;
 }
+int MusicTitleWidget::setAdapiveHeight( const int &adaptive_height ) {
+	return 0;
+}

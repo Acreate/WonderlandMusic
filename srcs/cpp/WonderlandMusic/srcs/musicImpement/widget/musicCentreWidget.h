@@ -71,7 +71,6 @@ protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
-	virtual bool sendMouseEventChildWidget( IMusicWidget *music_widget, QMouseEvent *parent_mouse_event );
 	bool setMusicWindow( MusicWindow *music_window ) override;
 
 public:

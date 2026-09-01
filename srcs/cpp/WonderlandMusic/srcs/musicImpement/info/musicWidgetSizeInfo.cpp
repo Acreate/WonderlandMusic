@@ -15,35 +15,31 @@ MusicWidgetSizeInfo::~MusicWidgetSizeInfo( ) {
 }
 bool MusicWidgetSizeInfo::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
-	return false;
+	return true;
 }
-int MusicWidgetSizeInfo::getFavoriteWidth( ) const {
-	QString defaultWidth = QObject::tr( "默认" );
+bool MusicWidgetSizeInfo::initInfo( ) {
 	auto appRenderImage = InstanceTools::getAppRenderImage( );
-	if( appRenderImage ) {
-		auto fontMetrics = appRenderImage->getFontMetrics( );
-		if( fontMetrics )
-			return fontMetrics->horizontalAdvance( defaultWidth );
-	}
+	if( appRenderImage == nullptr )
+		return false;
+
+	auto fontMetrics = appRenderImage->getFontMetrics( );
+	if( fontMetrics == nullptr )
+		return false;
 	auto applicationManage = InstanceTools::getApplicationManage( );
 	if( applicationManage == nullptr )
-		return 50;
+		return false;
 	auto metrics = applicationManage->fontMetrics( );
-	return metrics.horizontalAdvance( defaultWidth );
+	QString defaultWidth = QObject::tr( "默认" );
+	favoriteWidth = metrics.horizontalAdvance( defaultWidth );
+	titleHeight = metrics.height( );
+	return true;
+}
+
+int MusicWidgetSizeInfo::getFavoriteWidth( ) const {
+	return favoriteWidth;
 }
 int MusicWidgetSizeInfo::getTitleHeight( ) const {
-	QString defaultWidth = QObject::tr( "默认" );
-	auto appRenderImage = InstanceTools::getAppRenderImage( );
-	if( appRenderImage ) {
-		auto fontMetrics = appRenderImage->getFontMetrics( );
-		if( fontMetrics )
-			return fontMetrics->height( );
-	}
-	auto applicationManage = InstanceTools::getApplicationManage( );
-	if( applicationManage == nullptr )
-		return 50;
-	auto metrics = applicationManage->fontMetrics( );
-	return metrics.height( );
+	return titleHeight;
 }
 bool MusicWidgetSizeInfo::updateMusicWidgetLayout( ) {
 	return false;
@@ -66,8 +62,12 @@ IMusicCentreWidget * MusicWidgetSizeInfo::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 int MusicWidgetSizeInfo::setFavoriteWidth( const int &favoriet_width ) {
-	return 0;
+	int old = favoriet_width;
+	favoriteWidth = old;
+	return old;
 }
-int MusicWidgetSizeInfo::setTitleHeight( const int &favoriet_width ) {
-	return 0;
+int MusicWidgetSizeInfo::setTitleHeight( const int &title_height ) {
+	int old = titleHeight;
+	titleHeight = title_height;
+	return old;
 }

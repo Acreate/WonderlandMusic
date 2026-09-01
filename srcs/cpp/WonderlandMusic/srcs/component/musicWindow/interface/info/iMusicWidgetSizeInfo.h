@@ -16,6 +16,7 @@ public:
 	virtual int getFavoriteWidth( ) const = 0;
 	virtual int getTitleHeight( ) const = 0;
 	virtual bool updateMusicWidgetLayout( ) =0;
+	virtual bool initInfo( ) = 0;
 };
 
 #endif // IMUSICWIDGETSIZEINFO_H_H_HEAD__FILE__

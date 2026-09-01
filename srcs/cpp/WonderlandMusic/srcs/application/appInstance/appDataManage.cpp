@@ -55,6 +55,8 @@ bool AppDataManage::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( translate );
 	After_Init_Resource_App_Core_Ptr( appDataJsonKey );
 	After_Init_Resource_App_Core_Ptr( appMusicManage );
+	if( musicWidgetSizeInfo->initInfo( ) == false )
+		return false;
 	if( musicItemWidthInfo->initInfo( ) == false )
 		return false;
 	return true;
@@ -70,7 +72,6 @@ bool AppDataManage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( appMusicManage );
 	Delete_Resource_App_Core_Ptr( musicItemWidthInfo );
 	Delete_Resource_App_Core_Ptr( musicWidgetSizeInfo );
-
 	return true;
 }
 

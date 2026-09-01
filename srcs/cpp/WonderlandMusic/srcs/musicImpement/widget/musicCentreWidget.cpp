@@ -73,7 +73,6 @@ void MusicCentreWidget::resizeEvent( QResizeEvent *event ) {
 
 void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 	event->accept( );
-
 	userMutex->lock( );
 	switch( readDragStatus ) {
 		case Drag_Status::None : {
@@ -125,7 +124,6 @@ void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 		}
 
 		case Drag_Status::MusicTitleWidget : {
-			dragOffsetY = event->y( );
 			titleHeight = dragOrgY + event->y( ) - dragOffsetY;
 			setTitleHeight( titleHeight );
 			userMutex->unlock( );
@@ -158,7 +156,7 @@ void MusicCentreWidget::mousePressEvent( QMouseEvent *event ) {
 		}
 		case Drag_Status::MusicTitleWidget : {
 			dragOffsetY = event->y( );
-			dragOffsetY = titleHeight;
+			dragOrgY = titleHeight;
 			userMutex->unlock( );
 			return;
 		}
@@ -177,13 +175,6 @@ void MusicCentreWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		return;
 	}
 	userMutex->unlock( );
-}
-bool MusicCentreWidget::sendMouseEventChildWidget( IMusicWidget *music_widget, QMouseEvent *parent_mouse_event ) {
-	if( music_widget == nullptr )
-		return false;
-	auto widget = music_widget->toWidget( );
-
-	return sendMouseEventChildWidget( widget, parent_mouse_event );
 }
 bool MusicCentreWidget::setMusicWindow( MusicWindow *music_window ) {
 	musicWindow = music_window;

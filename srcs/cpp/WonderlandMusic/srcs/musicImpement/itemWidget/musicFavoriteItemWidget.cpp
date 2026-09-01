@@ -2,7 +2,6 @@
 
 #include <QLabel>
 
-#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 #include <QMouseEvent>
 
 #include "../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
@@ -18,11 +17,11 @@ MusicFavoriteItemWidget::MusicFavoriteItemWidget( ) {
 MusicFavoriteItemWidget::~MusicFavoriteItemWidget( ) {
 	delete nameLabel;
 }
-bool MusicFavoriteItemWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicFavoriteItemWidget::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
 }
-MusicCentreWidget * MusicFavoriteItemWidget::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicFavoriteItemWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 bool MusicFavoriteItemWidget::updateLayout( ) {

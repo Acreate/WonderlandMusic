@@ -1,6 +1,6 @@
 ﻿#include "transparencyScrollBar.h"
 
-#include <QPainter>
+#include <QMouseEvent>
 #include <qcoreevent.h>
 TransparencyScrollBar::TransparencyScrollBar( QWidget *widget ) : QScrollBar( widget ) {
 	setAttribute( Qt::WA_TransparentForMouseEvents, true );
@@ -8,14 +8,26 @@ TransparencyScrollBar::TransparencyScrollBar( QWidget *widget ) : QScrollBar( wi
 	setAttribute( Qt::WA_NoSystemBackground, true );
 	setAttribute( Qt::WA_OpaquePaintEvent, false );
 	setEnabled( false );
+	setMouseTracking( true );
 }
 TransparencyScrollBar::~TransparencyScrollBar( ) {
 }
 bool TransparencyScrollBar::event( QEvent *event ) {
 	switch( event->type( ) ) {
-		case QEvent::Type::Paint :
+		case QEvent::MouseButtonPress :
+		case QEvent::MouseButtonRelease :
+		case QEvent::MouseMove :
+		case QEvent::MouseButtonDblClick :
+		case QEvent::Wheel : {
 			event->ignore( );
 			return true;
+		}
+		case QEvent::Paint : {
+			event->accept( );
+			return true;
+		}
+		default :
+			break;
 	}
 	return QScrollBar::event( event );
 }

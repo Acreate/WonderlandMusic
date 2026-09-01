@@ -11,6 +11,7 @@
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
+#include "../musicImpement/widget/musicCentreWidget.h"
 #include "../musicImpement/widget/musicFavoriteWidget.h"
 #include "../musicImpement/widget/musicListWidget.h"
 #include "../musicImpement/widget/musicTitleWidget.h"
@@ -113,23 +114,26 @@ bool AppInstance::initAfter( ) {
 	After_Init_Resource_App_Core_Ptr( appDataManage );
 	After_Init_Resource_App_Core_Ptr( appUserInterfaceManage );
 
-	auto musicWindow = appUserInterfaceManage->getMusicWindow( );
+	auto musicCentreWidget = appUserInterfaceManage->getMusicCentreWidget( );
 
 	auto appMusicManage = appDataManage->getAppMusicManage( );
 	if( appMusicManage->initDefaultMusicFavoriteItem( ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, appMusicManage, initDefaultMusicFavoriteItem, tr( "设置音频信息管理组件配置初始化失败" ) );
-	if( musicWindow->setMusicDataManage( appMusicManage ) == appMusicManage )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWindow, setMusicDataManage, tr( "设置音频信息管理组件失败" ) );
+	if( musicCentreWidget->setMusicDataManage( appMusicManage ) == appMusicManage )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicCentreWidget, setMusicDataManage, tr( "设置音频信息管理组件失败" ) );
 	auto musicFavoriteWidget = appUserInterfaceManage->getMusicFavoriteWidget( );
-	if( musicWindow->setMusicFavoriteWidget( musicFavoriteWidget ) == musicFavoriteWidget )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWindow, setMusicFavoriteWidget, tr( "设置音频收藏夹面板组件失败" ) );
+	if( musicCentreWidget->setMusicFavoriteWidget( musicFavoriteWidget ) == musicFavoriteWidget )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicCentreWidget, setMusicFavoriteWidget, tr( "设置音频收藏夹面板组件失败" ) );
 	auto musicListWidget = appUserInterfaceManage->getMusicListWidget( );
-	if( musicWindow->setMusicListWidget( musicListWidget ) == musicListWidget )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWindow, setMusicListWidget, tr( "设置音频信息列表面板组件失败" ) );
+	if( musicCentreWidget->setMusicListWidget( musicListWidget ) == musicListWidget )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicCentreWidget, setMusicListWidget, tr( "设置音频信息列表面板组件失败" ) );
 	auto musicTitleWidget = appUserInterfaceManage->getMusicTitleWidget( );
-	if( musicWindow->setMusicTitleWidget( musicTitleWidget ) == musicTitleWidget )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWindow, setMusicTitleWidget, tr( "设置音频标题面板组件失败" ) );
+	if( musicCentreWidget->setMusicTitleWidget( musicTitleWidget ) == musicTitleWidget )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicCentreWidget, setMusicTitleWidget, tr( "设置音频标题面板组件失败" ) );
 
+	auto musicWindow = appUserInterfaceManage->getMusicWindow( );
+	if( musicWindow->setMusicCentreWidget( musicCentreWidget ) == musicCentreWidget )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicWindow, setMusicCentreWidget, tr( "设置音频主要组件配置初始化失败" ) );
 	auto optionWindow = appUserInterfaceManage->getOptionWindow( );
 	if( optionWindow->addOptionPanel( musicWindow ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, optionWindow, addOptionPanel, tr( "添加音乐播放面板失败" ) );

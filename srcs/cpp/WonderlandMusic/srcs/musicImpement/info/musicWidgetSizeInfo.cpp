@@ -13,7 +13,7 @@ MusicWidgetSizeInfo::MusicWidgetSizeInfo( ) {
 }
 MusicWidgetSizeInfo::~MusicWidgetSizeInfo( ) {
 }
-bool MusicWidgetSizeInfo::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicWidgetSizeInfo::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return false;
 }
@@ -62,7 +62,7 @@ bool MusicWidgetSizeInfo::setJsonData( const QJsonObject &set_json_object ) {
 		return false;
 	return true;
 }
-MusicCentreWidget * MusicWidgetSizeInfo::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicWidgetSizeInfo::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 int MusicWidgetSizeInfo::setFavoriteWidth( const int &favoriet_width ) {

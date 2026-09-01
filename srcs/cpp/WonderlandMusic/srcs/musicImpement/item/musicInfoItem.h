@@ -22,11 +22,11 @@ protected:
 	bool loadedOver;
 	QMediaPlayer *mediaPlayer = nullptr;
 	AppMusicManage *appMusicManage;
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 	MusicItemWidget *musicItemWidget = nullptr;
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
 	explicit MusicInfoItem( AppMusicManage *app_music_manage );
@@ -45,7 +45,7 @@ public:
 	virtual void setAbsoluteFilePath( const QString &absolute_file_path );
 	virtual void setElapsedTime( const qint64 elapsed_time );
 	virtual void setLoadedOver( const bool loaded_over );
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicItemWidget * getMusicItemWidget( ) const override;
 };
 

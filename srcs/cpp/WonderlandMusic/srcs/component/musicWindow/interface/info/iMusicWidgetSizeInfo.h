@@ -5,7 +5,7 @@
 #include "../musicCentreWidgetChild/iMusicCentreWidgetChild.h"
 
 class IMusicWidgetSizeInfo : public IMusicCentreWidgetChild, public IAppJsonData {
-	friend class MusicCentreWidget;
+	friend class IMusicCentreWidget;
 
 protected:
 	virtual int setFavoriteWidth( const int &favoriet_width ) = 0;

@@ -5,16 +5,13 @@
 #include "../../application/appInstance/appDataManage/jsonKey/musicWindowJsonKey.h"
 #include "../../application/appInstance/appDataManage/translate/musicWindowTranslate.h"
 
-#include "../../head/after_init_macro.h"
-#include "../../head/before_init_macro.h"
-#include "../../head/init_macro.h"
 #include "../../head/release_macro.h"
 #include "../../head/result_message_out.h"
 
 #include "../../mutex/userMutex.h"
 #include "../../tools/pathTools.h"
 
-#include "musicCentreWidget/musicCentreWidget.h"
+#include "interface/widget/iMusicCentreWidget.h"
 
 MusicWindow::MusicWindow( ) {
 }
@@ -25,7 +22,8 @@ bool MusicWindow::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
-	Delete_Resource_App_Core_Ptr( musicCentreWidget );
+	takeCentralWidget( );
+	musicCentreWidget = nullptr;
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
@@ -33,8 +31,6 @@ bool MusicWindow::deleteResource( ) {
 bool MusicWindow::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
-	musicCentreWidget = new MusicCentreWidget( this );
-	Before_Init_Resource_App_Core_Ptr( musicCentreWidget );
 	return true;
 }
 bool MusicWindow::init( ) {
@@ -44,12 +40,9 @@ bool MusicWindow::init( ) {
 		return true;
 	} ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, init, tr( "无法获取翻译实例" ) );
-	Init_Resource_App_Core_Ptr( musicCentreWidget );
 	return true;
 }
 bool MusicWindow::initAfter( ) {
-	After_Init_Resource_App_Core_Ptr( musicCentreWidget );
-	setCentralWidget( musicCentreWidget );
 	return true;
 }
 bool MusicWindow::getJsonData( QJsonObject &get_json_object ) const {
@@ -152,11 +145,33 @@ bool MusicWindow::synchronizationChildrenWidgetSize( ) {
 		return false;
 	return musicCentreWidget->synchronizationChildrenWidgetSize( );
 }
+IMusicCentreWidget * MusicWindow::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
+	if( music_centre_widget == nullptr ) {
+		auto old = music_centre_widget;
+		takeCentralWidget( );
+		musicCentreWidget = nullptr;
+		return old;
+	}
+	auto widget = music_centre_widget->toWidget( );
+	if( widget == nullptr )
+		return music_centre_widget;
+	if( music_centre_widget->setMusicWindow( this ) == false )
+		return music_centre_widget;
+	if( music_centre_widget->repaintMusicCentreWidget( ) == false )
+		return music_centre_widget;
+	if( music_centre_widget->synchronizationChildrenWidgetSize( ) == false )
+		return music_centre_widget;
+	auto old = musicCentreWidget;
+	musicCentreWidget = music_centre_widget;
+	takeCentralWidget( );
+	setCentralWidget( widget );
+	return old;
+}
 QWidget * MusicWindow::toWidget( ) {
 	return this;
 }
 
-MusicCentreWidget * MusicWindow::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicWindow::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 bool MusicWindow::showPanelBefore( ) {

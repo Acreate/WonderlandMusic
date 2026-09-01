@@ -10,7 +10,7 @@ class MusicTitleWidget : public QWidget, public IMusicTitleWidget, public IAppRe
 	Q_OBJECT;
 
 protected:
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
 	QImage *renderBuff = nullptr;
 	UserMutex *userMutex = nullptr;
@@ -28,21 +28,22 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	bool deleteResource( ) override;
 	void paintEvent( QPaintEvent *event ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
-
+	void leaveEvent( QEvent *event ) override;
+	bool event(QEvent *event) override;
 public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
 
 	QWidget * toWidget( ) override;
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
-	bool setIMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
+	bool setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) override;
 	IMusicItemWidthInfo * getIMusicItemWidthInfo( ) const override;
 	bool autoLayout( ) override;
 };

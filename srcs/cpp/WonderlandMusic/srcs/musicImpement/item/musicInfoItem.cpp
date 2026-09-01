@@ -100,7 +100,7 @@ bool MusicInfoItem::isLoadedOver( ) {
 	userMutex->lock( );
 	return userMutex->result_unlock( loadedOver );
 }
-bool MusicInfoItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicInfoItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	userMutex->lock( );
 	musicCentreWidget = music_centre_widget;
 	return userMutex->result_unlock( true );
@@ -170,7 +170,7 @@ void MusicInfoItem::setElapsedTime( const qint64 elapsed_time ) {
 void MusicInfoItem::setLoadedOver( const bool loaded_over ) {
 	loadedOver = loaded_over;
 }
-MusicCentreWidget * MusicInfoItem::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicInfoItem::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 IMusicItemWidget * MusicInfoItem::getMusicItemWidget( ) const {

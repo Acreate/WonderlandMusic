@@ -17,10 +17,9 @@
 
 #include <musicImpement/item/musicInfoItem.h>
 
-#include "../../../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
-
-#include "../../../musicImpement/info/musicItemWidthInfo.h"
-#include "../../../musicImpement/item/musicFavoriteItem.h"
+#include <musicImpement/info/musicItemWidthInfo.h>
+#include <musicImpement/item/musicFavoriteItem.h>
+#include <musicImpement/widget/musicCentreWidget.h>
 
 #include "appMusicManage/appMusicDecoder.h"
 
@@ -257,13 +256,13 @@ bool AppMusicManage::unsafeGetMusicFavoriteItem( std::vector< IMusicFavoriteItem
 	return true;
 }
 
-bool AppMusicManage::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool AppMusicManage::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	userMutex->lock( );
 	musicCentreWidget = music_centre_widget;
 	userMutex->unlock( );
 	return true;
 }
-MusicCentreWidget * AppMusicManage::getMusicCentreWidget( ) const {
+IMusicCentreWidget * AppMusicManage::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 bool AppMusicManage::getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const {

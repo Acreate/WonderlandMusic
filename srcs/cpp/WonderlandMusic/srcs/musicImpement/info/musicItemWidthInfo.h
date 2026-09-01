@@ -12,7 +12,7 @@ private:
 	int musicSingerNameWidth;
 	int musicDurationTimeWidth;
 	IMusicTitleWidget *musicTitleWidget = nullptr;
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
 	void setMusicCodeWidth( const int music_code_width ) override;
@@ -29,7 +29,7 @@ public:
 	MusicItemWidthInfo & operator=( const MusicItemWidthInfo &other );
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
 	int getSuggestHeight( ) const override;
@@ -47,7 +47,7 @@ public:
 	IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) override;
 	IMusicTitleWidget * getMusicTitleWidget( ) override;
 	bool synchronization( ) override;
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool isSuggestHeight( const int *width_var_ptr ) const override;
 	bool isMusicCodeWidth( const int *width_var_ptr ) const override;
 	bool isMusicNameWidth( const int *width_var_ptr ) const override;

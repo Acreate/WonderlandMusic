@@ -2,13 +2,12 @@
 
 #include <QMouseEvent>
 
-#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
+#include <component/musicWindow/interface/ItemWidget/iMusicFavoriteItemWidget.h>
+#include <component/musicWindow/interface/info/iMusicDataManage.h>
+#include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
+#include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
 
-#include "../../component/musicWindow/interface/ItemWidget/iMusicFavoriteItemWidget.h"
-#include "../../component/musicWindow/interface/info/iMusicDataManage.h"
-#include "../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
-
-#include "../../head/result_message_out.h"
+#include <head/result_message_out.h>
 
 MusicFavoriteWidget::MusicFavoriteWidget( ) {
 	appendTypeInfo( this );
@@ -22,14 +21,14 @@ bool MusicFavoriteWidget::getJsonData( QJsonObject &get_json_object ) const {
 bool MusicFavoriteWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }
-bool MusicFavoriteWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicFavoriteWidget::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
 }
 QWidget * MusicFavoriteWidget::toWidget( ) {
 	return this;
 }
-MusicCentreWidget * MusicFavoriteWidget::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicFavoriteWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 bool MusicFavoriteWidget::deleteResource( ) {
@@ -47,8 +46,26 @@ void MusicFavoriteWidget::mousePressEvent( QMouseEvent *event ) {
 void MusicFavoriteWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->ignore( );
 }
+bool MusicFavoriteWidget::event( QEvent *event ) {
+	switch( event->type( ) ) {
+		case QEvent::MouseButtonPress :
+		case QEvent::MouseButtonRelease :
+		case QEvent::MouseMove :
+		case QEvent::MouseButtonDblClick :
+		case QEvent::Wheel : {
+			event->ignore( );
+			return true;
+		}
+		default :
+			break;
+	}
+	return QWidget::event( event );
+}
 
 bool MusicFavoriteWidget::initBefore( ) {
+	deleteResource( );
+	setAttribute( Qt::WA_TransparentForMouseEvents, true );
+	setMouseTracking( true );
 	return true;
 }
 bool MusicFavoriteWidget::init( ) {

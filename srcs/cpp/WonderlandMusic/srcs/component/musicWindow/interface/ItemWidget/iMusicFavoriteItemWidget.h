@@ -9,7 +9,7 @@ class QMouseEvent;
 class IMusicFavoriteItemWidget : public IMusicCentreWidgetChild {
 	friend class IMusicFavoriteItem;
 	friend class IMusicFavoriteWidget;
-	friend class MusicCentreWidget;
+	friend class IMusicCentreWidget;
 
 protected:
 	virtual bool bindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) = 0;

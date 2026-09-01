@@ -11,7 +11,7 @@ protected:
 	UserMutex *musicFavoriteItemUserMutex;
 	QString name;
 	std::vector< IMusicItem * > musicItemVector;
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 	MusicFavoriteItemWidget *musicFavoriteItemWidget = nullptr;
 
 public:
@@ -19,7 +19,7 @@ public:
 	~MusicFavoriteItem( ) override;
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
 	bool getName( QString &result_name ) const override;
@@ -35,9 +35,8 @@ public:
 	bool fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) override;
 	size_t getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const override;
 	virtual void setName( const QString &name );
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const override;
-	
 };
 
 #endif // MUSICFAVORITEITEM_H_H_HEAD__FILE__

@@ -8,7 +8,7 @@ class MusicItemWidget : public QWidget, public IMusicItemWidget {
 	Q_OBJECT;
 
 private:
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 	IMusicItem *musicItem = nullptr;
 	IMusicListWidget *musicListWidget = nullptr;
 	QLabel *idLabel = nullptr;
@@ -21,10 +21,10 @@ public:
 	~MusicItemWidget( ) override;
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool updateLayout( ) override;
 	bool setMusicListWidget( IMusicListWidget *music_list_widget ) override;
 

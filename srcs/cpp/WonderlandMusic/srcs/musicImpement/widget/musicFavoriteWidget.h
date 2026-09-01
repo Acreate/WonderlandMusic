@@ -6,11 +6,13 @@
 
 #include <interface/iAppResourceCore.h>
 
+class IMusicCentreWidget;
+
 class MusicFavoriteWidget : public QWidget, public IMusicFavoriteWidget, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 
 public:
 	MusicFavoriteWidget( );
@@ -19,18 +21,19 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
 	QWidget * toWidget( ) override;
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 
 protected:
 	bool deleteResource( ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
-
+	
+	bool event(QEvent *event) override;
 private:
 	bool updateChildItem( IMusicFavoriteItem *music_favorite_item, int &offset_x, int &offset_y );
 

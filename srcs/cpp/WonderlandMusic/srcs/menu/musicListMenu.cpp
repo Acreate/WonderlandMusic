@@ -28,10 +28,10 @@ bool MusicListMenu::getJsonData( QJsonObject &get_json_object ) const {
 bool MusicListMenu::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }
-MusicCentreWidget * MusicListMenu::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicListMenu::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
-bool MusicListMenu::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicListMenu::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
 }

@@ -5,6 +5,7 @@
 
 #include "../../interface/iAppResourceCore.h"
 
+class MusicCentreWidget;
 class OptionWindow;
 class MusicWindow;
 class SettingWidget;
@@ -31,6 +32,8 @@ protected:
 	SettingWidget *settingWidget = nullptr;
 	/// @brief 关于窗口组件
 	AboutWidget *aboutWidget = nullptr;
+	/// @brief 音频主要组件
+	MusicCentreWidget *musicCentreWidget = nullptr;
 	/// @brief 音频收藏列表窗口组件
 	MusicFavoriteWidget *musicFavoriteWidget = nullptr;
 	/// @brief 音频信息列表窗口组件
@@ -64,6 +67,7 @@ public:
 	virtual MusicWindow * getMusicWindow( ) const;
 	virtual SettingWidget * getSettingWidget( ) const;
 	virtual AboutWidget * getAboutWidget( ) const;
+	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
 	virtual MusicFavoriteWidget * getMusicFavoriteWidget( ) const;
 	virtual MusicListWidget * getMusicListWidget( ) const;
 	virtual MusicTitleWidget * getMusicTitleWidget( ) const;

@@ -3,8 +3,6 @@
 #include <QPainter>
 #include <qevent.h>
 
-#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
-
 #include <application/appInstance/appDataManage.h>
 #include <application/appInstance/appUserInterfaceManage/appDrawManage.h>
 #include <application/appInstance/appUserInterfaceManage/appDrawManage/appRenderImage.h>
@@ -20,6 +18,8 @@
 
 #include <musicImpement/info/musicItemWidthInfo.h>
 
+#include "../../component/musicWindow/interface/widget/iMusicCentreWidget.h"
+
 MusicTitleWidget::MusicTitleWidget( ) {
 	appendTypeInfo( this );
 }
@@ -32,7 +32,7 @@ bool MusicTitleWidget::getJsonData( QJsonObject &get_json_object ) const {
 bool MusicTitleWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }
-bool MusicTitleWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicTitleWidget::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
 }
@@ -42,7 +42,6 @@ bool MusicTitleWidget::deleteResource( ) {
 	userMutex->lock( );
 	isDrag = false;
 	currentCursor = Qt::ArrowCursor;
-	setCursor( currentCursor );
 	resuntIndexVarPtr = nullptr;
 	orgX = resultIndex = 0;
 	auto musicCentreWidget = getMusicCentreWidget( );
@@ -51,6 +50,7 @@ bool MusicTitleWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( renderBuff );
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
+	setCursor( currentCursor );
 	return true;
 }
 void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
@@ -66,11 +66,13 @@ void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
+	QWidget::mouseMoveEvent( event );
 	event->ignore( );
 	if( userMutex == nullptr )
 		return;
 	if( musicItemWidthInfo == nullptr )
 		return;
+	qDebug( ) << "\t-> MusicTitleWidget " << event->pos( );
 	userMutex->lock( );
 	if( isDrag == false ) {
 		auto point = event->pos( );
@@ -78,7 +80,9 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 		if( musicItemWidthInfo->getPosItemWidthPtr( resuntIndexVarPtr, resultIndex, orgX ) == true ) {
 			if( currentCursor != Qt::SizeHorCursor ) {
 				currentCursor = Qt::SizeHorCursor;
+				userMutex->unlock( );
 				setCursor( currentCursor );
+				return;
 			}
 			userMutex->unlock( );
 			return;
@@ -87,10 +91,11 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 		resuntIndexVarPtr = nullptr;
 		if( currentCursor != Qt::ArrowCursor ) {
 			currentCursor = Qt::ArrowCursor;
-			setCursor( Qt::ArrowCursor );
+			userMutex->unlock( );
+			setCursor( currentCursor );
+			return;
 		}
 		userMutex->unlock( );
-		event->accept( );
 		return;
 	} else if( resuntIndexVarPtr != nullptr ) {
 		auto point = event->pos( );
@@ -99,15 +104,14 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 		if( posItemWidthPtrVar == false )
 			Result_Void_Messag_Ptr_Out_Args( this, tr( "设置 %1 下标宽度异常" ).arg( resultIndex ) );
 		userMutex->unlock( );
-		event->accept( );
 		if( posItemWidthPtrVar )
 			autoLayout( );
 		return;
 	}
 	userMutex->unlock( );
-	event->accept( );
 }
 void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
+	QWidget::mousePressEvent( event );
 	event->ignore( );
 	if( userMutex == nullptr )
 		return;
@@ -120,9 +124,9 @@ void MusicTitleWidget::mousePressEvent( QMouseEvent *event ) {
 		isDrag = true;
 	}
 	userMutex->unlock( );
-	event->accept( );
 }
 void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	QWidget::mouseReleaseEvent( event );
 	event->ignore( );
 	if( userMutex == nullptr )
 		return;
@@ -136,12 +140,42 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	isDrag = false;
 	orgWidth = 0;
 	userMutex->unlock( );
-	event->accept( );
+}
+void MusicTitleWidget::leaveEvent( QEvent *event ) {
+	QWidget::leaveEvent( event );
+	event->ignore( );
+	userMutex->lock( );
+	isDrag = false;
+	if( currentCursor != Qt::ArrowCursor ) {
+		currentCursor = Qt::ArrowCursor;
+		userMutex->unlock( );
+		setCursor( Qt::ArrowCursor );
+		return;
+	}
+	userMutex->unlock( );
+	if( musicCentreWidget )
+		musicCentreWidget->toWidget( )->setFocus( );
+}
+bool MusicTitleWidget::event( QEvent *event ) {
+	switch( event->type( ) ) {
+		case QEvent::MouseButtonPress :
+		case QEvent::MouseButtonRelease :
+		case QEvent::MouseMove :
+		case QEvent::MouseButtonDblClick :
+		case QEvent::Wheel : {
+			event->ignore( );
+			return true;
+		}
+		default :
+			break;
+	}
+	return QWidget::event( event );
 }
 bool MusicTitleWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
 	renderBuff = new QImage;
+	setAttribute( Qt::WA_TransparentForMouseEvents, true );
 	setMouseTracking( true );
 	return true;
 }
@@ -156,10 +190,10 @@ bool MusicTitleWidget::initAfter( ) {
 QWidget * MusicTitleWidget::toWidget( ) {
 	return this;
 }
-MusicCentreWidget * MusicTitleWidget::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicTitleWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
-bool MusicTitleWidget::setIMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) {
+bool MusicTitleWidget::setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) {
 	musicItemWidthInfo = music_item_width_info;
 	return true;
 }

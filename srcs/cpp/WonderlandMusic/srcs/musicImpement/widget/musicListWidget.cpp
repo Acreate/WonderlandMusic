@@ -2,7 +2,7 @@
 
 #include <QMouseEvent>
 
-#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
+#include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
 
 #include "../../mutex/userMutex.h"
 
@@ -18,7 +18,7 @@ bool MusicListWidget::getJsonData( QJsonObject &get_json_object ) const {
 bool MusicListWidget::setJsonData( const QJsonObject &set_json_object ) {
 	return true;
 }
-bool MusicListWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicListWidget::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
 }
@@ -41,9 +41,25 @@ void MusicListWidget::mousePressEvent( QMouseEvent *event ) {
 void MusicListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->ignore( );
 }
+bool MusicListWidget::event( QEvent *event ) {
+	switch( event->type( ) ) {
+		case QEvent::MouseButtonPress :
+		case QEvent::MouseButtonRelease :
+		case QEvent::MouseMove :
+		case QEvent::MouseButtonDblClick :
+		case QEvent::Wheel : {
+			event->ignore( );
+			return true;
+		}
+		default :
+			break;
+	}
+	return QWidget::event( event );
+}
 bool MusicListWidget::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
+	setAttribute( Qt::WA_TransparentForMouseEvents, true );
 	setMouseTracking( true );
 	return true;
 }
@@ -58,7 +74,7 @@ bool MusicListWidget::initAfter( ) {
 QWidget * MusicListWidget::toWidget( ) {
 	return this;
 }
-MusicCentreWidget * MusicListWidget::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicListWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 IMusicFavoriteItem * MusicListWidget::getCurrentMusicFavoriteItem( ) const {

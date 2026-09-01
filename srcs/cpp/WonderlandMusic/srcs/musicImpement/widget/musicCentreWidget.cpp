@@ -6,31 +6,27 @@
 #include <application/appInstance/appDataManage.h>
 #include <application/appInstance/appUserInterfaceManage/appMenuManage.h>
 
+#include <component/musicWindow/musicWindow.h>
+#include <component/musicWindow/interface/info/iMusicDataManage.h>
+#include <component/musicWindow/interface/widget/iMusicFavoriteWidget.h>
+#include <component/musicWindow/interface/widget/iMusicListWidget.h>
+#include <component/musicWindow/interface/widget/iMusicTitleWidget.h>
+#include <component/musicWindow/interface/widget/iMusicWidget.h>
+#include <component/musicWindow/musicScrollArea/musicScrollArea.h>
+#include <component/musicWindow/transparencyScrollBar/transparencyScrollBar.h>
+
 #include <head/after_init_macro.h>
 #include <head/before_init_macro.h>
 #include <head/release_macro.h>
 #include <head/result_message_out.h>
 
-#include <mutex/userMutex.h>
+#include <musicImpement/info/musicWidgetSizeInfo.h>
 
-#include "../musicWindow.h"
+#include <mutex/userMutex.h>
 
 #include <tools/instanceTools.h>
 
-#include <musicImpement/info/musicWidgetSizeInfo.h>
-
-#include "../interface/info/iMusicDataManage.h"
-#include "../interface/info/iMusicItemWidthInfo.h"
-#include "../interface/info/iMusicWidgetSizeInfo.h"
-#include "../interface/widget/iMusicFavoriteWidget.h"
-#include "../interface/widget/iMusicListWidget.h"
-#include "../interface/widget/iMusicTitleWidget.h"
-
-#include "../musicScrollArea/musicScrollArea.h"
-
-#include "../transparencyScrollBar/transparencyScrollBar.h"
-
-MusicCentreWidget::MusicCentreWidget( MusicWindow *parent ) : QWidget( parent ), musicWindow( parent ) {
+MusicCentreWidget::MusicCentreWidget( ) : QWidget( ), musicWindow( nullptr ) {
 	appendTypeInfo( this );
 }
 MusicCentreWidget::~MusicCentreWidget( ) {
@@ -40,9 +36,18 @@ bool MusicCentreWidget::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
+	dragStatus = Drag_Status::None;
+	readDragStatus = Drag_Status::None;
 	cursorShape = Qt::CursorShape::ArrowCursor;
 	setCursor( cursorShape );
 	isDrag = false;
+	clickWidth = 5;
+	favoriteLeft = 0;
+	favoriteRight = 0;
+	favoriteWidth = 0;
+	titleTop = 0;
+	titleBottom = 0;
+	titleHeight = 0;
 	dragOrgX = 0;
 	dragOrgY = 0;
 	dragOffsetX = 0;
@@ -55,6 +60,7 @@ bool MusicCentreWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicTitleWidgetScrollArea );
 	favoriteWidth = titleHeight = 0;
 	userMutex->unlock( );
+	musicWindow->setMusicCentreWidget( nullptr );
 	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
 }
@@ -66,38 +72,115 @@ void MusicCentreWidget::resizeEvent( QResizeEvent *event ) {
 }
 
 void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
-	auto point = event->pos( );
-	if( musicFavoriteWidget ) {
-		int x = point.x( );
-		if( x > favoriteLeft && x < favoriteRight ) {
-			if( cursorShape != Qt::CursorShape::SizeHorCursor ) {
-				cursorShape = Qt::CursorShape::SizeHorCursor;
-				setCursor( cursorShape );
+	event->accept( );
+
+	userMutex->lock( );
+
+	switch( readDragStatus ) {
+		case Drag_Status::None : {
+			auto point = event->pos( );
+			if( musicFavoriteWidget ) {
+				int x = point.x( );
+				if( x > favoriteLeft && x < favoriteRight ) {
+					qDebug( ) << "musicFavoriteWidget " << event->pos( );
+					dragStatus = Drag_Status::MusicFavoriteWidget;
+					if( cursorShape != Qt::CursorShape::SizeHorCursor ) {
+						cursorShape = Qt::CursorShape::SizeHorCursor;
+						userMutex->unlock( );
+						setCursor( cursorShape );
+						return;
+					}
+					userMutex->unlock( );
+					return;
+				}
 			}
+			if( musicTitleWidget ) {
+				int y = point.y( );
+				if( y > titleTop && y < titleBottom ) {
+					qDebug( ) << "musicTitleWidget " << event->pos( );
+					dragStatus = Drag_Status::MusicTitleWidget;
+					if( cursorShape != Qt::CursorShape::SizeVerCursor ) {
+						cursorShape = Qt::CursorShape::SizeVerCursor;
+						userMutex->unlock( );
+						setCursor( cursorShape );
+						return;
+					}
+					userMutex->unlock( );
+					return;
+				}
+			}
+			qDebug( ) << "None " << event->pos( );
+			dragStatus = Drag_Status::None;
+			if( cursorShape != Qt::CursorShape::ArrowCursor ) {
+				cursorShape = Qt::CursorShape::ArrowCursor;
+				userMutex->unlock( );
+				setCursor( cursorShape );
+				return;
+			}
+			userMutex->unlock( );
+			return;
+		}
+		case Drag_Status::MusicFavoriteWidget : {
+			favoriteWidth = dragOrgX + event->x( ) - dragOffsetX;
+			setFavoriteWidth( favoriteWidth );
+			userMutex->unlock( );
+			synchronizationChildrenWidgetSize( );
+			return;
+		}
+
+		case Drag_Status::MusicTitleWidget : {
+			dragOffsetY = event->y( );
+			titleHeight = dragOrgY + event->y( ) - dragOffsetY;
+			setTitleHeight( titleHeight );
+			userMutex->unlock( );
+			synchronizationChildrenWidgetSize( );
 			return;
 		}
 	}
-	if( musicTitleWidget ) {
-		int y = point.y( );
-		if( y > titleTop && y < titleBottom ) {
-			if( cursorShape != Qt::CursorShape::SizeVerCursor ) {
-				cursorShape = Qt::CursorShape::SizeVerCursor;
-				setCursor( cursorShape );
-			}
+	dragStatus = Drag_Status::None;
+	if( cursorShape != Qt::CursorShape::ArrowCursor ) {
+		cursorShape = Qt::CursorShape::ArrowCursor;
+		userMutex->unlock( );
+		setCursor( cursorShape );
+		return;
+	}
+	userMutex->unlock( );
+}
+void MusicCentreWidget::mousePressEvent( QMouseEvent *event ) {
+	event->accept( );
+	userMutex->lock( );
+	readDragStatus = dragStatus;
+	switch( dragStatus ) {
+		case Drag_Status::None :
+			userMutex->unlock( );
+			return;
+		case Drag_Status::MusicFavoriteWidget : {
+			dragOffsetX = event->x( );
+			dragOrgX = favoriteWidth;
+			userMutex->unlock( );
+			return;
+		}
+		case Drag_Status::MusicTitleWidget : {
+			dragOffsetY = event->y( );
+			dragOffsetY = titleHeight;
+			userMutex->unlock( );
 			return;
 		}
 	}
 
-	if( cursorShape != Qt::CursorShape::ArrowCursor ) {
-		cursorShape = Qt::CursorShape::ArrowCursor;
-		setCursor( cursorShape );
-	}
-}
-void MusicCentreWidget::mousePressEvent( QMouseEvent *event ) {
-	QWidget::mousePressEvent( event );
+	userMutex->unlock( );
 }
 void MusicCentreWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	QWidget::mouseReleaseEvent( event );
+	event->accept( );
+	userMutex->lock( );
+	readDragStatus = dragStatus = Drag_Status::None;
+	if( cursorShape != Qt::CursorShape::ArrowCursor ) {
+		cursorShape = Qt::CursorShape::ArrowCursor;
+		userMutex->unlock( );
+		setCursor( cursorShape );
+		return;
+	}
+	userMutex->unlock( );
 }
 bool MusicCentreWidget::sendMouseEventChildWidget( IMusicWidget *music_widget, QMouseEvent *parent_mouse_event ) {
 	if( music_widget == nullptr )
@@ -105,6 +188,14 @@ bool MusicCentreWidget::sendMouseEventChildWidget( IMusicWidget *music_widget, Q
 	auto widget = music_widget->toWidget( );
 
 	return sendMouseEventChildWidget( widget, parent_mouse_event );
+}
+bool MusicCentreWidget::setMusicWindow( MusicWindow *music_window ) {
+	musicWindow = music_window;
+	setParent( musicWindow );
+	return true;
+}
+QWidget * MusicCentreWidget::toWidget( ) {
+	return this;
 }
 bool MusicCentreWidget::sendMouseEventChildWidget( QWidget *music_widget, QMouseEvent *event ) {
 	if( music_widget == nullptr )
@@ -128,19 +219,12 @@ bool MusicCentreWidget::sendMouseEventChildWidget( QWidget *music_widget, QMouse
 
 bool MusicCentreWidget::initBefore( ) {
 	deleteResource( );
-	userMutex = new UserMutex;
-	setMouseTracking( true );
-	cursorShape = Qt::CursorShape::ArrowCursor;
-	return true;
-}
-bool MusicCentreWidget::init( ) {
-	return true;
-}
-bool MusicCentreWidget::initAfter( ) {
 	musicfavoriteWidgetScrollArea = new MusicScrollArea( this );
 	musicTitleWidgetScrollArea = new MusicScrollArea( this );
 	musicListWidgetScrollArea = new MusicScrollArea( this );
-
+	userMutex = new UserMutex;
+	setMouseTracking( true );
+	cursorShape = Qt::CursorShape::ArrowCursor;
 	musicTitleWidgetScrollArea->setVerticalScrollBar( new TransparencyScrollBar( this ) );
 	musicTitleWidgetScrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	auto verticalScrollBar = musicTitleWidgetScrollArea->verticalScrollBar( );
@@ -151,9 +235,13 @@ bool MusicCentreWidget::initAfter( ) {
 
 	connect( scrollBar, &QScrollBar::valueChanged, horizontalScrollBar, &QScrollBar::setValue );
 	connect( scrollBar, &QScrollBar::rangeChanged, horizontalScrollBar, &QScrollBar::setRange );
-
+	return true;
+}
+bool MusicCentreWidget::init( ) {
+	return true;
+}
+bool MusicCentreWidget::initAfter( ) {
 	synchronizationChildrenWidgetSize( );
-
 	musicListWidgetScrollArea->show( );
 	musicfavoriteWidgetScrollArea->show( );
 	musicTitleWidgetScrollArea->show( );
@@ -306,7 +394,7 @@ IMusicTitleWidget * MusicCentreWidget::setMusicTitleWidget( IMusicTitleWidget *c
 		if( musicTitleWidget && musicTitleWidget->setMusicCentreWidget( nullptr ) == false )
 			return Result_Var_Function_Messag_Ptr_Out_Args( music_title_widget, musicTitleWidget, setMusicCentreWidget, tr( "配置 nullptr 组件失败" ) );
 		this->musicTitleWidget = music_title_widget;
-		musicTitleWidget->setIMusicItemWidthInfo( nullptr );
+		musicTitleWidget->setMusicItemWidthInfo( nullptr );
 		musicTitleWidgetScrollArea->takeWidget( );
 		return old;
 	}

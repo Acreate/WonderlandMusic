@@ -9,8 +9,8 @@
 
 #include "../component/musicWindow/musicWindow.h"
 #include "../component/musicWindow/interface/item/iMusicFavoriteItem.h"
+#include "../component/musicWindow/interface/widget/iMusicCentreWidget.h"
 #include "../component/musicWindow/interface/widget/iMusicFavoriteWidget.h"
-#include "../component/musicWindow/musicCentreWidget/musicCentreWidget.h"
 
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
@@ -87,10 +87,10 @@ bool MusicFavoriteMenu::setJsonData( const QJsonObject &set_json_object ) {
 		return false;
 	return true;
 }
-MusicCentreWidget * MusicFavoriteMenu::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicFavoriteMenu::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
-bool MusicFavoriteMenu::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicFavoriteMenu::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
 }

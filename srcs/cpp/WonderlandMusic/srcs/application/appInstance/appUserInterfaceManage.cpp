@@ -10,6 +10,7 @@
 #include "../../head/release_macro.h"
 #include "../../head/result_message_out.h"
 
+#include "../../musicImpement/widget/musicCentreWidget.h"
 #include "../../musicImpement/widget/musicFavoriteWidget.h"
 #include "../../musicImpement/widget/musicListWidget.h"
 #include "../../musicImpement/widget/musicTitleWidget.h"
@@ -38,6 +39,7 @@ bool AppUserInterfaceManage::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicFavoriteWidget );
 	Delete_Resource_App_Core_Ptr( musicListWidget );
 	Delete_Resource_App_Core_Ptr( musicTitleWidget );
+	Delete_Resource_App_Core_Ptr( musicCentreWidget );
 	Delete_Resource_App_Core_Ptr( musicWindow );
 
 	Delete_Resource_App_Core_Ptr( settingWidget );
@@ -100,6 +102,7 @@ bool AppUserInterfaceManage::init( ) {
 	Init_Resource_App_Core_Ptr( musicWindow );
 	Init_Resource_App_Core_Ptr( settingWidget );
 	Init_Resource_App_Core_Ptr( aboutWidget );
+	Init_Resource_App_Core_Ptr( musicCentreWidget );
 	Init_Resource_App_Core_Ptr( musicFavoriteWidget );
 	Init_Resource_App_Core_Ptr( musicListWidget );
 	Init_Resource_App_Core_Ptr( musicTitleWidget );
@@ -118,6 +121,7 @@ bool AppUserInterfaceManage::initBefore( ) {
 	settingWidget = new SettingWidget;
 
 	aboutWidget = new AboutWidget;
+	musicCentreWidget = new MusicCentreWidget;
 	musicFavoriteWidget = new MusicFavoriteWidget;
 	musicListWidget = new MusicListWidget;
 	musicTitleWidget = new MusicTitleWidget;
@@ -131,6 +135,7 @@ bool AppUserInterfaceManage::initBefore( ) {
 	Before_Init_Resource_App_Core_Ptr( musicWindow );
 	Before_Init_Resource_App_Core_Ptr( settingWidget );
 	Before_Init_Resource_App_Core_Ptr( aboutWidget );
+	Before_Init_Resource_App_Core_Ptr( musicCentreWidget );
 	Before_Init_Resource_App_Core_Ptr( musicFavoriteWidget );
 	Before_Init_Resource_App_Core_Ptr( musicListWidget );
 	Before_Init_Resource_App_Core_Ptr( musicTitleWidget );
@@ -202,6 +207,9 @@ SettingWidget * AppUserInterfaceManage::getSettingWidget( ) const {
 }
 AboutWidget * AppUserInterfaceManage::getAboutWidget( ) const {
 	return aboutWidget;
+}
+MusicCentreWidget * AppUserInterfaceManage::getMusicCentreWidget( ) const {
+	return musicCentreWidget;
 }
 MusicFavoriteWidget * AppUserInterfaceManage::getMusicFavoriteWidget( ) const {
 	return musicFavoriteWidget;

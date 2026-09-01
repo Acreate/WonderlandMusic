@@ -1,19 +1,17 @@
 ﻿#ifndef IMUSICFAVORITEMENU_H_H_HEAD__FILE__
 #define IMUSICFAVORITEMENU_H_H_HEAD__FILE__
 
-#include <interface/iAppJsonData.h>
-
-#include "../../../../interface/iAppResourceCore.h"
+#include <interface/iAppResourceCore.h>
 
 #include "../musicWidgetChild/musicWidgetChild.h"
 
 class IMusicFavoriteItem;
 class IMusicFavoriteWidget;
-class MusicCentreWidget;
+class IMusicCentreWidget;
 class QMenu;
 
 class IMusicFavoriteMenu : public MusicWidgetChild, public IAppResourceCore {
-	friend class MusicCentreWidget;
+	friend class IMusicCentreWidget;
 
 public:
 	IMusicFavoriteMenu( );

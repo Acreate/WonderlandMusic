@@ -6,7 +6,7 @@
 
 #include <interface/iAppJsonData.h>
 
-#include "../../../interface/iAppResourceCore.h"
+#include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
 
 class MusicScrollArea;
 class IMusicWidget;
@@ -23,9 +23,16 @@ class QScrollArea;
 class UserMutex;
 class MusicWindow;
 
-class MusicCentreWidget : public QWidget, public IAppCore, public IAppJsonData, public IAppResourceCore {
+class MusicCentreWidget : public QWidget, public IMusicCentreWidget {
 	Q_OBJECT;
 	friend class MusicCentreWidgetTools;
+
+protected:
+	enum class Drag_Status {
+		None,
+		MusicFavoriteWidget,
+		MusicTitleWidget
+	};
 
 private:
 	MusicWindow *musicWindow;
@@ -39,6 +46,8 @@ private:
 	IMusicDataManage *musicDataManage = nullptr;
 	bool isOverMouseEvent = false;
 	Qt::CursorShape cursorShape;
+	Drag_Status dragStatus = Drag_Status::None;
+	Drag_Status readDragStatus = Drag_Status::None;
 	int clickWidth = 5;
 	int favoriteLeft = 0;
 	int favoriteRight = 0;
@@ -53,7 +62,7 @@ private:
 	int dragOffsetY = 0;
 
 public:
-	MusicCentreWidget( MusicWindow *parent );
+	MusicCentreWidget( );
 	~MusicCentreWidget( ) override;
 
 protected:
@@ -63,6 +72,10 @@ protected:
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 	virtual bool sendMouseEventChildWidget( IMusicWidget *music_widget, QMouseEvent *parent_mouse_event );
+	bool setMusicWindow( MusicWindow *music_window ) override;
+
+public:
+	QWidget * toWidget( ) override;
 
 private:
 	bool sendMouseEventChildWidget( QWidget *music_widget, QMouseEvent *event );
@@ -73,28 +86,28 @@ public:
 	bool initAfter( ) override;
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
-	virtual MusicWindow * getMusicWindow( ) const;
-	virtual IMusicFavoriteWidget * getMusicFavoriteWidget( ) const;
-	virtual IMusicListWidget * getMusicListWidget( ) const;
-	virtual IMusicTitleWidget * getMusicTitleWidget( ) const;
-	virtual IMusicDataManage * getMusicDataManage( ) const;
-	virtual IMusicFavoriteMenu * getMusicFavoriteMenu( ) const;
-	virtual IMusicListMenu * getMusicListMenu( ) const;
-	virtual IMusicWidgetSizeInfo * getMusicWidgetSizeInfo( ) const;
-	virtual IMusicFavoriteWidget * setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget );
-	virtual IMusicListWidget * setMusicListWidget( IMusicListWidget *const music_list_widget );
-	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *const music_title_widget );
-	virtual IMusicDataManage * setMusicDataManage( IMusicDataManage *const music_data_manage );
+	MusicWindow * getMusicWindow( ) const override;
+	IMusicFavoriteWidget * getMusicFavoriteWidget( ) const override;
+	IMusicListWidget * getMusicListWidget( ) const override;
+	IMusicTitleWidget * getMusicTitleWidget( ) const override;
+	IMusicDataManage * getMusicDataManage( ) const override;
+	IMusicFavoriteMenu * getMusicFavoriteMenu( ) const override;
+	IMusicListMenu * getMusicListMenu( ) const override;
+	IMusicWidgetSizeInfo * getMusicWidgetSizeInfo( ) const override;
+	IMusicFavoriteWidget * setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) override;
+	IMusicListWidget * setMusicListWidget( IMusicListWidget *const music_list_widget ) override;
+	IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) override;
+	IMusicDataManage * setMusicDataManage( IMusicDataManage *const music_data_manage ) override;
 
-	virtual IMusicFavoriteWidget * removeMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget );
-	virtual IMusicListWidget * removeMusicListWidget( IMusicListWidget *const music_list_widget );
-	virtual IMusicTitleWidget * removeMusicTitleWidget( IMusicTitleWidget *const music_title_widget );
+	IMusicFavoriteWidget * removeMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) override;
+	IMusicListWidget * removeMusicListWidget( IMusicListWidget *const music_list_widget ) override;
+	IMusicTitleWidget * removeMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) override;
 
-	virtual bool repaintListWidget( );
-	virtual bool repaintTitleWidget( );
-	virtual bool repaintFavoriteWidget( );
-	virtual bool repaintMusicCentreWidget( );
-	virtual bool synchronizationChildrenWidgetSize( );
+	bool repaintListWidget( ) override;
+	bool repaintTitleWidget( ) override;
+	bool repaintFavoriteWidget( ) override;
+	bool repaintMusicCentreWidget( ) override;
+	bool synchronizationChildrenWidgetSize( ) override;
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

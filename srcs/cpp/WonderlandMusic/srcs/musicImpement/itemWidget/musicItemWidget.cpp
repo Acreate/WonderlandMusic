@@ -8,9 +8,10 @@
 #include <component/musicWindow/interface/item/iMusicItem.h>
 #include <component/musicWindow/interface/widget/iMusicListWidget.h>
 #include <component/musicWindow/interface/widget/iMusicTitleWidget.h>
-#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
 
 #include <head/result_message_out.h>
+
+#include "../../component/musicWindow/interface/widget/iMusicCentreWidget.h"
 MusicItemWidget::MusicItemWidget( ) {
 	appendTypeInfo( this );
 	hide( );
@@ -25,11 +26,11 @@ MusicItemWidget::~MusicItemWidget( ) {
 	delete singerLabel;
 	delete elapsedTimeLabel;
 }
-bool MusicItemWidget::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicItemWidget::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
 }
-MusicCentreWidget * MusicItemWidget::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicItemWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 bool MusicItemWidget::updateLayout( ) {

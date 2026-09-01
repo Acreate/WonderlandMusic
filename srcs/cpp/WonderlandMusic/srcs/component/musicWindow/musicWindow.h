@@ -7,6 +7,7 @@
 #include "../../interface/iAppJsonData.h"
 #include "../../interface/iAppResourceCore.h"
 
+class IMusicCentreWidget;
 class IMusicDataManage;
 class IMusicItemWidthInfo;
 class IMusicWidgetSizeInfo;
@@ -15,7 +16,6 @@ class IMusicTitleWidget;
 class IMusicListWidget;
 class IMusicListMenu;
 class IMusicFavoriteMenu;
-class MusicCentreWidget;
 class UserMutex;
 
 class MusicWindow : public QMainWindow, public OptionPanel, public IAppJsonData, public IAppResourceCore {
@@ -24,7 +24,7 @@ class MusicWindow : public QMainWindow, public OptionPanel, public IAppJsonData,
 
 private:
 	UserMutex *userMutex = nullptr;
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 
 public:
 	MusicWindow( );
@@ -38,7 +38,7 @@ public:
 	bool init( ) override;
 	bool initAfter( ) override;
 	QWidget * toWidget( ) override;
-	virtual MusicCentreWidget * getMusicCentreWidget( ) const;
+	virtual IMusicCentreWidget * getMusicCentreWidget( ) const;
 	bool showPanelBefore( ) override;
 	bool hidePanelBefore( ) override;
 	bool releasePanelBefore( ) override;
@@ -62,6 +62,7 @@ public:
 	virtual bool repaintMusicCentreWidget( );
 	virtual bool repaintChildrenWidget( );
 	virtual bool synchronizationChildrenWidgetSize( );
+	virtual IMusicCentreWidget * setMusicCentreWidget( IMusicCentreWidget *music_centre_widget );
 };
 
 #endif // MUSICWINDOW_H_H_HEAD__FILE__

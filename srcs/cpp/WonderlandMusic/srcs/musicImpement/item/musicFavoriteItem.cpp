@@ -6,13 +6,13 @@
 
 #include <component/musicWindow/interface/item/iMusicItem.h>
 
-#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
-
 #include <mutex/userMutex.h>
+
+#include "../../component/musicWindow/interface/widget/iMusicCentreWidget.h"
 
 #include "../itemWidget/musicFavoriteItemWidget.h"
 
-bool MusicFavoriteItem::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicFavoriteItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicCentreWidget = music_centre_widget;
 	musicFavoriteItemUserMutex->unlock( );
@@ -42,7 +42,7 @@ bool MusicFavoriteItem::clear( ) {
 bool MusicFavoriteItem::update( ) {
 	if( musicCentreWidget == nullptr )
 		return false;
-	musicCentreWidget->update( );
+	musicCentreWidget->repaintMusicCentreWidget( );
 	return true;
 }
 bool MusicFavoriteItem::fromIndexGetMusicItem( IMusicItem *&result_music_item_vector, const size_t &result_count ) {
@@ -99,7 +99,7 @@ size_t MusicFavoriteItem::getMusicVectorClone( std::vector< IMusicItem * > &resu
 void MusicFavoriteItem::setName( const QString &name ) {
 	this->name = name;
 }
-MusicCentreWidget * MusicFavoriteItem::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicFavoriteItem::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 IMusicFavoriteItemWidget * MusicFavoriteItem::getMusicFavoriteItemWidget( ) const {

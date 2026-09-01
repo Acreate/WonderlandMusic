@@ -8,7 +8,7 @@ class MusicFavoriteItemWidget : public QWidget, public IMusicFavoriteItemWidget 
 	Q_OBJECT;
 
 private:
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 	IMusicFavoriteItem *musicFavoriteItem = nullptr;
 	IMusicFavoriteWidget *musicFavoriteWidget = nullptr;
 	QLabel *nameLabel = nullptr;
@@ -18,10 +18,10 @@ public:
 	~MusicFavoriteItemWidget( ) override;
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool updateLayout( ) override;
 	bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) override;
 

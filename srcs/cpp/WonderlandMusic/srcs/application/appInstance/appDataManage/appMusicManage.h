@@ -29,7 +29,7 @@ protected:
 	std::vector< MusicFavoriteItem * > musicFavoriteItemVector;
 	MusicFavoriteItem *currenstFavoriteItem = nullptr;
 	MusicFavoriteItem *defaultFavoriteItem = nullptr;
-	MusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
 	bool deleteResource( ) override;
@@ -72,12 +72,12 @@ private:
 	virtual bool unsafeGetMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const;
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 	bool setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) override;
 
 public:
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool initDefaultMusicFavoriteItem( ) override;
 	bool clear( ) override;
 	bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const override;

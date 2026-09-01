@@ -12,9 +12,9 @@
 
 #include <tools/instanceTools.h>
 
-#include <component/musicWindow/musicCentreWidget/musicCentreWidget.h>
-
 #include <application/appInstance/appDataManage/jsonKey/musicItemWidthInfoJsonKey.h>
+
+#include "../../component/musicWindow/interface/widget/iMusicCentreWidget.h"
 MusicItemWidthInfo::MusicItemWidthInfo( ) {
 	appendTypeInfo( this );
 }
@@ -82,7 +82,7 @@ void MusicItemWidthInfo::setMusicSingerNameWidth( const int music_singer_name_wi
 void MusicItemWidthInfo::setMusicDurationTimeWidth( const int music_duration_time_width ) {
 	musicDurationTimeWidth = music_duration_time_width;
 }
-bool MusicItemWidthInfo::setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) {
+bool MusicItemWidthInfo::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
 }
@@ -195,7 +195,7 @@ bool MusicItemWidthInfo::synchronization( ) {
 		return false;
 	return musicCentreWidget->repaintListWidget( );
 }
-MusicCentreWidget * MusicItemWidthInfo::getMusicCentreWidget( ) const {
+IMusicCentreWidget * MusicItemWidthInfo::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 bool MusicItemWidthInfo::isSuggestHeight( const int *width_var_ptr ) const {

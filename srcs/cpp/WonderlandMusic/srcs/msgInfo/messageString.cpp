@@ -120,15 +120,15 @@ MessageString & MessageString::operator<<( const QPointF &message ) {
 
 MessageString::MessageString( const void_ptr &in_obj ) {
 	constexpr size_t base = sizeof( void_ptr ) * 2;
-	this->messageList << QString( "0x%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( );
+	this->messageList << ( "0x" + QString( "%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( ) );
 }
 MessageString::MessageString( const void_const_ptr &in_obj ) {
 	constexpr size_t base = sizeof( void_ptr ) * 2;
-	this->messageList << QString( "0x%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( );
+	this->messageList << ( "0x" + QString( "%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( ) );
 }
 MessageString::MessageString( const nullptr_t &in_obj ) {
 	constexpr size_t base = sizeof( void_ptr ) * 2;
-	this->messageList << QString( "0x%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( );
+	this->messageList << ( "0x" + QString( "%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( ) );
 }
 MessageString::MessageString( const char8_t *&in_obj ) {
 	messageList << QString::fromUtf8( in_obj );
@@ -220,17 +220,17 @@ MessageString & MessageString::operator+=( const MessageString &source_obj ) {
 
 MessageString & MessageString::operator<<( const void_ptr &in_obj ) {
 	constexpr size_t base = sizeof( void_ptr ) * 2;
-	this->messageList << QString( "0x%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( );
+	this->messageList << ( "0x" + QString( "%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( ) );
 	return *this;
 }
 MessageString & MessageString::operator<<( const void_const_ptr &in_obj ) {
 	constexpr size_t base = sizeof( void_ptr ) * 2;
-	this->messageList << QString( "0x%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( );
+	this->messageList << ( "0x" + QString( "%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( ) );
 	return *this;
 }
 MessageString & MessageString::operator<<( const nullptr_t &in_obj ) {
 	constexpr size_t base = sizeof( void_ptr ) * 2;
-	this->messageList << QString( "0x%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( );
+	this->messageList << ( "0x" + QString( "%1" ).arg( ( qulonglong ) in_obj, 16, base, '0' ).toUpper( ) );
 	return *this;
 }
 

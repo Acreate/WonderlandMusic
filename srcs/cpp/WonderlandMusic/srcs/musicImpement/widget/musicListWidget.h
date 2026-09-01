@@ -10,8 +10,9 @@ class MusicListWidget : public QWidget, public IMusicListWidget, public IAppReso
 	Q_OBJECT;
 
 private:
-	MusicCentreWidget *musicCentreWidget = nullptr;
-	UserMutex* userMutex = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
+	UserMutex *userMutex = nullptr;
+
 public:
 	MusicListWidget( );
 	~MusicListWidget( ) override;
@@ -19,19 +20,19 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
-	bool setMusicCentreWidget( MusicCentreWidget *music_centre_widget ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	bool deleteResource( ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
-
+	bool event(QEvent *event) override;
 public:
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
 
 	QWidget * toWidget( ) override;
-	MusicCentreWidget * getMusicCentreWidget( ) const override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicFavoriteItem * getCurrentMusicFavoriteItem( ) const override;
 	bool setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
 	bool fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) override;

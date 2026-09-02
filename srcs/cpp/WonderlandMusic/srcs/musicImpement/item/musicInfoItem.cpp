@@ -25,11 +25,11 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManag
 	loadedOver = false;
 	appendTypeInfo( this );
 }
-MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path ) : appMusicManage( app_music_manage ) {
+MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, IMusicFavoriteItem *music_favorite_item, const QString &file_path ) : appMusicManage( app_music_manage ), musicFavoriteItem( music_favorite_item ) {
 	musicItemWidget = new MusicItemWidget;
 	binMusicItemWidget( musicItemWidget, this );
 	userMutex = new UserMutex;
-	QFileInfo fileInfo( disk_file_path );
+	QFileInfo fileInfo( file_path );
 	if( appMusicManage == nullptr || fileInfo.exists( ) == false ) {
 		deleteLater( );
 		return;
@@ -85,6 +85,7 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, const QString &d
 	auto source = QUrl::fromLocalFile( filePath );
 	mediaPlayer->setSource( source );
 }
+
 MusicInfoItem::~MusicInfoItem( ) {
 	userMutex->lock( );
 	if( mediaPlayer )
@@ -175,4 +176,7 @@ IMusicCentreWidget * MusicInfoItem::getMusicCentreWidget( ) const {
 }
 IMusicItemWidget * MusicInfoItem::getMusicItemWidget( ) const {
 	return musicItemWidget;
+}
+IMusicFavoriteItem * MusicInfoItem::getMusicFavoriteItem( ) const {
+	return nullptr;
 }

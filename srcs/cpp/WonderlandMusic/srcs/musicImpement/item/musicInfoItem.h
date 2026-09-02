@@ -24,13 +24,14 @@ protected:
 	AppMusicManage *appMusicManage;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 	MusicItemWidget *musicItemWidget = nullptr;
+	IMusicFavoriteItem *musicFavoriteItem = nullptr;
 
 protected:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
+	MusicInfoItem( AppMusicManage *app_music_manage, IMusicFavoriteItem *music_favorite_item, const QString &file_path );
 	explicit MusicInfoItem( AppMusicManage *app_music_manage );
-	explicit MusicInfoItem( AppMusicManage *app_music_manage, const QString &disk_file_path );
 	bool getElapsedTimeString( QString &result_elapsed_time_string ) const override;
 	~MusicInfoItem( ) override;
 	bool isLoadedOver( ) override;
@@ -47,6 +48,7 @@ public:
 	virtual void setLoadedOver( const bool loaded_over );
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicItemWidget * getMusicItemWidget( ) const override;
+	IMusicFavoriteItem * getMusicFavoriteItem( ) const override;
 };
 
 #endif // MUSICINFOITEM_H_H_HEAD__FILE__

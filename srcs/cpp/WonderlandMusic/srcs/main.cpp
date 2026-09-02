@@ -1,10 +1,17 @@
-﻿#include <QLoggingCategory>
+﻿#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#include <QLoggingCategory>
 #include "application/appInstance.h"
 #include "dateTimeFormat/dateTimeFormat.h"
 #include "head/result_message_out.h"
 
 #include "msgInfo/messageErrorOut.h"
 #include "msgInfo/messageString.h"
+
+#include "musicPlayer/musicInfo.h"
+
 #include "tools/pathTools.h"
 static MessageErrorOut *messageErrorOut = nullptr;
 static MessageString *permit = nullptr;
@@ -107,6 +114,9 @@ static int endProcess( int exit_code ) {
 }
 
 int main( int argc, char *argv[ ], char *envp[ ] ) {
+#ifdef _WIN32
+	SetConsoleOutputCP( CP_UTF8 );
+#endif
 	int exec;
 	initTimeInfo( );
 
@@ -138,6 +148,10 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete application;
 		return exec;
 	}
+
+	MusicInfo info( "D:/music/audio/쏘리 쏘리 (Sorry, Sorry) - SUPER JUNIOR.flac" );
+	if( info.isRead( ) )
+		info.start( );
 
 	exec = application->exec( );
 	exec = endProcess( exec );

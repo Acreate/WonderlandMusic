@@ -106,7 +106,7 @@ size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, c
 	if( PathTools::isMusicFile( absoluteFilePath ) == false )
 		return 0;
 	userMutex->lock( );
-	auto musicItem = new MusicInfoItem( this, music_file_path );
+	auto musicItem = new MusicInfoItem( this, music_favorite_item, music_file_path );
 	musicItemVector.emplace_back( musicItem );
 	userMutex->unlock( );
 	return 1;

@@ -1,11 +1,11 @@
 ﻿#ifndef EXTERN_C_H_H_HEAD__FILE__
 #define EXTERN_C_H_H_HEAD__FILE__
 
-#ifndef EXTERN_C
+#ifndef INCLUDE_EXTERN_C
 	#ifdef __cplusplus
-		#define  EXTERN_C extern "C"
+		#define  INCLUDE_EXTERN_C extern "C"
 	#else
-		#define  EXTERN_C
+		#define  INCLUDE_EXTERN_C
 	#endif
 #endif
 

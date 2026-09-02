@@ -1,6 +1,7 @@
 ﻿#include "messageErrorOut.h"
 #include <qdir.h>
 #include "messageString.h"
+#include "outDebug.h"
 
 #include "../application/appInstance/appDateTimerManage.h"
 #include "../application/appInstance/appDataManage/translate/messageTranslate.h"
@@ -10,24 +11,6 @@
 #include "../tools/instanceTools.h"
 #include "../tools/sourceLocationTools.h"
 
-#define To_WriteConsoleW_Out 0
-
-#if To_WriteConsoleW_Out == 1
-#include <windows.h>
-// 核心：直接输出 UTF-16，不走 qDebug、不走本地编码
-static void StdErrorConsoleOut( const QString &text ) {
-	HANDLE h = GetStdHandle( STD_ERROR_HANDLE );
-	if( h == INVALID_HANDLE_VALUE )
-		return;
-	// QString → UTF-16（直接给控制台）
-	auto stdU16String = text.toStdU16String( );
-	auto data = stdU16String.data( );
-	WriteConsoleW( h, data, stdU16String.length( ), nullptr, nullptr );
-	WriteConsoleW( h, L"\r\n", 2, nullptr, nullptr );
-}
-#else
-	#define StdErrorConsoleOut( text ) qDebug( ) << text.toStdString( ).c_str( )
-#endif
 MessageErrorOut::MessageErrorOut( bool is_write_file, const QString &log_home_path, const std::source_location &source_location ) : logHomePtah( log_home_path ), location( source_location ), isWriteFile( is_write_file ) {
 }
 
@@ -104,7 +87,7 @@ QString MessageErrorOut::toQString( const DateTimeFormat &date_time_format ) con
 
 QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTimeFormat &date_time_format ) const {
 	QString outString = toQString( date_time_format );
-	StdErrorConsoleOut( outString );
+	OutDebug( ) << outString;
 	if( isWriteFile == false )
 		return outString;
 	QDateTime appStartRunDataTime;
@@ -139,7 +122,7 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 				createDirError = QObject::tr( "创建目录失败" );
 
 			SourceLocationTools::formatString( outString, date_time_format, std::source_location::current( ), createDirError + " : " + logHomePtah );
-			StdErrorConsoleOut( outString );
+			OutDebug( ) << outString;
 			return outString;
 		}
 	}
@@ -154,7 +137,7 @@ QString MessageErrorOut::writeLog( const QString &wirte_log_path, const DateTime
 		} ) == false )
 			openFileError = QObject::tr( "打开文件失败" );
 		SourceLocationTools::formatString( outString, date_time_format, std::source_location::current( ), openFileError + " : " + writeFilePath );
-		StdErrorConsoleOut( outString );
+		OutDebug( ) << outString;
 		return outString;
 	}
 	openFile.write( outString.toUtf8( ) );

@@ -1,12 +1,16 @@
 ﻿#include "appMusicDecoder.h"
 
 #include <QFileInfo>
-#include <QMetaEnum>
 #include <QString>
-#include <QMediaFormat>
 
 #include <tools/stringTools.h>
 #include <tools/vectorTools.h>
+
+#include <head/extern_c.h>
+
+INCLUDE_EXTERN_C {
+	#include <libavformat/avformat.h>
+}
 
 AppMusicDecoder::~AppMusicDecoder( ) {
 	deleteResource( );
@@ -47,8 +51,6 @@ AppMusicDecoder::StringOperator & AppMusicDecoder::StringOperator::operator<<( c
 
 void AppMusicDecoder::appendDecodeFileSuffix( const QString &decode_file_suffix ) {
 	QString *newItemSuffixes = new QString( StringTools::getFileSuffix( decode_file_suffix ).toUpper( ) );
-	*newItemSuffixes = newItemSuffixes->toUpper( );
-
 	supperDecodeFileSuffix.emplace_back( newItemSuffixes );
 }
 
@@ -61,38 +63,26 @@ void AppMusicDecoder::appendDecodeFileSuffix( const QStringList &decode_file_suf
 	for( ; index < count; index += 1 )
 		appendDecodeFileSuffix( data[ index ] );
 }
-
 bool AppMusicDecoder::init( ) {
-	// 自定义添加
-	appendAnyDecodeFileSuffix( "wav", "wma", "flac", "m4a", "aac", "ogg" );
-	// 遍历所有支持的媒体格式
-	QMediaFormat mediaFormat;
-	const auto &formats = mediaFormat.supportedAudioCodecs( QMediaFormat::Decode );
-	QMetaEnum metaEnum = QMetaEnum::fromType< QMediaFormat::AudioCodec >( );
-
-	for( const auto &fmt : formats ) {
-		QString *string;
-		string = new QString( metaEnum.valueToKey( ( quint64 ) fmt ) );
-		*string = string->toUpper( );
-		supperDecodeFileSuffix.emplace_back( string );
-
-		string = new QString( mediaFormat.audioCodecName( fmt ) );
-		*string = string->toUpper( );
-		supperDecodeFileSuffix.emplace_back( string );
+	void *opaque = nullptr;
+	const AVOutputFormat *ofmt;
+	QString buff;
+	QStringList spliteStringList;
+	qsizetype count;
+	qsizetype index;
+	QString *data;
+	while( ( ofmt = av_muxer_iterate( &opaque ) ) != nullptr ) {
+		if( ofmt->audio_codec == AV_CODEC_ID_NONE )
+			continue;
+		if( ofmt->extensions == nullptr || ofmt->extensions[ 0 ] == '\0' )
+			continue;
+		buff = QString::fromUtf8( ofmt->extensions );
+		spliteStringList = buff.split( "," );
+		count = spliteStringList.size( );
+		data = spliteStringList.data( );
+		for( index = 0; index < count; index += 1 )
+			appendDecodeFileSuffix( data[ index ] );
 	}
-	decltype(supperDecodeFileSuffix) singleCase;
-	decltype(supperDecodeFileSuffix) repetition;
-
-	using unityType = QString *;
-	VectorTools::compIdenticalTypeFinction< unityType > compFunction = [] ( auto &left_string_ptr, auto &right_string_ptr ) {
-		if( *left_string_ptr == *right_string_ptr )
-			return true;
-		return false;
-	};
-	VectorTools::getRepetition( singleCase, repetition, supperDecodeFileSuffix, compFunction );
-	supperDecodeFileSuffix = singleCase;
-	VectorTools::deleteVectorPtr( repetition );
-
 	return true;
 }
 

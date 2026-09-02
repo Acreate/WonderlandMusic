@@ -6,6 +6,8 @@
 
 #include "../head/extern_c.h"
 
+#include "../msgInfo/outDebug.h"
+
 INCLUDE_EXTERN_C {
 	#include <libavformat/avformat.h>
 	#include <libavcodec/avcodec.h>

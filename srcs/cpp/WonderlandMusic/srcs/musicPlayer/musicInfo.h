@@ -36,8 +36,7 @@ private:
 	QString avGetSampleFmtName;
 
 	int64_t bitRate;
-	int64_t durationUs;
-	double durationSec;
+	int64_t durationMillsecond;
 	QString channelLayoutDescribe;
 
 public:
@@ -64,8 +63,7 @@ public:
 	virtual int getNbChannels( ) const;
 	virtual const QString & getAvGetSampleFmtName( ) const;
 	virtual int64_t getBitRate( ) const;
-	virtual int64_t getDurationUs( ) const;
-	virtual double getDurationSec( ) const;
+	virtual int64_t getDurationMillsecond( ) const;
 	virtual const QString & getChannelLayoutDescribe( ) const;
 };
 

@@ -44,6 +44,8 @@ public:
 	MessageString( const int16_t &in_obj );
 	MessageString( const int32_t &in_obj );
 	MessageString( const int64_t &in_obj );
+	MessageString( const double &in_obj );
+	MessageString( const float &in_obj );
 	MessageString( const char in_obj[ ] );
 	MessageString( const wchar_t in_obj[ ] );
 	MessageString( const char * &in_obj );
@@ -70,6 +72,8 @@ public:
 	virtual MessageString & operator<<( const int16_t &in_obj );
 	virtual MessageString & operator<<( const int32_t &in_obj );
 	virtual MessageString & operator<<( const int64_t &in_obj );
+	virtual MessageString & operator<<( const double &in_obj );
+	virtual MessageString & operator<<( const float &in_obj );
 	virtual MessageString & operator<<( const char in_obj[ ] );
 	virtual MessageString & operator<<( const wchar_t in_obj[ ] );
 	virtual MessageString & operator<<( const char * &in_obj );

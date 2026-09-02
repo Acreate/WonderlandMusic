@@ -168,6 +168,12 @@ MessageString::MessageString( const int32_t &in_obj ) {
 MessageString::MessageString( const int64_t &in_obj ) {
 	this->messageList << QString::number( in_obj );
 }
+MessageString::MessageString( const double &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
+MessageString::MessageString( const float &in_obj ) {
+	this->messageList << QString::number( in_obj );
+}
 
 MessageString::MessageString( const char in_obj[ ] ) {
 	messageList << QString( in_obj );
@@ -270,6 +276,14 @@ MessageString & MessageString::operator<<( const int32_t &in_obj ) {
 }
 
 MessageString & MessageString::operator<<( const int64_t &in_obj ) {
+	this->messageList << QString::number( in_obj );
+	return *this;
+}
+MessageString & MessageString::operator<<( const double &in_obj ) {
+	this->messageList << QString::number( in_obj );
+	return *this;
+}
+MessageString & MessageString::operator<<( const float &in_obj ) {
 	this->messageList << QString::number( in_obj );
 	return *this;
 }

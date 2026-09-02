@@ -4,9 +4,9 @@
 
 #include <mutex/userMutex.h>
 
-#include "../head/extern_c.h"
+#include "../dateTimeFormat/dateTimeFormat.h"
 
-#include "../msgInfo/outDebug.h"
+#include "../head/extern_c.h"
 
 INCLUDE_EXTERN_C {
 	#include <libavformat/avformat.h>
@@ -15,6 +15,7 @@ INCLUDE_EXTERN_C {
 	#include <libavutil/dict.h>
 }
 
+static bool getAudioInfo( QString &result, AVDictionary *meta, const char *key );
 MusicInfo::MusicInfo( const QString &file_path ) {
 	userMutex = new UserMutex;
 	fileInfo = new QFileInfo( file_path );
@@ -74,11 +75,8 @@ void MusicInfo::run( ) {
 		Is_Interruption_Requested( );
 
 		bitRate = codecPar->bit_rate;
-		durationUs = audioStream->duration;
-		if( durationUs == AV_NOPTS_VALUE )
-			durationUs = fmtCtx->duration;
+		durationMillsecond = audioStream->duration * 1000 * av_q2d( audioStream->time_base );
 
-		durationSec = ( double ) durationUs / AV_TIME_BASE;
 		char chBuf[ 1024 ] { 0 };
 		av_channel_layout_describe( &codecPar->ch_layout, chBuf, sizeof( chBuf ) );
 		channelLayoutDescribe = QString( chBuf );
@@ -88,23 +86,21 @@ void MusicInfo::run( ) {
 		AVDictionary *meta = fmtCtx->metadata;
 		if( !meta )
 			break;
-		AVDictionaryEntry *entry = nullptr;
-
-		auto get_val = [&] ( const char *key ) ->QString {
-			entry = av_dict_get( meta, key, nullptr, AV_DICT_IGNORE_SUFFIX );
-			if( entry && entry->value )
-				return QString( entry->value );
-			return "";
-		};
-
-		title = get_val( "title" );
-		artist = get_val( "artist" );
-		album = get_val( "album" );
-		albumArtist = get_val( "album_artist" );
-		genre = get_val( "genre" );
-		date = get_val( "date" );
-		track = get_val( "track" );
-		comment = get_val( "comment" );
+		getAudioInfo( title, meta, "title" );
+		Is_Interruption_Requested( );
+		getAudioInfo( artist, meta, "artist" );
+		Is_Interruption_Requested( );
+		getAudioInfo( album, meta, "album" );
+		Is_Interruption_Requested( );
+		getAudioInfo( albumArtist, meta, "album_artist" );
+		Is_Interruption_Requested( );
+		getAudioInfo( genre, meta, "genre" );
+		Is_Interruption_Requested( );
+		getAudioInfo( date, meta, "date" );
+		Is_Interruption_Requested( );
+		getAudioInfo( track, meta, "track" );
+		Is_Interruption_Requested( );
+		getAudioInfo( comment, meta, "comment" );
 	} while( false );
 	if( fmtCtx )
 		avformat_close_input( &fmtCtx );
@@ -165,12 +161,18 @@ const QString & MusicInfo::getAvGetSampleFmtName( ) const {
 int64_t MusicInfo::getBitRate( ) const {
 	return bitRate;
 }
-int64_t MusicInfo::getDurationUs( ) const {
-	return durationUs;
-}
-double MusicInfo::getDurationSec( ) const {
-	return durationSec;
+int64_t MusicInfo::getDurationMillsecond( ) const {
+	return durationMillsecond;
 }
 const QString & MusicInfo::getChannelLayoutDescribe( ) const {
 	return channelLayoutDescribe;
+}
+bool getAudioInfo( QString &result, AVDictionary *meta, const char *key ) {
+	if( !meta )
+		return false;
+	AVDictionaryEntry *entry = av_dict_get( meta, key, nullptr, AV_DICT_IGNORE_SUFFIX );
+	if( entry == nullptr || entry->value == nullptr )
+		return false;
+	result = QString( entry->value );
+	return true;
 }

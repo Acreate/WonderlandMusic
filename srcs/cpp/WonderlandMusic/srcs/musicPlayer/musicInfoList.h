@@ -23,6 +23,8 @@ public:
 	MusicInfoList( const std::vector< QString > &file_list );
 	~MusicInfoList( ) override;
 	virtual bool getOverLoadMusicVector( std::vector< MusicInfo * > &result_over_load_music_info_vector ) const;
+	virtual QStringList toQStringList( ) const;
+	virtual operator QString( ) const;
 
 protected:
 	void run( ) override;

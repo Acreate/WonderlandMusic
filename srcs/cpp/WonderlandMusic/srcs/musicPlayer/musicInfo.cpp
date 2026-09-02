@@ -173,48 +173,48 @@ const QString & MusicInfo::getDurationMillsecondDateTimeString( ) const {
 const QString & MusicInfo::getChannelLayoutDescribe( ) const {
 	return channelLayoutDescribe;
 }
-MusicInfo::operator QString( ) const {
-	#define append_result_var( _append_result_target, _append_var_target ) \
-		_append_result_target.append( #_append_var_target ).append( " := " ).append( QString( "%1").arg(_append_var_target) )
+QStringList MusicInfo::toQStringList( ) const {
+	#define append_conver_string_var_beg( _append_var_target ) \
+		QString( "class %1 {\n" ).arg( TemplateArgs::getTypeName( _append_var_target ) )
 
-	QString result;
-	result.append( TemplateArgs::getTypeName( this ) );
-	result.append( " {\n\t" );
+	#define append_conver_string_var( _append_var_target ) \
+		QString("\t%1 := %2 ;\n").arg( #_append_var_target ).arg( _append_var_target )
+
+	#define append_conver_string_var_end( _append_var_target ) \
+		QString("\t%1 := %2 ;\n").arg( #_append_var_target ).arg( _append_var_target )
+
+	#define append_result_var_beg( _append_result_target, _append_var_target ) \
+		_append_result_target.append( append_conver_string_var_beg(_append_var_target) )
+
+	#define append_result_var( _append_result_target, _append_var_target ) \
+		_append_result_target.append( append_conver_string_var(_append_var_target) )
+
+	#define append_result_var_end( _append_result_target, _append_var_target ) \
+		(_append_result_target.append( append_conver_string_var_end(_append_var_target) ), _append_result_target.append( "};") )
+
+	QStringList result;
+	append_result_var_beg( result, this );
 	append_result_var( result, filePath );
-	result.append( ",\n\t" );
 	append_result_var( result, title );
-	result.append( ",\n\t" );
 	append_result_var( result, artist );
-	result.append( ",\n\t" );
 	append_result_var( result, album );
-	result.append( ",\n\t" );
 	append_result_var( result, albumArtist );
-	result.append( ",\n\t" );
 	append_result_var( result, genre );
-	result.append( ",\n\t" );
 	append_result_var( result, date );
-	result.append( ",\n\t" );
 	append_result_var( result, track );
-	result.append( ",\n\t" );
 	append_result_var( result, comment );
-	result.append( ",\n\t" );
 	append_result_var( result, avcodecGetName );
-	result.append( ",\n\t" );
 	append_result_var( result, sampleRate );
-	result.append( ",\n\t" );
 	append_result_var( result, nbChannels );
-	result.append( ",\n\t" );
 	append_result_var( result, avGetSampleFmtName );
-	result.append( ",\n\t" );
 	append_result_var( result, bitRate );
-	result.append( ",\n\t" );
 	append_result_var( result, durationMillsecond );
-	result.append( ",\n\t" );
 	append_result_var( result, durationMillsecondDateTimeString );
-	result.append( ",\n\t" );
-	append_result_var( result, channelLayoutDescribe );
-	result.append( "\n};" );
+	append_result_var_end( result, channelLayoutDescribe );
 	return result;
+}
+MusicInfo::operator QString( ) const {
+	return toQStringList( ).join( "" );
 }
 bool getAudioInfo( QString &result, AVDictionary *meta, const char *key ) {
 	if( !meta )

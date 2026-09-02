@@ -12,7 +12,6 @@
 #include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
-
 #include "../systemTrayIcon/systemTrayIcon.h"
 
 #include "../widget/aboutWidget.h"
@@ -171,4 +170,8 @@ int AppInstance::exec( ) {
 	if( appDataManage->writeJsonData( ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( exec, appDataManage, writeJsonData, tr( "json 写入异常" ) );
 	return exec;
+}
+int AppInstance::quit( ) {
+	applicationManage->quit( );
+	return 0;
 }

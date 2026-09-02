@@ -61,7 +61,7 @@ public:
 
 	bool initAfter( ) override;
 	virtual int exec( );
-
+	virtual int quit();
 protected:
 	bool deleteResource( ) override;
 

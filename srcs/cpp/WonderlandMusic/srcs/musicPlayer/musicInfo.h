@@ -21,7 +21,7 @@ private:
 	QFileInfo *fileInfo;
 	RunStatus status;
 	AVFormatContext *fmtCtx;
-	
+
 	QString filePath;
 	QString title;
 	QString artist;
@@ -68,7 +68,8 @@ public:
 	virtual int64_t getDurationMillsecond( ) const;
 	virtual const QString & getDurationMillsecondDateTimeString( ) const;
 	virtual const QString & getChannelLayoutDescribe( ) const;
-	operator QString( ) const;
+	virtual QStringList toQStringList( ) const;
+	virtual operator QString( ) const;
 };
 
 #endif // MUSICINFO_H_H_HEAD__FILE__

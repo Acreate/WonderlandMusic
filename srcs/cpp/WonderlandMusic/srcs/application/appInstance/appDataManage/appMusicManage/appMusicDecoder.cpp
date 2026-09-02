@@ -63,7 +63,6 @@ void AppMusicDecoder::appendDecodeFileSuffix( const QStringList &decode_file_suf
 }
 
 bool AppMusicDecoder::init( ) {
-	deleteResource( );
 	// 自定义添加
 	appendAnyDecodeFileSuffix( "wav", "wma", "flac", "m4a", "aac", "ogg" );
 	// 遍历所有支持的媒体格式
@@ -98,6 +97,7 @@ bool AppMusicDecoder::init( ) {
 }
 
 bool AppMusicDecoder::initBefore( ) {
+	deleteResource( );
 	return true;
 }
 

@@ -64,6 +64,7 @@ void MusicInfoList::run( ) {
 		if( musicVectorDataPtr[ index ]->isRead( ) )
 			musicVectorDataPtr[ index ]->start( );
 	userMutex->unlock( );
+	auto sleepTime = std::chrono::milliseconds( 500 );
 	while( count != 0 )
-		currentThread( )->sleep( 500 );
+		std::this_thread::sleep_for( sleepTime );
 }

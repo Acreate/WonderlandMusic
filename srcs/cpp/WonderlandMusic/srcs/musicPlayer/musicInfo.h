@@ -17,11 +17,12 @@ protected:
 	};
 
 private:
-	QString filePath;
 	UserMutex *userMutex;
 	QFileInfo *fileInfo;
 	RunStatus status;
 	AVFormatContext *fmtCtx;
+	
+	QString filePath;
 	QString title;
 	QString artist;
 	QString album;
@@ -37,6 +38,7 @@ private:
 
 	int64_t bitRate;
 	int64_t durationMillsecond;
+	QString durationMillsecondDateTimeString;
 	QString channelLayoutDescribe;
 
 public:
@@ -64,7 +66,9 @@ public:
 	virtual const QString & getAvGetSampleFmtName( ) const;
 	virtual int64_t getBitRate( ) const;
 	virtual int64_t getDurationMillsecond( ) const;
+	virtual const QString & getDurationMillsecondDateTimeString( ) const;
 	virtual const QString & getChannelLayoutDescribe( ) const;
+	operator QString( ) const;
 };
 
 #endif // MUSICINFO_H_H_HEAD__FILE__

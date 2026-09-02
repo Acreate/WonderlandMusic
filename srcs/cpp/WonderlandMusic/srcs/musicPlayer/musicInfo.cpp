@@ -8,6 +8,8 @@
 
 #include "../head/extern_c.h"
 
+#include "../tools/templateArgs.h"
+
 INCLUDE_EXTERN_C {
 	#include <libavformat/avformat.h>
 	#include <libavcodec/avcodec.h>
@@ -16,6 +18,7 @@ INCLUDE_EXTERN_C {
 }
 
 static bool getAudioInfo( QString &result, AVDictionary *meta, const char *key );
+
 MusicInfo::MusicInfo( const QString &file_path ) {
 	userMutex = new UserMutex;
 	fileInfo = new QFileInfo( file_path );
@@ -76,7 +79,7 @@ void MusicInfo::run( ) {
 
 		bitRate = codecPar->bit_rate;
 		durationMillsecond = audioStream->duration * 1000 * av_q2d( audioStream->time_base );
-
+		durationMillsecondDateTimeString = DateTimeFormat::millsecondToHourMinSecFrom( durationMillsecond );
 		char chBuf[ 1024 ] { 0 };
 		av_channel_layout_describe( &codecPar->ch_layout, chBuf, sizeof( chBuf ) );
 		channelLayoutDescribe = QString( chBuf );
@@ -164,8 +167,54 @@ int64_t MusicInfo::getBitRate( ) const {
 int64_t MusicInfo::getDurationMillsecond( ) const {
 	return durationMillsecond;
 }
+const QString & MusicInfo::getDurationMillsecondDateTimeString( ) const {
+	return durationMillsecondDateTimeString;
+}
 const QString & MusicInfo::getChannelLayoutDescribe( ) const {
 	return channelLayoutDescribe;
+}
+MusicInfo::operator QString( ) const {
+	#define append_result_var( _append_result_target, _append_var_target ) \
+		_append_result_target.append( #_append_var_target ).append( " := " ).append( QString( "%1").arg(_append_var_target) )
+
+	QString result;
+	result.append( TemplateArgs::getTypeName( this ) );
+	result.append( " {\n\t" );
+	append_result_var( result, filePath );
+	result.append( ",\n\t" );
+	append_result_var( result, title );
+	result.append( ",\n\t" );
+	append_result_var( result, artist );
+	result.append( ",\n\t" );
+	append_result_var( result, album );
+	result.append( ",\n\t" );
+	append_result_var( result, albumArtist );
+	result.append( ",\n\t" );
+	append_result_var( result, genre );
+	result.append( ",\n\t" );
+	append_result_var( result, date );
+	result.append( ",\n\t" );
+	append_result_var( result, track );
+	result.append( ",\n\t" );
+	append_result_var( result, comment );
+	result.append( ",\n\t" );
+	append_result_var( result, avcodecGetName );
+	result.append( ",\n\t" );
+	append_result_var( result, sampleRate );
+	result.append( ",\n\t" );
+	append_result_var( result, nbChannels );
+	result.append( ",\n\t" );
+	append_result_var( result, avGetSampleFmtName );
+	result.append( ",\n\t" );
+	append_result_var( result, bitRate );
+	result.append( ",\n\t" );
+	append_result_var( result, durationMillsecond );
+	result.append( ",\n\t" );
+	append_result_var( result, durationMillsecondDateTimeString );
+	result.append( ",\n\t" );
+	append_result_var( result, channelLayoutDescribe );
+	result.append( "\n};" );
+	return result;
 }
 bool getAudioInfo( QString &result, AVDictionary *meta, const char *key ) {
 	if( !meta )

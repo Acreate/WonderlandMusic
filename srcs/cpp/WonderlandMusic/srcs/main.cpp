@@ -5,6 +5,7 @@
 
 #include "msgInfo/messageErrorOut.h"
 #include "msgInfo/messageString.h"
+#include "msgInfo/outDebug.h"
 
 #include "musicPlayer/musicInfo.h"
 
@@ -141,7 +142,6 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete application;
 		return exec;
 	}
-
 	exec = application->exec( );
 	exec = endProcess( exec );
 

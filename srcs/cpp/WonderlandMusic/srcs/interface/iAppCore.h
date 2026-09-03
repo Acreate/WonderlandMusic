@@ -9,10 +9,9 @@ class IAppCore {
 private:
 	UserMutex *typeInfoUserMutex = nullptr;
 	ClassTypeInfo *classTypeInfo = nullptr;
+
 	static void appendPtr( IAppCore *ptr );
 	static void removePtr( IAppCore *ptr );
-	ClassTypeInfo * appendClassTypeInfo( void *ptr, const type_info &type_info );
-	ClassTypeInfo * appendClassTypeInfo( void *ptr, const type_info &type_info, const QString &type_name );
 
 	bool isClassType( const void *&ptr ) const;
 	bool isClassType( const void *&&ptr ) const;
@@ -20,15 +19,36 @@ private:
 
 	bool isClassType( const QString &type_name ) const;
 
+	ClassTypeInfo * appendClassTypeInfo( const void *ptr, const ::type_info &type_info, const QString &type_name );
+
+protected:
+	virtual const void * getPtr( ) const;
+	virtual const ClassTypeInfo & getClassTypeInfo( ) const;
+	virtual const type_info & getStdTypeInfo( ) const;
+
+	template< typename T >
+	ClassTypeInfo * appendTypeInfo( T *ptr, const ::type_info &type_info, const QString &type_name ) {
+		return appendClassTypeInfo( ptr, type_info, type_name );
+	}
+	template< typename T >
+	ClassTypeInfo * appendTypeInfo( T *ptr, const QString &type_name ) {
+		auto &typeInfo = typeid( T );
+		return appendTypeInfo( ptr, typeInfo, type_name );
+	}
+	template< typename T >
+	ClassTypeInfo * appendTypeInfo( T *ptr ) {
+		auto &typeInfo = typeid( T );
+		return appendTypeInfo( ptr, typeInfo, typeInfo.name( ) );
+	}
+
 public:
 	static IAppCore * case_ptr( void *ptr );
 	static const IAppCore * case_ptr( const void *ptr );
 
 protected:
-	template< typename T >
-	ClassTypeInfo * appendTypeInfo( T *ptr ) {
-		return appendClassTypeInfo( ptr, typeid( T ) );
-	}
+	ClassTypeInfo * appendClassTypeInfo( IAppCore *ptr );
+	ClassTypeInfo * appendClassTypeInfo( IAppCore *ptr, const type_info &type_info );
+	ClassTypeInfo * appendClassTypeInfo( IAppCore *ptr, const type_info &type_info, const QString &type_name );
 
 public:
 	IAppCore( );

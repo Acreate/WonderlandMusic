@@ -26,11 +26,15 @@ void IAppCore::removePtr( IAppCore *ptr ) {
 	}
 	userMutex->unlock( );
 }
-ClassTypeInfo * IAppCore::appendClassTypeInfo( void *ptr, const type_info &type_info ) {
-	return classTypeInfo->appendClassTypeInfo( ptr, type_info );
+ClassTypeInfo * IAppCore::appendClassTypeInfo( IAppCore *ptr ) {
+	return appendClassTypeInfo( ptr, ptr->getStdTypeInfo( ) );
 }
-ClassTypeInfo * IAppCore::appendClassTypeInfo( void *ptr, const type_info &type_info, const QString &type_name ) {
-	return classTypeInfo->appendClassTypeInfo( ptr, type_info, type_name );
+ClassTypeInfo * IAppCore::appendClassTypeInfo( IAppCore *ptr, const type_info &type_info ) {
+	return appendClassTypeInfo( ptr, type_info, type_info.name( ) );
+}
+ClassTypeInfo * IAppCore::appendClassTypeInfo( IAppCore *ptr, const type_info &type_info, const QString &type_name ) {
+	const void *parPtr = ptr->getPtr( );
+	return appendClassTypeInfo( parPtr, type_info, type_name );
 }
 bool IAppCore::isClassType( const void *&ptr ) const {
 	return classTypeInfo->isClassType( ptr );
@@ -43,6 +47,18 @@ bool IAppCore::isClassType( const type_info &type_info ) const {
 }
 bool IAppCore::isClassType( const QString &type_name ) const {
 	return classTypeInfo->isClassType( type_name );
+}
+ClassTypeInfo * IAppCore::appendClassTypeInfo( const void *ptr, const type_info &type_info, const QString &type_name ) {
+	return classTypeInfo->appendClassTypeInfo( ptr, type_info, type_name );
+}
+const void * IAppCore::getPtr( ) const {
+	return this;
+}
+const ClassTypeInfo & IAppCore::getClassTypeInfo( ) const {
+	return *classTypeInfo;
+}
+const type_info & IAppCore::getStdTypeInfo( ) const {
+	return typeid( *this );
 }
 IAppCore * IAppCore::case_ptr( void *ptr ) {
 	IAppCore *result = nullptr;
@@ -78,7 +94,8 @@ const IAppCore * IAppCore::case_ptr( const void *ptr ) {
 }
 IAppCore::IAppCore( ) {
 	typeInfoUserMutex = new UserMutex;
-	classTypeInfo = new ClassTypeInfo( this, typeid( IAppCore ) );
+	auto &typeInfo = typeid( IAppCore );
+	classTypeInfo = new ClassTypeInfo( this, typeInfo, typeInfo.name( ) );
 	appendPtr( this );
 }
 IAppCore::~IAppCore( ) {
@@ -89,8 +106,9 @@ QString IAppCore::getTypeName( ) const {
 	auto casePtr = case_ptr( this );
 	if( casePtr == nullptr )
 		return nullptr;
+	auto &typeInfo = casePtr->getClassTypeInfo( );
 	QString typeName;
-	if( classTypeInfo->getClassTypeName( this, typeName ) )
+	if( typeInfo.getClassTypeName( casePtr->getPtr( ), typeName ) )
 		return typeName;
 	return nullptr;
 }

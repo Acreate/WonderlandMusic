@@ -29,6 +29,7 @@ bool ClassTypeInfo::unsafeIsType( const void *&ptr ) const {
 			return true;
 	return false;
 }
+
 bool ClassTypeInfo::unsafeIsType( const type_info &type_info ) const {
 	if( typeInfo == type_info )
 		return true;
@@ -67,20 +68,22 @@ bool ClassTypeInfo::unsafeGetClassTypeName( const void *&ptr, QString &result_na
 	if( count == 0 )
 		return false;
 	auto data = aliasTypeInfos.data( );
-	size_t index = count;
-	do
-		if( index -= 1, data[ index ]->ptr == ptr ) {
+	size_t index = count - 1;
+	for( ; index != 0; index -= 1 )
+		if( data[ index ]->ptr == ptr ) {
 			result_name = *data[ index ]->name;
 			return true;
 		}
-	while( index != 0 );
-	index = count;
-	do
-		if( index -= 1, data[ index ]->unsafeGetClassTypeName( ptr, result_name ) ) {
-			result_name = *data[ index ]->name;
+	if( data[ index ]->ptr == ptr ) {
+		result_name = *data[ index ]->name;
+		return true;
+	}
+	index = count - 1;
+	for( ; index != 0; index -= 1 )
+		if( data[ index ]->unsafeGetClassTypeName( ptr, result_name ) )
 			return true;
-		}
-	while( index != 0 );
+	if( data[ index ]->unsafeGetClassTypeName( ptr, result_name ) )
+		return true;
 	if( this == ptr ) {
 		result_name = *name;
 		return true;
@@ -92,29 +95,30 @@ bool ClassTypeInfo::unsafeGetClassTypeName( const void *&&ptr, QString &result_n
 	if( count == 0 )
 		return false;
 	auto data = aliasTypeInfos.data( );
-	size_t index = count;
-	do
-		if( index -= 1, data[ index ]->ptr == ptr ) {
+	size_t index = count - 1;
+	for( ; index != 0; index -= 1 )
+		if( data[ index ]->ptr == ptr ) {
 			result_name = *data[ index ]->name;
 			return true;
 		}
-	while( index != 0 );
-	index = count;
-	do
-		if( index -= 1, data[ index ]->unsafeGetClassTypeName( ptr, result_name ) ) {
-			result_name = *data[ index ]->name;
+	if( data[ index ]->ptr == ptr ) {
+		result_name = *data[ index ]->name;
+		return true;
+	}
+	index = count - 1;
+	for( ; index != 0; index -= 1 )
+		if( data[ index ]->unsafeGetClassTypeName( ptr, result_name ) )
 			return true;
-		}
-	while( index != 0 );
+	if( data[ index ]->unsafeGetClassTypeName( ptr, result_name ) )
+		return true;
 	if( this == ptr ) {
 		result_name = *name;
 		return true;
 	}
 	return false;
 }
-ClassTypeInfo::ClassTypeInfo( void *ptr, const type_info &type_info ) : ClassTypeInfo( ptr, type_info, type_info.name( ) ) {
-}
-ClassTypeInfo::ClassTypeInfo( void *ptr, const type_info &type_info, const QString &name ) : typeInfo( type_info ), name( new QString( name ) ), ptr( ptr ) {
+
+ClassTypeInfo::ClassTypeInfo( const void *ptr, const type_info &type_info, const QString &name ) : typeInfo( type_info ), name( new QString( name ) ), ptr( ptr ) {
 	userMutex = new UserMutex;
 }
 ClassTypeInfo::~ClassTypeInfo( ) {
@@ -147,6 +151,7 @@ bool ClassTypeInfo::getClassTypeName( const void *&&ptr, QString &result_name ) 
 	userMutex->unlock( );
 	return result;
 }
+
 bool ClassTypeInfo::isClassType( const void *&&ptr ) const {
 	if( ptr == nullptr )
 		return false;
@@ -161,6 +166,7 @@ bool ClassTypeInfo::isClassType( const void *&ptr ) const {
 	userMutex->unlock( );
 	return result;
 }
+
 bool ClassTypeInfo::isClassType( const type_info &type_info ) const {
 	userMutex->lock( );
 	auto result = unsafeIsType( type_info );
@@ -173,23 +179,12 @@ bool ClassTypeInfo::isClassType( const QString &type_name ) const {
 	userMutex->unlock( );
 	return result;
 }
-ClassTypeInfo * ClassTypeInfo::appendClassTypeInfo( void *ptr, const type_info &type_info, const QString &name ) {
+ClassTypeInfo * ClassTypeInfo::appendClassTypeInfo( const void *ptr, const type_info &type_info, const QString &name ) {
 	ClassTypeInfo *typeInfo = nullptr;
 	userMutex->lock( );
 	auto result = unsafeIsType( type_info );
 	if( result == false ) {
 		typeInfo = new ClassTypeInfo( ptr, type_info, name );
-		aliasTypeInfos.emplace_back( typeInfo );
-	}
-	userMutex->unlock( );
-	return typeInfo;
-}
-ClassTypeInfo * ClassTypeInfo::appendClassTypeInfo( void *ptr, const type_info &type_info ) {
-	ClassTypeInfo *typeInfo = nullptr;
-	userMutex->lock( );
-	auto result = unsafeIsType( type_info );
-	if( result == false ) {
-		typeInfo = new ClassTypeInfo( ptr, type_info );
 		aliasTypeInfos.emplace_back( typeInfo );
 	}
 	userMutex->unlock( );

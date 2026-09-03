@@ -28,8 +28,6 @@
 
 #include "../../application/appInstance/appDataManage/appMusicManage.h"
 
-#include "../../component/musicWindow/interface/menu/iMusicFavoriteMenu.h"
-
 MusicCentreWidget::MusicCentreWidget( ) : QWidget( ), musicWindow( nullptr ) {
 	appendTypeInfo( this );
 }
@@ -197,7 +195,6 @@ void MusicCentreWidget::mouseReleaseEvent( QMouseEvent *event ) {
 					break;
 				if( isContainsViewport == false )
 					return;
-				auto appMusicManage = InstanceTools::getAppMusicManage( );
 				std::vector< IMusicItem * > result;
 				if( execMenu( musicListWidget, nullptr, event->globalPos( ) ) == false )
 					Result_Void_Function_Messag_Ptr_Out_Args( this, execMenu, tr( "列表菜单显示异常" ) );

@@ -5,16 +5,16 @@
 
 #include "messageString.h"
 #ifdef WIN64
-#define To_WriteConsoleW_Out 1
+	#define To_WriteConsoleW_Out
 #endif
 
 #ifndef To_WriteConsoleW_Out
-#ifdef WIN32
-#define To_WriteConsoleW_Out 1
-#endif
+	#ifdef WIN32
+		#define To_WriteConsoleW_Out
+	#endif
 #endif
 
-#if To_WriteConsoleW_Out == 1
+#ifdef To_WriteConsoleW_Out
 #include <windows.h>
 // 核心：直接输出 UTF-16，不走 qDebug、不走本地编码
 static void StdErrorConsoleOut( const QString &text ) {

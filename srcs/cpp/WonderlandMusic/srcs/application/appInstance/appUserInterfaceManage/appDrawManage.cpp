@@ -155,18 +155,10 @@ bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem *
 }
 
 bool appDrawTools::drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &offset_pos_x, const int &offset_pos_y ) {
-	size_t idCode;
-	if( music_item->getIdCode( idCode ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getIdCode, QObject::tr( "获取歌曲id失败" ) );
-	QString name;
-	if( music_item->getName( name ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getName, QObject::tr( "获取歌曲名称失败" ) );
-	QString singer;
-	if( music_item->getSinger( singer ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getSinger, QObject::tr( "获取歌曲歌手失败" ) );
-	QString elapsedTimeString;
-	if( music_item->getElapsedTimeString( elapsedTimeString ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getElapsedTimeString, QObject::tr( "获取时间字符串失败" ) );
+	size_t idCode = music_item->getIdCode( );
+	QString name = music_item->getName( );
+	QString singer = music_item->getSinger( );
+	QString elapsedTimeString = music_item->getElapsedTimeString( );
 
 	const int calculateMinHeight = music_item_width_info->getSuggestHeight( );
 
@@ -198,18 +190,10 @@ bool appDrawTools::drawItem( QPainter &painter, const IMusicItem *music_item, co
 	return true;
 }
 bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const {
-	size_t idCode;
-	if( music_item->getIdCode( idCode ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getIdCode, QObject::tr( "获取歌曲id失败" ) );
-	QString name;
-	if( music_item->getName( name ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getName, QObject::tr( "获取歌曲名称失败" ) );
-	QString singer;
-	if( music_item->getSinger( singer ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getSinger, QObject::tr( "获取歌曲歌手失败" ) );
-	QString elapsedTimeString;
-	if( music_item->getElapsedTimeString( elapsedTimeString ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item, getElapsedTimeString, QObject::tr( "获取时间字符串失败" ) );
+	size_t idCode = music_item->getIdCode( );
+	QString name = music_item->getName( );
+	QString singer = music_item->getSinger( );
+	QString elapsedTimeString = music_item->getElapsedTimeString( );
 
 	QFontMetrics fontMetrics = painter.fontMetrics( );
 	const int calculateMinHeight = fontMetrics.height( );
@@ -271,11 +255,8 @@ bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem *
 	size_t index = 0;
 	int offsetY = 0;
 	for( ; index < count; index += 1 ) {
-		if( appDrawTools::drawItem( painter, data[ index ], music_item_width_info, 0, offsetY ) == false ) {
-			QString name;
-			data[ index ]->getName( name );
-			return Result_Var_Function_Messag_Ptr_Out_Args( false, this, drawItem, QObject::tr( "绘制异常 : music_item_vector[%1].name = %2" ).arg( index ).arg( name ) );
-		}
+		if( appDrawTools::drawItem( painter, data[ index ], music_item_width_info, 0, offsetY ) == false )
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, this, drawItem, QObject::tr( "绘制异常 : music_item_vector[%1].name = %2" ).arg( index ).arg( data[ index ]->getName( ) ) );
 		offsetY += height;
 	}
 

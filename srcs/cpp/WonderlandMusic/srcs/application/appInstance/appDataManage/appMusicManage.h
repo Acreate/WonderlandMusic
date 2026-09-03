@@ -10,8 +10,6 @@
 class MusicItemWidthInfo;
 class IMusicFavoriteItem;
 class IMusicItemWidthInfo;
-class MusicFavoriteItem;
-class MusicInfoItem;
 
 class IMusicItem;
 class QPainter;
@@ -25,10 +23,10 @@ protected:
 	UserMutex *userMutex = nullptr;
 	AppMusicDecoder *appMusicDecoder = nullptr;
 	MusicItemWidthInfo *musicItemWidthInfo = nullptr;
-	std::vector< MusicInfoItem * > musicItemVector;
-	std::vector< MusicFavoriteItem * > musicFavoriteItemVector;
-	MusicFavoriteItem *currenstFavoriteItem = nullptr;
-	MusicFavoriteItem *defaultFavoriteItem = nullptr;
+	std::vector< IMusicItem * > musicItemVector;
+	std::vector< IMusicFavoriteItem * > musicFavoriteItemVector;
+	IMusicFavoriteItem *currenstFavoriteItem = nullptr;
+	IMusicFavoriteItem *defaultFavoriteItem = nullptr;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 
 protected:
@@ -61,7 +59,7 @@ public:
 	virtual bool updateMusicItem( IMusicItem *music_item );
 	virtual bool removeMusicItem( IMusicItem *music_item );
 	virtual bool hasMusicItem( size_t &result_index, const IMusicItem *music_item ) const;
-
+	virtual bool moveMusicVector( const IMusicFavoriteItem *music_favorite_item, const std::vector< IMusicItem * > &music_info_items );
 	virtual IMusicItemWidthInfo * getMusicItemWidthInfo( ) const;
 	virtual bool setMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info );
 

@@ -42,18 +42,10 @@ bool MusicItemWidget::updateLayout( ) {
 	auto iMusicItemWidthInfo = musicTitleWidget->getIMusicItemWidthInfo( );
 	if( iMusicItemWidthInfo == nullptr )
 		return false;
-	size_t idCode;
-	if( musicItem->getIdCode( idCode ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItem, getIdCode, QObject::tr( "获取歌曲id失败" ) );
-	QString name;
-	if( musicItem->getName( name ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItem, getName, QObject::tr( "获取歌曲名称失败" ) );
-	QString singer;
-	if( musicItem->getSinger( singer ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItem, getSinger, QObject::tr( "获取歌曲歌手失败" ) );
-	QString elapsedTimeString;
-	if( musicItem->getElapsedTimeString( elapsedTimeString ) == false )
-		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItem, getElapsedTimeString, QObject::tr( "获取时间字符串失败" ) );
+	size_t idCode = musicItem->getIdCode( );
+	QString name = musicItem->getName( );
+	QString singer = musicItem->getSinger( );
+	QString elapsedTimeString = musicItem->getElapsedTimeString( );
 	idLabel->setText( name );
 	nameLabel->setText( name );
 	singerLabel->setText( name );

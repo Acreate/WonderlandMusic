@@ -51,6 +51,7 @@ protected:
 		virtual bool isFinished( );
 		virtual MusicInfoList * getMusicInfoList( ) const;
 		virtual bool moveToMusicInfoVector( std::vector< MusicInfo * > &result_detach_vector );
+		virtual IMusicFavoriteItem * getMusicFavoriteItem( ) const;
 	};
 
 protected:

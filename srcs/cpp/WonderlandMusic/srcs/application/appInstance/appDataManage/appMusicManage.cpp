@@ -99,6 +99,20 @@ bool AppMusicManage::removeMusicItem( IMusicItem *music_item ) {
 bool AppMusicManage::hasMusicItem( size_t &result_index, const IMusicItem *music_item ) const {
 	return false;
 }
+bool AppMusicManage::moveMusicVector( const IMusicFavoriteItem *music_favorite_item, const std::vector< IMusicItem * > &music_info_items ) {
+	userMutex->lock( );
+	size_t count = musicFavoriteItemVector.size( );
+	auto data = musicFavoriteItemVector.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ] == music_favorite_item ) {
+			data[ index ]->addMusicItem( music_info_items );
+
+			return userMutex->result_unlock( true );
+		}
+	userMutex->unlock( );
+	return false;
+}
 
 bool AppMusicManage::clear( ) {
 	userMutex->lock( );
@@ -215,8 +229,9 @@ bool AppMusicManage::initDefaultMusicFavoriteItem( ) {
 	userMutex->lock( );
 	if( defaultFavoriteItem )
 		delete defaultFavoriteItem;
-	defaultFavoriteItem = new MusicFavoriteItem;
-	defaultFavoriteItem->setName( tr( "默认" ) );
+	auto create = new MusicFavoriteItem;
+	defaultFavoriteItem = create;
+	create->setName( tr( "默认" ) );
 	userMutex->unlock( );
 	return true;
 }

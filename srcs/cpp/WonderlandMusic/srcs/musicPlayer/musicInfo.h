@@ -23,6 +23,7 @@ private:
 	AVFormatContext *fmtCtx;
 
 	QString filePath;
+	QString absoluteFilePath;
 	QString title;
 	QString artist;
 	QString album;
@@ -44,6 +45,8 @@ private:
 public:
 	explicit MusicInfo( const QString &file_path );
 	~MusicInfo( ) override;
+	MusicInfo( const MusicInfo &other );
+	MusicInfo & operator=( const MusicInfo &other );
 
 protected:
 	void run( ) override;
@@ -51,6 +54,7 @@ protected:
 public:
 	virtual bool isRead( ) const;
 	virtual const QString & getFilePath( ) const;
+	virtual const QString & getAbsoluteFilePath( ) const;
 	virtual RunStatus getStatus( ) const;
 	virtual const QString & getTitle( ) const;
 	virtual const QString & getArtist( ) const;

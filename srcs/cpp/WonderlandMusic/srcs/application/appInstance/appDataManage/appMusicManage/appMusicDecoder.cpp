@@ -18,7 +18,11 @@
 #include <tools/invokeMethodTools.h>
 #include <tools/pathTools.h>
 
+#include "../appMusicManage.h"
+
 #include "../../../../msgInfo/outDebug.h"
+
+#include "../../../../musicImpement/item/musicInfoItem.h"
 
 INCLUDE_EXTERN_C {
 	#include <libavformat/avformat.h>
@@ -119,7 +123,12 @@ MusicInfoList * AppMusicDecoder::LoadMusic::getMusicInfoList( ) const {
 bool AppMusicDecoder::LoadMusic::moveToMusicInfoVector( std::vector< MusicInfo * > &result_detach_vector ) {
 	return musicInfoList->moveToMusicInfoVector( result_detach_vector );
 }
+IMusicFavoriteItem * AppMusicDecoder::LoadMusic::getMusicFavoriteItem( ) const {
+	return musicFavoriteItem;
+}
 bool AppMusicDecoder::overLoad( LoadMusic *load_music ) {
+	std::vector< MusicInfo * > musicInfos;
+	IMusicFavoriteItem *musicFavoriteItem = nullptr;
 	bool cond = false;
 	LoadMusic *loadMusic;
 	userMutex->lock( );
@@ -129,7 +138,8 @@ bool AppMusicDecoder::overLoad( LoadMusic *load_music ) {
 	for( ; index < count; index += 1 )
 		if( data[ index ] == load_music ) {
 			loadMusic = data[ index ];
-			OutDebug( ) << *loadMusic->getMusicInfoList( );
+			if( loadMusic->moveToMusicInfoVector( musicInfos ) )
+				musicFavoriteItem = loadMusic->getMusicFavoriteItem( );
 			loadMusicVector.erase( loadMusicVector.begin( ) + index );
 			LoadMusicDecoderTools::releaseAppMusicDecoder( loadMusic );
 			delete loadMusic;
@@ -137,6 +147,20 @@ bool AppMusicDecoder::overLoad( LoadMusic *load_music ) {
 			break;
 		}
 	userMutex->unlock( );
+	if( musicFavoriteItem ) {
+		AppMusicManage *appMusicManage = InstanceTools::getAppMusicManage( );
+		count = musicInfos.size( );
+		std::vector< IMusicItem * > musicItems( count );
+		auto musicInfoData = musicInfos.data( );
+		auto musicItemData = musicItems.data( );
+		index = 0;
+		for( ; index < count; index += 1 ) {
+			musicItemData[ index ] = new MusicInfoItem( appMusicManage, musicFavoriteItem, *musicInfoData[ index ] );
+			delete musicInfoData[ index ]; // 释放
+			musicInfoData[ index ] = nullptr;
+		}
+		appMusicManage->moveMusicVector( musicFavoriteItem, musicItems );
+	}
 	return cond;
 }
 void AppMusicDecoder::appendDecodeFileSuffix( const QString &decode_file_suffix ) {

@@ -24,7 +24,8 @@ MusicInfo::MusicInfo( const QString &file_path ) {
 	fileInfo = new QFileInfo( file_path );
 	status = RunStatus::Ready;
 	fmtCtx = nullptr;
-	filePath = fileInfo->absoluteFilePath( );
+	absoluteFilePath = fileInfo->absoluteFilePath( );
+	filePath = fileInfo->fileName( );
 }
 MusicInfo::~MusicInfo( ) {
 	QThread::requestInterruption( );
@@ -36,6 +37,56 @@ MusicInfo::~MusicInfo( ) {
 	delete fileInfo;
 	delete userMutex;
 	userMutex = nullptr;
+}
+MusicInfo::MusicInfo( const MusicInfo &other ) : status { other.status },
+	filePath { other.filePath },
+	absoluteFilePath { other.absoluteFilePath },
+	title { other.title },
+	artist { other.artist },
+	album { other.album },
+	albumArtist { other.albumArtist },
+	genre { other.genre },
+	date { other.date },
+	track { other.track },
+	comment { other.comment },
+	avcodecGetName { other.avcodecGetName },
+	sampleRate { other.sampleRate },
+	nbChannels { other.nbChannels },
+	avGetSampleFmtName { other.avGetSampleFmtName },
+	bitRate { other.bitRate },
+	durationMillsecond { other.durationMillsecond },
+	durationMillsecondDateTimeString { other.durationMillsecondDateTimeString },
+	channelLayoutDescribe { other.channelLayoutDescribe } {
+	userMutex = new UserMutex;
+	fileInfo = new QFileInfo( absoluteFilePath );
+	fmtCtx = nullptr;
+}
+MusicInfo & MusicInfo::operator=( const MusicInfo &other ) {
+	if( this == &other )
+		return *this;
+	status = other.status;
+	fmtCtx = nullptr;
+	filePath = other.filePath;
+	absoluteFilePath = other.absoluteFilePath;
+	title = other.title;
+	artist = other.artist;
+	album = other.album;
+	albumArtist = other.albumArtist;
+	genre = other.genre;
+	date = other.date;
+	track = other.track;
+	comment = other.comment;
+	avcodecGetName = other.avcodecGetName;
+	sampleRate = other.sampleRate;
+	nbChannels = other.nbChannels;
+	avGetSampleFmtName = other.avGetSampleFmtName;
+	bitRate = other.bitRate;
+	durationMillsecond = other.durationMillsecond;
+	durationMillsecondDateTimeString = other.durationMillsecondDateTimeString;
+	channelLayoutDescribe = other.channelLayoutDescribe;
+	userMutex = new UserMutex;
+	fileInfo = new QFileInfo( absoluteFilePath );
+	return *this;
 }
 void MusicInfo::run( ) {
 	// 跳出宏
@@ -120,6 +171,9 @@ bool MusicInfo::isRead( ) const {
 }
 const QString & MusicInfo::getFilePath( ) const {
 	return filePath;
+}
+const QString & MusicInfo::getAbsoluteFilePath( ) const {
+	return absoluteFilePath;
 }
 
 MusicInfo::RunStatus MusicInfo::getStatus( ) const {

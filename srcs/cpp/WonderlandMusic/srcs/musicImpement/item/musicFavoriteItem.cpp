@@ -26,6 +26,13 @@ bool MusicFavoriteItem::getName( QString &result_name ) const {
 }
 bool MusicFavoriteItem::addMusicItem( IMusicItem *music_item ) {
 	musicFavoriteItemUserMutex->lock( );
+	musicItemVector.emplace_back( music_item );
+	musicFavoriteItemUserMutex->unlock( );
+	return true;
+}
+bool MusicFavoriteItem::addMusicItem( const std::vector< IMusicItem * > &music_info_items ) {
+	musicFavoriteItemUserMutex->lock( );
+	musicItemVector.append_range( music_info_items );
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }

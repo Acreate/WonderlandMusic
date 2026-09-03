@@ -14,13 +14,13 @@ protected:
 
 public:
 	IMusicItem( );
-	virtual bool isLoadedOver( ) = 0;
-	virtual bool getIdCode( size_t &result_id_code ) const = 0;
-	virtual bool getName( QString &result_name ) const = 0;
-	virtual bool getSinger( QString &result_singer ) const = 0;
-	virtual bool getFilePath( QString &result_file_path ) const = 0;
-	virtual bool getElapsedTime( size_t &result_elapsed_time ) const = 0;
-	virtual bool getElapsedTimeString( QString &result_elapsed_time_string ) const = 0;
+	virtual size_t getIdCode( ) const = 0;
+	virtual const QString & getName( ) const = 0;
+	virtual const QString & getSinger( ) const = 0;
+	virtual const QString & getFilePath( ) const = 0;
+	virtual const QString & getAbsoluteFilePath( ) const = 0;
+	virtual const QString & getElapsedTimeString( ) const = 0;
+	virtual const qint64 & getElapsedTime( ) const = 0;
 	virtual IMusicItemWidget * getMusicItemWidget( ) const = 0;
 	virtual IMusicFavoriteItem * getMusicFavoriteItem( ) const = 0;
 };

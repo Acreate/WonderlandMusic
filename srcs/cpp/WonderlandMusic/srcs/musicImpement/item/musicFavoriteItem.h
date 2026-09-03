@@ -24,6 +24,7 @@ protected:
 public:
 	bool getName( QString &result_name ) const override;
 	bool addMusicItem( IMusicItem *music_item ) override;
+	bool addMusicItem( const std::vector<IMusicItem *> &music_info_items ) override;
 	bool removeMusicItem( IMusicItem *music_item ) override;
 	bool clear( ) override;
 	bool update( ) override;

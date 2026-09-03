@@ -5,7 +5,7 @@
 
 #include <cmake_property_to_c_cpp_header_env.h>
 
-#include "../../auto_generate_files/macro/cmake_to_c_cpp_header_env.h"
+#include <cmake_to_c_cpp_header_env.h>
 
 bool CmakeInfo::getGeneratePorjectDateTime( QDateTime &result_data_time ) {
 	QString format = cmake_property_Generate_Date_Time_Format;

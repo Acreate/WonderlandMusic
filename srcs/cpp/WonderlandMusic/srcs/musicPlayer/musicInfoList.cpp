@@ -33,9 +33,8 @@ void MusicInfoList::loadFinished( MusicInfo *music_info ) {
 		} );
 }
 
-MusicInfoList::MusicInfoList( const std::vector< QString > &file_list ) : QThread( ) {
+MusicInfoList::MusicInfoList( const std::vector< QString > &file_list ) : MusicInfoList( ) {
 	count = file_list.size( );
-	userMutex = new UserMutex;
 	musicVector.resize( count );
 	auto sourceDataPtr = file_list.data( );
 	musicVectorDataPtr = musicVector.data( );
@@ -50,6 +49,11 @@ MusicInfoList::MusicInfoList( const std::vector< QString > &file_list ) : QThrea
 		} );
 	}
 }
+MusicInfoList::MusicInfoList( ) : QThread( ) {
+	userMutex = new UserMutex;
+	count = 0;
+	musicVectorDataPtr = nullptr;
+}
 MusicInfoList::~MusicInfoList( ) {
 	userMutex->lock( );
 	auto musicInfo = overLoadMusicVector.data( );
@@ -60,6 +64,36 @@ MusicInfoList::~MusicInfoList( ) {
 	userMutex->unlock( );
 	delete userMutex;
 	userMutex = nullptr;
+}
+bool MusicInfoList::appendLoadMusicFileList( const std::vector< QString > &file_list ) {
+	userMutex->lock( );
+	if( isFinished( ) || isInterruptionRequested( ) || count == overLoadMusicVector.size( ) )
+		return userMutex->result_unlock( false );
+	size_t appendCount = file_list.size( );
+	size_t newCount = appendCount + count;
+	std::vector< MusicInfo * > buff( newCount, nullptr );
+	auto buffData = buff.data( );
+	for( index = 0; index < count; index += 1 )
+		buffData[ index ] = musicVectorDataPtr[ index ];
+
+	auto sourceDataPtr = file_list.data( );
+	MusicInfo *musicInfo;
+	QString filePath;
+	for( index = 0; index < count; index += 1 ) {
+		filePath = sourceDataPtr[ index ];
+		musicInfo = new MusicInfo( filePath );
+		buffData[ index + count ] = musicInfo;
+		connect( musicInfo, &MusicInfo::finished, [musicInfo, this]( ) {
+			loadFinished( musicInfo );
+		} );
+		if( isRunning( ) )
+			musicInfo->start( );
+	}
+	musicVector = buff;
+	count = newCount;
+	musicVectorDataPtr = musicVector.data( );
+	userMutex->unlock( );
+	return true;
 }
 bool MusicInfoList::getOverLoadMusicVector( std::vector< MusicInfo * > &result_over_load_music_info_vector ) const {
 	userMutex->lock( );
@@ -102,6 +136,9 @@ QStringList MusicInfoList::toQStringList( ) const {
 }
 MusicInfoList::operator QString( ) const {
 	return toQStringList( ).join( "" );
+}
+size_t MusicInfoList::getCount( ) const {
+	return count;
 }
 void MusicInfoList::run( ) {
 	userMutex->lock( );

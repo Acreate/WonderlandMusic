@@ -8,6 +8,16 @@
 
 #include <head/extern_c.h>
 
+#include "../../../../head/release_macro.h"
+
+#include "../../../../musicPlayer/musicInfo.h"
+#include "../../../../musicPlayer/musicInfoList.h"
+
+#include "../../../../mutex/userMutex.h"
+
+#include "../../../../tools/instanceTools.h"
+#include "../../../../tools/invokeMethodTools.h"
+
 INCLUDE_EXTERN_C {
 	#include <libavformat/avformat.h>
 }
@@ -49,6 +59,80 @@ AppMusicDecoder::StringOperator & AppMusicDecoder::StringOperator::operator<<( c
 	return *this;
 }
 
+void AppMusicDecoder::LoadMusic::connectLoadOverFinish( ) {
+	QObject::connect( musicInfoList, &QThread::finished, [this]( ) {
+		InvokeMethodTools::invokeQueuedConnectionMethod( [this] ( ApplicationManage *applicationManage ) {
+			if( appMusicDecoder )
+				if( LoadMusicDecoderTools::overLoad( appMusicDecoder, this ) )
+					return;
+			std::vector< MusicInfo * > musicInfos;
+			musicInfoList->getOverLoadMusicVector( musicInfos );
+			auto musicInfo = musicInfos.data( );
+			size_t index = 0;
+			size_t count = musicInfos.size( );
+			for( ; index < count; index += 1 )
+				delete musicInfo[ index ];
+			delete this;
+		} );
+	} );
+}
+void AppMusicDecoder::LoadMusic::releaseAppMusicDecoder( ) {
+	appMusicDecoder = nullptr;
+}
+AppMusicDecoder::LoadMusic::LoadMusic( AppMusicDecoder *app_music_decoder, IMusicFavoriteItem *music_favorite_item ) : musicFavoriteItem( music_favorite_item ), appMusicDecoder( app_music_decoder ) {
+	musicInfoList = new MusicInfoList( );
+	connectLoadOverFinish( );
+}
+AppMusicDecoder::LoadMusic::LoadMusic( AppMusicDecoder *app_music_decoder, IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &file_list ) : appMusicDecoder( app_music_decoder ) {
+	musicInfoList = new MusicInfoList( file_list );
+	connectLoadOverFinish( );
+}
+AppMusicDecoder::LoadMusic::~LoadMusic( ) {
+	musicInfoList->requestInterruption( );
+	if( musicInfoList->isRunning( ) ) {
+		auto sleepTime = std::chrono::microseconds( 100 );
+		while( musicInfoList->isFinished( ) == false )
+			std::this_thread::sleep_for( sleepTime );
+	}
+	if( appMusicDecoder )
+		LoadMusicDecoderTools::overLoad( appMusicDecoder, this );
+	delete musicInfoList;
+}
+bool AppMusicDecoder::LoadMusic::start( ) {
+	musicInfoList->start( );
+	return true;
+}
+bool AppMusicDecoder::LoadMusic::append( const std::vector< QString > &file_list ) {
+	return musicInfoList->appendLoadMusicFileList( file_list );
+}
+bool AppMusicDecoder::LoadMusic::isRunning( ) {
+	return musicInfoList->isRunning( );
+}
+bool AppMusicDecoder::LoadMusic::isFinished( ) {
+	return musicInfoList->isFinished( );
+}
+MusicInfoList * AppMusicDecoder::LoadMusic::getMusicInfoList( ) const {
+	return musicInfoList;
+}
+bool AppMusicDecoder::overLoad( LoadMusic *load_music ) {
+	bool cond = false;
+	LoadMusic *loadMusic;
+	userMutex->lock( );
+	size_t count = loadMusicVector.size( );
+	auto data = loadMusicVector.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ] == load_music ) {
+			loadMusic = data[ index ];
+			loadMusicVector.erase( loadMusicVector.begin( ) + index );
+			LoadMusicDecoderTools::releaseAppMusicDecoder( loadMusic );
+			delete loadMusic;
+			cond = true;
+			break;
+		}
+	userMutex->unlock( );
+	return cond;
+}
 void AppMusicDecoder::appendDecodeFileSuffix( const QString &decode_file_suffix ) {
 	QString *newItemSuffixes = new QString( StringTools::getFileSuffix( decode_file_suffix ).toUpper( ) );
 	supperDecodeFileSuffix.emplace_back( newItemSuffixes );
@@ -64,6 +148,7 @@ void AppMusicDecoder::appendDecodeFileSuffix( const QStringList &decode_file_suf
 		appendDecodeFileSuffix( data[ index ] );
 }
 bool AppMusicDecoder::init( ) {
+	userMutex->lock( );
 	void *opaque = nullptr;
 	const AVOutputFormat *ofmt;
 	QString buff;
@@ -83,25 +168,45 @@ bool AppMusicDecoder::init( ) {
 		for( index = 0; index < count; index += 1 )
 			appendDecodeFileSuffix( data[ index ] );
 	}
+	userMutex->unlock( );
 	return true;
 }
 
 bool AppMusicDecoder::initBefore( ) {
 	deleteResource( );
+	userMutex = new UserMutex;
 	return true;
 }
 
 bool AppMusicDecoder::initAfter( ) {
 	return true;
 }
+bool AppMusicDecoder::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QString &music_file ) {
+	return false;
+}
+size_t AppMusicDecoder::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector ) {
+	return 0;
+}
+size_t AppMusicDecoder::loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path ) {
+	return 0;
+}
+bool AppMusicDecoder::startLoad( ) {
+	return false;
+}
 
 bool AppMusicDecoder::deleteResource( ) {
+	if( userMutex == nullptr )
+		return true;
+	userMutex->lock( );
 	VectorTools::deleteVectorPtr( supperDecodeFileSuffix );
 	supperDecodeFileSuffix.clear( );
+	userMutex->unlock( );
+	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
 }
 
 std::vector< QString > AppMusicDecoder::getSupperDecodeFileSuffix( ) const {
+	userMutex->lock( );
 	size_t count = supperDecodeFileSuffix.size( );
 	std::vector< QString > result( count );
 	auto data = supperDecodeFileSuffix.data( );
@@ -109,6 +214,15 @@ std::vector< QString > AppMusicDecoder::getSupperDecodeFileSuffix( ) const {
 	size_t index = 0;
 	for( ; index < count; index += 1 )
 		resultData[ index ] = *data[ index ];
-
+	userMutex->unlock( );
 	return result;
+}
+bool LoadMusicDecoderTools::overLoad( AppMusicDecoder *app_music_decoder, AppMusicDecoder::LoadMusic *load_music ) {
+	if( app_music_decoder == nullptr || load_music == nullptr )
+		return false;
+	return app_music_decoder->overLoad( load_music );
+}
+void LoadMusicDecoderTools::releaseAppMusicDecoder( AppMusicDecoder::LoadMusic *load_music ) {
+	if( load_music )
+		load_music->releaseAppMusicDecoder( );
 }

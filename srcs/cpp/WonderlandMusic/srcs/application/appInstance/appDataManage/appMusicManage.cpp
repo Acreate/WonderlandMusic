@@ -67,49 +67,7 @@ AppMusicDecoder * AppMusicManage::getAppMusicDecoder( ) const {
 	return appMusicDecoder;
 }
 size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector ) {
-	size_t result = 0;
-	size_t count = music_file_path_vector.size( );
-	if( count == 0 )
-		return result;
-	size_t index = 0;
-	auto data = music_file_path_vector.data( );
-	for( ; index < count; index += 1 )
-		result += loadMusicFile( music_favorite_item, data[ index ] );
-	return result;
-}
-size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::list< QString > &music_file_path_list ) {
-	size_t result = 0;
-	auto iterator = music_file_path_list.begin( );
-	auto end = music_file_path_list.end( );
-	if( iterator == end )
-		return result;
-	for( ; iterator != end; ++iterator )
-		result += loadMusicFile( music_favorite_item, *iterator );
-	return result;
-}
-size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QStringList &music_file_path_list ) {
-	size_t result = 0;
-	size_t count = music_file_path_list.size( );
-	if( count == 0 )
-		return result;
-	size_t index = 0;
-	auto data = music_file_path_list.data( );
-	for( ; index < count; index += 1 )
-		result += loadMusicFile( music_favorite_item, data[ index ] );
-	return result;
-}
-size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QString &music_file_path ) {
-	QFileInfo info( music_file_path );
-	if( info.exists( ) == false )
-		return 0;
-	auto absoluteFilePath = info.absoluteFilePath( );
-	if( PathTools::isMusicFile( absoluteFilePath ) == false )
-		return 0;
-	userMutex->lock( );
-	auto musicItem = new MusicInfoItem( this, music_favorite_item, music_file_path );
-	musicItemVector.emplace_back( musicItem );
-	userMutex->unlock( );
-	return 1;
+	return 0; // todo : ===
 }
 size_t AppMusicManage::loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path ) {
 	size_t result = 0;
@@ -122,10 +80,13 @@ size_t AppMusicManage::loadMusicDir( IMusicFavoriteItem *music_favorite_item, co
 		if( musicFileCount ) {
 			musicFileCount = PathTools::filterMusicFile( filterMusicFileList, getFileList );
 			if( musicFileCount ) {
-				auto data = filterMusicFileList.data( );
-				qsizetype index;
-				for( index = 0; index < musicFileCount; index += 1 )
-					result += loadMusicFile( music_favorite_item, data[ index ] );
+				std::vector< QString > appendFile( musicFileCount );
+				auto data = appendFile.data( );
+				size_t index = 0;
+				auto pointer = filterMusicFileList.data( );
+				for( ; index < musicFileCount; index += 1 )
+					data[ index ] = pointer[ index ];
+				loadMusicFile( music_favorite_item, appendFile );
 			}
 		}
 	}

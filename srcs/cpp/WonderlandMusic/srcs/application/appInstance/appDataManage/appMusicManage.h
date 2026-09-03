@@ -48,10 +48,9 @@ public:
 
 public:
 	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector );
-	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::list< QString > &music_file_path_list );
-	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QStringList &music_file_path_list );
-	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QString &music_file_path );
 	virtual size_t loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path );
+
+protected:
 	virtual bool unsafeClear( );
 
 public:

@@ -67,30 +67,10 @@ AppMusicDecoder * AppMusicManage::getAppMusicDecoder( ) const {
 	return appMusicDecoder;
 }
 size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector ) {
-	return 0; // todo : ===
+	return appMusicDecoder->loadMusicFile( music_favorite_item, music_file_path_vector );
 }
 size_t AppMusicManage::loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path ) {
-	size_t result = 0;
-
-	QStringList filterMusicFileList;
-	QStringList getFileList;
-	qsizetype musicFileCount;
-	if( PathTools::entryFilePath( filterMusicFileList, music_dir_path ) ) {
-		musicFileCount = PathTools::filterFile( getFileList, filterMusicFileList );
-		if( musicFileCount ) {
-			musicFileCount = PathTools::filterMusicFile( filterMusicFileList, getFileList );
-			if( musicFileCount ) {
-				std::vector< QString > appendFile( musicFileCount );
-				auto data = appendFile.data( );
-				size_t index = 0;
-				auto pointer = filterMusicFileList.data( );
-				for( ; index < musicFileCount; index += 1 )
-					data[ index ] = pointer[ index ];
-				loadMusicFile( music_favorite_item, appendFile );
-			}
-		}
-	}
-	return result;
+	return appMusicDecoder->loadMusicDir( music_favorite_item, music_dir_path );
 }
 bool AppMusicManage::unsafeClear( ) {
 	auto clearMusicItemVectorResult = unsafeClearMusicItemVector( );

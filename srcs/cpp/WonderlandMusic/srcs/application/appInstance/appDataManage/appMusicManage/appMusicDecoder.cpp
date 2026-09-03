@@ -1,6 +1,5 @@
 ﻿#include "appMusicDecoder.h"
 
-#include <QFileInfo>
 #include <QString>
 
 #include <tools/stringTools.h>
@@ -8,15 +7,16 @@
 
 #include <head/extern_c.h>
 
-#include "../../../../head/release_macro.h"
+#include <head/release_macro.h>
 
-#include "../../../../musicPlayer/musicInfo.h"
-#include "../../../../musicPlayer/musicInfoList.h"
+#include <musicPlayer/musicInfo.h>
+#include <musicPlayer/musicInfoList.h>
 
-#include "../../../../mutex/userMutex.h"
+#include <mutex/userMutex.h>
 
-#include "../../../../tools/instanceTools.h"
-#include "../../../../tools/invokeMethodTools.h"
+#include <tools/instanceTools.h>
+#include <tools/invokeMethodTools.h>
+#include <tools/pathTools.h>
 
 INCLUDE_EXTERN_C {
 	#include <libavformat/avformat.h>
@@ -182,13 +182,47 @@ bool AppMusicDecoder::initAfter( ) {
 	return true;
 }
 bool AppMusicDecoder::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const QString &music_file ) {
-	return false;
+	userMutex->lock( );
+	auto loadMusic = new LoadMusic( this, music_favorite_item, { music_file } );
+	loadMusicVector.emplace_back( loadMusic );
+	size_t result = loadMusic->start( ) ? 1 : 0;
+	userMutex->unlock( );
+	return result;
 }
 size_t AppMusicDecoder::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector ) {
-	return 0;
+	userMutex->lock( );
+	size_t result = music_file_path_vector.size( );
+	auto loadMusic = new LoadMusic( this, music_favorite_item, music_file_path_vector );
+	loadMusicVector.emplace_back( loadMusic );
+	loadMusic->start( );
+	userMutex->unlock( );
+	return result;
 }
 size_t AppMusicDecoder::loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path ) {
-	return 0;
+	userMutex->lock( );
+	size_t result = 0;
+
+	QStringList filterMusicFileList;
+	QStringList getFileList;
+	if( PathTools::entryFilePath( filterMusicFileList, music_dir_path ) ) {
+		result = PathTools::filterFile( getFileList, filterMusicFileList );
+		if( result ) {
+			result = PathTools::filterMusicFile( filterMusicFileList, getFileList );
+			if( result ) {
+				std::vector< QString > appendFile( result );
+				auto data = appendFile.data( );
+				size_t index = 0;
+				auto pointer = filterMusicFileList.data( );
+				for( ; index < result; index += 1 )
+					data[ index ] = pointer[ index ];
+				auto loadMusic = new LoadMusic( this, music_favorite_item, appendFile );
+				loadMusicVector.emplace_back( loadMusic );
+				loadMusic->start( );
+			}
+		}
+	}
+	userMutex->unlock( );
+	return result;
 }
 bool AppMusicDecoder::startLoad( ) {
 	return false;

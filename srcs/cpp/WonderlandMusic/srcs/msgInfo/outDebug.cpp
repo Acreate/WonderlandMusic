@@ -4,8 +4,15 @@
 #include <QDebug>
 
 #include "messageString.h"
-
+#ifdef WIN64
 #define To_WriteConsoleW_Out 1
+#endif
+
+#ifndef To_WriteConsoleW_Out
+#ifdef WIN32
+#define To_WriteConsoleW_Out 1
+#endif
+#endif
 
 #if To_WriteConsoleW_Out == 1
 #include <windows.h>

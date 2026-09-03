@@ -10,12 +10,6 @@
 
 InitMain *InitMain::initMainInstance = nullptr;
 
-//static MessageErrorOut *messageErrorOut = nullptr;
-//static MessageString *permit = nullptr;
-//static MessageString *screening = nullptr;
-//static QLoggingCategory::CategoryFilter oldCategoryFilter = nullptr;
-//static QDateTime *startDateTime = nullptr;
-//static QDateTime *endDateTime = nullptr;
 #ifdef CANCEL_FILTER
 	#define is_en_filter 0
 #else

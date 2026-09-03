@@ -28,6 +28,7 @@ public:
 	virtual QStringList toQStringList( ) const;
 	virtual operator QString( ) const;
 	virtual size_t getCount( ) const;
+	virtual bool moveToMusicInfoVector( std::vector< MusicInfo * > &result_detach_vector );
 
 protected:
 	void run( ) override;

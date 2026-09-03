@@ -55,11 +55,23 @@ MusicInfoList::MusicInfoList( ) : QThread( ) {
 	musicVectorDataPtr = nullptr;
 }
 MusicInfoList::~MusicInfoList( ) {
+	if( isRunning( ) == true ) {
+		requestInterruption( );
+		auto sleepTime = std::chrono::microseconds( 500 );
+		while( isFinished( ) == false )
+			std::this_thread::sleep_for( sleepTime );
+	}
 	userMutex->lock( );
+	size_t overCount = overLoadMusicVector.size( );
 	auto musicInfo = overLoadMusicVector.data( );
+	for( index = 0; index < overCount; index += 1 )
+		if( musicInfo[ index ] )
+			delete musicInfo[ index ];
 	for( index = 0; index < count; index += 1 )
-		delete musicInfo[ index ];
+		if( musicVectorDataPtr[ index ] )
+			delete musicVectorDataPtr[ index ];
 	overLoadMusicVector.clear( );
+	musicVector.clear( );
 	count = 0;
 	userMutex->unlock( );
 	delete userMutex;
@@ -140,6 +152,18 @@ MusicInfoList::operator QString( ) const {
 size_t MusicInfoList::getCount( ) const {
 	return count;
 }
+bool MusicInfoList::moveToMusicInfoVector( std::vector< MusicInfo * > &result_detach_vector ) {
+	userMutex->lock( );
+	if( isRunning( ) == true || isFinished( ) == false )
+		return userMutex->result_unlock( false );
+	result_detach_vector = overLoadMusicVector;
+	result_detach_vector.append_range( musicVector );
+	overLoadMusicVector.clear( );
+	musicVector.clear( );
+	userMutex->unlock( );
+	return true;
+}
+
 void MusicInfoList::run( ) {
 	userMutex->lock( );
 	for( index = 0; index < count; index += 1 )

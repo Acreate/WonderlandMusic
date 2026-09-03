@@ -1,18 +1,12 @@
 ﻿#include <QLoggingCategory>
 #include "application/appInstance.h"
-#include "application/appInstance/applicationManage.h"
 
 #include "dateTimeFormat/dateTimeFormat.h"
 #include "head/result_message_out.h"
 
 #include "msgInfo/messageErrorOut.h"
 #include "msgInfo/messageString.h"
-#include "msgInfo/outDebug.h"
 
-#include "musicPlayer/musicInfo.h"
-#include "musicPlayer/musicInfoList.h"
-
-#include "tools/pathTools.h"
 static MessageErrorOut *messageErrorOut = nullptr;
 static MessageString *permit = nullptr;
 static MessageString *screening = nullptr;
@@ -145,7 +139,7 @@ int main( int argc, char *argv[ ], char *envp[ ] ) {
 		delete application;
 		return exec;
 	}
-	
+
 	exec = application->exec( );
 	exec = endProcess( exec );
 

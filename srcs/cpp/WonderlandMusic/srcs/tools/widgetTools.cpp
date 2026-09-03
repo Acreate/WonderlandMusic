@@ -58,7 +58,7 @@ bool WidgetTools::showMultipleSelectFileDialog( std::vector< QString > &result_s
 	//multipleSelectDialog->setParent( parent );
 	multipleSelectDialog->setFileMode( QFileDialog::ExistingFiles );
 	// 该窗口路径并没有更新
-	multipleSelectDialog->setOption( QFileDialog::DontUseNativeDialog );
+	//multipleSelectDialog->setOption( QFileDialog::DontUseNativeDialog );
 	multipleSelectDialog->setOption( QFileDialog::DontResolveSymlinks, true );
 	multipleSelectDialog->setOption( QFileDialog::DontConfirmOverwrite, true );
 	multipleSelectDialog->setOption( QFileDialog::DontUseCustomDirectoryIcons, true );
@@ -93,7 +93,7 @@ bool WidgetTools::showMultipleSelectDirDialog( std::vector< QString > &result_se
 	//multipleSelectDialog->setParent( parent );
 	multipleSelectDialog->setWindowTitle( title_text );
 	multipleSelectDialog->setFileMode( QFileDialog::Directory );
-	multipleSelectDialog->setOption( QFileDialog::DontUseNativeDialog );
+	//multipleSelectDialog->setOption( QFileDialog::DontUseNativeDialog );
 	multipleSelectDialog->setOption( QFileDialog::DontResolveSymlinks, true );
 	multipleSelectDialog->setOption( QFileDialog::DontConfirmOverwrite, true );
 	multipleSelectDialog->setOption( QFileDialog::DontUseCustomDirectoryIcons, true );

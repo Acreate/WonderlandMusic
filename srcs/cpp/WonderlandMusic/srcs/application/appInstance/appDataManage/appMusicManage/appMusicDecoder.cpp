@@ -18,6 +18,8 @@
 #include <tools/invokeMethodTools.h>
 #include <tools/pathTools.h>
 
+#include "../../../../msgInfo/outDebug.h"
+
 INCLUDE_EXTERN_C {
 	#include <libavformat/avformat.h>
 }
@@ -114,6 +116,9 @@ bool AppMusicDecoder::LoadMusic::isFinished( ) {
 MusicInfoList * AppMusicDecoder::LoadMusic::getMusicInfoList( ) const {
 	return musicInfoList;
 }
+bool AppMusicDecoder::LoadMusic::moveToMusicInfoVector( std::vector< MusicInfo * > &result_detach_vector ) {
+	return musicInfoList->moveToMusicInfoVector( result_detach_vector );
+}
 bool AppMusicDecoder::overLoad( LoadMusic *load_music ) {
 	bool cond = false;
 	LoadMusic *loadMusic;
@@ -124,6 +129,7 @@ bool AppMusicDecoder::overLoad( LoadMusic *load_music ) {
 	for( ; index < count; index += 1 )
 		if( data[ index ] == load_music ) {
 			loadMusic = data[ index ];
+			OutDebug( ) << *loadMusic->getMusicInfoList( );
 			loadMusicVector.erase( loadMusicVector.begin( ) + index );
 			LoadMusicDecoderTools::releaseAppMusicDecoder( loadMusic );
 			delete loadMusic;

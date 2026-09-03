@@ -7,6 +7,7 @@
 
 #include <interface/iAppResourceCore.h>
 
+class MusicInfo;
 class MusicInfoList;
 class IMusicFavoriteItem;
 class QMediaPlayer;
@@ -49,6 +50,7 @@ protected:
 		virtual bool isRunning( );
 		virtual bool isFinished( );
 		virtual MusicInfoList * getMusicInfoList( ) const;
+		virtual bool moveToMusicInfoVector( std::vector< MusicInfo * > &result_detach_vector );
 	};
 
 protected:

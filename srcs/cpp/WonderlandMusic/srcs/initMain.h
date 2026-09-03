@@ -1,5 +1,6 @@
 ﻿#ifndef INITMAIN_H_H_HEAD__FILE__
 #define INITMAIN_H_H_HEAD__FILE__
+#include "interface/iAppCore.h"
 #include "interface/iAppResourceCore.h"
 
 class AppInstance;
@@ -11,7 +12,7 @@ class QDateTime;
 
 typedef void (* CategoryFilter)( QLoggingCategory * );
 
-class InitMain : public IAppResourceCore {
+class InitMain : public IAppResourceCore, public IAppCore {
 private:
 	static InitMain *initMainInstance;
 

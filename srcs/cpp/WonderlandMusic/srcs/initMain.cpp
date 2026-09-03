@@ -111,6 +111,7 @@ bool InitMain::deleteResource( ) {
 	return true;
 }
 InitMain::InitMain( int argc, char *argv[ ], char *envp[ ] ) : argc( argc ), argv( argv ), envp( envp ) {
+	appendTypeInfo( this );
 }
 InitMain::~InitMain( ) {
 	deleteResource( );

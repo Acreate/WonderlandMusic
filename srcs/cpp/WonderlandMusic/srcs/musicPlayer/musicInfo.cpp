@@ -23,7 +23,6 @@ MusicInfo::MusicInfo( const QString &file_path ) {
 	userMutex = new UserMutex;
 	fileInfo = new QFileInfo( file_path );
 	status = RunStatus::Ready;
-	fmtCtx = nullptr;
 	absoluteFilePath = fileInfo->absoluteFilePath( );
 	filePath = fileInfo->fileName( );
 }
@@ -57,15 +56,18 @@ MusicInfo::MusicInfo( const MusicInfo &other ) : status { other.status },
 	durationMillsecond { other.durationMillsecond },
 	durationMillsecondDateTimeString { other.durationMillsecondDateTimeString },
 	channelLayoutDescribe { other.channelLayoutDescribe } {
-	userMutex = new UserMutex;
-	fileInfo = new QFileInfo( absoluteFilePath );
+	if( userMutex == nullptr )
+		userMutex = new UserMutex;
+	if( fileInfo )
+		fileInfo = new QFileInfo( absoluteFilePath );
+	if( fmtCtx )
+		avformat_close_input( &fmtCtx );
 	fmtCtx = nullptr;
 }
 MusicInfo & MusicInfo::operator=( const MusicInfo &other ) {
 	if( this == &other )
 		return *this;
 	status = other.status;
-	fmtCtx = nullptr;
 	filePath = other.filePath;
 	absoluteFilePath = other.absoluteFilePath;
 	title = other.title;
@@ -84,8 +86,13 @@ MusicInfo & MusicInfo::operator=( const MusicInfo &other ) {
 	durationMillsecond = other.durationMillsecond;
 	durationMillsecondDateTimeString = other.durationMillsecondDateTimeString;
 	channelLayoutDescribe = other.channelLayoutDescribe;
-	userMutex = new UserMutex;
-	fileInfo = new QFileInfo( absoluteFilePath );
+	if( userMutex == nullptr )
+		userMutex = new UserMutex;
+	if( fileInfo )
+		fileInfo = new QFileInfo( absoluteFilePath );
+	if( fmtCtx )
+		avformat_close_input( &fmtCtx );
+	fmtCtx = nullptr;
 	return *this;
 }
 void MusicInfo::run( ) {

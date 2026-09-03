@@ -17,10 +17,10 @@ protected:
 	};
 
 private:
-	UserMutex *userMutex;
-	QFileInfo *fileInfo;
+	UserMutex *userMutex = nullptr;
+	QFileInfo *fileInfo = nullptr;
+	AVFormatContext *fmtCtx = nullptr;
 	RunStatus status;
-	AVFormatContext *fmtCtx;
 
 	QString filePath;
 	QString absoluteFilePath;

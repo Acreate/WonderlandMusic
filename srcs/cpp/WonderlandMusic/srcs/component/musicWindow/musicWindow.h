@@ -20,7 +20,6 @@ class UserMutex;
 
 class MusicWindow : public QMainWindow, public OptionPanel, public IAppJsonData, public IAppResourceCore {
 	Q_OBJECT;
-	friend class MusicItem;
 
 private:
 	UserMutex *userMutex = nullptr;

@@ -12,13 +12,28 @@
 
 #include <musicImpement/itemWidget/musicFavoriteItemWidget.h>
 
-#include "../../component/musicWindow/interface/ItemWidget/iMusicItemWidget.h"
+#include <component/musicWindow/musicWindow.h>
+#include <component/musicWindow/interface/ItemWidget/iMusicItemWidget.h>
+
+#include "musicInfoItem.h"
+
+#include "../../application/appInstance/appDataManage/appMusicManage.h"
+
+#include "../../musicPlayer/musicInfo.h"
+
+#include "../../tools/instanceTools.h"
+#include "../../tools/invokeMethodTools.h"
+#include "../../tools/pathTools.h"
 
 bool MusicFavoriteItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicCentreWidget = music_centre_widget;
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
+}
+IMusicItem * MusicFavoriteItem::load( MusicInfo *music_info ) {
+	auto musicItem = new MusicInfoItem( this, *music_info );
+	return musicItem;
 }
 bool MusicFavoriteItem::getName( QString &result_name ) const {
 	musicFavoriteItemUserMutex->lock( );
@@ -189,14 +204,72 @@ IMusicCentreWidget * MusicFavoriteItem::getMusicCentreWidget( ) const {
 IMusicFavoriteItemWidget * MusicFavoriteItem::getMusicFavoriteItemWidget( ) const {
 	return musicFavoriteItemWidget;
 }
-bool MusicFavoriteItem::loadMusicDirPath( const std::vector<QString> &music_file_path ) {
-	return false;
+bool MusicFavoriteItem::loadMusicDirPath( const std::vector< QString > &music_file_path ) {
+	size_t result = 0;
+	QStringList filterMusicFileList;
+	QStringList getFileList;
+	if( PathTools::entryFilePath( filterMusicFileList, music_file_path ) ) {
+		result = PathTools::filterFile( getFileList, filterMusicFileList );
+		if( result ) {
+			result = PathTools::filterMusicFile( filterMusicFileList, getFileList );
+			if( result ) {
+				size_t index = 0;
+				auto pointer = filterMusicFileList.data( );
+				for( ; index < result; index += 1 ) {
+					auto musicInfo = new MusicInfo( pointer[ index ] );
+					if( musicInfo == nullptr )
+						return false;
+					connect( musicInfo, &MusicInfo::finished, [this, musicInfo]( ) {
+						InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfo] ( ApplicationManage *applicationManage ) {
+							addMusicItem( load( musicInfo ) );
+							delete musicInfo;
+						} );
+					} );
+					musicInfo->start( );
+				}
+			}
+		}
+	}
+	return result;
 }
-bool MusicFavoriteItem::loadMusicFile( const std::vector<QString> &music_file_path ) {
-	return false;
+bool MusicFavoriteItem::loadMusicFile( const std::vector< QString > &music_file_path ) {
+	auto appMusicManage = InstanceTools::getAppMusicManage( );
+	if( appMusicManage == nullptr )
+		return false;
+	size_t count = music_file_path.size( );
+	if( count == 0 )
+		return false;
+	auto data = music_file_path.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( appMusicManage->musicFileNameSupperDecoder( data[ index ] ) ) {
+			auto musicInfo = new MusicInfo( data[ index ] );
+			if( musicInfo == nullptr )
+				return false;
+			connect( musicInfo, &MusicInfo::finished, [this, musicInfo]( ) {
+				InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfo] ( ApplicationManage *applicationManage ) {
+					addMusicItem( load( musicInfo ) );
+					delete musicInfo;
+				} );
+			} );
+			musicInfo->start( );
+		}
+	return true;
 }
 bool MusicFavoriteItem::loadMusicFile( const QString &music_file_path ) {
-	return false;
+	if( PathTools::isMusicFile( music_file_path ) == false )
+		return false;
+	auto musicInfo = new MusicInfo( music_file_path );
+	if( musicInfo == nullptr )
+		return false;
+	connect( musicInfo, &MusicInfo::finished, [this, musicInfo]( ) {
+		InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfo] ( ApplicationManage *applicationManage ) {
+			addMusicItem( load( musicInfo ) );
+			delete musicInfo;
+		} );
+	} );
+	musicInfo->start( );
+	return true;
 }
 MusicFavoriteItem::MusicFavoriteItem( ) {
 	appendTypeInfo( this );
@@ -206,10 +279,19 @@ MusicFavoriteItem::MusicFavoriteItem( ) {
 }
 MusicFavoriteItem::~MusicFavoriteItem( ) {
 	musicFavoriteItemUserMutex->lock( );
-	musicItemVector.clear( );
-	if( musicFavoriteItemWidget ) {
-		delete musicFavoriteItemWidget;
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		size_t index = 0;
+		auto data = musicItemVector.data( );
+		for( ; index < count; index += 1 ) {
+			setMusicItemFavoriteItem( data[ index ], nullptr );
+			delete data[ index ];
+		}
 	}
+	musicItemVector.clear( );
+	if( musicFavoriteItemWidget )
+		delete musicFavoriteItemWidget;
+	musicFavoriteItemWidget = nullptr;
 	musicFavoriteItemUserMutex->unlock( );
 	delete musicFavoriteItemUserMutex;
 	musicFavoriteItemUserMutex = nullptr;

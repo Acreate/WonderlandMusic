@@ -1,30 +1,32 @@
 ﻿#include "musicInfoItem.h"
 
-#include <mutex/userMutex.h>
-
-#include <musicImpement/itemWidget/musicItemWidget.h>
-
 #include <application/appInstance/appDataManage/appMusicManage.h>
+
+#include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
 
 #include <dateTimeFormat/dateTimeFormat.h>
 
-#include <tools/pathTools.h>
+#include <musicImpement/itemWidget/musicItemWidget.h>
 
 #include <musicPlayer/musicInfo.h>
 
-MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManage( app_music_manage ) {
+#include <mutex/userMutex.h>
+
+#include <tools/pathTools.h>
+
+MusicInfoItem::MusicInfoItem( IMusicFavoriteItem *music_favorite_item ) : musicFavoriteItem( music_favorite_item ) {
 	musicItemWidget = new MusicItemWidget;
 	binMusicItemWidget( musicItemWidget, this );
-	if( appMusicManage == nullptr ) {
+	if( music_favorite_item == nullptr ) {
 		deleteLater( );
 		return;
 	}
 	appendTypeInfo( this );
 }
-MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info ) {
+MusicInfoItem::MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info ) : musicFavoriteItem( music_favorite_item ) {
 	musicItemWidget = new MusicItemWidget;
 	binMusicItemWidget( musicItemWidget, this );
-	if( appMusicManage == nullptr || initVar( music_info ) == false ) {
+	if( music_favorite_item == nullptr || initVar( music_info ) == false ) {
 		deleteLater( );
 		return;
 	}
@@ -32,6 +34,8 @@ MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage, IMusicFavoriteIt
 }
 
 MusicInfoItem::~MusicInfoItem( ) {
+	if( musicFavoriteItem )
+		musicFavoriteItem->removeMusicItem( this );
 	if( musicItemWidget )
 		delete musicItemWidget;
 }
@@ -62,6 +66,10 @@ const QString & MusicInfoItem::getFileBaseName( ) const {
 }
 bool MusicInfoItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
+	return true;
+}
+bool MusicInfoItem::setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) {
+	musicFavoriteItem = music_favorite_item;
 	return true;
 }
 bool MusicInfoItem::initVar( const MusicInfo &music_info ) {

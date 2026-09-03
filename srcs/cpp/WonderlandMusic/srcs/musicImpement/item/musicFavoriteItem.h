@@ -2,6 +2,7 @@
 #define MUSICFAVORITEITEM_H_H_HEAD__FILE__
 #include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
 
+class MusicInfo;
 class MusicFavoriteItemWidget;
 
 class MusicFavoriteItem : public QObject, public IMusicFavoriteItem {
@@ -20,6 +21,7 @@ public:
 
 protected:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
+	virtual IMusicItem * load( MusicInfo *music_info );
 
 public:
 	bool getName( QString &result_name ) const override;
@@ -39,8 +41,8 @@ public:
 	virtual void setName( const QString &name );
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const override;
-	bool loadMusicDirPath( const std::vector<QString> &music_file_path ) override;
-	bool loadMusicFile( const std::vector<QString> &music_file_path ) override;
+	bool loadMusicDirPath( const std::vector< QString > &music_file_path ) override;
+	bool loadMusicFile( const std::vector< QString > &music_file_path ) override;
 	bool loadMusicFile( const QString &music_file_path ) override;
 };
 

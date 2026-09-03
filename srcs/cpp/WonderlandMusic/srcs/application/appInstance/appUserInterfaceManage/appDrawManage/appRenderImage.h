@@ -3,14 +3,12 @@
 
 #include <interface/iAppCore.h>
 
-#include "../../../../interface/iAppResourceCore.h"
+#include <interface/iAppResourceCore.h>
 
 class IMusicItemWidthInfo;
 class IMusicItem;
 class IMusicFavoriteItem;
-class FavoriteItem;
 class ItemWidthInfo;
-class MusicItem;
 class QSize;
 class QWidget;
 class QPen;

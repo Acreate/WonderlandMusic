@@ -6,12 +6,11 @@
 
 #include "../../interface/iAppResourceCore.h"
 
+class FavoriteItem;
 class IMusicItemWidthInfo;
 class IMusicWidgetSizeInfo;
 class MusicItemWidthInfo;
 class MusicWidgetSizeInfo;
-class FavoriteItem;
-class MusicItem;
 class AppMusicManage;
 class AppDataJsonKey;
 class QTranslator;

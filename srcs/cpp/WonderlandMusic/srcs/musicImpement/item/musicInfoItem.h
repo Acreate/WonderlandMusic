@@ -20,20 +20,19 @@ protected:
 	QString absoluteFilePath;
 	QString elapsedTimeString;
 	qint64 elapsedTime;
-	AppMusicManage *appMusicManage;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 	MusicItemWidget *musicItemWidget = nullptr;
 	IMusicFavoriteItem *musicFavoriteItem = nullptr;
 
 protected:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
+	bool setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
 
-protected:
 	virtual bool initVar( const MusicInfo &music_info );
 
 public:
-	MusicInfoItem( AppMusicManage *app_music_manage, IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info );
-	explicit MusicInfoItem( AppMusicManage *app_music_manage );
+	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info );
+	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item );
 	~MusicInfoItem( ) override;
 	size_t getIdCode( ) const override;
 	const QString & getName( ) const override;

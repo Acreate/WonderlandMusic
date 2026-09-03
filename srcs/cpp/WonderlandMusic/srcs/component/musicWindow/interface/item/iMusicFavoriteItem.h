@@ -11,6 +11,8 @@ class IMusicFavoriteItem : public IMusicCentreWidgetChild {
 protected:
 	static bool bindMusicFavoriteItem( IMusicFavoriteItemWidget *bind_target, IMusicFavoriteItem *bind_source );
 
+	static bool setMusicItemFavoriteItem( IMusicItem *music_item, IMusicFavoriteItem *music_favorite_item );
+
 public:
 	IMusicFavoriteItem( );
 	virtual bool getName( QString &result_name ) const = 0;

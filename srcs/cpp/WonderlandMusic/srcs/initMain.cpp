@@ -143,7 +143,7 @@ bool InitMain::initAfter( ) {
 	return Result_Var_Function_Messag_Ptr_Out_Args( false, application, initAfter, QObject::tr( "后置初始化失败" ) );;
 }
 int InitMain::runMain( ) {
-	return application->exec( );
+	return endProcess( application->exec( ) );
 }
 int InitMain::getExecCode( ) const {
 	return execCode;

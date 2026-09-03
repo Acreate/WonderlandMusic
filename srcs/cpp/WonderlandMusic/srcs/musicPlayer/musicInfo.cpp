@@ -25,6 +25,7 @@ MusicInfo::MusicInfo( const QString &file_path ) {
 	status = RunStatus::Ready;
 	absoluteFilePath = fileInfo->absoluteFilePath( );
 	filePath = fileInfo->fileName( );
+	fileBaseName = fileInfo->baseName( );
 }
 MusicInfo::~MusicInfo( ) {
 	QThread::requestInterruption( );
@@ -55,7 +56,8 @@ MusicInfo::MusicInfo( const MusicInfo &other ) : status { other.status },
 	bitRate { other.bitRate },
 	durationMillsecond { other.durationMillsecond },
 	durationMillsecondDateTimeString { other.durationMillsecondDateTimeString },
-	channelLayoutDescribe { other.channelLayoutDescribe } {
+	channelLayoutDescribe { other.channelLayoutDescribe },
+	fileBaseName( other.fileBaseName ) {
 	if( userMutex == nullptr )
 		userMutex = new UserMutex;
 	if( fileInfo )
@@ -86,6 +88,7 @@ MusicInfo & MusicInfo::operator=( const MusicInfo &other ) {
 	durationMillsecond = other.durationMillsecond;
 	durationMillsecondDateTimeString = other.durationMillsecondDateTimeString;
 	channelLayoutDescribe = other.channelLayoutDescribe;
+	fileBaseName = other.fileBaseName;
 	if( userMutex == nullptr )
 		userMutex = new UserMutex;
 	if( fileInfo )
@@ -175,6 +178,9 @@ bool MusicInfo::isRead( ) const {
 	if( fileInfo->exists( ) == false )
 		return userMutex->result_unlock( false );
 	return userMutex->result_unlock( true );
+}
+const QString & MusicInfo::getFileBaseName( ) const {
+	return fileBaseName;
 }
 const QString & MusicInfo::getFilePath( ) const {
 	return filePath;

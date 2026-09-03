@@ -13,6 +13,7 @@ class MusicInfoItem : public QObject, public IMusicItem {
 
 protected:
 	size_t idCode;
+	QString fileBaseName;
 	QString name;
 	QString singer;
 	QString filePath;
@@ -41,6 +42,7 @@ public:
 	const QString & getAbsoluteFilePath( ) const override;
 	const QString & getElapsedTimeString( ) const override;
 	const qint64 & getElapsedTime( ) const override;
+	const QString & getFileBaseName( ) const override;
 	virtual void setIdCode( const size_t id_code );
 	virtual void setName( const QString &name );
 	virtual void setSinger( const QString &singer );

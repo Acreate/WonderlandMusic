@@ -135,3 +135,6 @@ void MusicItemWidget::paintEvent( QPaintEvent *event ) {
 IMusicItem * MusicItemWidget::getBindMusicItem( ) const {
 	return musicItem;
 }
+QWidget * MusicItemWidget::toWidget( ) {
+	return this;
+}

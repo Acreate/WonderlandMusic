@@ -23,6 +23,7 @@ public:
 	virtual const qint64 & getElapsedTime( ) const = 0;
 	virtual IMusicItemWidget * getMusicItemWidget( ) const = 0;
 	virtual IMusicFavoriteItem * getMusicFavoriteItem( ) const = 0;
+	virtual const QString & getFileBaseName( ) const = 0;
 };
 
 #endif // IMUSICITEM_H_H_HEAD__FILE__

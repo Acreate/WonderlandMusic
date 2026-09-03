@@ -8,9 +8,11 @@
 
 #include <mutex/userMutex.h>
 
-#include "../../component/musicWindow/interface/widget/iMusicCentreWidget.h"
+#include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
 
-#include "../itemWidget/musicFavoriteItemWidget.h"
+#include <musicImpement/itemWidget/musicFavoriteItemWidget.h>
+
+#include "../../component/musicWindow/interface/ItemWidget/iMusicItemWidget.h"
 
 bool MusicFavoriteItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicFavoriteItemUserMutex->lock( );
@@ -28,12 +30,16 @@ bool MusicFavoriteItem::addMusicItem( IMusicItem *music_item ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicItemVector.emplace_back( music_item );
 	musicFavoriteItemUserMutex->unlock( );
+	if( musicCentreWidget )
+		musicCentreWidget->repaintListWidget( );
 	return true;
 }
 bool MusicFavoriteItem::addMusicItem( const std::vector< IMusicItem * > &music_info_items ) {
 	musicFavoriteItemUserMutex->lock( );
 	musicItemVector.append_range( music_info_items );
 	musicFavoriteItemUserMutex->unlock( );
+	if( musicCentreWidget )
+		musicCentreWidget->repaintListWidget( );
 	return true;
 }
 bool MusicFavoriteItem::removeMusicItem( IMusicItem *music_item ) {
@@ -52,41 +58,108 @@ bool MusicFavoriteItem::update( ) {
 	musicCentreWidget->repaintMusicCentreWidget( );
 	return true;
 }
-bool MusicFavoriteItem::fromIndexGetMusicItem( IMusicItem *&result_music_item_vector, const size_t &result_count ) {
-	bool result = true;
-	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
-	} );
-	return result;
+bool MusicFavoriteItem::fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) const {
+	musicFavoriteItemUserMutex->lock( );
+
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		size_t index = 0;
+		auto musicItem = musicItemVector.data( );
+		IMusicItemWidget *musicItemWidget;
+		QWidget *widget;
+		for( ; index < count; index += 1 ) {
+			musicItemWidget = musicItem[ index ]->getMusicItemWidget( );
+			if( musicItemWidget == nullptr )
+				continue;
+			widget = musicItemWidget->toWidget( );
+			if( widget == nullptr )
+				continue;
+			if( widget->geometry( ).contains( 1, y_pos ) )
+				break;
+			result_music_item = musicItem[ index ];
+			return musicFavoriteItemUserMutex->result_unlock( true );
+		}
+	}
+	return musicFavoriteItemUserMutex->result_unlock( false );
 }
-bool MusicFavoriteItem::fromMusicItemGetIndex( size_t &result_index, const IMusicItem *music_item ) {
-	bool result = true;
-	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
-	} );
-	return result;
+bool MusicFavoriteItem::fromIndexGetMusicItem( IMusicItem *&result_music_item, const size_t &index ) const {
+	musicFavoriteItemUserMutex->lock( );
+
+	size_t count = musicItemVector.size( );
+	if( count > index ) {
+		auto musicItem = musicItemVector.data( );
+		result_music_item = musicItem[ index ];
+		return musicFavoriteItemUserMutex->result_unlock( true );
+	}
+
+	return musicFavoriteItemUserMutex->result_unlock( false );
 }
-bool MusicFavoriteItem::fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) {
-	bool result = true;
-	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
-	} );
-	return result;
+bool MusicFavoriteItem::fromMusicItemGetIndex( size_t &result_index, const IMusicItem *music_item ) const {
+	musicFavoriteItemUserMutex->lock( );
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		auto musicItem = musicItemVector.data( );
+		for( result_index = 0; result_index < count; result_index += 1 )
+			if( musicItem[ result_index ] == music_item )
+				return musicFavoriteItemUserMutex->result_unlock( true );
+	}
+	return musicFavoriteItemUserMutex->result_unlock( false );
 }
-bool MusicFavoriteItem::fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) {
-	bool result = true;
-	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
-	} );
-	return result;
+bool MusicFavoriteItem::fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &music_name ) const {
+	musicFavoriteItemUserMutex->lock( );
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		auto musicItem = musicItemVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			if( musicItem[ index ]->getName( ) == music_name ) {
+				result_music_item = musicItem[ index ];
+				return musicFavoriteItemUserMutex->result_unlock( true );
+			}
+	}
+	return musicFavoriteItemUserMutex->result_unlock( false );
 }
-bool MusicFavoriteItem::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) {
-	bool result = true;
-	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
-	} );
-	return result;
+bool MusicFavoriteItem::fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) const {
+	musicFavoriteItemUserMutex->lock( );
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		auto musicItem = musicItemVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			if( musicItem[ index ]->getFileBaseName( ) == file_base_name ) {
+				result_music_item = musicItem[ index ];
+				return musicFavoriteItemUserMutex->result_unlock( true );
+			}
+	}
+	return musicFavoriteItemUserMutex->result_unlock( false );
 }
-bool MusicFavoriteItem::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) {
-	bool result = true;
-	musicFavoriteItemUserMutex->auto_job( [&result]( ) {
-	} );
-	return result;
+bool MusicFavoriteItem::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &absolute_file_path ) const {
+	musicFavoriteItemUserMutex->lock( );
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		auto musicItem = musicItemVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			if( musicItem[ index ]->getAbsoluteFilePath( ) == absolute_file_path ) {
+				result_music_item = musicItem[ index ];
+				return musicFavoriteItemUserMutex->result_unlock( true );
+			}
+	}
+	return musicFavoriteItemUserMutex->result_unlock( false );
+}
+bool MusicFavoriteItem::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) const {
+	musicFavoriteItemUserMutex->lock( );
+	size_t count = musicItemVector.size( );
+	if( count ) {
+		auto musicItem = musicItemVector.data( );
+		size_t index = 0;
+		for( ; index < count; index += 1 )
+			if( musicItem[ index ]->getSinger( ) == singer ) {
+				result_music_item = musicItem[ index ];
+				return musicFavoriteItemUserMutex->result_unlock( true );
+			}
+	}
+	return musicFavoriteItemUserMutex->result_unlock( false );
 }
 size_t MusicFavoriteItem::getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const {
 	size_t result;
@@ -104,7 +177,11 @@ size_t MusicFavoriteItem::getMusicVectorClone( std::vector< IMusicItem * > &resu
 	return result;
 }
 void MusicFavoriteItem::setName( const QString &name ) {
+	musicFavoriteItemUserMutex->lock( );
 	this->name = name;
+	musicFavoriteItemUserMutex->unlock( );
+	if( musicFavoriteItemWidget )
+		musicFavoriteItemWidget->updateLayout( );
 }
 IMusicCentreWidget * MusicFavoriteItem::getMusicCentreWidget( ) const {
 	return musicCentreWidget;

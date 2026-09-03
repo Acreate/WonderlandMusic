@@ -1,8 +1,5 @@
 ﻿#include "musicInfoItem.h"
 
-#include <QMediaPlayer>
-#include <qimage.h>
-
 #include <mutex/userMutex.h>
 
 #include <musicImpement/itemWidget/musicItemWidget.h>
@@ -13,9 +10,7 @@
 
 #include <tools/pathTools.h>
 
-#include "../../msgInfo/outDebug.h"
-
-#include "../../musicPlayer/musicInfo.h"
+#include <musicPlayer/musicInfo.h>
 
 MusicInfoItem::MusicInfoItem( AppMusicManage *app_music_manage ) : appMusicManage( app_music_manage ) {
 	musicItemWidget = new MusicItemWidget;
@@ -62,6 +57,9 @@ const QString & MusicInfoItem::getElapsedTimeString( ) const {
 const qint64 & MusicInfoItem::getElapsedTime( ) const {
 	return elapsedTime;
 }
+const QString & MusicInfoItem::getFileBaseName( ) const {
+	return fileBaseName;
+}
 bool MusicInfoItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
 	return true;
@@ -73,6 +71,7 @@ bool MusicInfoItem::initVar( const MusicInfo &music_info ) {
 	absoluteFilePath = music_info.getAbsoluteFilePath( );
 	elapsedTimeString = music_info.getDurationMillsecondDateTimeString( );
 	elapsedTime = music_info.getDurationMillsecond( );
+	fileBaseName = music_info.getFileBaseName( );
 	return true;
 }
 

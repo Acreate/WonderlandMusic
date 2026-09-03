@@ -34,6 +34,7 @@ protected:
 
 public:
 	IMusicItem * getBindMusicItem( ) const override;
+	QWidget * toWidget( ) override;
 };
 
 #endif // MUSICITEMWIDGET_H_H_HEAD__FILE__

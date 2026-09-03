@@ -12,7 +12,7 @@ class MusicListWidget : public QWidget, public IMusicListWidget, public IAppReso
 private:
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 	UserMutex *userMutex = nullptr;
-
+	IMusicFavoriteItem*  musicFavoriteItem = nullptr;
 public:
 	MusicListWidget( );
 	~MusicListWidget( ) override;
@@ -35,12 +35,12 @@ public:
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicFavoriteItem * getCurrentMusicFavoriteItem( ) const override;
 	bool setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
-	bool fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) override;
-	bool fromIndexGetMusicItem( IMusicItem *&result_music_item, const size_t &index ) override;
-	bool fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) override;
-	bool fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) override;
-	bool fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) override;
-	bool fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) override;
+	bool fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) const override;
+	bool fromIndexGetMusicItem( IMusicItem *&result_music_item, const size_t &index ) const override;
+	bool fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) const override;
+	bool fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) const override;
+	bool fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) const override;
+	bool fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) const override;
 	bool autoLayout( ) override;
 };
 

@@ -22,6 +22,7 @@ private:
 	AVFormatContext *fmtCtx = nullptr;
 	RunStatus status;
 
+	QString fileBaseName;
 	QString filePath;
 	QString absoluteFilePath;
 	QString title;
@@ -53,6 +54,7 @@ protected:
 
 public:
 	virtual bool isRead( ) const;
+	virtual const QString & getFileBaseName( ) const;
 	virtual const QString & getFilePath( ) const;
 	virtual const QString & getAbsoluteFilePath( ) const;
 	virtual RunStatus getStatus( ) const;

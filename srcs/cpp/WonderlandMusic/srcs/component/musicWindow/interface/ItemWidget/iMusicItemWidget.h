@@ -18,6 +18,7 @@ public:
 	virtual bool setMusicListWidget( IMusicListWidget *music_list_widget ) = 0;
 	virtual bool updateLayout( ) =0;
 	virtual IMusicItem * getBindMusicItem( ) const = 0;
+	virtual QWidget * toWidget( ) =0;
 };
 
 #endif // IMUSICITEMWIDGET_H_H_HEAD__FILE__

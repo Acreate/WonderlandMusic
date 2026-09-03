@@ -4,6 +4,8 @@
 
 #include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
 
+#include "../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
+
 #include "../../mutex/userMutex.h"
 
 MusicListWidget::MusicListWidget( ) {
@@ -63,29 +65,53 @@ IMusicCentreWidget * MusicListWidget::getMusicCentreWidget( ) const {
 	return musicCentreWidget;
 }
 IMusicFavoriteItem * MusicListWidget::getCurrentMusicFavoriteItem( ) const {
-	return nullptr;
+	return musicFavoriteItem;
 }
 bool MusicListWidget::setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) {
-	return true;
+	userMutex->lock( );
+	musicFavoriteItem = music_favorite_item;
+	userMutex->unlock( );
+	return autoLayout( );
 }
-bool MusicListWidget::fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) {
-	return true;
+bool MusicListWidget::fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) const {
+	userMutex->lock( );
+	if( musicFavoriteItem )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( musicFavoriteItem->fromYPosGetMusicItem( result_music_item, y_pos ) );
 }
-bool MusicListWidget::fromIndexGetMusicItem( IMusicItem *&result_music_item, const size_t &index ) {
-	return true;
+bool MusicListWidget::fromIndexGetMusicItem( IMusicItem *&result_music_item, const size_t &index ) const {
+	userMutex->lock( );
+	if( musicFavoriteItem )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( musicFavoriteItem->fromIndexGetMusicItem( result_music_item, index ) );
 }
-bool MusicListWidget::fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) {
-	return true;
+bool MusicListWidget::fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) const {
+	userMutex->lock( );
+	if( musicFavoriteItem )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( musicFavoriteItem->fromNameGetFirstMusicItem( result_music_item, name ) );
 }
-bool MusicListWidget::fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) {
-	return true;
+bool MusicListWidget::fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) const {
+	userMutex->lock( );
+	if( musicFavoriteItem )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( musicFavoriteItem->fromFileBaseNameGetFirstMusicItem( result_music_item, file_base_name ) );
 }
-bool MusicListWidget::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) {
-	return true;
+bool MusicListWidget::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) const {
+	userMutex->lock( );
+	if( musicFavoriteItem )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( musicFavoriteItem->fromFileAbsPathGetFirstMusicItem( result_music_item, path ) );
 }
-bool MusicListWidget::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) {
-	return true;
+bool MusicListWidget::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) const {
+	userMutex->lock( );
+	if( musicFavoriteItem )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( musicFavoriteItem->fromSingerGetFirstMusicItem( result_music_item, singer ) );
 }
 bool MusicListWidget::autoLayout( ) {
-	return true;
+	userMutex->lock( );
+	if( musicFavoriteItem )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( true );
 }

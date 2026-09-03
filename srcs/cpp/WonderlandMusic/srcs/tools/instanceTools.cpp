@@ -40,11 +40,7 @@ AppMenuManage * InstanceTools::getAppMenuManage( ) {
 	If_Nullptr_Result_Nullptr( topPtr );
 	return topPtr->getAppMenuManage( );
 }
-AppMusicDecoder * InstanceTools::getAppMusicDecoder( ) {
-	auto topPtr = InstanceTools::getAppMusicManage( );
-	If_Nullptr_Result_Nullptr( topPtr );
-	return topPtr->getAppMusicDecoder( );
-}
+
 AppMusicManage * InstanceTools::getAppMusicManage( ) {
 	auto topPtr = InstanceTools::getAppDataManage( );
 	If_Nullptr_Result_Nullptr( topPtr );

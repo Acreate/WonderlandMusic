@@ -189,6 +189,15 @@ IMusicCentreWidget * MusicFavoriteItem::getMusicCentreWidget( ) const {
 IMusicFavoriteItemWidget * MusicFavoriteItem::getMusicFavoriteItemWidget( ) const {
 	return musicFavoriteItemWidget;
 }
+bool MusicFavoriteItem::loadMusicDirPath( const std::vector<QString> &music_file_path ) {
+	return false;
+}
+bool MusicFavoriteItem::loadMusicFile( const std::vector<QString> &music_file_path ) {
+	return false;
+}
+bool MusicFavoriteItem::loadMusicFile( const QString &music_file_path ) {
+	return false;
+}
 MusicFavoriteItem::MusicFavoriteItem( ) {
 	appendTypeInfo( this );
 	musicFavoriteItemUserMutex = new UserMutex;

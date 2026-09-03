@@ -4,9 +4,9 @@
 #include <interface/iAppCore.h>
 #include <interface/iAppJsonData.h>
 
-#include "../../../component/musicWindow/interface/info/iMusicDataManage.h"
+#include <component/musicWindow/interface/info/iMusicDataManage.h>
 
-#include "../../../interface/iAppResourceCore.h"
+#include <interface/iAppResourceCore.h>
 class MusicItemWidthInfo;
 class IMusicFavoriteItem;
 class IMusicItemWidthInfo;
@@ -14,24 +14,21 @@ class IMusicItemWidthInfo;
 class IMusicItem;
 class QPainter;
 class UserMutex;
-class AppMusicDecoder;
 
 class AppMusicManage : public QObject, public IMusicDataManage, public IAppJsonData, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:
 	UserMutex *userMutex = nullptr;
-	AppMusicDecoder *appMusicDecoder = nullptr;
 	MusicItemWidthInfo *musicItemWidthInfo = nullptr;
-	std::vector< IMusicItem * > musicItemVector;
 	std::vector< IMusicFavoriteItem * > musicFavoriteItemVector;
 	IMusicFavoriteItem *currenstFavoriteItem = nullptr;
 	IMusicFavoriteItem *defaultFavoriteItem = nullptr;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
+	std::vector< QString > supperDecodeFileSuffix;
 
 protected:
 	bool deleteResource( ) override;
-	virtual bool unsafeClearMusicItemVector( );
 	virtual bool unsafeClearMusicFavoriteItem( );
 
 public:
@@ -41,12 +38,6 @@ public:
 	bool init( ) override;
 	bool initBefore( ) override;
 	bool initAfter( ) override;
-
-	virtual AppMusicDecoder * getAppMusicDecoder( ) const;
-
-public:
-	virtual size_t loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector );
-	virtual size_t loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path );
 
 protected:
 	virtual bool unsafeClear( );
@@ -62,6 +53,8 @@ public:
 	virtual bool moveMusicVector( const IMusicFavoriteItem *music_favorite_item, const std::vector< IMusicItem * > &music_info_items );
 	virtual IMusicItemWidthInfo * getMusicItemWidthInfo( ) const;
 	virtual bool setMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info );
+	virtual bool musicFileNameSupperDecoder( const QString &file_name ) const;
+	virtual const std::vector<QString> & getSupperDecodeFileSuffix( ) const;
 
 private:
 	virtual bool unsafeGetMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const;
@@ -81,6 +74,5 @@ public:
 	bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const override;
 	bool getMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const override;
 	bool getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const override;
-	bool getMusicItemVector( std::vector< IMusicItem * > &result_music_item_vector ) const override;
 };
 #endif // APPMUSICMANAGE_H_H_HEAD__FILE__

@@ -2,7 +2,6 @@
 
 #include <QJsonObject>
 
-#include <application/appInstance/appDataManage/appMusicManage.h>
 #include <application/appInstance/appDataManage/jsonKey/musicFavoriteMenuJsonKey.h>
 #include <application/appInstance/appDataManage/translate/musicFavoriteMenuTranslate.h>
 #include <application/appInstance/appUserInterfaceManage/appMenuManage.h>
@@ -156,8 +155,8 @@ void MusicFavoriteMenu::slot_addMusicFile( ) {
 		QFileInfo info( resultFile[ 0 ] );
 		auto dir = info.dir( );
 		openSelecteMultiFileWidgetPath = dir.path( );
-		auto appMusicManage = InstanceTools::getAppMusicManage( );
-		appMusicManage->loadMusicFile( musicFavoriteItem, resultFile );
+		if( musicFavoriteItem->loadMusicFile( resultFile ) == false )
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItem, loadMusicFile, tr( "加载文件失败" ) );
 		return true;
 	} );
 }
@@ -171,11 +170,10 @@ void MusicFavoriteMenu::slot_addMusicDir( ) {
 		if( WidgetTools::showMultipleSelectDirDialog( resultFile, openSelecteMultiDirWidgetPath, openWidget, translate.getSelectMusicFile( ) ) == false )
 			return false;
 		QFileInfo info( resultFile[ 0 ] );
-
 		auto dir = info.dir( );
 		openSelecteMultiDirWidgetPath = dir.path( );
-		auto appMusicManage = InstanceTools::getAppMusicManage( );
-		appMusicManage->loadMusicFile( musicFavoriteItem, resultFile );
+		if( musicFavoriteItem->loadMusicDirPath( resultFile ) == false )
+			return Result_Var_Function_Messag_Ptr_Out_Args( false, musicFavoriteItem, loadMusicFile, tr( "加载目录失败" ) );
 		return true;
 	} );
 }

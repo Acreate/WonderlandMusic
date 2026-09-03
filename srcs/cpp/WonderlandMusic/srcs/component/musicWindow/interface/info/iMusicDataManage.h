@@ -17,7 +17,6 @@ public:
 	virtual bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const = 0;
 	virtual bool getMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const = 0;
 	virtual bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const = 0;
-	virtual bool getMusicItemVector( std::vector< IMusicItem * > &result_music_item_vector ) const = 0;
 	virtual bool initDefaultMusicFavoriteItem( ) = 0;
 	virtual bool clear( ) = 0;
 };

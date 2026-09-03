@@ -9,7 +9,7 @@
 
 #include "../application/appInstance/appDataManage.h"
 #include "../application/appInstance/applicationManage.h"
-#include "../application/appInstance/appDataManage/appMusicManage/appMusicDecoder.h"
+#include "../application/appInstance/appDataManage/appMusicManage.h"
 
 #include "../msgInfo/messageErrorOut.h"
 #include "../msgInfo/messageString.h"
@@ -69,9 +69,9 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::v
 	result_get_path.resize( count );
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
-	auto musicDecoder = InstanceTools::getAppMusicDecoder( );
+	auto appMusicManage = InstanceTools::getAppMusicManage( );
 	for( index = 0; index < count; ++index )
-		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
+		if( appMusicManage->musicFileNameSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];
 			resultCount += 1;
 		}
@@ -79,10 +79,10 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const std::v
 	return resultCount;
 }
 bool PathTools::isMusicFile( const QString &entry_path ) {
-	auto musicDecoder = InstanceTools::getAppMusicDecoder( );
-	if( musicDecoder == nullptr )
+	auto appMusicManage = InstanceTools::getAppMusicManage( );
+	if( appMusicManage == nullptr )
 		return false;
-	return musicDecoder->musicFileNmaeSupperDecoder( entry_path );
+	return appMusicManage->musicFileNameSupperDecoder( entry_path );
 }
 qsizetype PathTools::filterFile( QStringList &result_get_path, const QStringList &entry_path ) {
 	qsizetype resultDataIndex = 0;
@@ -126,9 +126,9 @@ qsizetype PathTools::filterMusicFile( QStringList &result_get_path, const QStrin
 	auto resultData = result_get_path.data( );
 	auto foreachData = entry_path.data( );
 
-	auto musicDecoder = InstanceTools::getAppMusicDecoder( );
+	auto appMusicManage = InstanceTools::getAppMusicManage( );
 	for( index = 0; index < count; ++index )
-		if( musicDecoder->musicFileNmaeSupperDecoder( foreachData[ index ] ) ) {
+		if( appMusicManage->musicFileNameSupperDecoder( foreachData[ index ] ) ) {
 			resultData[ resultCount ] = foreachData[ index ];
 			resultCount += 1;
 		}
@@ -418,9 +418,9 @@ bool PathTools::getSupperDecodeFileSuffixFilter( QString &result_supper_decode_m
 	return true;
 }
 bool PathTools::getSupperDecodeFileSuffix( std::vector< QString > &result_supper_decode_music_file_suffix ) {
-	auto appMusicDecoder = InstanceTools::getAppMusicDecoder( );
-	if( appMusicDecoder == nullptr )
+	auto appMusicManage = InstanceTools::getAppMusicManage( );
+	if( appMusicManage == nullptr )
 		return false;
-	result_supper_decode_music_file_suffix = appMusicDecoder->getSupperDecodeFileSuffix( );
+	result_supper_decode_music_file_suffix = appMusicManage->getSupperDecodeFileSuffix( );
 	return true;
 }

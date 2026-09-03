@@ -39,6 +39,9 @@ public:
 	virtual void setName( const QString &name );
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const override;
+	bool loadMusicDirPath( const std::vector<QString> &music_file_path ) override;
+	bool loadMusicFile( const std::vector<QString> &music_file_path ) override;
+	bool loadMusicFile( const QString &music_file_path ) override;
 };
 
 #endif // MUSICFAVORITEITEM_H_H_HEAD__FILE__

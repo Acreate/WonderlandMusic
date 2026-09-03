@@ -199,8 +199,6 @@ void MusicCentreWidget::mouseReleaseEvent( QMouseEvent *event ) {
 					return;
 				auto appMusicManage = InstanceTools::getAppMusicManage( );
 				std::vector< IMusicItem * > result;
-				if( appMusicManage->getMusicItemVector( result ) == false )
-					break;
 				if( execMenu( musicListWidget, nullptr, event->globalPos( ) ) == false )
 					Result_Void_Function_Messag_Ptr_Out_Args( this, execMenu, tr( "列表菜单显示异常" ) );
 				break;

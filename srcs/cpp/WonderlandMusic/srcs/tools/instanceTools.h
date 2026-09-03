@@ -17,8 +17,6 @@ Def_Get_Name_Function( ApplicationManage );
 
 Def_Get_Name_Function( AppMenuManage );
 
-Def_Get_Name_Function( AppMusicDecoder );
-
 Def_Get_Name_Function( AppMusicManage );
 
 Def_Get_Name_Function( AppRenderImage );

@@ -28,6 +28,9 @@ public:
 	virtual bool fromSingerGetFirstMusicItem( IMusicItem * &result_music_item, const QString &singer ) const = 0;
 	virtual size_t getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const = 0;
 	virtual IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const = 0;
+	virtual bool loadMusicDirPath( const std::vector< QString > &music_file_path ) = 0;
+	virtual bool loadMusicFile( const std::vector< QString > &music_file_path ) = 0;
+	virtual bool loadMusicFile( const QString &music_file_path ) = 0;
 };
 
 #endif // IMUSICFAVORITEITEM_H_H_HEAD__FILE__

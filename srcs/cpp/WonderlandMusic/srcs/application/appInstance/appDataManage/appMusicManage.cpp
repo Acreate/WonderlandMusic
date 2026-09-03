@@ -5,9 +5,6 @@
 #include <component/musicWindow/interface/info/iMusicItemWidthInfo.h>
 #include <component/musicWindow/interface/item/iMusicItem.h>
 
-#include <head/after_init_macro.h>
-#include <head/before_init_macro.h>
-#include <head/init_macro.h>
 #include <head/release_macro.h>
 #include <head/result_message_out.h>
 
@@ -15,67 +12,57 @@
 
 #include <tools/pathTools.h>
 
-#include <musicImpement/item/musicInfoItem.h>
-
 #include <musicImpement/info/musicItemWidthInfo.h>
 #include <musicImpement/item/musicFavoriteItem.h>
 #include <musicImpement/widget/musicCentreWidget.h>
 
-#include "appMusicManage/appMusicDecoder.h"
+#include <tools/ffmpegTools.h>
 
 class IMusicFavoriteItem;
 bool AppMusicManage::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
 	userMutex->lock( );
-	if( musicCentreWidget )
-
-		Delete_Resource_App_Core_Ptr( appMusicDecoder );
+	supperDecodeFileSuffix.clear( );
 	Delete_Resource_App_Core_Ptr( musicItemWidthInfo );
-	auto clearMusicItemVectorResult = unsafeClearMusicItemVector( );
-	auto clearMusicFavoriteItemResult = unsafeClearMusicFavoriteItem( );
+	auto clearResult = unsafeClear( );
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
-	return clearMusicItemVectorResult && clearMusicFavoriteItemResult;
+	return clearResult;
 }
-bool AppMusicManage::unsafeClearMusicItemVector( ) {
-	return false;
-}
+
 bool AppMusicManage::unsafeClearMusicFavoriteItem( ) {
-	return false;
+	size_t count = musicFavoriteItemVector.size( );
+	if( count == 0 )
+		return true;
+	auto data = musicFavoriteItemVector.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		delete data[ index ];
+	musicFavoriteItemVector.clear( );
+	return true;
 }
 
 bool AppMusicManage::init( ) {
-	Init_Resource_App_Core_Ptr( appMusicDecoder );
+	supperDecodeFileSuffix = ffmpegTools::getFFmpegSuperMusicType( );
+	if( supperDecodeFileSuffix.size( ) == 0 )
+		return false;
 	return true;
 }
 
 bool AppMusicManage::initBefore( ) {
 	deleteResource( );
-	appMusicDecoder = new AppMusicDecoder;
 	userMutex = new UserMutex;
-	Before_Init_Resource_App_Core_Ptr( appMusicDecoder );
 	return true;
 }
 
 bool AppMusicManage::initAfter( ) {
-	After_Init_Resource_App_Core_Ptr( appMusicDecoder );
 	return true;
 }
 
-AppMusicDecoder * AppMusicManage::getAppMusicDecoder( ) const {
-	return appMusicDecoder;
-}
-size_t AppMusicManage::loadMusicFile( IMusicFavoriteItem *music_favorite_item, const std::vector< QString > &music_file_path_vector ) {
-	return appMusicDecoder->loadMusicFile( music_favorite_item, music_file_path_vector );
-}
-size_t AppMusicManage::loadMusicDir( IMusicFavoriteItem *music_favorite_item, const QString &music_dir_path ) {
-	return appMusicDecoder->loadMusicDir( music_favorite_item, music_dir_path );
-}
 bool AppMusicManage::unsafeClear( ) {
-	auto clearMusicItemVectorResult = unsafeClearMusicItemVector( );
 	auto clearMusicFavoriteItemResult = unsafeClearMusicFavoriteItem( );
-	return clearMusicItemVectorResult && clearMusicFavoriteItemResult;
+	return clearMusicFavoriteItemResult;
 }
 bool AppMusicManage::getMusicWindowInfoJsonData( QJsonObject &result_json_object ) {
 	return true;
@@ -166,19 +153,7 @@ bool AppMusicManage::getMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &
 	bool getMusicFavoriteItem = unsafeGetMusicFavoriteItem( result_music_favorite_item );
 	return userMutex->result_unlock( getMusicFavoriteItem );
 }
-bool AppMusicManage::getMusicItemVector( std::vector< IMusicItem * > &result_music_item_vector ) const {
-	userMutex->lock( );
-	size_t count = musicItemVector.size( );
-	if( count ) {
-		result_music_item_vector.resize( count );
-		auto setData = result_music_item_vector.data( );
-		auto sourceData = musicItemVector.data( );
-		size_t index = 0;
-		for( ; index < count; index += 1 )
-			setData[ index ] = sourceData[ index ];
-	}
-	return userMutex->result_unlock( true );
-}
+
 IMusicItemWidthInfo * AppMusicManage::getMusicItemWidthInfo( ) const {
 	return musicItemWidthInfo;
 }
@@ -186,6 +161,25 @@ bool AppMusicManage::setMusicItemWidthInfo( const IMusicItemWidthInfo &music_ite
 	if( musicItemWidthInfo->setIMusicItemWidthInfo( music_item_width_info ) == false )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicItemWidthInfo, setIMusicItemWidthInfo, tr( "配置项的宽度信息异常" ) );
 	return true;
+}
+bool AppMusicManage::musicFileNameSupperDecoder( const QString &file_name ) const {
+	size_t count = supperDecodeFileSuffix.size( );
+	if( count == 0 )
+		return false; // 没有正确解析后缀
+	qsizetype indexOf = file_name.indexOf( "." );
+	if( indexOf == -1 )
+		return false; // 没有后缀
+	auto compString = file_name.mid( indexOf + 1 );
+	compString = compString.toUpper( );
+	auto data = supperDecodeFileSuffix.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ] == compString )
+			return true;
+	return false;
+}
+const std::vector< QString > & AppMusicManage::getSupperDecodeFileSuffix( ) const {
+	return supperDecodeFileSuffix;
 }
 bool AppMusicManage::unsafeGetMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const {
 	result_default_music_favorite_item = defaultFavoriteItem;

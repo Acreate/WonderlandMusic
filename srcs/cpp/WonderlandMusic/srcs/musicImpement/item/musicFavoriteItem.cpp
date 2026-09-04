@@ -193,7 +193,7 @@ bool MusicFavoriteItem::loadMusicFile( const QString &music_file_path ) {
 	return true;
 }
 void MusicFavoriteItem::loadOverMusicFileList( MusicFileInfoList *music_file_info_list ) {
-	if( music_file_info_list->getStatus( ) != MusicFileInfoList::Status::Finish ) {
+	if( music_file_info_list->getStatus( ) == MusicFileInfoList::Status::Finish ) {
 		InvokeMethodTools::invokeQueuedConnectionMethod( [this, music_file_info_list] ( ApplicationManage *applicationManage ) {
 			delete music_file_info_list;
 		} );

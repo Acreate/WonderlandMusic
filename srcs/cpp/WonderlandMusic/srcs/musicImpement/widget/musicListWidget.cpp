@@ -153,35 +153,41 @@ bool MusicListWidget::fromYPosGetMusicItem( IMusicItem *&result_music_item, cons
 	userMutex->lock( );
 	if( musicFavoriteItem )
 		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( musicFavoriteItem->fromYPosGetMusicItem( result_music_item, y_pos ) );
+	userMutex->unlock( );
+	return false;
 }
 bool MusicListWidget::fromIndexGetMusicItem( IMusicItem *&result_music_item, const size_t &index ) const {
 	userMutex->lock( );
 	if( musicFavoriteItem )
 		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( musicFavoriteItem->fromIndexGetMusicItem( result_music_item, index ) );
+	userMutex->unlock( );
+	return false;
 }
 bool MusicListWidget::fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &name ) const {
 	userMutex->lock( );
 	if( musicFavoriteItem )
 		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( musicFavoriteItem->fromNameGetFirstMusicItem( result_music_item, name ) );
+	userMutex->unlock( );
+	return false;
 }
 bool MusicListWidget::fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) const {
 	userMutex->lock( );
 	if( musicFavoriteItem )
 		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( musicFavoriteItem->fromFileBaseNameGetFirstMusicItem( result_music_item, file_base_name ) );
+	userMutex->unlock( );
+	return false;
 }
 bool MusicListWidget::fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) const {
 	userMutex->lock( );
 	if( musicFavoriteItem )
 		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( musicFavoriteItem->fromFileAbsPathGetFirstMusicItem( result_music_item, path ) );
+	userMutex->unlock( );
+	return false;
 }
 bool MusicListWidget::fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) const {
 	userMutex->lock( );
 	if( musicFavoriteItem )
 		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( musicFavoriteItem->fromSingerGetFirstMusicItem( result_music_item, singer ) );
+	userMutex->unlock( );
+	return false;
 }

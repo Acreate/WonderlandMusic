@@ -28,13 +28,6 @@ public:
 	bool removeMusicItem( IMusicItem *music_item ) override;
 	bool clear( ) override;
 	bool update( ) override;
-	bool fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) const override;
-	bool fromIndexGetMusicItem( IMusicItem *&result_music_item, const size_t &index ) const override;
-	bool fromMusicItemGetIndex( size_t &result_index, const IMusicItem *music_item ) const override;
-	bool fromNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &music_name ) const override;
-	bool fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) const override;
-	bool fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &absolute_file_path ) const override;
-	bool fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) const override;
 	size_t getMusicVector( std::vector< IMusicItem * > &result_clone_vector ) const override;
 	virtual void setName( const QString &name );
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;

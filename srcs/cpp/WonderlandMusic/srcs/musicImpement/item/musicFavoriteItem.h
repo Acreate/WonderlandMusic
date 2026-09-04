@@ -3,7 +3,7 @@
 #include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
 
 class MusicInfoItem;
-class MusicInfo;
+class MusicFileInfo;
 class MusicFavoriteItemWidget;
 
 class MusicFavoriteItem : public QObject, public IMusicFavoriteItem {
@@ -22,8 +22,8 @@ public:
 
 public:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
-	virtual MusicInfoItem * load( MusicInfo *music_info );
-	virtual std::vector< MusicInfoItem * > load( const std::vector< MusicInfo * > &music_infos );
+	virtual MusicInfoItem * load( MusicFileInfo *music_info );
+	virtual std::vector< MusicInfoItem * > load( const std::vector< MusicFileInfo * > &music_infos );
 	bool getName( QString &result_name ) const override;
 	bool removeMusicItem( IMusicItem *music_item ) override;
 	bool clear( ) override;

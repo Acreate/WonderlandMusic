@@ -6,7 +6,7 @@ class QFileInfo;
 class UserMutex;
 struct AVFormatContext;
 
-class MusicInfo : public QThread {
+class MusicFileInfo : public QThread {
 	Q_OBJECT;
 
 protected:
@@ -45,10 +45,10 @@ private:
 	QString channelLayoutDescribe;
 
 public:
-	explicit MusicInfo( const QString &file_path );
-	~MusicInfo( ) override;
-	MusicInfo( const MusicInfo &other );
-	MusicInfo & operator=( const MusicInfo &other );
+	explicit MusicFileInfo( const QString &file_path );
+	~MusicFileInfo( ) override;
+	MusicFileInfo( const MusicFileInfo &other );
+	MusicFileInfo & operator=( const MusicFileInfo &other );
 
 protected:
 	void run( ) override;

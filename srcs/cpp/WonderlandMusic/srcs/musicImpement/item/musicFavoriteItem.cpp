@@ -13,7 +13,6 @@
 #include <musicImpement/itemWidget/musicFavoriteItemWidget.h>
 
 #include <component/musicWindow/musicWindow.h>
-#include <component/musicWindow/interface/ItemWidget/iMusicItemWidget.h>
 
 #include "musicInfoItem.h"
 
@@ -21,8 +20,8 @@
 
 #include "../../component/musicWindow/interface/widget/iMusicListWidget.h"
 
-#include "../../musicPlayer/musicInfo.h"
-#include "../../musicPlayer/musicInfoList.h"
+#include "../../musicFileInfo/musicFileInfo.h"
+#include "../../musicFileInfo/musicFileInfoList.h"
 
 #include "../../tools/instanceTools.h"
 #include "../../tools/invokeMethodTools.h"
@@ -34,7 +33,7 @@ bool MusicFavoriteItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_w
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
-MusicInfoItem * MusicFavoriteItem::load( MusicInfo *music_info ) {
+MusicInfoItem * MusicFavoriteItem::load( MusicFileInfo *music_info ) {
 	if( music_info->isOK( ) == false )
 		return nullptr;
 	musicFavoriteItemUserMutex->lock( );
@@ -49,7 +48,7 @@ MusicInfoItem * MusicFavoriteItem::load( MusicInfo *music_info ) {
 	musicListWidget->updateMusicFavoriteItem( this );
 	return musicItem;
 }
-std::vector< MusicInfoItem * > MusicFavoriteItem::load( const std::vector< MusicInfo * > &music_infos ) {
+std::vector< MusicInfoItem * > MusicFavoriteItem::load( const std::vector< MusicFileInfo * > &music_infos ) {
 	musicFavoriteItemUserMutex->lock( );
 	size_t count = music_infos.size( );
 	std::vector< MusicInfoItem * > result( count );
@@ -147,10 +146,10 @@ bool MusicFavoriteItem::loadMusicDirPath( const std::vector< QString > &music_fi
 				if( fileIndex == 0 )
 					return false;
 				file.resize( fileIndex );
-				MusicInfoList *musicInfoList = new MusicInfoList( file );
-				connect( musicInfoList, &MusicInfo::finished, [this, musicInfoList]( ) {
+				MusicFileInfoList *musicInfoList = new MusicFileInfoList( file );
+				connect( musicInfoList, &MusicFileInfo::finished, [this, musicInfoList]( ) {
 					InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfoList] ( ApplicationManage *applicationManage ) {
-						std::vector< MusicInfo * > getResult;
+						std::vector< MusicFileInfo * > getResult;
 						if( musicInfoList->getOverLoadMusicVector( getResult ) )
 							load( getResult );
 						delete musicInfoList;
@@ -182,10 +181,10 @@ bool MusicFavoriteItem::loadMusicFile( const std::vector< QString > &music_file_
 	if( fileIndex == 0 )
 		return false;
 	file.resize( fileIndex );
-	MusicInfoList *musicInfoList = new MusicInfoList( file );
-	connect( musicInfoList, &MusicInfo::finished, [this, musicInfoList]( ) {
+	MusicFileInfoList *musicInfoList = new MusicFileInfoList( file );
+	connect( musicInfoList, &MusicFileInfo::finished, [this, musicInfoList]( ) {
 		InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfoList] ( ApplicationManage *applicationManage ) {
-			std::vector< MusicInfo * > getResult;
+			std::vector< MusicFileInfo * > getResult;
 			if( musicInfoList->getOverLoadMusicVector( getResult ) )
 				load( getResult );
 			delete musicInfoList;
@@ -197,10 +196,10 @@ bool MusicFavoriteItem::loadMusicFile( const std::vector< QString > &music_file_
 bool MusicFavoriteItem::loadMusicFile( const QString &music_file_path ) {
 	if( PathTools::isMusicFile( music_file_path ) == false )
 		return false;
-	auto musicInfo = new MusicInfo( music_file_path );
+	auto musicInfo = new MusicFileInfo( music_file_path );
 	if( musicInfo == nullptr )
 		return false;
-	connect( musicInfo, &MusicInfo::finished, [this, musicInfo]( ) {
+	connect( musicInfo, &MusicFileInfo::finished, [this, musicInfo]( ) {
 		InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfo] ( ApplicationManage *applicationManage ) {
 			load( musicInfo );
 			delete musicInfo;

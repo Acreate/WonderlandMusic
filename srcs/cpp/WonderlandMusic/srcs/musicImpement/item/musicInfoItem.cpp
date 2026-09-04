@@ -8,30 +8,29 @@
 
 #include <musicImpement/itemWidget/musicItemWidget.h>
 
-#include <musicPlayer/musicInfo.h>
+#include <musicFileInfo/musicFileInfo.h>
 
 #include <mutex/userMutex.h>
 
 #include <tools/pathTools.h>
 
 MusicInfoItem::MusicInfoItem( IMusicFavoriteItem *music_favorite_item ) : musicFavoriteItem( music_favorite_item ) {
-	musicItemWidget = new MusicItemWidget;
-	musicItemWidget->bindMusicItem( this );
-
 	if( music_favorite_item == nullptr ) {
 		deleteLater( );
 		return;
 	}
 	appendTypeInfo( this );
-}
-MusicInfoItem::MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info ) : musicFavoriteItem( music_favorite_item ) {
 	musicItemWidget = new MusicItemWidget;
 	musicItemWidget->bindMusicItem( this );
+}
+MusicInfoItem::MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicFileInfo &music_info ) : musicFavoriteItem( music_favorite_item ) {
 	if( music_favorite_item == nullptr || initVar( music_info ) == false ) {
 		deleteLater( );
 		return;
 	}
 	appendTypeInfo( this );
+	musicItemWidget = new MusicItemWidget;
+	musicItemWidget->bindMusicItem( this );
 }
 
 MusicInfoItem::~MusicInfoItem( ) {
@@ -73,7 +72,7 @@ bool MusicInfoItem::setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_ite
 	musicFavoriteItem = music_favorite_item;
 	return true;
 }
-bool MusicInfoItem::initVar( const MusicInfo &music_info ) {
+bool MusicInfoItem::initVar( const MusicFileInfo &music_info ) {
 	idCode = 0;
 	name = music_info.getTitle( );
 	singer = music_info.getArtist( );

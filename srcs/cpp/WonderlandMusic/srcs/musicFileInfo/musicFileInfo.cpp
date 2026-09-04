@@ -1,4 +1,4 @@
-﻿#include "musicInfo.h"
+﻿#include "musicFileInfo.h"
 
 #include <QFileInfo>
 
@@ -20,7 +20,7 @@ INCLUDE_EXTERN_C {
 
 static bool getAudioInfo( QString &result, AVDictionary *meta, const char *key );
 
-MusicInfo::MusicInfo( const QString &file_path ) {
+MusicFileInfo::MusicFileInfo( const QString &file_path ) {
 	musicStatus = -1;
 	userMutex = new UserMutex;
 	fileInfo = new QFileInfo( file_path );
@@ -29,7 +29,7 @@ MusicInfo::MusicInfo( const QString &file_path ) {
 	filePath = fileInfo->fileName( );
 	fileBaseName = fileInfo->baseName( );
 }
-MusicInfo::~MusicInfo( ) {
+MusicFileInfo::~MusicFileInfo( ) {
 	QThread::requestInterruption( );
 	auto sleepTime = std::chrono::milliseconds( 1000 );
 	while( isRunning( ) )
@@ -40,10 +40,10 @@ MusicInfo::~MusicInfo( ) {
 	delete userMutex;
 	userMutex = nullptr;
 }
-MusicInfo::MusicInfo( const MusicInfo &other ) {
+MusicFileInfo::MusicFileInfo( const MusicFileInfo &other ) {
 	operator=( other );
 }
-MusicInfo & MusicInfo::operator=( const MusicInfo &other ) {
+MusicFileInfo & MusicFileInfo::operator=( const MusicFileInfo &other ) {
 	if( this == &other )
 		return *this;
 	status = other.status;
@@ -76,7 +76,7 @@ MusicInfo & MusicInfo::operator=( const MusicInfo &other ) {
 	musicStatus = other.musicStatus;
 	return *this;
 }
-void MusicInfo::run( ) {
+void MusicFileInfo::run( ) {
 	// 跳出宏
 	#define Is_Interruption_Requested( ) if( isInterruptionRequested( ) ) break
 	userMutex->lock( );
@@ -161,10 +161,10 @@ void MusicInfo::run( ) {
 	status = RunStatus::Over;
 	userMutex->unlock( );
 }
-bool MusicInfo::isOK( ) const {
+bool MusicFileInfo::isOK( ) const {
 	return musicStatus == 0;
 }
-bool MusicInfo::isRead( ) const {
+bool MusicFileInfo::isRead( ) const {
 	if( status != RunStatus::Ready )
 		return false;
 	userMutex->lock( );
@@ -172,68 +172,68 @@ bool MusicInfo::isRead( ) const {
 		return userMutex->result_unlock( false );
 	return userMutex->result_unlock( true );
 }
-const QString & MusicInfo::getFileBaseName( ) const {
+const QString & MusicFileInfo::getFileBaseName( ) const {
 	return fileBaseName;
 }
-const QString & MusicInfo::getFilePath( ) const {
+const QString & MusicFileInfo::getFilePath( ) const {
 	return filePath;
 }
-const QString & MusicInfo::getAbsoluteFilePath( ) const {
+const QString & MusicFileInfo::getAbsoluteFilePath( ) const {
 	return absoluteFilePath;
 }
 
-MusicInfo::RunStatus MusicInfo::getStatus( ) const {
+MusicFileInfo::RunStatus MusicFileInfo::getStatus( ) const {
 	return status;
 }
-const QString & MusicInfo::getTitle( ) const {
+const QString & MusicFileInfo::getTitle( ) const {
 	return title;
 }
-const QString & MusicInfo::getArtist( ) const {
+const QString & MusicFileInfo::getArtist( ) const {
 	return artist;
 }
-const QString & MusicInfo::getAlbum( ) const {
+const QString & MusicFileInfo::getAlbum( ) const {
 	return album;
 }
-const QString & MusicInfo::getAlbumArtist( ) const {
+const QString & MusicFileInfo::getAlbumArtist( ) const {
 	return albumArtist;
 }
-const QString & MusicInfo::getGenre( ) const {
+const QString & MusicFileInfo::getGenre( ) const {
 	return genre;
 }
-const QString & MusicInfo::getDate( ) const {
+const QString & MusicFileInfo::getDate( ) const {
 	return date;
 }
-const QString & MusicInfo::getTrack( ) const {
+const QString & MusicFileInfo::getTrack( ) const {
 	return track;
 }
-const QString & MusicInfo::getComment( ) const {
+const QString & MusicFileInfo::getComment( ) const {
 	return comment;
 }
-const QString & MusicInfo::getAvcodecGetName( ) const {
+const QString & MusicFileInfo::getAvcodecGetName( ) const {
 	return avcodecGetName;
 }
-int MusicInfo::getSampleRate( ) const {
+int MusicFileInfo::getSampleRate( ) const {
 	return sampleRate;
 }
-int MusicInfo::getNbChannels( ) const {
+int MusicFileInfo::getNbChannels( ) const {
 	return nbChannels;
 }
-const QString & MusicInfo::getAvGetSampleFmtName( ) const {
+const QString & MusicFileInfo::getAvGetSampleFmtName( ) const {
 	return avGetSampleFmtName;
 }
-int64_t MusicInfo::getBitRate( ) const {
+int64_t MusicFileInfo::getBitRate( ) const {
 	return bitRate;
 }
-int64_t MusicInfo::getDurationMillsecond( ) const {
+int64_t MusicFileInfo::getDurationMillsecond( ) const {
 	return durationMillsecond;
 }
-const QString & MusicInfo::getDurationMillsecondDateTimeString( ) const {
+const QString & MusicFileInfo::getDurationMillsecondDateTimeString( ) const {
 	return durationMillsecondDateTimeString;
 }
-const QString & MusicInfo::getChannelLayoutDescribe( ) const {
+const QString & MusicFileInfo::getChannelLayoutDescribe( ) const {
 	return channelLayoutDescribe;
 }
-QStringList MusicInfo::toQStringList( ) const {
+QStringList MusicFileInfo::toQStringList( ) const {
 	#define append_conver_string_var_beg( _append_var_target ) \
 		QString( "class %1 {\n" ).arg( TemplateArgs::getTypeName( _append_var_target ) )
 
@@ -273,7 +273,7 @@ QStringList MusicInfo::toQStringList( ) const {
 	append_result_var_end( result, channelLayoutDescribe );
 	return result;
 }
-MusicInfo::operator QString( ) const {
+MusicFileInfo::operator QString( ) const {
 	return toQStringList( ).join( "" );
 }
 bool getAudioInfo( QString &result, AVDictionary *meta, const char *key ) {

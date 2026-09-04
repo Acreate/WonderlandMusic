@@ -3,7 +3,7 @@
 
 #include <component/musicWindow/interface/item/iMusicItem.h>
 
-class MusicInfo;
+class MusicFileInfo;
 class MusicItemWidget;
 class QMediaPlayer;
 
@@ -26,11 +26,11 @@ protected:
 	IMusicFavoriteItem *musicFavoriteItem = nullptr;
 
 protected:
-	virtual bool initVar( const MusicInfo &music_info );
+	virtual bool initVar( const MusicFileInfo &music_info );
 	~MusicInfoItem( ) override;
 
 public:
-	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info );
+	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicFileInfo &music_info );
 	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item );
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	bool setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;

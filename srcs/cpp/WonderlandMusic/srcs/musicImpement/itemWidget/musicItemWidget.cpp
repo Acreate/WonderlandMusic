@@ -37,7 +37,7 @@ bool MusicItemWidget::updateLayout( ) {
 	auto musicTitleWidget = musicCentreWidget->getMusicTitleWidget( );
 	if( musicTitleWidget == nullptr )
 		return false;
-	auto iMusicItemWidthInfo = musicTitleWidget->getIMusicItemWidthInfo( );
+	auto iMusicItemWidthInfo = musicTitleWidget->getMusicItemWidthInfo( );
 	if( iMusicItemWidthInfo == nullptr )
 		return false;
 	AppDrawManage *appDrawManage = InstanceTools::getAppDrawManage( );

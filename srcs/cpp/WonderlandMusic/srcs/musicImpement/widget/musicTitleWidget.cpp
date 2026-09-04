@@ -130,17 +130,22 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 		return;
 	if( musicItemWidthInfo == nullptr )
 		return;
+	bool update;
 	userMutex->lock( );
+	update = isDrag;
 	isDrag = false;
 	orgWidth = 0;
 	if( resuntIndexVarPtr ) {
 		if( currentCursor != Qt::ArrowCursor )
 			currentCursor = Qt::ArrowCursor;
+
 		event->accept( );
 	}
 	resuntIndexVarPtr = nullptr;
 	userMutex->unlock( );
 	setCursor( currentCursor );
+	if( update && musicCentreWidget )
+		musicCentreWidget->repaintListWidget( );
 }
 
 bool MusicTitleWidget::initBefore( ) {
@@ -168,7 +173,7 @@ bool MusicTitleWidget::setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_wi
 	musicItemWidthInfo = music_item_width_info;
 	return true;
 }
-IMusicItemWidthInfo * MusicTitleWidget::getIMusicItemWidthInfo( ) const {
+IMusicItemWidthInfo * MusicTitleWidget::getMusicItemWidthInfo( ) const {
 	return musicItemWidthInfo;
 }
 bool MusicTitleWidget::updateMusicItemWidthInfoLayout( ) {

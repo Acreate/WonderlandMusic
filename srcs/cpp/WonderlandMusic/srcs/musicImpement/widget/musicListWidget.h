@@ -13,7 +13,8 @@ private:
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 	UserMutex *userMutex = nullptr;
 	IMusicFavoriteItem *musicFavoriteItem = nullptr;
-
+	int caculateHeight = 0;
+	int caculateWidth = 0;
 public:
 	MusicListWidget( );
 	~MusicListWidget( ) override;

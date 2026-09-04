@@ -17,7 +17,6 @@
 
 #include <tools/ffmpegTools.h>
 
-class IMusicFavoriteItem;
 bool AppMusicManage::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;

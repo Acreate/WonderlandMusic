@@ -43,7 +43,7 @@ public:
 	bool fromYPosGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &pos_y ) const override;
 	bool fromIndexGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const size_t &index ) const override;
 	bool fromNameGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const QString &index ) const override;
-	bool autoLayout( ) override;
+	bool updateFavoriteItemLayout( ) override;
 	int setAdapiveWidth( const int &adaptive_width ) override;
 };
 

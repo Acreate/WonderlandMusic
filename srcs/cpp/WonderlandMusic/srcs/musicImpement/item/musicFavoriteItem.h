@@ -23,6 +23,7 @@ public:
 protected:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	virtual MusicInfoItem * load( MusicInfo *music_info );
+	virtual std::vector< MusicInfoItem * > load( const std::vector< MusicInfo * > &music_infos );
 
 public:
 	bool getName( QString &result_name ) const override;

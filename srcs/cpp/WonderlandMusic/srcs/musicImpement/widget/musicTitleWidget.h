@@ -44,7 +44,7 @@ public:
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) override;
 	IMusicItemWidthInfo * getIMusicItemWidthInfo( ) const override;
-	bool autoLayout( ) override;
+	bool updateMusicItemWidthInfoLayout( ) override;
 	int setAdapiveHeight( const int &adaptive_height ) override;
 };
 

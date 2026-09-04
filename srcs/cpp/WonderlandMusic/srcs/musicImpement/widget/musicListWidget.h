@@ -27,6 +27,9 @@ protected:
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 
 public:
+	bool updateMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
+	bool updateCurrentMusicFavoriteItem( ) override;
+
 	bool initBefore( ) override;
 	bool init( ) override;
 	bool initAfter( ) override;
@@ -41,7 +44,6 @@ public:
 	bool fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) const override;
 	bool fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &path ) const override;
 	bool fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) const override;
-	bool autoLayout( ) override;
 };
 
 #endif // MUSICLISTWIDGET_H_H_HEAD__FILE__

@@ -16,9 +16,7 @@
 
 #include <tools/instanceTools.h>
 
-#include <musicImpement/info/musicItemWidthInfo.h>
-
-#include "../../component/musicWindow/interface/widget/iMusicCentreWidget.h"
+#include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
 
 MusicTitleWidget::MusicTitleWidget( ) {
 	appendTypeInfo( this );
@@ -105,7 +103,7 @@ void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
 			Result_Void_Messag_Ptr_Out_Args( this, tr( "设置 %1 下标宽度异常" ).arg( resultIndex ) );
 		userMutex->unlock( );
 		if( posItemWidthPtrVar )
-			autoLayout( );
+			updateMusicItemWidthInfoLayout( );
 		event->accept( );
 		return;
 	}
@@ -156,7 +154,7 @@ bool MusicTitleWidget::init( ) {
 	return true;
 }
 bool MusicTitleWidget::initAfter( ) {
-	if( autoLayout( ) == false )
+	if( updateMusicItemWidthInfoLayout( ) == false )
 		return false;
 	return true;
 }
@@ -173,7 +171,7 @@ bool MusicTitleWidget::setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_wi
 IMusicItemWidthInfo * MusicTitleWidget::getIMusicItemWidthInfo( ) const {
 	return musicItemWidthInfo;
 }
-bool MusicTitleWidget::autoLayout( ) {
+bool MusicTitleWidget::updateMusicItemWidthInfoLayout( ) {
 	if( userMutex == nullptr )
 		return false;
 	auto appDrawManage = InstanceTools::getAppDrawManage( );
@@ -203,6 +201,7 @@ bool MusicTitleWidget::autoLayout( ) {
 	repaint( );
 	return true;
 }
+
 int MusicTitleWidget::setAdapiveHeight( const int &adaptive_height ) {
 	return 0;
 }

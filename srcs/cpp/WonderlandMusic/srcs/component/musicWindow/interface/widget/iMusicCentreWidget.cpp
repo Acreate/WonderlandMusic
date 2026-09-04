@@ -1,9 +1,12 @@
 ﻿#include "iMusicCentreWidget.h"
 
+#include "iMusicListWidget.h"
+
 #include "../info/iMusicWidgetSizeInfo.h"
 
 #include "../menu/iMusicFavoriteMenu.h"
 #include "../menu/iMusicListMenu.h"
+
 int IMusicCentreWidget::setFavoriteWidth( const int &favoriet_width ) {
 	auto musicWidgetSizeInfo = getMusicWidgetSizeInfo( );
 	if( musicWidgetSizeInfo == nullptr )
@@ -27,6 +30,8 @@ bool IMusicCentreWidget::execMenu( IMusicListWidget *music_list_widget, IMusicIt
 	if( musicListMenu == nullptr )
 		return false;
 	return musicListMenu->execMenu( music_list_widget, music_item, mouse_global_point );
+}
+IMusicCentreWidget::~IMusicCentreWidget( ) {
 }
 IMusicCentreWidget::IMusicCentreWidget( ) {
 	appendTypeInfo( this );

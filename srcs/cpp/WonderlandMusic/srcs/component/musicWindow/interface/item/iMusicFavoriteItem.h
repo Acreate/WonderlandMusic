@@ -12,8 +12,9 @@ protected:
 	static bool bindMusicFavoriteItem( IMusicFavoriteItemWidget *bind_target, IMusicFavoriteItem *bind_source );
 
 	static bool setMusicItemFavoriteItem( IMusicItem *music_item, IMusicFavoriteItem *music_favorite_item );
-	~IMusicFavoriteItem( ) override {
-	}
+
+protected:
+	~IMusicFavoriteItem( ) override;
 
 public:
 	IMusicFavoriteItem( );

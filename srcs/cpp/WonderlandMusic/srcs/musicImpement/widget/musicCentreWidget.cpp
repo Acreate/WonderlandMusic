@@ -34,6 +34,7 @@ MusicCentreWidget::MusicCentreWidget( ) : QWidget( ), musicWindow( nullptr ) {
 MusicCentreWidget::~MusicCentreWidget( ) {
 	deleteResource( );
 }
+
 bool MusicCentreWidget::deleteResource( ) {
 	if( userMutex == nullptr )
 		return true;
@@ -492,17 +493,17 @@ IMusicTitleWidget * MusicCentreWidget::removeMusicTitleWidget( IMusicTitleWidget
 bool MusicCentreWidget::repaintListWidget( ) {
 	if( musicListWidget == nullptr )
 		return false;
-	return musicListWidget->autoLayout( );
+	return musicListWidget->updateCurrentMusicFavoriteItem( );
 }
 bool MusicCentreWidget::repaintTitleWidget( ) {
 	if( musicTitleWidget == nullptr )
 		return false;
-	return musicTitleWidget->autoLayout( );
+	return musicTitleWidget->updateMusicItemWidthInfoLayout( );
 }
 bool MusicCentreWidget::repaintFavoriteWidget( ) {
 	if( musicFavoriteWidget == nullptr )
 		return false;
-	return musicFavoriteWidget->autoLayout( );
+	return musicFavoriteWidget->updateFavoriteItemLayout( );
 }
 bool MusicCentreWidget::repaintMusicCentreWidget( ) {
 	if( repaintTitleWidget( ) == false )

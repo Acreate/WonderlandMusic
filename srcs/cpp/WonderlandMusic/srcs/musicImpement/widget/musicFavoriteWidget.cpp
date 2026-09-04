@@ -67,7 +67,7 @@ bool MusicFavoriteWidget::fromIndexGetMusicFavoriteItem( IMusicFavoriteItem *&re
 bool MusicFavoriteWidget::fromNameGetMusicFavoriteItem( IMusicFavoriteItem *&result_music_favorite_item, const QString &index ) const {
 	return true;
 }
-bool MusicFavoriteWidget::autoLayout( ) {
+bool MusicFavoriteWidget::updateFavoriteItemLayout( ) {
 	if( musicCentreWidget == nullptr )
 		return false;
 	auto musicDataManage = musicCentreWidget->getMusicDataManage( );
@@ -91,6 +91,7 @@ bool MusicFavoriteWidget::autoLayout( ) {
 	resize( offsetX, offsetY );
 	return true;
 }
+
 int MusicFavoriteWidget::setAdapiveWidth( const int &adaptive_width ) {
 	return 0;
 }

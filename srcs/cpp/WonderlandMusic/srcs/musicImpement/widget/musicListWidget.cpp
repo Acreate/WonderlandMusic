@@ -43,6 +43,18 @@ void MusicListWidget::mousePressEvent( QMouseEvent *event ) {
 void MusicListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->ignore( );
 }
+bool MusicListWidget::updateMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) {
+	userMutex->lock( );
+	if( musicFavoriteItem != music_favorite_item )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( true );
+}
+bool MusicListWidget::updateCurrentMusicFavoriteItem( ) {
+	userMutex->lock( );
+	if( musicFavoriteItem )
+		return userMutex->result_unlock( false );
+	return userMutex->result_unlock( true );
+}
 
 bool MusicListWidget::initBefore( ) {
 	deleteResource( );
@@ -54,8 +66,6 @@ bool MusicListWidget::init( ) {
 	return true;
 }
 bool MusicListWidget::initAfter( ) {
-	if( autoLayout( ) == false )
-		return false;
 	return true;
 }
 QWidget * MusicListWidget::toWidget( ) {
@@ -71,7 +81,7 @@ bool MusicListWidget::setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_fav
 	userMutex->lock( );
 	musicFavoriteItem = music_favorite_item;
 	userMutex->unlock( );
-	return autoLayout( );
+	return updateCurrentMusicFavoriteItem( );
 }
 bool MusicListWidget::fromYPosGetMusicItem( IMusicItem *&result_music_item, const size_t &y_pos ) const {
 	userMutex->lock( );
@@ -108,10 +118,4 @@ bool MusicListWidget::fromSingerGetFirstMusicItem( IMusicItem *&result_music_ite
 	if( musicFavoriteItem )
 		return userMutex->result_unlock( false );
 	return userMutex->result_unlock( musicFavoriteItem->fromSingerGetFirstMusicItem( result_music_item, singer ) );
-}
-bool MusicListWidget::autoLayout( ) {
-	userMutex->lock( );
-	if( musicFavoriteItem )
-		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( true );
 }

@@ -17,6 +17,7 @@ public:
 	virtual bool setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) = 0;
 	virtual IMusicItemWidthInfo * getIMusicItemWidthInfo( ) const = 0;
 	virtual int setAdapiveHeight( const int &adaptive_height ) = 0;
+	virtual bool updateMusicItemWidthInfoLayout( ) =0;
 };
 
 #endif // IMUSICTITLEWIDGET_H_H_HEAD__FILE__

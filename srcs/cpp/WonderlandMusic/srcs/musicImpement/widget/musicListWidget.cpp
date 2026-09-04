@@ -87,7 +87,7 @@ bool MusicListWidget::unsafeUpdateCurrentMusicFavoriteItem( ) {
 			continue;
 		}
 		widget->setGeometry( 0, offsetY, thisWidth, thisHeight );
-		offsetY += widget->height( );
+		offsetY += thisHeight;
 	}
 	return true;
 }

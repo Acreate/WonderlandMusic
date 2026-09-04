@@ -26,15 +26,14 @@ protected:
 	IMusicFavoriteItem *musicFavoriteItem = nullptr;
 
 protected:
-	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
-	bool setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
-
 	virtual bool initVar( const MusicInfo &music_info );
 	~MusicInfoItem( ) override;
 
 public:
 	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info );
 	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item );
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
+	bool setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
 	size_t getIdCode( ) const override;
 	const QString & getName( ) const override;
 	const QString & getSinger( ) const override;
@@ -43,11 +42,11 @@ public:
 	const QString & getElapsedTimeString( ) const override;
 	const qint64 & getElapsedTime( ) const override;
 	const QString & getFileBaseName( ) const override;
-	virtual void setIdCode( const size_t id_code );
-	virtual void setName( const QString &name );
-	virtual void setSinger( const QString &singer );
-	virtual void setAbsoluteFilePath( const QString &absolute_file_path );
-	virtual void setElapsedTime( const qint64 elapsed_time );
+	void setIdCode( const size_t id_code ) override;
+	void setName( const QString &name ) override;
+	void setSinger( const QString &singer ) override;
+	void setAbsoluteFilePath( const QString &absolute_file_path ) override;
+	void setElapsedTime( const qint64 elapsed_time ) override;
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicItemWidget * getMusicItemWidget( ) const override;
 	IMusicFavoriteItem * getMusicFavoriteItem( ) const override;

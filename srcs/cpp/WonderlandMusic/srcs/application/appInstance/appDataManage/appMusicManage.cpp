@@ -178,6 +178,15 @@ bool AppMusicManage::unsafeGetMusicFavoriteItem( std::vector< IMusicFavoriteItem
 bool AppMusicManage::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	userMutex->lock( );
 	musicCentreWidget = music_centre_widget;
+
+	if( defaultFavoriteItem->setMusicCentreWidget( music_centre_widget ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( userMutex->result_unlock( false ), defaultFavoriteItem, setMusicFavoriteItemMusicCentreWidget, tr( "配置收藏夹的 IMusicCentreWidget * 失败" ) );
+	size_t count = musicFavoriteItemVector.size( );
+	auto data = musicFavoriteItemVector.data( );
+	size_t index = 0;
+	for( ; index < count; index += 1 )
+		if( data[ index ]->setMusicCentreWidget( music_centre_widget ) == false )
+			return Result_Var_Function_Messag_Ptr_Out_Args( userMutex->result_unlock( false ), data[ index ], setMusicFavoriteItemMusicCentreWidget, tr( "配置收藏夹的 IMusicCentreWidget * 失败" ) );
 	userMutex->unlock( );
 	return true;
 }

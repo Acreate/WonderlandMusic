@@ -65,7 +65,8 @@ bool MusicCentreWidget::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( musicTitleWidgetScrollArea );
 	favoriteWidth = titleHeight = 0;
 	userMutex->unlock( );
-	musicWindow->setMusicCentreWidget( nullptr );
+	if( musicWindow )
+		musicWindow->setMusicCentreWidget( nullptr );
 	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
 }
@@ -267,6 +268,7 @@ bool MusicCentreWidget::initBefore( ) {
 
 	connect( scrollBar, &QScrollBar::valueChanged, horizontalScrollBar, &QScrollBar::setValue );
 	connect( scrollBar, &QScrollBar::rangeChanged, horizontalScrollBar, &QScrollBar::setRange );
+
 	return true;
 }
 bool MusicCentreWidget::init( ) {

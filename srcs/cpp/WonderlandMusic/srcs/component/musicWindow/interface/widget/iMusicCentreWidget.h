@@ -18,19 +18,16 @@ class IMusicFavoriteWidget;
 class MusicWindow;
 
 class IMusicCentreWidget : public IAppCore, public IAppJsonData, public IAppResourceCore {
-	friend class MusicWindow;
-	friend class IMusicFavoriteItem;
-
 protected:
+	~IMusicCentreWidget( ) override;
+
+public:
+	IMusicCentreWidget( );
 	virtual int setFavoriteWidth( const int &favoriet_width );
 	virtual int setTitleHeight( const int &title_height );
 	virtual bool setMusicWindow( MusicWindow *music_window ) =0;
 	virtual bool execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point );
 	virtual bool execMenu( IMusicListWidget *music_list_widget, IMusicItem *music_item, const QPoint &mouse_global_point );
-	~IMusicCentreWidget( ) override;
-
-public:
-	IMusicCentreWidget( );
 	virtual MusicWindow * getMusicWindow( ) const = 0;
 	virtual IMusicFavoriteWidget * getMusicFavoriteWidget( ) const = 0;
 	virtual IMusicListWidget * getMusicListWidget( ) const = 0;

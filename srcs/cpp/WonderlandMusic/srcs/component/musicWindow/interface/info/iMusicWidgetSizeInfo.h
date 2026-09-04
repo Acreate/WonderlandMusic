@@ -5,16 +5,13 @@
 #include "../musicCentreWidgetChild/iMusicCentreWidgetChild.h"
 
 class IMusicWidgetSizeInfo : public IMusicCentreWidgetChild, public IAppJsonData {
-	friend class IMusicCentreWidget;
-
 protected:
-	virtual int setFavoriteWidth( const int &favoriet_width ) = 0;
-	virtual int setTitleHeight( const int &favoriet_width ) = 0;
-	~IMusicWidgetSizeInfo( ) override {
-	}
+	~IMusicWidgetSizeInfo( ) override;
 
 public:
 	IMusicWidgetSizeInfo( );
+	virtual int setFavoriteWidth( const int &favoriet_width ) = 0;
+	virtual int setTitleHeight( const int &favoriet_width ) = 0;
 	virtual int getFavoriteWidth( ) const = 0;
 	virtual int getTitleHeight( ) const = 0;
 	virtual bool updateMusicWidgetLayout( ) =0;

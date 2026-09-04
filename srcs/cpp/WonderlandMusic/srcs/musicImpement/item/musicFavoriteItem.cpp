@@ -17,7 +17,6 @@
 
 #include "musicInfoItem.h"
 
-#include "../../application/appInstance/appDataManage/appDataJsonKey.h"
 #include "../../application/appInstance/appDataManage/appMusicManage.h"
 
 #include "../../component/musicWindow/interface/widget/iMusicListWidget.h"
@@ -192,20 +191,19 @@ bool MusicFavoriteItem::fromSingerGetFirstMusicItem( IMusicItem *&result_music_i
 	}
 	return musicFavoriteItemUserMutex->result_unlock( false );
 }
-size_t MusicFavoriteItem::getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const {
-	size_t result;
-	musicFavoriteItemUserMutex->auto_job( [&result, this, &result_clone_vector]( ) {
-		result = musicItemVector.size( );
-		result_clone_vector.resize( result );
-		if( result ) {
-			auto source = musicItemVector.data( );
-			auto dest = result_clone_vector.data( );
-			size_t index = 0;
-			for( ; index < result; index += 1 )
-				dest[ index ] = source[ index ];
-		}
-	} );
-	return result;
+size_t MusicFavoriteItem::getMusicVector( std::vector< IMusicItem * > &result_clone_vector ) const {
+	musicFavoriteItemUserMutex->lock( );
+	auto result = musicItemVector.size( );
+	result_clone_vector.resize( result );
+	if( result ) {
+		auto source = musicItemVector.data( );
+		auto dest = result_clone_vector.data( );
+		size_t index = 0;
+		for( ; index < result; index += 1 )
+			dest[ index ] = source[ index ];
+	}
+	musicFavoriteItemUserMutex->unlock( );
+	return true;
 }
 void MusicFavoriteItem::setName( const QString &name ) {
 	musicFavoriteItemUserMutex->lock( );
@@ -309,7 +307,7 @@ MusicFavoriteItem::MusicFavoriteItem( ) {
 	appendTypeInfo( this );
 	musicFavoriteItemUserMutex = new UserMutex;
 	musicFavoriteItemWidget = new MusicFavoriteItemWidget;
-	bindMusicFavoriteItem( musicFavoriteItemWidget, this );
+	musicFavoriteItemWidget->bindMusicFavoriteItem( this );
 }
 MusicFavoriteItem::~MusicFavoriteItem( ) {
 	musicFavoriteItemUserMutex->lock( );
@@ -318,7 +316,7 @@ MusicFavoriteItem::~MusicFavoriteItem( ) {
 		size_t index = 0;
 		auto data = musicItemVector.data( );
 		for( ; index < count; index += 1 ) {
-			setMusicItemFavoriteItem( data[ index ], nullptr );
+			data[ index ]->setMusicFavoriteItem( nullptr );
 			delete data[ index ];
 		}
 	}

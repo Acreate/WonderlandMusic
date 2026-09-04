@@ -18,15 +18,15 @@ public:
 	~MusicFavoriteItemWidget( ) override;
 
 protected:
-	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	bool updateLayout( ) override;
 	bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) override;
 
-protected:
 	bool bindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
+
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
 	IMusicFavoriteItem * getBindMusicFavoriteItem( ) const override;

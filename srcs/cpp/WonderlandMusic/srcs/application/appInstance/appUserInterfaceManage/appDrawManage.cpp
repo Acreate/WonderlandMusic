@@ -56,7 +56,7 @@ AppRenderImage * AppDrawManage::getAppRenderImage( ) const {
 }
 bool AppDrawManage::drawTitle( QPainter &painter, const IMusicItemWidthInfo *music_item_width_info, int offset_pos_x, int offset_pos_y ) const {
 	if( music_item_width_info == nullptr )
-		return false;
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item_width_info, drawItemBakground, QObject::tr( "music_item_width_info * 不能为 nullptr" ) );
 	if( AppTranslateTools::getMusicTitleWidget( [&painter, music_item_width_info, offset_pos_y, offset_pos_x] ( MusicTitleWidgetTranslate &translate ) {
 		QFontMetrics fontMetrics = painter.fontMetrics( );
 		const int calculateMinHeight = fontMetrics.height( );
@@ -155,6 +155,8 @@ bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem *
 }
 
 bool appDrawTools::drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &offset_pos_x, const int &offset_pos_y ) {
+	if( music_item_width_info == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item_width_info, drawItemBakground, QObject::tr( "music_item_width_info * 不能为 nullptr" ) );
 	size_t idCode = music_item->getIdCode( );
 	QString name = music_item->getName( );
 	QString singer = music_item->getSinger( );
@@ -190,6 +192,8 @@ bool appDrawTools::drawItem( QPainter &painter, const IMusicItem *music_item, co
 	return true;
 }
 bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const {
+	if( music_item_width_info == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item_width_info, drawItemBakground, QObject::tr( "music_item_width_info * 不能为 nullptr" ) );
 	size_t idCode = music_item->getIdCode( );
 	QString name = music_item->getName( );
 	QString singer = music_item->getSinger( );
@@ -285,6 +289,103 @@ bool AppDrawManage::drawItem( QPainter &painter, const std::vector< IMusicItem *
 	int musicDurationTimeWidth = music_item_width_info->getMusicDurationTimeWidth( );
 	currentX = currentX + separatorWidth + musicDurationTimeWidth + intervalWidth;
 	fillRect = QRect( currentX, pos_y, separatorWidth, offsetY );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	return true;
+}
+bool AppDrawManage::drawItemBakground( QPainter &painter, IMusicItem *music_item ) {
+	AppDataManage *appDataManage = InstanceTools::getAppDataManage( );
+	if( appDataManage == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, drawItem, QObject::tr( "AppDataManage * 获取失败" ) );
+	auto musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
+	if( musicItemWidthInfo == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, appDataManage, getMusicItemWidthInfo, QObject::tr( "MusicItemWidthInfo * 获取失败" ) );
+	return drawItemBakground( painter, music_item, musicItemWidthInfo );
+}
+bool AppDrawManage::drawItemBakground( QPainter &painter, IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info ) {
+	return drawItemBakground( painter, music_item, music_item_width_info, 0, 0 );
+}
+bool AppDrawManage::drawItemBakground( QPainter &painter, IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) {
+	if( music_item_width_info == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item_width_info, drawItemBakground, QObject::tr( "music_item_width_info * 不能为 nullptr" ) );
+	auto fontMetrics = painter.fontMetrics( );
+	int height = music_item_width_info->getSuggestHeight( );
+
+	const int separatorWidth = music_item_width_info->getSeparatorWidth( );
+	int intervalWidth = music_item_width_info->getIntervalWidth( );
+	int currentX = intervalWidth + pos_x;
+	QColor fillSeparatorColor = painter.brush( ).color( );
+	QRect fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	int musicCodeWidth = music_item_width_info->getMusicCodeWidth( );
+	currentX = currentX + separatorWidth + musicCodeWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	int musicNameWidth = music_item_width_info->getMusicNameWidth( );
+	currentX = currentX + separatorWidth + musicNameWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	int musicSingerNameWidth = music_item_width_info->getMusicSingerNameWidth( );
+	currentX = currentX + separatorWidth + musicSingerNameWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	int musicDurationTimeWidth = music_item_width_info->getMusicDurationTimeWidth( );
+	currentX = currentX + separatorWidth + musicDurationTimeWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+	return true;
+}
+bool AppDrawManage::drawItemBakground( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector ) {
+	AppDataManage *appDataManage = InstanceTools::getAppDataManage( );
+	if( appDataManage == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, drawItem, QObject::tr( "AppDataManage * 获取失败" ) );
+	auto musicItemWidthInfo = appDataManage->getMusicItemWidthInfo( );
+	if( musicItemWidthInfo == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, appDataManage, getMusicItemWidthInfo, QObject::tr( "MusicItemWidthInfo * 获取失败" ) );
+	return drawItemBakground( painter, music_item_vector, musicItemWidthInfo );
+}
+bool AppDrawManage::drawItemBakground( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info ) {
+	return drawItemBakground( painter, music_item_vector, music_item_width_info, 0, 0 );
+}
+bool AppDrawManage::drawItemBakground( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) {
+	if( music_item_width_info == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, music_item_width_info, drawItemBakground, QObject::tr( "music_item_width_info * 不能为 nullptr" ) );
+	size_t count = music_item_vector.size( );
+	if( count == 0 )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, drawItem, QObject::tr( "序列数量为 0" ) );
+
+	auto fontMetrics = painter.fontMetrics( );
+	int height = music_item_width_info->getSuggestHeight( ) * count;
+
+	const int separatorWidth = music_item_width_info->getSeparatorWidth( );
+	int intervalWidth = music_item_width_info->getIntervalWidth( );
+	int currentX = intervalWidth + pos_x;
+	QColor fillSeparatorColor = painter.brush( ).color( );
+	QRect fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	int musicCodeWidth = music_item_width_info->getMusicCodeWidth( );
+	currentX = currentX + separatorWidth + musicCodeWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	int musicNameWidth = music_item_width_info->getMusicNameWidth( );
+	currentX = currentX + separatorWidth + musicNameWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	int musicSingerNameWidth = music_item_width_info->getMusicSingerNameWidth( );
+	currentX = currentX + separatorWidth + musicSingerNameWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, height );
+	painter.fillRect( fillRect, fillSeparatorColor );
+
+	int musicDurationTimeWidth = music_item_width_info->getMusicDurationTimeWidth( );
+	currentX = currentX + separatorWidth + musicDurationTimeWidth + intervalWidth;
+	fillRect = QRect( currentX, pos_y, separatorWidth, height );
 	painter.fillRect( fillRect, fillSeparatorColor );
 
 	return true;

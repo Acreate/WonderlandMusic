@@ -1,7 +1,5 @@
 ﻿#include "iMusicCentreWidget.h"
 
-#include "iMusicListWidget.h"
-
 #include "../info/iMusicWidgetSizeInfo.h"
 
 #include "../menu/iMusicFavoriteMenu.h"

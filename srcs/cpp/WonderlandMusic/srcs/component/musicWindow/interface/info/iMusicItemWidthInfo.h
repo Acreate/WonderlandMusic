@@ -8,21 +8,18 @@
 class IMusicTitleWidget;
 
 class IMusicItemWidthInfo : public IMusicCentreWidgetChild, public IAppJsonData {
-	friend class IMusicTitleWidget;
-
 protected:
+	~IMusicItemWidthInfo( ) override;
+
+public:
+	IMusicItemWidthInfo( );
+
 	virtual void setSuggestHeight( const int suggest_height ) = 0;
 	virtual void setMusicCodeWidth( const int music_code_width ) = 0;
 	virtual void setMusicNameWidth( const int music_name_width ) = 0;
 	virtual void setMusicSingerNameWidth( const int music_singer_name_width ) = 0;
 	virtual void setMusicDurationTimeWidth( const int music_duration_time_width ) = 0;
 	virtual bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) = 0;
-	~IMusicItemWidthInfo( ) override {
-	}
-
-public:
-	IMusicItemWidthInfo( );
-
 	virtual int getSuggestHeight( ) const = 0;
 	virtual int getCalculateMinWidth( ) const = 0;
 	virtual int getIntervalWidth( ) const = 0;

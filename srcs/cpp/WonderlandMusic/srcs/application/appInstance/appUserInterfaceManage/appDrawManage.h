@@ -42,6 +42,14 @@ public:
 	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info ) const;
 	virtual bool drawItem( QPainter &painter, const IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const;
 	virtual bool drawItem( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y ) const;
+
+	virtual bool drawItemBakground( QPainter &painter, IMusicItem *music_item );
+	virtual bool drawItemBakground( QPainter &painter, IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info );
+	virtual bool drawItemBakground( QPainter &painter, IMusicItem *music_item, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y );
+
+	virtual bool drawItemBakground( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector );
+	virtual bool drawItemBakground( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info );
+	virtual bool drawItemBakground( QPainter &painter, const std::vector< IMusicItem * > &music_item_vector, const IMusicItemWidthInfo *music_item_width_info, const int &pos_x, const int &pos_y );
 };
 
 #endif // APPDRAWMANAGE_H_H_HEAD__FILE__

@@ -7,14 +7,11 @@ class QPainter;
 class IMusicFavoriteItem;
 
 class IMusicDataManage : public IMusicCentreWidgetChild {
-	friend class MusicCentreWidget;
-
 protected:
-	virtual bool setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) = 0;
-	~IMusicDataManage( ) override {
-	}
+	~IMusicDataManage( ) override;
 
 public:
+	virtual bool setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) = 0;
 	virtual bool getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const = 0;
 	virtual bool getMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item, std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const = 0;
 	virtual bool getMusicFavoriteItem( std::vector< IMusicFavoriteItem * > &result_music_favorite_item ) const = 0;

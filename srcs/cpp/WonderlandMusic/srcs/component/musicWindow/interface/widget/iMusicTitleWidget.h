@@ -8,10 +8,10 @@ class QPoint;
 
 class IMusicTitleWidget : public IMusicWidget {
 protected:
-	virtual bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width );
 	~IMusicTitleWidget( ) override;
 
 public:
+	virtual bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width );
 	QString getTypeName( ) const override;
 	IMusicTitleWidget( );
 	virtual bool setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) = 0;

@@ -4,11 +4,8 @@
 #include "../musicCentreWidgetChild/iMusicCentreWidgetChild.h"
 
 class MusicWidgetChild : public IAppJsonData, public IMusicCentreWidgetChild {
-	friend class MusicCentreWidget;
-
 protected:
-	~MusicWidgetChild( ) override {
-	}
+	~MusicWidgetChild( ) override;
 };
 
 #endif // MUSICWIDGETCHILD_H_H_HEAD__FILE__

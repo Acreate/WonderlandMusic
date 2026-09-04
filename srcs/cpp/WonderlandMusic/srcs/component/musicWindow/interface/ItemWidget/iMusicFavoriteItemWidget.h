@@ -3,19 +3,17 @@
 
 #include "../musicCentreWidgetChild/iMusicCentreWidgetChild.h"
 
+class IMusicFavoriteItem;
 class IMusicFavoriteWidget;
 class QMouseEvent;
 
 class IMusicFavoriteItemWidget : public IMusicCentreWidgetChild {
-	friend class IMusicFavoriteItem;
-	friend class IMusicFavoriteWidget;
-	friend class IMusicCentreWidget;
-
 protected:
-	virtual bool bindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) = 0;
 	~IMusicFavoriteItemWidget( ) override;
+
 public:
 	IMusicFavoriteItemWidget( );
+	virtual bool bindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) = 0;
 	virtual bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) = 0;
 	virtual bool updateLayout( ) =0;
 	virtual IMusicFavoriteItem * getBindMusicFavoriteItem( ) const = 0;

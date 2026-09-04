@@ -10,6 +10,6 @@ IAppRenderBuff::~IAppRenderBuff( ) {
 	delete renderBuff;
 }
 
-const QImage * IAppRenderBuff::getRenderBuff( ) const {
+QImage * IAppRenderBuff::getRenderBuff( ) const {
 	return renderBuff;
 }

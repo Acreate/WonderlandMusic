@@ -2,28 +2,28 @@
 
 #include <QPainter>
 
-#include "../component/musicWindow/musicWindow.h"
-#include "../component/musicWindow/interface/widget/iMusicCentreWidget.h"
-#include "../component/optionWindow/optionWindow.h"
+#include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
+#include <component/musicWindow/musicWindow.h>
+#include <component/optionWindow/optionWindow.h>
 
-#include "../head/after_init_macro.h"
-#include "../head/before_init_macro.h"
-#include "../head/init_macro.h"
-#include "../head/release_macro.h"
-#include "../head/result_message_out.h"
+#include <head/after_init_macro.h>
+#include <head/before_init_macro.h>
+#include <head/init_macro.h>
+#include <head/release_macro.h>
+#include <head/result_message_out.h>
 
-#include "../systemTrayIcon/systemTrayIcon.h"
+#include <systemTrayIcon/systemTrayIcon.h>
 
-#include "../widget/aboutWidget.h"
-#include "../widget/settingWidget.h"
+#include <widget/aboutWidget.h>
+#include <widget/settingWidget.h>
 
-#include "../window/mainWindow.h"
+#include <window/mainWindow.h>
 
 #include "appInstance/appDataManage.h"
-#include "appInstance/appDateTimerManage.h"
-#include "appInstance/appUserInterfaceManage.h"
-#include "appInstance/applicationManage.h"
 #include "appInstance/appDataManage/appMusicManage.h"
+#include "appInstance/appDateTimerManage.h"
+#include "appInstance/applicationManage.h"
+#include "appInstance/appUserInterfaceManage.h"
 
 AppInstance *AppInstanceTool::appInstance = nullptr;
 bool AppInstanceTool::deleteAppInstance( AppInstance *&app_instance ) {
@@ -140,6 +140,7 @@ bool AppInstance::initAfter( ) {
 	auto musicTitleWidget = appUserInterfaceManage->getMusicTitleWidget( );
 	if( musicCentreWidget->setMusicTitleWidget( musicTitleWidget ) == musicTitleWidget )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicCentreWidget, setMusicTitleWidget, QObject::tr( "设置音频标题面板组件失败" ) );
+
 	IMusicFavoriteItem *musicFavoriteItem = nullptr;
 	if( appMusicManage->getMusicFavoriteItem( musicFavoriteItem ) == false || musicFavoriteItem == nullptr )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, appMusicManage, getMusicFavoriteItem, QObject::tr( "无法获取默认收藏项" ) );

@@ -4,7 +4,11 @@
 
 #include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
 
+#include "../../component/musicWindow/interface/ItemWidget/iMusicItemWidget.h"
 #include "../../component/musicWindow/interface/item/iMusicFavoriteItem.h"
+#include "../../component/musicWindow/interface/item/iMusicItem.h"
+
+#include "../../head/result_message_out.h"
 
 #include "../../mutex/userMutex.h"
 
@@ -43,17 +47,61 @@ void MusicListWidget::mousePressEvent( QMouseEvent *event ) {
 void MusicListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	event->ignore( );
 }
+bool MusicListWidget::unsafeUpdateCurrentMusicFavoriteItem( ) {
+	if( musicFavoriteItem == nullptr )
+		return false;
+	std::vector< IMusicItem * > resultClone;
+	if( musicFavoriteItem->getMusicVector( resultClone ) == false )
+		return false;
+	size_t count = resultClone.size( );
+	if( count == 0 )
+		return true;
+	auto musicItem = resultClone.data( );
+	size_t index = 0;
+	IMusicItemWidget *musicItemWidget;
+	int offsetY = 0;
+	int thisWidth = width( );
+	int thisHeight = height( );
+	IMusicItem *item;
+	for( ; index < count; index += 1 ) {
+		item = musicItem[ index ];
+		if( item->setMusicCentreWidget( musicCentreWidget ) == false )
+			continue;
+		musicItemWidget = item->getMusicItemWidget( );
+		if( musicItemWidget == nullptr ) {
+			Result_Var_Function_Messag_Ptr_Out_Args( nullptr, musicItem[ index ], getMusicItemWidget, tr( "返回值 nullptr" ) );
+			continue;
+		}
+		if( musicItemWidget->setMusicListWidget( this ) == false ) {
+			Result_Var_Function_Messag_Ptr_Out_Args( nullptr, musicItemWidget, setMusicListWidget, tr( "配置 MusicListWidget 失败" ) );
+			continue;
+		}
+		item->setIdCode( index + 1 );
+		if( musicItemWidget->updateLayout( ) == false ) {
+			Result_Var_Function_Messag_Ptr_Out_Args( nullptr, musicItemWidget, updateLayout, tr( "更新布局" ) );
+			continue;
+		}
+		auto widget = musicItemWidget->toWidget( );
+		if( widget == nullptr ) {
+			Result_Var_Function_Messag_Ptr_Out_Args( nullptr, musicItemWidget, toWidget, tr( "没有窗口组件" ) );
+			continue;
+		}
+		widget->setGeometry( 0, offsetY, thisWidth, thisHeight );
+		offsetY += widget->height( );
+	}
+	return true;
+}
 bool MusicListWidget::updateMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) {
 	userMutex->lock( );
 	if( musicFavoriteItem != music_favorite_item )
 		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( true );
+	auto updateResult = unsafeUpdateCurrentMusicFavoriteItem( );
+	return userMutex->result_unlock( updateResult );
 }
 bool MusicListWidget::updateCurrentMusicFavoriteItem( ) {
 	userMutex->lock( );
-	if( musicFavoriteItem == nullptr )
-		return userMutex->result_unlock( false );
-	return userMutex->result_unlock( true );
+	auto updateResult = unsafeUpdateCurrentMusicFavoriteItem( );
+	return userMutex->result_unlock( updateResult );
 }
 
 bool MusicListWidget::initBefore( ) {

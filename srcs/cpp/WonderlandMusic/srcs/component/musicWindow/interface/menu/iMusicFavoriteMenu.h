@@ -11,16 +11,14 @@ class IMusicCentreWidget;
 class QMenu;
 
 class IMusicFavoriteMenu : public MusicWidgetChild, public IAppResourceCore {
-	friend class IMusicCentreWidget;
-
 public:
 	IMusicFavoriteMenu( );
 
 protected:
-	virtual bool execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point ) = 0;
-	
 	~IMusicFavoriteMenu( ) override;
+
 public:
+	virtual bool execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point ) = 0;
 	virtual QMenu * toMenu( ) = 0;
 };
 

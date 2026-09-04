@@ -4,16 +4,12 @@
 class IMusicCentreWidget;
 
 class IMusicCentreWidgetChild : public IAppCore {
-private:
-	friend class IMusicCentreWidget;
-
 protected:
-	virtual bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) = 0;
-
 	~IMusicCentreWidgetChild( ) override;
 
 public:
 	IMusicCentreWidgetChild( );
+	virtual bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) = 0;
 	virtual IMusicCentreWidget * getMusicCentreWidget( ) const = 0;
 };
 

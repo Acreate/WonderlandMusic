@@ -16,7 +16,8 @@
 
 MusicInfoItem::MusicInfoItem( IMusicFavoriteItem *music_favorite_item ) : musicFavoriteItem( music_favorite_item ) {
 	musicItemWidget = new MusicItemWidget;
-	binMusicItemWidget( musicItemWidget, this );
+	musicItemWidget->bindMusicItem( this );
+
 	if( music_favorite_item == nullptr ) {
 		deleteLater( );
 		return;
@@ -25,7 +26,7 @@ MusicInfoItem::MusicInfoItem( IMusicFavoriteItem *music_favorite_item ) : musicF
 }
 MusicInfoItem::MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info ) : musicFavoriteItem( music_favorite_item ) {
 	musicItemWidget = new MusicItemWidget;
-	binMusicItemWidget( musicItemWidget, this );
+	musicItemWidget->bindMusicItem( this );
 	if( music_favorite_item == nullptr || initVar( music_info ) == false ) {
 		deleteLater( );
 		return;
@@ -66,7 +67,7 @@ const QString & MusicInfoItem::getFileBaseName( ) const {
 }
 bool MusicInfoItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	musicCentreWidget = music_centre_widget;
-	return true;
+	return musicItemWidget->setMusicCentreWidget( musicCentreWidget );
 }
 bool MusicInfoItem::setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) {
 	musicFavoriteItem = music_favorite_item;

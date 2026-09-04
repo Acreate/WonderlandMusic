@@ -20,12 +20,10 @@ public:
 	MusicFavoriteItem( );
 	~MusicFavoriteItem( ) override;
 
-protected:
+public:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	virtual MusicInfoItem * load( MusicInfo *music_info );
 	virtual std::vector< MusicInfoItem * > load( const std::vector< MusicInfo * > &music_infos );
-
-public:
 	bool getName( QString &result_name ) const override;
 	bool removeMusicItem( IMusicItem *music_item ) override;
 	bool clear( ) override;
@@ -37,7 +35,7 @@ public:
 	bool fromFileBaseNameGetFirstMusicItem( IMusicItem *&result_music_item, const QString &file_base_name ) const override;
 	bool fromFileAbsPathGetFirstMusicItem( IMusicItem *&result_music_item, const QString &absolute_file_path ) const override;
 	bool fromSingerGetFirstMusicItem( IMusicItem *&result_music_item, const QString &singer ) const override;
-	size_t getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const override;
+	size_t getMusicVector( std::vector< IMusicItem * > &result_clone_vector ) const override;
 	virtual void setName( const QString &name );
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 	IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const override;

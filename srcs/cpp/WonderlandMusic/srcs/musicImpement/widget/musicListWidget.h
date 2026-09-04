@@ -12,7 +12,8 @@ class MusicListWidget : public QWidget, public IMusicListWidget, public IAppReso
 private:
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 	UserMutex *userMutex = nullptr;
-	IMusicFavoriteItem*  musicFavoriteItem = nullptr;
+	IMusicFavoriteItem *musicFavoriteItem = nullptr;
+
 public:
 	MusicListWidget( );
 	~MusicListWidget( ) override;
@@ -20,13 +21,16 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
-	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	bool deleteResource( ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 
+protected:
+	virtual bool unsafeUpdateCurrentMusicFavoriteItem( );
+
 public:
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	bool updateMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
 	bool updateCurrentMusicFavoriteItem( ) override;
 

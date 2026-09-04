@@ -9,11 +9,6 @@ class QImage;
 
 class IMusicFavoriteItem : public IMusicCentreWidgetChild {
 protected:
-	static bool bindMusicFavoriteItem( IMusicFavoriteItemWidget *bind_target, IMusicFavoriteItem *bind_source );
-
-	static bool setMusicItemFavoriteItem( IMusicItem *music_item, IMusicFavoriteItem *music_favorite_item );
-
-protected:
 	~IMusicFavoriteItem( ) override;
 
 public:
@@ -29,7 +24,7 @@ public:
 	virtual bool fromFileBaseNameGetFirstMusicItem( IMusicItem * &result_music_item, const QString &file_base_name ) const = 0;
 	virtual bool fromFileAbsPathGetFirstMusicItem( IMusicItem * &result_music_item, const QString &path ) const = 0;
 	virtual bool fromSingerGetFirstMusicItem( IMusicItem * &result_music_item, const QString &singer ) const = 0;
-	virtual size_t getMusicVectorClone( std::vector< IMusicItem * > &result_clone_vector ) const = 0;
+	virtual size_t getMusicVector( std::vector< IMusicItem * > &result_clone_vector ) const = 0;
 	virtual IMusicFavoriteItemWidget * getMusicFavoriteItemWidget( ) const = 0;
 	virtual bool loadMusicDirPath( const std::vector< QString > &music_file_path ) = 0;
 	virtual bool loadMusicFile( const std::vector< QString > &music_file_path ) = 0;

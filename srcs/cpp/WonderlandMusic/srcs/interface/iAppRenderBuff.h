@@ -4,13 +4,16 @@
 class QImage;
 
 class IAppRenderBuff {
-protected:
+private:
 	QImage *renderBuff = nullptr;
+
+protected:
 	virtual ~IAppRenderBuff( );
+
 public:
 	IAppRenderBuff( );
 
-	virtual const QImage * getRenderBuff( ) const;
+	virtual QImage * getRenderBuff( ) const;
 
 	virtual bool renderToBuff( ) = 0;
 };

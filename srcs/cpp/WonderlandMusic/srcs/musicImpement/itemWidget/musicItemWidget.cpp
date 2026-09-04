@@ -57,7 +57,7 @@ bool MusicItemWidget::updateLayout( ) {
 	QPainter painter;
 	painter.begin( renderBuff );
 	painter.setPen( Qt::GlobalColor::black );
-	painter.setBackground( Qt::GlobalColor::red );
+	painter.setBrush( Qt::GlobalColor::red );
 	painter.setFont( *font );
 	appDrawManage->drawItem( painter, musicItem, iMusicItemWidthInfo );
 	painter.end( );

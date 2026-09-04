@@ -75,6 +75,7 @@ bool MusicInfoItem::setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_ite
 }
 bool MusicInfoItem::initVar( const MusicInfo &music_info ) {
 	idCode = 0;
+	name = music_info.getTitle( );
 	singer = music_info.getArtist( );
 	filePath = music_info.getFilePath( );
 	absoluteFilePath = music_info.getAbsoluteFilePath( );

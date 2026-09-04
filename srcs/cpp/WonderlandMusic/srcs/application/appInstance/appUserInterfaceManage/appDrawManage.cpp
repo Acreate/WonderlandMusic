@@ -205,7 +205,7 @@ bool AppDrawManage::drawItem( QPainter &painter, const IMusicItem *music_item, c
 	const int separatorWidth = music_item_width_info->getSeparatorWidth( );
 	int intervalWidth = music_item_width_info->getIntervalWidth( );
 	int currentX = intervalWidth + pos_x;
-	QColor fillSeparatorColor = painter.brush( ).color( );;
+	QColor fillSeparatorColor = painter.brush( ).color( );
 	QRect fillRect = QRect( currentX, pos_y, separatorWidth, calculateMinHeight );
 	painter.fillRect( fillRect, fillSeparatorColor );
 

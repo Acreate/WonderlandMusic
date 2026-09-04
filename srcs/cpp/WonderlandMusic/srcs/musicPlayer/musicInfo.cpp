@@ -7,6 +7,7 @@
 #include "../dateTimeFormat/dateTimeFormat.h"
 
 #include "../head/extern_c.h"
+#include "../head/result_message_out.h"
 
 #include "../tools/templateArgs.h"
 
@@ -20,6 +21,7 @@ INCLUDE_EXTERN_C {
 static bool getAudioInfo( QString &result, AVDictionary *meta, const char *key );
 
 MusicInfo::MusicInfo( const QString &file_path ) {
+	musicStatus = -1;
 	userMutex = new UserMutex;
 	fileInfo = new QFileInfo( file_path );
 	status = RunStatus::Ready;
@@ -38,33 +40,8 @@ MusicInfo::~MusicInfo( ) {
 	delete userMutex;
 	userMutex = nullptr;
 }
-MusicInfo::MusicInfo( const MusicInfo &other ) : status { other.status },
-	filePath { other.filePath },
-	absoluteFilePath { other.absoluteFilePath },
-	title { other.title },
-	artist { other.artist },
-	album { other.album },
-	albumArtist { other.albumArtist },
-	genre { other.genre },
-	date { other.date },
-	track { other.track },
-	comment { other.comment },
-	avcodecGetName { other.avcodecGetName },
-	sampleRate { other.sampleRate },
-	nbChannels { other.nbChannels },
-	avGetSampleFmtName { other.avGetSampleFmtName },
-	bitRate { other.bitRate },
-	durationMillsecond { other.durationMillsecond },
-	durationMillsecondDateTimeString { other.durationMillsecondDateTimeString },
-	channelLayoutDescribe { other.channelLayoutDescribe },
-	fileBaseName( other.fileBaseName ) {
-	if( userMutex == nullptr )
-		userMutex = new UserMutex;
-	if( fileInfo )
-		fileInfo = new QFileInfo( absoluteFilePath );
-	if( fmtCtx )
-		avformat_close_input( &fmtCtx );
-	fmtCtx = nullptr;
+MusicInfo::MusicInfo( const MusicInfo &other ) {
+	operator=( other );
 }
 MusicInfo & MusicInfo::operator=( const MusicInfo &other ) {
 	if( this == &other )
@@ -96,6 +73,7 @@ MusicInfo & MusicInfo::operator=( const MusicInfo &other ) {
 	if( fmtCtx )
 		avformat_close_input( &fmtCtx );
 	fmtCtx = nullptr;
+	musicStatus = other.musicStatus;
 	return *this;
 }
 void MusicInfo::run( ) {
@@ -103,6 +81,7 @@ void MusicInfo::run( ) {
 	#define Is_Interruption_Requested( ) if( isInterruptionRequested( ) ) break
 	userMutex->lock( );
 	do {
+		musicStatus = 1;
 		if( fileInfo->exists( ) == false || status == RunStatus::Run )
 			break;
 		status = RunStatus::Run;
@@ -110,18 +89,28 @@ void MusicInfo::run( ) {
 			avformat_close_input( &fmtCtx );
 		Is_Interruption_Requested( );
 		// 打开
-		int ret = avformat_open_input( &fmtCtx, filePath.toStdString( ).c_str( ), nullptr, nullptr );
-		if( ret < 0 )
+		int ret = avformat_open_input( &fmtCtx, absoluteFilePath.toStdString( ).c_str( ), nullptr, nullptr );
+		if( ret < 0 ) {
+			char err_buf[ AV_ERROR_MAX_STRING_SIZE ] = { 0 };
+			av_strerror( ret, err_buf, sizeof( err_buf ) );
+			Result_Var_Function_Messag_Ptr_Out_Args( false, fmtCtx, avformat_open_input, tr( "%1 : [%1]" ).arg( QString(err_buf) ).arg( absoluteFilePath) );
 			break;
+		}
 		Is_Interruption_Requested( );
 		int formatFindInfo = avformat_find_stream_info( fmtCtx, NULL );
-		if( formatFindInfo < 0 )
+		if( formatFindInfo < 0 ) {
+			char err_buf[ AV_ERROR_MAX_STRING_SIZE ] = { 0 };
+			av_strerror( formatFindInfo, err_buf, sizeof( err_buf ) );
+			Result_Var_Function_Messag_Ptr_Out_Args( false, fmtCtx, avformat_find_stream_info, tr( "%1 : [%1]" ).arg( QString(err_buf) ).arg( absoluteFilePath) );
 			break;
+		}
 		Is_Interruption_Requested( );
 		// 查找音频流索引
 		int audioStreamIndex = av_find_best_stream( fmtCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0 );
-		if( audioStreamIndex < 0 )
+		if( audioStreamIndex < 0 ) {
+			Result_Var_Function_Messag_Ptr_Out_Args( false, fmtCtx, av_find_best_stream, tr( "不存在任何音频流 : [%1]" ).arg( absoluteFilePath) );
 			break;
+		}
 		Is_Interruption_Requested( );
 		AVStream *audioStream = fmtCtx->streams[ audioStreamIndex ];
 		AVCodecParameters *codecPar = audioStream->codecpar;
@@ -165,11 +154,15 @@ void MusicInfo::run( ) {
 		getAudioInfo( track, meta, "track" );
 		Is_Interruption_Requested( );
 		getAudioInfo( comment, meta, "comment" );
+		musicStatus = 0;
 	} while( false );
 	if( fmtCtx )
 		avformat_close_input( &fmtCtx );
 	status = RunStatus::Over;
 	userMutex->unlock( );
+}
+bool MusicInfo::isOK( ) const {
+	return musicStatus == 0;
 }
 bool MusicInfo::isRead( ) const {
 	if( status != RunStatus::Ready )

@@ -35,6 +35,8 @@ bool MusicFavoriteItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_w
 	return true;
 }
 MusicInfoItem * MusicFavoriteItem::load( MusicInfo *music_info ) {
+	if( music_info->isOK( ) == false )
+		return nullptr;
 	musicFavoriteItemUserMutex->lock( );
 	auto musicItem = new MusicInfoItem( this, *music_info );
 	musicItemVector.emplace_back( musicItem );
@@ -51,11 +53,18 @@ std::vector< MusicInfoItem * > MusicFavoriteItem::load( const std::vector< Music
 	musicFavoriteItemUserMutex->lock( );
 	size_t count = music_infos.size( );
 	std::vector< MusicInfoItem * > result( count );
+	size_t createCount = 0;
 	auto data = music_infos.data( );
 	size_t index = 0;
 	auto resultData = result.data( );
 	for( ; index < count; index += 1 )
-		resultData[ index ] = new MusicInfoItem( this, *data[ index ] );
+		if( data[ index ]->isOK( ) ) {
+			resultData[ createCount ] = new MusicInfoItem( this, *data[ index ] );
+			createCount += 1;
+		}
+	if( createCount == 0 )
+		return { };
+	result.resize( createCount );
 	musicItemVector.append_range( result );
 	musicFavoriteItemUserMutex->unlock( );
 	if( musicCentreWidget == nullptr )

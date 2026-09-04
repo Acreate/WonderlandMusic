@@ -20,6 +20,7 @@ private:
 	UserMutex *userMutex = nullptr;
 	QFileInfo *fileInfo = nullptr;
 	AVFormatContext *fmtCtx = nullptr;
+	int musicStatus;
 	RunStatus status;
 
 	QString fileBaseName;
@@ -53,6 +54,7 @@ protected:
 	void run( ) override;
 
 public:
+	virtual bool isOK( ) const;
 	virtual bool isRead( ) const;
 	virtual const QString & getFileBaseName( ) const;
 	virtual const QString & getFilePath( ) const;

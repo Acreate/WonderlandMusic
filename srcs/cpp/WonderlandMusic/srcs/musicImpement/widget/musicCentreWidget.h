@@ -110,6 +110,7 @@ public:
 	bool repaintFavoriteWidget( ) override;
 	bool repaintMusicCentreWidget( ) override;
 	bool synchronizationChildrenWidgetSize( ) override;
+	bool setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
 };
 
 #endif // MUSICCENTREWIDGET_H_H_HEAD__FILE__

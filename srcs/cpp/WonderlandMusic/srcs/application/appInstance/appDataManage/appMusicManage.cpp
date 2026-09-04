@@ -55,6 +55,8 @@ bool AppMusicManage::initBefore( ) {
 }
 
 bool AppMusicManage::initAfter( ) {
+	if( initDefaultMusicFavoriteItem( ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, this, initDefaultMusicFavoriteItem, tr( "初始化默认收藏项失败" ) );
 	return true;
 }
 
@@ -189,11 +191,14 @@ bool AppMusicManage::getMusicFavoriteItem( IMusicFavoriteItem *&result_default_m
 }
 bool AppMusicManage::initDefaultMusicFavoriteItem( ) {
 	userMutex->lock( );
+	MusicFavoriteItem *old = nullptr;
 	if( defaultFavoriteItem )
-		delete defaultFavoriteItem;
+		old = defaultFavoriteItem;
 	defaultFavoriteItem = new MusicFavoriteItem;
 	defaultFavoriteItem->setName( tr( "默认" ) );
 	userMutex->unlock( );
+	if( old )
+		delete old;
 	return true;
 }
 

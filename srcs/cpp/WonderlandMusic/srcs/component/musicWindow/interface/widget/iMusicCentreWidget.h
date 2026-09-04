@@ -54,6 +54,7 @@ public:
 	virtual bool repaintMusicCentreWidget( ) = 0;
 	virtual bool synchronizationChildrenWidgetSize( ) = 0;
 	virtual QWidget * toWidget( ) = 0;
+	virtual bool setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) =0;
 };
 
 #endif // IMUSICCENTREWIDGET_H_H_HEAD__FILE__

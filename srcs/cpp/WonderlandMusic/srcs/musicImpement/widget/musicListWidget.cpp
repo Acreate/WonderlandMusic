@@ -51,7 +51,7 @@ bool MusicListWidget::updateMusicFavoriteItem( IMusicFavoriteItem *music_favorit
 }
 bool MusicListWidget::updateCurrentMusicFavoriteItem( ) {
 	userMutex->lock( );
-	if( musicFavoriteItem )
+	if( musicFavoriteItem == nullptr )
 		return userMutex->result_unlock( false );
 	return userMutex->result_unlock( true );
 }

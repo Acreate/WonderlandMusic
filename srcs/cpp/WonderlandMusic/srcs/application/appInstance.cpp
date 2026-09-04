@@ -140,6 +140,11 @@ bool AppInstance::initAfter( ) {
 	auto musicTitleWidget = appUserInterfaceManage->getMusicTitleWidget( );
 	if( musicCentreWidget->setMusicTitleWidget( musicTitleWidget ) == musicTitleWidget )
 		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicCentreWidget, setMusicTitleWidget, QObject::tr( "设置音频标题面板组件失败" ) );
+	IMusicFavoriteItem *musicFavoriteItem = nullptr;
+	if( appMusicManage->getMusicFavoriteItem( musicFavoriteItem ) == false || musicFavoriteItem == nullptr )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, appMusicManage, getMusicFavoriteItem, QObject::tr( "无法获取默认收藏项" ) );
+	if( musicCentreWidget->setCurrentMusicFavoriteItem( musicFavoriteItem ) == false )
+		return Result_Var_Function_Messag_Ptr_Out_Args( false, musicCentreWidget, setCurrentMusicFavoriteItem, QObject::tr( "配置默认收藏项异常" ) );
 
 	auto musicWindow = appUserInterfaceManage->getMusicWindow( );
 	if( musicWindow->setMusicCentreWidget( musicCentreWidget ) == musicCentreWidget )

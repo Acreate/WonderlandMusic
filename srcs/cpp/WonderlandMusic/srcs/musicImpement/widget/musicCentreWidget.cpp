@@ -544,3 +544,8 @@ bool MusicCentreWidget::synchronizationChildrenWidgetSize( ) {
 	}
 	return userMutex->result_unlock( Result_Var_Function_Messag_Ptr_Out_Args( false, this, calculateSize, tr( "高度失效:%1" ).arg( thisCentreHeight ) ) );
 }
+bool MusicCentreWidget::setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) {
+	if( musicListWidget == nullptr )
+		return false;
+	return musicListWidget->setCurrentMusicFavoriteItem( music_favorite_item );
+}

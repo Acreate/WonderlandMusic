@@ -147,14 +147,7 @@ bool MusicFavoriteItem::loadMusicDirPath( const std::vector< QString > &music_fi
 					return false;
 				file.resize( fileIndex );
 				MusicFileInfoList *musicInfoList = new MusicFileInfoList( file );
-				connect( musicInfoList, &MusicFileInfoList::signal_finish, [this] ( MusicFileInfoList *music_file_info_list ) {
-					InvokeMethodTools::invokeQueuedConnectionMethod( [this, music_file_info_list] ( ApplicationManage *applicationManage ) {
-						std::vector< MusicFileInfo * > getResult;
-						if( music_file_info_list->getOverLoadMusicVector( getResult ) )
-							load( getResult );
-						delete music_file_info_list;
-					} );
-				} );
+				connect( musicInfoList, &MusicFileInfoList::signal_finish, this, &MusicFavoriteItem::loadOverMusicFileList );
 				musicInfoList->start( );
 			}
 		}
@@ -182,14 +175,8 @@ bool MusicFavoriteItem::loadMusicFile( const std::vector< QString > &music_file_
 		return false;
 	file.resize( fileIndex );
 	MusicFileInfoList *musicInfoList = new MusicFileInfoList( file );
-	connect( musicInfoList, &MusicFileInfoList::signal_finish, [this] ( MusicFileInfoList *music_file_info_list ) {
-		InvokeMethodTools::invokeQueuedConnectionMethod( [this, music_file_info_list] ( ApplicationManage *applicationManage ) {
-			std::vector< MusicFileInfo * > getResult;
-			if( music_file_info_list->getOverLoadMusicVector( getResult ) )
-				load( getResult );
-			delete music_file_info_list;
-		} );
-	} );
+
+	connect( musicInfoList, &MusicFileInfoList::signal_finish, this, &MusicFavoriteItem::loadOverMusicFileList );
 	musicInfoList->start( );
 	return true;
 }
@@ -200,13 +187,30 @@ bool MusicFavoriteItem::loadMusicFile( const QString &music_file_path ) {
 	if( musicInfo == nullptr )
 		return false;
 	connect( musicInfo, &MusicFileInfo::finished, [this, musicInfo]( ) {
-		InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfo] ( ApplicationManage *applicationManage ) {
-			load( musicInfo );
-			delete musicInfo;
-		} );
+		loadOverMusicFile( musicInfo );
 	} );
 	musicInfo->start( );
 	return true;
+}
+void MusicFavoriteItem::loadOverMusicFileList( MusicFileInfoList *music_file_info_list ) {
+	if( music_file_info_list->getStatus( ) != MusicFileInfoList::Status::Finish ) {
+		InvokeMethodTools::invokeQueuedConnectionMethod( [this, music_file_info_list] ( ApplicationManage *applicationManage ) {
+			delete music_file_info_list;
+		} );
+		return;
+	}
+	InvokeMethodTools::invokeQueuedConnectionMethod( [this, music_file_info_list] ( ApplicationManage *applicationManage ) {
+		std::vector< MusicFileInfo * > getResult;
+		if( music_file_info_list->getOverLoadMusicVector( getResult ) )
+			load( getResult );
+		delete music_file_info_list;
+	} );
+}
+void MusicFavoriteItem::loadOverMusicFile( MusicFileInfo *music_file_info ) {
+	InvokeMethodTools::invokeQueuedConnectionMethod( [this, music_file_info] ( ApplicationManage *applicationManage ) {
+		load( music_file_info );
+		delete music_file_info;
+	} );
 }
 MusicFavoriteItem::MusicFavoriteItem( ) {
 	appendTypeInfo( this );

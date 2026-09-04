@@ -2,6 +2,7 @@
 #define MUSICFAVORITEITEM_H_H_HEAD__FILE__
 #include <component/musicWindow/interface/item/iMusicFavoriteItem.h>
 
+class MusicFileInfoList;
 class MusicInfoItem;
 class MusicFileInfo;
 class MusicFavoriteItemWidget;
@@ -15,6 +16,10 @@ protected:
 	std::vector< MusicInfoItem * > musicItemVector;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 	MusicFavoriteItemWidget *musicFavoriteItemWidget = nullptr;
+
+protected:
+	virtual void loadOverMusicFileList( MusicFileInfoList *music_file_info_list );
+	virtual void loadOverMusicFile( MusicFileInfo *music_file_info );
 
 public:
 	MusicFavoriteItem( );

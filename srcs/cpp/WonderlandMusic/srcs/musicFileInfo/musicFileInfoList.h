@@ -10,7 +10,7 @@ class MusicFileInfo;
 class MusicFileInfoList : public QObject {
 	Q_OBJECT;
 
-protected:
+public:
 	enum class Status {
 		None,
 		Start,

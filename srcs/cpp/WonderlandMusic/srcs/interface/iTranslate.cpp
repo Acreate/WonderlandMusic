@@ -3,6 +3,8 @@
 bool ITranslate::deleteResource( ) {
 	return true;
 }
+ITranslate::~ITranslate( ) {
+}
 
 bool ITranslate::initBefore( ) {
 	return true;

@@ -11,8 +11,7 @@ class AppDateTimerManage;
 class AppUserInterfaceManage;
 class AppDataManage;
 
-class AppInstance : public QObject, public IAppCore, public IAppResourceCore {
-	Q_OBJECT;
+class AppInstance : public IAppCore, public IAppResourceCore {
 	friend class AppInstanceTool;
 
 private:
@@ -49,10 +48,12 @@ protected:
 	/// @brief 时间管理
 	AppDateTimerManage *appDateTimerManage = nullptr;
 
-public:
+protected:
 	AppInstance( int &argc, char **argv, int app_flag_s = QCoreApplication::ApplicationFlags );
 
 	~AppInstance( ) override;
+
+public:
 	static AppInstance * getAppInstance( );
 
 	bool init( ) override;
@@ -76,4 +77,10 @@ public:
 	virtual ApplicationManage * getApplicationManage( ) const;
 };
 
+class AppInstanceTool {
+	friend class InitMain;
+	static AppInstance *appInstance;
+	static bool deleteAppInstance( AppInstance *&app_instance );
+	static AppInstance * createAppInstance( int &argc, char **argv, int app_flag_s = QCoreApplication::ApplicationFlags );
+};
 #endif // APPINSTANCE_H_H_HEAD__FILE__

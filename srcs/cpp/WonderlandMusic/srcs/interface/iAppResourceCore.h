@@ -5,9 +5,9 @@ class IAppResourceCore {
 protected:
 	virtual bool deleteResource( ) = 0;
 
-public:
-	virtual ~IAppResourceCore( ) = default;
+	virtual ~IAppResourceCore( );
 
+public:
 	/// @brief 在初始化之前调用，建议在此调用的成员创建流程
 	/// @return 成功返回 true
 	virtual bool initBefore( ) = 0;

@@ -3,6 +3,9 @@
 #include "iAppJsonData.h"
 
 class IAppDiskJsonData : public IAppJsonData {
+protected:
+	~IAppDiskJsonData( ) override;
+
 public:
 	virtual bool readJsonData( ) = 0;
 

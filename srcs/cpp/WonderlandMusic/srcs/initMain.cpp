@@ -107,7 +107,7 @@ bool InitMain::deleteResource( ) {
 	if( application == nullptr )
 		return true;
 	execCode = endProcess( execCode );
-	delete application;
+	AppInstanceTool::deleteAppInstance( application );
 	return true;
 }
 InitMain::InitMain( int argc, char *argv[ ], char *envp[ ] ) : argc( argc ), argv( argv ), envp( envp ) {
@@ -125,7 +125,7 @@ bool InitMain::initBefore( ) {
 	} );
 	satrtProcess( );
 
-	application = new AppInstance( argc, argv );
+	application = AppInstanceTool::createAppInstance( argc, argv );
 	if( application->initBefore( ) )
 		return true;
 	execCode = -1;

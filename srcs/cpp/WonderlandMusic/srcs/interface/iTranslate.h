@@ -10,6 +10,7 @@ namespace AppTranslateTools {
 class ITranslate : public IAppCore , public IAppResourceCore {
 protected:
 	bool deleteResource( ) override;
+	~ITranslate( ) override;
 
 public:
 	bool initBefore( ) override;

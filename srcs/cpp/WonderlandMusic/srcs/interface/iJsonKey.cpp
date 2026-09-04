@@ -13,6 +13,8 @@ QString IJsonKey::getNormalJsonKeyFile( const QString &json_file_last_file_path 
 		return applicationDirPath + json_file_last_file_path;
 	return "./" + json_file_last_file_path;
 }
+IJsonKey::~IJsonKey( ) {
+}
 
 bool IJsonKey::initBefore( ) {
 	return true;

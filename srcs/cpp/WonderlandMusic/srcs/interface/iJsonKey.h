@@ -14,6 +14,7 @@ protected:
 	QString filePath;
 	bool deleteResource( ) override;
 	virtual QString getNormalJsonKeyFile( const QString &json_file_last_file_path ) const;
+	~IJsonKey( ) override;
 
 public:
 	bool initBefore( ) override;

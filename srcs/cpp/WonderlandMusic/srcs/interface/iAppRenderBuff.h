@@ -6,11 +6,9 @@ class QImage;
 class IAppRenderBuff {
 protected:
 	QImage *renderBuff = nullptr;
-
+	virtual ~IAppRenderBuff( );
 public:
 	IAppRenderBuff( );
-
-	virtual ~IAppRenderBuff( );
 
 	virtual const QImage * getRenderBuff( ) const;
 

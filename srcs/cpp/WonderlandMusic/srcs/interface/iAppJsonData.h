@@ -9,7 +9,7 @@ class QJsonObject;
 
 class IAppJsonData {
 protected:
-	virtual ~IAppJsonData( ) = default;
+	virtual ~IAppJsonData( );
 
 public:
 	virtual bool getJsonData( QJsonObject &get_json_object ) const = 0;

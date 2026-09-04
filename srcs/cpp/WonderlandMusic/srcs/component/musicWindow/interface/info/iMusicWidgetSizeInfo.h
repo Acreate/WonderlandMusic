@@ -10,6 +10,8 @@ class IMusicWidgetSizeInfo : public IMusicCentreWidgetChild, public IAppJsonData
 protected:
 	virtual int setFavoriteWidth( const int &favoriet_width ) = 0;
 	virtual int setTitleHeight( const int &favoriet_width ) = 0;
+	~IMusicWidgetSizeInfo( ) override {
+	}
 
 public:
 	IMusicWidgetSizeInfo( );

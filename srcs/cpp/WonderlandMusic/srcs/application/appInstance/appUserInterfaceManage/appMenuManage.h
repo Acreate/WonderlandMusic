@@ -5,6 +5,8 @@
 
 #include "../../../interface/iAppResourceCore.h"
 
+class MusicListMenu;
+class MusicFavoriteMenu;
 class IMusicListMenu;
 class IMusicFavoriteMenu;
 class SystemTrayIconMenu;
@@ -15,8 +17,8 @@ class AppMenuManage : public QObject, public IAppCore, public IAppJsonData, publ
 
 protected:
 	SystemTrayIconMenu *systemTrayIconMenu = nullptr;
-	IMusicFavoriteMenu *musicFavoriteMenu = nullptr;
-	IMusicListMenu *musicListMenu = nullptr;
+	MusicFavoriteMenu *musicFavoriteMenu = nullptr;
+	MusicListMenu *musicListMenu = nullptr;
 
 public:
 	AppMenuManage( );

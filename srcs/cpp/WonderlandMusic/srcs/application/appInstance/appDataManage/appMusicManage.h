@@ -7,6 +7,7 @@
 #include <component/musicWindow/interface/info/iMusicDataManage.h>
 
 #include <interface/iAppResourceCore.h>
+class MusicFavoriteItem;
 class MusicItemWidthInfo;
 class IMusicFavoriteItem;
 class IMusicItemWidthInfo;
@@ -21,9 +22,9 @@ class AppMusicManage : public QObject, public IMusicDataManage, public IAppJsonD
 protected:
 	UserMutex *userMutex = nullptr;
 	MusicItemWidthInfo *musicItemWidthInfo = nullptr;
-	std::vector< IMusicFavoriteItem * > musicFavoriteItemVector;
-	IMusicFavoriteItem *currenstFavoriteItem = nullptr;
-	IMusicFavoriteItem *defaultFavoriteItem = nullptr;
+	std::vector< MusicFavoriteItem * > musicFavoriteItemVector;
+	MusicFavoriteItem *currenstFavoriteItem = nullptr;
+	MusicFavoriteItem *defaultFavoriteItem = nullptr;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 	std::vector< QString > supperDecodeFileSuffix;
 
@@ -45,16 +46,10 @@ protected:
 public:
 	virtual bool getMusicWindowInfoJsonData( QJsonObject &result_json_object );
 	virtual bool setMusicWindowInfoJsonData( const QJsonObject &result_json_object );
-	virtual bool hasMusicFile( const QString &file_path ) const;
-	virtual bool addMusicItem( IMusicItem *music_item );
-	virtual bool updateMusicItem( IMusicItem *music_item );
-	virtual bool removeMusicItem( IMusicItem *music_item );
-	virtual bool hasMusicItem( size_t &result_index, const IMusicItem *music_item ) const;
-	virtual bool moveMusicVector( const IMusicFavoriteItem *music_favorite_item, const std::vector< IMusicItem * > &music_info_items );
 	virtual IMusicItemWidthInfo * getMusicItemWidthInfo( ) const;
 	virtual bool setMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info );
 	virtual bool musicFileNameSupperDecoder( const QString &file_name ) const;
-	virtual const std::vector<QString> & getSupperDecodeFileSuffix( ) const;
+	virtual const std::vector< QString > & getSupperDecodeFileSuffix( ) const;
 
 private:
 	virtual bool unsafeGetMusicFavoriteItem( IMusicFavoriteItem *&result_default_music_favorite_item ) const;

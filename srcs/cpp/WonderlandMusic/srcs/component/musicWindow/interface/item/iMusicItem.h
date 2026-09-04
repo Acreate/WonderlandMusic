@@ -12,6 +12,8 @@ class IMusicItem : public IMusicCentreWidgetChild {
 protected:
 	static bool binMusicItemWidget( IMusicItemWidget *bind_target, IMusicItem *bind_source );
 	virtual bool setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) = 0;
+	~IMusicItem( ) override {
+	}
 
 public:
 	IMusicItem( );

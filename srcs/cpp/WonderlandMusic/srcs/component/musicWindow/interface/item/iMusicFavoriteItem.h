@@ -12,12 +12,12 @@ protected:
 	static bool bindMusicFavoriteItem( IMusicFavoriteItemWidget *bind_target, IMusicFavoriteItem *bind_source );
 
 	static bool setMusicItemFavoriteItem( IMusicItem *music_item, IMusicFavoriteItem *music_favorite_item );
+	~IMusicFavoriteItem( ) override {
+	}
 
 public:
 	IMusicFavoriteItem( );
 	virtual bool getName( QString &result_name ) const = 0;
-	virtual bool addMusicItem( IMusicItem *music_item ) = 0;
-	virtual bool addMusicItem( const std::vector< IMusicItem * > &music_info_items ) = 0;
 	virtual bool removeMusicItem( IMusicItem *music_item ) = 0;
 	virtual bool clear( ) = 0;
 	virtual bool update( ) = 0;

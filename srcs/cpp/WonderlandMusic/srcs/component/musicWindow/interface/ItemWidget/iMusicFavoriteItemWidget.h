@@ -13,10 +13,9 @@ class IMusicFavoriteItemWidget : public IMusicCentreWidgetChild {
 
 protected:
 	virtual bool bindMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) = 0;
-
+	~IMusicFavoriteItemWidget( ) override;
 public:
 	IMusicFavoriteItemWidget( );
-	~IMusicFavoriteItemWidget( ) override;
 	virtual bool setMusicFavoriteWidget( IMusicFavoriteWidget *music_favorite_widget ) = 0;
 	virtual bool updateLayout( ) =0;
 	virtual IMusicFavoriteItem * getBindMusicFavoriteItem( ) const = 0;

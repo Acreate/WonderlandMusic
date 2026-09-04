@@ -10,6 +10,7 @@ class QMediaPlayer;
 class MusicInfoItem : public QObject, public IMusicItem {
 	Q_OBJECT;
 	friend class AppMusicManage;
+	friend class MusicFavoriteItem;
 
 protected:
 	size_t idCode;
@@ -29,11 +30,11 @@ protected:
 	bool setMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) override;
 
 	virtual bool initVar( const MusicInfo &music_info );
+	~MusicInfoItem( ) override;
 
 public:
 	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item, const MusicInfo &music_info );
 	explicit MusicInfoItem( IMusicFavoriteItem *music_favorite_item );
-	~MusicInfoItem( ) override;
 	size_t getIdCode( ) const override;
 	const QString & getName( ) const override;
 	const QString & getSinger( ) const override;

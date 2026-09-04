@@ -10,9 +10,10 @@ private:
 protected:
 	virtual bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) = 0;
 
+	~IMusicCentreWidgetChild( ) override;
+
 public:
 	IMusicCentreWidgetChild( );
-	~IMusicCentreWidgetChild( ) override;
 	virtual IMusicCentreWidget * getMusicCentreWidget( ) const = 0;
 };
 

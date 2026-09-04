@@ -11,6 +11,8 @@ class IMusicDataManage : public IMusicCentreWidgetChild {
 
 protected:
 	virtual bool setCurrentSelectFavoriteItem( IMusicFavoriteItem *set_select_music_favorite_item ) = 0;
+	~IMusicDataManage( ) override {
+	}
 
 public:
 	virtual bool getCurrentSelectFavoriteItem( IMusicFavoriteItem *&result_current_select_music_favorite_item ) const = 0;

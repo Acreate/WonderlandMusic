@@ -6,8 +6,6 @@
 
 #include "../head/result_message_out.h"
 
-#include "../thread/musicPlayerThread/musicMediaPlayerThread.h"
-
 namespace invoke {
 	static void work( ApplicationManage *applicationManage, const std::function< void( ApplicationManage *applicationManage ) > &function ) {
 		function( applicationManage );

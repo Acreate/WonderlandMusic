@@ -11,10 +11,10 @@ class IMusicItemWidget : public IMusicCentreWidgetChild {
 
 protected:
 	virtual bool bindMusicItem( IMusicItem *music_item ) = 0;
-
+	
+	~IMusicItemWidget( ) override;
 public:
 	IMusicItemWidget( );
-	~IMusicItemWidget( ) override;
 	virtual bool setMusicListWidget( IMusicListWidget *music_list_widget ) = 0;
 	virtual bool updateLayout( ) =0;
 	virtual IMusicItem * getBindMusicItem( ) const = 0;

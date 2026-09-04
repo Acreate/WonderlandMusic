@@ -25,6 +25,9 @@
 #include "appInstance/applicationManage.h"
 #include "appInstance/appDataManage/appMusicManage.h"
 
+AppInstance::~AppInstance( ) {
+	deleteResource( );
+}
 AppInstance *AppInstance::instance = nullptr;
 
 AppInstance::AppParam::~AppParam( ) {
@@ -75,10 +78,6 @@ AppDateTimerManage * AppInstance::getAppDateTimerManage( ) const {
 
 ApplicationManage * AppInstance::getApplicationManage( ) const {
 	return applicationManage;
-}
-
-AppInstance::~AppInstance( ) {
-	deleteResource( );
 }
 
 bool AppInstance::init( ) {

@@ -49,10 +49,10 @@ protected:
 	ClassTypeInfo * appendClassTypeInfo( IAppCore *ptr );
 	ClassTypeInfo * appendClassTypeInfo( IAppCore *ptr, const type_info &type_info );
 	ClassTypeInfo * appendClassTypeInfo( IAppCore *ptr, const type_info &type_info, const QString &type_name );
+	virtual ~IAppCore( );
 
 public:
 	IAppCore( );
-	virtual ~IAppCore( );
 
 	/// @brief 获取类名称
 	/// @return 类名称

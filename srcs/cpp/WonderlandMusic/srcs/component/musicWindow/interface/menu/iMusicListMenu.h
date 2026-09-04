@@ -1,7 +1,6 @@
 ﻿#ifndef IMUSICLISTMENU_H_H_HEAD__FILE__
 #define IMUSICLISTMENU_H_H_HEAD__FILE__
 
-
 #include <interface/iAppResourceCore.h>
 
 #include "../musicWidgetChild/musicWidgetChild.h"
@@ -16,10 +15,11 @@ class IMusicListMenu : public MusicWidgetChild, public IAppResourceCore {
 
 public:
 	IMusicListMenu( );
-	~IMusicListMenu( ) override;
 
 protected:
 	virtual bool execMenu( IMusicListWidget *music_list_widget, IMusicItem *music_item, const QPoint &mouse_global_point ) = 0;
+
+	~IMusicListMenu( ) override;
 
 public:
 	virtual QMenu * toMenu( ) = 0;

@@ -1,6 +1,7 @@
 ﻿#include "initMain.h"
 
 #include "head/result_message_out.h"
+
 int main( int argc, char *argv[ ], char *envp[ ] ) {
 	int runMainCode;
 	InitMain *initMain = new InitMain( argc, argv, envp );

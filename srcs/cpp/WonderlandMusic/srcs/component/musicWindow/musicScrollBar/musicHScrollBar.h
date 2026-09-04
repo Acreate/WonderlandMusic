@@ -7,6 +7,7 @@ class MusicHScrollBar : public QScrollBar {
 
 public:
 	MusicHScrollBar( QWidget *parent = nullptr );
+
 	~MusicHScrollBar( ) override;
 
 protected:

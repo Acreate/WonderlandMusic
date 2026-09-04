@@ -31,30 +31,19 @@ bool MusicFavoriteItem::setMusicCentreWidget( IMusicCentreWidget *music_centre_w
 	musicFavoriteItemUserMutex->unlock( );
 	return true;
 }
-IMusicItem * MusicFavoriteItem::load( MusicInfo *music_info ) {
+MusicInfoItem * MusicFavoriteItem::load( MusicInfo *music_info ) {
 	auto musicItem = new MusicInfoItem( this, *music_info );
+	musicFavoriteItemUserMutex->lock( );
+	musicItemVector.emplace_back( musicItem );
+	musicFavoriteItemUserMutex->unlock( );
+	if( musicCentreWidget )
+		musicCentreWidget->repaintListWidget( );
 	return musicItem;
 }
 bool MusicFavoriteItem::getName( QString &result_name ) const {
 	musicFavoriteItemUserMutex->lock( );
 	result_name = name;
 	musicFavoriteItemUserMutex->unlock( );
-	return true;
-}
-bool MusicFavoriteItem::addMusicItem( IMusicItem *music_item ) {
-	musicFavoriteItemUserMutex->lock( );
-	musicItemVector.emplace_back( music_item );
-	musicFavoriteItemUserMutex->unlock( );
-	if( musicCentreWidget )
-		musicCentreWidget->repaintListWidget( );
-	return true;
-}
-bool MusicFavoriteItem::addMusicItem( const std::vector< IMusicItem * > &music_info_items ) {
-	musicFavoriteItemUserMutex->lock( );
-	musicItemVector.append_range( music_info_items );
-	musicFavoriteItemUserMutex->unlock( );
-	if( musicCentreWidget )
-		musicCentreWidget->repaintListWidget( );
 	return true;
 }
 bool MusicFavoriteItem::removeMusicItem( IMusicItem *music_item ) {
@@ -221,7 +210,7 @@ bool MusicFavoriteItem::loadMusicDirPath( const std::vector< QString > &music_fi
 						return false;
 					connect( musicInfo, &MusicInfo::finished, [this, musicInfo]( ) {
 						InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfo] ( ApplicationManage *applicationManage ) {
-							addMusicItem( load( musicInfo ) );
+							load( musicInfo );
 							delete musicInfo;
 						} );
 					} );
@@ -248,7 +237,7 @@ bool MusicFavoriteItem::loadMusicFile( const std::vector< QString > &music_file_
 				return false;
 			connect( musicInfo, &MusicInfo::finished, [this, musicInfo]( ) {
 				InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfo] ( ApplicationManage *applicationManage ) {
-					addMusicItem( load( musicInfo ) );
+					load( musicInfo );
 					delete musicInfo;
 				} );
 			} );
@@ -264,7 +253,7 @@ bool MusicFavoriteItem::loadMusicFile( const QString &music_file_path ) {
 		return false;
 	connect( musicInfo, &MusicInfo::finished, [this, musicInfo]( ) {
 		InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfo] ( ApplicationManage *applicationManage ) {
-			addMusicItem( load( musicInfo ) );
+			load( musicInfo );
 			delete musicInfo;
 		} );
 	} );

@@ -5,8 +5,13 @@
 class MusicScrollArea : public QScrollArea {
 	Q_OBJECT;
 
+protected:
+
 public:
 	MusicScrollArea( QWidget *parent );
+
+	~MusicScrollArea( ) override {
+	}
 
 protected:
 	void mouseMoveEvent( QMouseEvent * ) override;

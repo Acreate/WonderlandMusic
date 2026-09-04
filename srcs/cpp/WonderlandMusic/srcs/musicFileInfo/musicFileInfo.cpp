@@ -164,7 +164,7 @@ void MusicFileInfo::run( ) {
 bool MusicFileInfo::isOK( ) const {
 	return musicStatus == 0;
 }
-bool MusicFileInfo::isRead( ) const {
+bool MusicFileInfo::isReady( ) const {
 	if( status != RunStatus::Ready )
 		return false;
 	userMutex->lock( );

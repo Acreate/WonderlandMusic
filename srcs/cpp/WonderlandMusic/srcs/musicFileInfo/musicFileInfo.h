@@ -55,7 +55,7 @@ protected:
 
 public:
 	virtual bool isOK( ) const;
-	virtual bool isRead( ) const;
+	virtual bool isReady( ) const;
 	virtual const QString & getFileBaseName( ) const;
 	virtual const QString & getFilePath( ) const;
 	virtual const QString & getAbsoluteFilePath( ) const;

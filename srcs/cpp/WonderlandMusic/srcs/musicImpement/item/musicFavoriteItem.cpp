@@ -147,12 +147,12 @@ bool MusicFavoriteItem::loadMusicDirPath( const std::vector< QString > &music_fi
 					return false;
 				file.resize( fileIndex );
 				MusicFileInfoList *musicInfoList = new MusicFileInfoList( file );
-				connect( musicInfoList, &MusicFileInfo::finished, [this, musicInfoList]( ) {
-					InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfoList] ( ApplicationManage *applicationManage ) {
+				connect( musicInfoList, &MusicFileInfoList::signal_finish, [this] ( MusicFileInfoList *music_file_info_list ) {
+					InvokeMethodTools::invokeQueuedConnectionMethod( [this, music_file_info_list] ( ApplicationManage *applicationManage ) {
 						std::vector< MusicFileInfo * > getResult;
-						if( musicInfoList->getOverLoadMusicVector( getResult ) )
+						if( music_file_info_list->getOverLoadMusicVector( getResult ) )
 							load( getResult );
-						delete musicInfoList;
+						delete music_file_info_list;
 					} );
 				} );
 				musicInfoList->start( );
@@ -182,12 +182,12 @@ bool MusicFavoriteItem::loadMusicFile( const std::vector< QString > &music_file_
 		return false;
 	file.resize( fileIndex );
 	MusicFileInfoList *musicInfoList = new MusicFileInfoList( file );
-	connect( musicInfoList, &MusicFileInfo::finished, [this, musicInfoList]( ) {
-		InvokeMethodTools::invokeQueuedConnectionMethod( [this, musicInfoList] ( ApplicationManage *applicationManage ) {
+	connect( musicInfoList, &MusicFileInfoList::signal_finish, [this] ( MusicFileInfoList *music_file_info_list ) {
+		InvokeMethodTools::invokeQueuedConnectionMethod( [this, music_file_info_list] ( ApplicationManage *applicationManage ) {
 			std::vector< MusicFileInfo * > getResult;
-			if( musicInfoList->getOverLoadMusicVector( getResult ) )
+			if( music_file_info_list->getOverLoadMusicVector( getResult ) )
 				load( getResult );
-			delete musicInfoList;
+			delete music_file_info_list;
 		} );
 	} );
 	musicInfoList->start( );

@@ -2,22 +2,37 @@
 #define MUSICINFOLIST_H_H_HEAD__FILE__
 #include <QThread>
 
+#include "../interface/iAppCore.h"
+
 class UserMutex;
 class MusicFileInfo;
 
-class MusicFileInfoList : public QThread {
+class MusicFileInfoList : public QObject {
 	Q_OBJECT;
+
+protected:
+	enum class Status {
+		None,
+		Start,
+		Run,
+		Finish,
+		Interrupt,
+		Error
+	};
 
 private:
 	std::vector< MusicFileInfo * > overLoadMusicVector;
 	std::vector< MusicFileInfo * > musicVector;
+	MusicFileInfo *current = nullptr;
 	UserMutex *userMutex;
 	size_t count;
 	size_t index;
 	MusicFileInfo * *musicVectorDataPtr;
+	Status status;
+	bool interruption;
 
 protected:
-	virtual void loadFinished( MusicFileInfo *music_info );
+	virtual void overWork( );
 
 public:
 	MusicFileInfoList( const std::vector< QString > &file_list );
@@ -29,9 +44,15 @@ public:
 	virtual operator QString( ) const;
 	virtual size_t getCount( ) const;
 	virtual bool moveToMusicInfoVector( std::vector< MusicFileInfo * > &result_detach_vector );
-
-protected:
-	void run( ) override;
+	virtual bool requestInterruption( );
+	virtual bool isFinished( ) const;
+	virtual bool isRunning( ) const;
+	virtual bool isInterruptionRequested( ) const;
+	virtual bool start( );
+	virtual Status getStatus( ) const;
+Q_SIGNALS:
+	void signal_finish( MusicFileInfoList *music_file_info_list );
+	void signal_start( MusicFileInfoList *music_file_info_list );
 };
 
 #endif // MUSICINFOLIST_H_H_HEAD__FILE__

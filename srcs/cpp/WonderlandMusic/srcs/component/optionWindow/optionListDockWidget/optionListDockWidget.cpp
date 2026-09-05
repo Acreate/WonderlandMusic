@@ -84,7 +84,7 @@ QDockWidget::title {
 	}
 	setWidget( scrollArea );
 	setTitleBarWidget( dockTitleWidget );
-	setContextMenuPolicy( Qt::NoContextMenu );
+	setContextMenuPolicy( Qt::PreventContextMenu );
 	setFeatures( QDockWidget::NoDockWidgetFeatures );
 	setAllowedAreas( Qt::LeftDockWidgetArea );
 	setFloating( false );

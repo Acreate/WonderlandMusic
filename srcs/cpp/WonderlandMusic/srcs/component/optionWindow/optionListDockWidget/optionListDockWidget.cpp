@@ -7,10 +7,10 @@
 
 #include "../optionWindow.h"
 
-#include "../../../head/after_init_macro.h"
-#include "../../../head/before_init_macro.h"
-#include "../../../head/init_macro.h"
-#include "../../../head/release_macro.h"
+#include <head/after_init_macro.h>
+#include <head/before_init_macro.h>
+#include <head/init_macro.h>
+#include <head/release_macro.h>
 
 #include "../widget/optionListWidget.h"
 OptionListDockWidget::OptionListDockWidget( OptionWindow *option_window ) : optionWindow( option_window ) {

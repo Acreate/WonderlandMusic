@@ -1,7 +1,9 @@
 ﻿#include "playerControlWidgetScrollArea.h"
 
 #include <QMouseEvent>
-PlayerControlWidgetScrollArea::PlayerControlWidgetScrollArea( ) : QScrollArea( ) {
+
+#include "../playWindow.h"
+PlayerControlWidgetScrollArea::PlayerControlWidgetScrollArea( PlayWindow *play_window ) : QScrollArea( play_window ) {
 	setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	setWidgetResizable( true );

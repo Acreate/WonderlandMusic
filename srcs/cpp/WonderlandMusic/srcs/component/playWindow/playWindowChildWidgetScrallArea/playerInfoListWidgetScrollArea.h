@@ -2,11 +2,12 @@
 #define PLAYERINFOLISTWIDGETSCROLLAREA_H_H_HEAD__FILE__
 #include <QScrollArea>
 
-class PlayerInfoListWidgetScrollArea :public QScrollArea{
+class PlayerInfoListWidgetScrollArea : public QScrollArea {
 	Q_OBJECT;
+
 public:
-	PlayerInfoListWidgetScrollArea();
-	~PlayerInfoListWidgetScrollArea() override;
+	PlayerInfoListWidgetScrollArea( PlayWindow *play_window );
+	~PlayerInfoListWidgetScrollArea( ) override;
 
 protected:
 	void mouseDoubleClickEvent( QMouseEvent * ) override;

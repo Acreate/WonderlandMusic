@@ -5,6 +5,8 @@
 #include "../../interface/iAppCore.h"
 #include "../../interface/iAppResourceCore.h"
 
+class PlayerInfoListWidgetScrollArea;
+class PlayerControlWidgetScrollArea;
 class IPlayerControlWidget;
 class IPlayerInfoListWidget;
 
@@ -12,8 +14,10 @@ class PlayWindow : public QMainWindow, public IAppResourceCore, public IAppCore 
 	Q_OBJECT;
 
 private:
-	IPlayerInfoListWidget *playerInfoListWidget;
-	IPlayerControlWidget *playerControlWidget;
+	IPlayerInfoListWidget *playerInfoListWidget = nullptr;
+	IPlayerControlWidget *playerControlWidget = nullptr;
+	PlayerControlWidgetScrollArea *playerControlWidgetScrollArea = nullptr;
+	PlayerInfoListWidgetScrollArea *playerInfoListWidgetScrollArea = nullptr;
 
 public:
 	PlayWindow( QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags( ) );

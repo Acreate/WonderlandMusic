@@ -1,18 +1,43 @@
 ﻿#include "playWindow.h"
 
+#include "../../head/release_macro.h"
 #include "../../head/result_message_out.h"
+
+#include "../../mutex/userMutex.h"
 
 #include "interface/iPlayerControlWidget.h"
 #include "interface/iPlayerInfoListWidget.h"
+
+#include "playWindowChildWidgetScrallArea/playerControlWidgetScrollArea.h"
+#include "playWindowChildWidgetScrallArea/playerInfoListWidgetScrollArea.h"
 PlayWindow::PlayWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
 }
 PlayWindow::~PlayWindow( ) {
 	deleteResource( );
 }
 bool PlayWindow::deleteResource( ) {
+	if( userMutex == nullptr )
+		return true;
+	if( playerInfoListWidget )
+		playerInfoListWidget->setPlayerWindow( nullptr );
+	if( playerControlWidget )
+		playerControlWidget->setPlayerWindow( nullptr );
+	userMutex->lock( );
+	playerControlWidgetScrollArea->takeWidget( );
+	playerInfoListWidgetScrollArea->takeWidget( );
+	playerInfoListWidget = nullptr;
+	playerControlWidget = nullptr;
+	Delete_Resource_App_Core_Ptr( playerControlWidgetScrollArea );
+	Delete_Resource_App_Core_Ptr( playerInfoListWidgetScrollArea );
+	userMutex->unlock( );
+	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
 }
 bool PlayWindow::initBefore( ) {
+	deleteResource( );
+	userMutex = new UserMutex;
+	playerControlWidgetScrollArea = new PlayerControlWidgetScrollArea( this );
+	playerInfoListWidgetScrollArea = new PlayerInfoListWidgetScrollArea( this );
 	return true;
 }
 bool PlayWindow::init( ) {
@@ -54,6 +79,6 @@ bool PlayWindow::updateLayout( ) {
 	if( playerInfoListWidget )
 		if( playerInfoListWidget->updateLayout( ) == false )
 			return Result_Var_Function_Messag_Ptr_Out_Args( false, playerInfoListWidget, updateLayout, tr( "列表组件布局异常" ) );
-	
+
 	return true;
 }

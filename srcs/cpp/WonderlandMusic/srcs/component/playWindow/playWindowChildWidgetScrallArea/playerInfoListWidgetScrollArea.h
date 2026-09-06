@@ -2,6 +2,8 @@
 #define PLAYERINFOLISTWIDGETSCROLLAREA_H_H_HEAD__FILE__
 #include <QScrollArea>
 
+class PlayWindow;
+
 class PlayerInfoListWidgetScrollArea : public QScrollArea {
 	Q_OBJECT;
 

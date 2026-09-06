@@ -2,11 +2,13 @@
 #define PLAYERCONTROLWIDGETSCROLLAREA_H_H_HEAD__FILE__
 #include <QScrollArea>
 
+class PlayWindow;
+
 class PlayerControlWidgetScrollArea : public QScrollArea {
 	Q_OBJECT;
 
 public:
-	PlayerControlWidgetScrollArea( );
+	PlayerControlWidgetScrollArea( PlayWindow *play_window );
 	~PlayerControlWidgetScrollArea( ) override;
 
 protected:

@@ -14,6 +14,7 @@ class PlayWindow : public QMainWindow, public IAppResourceCore, public IAppCore 
 	Q_OBJECT;
 
 private:
+	UserMutex *userMutex = nullptr;
 	IPlayerInfoListWidget *playerInfoListWidget = nullptr;
 	IPlayerControlWidget *playerControlWidget = nullptr;
 	PlayerControlWidgetScrollArea *playerControlWidgetScrollArea = nullptr;

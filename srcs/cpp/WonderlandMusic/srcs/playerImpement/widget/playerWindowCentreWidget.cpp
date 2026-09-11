@@ -51,7 +51,7 @@ bool PlayerWindowCentreWidget::updateLayout( ) {
 		int currentWidgetHieght = this->height( );
 		int currentWidgetWidth = this->width( );
 		auto controlWidget = playerControlWidget->toWidget( );
-		int controlHeght = 200;
+		int controlHeght = 70;
 		int listWidgetHeight = currentWidgetHieght - controlHeght;
 		auto listWidget = playerInfoListWidget->toWidget( );
 		listWidget->setGeometry( 0, 0, currentWidgetWidth, listWidgetHeight );

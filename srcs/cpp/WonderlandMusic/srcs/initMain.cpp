@@ -24,7 +24,7 @@ InitMain *InitMain::initMainInstance = nullptr;
 #endif
 #if is_en_write_log
 #include "tools/classTypeTools.h"
-	#define new_ptr( ptr ) classTypeTools::make_args_ptr( ptr )
+	#define new_ptr( ptr , ...) classTypeTools::make_args_ptr( ptr __VA_ARGS__ )
 #else
 	#define new_ptr( ptr ) ( ptr = nullptr)
 #endif
@@ -58,7 +58,7 @@ void InitMain::myCategoryFilter( QLoggingCategory *category ) {
 }
 
 void InitMain::initTimeInfo( ) {
-	messageErrorOut = new_ptr( messageErrorOut );
+	messageErrorOut = new_ptr( messageErrorOut, , true, ".log", std::source_location::current( ) );
 	permit = new_ptr( permit );
 	screening = new_ptr( screening );
 	startDateTime = new_ptr( startDateTime );
@@ -116,10 +116,10 @@ bool InitMain::deleteResource( ) {
 InitMain::InitMain( int argc, char *argv[ ], char *envp[ ] ) : argc( argc ), argv( argv ), envp( envp ) {
 }
 InitMain::~InitMain( ) {
-	deleteResource(  );
+	deleteResource( );
 }
 bool InitMain::initBefore( ) {
-	deleteResource(  );
+	deleteResource( );
 	initTimeInfo( );
 	initMainInstance = this;
 	oldCategoryFilter = QLoggingCategory::installFilter( [] ( QLoggingCategory *category ) {

@@ -43,6 +43,8 @@ bool PlayWindow::setPlayerWindowCentreWidget( IPlayerWindowCentreWidget *const p
 	if( playerWindowCentreWidget )
 		playerWindowCentreWidget->setPlayWindow( nullptr );
 	playerWindowCentreWidget = player_window_centre_widget;
+	if( playerWindowCentreWidget )
+		playerWindowCentreWidget->setPlayWindow( this );
 	return true;
 }
 IPlayerInfoListWidget * PlayWindow::getPlayerInfoListWidget( ) const {

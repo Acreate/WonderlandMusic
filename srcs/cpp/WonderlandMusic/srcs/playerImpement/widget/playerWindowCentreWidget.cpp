@@ -1,5 +1,6 @@
 ﻿#include "playerWindowCentreWidget.h"
 
+#include "../../component/playWindow/playWindow.h"
 #include "../../component/playWindow/interface/widget/iPlayerControlWidget.h"
 #include "../../component/playWindow/interface/widget/iPlayerInfoListWidget.h"
 #include "../../component/playWindow/playerWindowCentreChildWidgetScrallArea/playerControlWidgetScrollArea.h"
@@ -13,7 +14,7 @@ PlayerWindowCentreWidget::PlayerWindowCentreWidget( ) {
 	regClassTypeInfoRef( this );
 }
 PlayerWindowCentreWidget::~PlayerWindowCentreWidget( ) {
- deleteResource(  );
+	deleteResource( );
 }
 PlayWindow * PlayerWindowCentreWidget::getPlayWindow( ) const {
 	return playWindow;
@@ -67,19 +68,23 @@ bool PlayerWindowCentreWidget::deleteResource( ) {
 		playerInfoListWidget->setPlayerWindowCentre( nullptr );
 	if( playerControlWidget )
 		playerControlWidget->setPlayerWindowCentre( nullptr );
+	if( playWindow )
+		playWindow->setPlayerWindowCentreWidget( nullptr );
 	userMutex->lock( );
 	playerControlWidgetScrollArea->takeWidget( );
 	playerInfoListWidgetScrollArea->takeWidget( );
 	Delete_Resource_App_Core_Ptr( playerControlWidgetScrollArea );
 	Delete_Resource_App_Core_Ptr( playerInfoListWidgetScrollArea );
+
 	playerInfoListWidget = nullptr;
 	playerControlWidget = nullptr;
+	playWindow = nullptr;
 	userMutex->unlock( );
 	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
 }
 bool PlayerWindowCentreWidget::initBefore( ) {
- deleteResource(  );
+	deleteResource( );
 	userMutex = new UserMutex;
 	playerControlWidgetScrollArea = new PlayerControlWidgetScrollArea( );
 	playerInfoListWidgetScrollArea = new PlayerInfoListWidgetScrollArea( );

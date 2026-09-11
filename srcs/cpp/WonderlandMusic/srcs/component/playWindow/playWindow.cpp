@@ -1,8 +1,8 @@
 ﻿#include "playWindow.h"
 
-#include "../../head/release_macro.h"
+#include <head/release_macro.h>
 
-#include "../../mutex/userMutex.h"
+#include <mutex/userMutex.h>
 
 #include "interface/widget/iPlayerControlWidget.h"
 #include "interface/widget/iPlayerWindowCentreWidget.h"

@@ -67,6 +67,10 @@ size_t OptionWindow::removeAllOptionPanel( std::vector< OptionPanel * > &result_
 	updateWindow( );
 	return count;
 }
+size_t OptionWindow::removeAllOptionPanel( ) {
+	std::vector< OptionPanel * > resultRemovePanel;
+	return removeAllOptionPanel( resultRemovePanel );
+}
 OptionWindow::OptionWindow( ) {
 	regClassTypeInfoRef( this );
 }

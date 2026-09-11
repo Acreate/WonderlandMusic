@@ -16,8 +16,15 @@ protected:
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;
+	bool hideOptionPanel( ) override;
+	bool hideOptionPanel( OptionPanel *option_panel ) override;
 
 public:
+	bool showOptionButton( OptionButton *option_button ) override;
+	bool showOptionPanel( ) override;
+	bool showOptionPanel( OptionPanel *option_panel ) override;
+	void updateOptionPanelInfo( OptionPanel *option_panel ) override;
+
 	bool init( ) override;
 	bool initAfter( ) override;
 	bool initBefore( ) override;

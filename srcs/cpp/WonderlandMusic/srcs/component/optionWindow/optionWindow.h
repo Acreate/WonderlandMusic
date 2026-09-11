@@ -27,10 +27,7 @@ protected:
 protected :
 	virtual void removeOptionPanel( OptionPanel *option_panel );
 	virtual size_t removeAllOptionPanel( std::vector< OptionPanel * > &result_remove_panel );
-	virtual size_t removeAllOptionPanel( ) {
-		std::vector< OptionPanel * > resultRemovePanel;
-		return removeAllOptionPanel( resultRemovePanel );
-	}
+	virtual size_t removeAllOptionPanel( );
 
 	virtual bool hideOptionPanel( );
 	virtual bool hideOptionPanel( OptionPanel *option_panel );

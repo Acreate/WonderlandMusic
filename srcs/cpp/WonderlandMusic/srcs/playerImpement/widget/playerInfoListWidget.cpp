@@ -34,6 +34,41 @@ void PlayerInfoListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	OptionWindow::mouseReleaseEvent( event );
 	event->ignore( );
 }
+bool PlayerInfoListWidget::hideOptionPanel( ) {
+	bool result = OptionWindow::hideOptionPanel( );
+	if( playerWindowCentreWidget )
+		playerWindowCentreWidget->updateLayout( );
+	return result;
+}
+bool PlayerInfoListWidget::hideOptionPanel( OptionPanel *option_panel ) {
+	bool result = OptionWindow::hideOptionPanel( option_panel );
+	if( playerWindowCentreWidget )
+		playerWindowCentreWidget->updateLayout( );
+	return result;
+}
+bool PlayerInfoListWidget::showOptionButton( OptionButton *option_button ) {
+	bool result = OptionWindow::showOptionButton( option_button );
+	if( playerWindowCentreWidget )
+		playerWindowCentreWidget->updateLayout( );
+	return result;
+}
+bool PlayerInfoListWidget::showOptionPanel( ) {
+	bool result = OptionWindow::showOptionPanel( );
+	if( playerWindowCentreWidget )
+		playerWindowCentreWidget->updateLayout( );
+	return result;
+}
+bool PlayerInfoListWidget::showOptionPanel( OptionPanel *option_panel ) {
+	bool result = OptionWindow::showOptionPanel( option_panel );
+	if( playerWindowCentreWidget )
+		playerWindowCentreWidget->updateLayout( );
+	return result;
+}
+void PlayerInfoListWidget::updateOptionPanelInfo( OptionPanel *option_panel ) {
+	OptionWindow::updateOptionPanelInfo( option_panel );
+	if( playerWindowCentreWidget )
+		playerWindowCentreWidget->updateLayout( );
+}
 
 bool PlayerInfoListWidget::init( ) {
 	bool result = OptionWindow::init( );

@@ -4,7 +4,6 @@
 
 #include "dateTimeFormat/dateTimeFormat.h"
 
-#include "head/release_macro.h"
 #include "head/result_message_out.h"
 
 #include "msgInfo/messageErrorOut.h"

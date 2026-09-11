@@ -4,6 +4,9 @@
 #include <QRect>
 #include <source_location>
 
+#include "../application/appInstance/appDataManage/translate/messageTranslate.h"
+
+#include "../tools/appTranslateTools.h"
 #include "../tools/sourceLocationTools.h"
 
 const QString & MessageString::getJion( ) const {
@@ -38,7 +41,11 @@ MessageString::MessageString( const std::source_location &source_location ) {
 	QString sourceFun;
 	QString sourceLine;
 	SourceLocationTools::formatSourceFilePath( sourceFile, sourceFun, sourceLine, source_location );
-	messageList << QString( "::\n: %1\n: %2\n: [ %3 ]\n::" ).arg( sourceFile ).arg( sourceFun ).arg( sourceLine );
+	if( AppTranslateTools::getMessage( [&, this] ( MessageTranslate &translate ) {
+		messageList << QString( "::\n: [ %1 ] = %2\n: [ %3 ] = %4\n: [ %5 ] = [ %6 ]\n::\n" ).arg( translate.getSourceFile( ) ).arg( sourceFile ).arg( translate.getSourceFunction( ) ).arg( sourceFun ).arg( translate.getSourceLine( ) ).arg( sourceLine );
+		return true;
+	} ) == false )
+		messageList << QString( "::\n: %1\n: %2\n: [ %3 ]\n::\n" ).arg( sourceFile ).arg( sourceFun ).arg( sourceLine );
 }
 
 MessageString & MessageString::operator<<( const std::source_location &source_location ) {
@@ -46,7 +53,11 @@ MessageString & MessageString::operator<<( const std::source_location &source_lo
 	QString sourceFun;
 	QString sourceLine;
 	SourceLocationTools::formatSourceFilePath( sourceFile, sourceFun, sourceLine, source_location );
-	messageList << QString( "::\n: %1\n: %2\n: [ %3 ]\n::" ).arg( sourceFile ).arg( sourceFun ).arg( sourceLine );
+	if( AppTranslateTools::getMessage( [&, this] ( MessageTranslate &translate ) {
+		messageList << QString( "::\n: [ %1 ] = %2\n: [ %3 ] = %4\n: [ %5 ] = [ %6 ]\n::\n" ).arg( translate.getSourceFile( ) ).arg( sourceFile ).arg( translate.getSourceFunction( ) ).arg( sourceFun ).arg( translate.getSourceLine( ) ).arg( sourceLine );
+		return true;
+	} ) == false )
+		messageList << QString( "::\n: %1\n: %2\n: [ %3 ]\n::\n" ).arg( sourceFile ).arg( sourceFun ).arg( sourceLine );
 	return *this;
 }
 

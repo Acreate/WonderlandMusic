@@ -28,9 +28,6 @@
 
 #include "../mutex/userMutex.h"
 
-#include "../playerImpement/widget/playerControlWidget.h"
-#include "../playerImpement/widget/playerWindowCentreWidget.h"
-
 #include "appInstance/appDataManage.h"
 #include "appInstance/appDataManage/appMusicManage.h"
 #include "appInstance/appDateTimerManage.h"
@@ -53,8 +50,7 @@ AppInstance * AppInstanceTool::createAppInstance( int &argc, char **argv, int ap
 }
 
 AppInstance::~AppInstance( ) {
-	
-	deleteResource(  );
+	deleteResource( );
 	delete classTypeInfoStack;
 	instance = nullptr;
 }
@@ -136,7 +132,7 @@ bool AppInstance::init( ) {
 }
 
 bool AppInstance::initBefore( ) {
-	deleteResource(  );
+	deleteResource( );
 	instance = this;
 	userMutex = new UserMutex;
 	applicationManage = new ApplicationManage( appParam.argc, appParam.argv, appParam.app_flag_s );

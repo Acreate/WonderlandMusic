@@ -253,9 +253,9 @@ IMusicTitleWidget * AppUserInterfaceManage::getMusicTitleWidget( ) const {
 PlayWindow * AppUserInterfaceManage::getPlayWindow( ) const {
 	return playWindow;
 }
-PlayerWindowCentreWidget * AppUserInterfaceManage::getPlayerWindowCentreWidget( ) const {
+IPlayerWindowCentreWidget * AppUserInterfaceManage::getPlayerWindowCentreWidget( ) const {
 	return playerWindowCentreWidget;
 }
-PlayerControlWidget * AppUserInterfaceManage::getPlayerControlWidget( ) const {
+IPlayerControlWidget * AppUserInterfaceManage::getPlayerControlWidget( ) const {
 	return playerControlWidget;
 }

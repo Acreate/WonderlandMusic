@@ -1,8 +1,12 @@
 ﻿#include "playWindow.h"
 
+#include <QMouseEvent>
+
 #include <head/release_macro.h>
 
 #include <mutex/userMutex.h>
+
+#include "../../head/q_debug_message_var_out.h"
 
 #include "interface/widget/iPlayerControlWidget.h"
 #include "interface/widget/iPlayerWindowCentreWidget.h"
@@ -25,9 +29,37 @@ bool PlayWindow::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( userMutex );
 	return true;
 }
+void PlayWindow::paintEvent( QPaintEvent *event ) {
+	QMainWindow::paintEvent( event );
+}
+void PlayWindow::showEvent( QShowEvent *event ) {
+	QMainWindow::showEvent( event );
+	updateLayout( );
+}
+void PlayWindow::resizeEvent( QResizeEvent *event ) {
+	QMainWindow::resizeEvent( event );
+	updateLayout( );
+}
+void PlayWindow::mouseDoubleClickEvent( QMouseEvent *event ) {
+	QMainWindow::mouseDoubleClickEvent( event );
+	event->ignore( );
+}
+void PlayWindow::mouseMoveEvent( QMouseEvent *event ) {
+	QMainWindow::mouseMoveEvent( event );
+	event->ignore( );
+}
+void PlayWindow::mousePressEvent( QMouseEvent *event ) {
+	QMainWindow::mousePressEvent( event );
+	event->ignore( );
+}
+void PlayWindow::mouseReleaseEvent( QMouseEvent *event ) {
+	QMainWindow::mouseReleaseEvent( event );
+	event->ignore( );
+}
 bool PlayWindow::initBefore( ) {
 	deleteResource( );
 	userMutex = new UserMutex;
+	setMouseTracking( true );
 	return true;
 }
 bool PlayWindow::init( ) {
@@ -42,9 +74,13 @@ IPlayerWindowCentreWidget * PlayWindow::getPlayerWindowCentreWidget( ) const {
 bool PlayWindow::setPlayerWindowCentreWidget( IPlayerWindowCentreWidget *const player_window_centre_widget ) {
 	if( playerWindowCentreWidget )
 		playerWindowCentreWidget->setPlayWindow( nullptr );
+	takeCentralWidget( );
 	playerWindowCentreWidget = player_window_centre_widget;
-	if( playerWindowCentreWidget )
+	if( playerWindowCentreWidget ) {
 		playerWindowCentreWidget->setPlayWindow( this );
+		auto widget = playerWindowCentreWidget->toWidget( );
+		setCentralWidget( widget );
+	}
 	return true;
 }
 IPlayerInfoListWidget * PlayWindow::getPlayerInfoListWidget( ) const {

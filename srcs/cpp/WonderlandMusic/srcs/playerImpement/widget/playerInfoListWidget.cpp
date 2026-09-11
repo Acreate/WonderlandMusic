@@ -1,5 +1,8 @@
 ﻿#include "playerInfoListWidget.h"
 
+#include <QMouseEvent>
+#include <QPainter>
+
 #include "../../component/playWindow/playWindow.h"
 #include "../../component/playWindow/interface/widget/iPlayerWindowCentreWidget.h"
 
@@ -12,6 +15,26 @@ bool PlayerInfoListWidget::deleteResource( ) {
 	setPlayerWindowCentre( nullptr );
 	return result;
 }
+void PlayerInfoListWidget::paintEvent( QPaintEvent *event ) {
+	OptionWindow::paintEvent( event );
+}
+void PlayerInfoListWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
+	OptionWindow::mouseDoubleClickEvent( event );
+	event->ignore( );
+}
+void PlayerInfoListWidget::mouseMoveEvent( QMouseEvent *event ) {
+	OptionWindow::mouseMoveEvent( event );
+	event->ignore( );
+}
+void PlayerInfoListWidget::mousePressEvent( QMouseEvent *event ) {
+	OptionWindow::mousePressEvent( event );
+	event->ignore( );
+}
+void PlayerInfoListWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	OptionWindow::mouseReleaseEvent( event );
+	event->ignore( );
+}
+
 bool PlayerInfoListWidget::init( ) {
 	bool result = OptionWindow::init( );
 
@@ -25,7 +48,7 @@ bool PlayerInfoListWidget::initAfter( ) {
 bool PlayerInfoListWidget::initBefore( ) {
 	PlayerInfoListWidget::deleteResource( );
 	bool result = OptionWindow::initBefore( );
-
+	setMouseTracking( true );
 	return result;
 }
 PlayerInfoListWidget::PlayerInfoListWidget( ) : ClassTypeInfoVar( ), OptionWindow( ), IPlayerInfoListWidget( ) {
@@ -58,9 +81,6 @@ IPlayerWindowCentreWidget * PlayerInfoListWidget::getPlayerWindowCentre( ) const
 bool PlayerInfoListWidget::updateLayout( ) {
 	if( playerWindowCentreWidget == nullptr )
 		return false;
-	auto widget = playerWindowCentreWidget->toWidget( );
-	int width = widget->width( );
-	resize( width, 200 );
 	return true;
 }
 PlayerInfoListWidget::~PlayerInfoListWidget( ) {

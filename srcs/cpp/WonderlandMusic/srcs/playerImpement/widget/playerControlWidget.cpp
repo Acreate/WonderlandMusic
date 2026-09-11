@@ -1,5 +1,8 @@
 ﻿#include "playerControlWidget.h"
 
+#include <QMouseEvent>
+#include <QPainter>
+
 #include "../../component/playWindow/interface/widget/iPlayerWindowCentreWidget.h"
 
 #include "../../head/release_macro.h"
@@ -8,7 +11,7 @@ PlayerControlWidget::PlayerControlWidget( ) {
 	regClassTypeInfoRef( this );
 }
 PlayerControlWidget::~PlayerControlWidget( ) {
-	deleteResource(  );
+	deleteResource( );
 }
 QWidget * PlayerControlWidget::toWidget( ) {
 	return this;
@@ -36,9 +39,6 @@ IPlayerWindowCentreWidget * PlayerControlWidget::getPlayerWindowCentre( ) const 
 bool PlayerControlWidget::updateLayout( ) {
 	if( playerWindowCentreWidget == nullptr )
 		return false;
-	auto widget = playerWindowCentreWidget->toWidget( );
-	int width = widget->width( );
-	resize( width, 200 );
 	return true;
 }
 bool PlayerControlWidget::player( const QString &music_file_path ) {
@@ -57,8 +57,24 @@ bool PlayerControlWidget::deleteResource( ) {
 	setPlayerWindowCentre( nullptr );
 	return true;
 }
+void PlayerControlWidget::paintEvent( QPaintEvent *event ) {
+	QWidget::paintEvent( event );
+}
+void PlayerControlWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
+	event->ignore( );
+}
+void PlayerControlWidget::mouseMoveEvent( QMouseEvent *event ) {
+	event->ignore( );
+}
+void PlayerControlWidget::mousePressEvent( QMouseEvent *event ) {
+	event->ignore( );
+}
+void PlayerControlWidget::mouseReleaseEvent( QMouseEvent *event ) {
+	event->ignore( );
+}
 bool PlayerControlWidget::initBefore( ) {
-	deleteResource(  );
+	deleteResource( );
+	setMouseTracking( true );
 	return true;
 }
 bool PlayerControlWidget::init( ) {

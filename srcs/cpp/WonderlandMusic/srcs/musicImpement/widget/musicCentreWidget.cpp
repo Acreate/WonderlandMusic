@@ -28,11 +28,13 @@
 
 #include "../../application/appInstance/appDataManage/appMusicManage.h"
 
+#include "../../head/q_debug_message_var_out.h"
+
 MusicCentreWidget::MusicCentreWidget( ) : QWidget( ), musicWindow( nullptr ) {
 	regClassTypeInfoRef( this );
 }
 MusicCentreWidget::~MusicCentreWidget( ) {
- deleteResource(  );
+	deleteResource( );
 }
 
 bool MusicCentreWidget::deleteResource( ) {
@@ -84,7 +86,8 @@ void MusicCentreWidget::resizeEvent( QResizeEvent *event ) {
 }
 
 void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
-	event->accept( );
+	Q_Debug_MessageString( "鼠标移动" );
+	event->ignore( );
 	userMutex->lock( );
 	switch( readDragStatus ) {
 		case Drag_Status::None : {
@@ -245,7 +248,7 @@ bool MusicCentreWidget::event( QEvent *event ) {
 }
 
 bool MusicCentreWidget::initBefore( ) {
- deleteResource(  );
+	deleteResource( );
 	clickWidth = 5;
 	favoriteLeft = 0;
 	favoriteRight = 0;

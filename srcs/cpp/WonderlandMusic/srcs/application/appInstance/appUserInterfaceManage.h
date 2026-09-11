@@ -6,6 +6,8 @@
 
 #include "../../classTypeInfo/classTypeInfoVar.h"
 
+#include "../../component/playWindow/interface/widget/iPlayerWindowCentreWidget.h"
+
 class PlayerControlWidget;
 class PlayerWindowCentreWidget;
 class PlayerInfoListWidget;
@@ -89,7 +91,7 @@ public:
 	virtual IMusicListWidget * getMusicListWidget( ) const;
 	virtual IMusicTitleWidget * getMusicTitleWidget( ) const;
 	virtual PlayWindow * getPlayWindow( ) const;
-	virtual PlayerWindowCentreWidget * getPlayerWindowCentreWidget( ) const;
-	virtual PlayerControlWidget * getPlayerControlWidget( ) const;
+	virtual IPlayerWindowCentreWidget * getPlayerWindowCentreWidget( ) const;
+	virtual IPlayerControlWidget * getPlayerControlWidget( ) const;
 };
 #endif // APPUSERINTERFACEMANAGE_H_H_HEAD__FILE__

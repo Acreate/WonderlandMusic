@@ -1,7 +1,6 @@
 ﻿#include "playWindow.h"
 
 #include "../../head/release_macro.h"
-#include "../../head/result_message_out.h"
 
 #include "../../mutex/userMutex.h"
 
@@ -12,8 +11,7 @@ PlayWindow::PlayWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 	regClassTypeInfoRef( this );
 }
 PlayWindow::~PlayWindow( ) {
- deleteResource(  );
-	
+	deleteResource( );
 }
 bool PlayWindow::deleteResource( ) {
 	if( userMutex == nullptr )
@@ -28,7 +26,7 @@ bool PlayWindow::deleteResource( ) {
 	return true;
 }
 bool PlayWindow::initBefore( ) {
- deleteResource(  );
+	deleteResource( );
 	userMutex = new UserMutex;
 	return true;
 }

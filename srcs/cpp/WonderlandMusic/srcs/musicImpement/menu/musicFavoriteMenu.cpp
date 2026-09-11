@@ -20,7 +20,7 @@
 MusicFavoriteMenu::MusicFavoriteMenu( ) {
 }
 MusicFavoriteMenu::~MusicFavoriteMenu( ) {
-	deleteResource( );
+ deleteResource(  );
 }
 bool MusicFavoriteMenu::deleteResource( ) {
 	Delete_Resource_App_Core_Ptr( createFavoriteItemAction );
@@ -31,7 +31,7 @@ bool MusicFavoriteMenu::deleteResource( ) {
 	return true;
 }
 bool MusicFavoriteMenu::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	createFavoriteItemAction = addAction( "" );
 	renameFavoriteItemAction = addAction( "" );
 	deleteFavoriteItemAction = addAction( "" );

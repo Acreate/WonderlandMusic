@@ -9,7 +9,7 @@ bool AppDateTimerManage::init( ) {
 }
 
 bool AppDateTimerManage::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	startDateTime = new QDateTime( QDateTime::currentDateTime( ) );
 	return true;
 }
@@ -27,7 +27,7 @@ AppDateTimerManage::AppDateTimerManage( ) {
 }
 
 AppDateTimerManage::~AppDateTimerManage( ) {
-	deleteResource( );
+ deleteResource(  );
 	
 }
 

@@ -30,7 +30,7 @@ AppDrawManage::AppDrawManage( ) {
 	regClassTypeInfoRef( this );
 }
 AppDrawManage::~AppDrawManage( ) {
-	deleteResource( );
+ deleteResource(  );
 	
 }
 
@@ -45,7 +45,7 @@ bool AppDrawManage::init( ) {
 }
 
 bool AppDrawManage::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	appRenderImage = new AppRenderImage;
 	Before_Init_Resource_App_Core_Ptr( appRenderImage );
 	return true;

@@ -10,7 +10,12 @@ class PlayerInfoListWidget : public OptionWindow, public IPlayerInfoListWidget {
 protected:
 	IPlayerWindowCentreWidget *playerWindowCentreWidget = nullptr;
 
+	bool deleteResource( ) override;
+
 public:
+	bool init( ) override;
+	bool initAfter( ) override;
+	bool initBefore( ) override;
 	PlayerInfoListWidget( );
 	QWidget * toWidget( ) override;
 	IPlayerWindowCentreWidget * getPlayerWindowCentre( ) const override;

@@ -32,7 +32,7 @@ MusicCentreWidget::MusicCentreWidget( ) : QWidget( ), musicWindow( nullptr ) {
 	regClassTypeInfoRef( this );
 }
 MusicCentreWidget::~MusicCentreWidget( ) {
-	deleteResource( );
+ deleteResource(  );
 }
 
 bool MusicCentreWidget::deleteResource( ) {
@@ -57,11 +57,17 @@ bool MusicCentreWidget::deleteResource( ) {
 	dragOrgY = 0;
 	dragOffsetX = 0;
 	dragOffsetY = 0;
+	if( musicFavoriteWidget )
+		musicFavoriteWidget->setMusicCentreWidget( nullptr );
+	if( musicListWidget )
+		musicListWidget->setMusicCentreWidget( nullptr );
+	if( musicTitleWidget )
+		musicTitleWidget->setMusicCentreWidget( nullptr );
 	musicfavoriteWidgetScrollArea->takeWidget( );
-	Delete_Resource_App_Core_Ptr( musicfavoriteWidgetScrollArea );
 	musicListWidgetScrollArea->takeWidget( );
-	Delete_Resource_App_Core_Ptr( musicListWidgetScrollArea );
 	musicTitleWidgetScrollArea->takeWidget( );
+	Delete_Resource_App_Core_Ptr( musicfavoriteWidgetScrollArea );
+	Delete_Resource_App_Core_Ptr( musicListWidgetScrollArea );
 	Delete_Resource_App_Core_Ptr( musicTitleWidgetScrollArea );
 	favoriteWidth = titleHeight = 0;
 	userMutex->unlock( );
@@ -239,7 +245,7 @@ bool MusicCentreWidget::event( QEvent *event ) {
 }
 
 bool MusicCentreWidget::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	clickWidth = 5;
 	favoriteLeft = 0;
 	favoriteRight = 0;

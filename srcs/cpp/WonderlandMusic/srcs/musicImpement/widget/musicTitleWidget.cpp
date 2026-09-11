@@ -22,7 +22,7 @@ MusicTitleWidget::MusicTitleWidget( ) {
 	regClassTypeInfoRef( this );
 }
 MusicTitleWidget::~MusicTitleWidget( ) {
-	deleteResource( );
+ deleteResource(  );
 	
 }
 bool MusicTitleWidget::getJsonData( QJsonObject &get_json_object ) const {
@@ -150,7 +150,7 @@ void MusicTitleWidget::mouseReleaseEvent( QMouseEvent *event ) {
 }
 
 bool MusicTitleWidget::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	userMutex = new UserMutex;
 	renderBuff = new QImage;
 	setMouseTracking( true );

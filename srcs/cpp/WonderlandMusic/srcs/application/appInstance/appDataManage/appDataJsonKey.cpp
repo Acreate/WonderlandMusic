@@ -40,7 +40,7 @@ bool AppDataJsonKey::deleteResource( ) {
 }
 
 AppDataJsonKey::~AppDataJsonKey( ) {
-	deleteResource( );
+	deleteResource(  );
 }
 
 AppDataJsonKey::AppDataJsonKey( ) {
@@ -67,7 +67,7 @@ bool AppDataJsonKey::init( ) {
 }
 
 bool AppDataJsonKey::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 	aboutWidget = new AboutWidgetJsonKey;
 	mainWindow = new MainWindowJsonKey;
 	systemTrayIcon = new SystemTrayIconJsonKey;

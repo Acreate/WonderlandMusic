@@ -12,6 +12,7 @@
 
 #include "../head/after_init_macro.h"
 #include "../head/before_init_macro.h"
+#include "../head/release_macro.h"
 #include "../head/result_message_out.h"
 
 #include "../msgInfo/messageErrorOut.h"
@@ -92,7 +93,7 @@ bool MainWindow::setJsonData( const QJsonObject &set_json_object ) {
 }
 
 MainWindow::~MainWindow( ) {
-	deleteResource( );
+	deleteResource(  );
 }
 
 MainWindow::MainWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
@@ -103,7 +104,7 @@ bool MainWindow::init( ) {
 }
 
 bool MainWindow::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 	if( AppTranslateTools::getMainWindow( [this] ( MainWindowTranslate &translate ) {
 		// 配置窗口顶部显示
 		setWindowTitle( translate.getAppWindowTitleName( ) );

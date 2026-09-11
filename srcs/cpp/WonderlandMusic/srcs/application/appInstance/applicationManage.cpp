@@ -2,6 +2,8 @@
 
 #include "appUserInterfaceManage.h"
 
+#include "../../head/release_macro.h"
+
 #include "../../tools/instanceTools.h"
 
 #include "../../window/mainWindow.h"
@@ -19,7 +21,7 @@ bool ApplicationManage::init( ) {
 }
 
 bool ApplicationManage::initAfter( ) {
-	deleteResource( );
+	deleteResource(  );
 	appUserInterfaceManage = InstanceTools::getAppUserInterfaceManage( );
 	mainWindow = appUserInterfaceManage->getMainWindow( );
 	appDataManage = InstanceTools::getAppDataManage( );
@@ -31,8 +33,7 @@ ApplicationManage::ApplicationManage( int &argc, char **argv, int app_flag_s ) :
 }
 
 ApplicationManage::~ApplicationManage( ) {
-	deleteResource( );
-	
+	deleteResource(  );
 }
 
 bool ApplicationManage::notify( QObject *object, QEvent *event ) {

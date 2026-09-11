@@ -22,7 +22,7 @@ AppMenuManage::AppMenuManage( ) {
 }
 
 AppMenuManage::~AppMenuManage( ) {
-	deleteResource( );
+ deleteResource(  );
 	
 }
 
@@ -34,7 +34,7 @@ bool AppMenuManage::deleteResource( ) {
 }
 
 bool AppMenuManage::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	systemTrayIconMenu = new SystemTrayIconMenu;
 	musicFavoriteMenu = new MusicFavoriteMenu;
 	musicListMenu = new MusicListMenu;

@@ -53,8 +53,8 @@ AppInstance * AppInstanceTool::createAppInstance( int &argc, char **argv, int ap
 }
 
 AppInstance::~AppInstance( ) {
-	deleteResource( );
-
+	
+	deleteResource(  );
 	delete classTypeInfoStack;
 	instance = nullptr;
 }
@@ -136,7 +136,7 @@ bool AppInstance::init( ) {
 }
 
 bool AppInstance::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 	instance = this;
 	userMutex = new UserMutex;
 	applicationManage = new ApplicationManage( appParam.argc, appParam.argv, appParam.app_flag_s );

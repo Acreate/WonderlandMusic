@@ -4,8 +4,9 @@
 
 #include <tools/instanceTools.h>
 
-#include "../../application/appInstance/appDataManage/translate/messageTranslate.h"
 #include "../../application/appInstance/appDataManage/translate/musicListMenuTranslate.h"
+
+#include "../../head/release_macro.h"
 
 #include "../../mutex/userMutex.h"
 
@@ -14,7 +15,7 @@ MusicListMenu::MusicListMenu( ) {
 	classTypeTools::regTypeInfoRef( this );
 }
 MusicListMenu::~MusicListMenu( ) {
-	deleteResource( );
+	deleteResource(  );
 }
 bool MusicListMenu::deleteResource( ) {
 	if( userMutex == nullptr )
@@ -30,7 +31,7 @@ bool MusicListMenu::deleteResource( ) {
 	return true;
 }
 bool MusicListMenu::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 	userMutex = new UserMutex;
 	playMusicItem = addAction( "" );
 	addSeparator( );

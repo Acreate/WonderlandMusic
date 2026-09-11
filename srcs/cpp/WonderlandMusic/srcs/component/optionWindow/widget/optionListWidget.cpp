@@ -21,7 +21,7 @@ OptionListWidget::OptionListWidget( OptionWindow *parent ) : QWidget( parent ), 
 	regClassTypeInfoRef( this );
 }
 OptionListWidget::~OptionListWidget( ) {
-	deleteResource( );
+ deleteResource(  );
 	
 }
 bool OptionListWidget::hasOptionButton( size_t &result_index, const OptionButton *option_item ) {
@@ -125,7 +125,7 @@ bool OptionListWidget::deleteResource( ) {
 	return true;
 }
 bool OptionListWidget::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	mutex = new UserMutex;
 
 	return true;

@@ -12,7 +12,7 @@ PlayWindow::PlayWindow( QWidget *parent, Qt::WindowFlags flags ) : QMainWindow( 
 	regClassTypeInfoRef( this );
 }
 PlayWindow::~PlayWindow( ) {
-	deleteResource( );
+ deleteResource(  );
 	
 }
 bool PlayWindow::deleteResource( ) {
@@ -28,7 +28,7 @@ bool PlayWindow::deleteResource( ) {
 	return true;
 }
 bool PlayWindow::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	userMutex = new UserMutex;
 	return true;
 }

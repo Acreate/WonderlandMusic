@@ -5,6 +5,8 @@
 #include "../application/appInstance/appDataManage/jsonKey/systemTrayIconJsonKey.h"
 #include "../application/appInstance/appDataManage/translate/systemTrayIconTranslate.h"
 
+#include "../head/release_macro.h"
+
 #include "../menu/systemTrayIconMenu.h"
 #include "../msgInfo/messageErrorOut.h"
 
@@ -43,7 +45,7 @@ SystemTrayIcon::SystemTrayIcon( const QIcon &icon, QObject *parent ) : QSystemTr
 bool SystemTrayIcon::initBefore( ) {
 	if( QSystemTrayIcon::isSystemTrayAvailable( ) == false )
 		return false;
-	deleteResource( );
+	deleteResource(  );
 
 	return true;
 }
@@ -86,5 +88,5 @@ bool SystemTrayIcon::init( ) {
 }
 
 SystemTrayIcon::~SystemTrayIcon( ) {
-	deleteResource( );
+	deleteResource(  );
 }

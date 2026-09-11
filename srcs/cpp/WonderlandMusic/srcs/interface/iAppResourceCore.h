@@ -3,6 +3,8 @@
 #include <QObject>
 
 class IAppResourceCore {
+	friend class AppResourceTools;
+
 protected:
 	virtual bool deleteResource( ) = 0;
 

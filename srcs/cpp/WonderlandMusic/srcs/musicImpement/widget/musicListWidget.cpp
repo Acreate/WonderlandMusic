@@ -10,6 +10,7 @@
 #include "../../component/musicWindow/interface/item/iMusicItem.h"
 #include "../../component/musicWindow/interface/widget/iMusicTitleWidget.h"
 
+#include "../../head/release_macro.h"
 #include "../../head/result_message_out.h"
 
 #include "../../mutex/userMutex.h"
@@ -18,8 +19,7 @@ MusicListWidget::MusicListWidget( ) {
 	regClassTypeInfoRef( this );
 }
 MusicListWidget::~MusicListWidget( ) {
-	deleteResource( );
-	
+	deleteResource(  );
 }
 bool MusicListWidget::getJsonData( QJsonObject &get_json_object ) const {
 	return true;
@@ -124,7 +124,7 @@ bool MusicListWidget::updateCurrentMusicFavoriteItem( ) {
 }
 
 bool MusicListWidget::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 	userMutex = new UserMutex;
 	setMouseTracking( true );
 	return true;

@@ -3,6 +3,8 @@
 #include "application/appInstance.h"
 
 #include "dateTimeFormat/dateTimeFormat.h"
+
+#include "head/release_macro.h"
 #include "head/result_message_out.h"
 
 #include "msgInfo/messageErrorOut.h"
@@ -114,10 +116,10 @@ bool InitMain::deleteResource( ) {
 InitMain::InitMain( int argc, char *argv[ ], char *envp[ ] ) : argc( argc ), argv( argv ), envp( envp ) {
 }
 InitMain::~InitMain( ) {
-	deleteResource( );
+	deleteResource(  );
 }
 bool InitMain::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 	initTimeInfo( );
 	initMainInstance = this;
 	oldCategoryFilter = QLoggingCategory::installFilter( [] ( QLoggingCategory *category ) {

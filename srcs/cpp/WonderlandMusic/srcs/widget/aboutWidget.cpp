@@ -80,7 +80,7 @@ bool AboutWidget::init( ) {
 }
 
 AboutWidget::~AboutWidget( ) {
-	deleteResource( );
+ deleteResource(  );
 }
 
 bool AboutWidget::deleteResource( ) {
@@ -94,7 +94,7 @@ QWidget * AboutWidget::toWidget( ) {
 }
 
 bool AboutWidget::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	mainLayout = new QHBoxLayout( this );
 
 	qtIco = new QLabel( this );

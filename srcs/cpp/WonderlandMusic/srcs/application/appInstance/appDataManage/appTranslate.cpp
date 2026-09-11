@@ -31,7 +31,7 @@ AppTranslate::AppTranslate( ) {
 }
 
 bool AppTranslate::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 
 	QTextCodec *utf8 = QTextCodec::codecForName( "UTF-8" );
 	if( utf8 == nullptr )
@@ -89,8 +89,7 @@ bool AppTranslate::deleteResource( ) {
 }
 
 AppTranslate::~AppTranslate( ) {
-	deleteResource( );
-	
+	deleteResource(  );
 }
 
 bool AppTranslate::init( ) {

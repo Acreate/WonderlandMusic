@@ -72,8 +72,7 @@ OptionWindow::OptionWindow( ) {
 }
 
 OptionWindow::~OptionWindow( ) {
-	deleteResource( );
-	
+	OptionWindow::deleteResource( );
 }
 
 void OptionWindow::updateOptionPanelInfo( OptionPanel *option_panel ) {
@@ -254,7 +253,7 @@ bool OptionWindow::deleteResource( ) {
 	return true;
 }
 bool OptionWindow::initBefore( ) {
-	deleteResource( );
+	OptionWindow::deleteResource( );
 	optionListDockWidget = new OptionListDockWidget( this );
 	mutex = new UserMutex;
 	auto parentObjectPtr = parent( );

@@ -31,6 +31,7 @@ class AppUserInterfaceManage : public QObject, public IAppJsonData, public IAppR
 	Q_OBJECT;
 
 protected:
+	UserMutex* userMutex = nullptr;
 	/// @brief 主要执行窗口
 	MainWindow *mainWindow = nullptr;
 	/// @brief 播放窗口

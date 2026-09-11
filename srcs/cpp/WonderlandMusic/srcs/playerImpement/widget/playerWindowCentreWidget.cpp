@@ -13,8 +13,7 @@ PlayerWindowCentreWidget::PlayerWindowCentreWidget( ) {
 	regClassTypeInfoRef( this );
 }
 PlayerWindowCentreWidget::~PlayerWindowCentreWidget( ) {
-	deleteResource( );
-	
+ deleteResource(  );
 }
 PlayWindow * PlayerWindowCentreWidget::getPlayWindow( ) const {
 	return playWindow;
@@ -80,7 +79,8 @@ bool PlayerWindowCentreWidget::deleteResource( ) {
 	return true;
 }
 bool PlayerWindowCentreWidget::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
+	userMutex = new UserMutex;
 	playerControlWidgetScrollArea = new PlayerControlWidgetScrollArea( );
 	playerInfoListWidgetScrollArea = new PlayerInfoListWidgetScrollArea( );
 	return true;

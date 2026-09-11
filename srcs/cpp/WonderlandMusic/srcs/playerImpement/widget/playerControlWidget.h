@@ -16,7 +16,7 @@ public:
 	PlayerControlWidget( );
 	~PlayerControlWidget( ) override;
 	QWidget * toWidget( ) override;
-	bool setPlayerWindowCentre( IPlayerWindowCentreWidget *play_window ) override;
+	bool setPlayerWindowCentre( IPlayerWindowCentreWidget *play_window_centre_widget ) override;
 	IPlayerWindowCentreWidget * getPlayerWindowCentre( ) const override;
 	bool updateLayout( ) override;
 	bool player( const QString &music_file_path ) override;

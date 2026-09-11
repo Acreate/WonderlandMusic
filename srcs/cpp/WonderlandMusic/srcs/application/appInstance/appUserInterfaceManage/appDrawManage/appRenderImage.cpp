@@ -21,12 +21,12 @@ AppRenderImage::AppRenderImage( ) {
 }
 
 AppRenderImage::~AppRenderImage( ) {
-	deleteResource( );
+ deleteResource(  );
 	
 }
 
 bool AppRenderImage::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	return true;
 }
 

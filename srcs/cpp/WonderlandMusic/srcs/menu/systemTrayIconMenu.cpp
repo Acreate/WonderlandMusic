@@ -4,6 +4,8 @@
 #include "../application/appInstance/applicationManage.h"
 #include "../application/appInstance/appDataManage/translate/systemTrayIconMenuTranslate.h"
 
+#include "../head/release_macro.h"
+
 #include "../tools/instanceTools.h"
 
 void SystemTrayIconMenu::slot_showMainWindow( ) {
@@ -31,7 +33,7 @@ bool SystemTrayIconMenu::init( ) {
 }
 
 bool SystemTrayIconMenu::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 
 	return true;
 }
@@ -50,7 +52,7 @@ bool SystemTrayIconMenu::initAfter( ) {
 }
 
 SystemTrayIconMenu::~SystemTrayIconMenu( ) {
-	deleteResource( );
+	deleteResource(  );
 }
 
 SystemTrayIconMenu::SystemTrayIconMenu( QWidget *parent ) : SystemTrayIconMenu( "", parent ) {

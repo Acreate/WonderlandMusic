@@ -17,7 +17,7 @@ OptionListDockWidget::OptionListDockWidget( OptionWindow *option_window ) : opti
 	regClassTypeInfoRef( this );
 }
 OptionListDockWidget::~OptionListDockWidget( ) {
-	deleteResource( );
+ deleteResource(  );
 	
 }
 OptionWindow * OptionListDockWidget::getOptionWindow( ) const {
@@ -46,7 +46,7 @@ bool OptionListDockWidget::deleteResource( ) {
 	return true;
 }
 bool OptionListDockWidget::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	if( optionWindow == nullptr )
 		return false;
 	dockTitleWidget = new QWidget;

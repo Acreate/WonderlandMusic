@@ -54,7 +54,7 @@ bool AppMusicManage::init( ) {
 }
 
 bool AppMusicManage::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	userMutex = new UserMutex;
 	return true;
 }
@@ -201,7 +201,7 @@ AppMusicManage::AppMusicManage( ) : ClassTypeInfoVar( ) {
 	regClassTypeInfoRef( this );
 }
 AppMusicManage::~AppMusicManage( ) {
-	deleteResource( );
+ deleteResource(  );
 }
 
 bool AppMusicManage::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {

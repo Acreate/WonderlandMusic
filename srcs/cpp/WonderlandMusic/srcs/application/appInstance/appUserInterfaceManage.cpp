@@ -18,6 +18,8 @@
 #include "../../musicImpement/widget/musicListWidget.h"
 #include "../../musicImpement/widget/musicTitleWidget.h"
 
+#include "../../mutex/userMutex.h"
+
 #include "../../playerImpement/widget/playerControlWidget.h"
 #include "../../playerImpement/widget/playerWindowCentreWidget.h"
 
@@ -36,6 +38,8 @@
 #include "appUserInterfaceManage/appMenuManage.h"
 
 bool AppUserInterfaceManage::deleteResource( ) {
+	if( userMutex == nullptr )
+		return true;
 	if( systemTrayIcon )
 		systemTrayIcon->hide( );
 	Delete_Resource_App_Core_Ptr( appMenuManage );
@@ -125,7 +129,8 @@ bool AppUserInterfaceManage::init( ) {
 }
 
 bool AppUserInterfaceManage::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
+	userMutex = new UserMutex;
 	appDrawManage = new AppDrawManage;
 	mainWindow = new MainWindow;
 	playWindow = new PlayWindow;
@@ -188,8 +193,7 @@ AppUserInterfaceManage::AppUserInterfaceManage( ) {
 }
 
 AppUserInterfaceManage::~AppUserInterfaceManage( ) {
-	deleteResource( );
-	
+	deleteResource(  );
 }
 
 bool AppUserInterfaceManage::showMainWindow( ) const {

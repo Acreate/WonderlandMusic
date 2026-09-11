@@ -17,8 +17,7 @@ MusicWindow::MusicWindow( ) {
 	regClassTypeInfoRef( this );
 }
 MusicWindow::~MusicWindow( ) {
-	deleteResource( );
-	
+ deleteResource(  );
 }
 bool MusicWindow::deleteResource( ) {
 	if( userMutex == nullptr )
@@ -31,7 +30,7 @@ bool MusicWindow::deleteResource( ) {
 	return true;
 }
 bool MusicWindow::initBefore( ) {
-	deleteResource( );
+ deleteResource(  );
 	userMutex = new UserMutex;
 	return true;
 }
@@ -147,25 +146,28 @@ bool MusicWindow::synchronizationChildrenWidgetSize( ) {
 }
 bool MusicWindow::setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) {
 	if( music_centre_widget == nullptr ) {
-		auto old = music_centre_widget;
+		if( musicCentreWidget->setMusicWindow( nullptr ) == false )
+			return false;
 		takeCentralWidget( );
 		musicCentreWidget = nullptr;
-		return old;
+		return true;
 	}
 	auto widget = music_centre_widget->toWidget( );
 	if( widget == nullptr )
-		return music_centre_widget;
+		return false;
 	if( music_centre_widget->setMusicWindow( this ) == false )
-		return music_centre_widget;
+		return false;
 	if( music_centre_widget->repaintMusicCentreWidget( ) == false )
-		return music_centre_widget;
+		return false;
 	if( music_centre_widget->synchronizationChildrenWidgetSize( ) == false )
-		return music_centre_widget;
+		return false;
 	auto old = musicCentreWidget;
 	musicCentreWidget = music_centre_widget;
+	if( old && old->setMusicWindow( nullptr ) == false )
+		return false;
 	takeCentralWidget( );
 	setCentralWidget( widget );
-	return old;
+	return true;
 }
 QWidget * MusicWindow::toWidget( ) {
 	return this;

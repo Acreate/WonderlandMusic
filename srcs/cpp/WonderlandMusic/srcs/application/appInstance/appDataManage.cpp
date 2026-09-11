@@ -32,7 +32,7 @@ bool AppDataManage::init( ) {
 }
 
 bool AppDataManage::initBefore( ) {
-	deleteResource( );
+	deleteResource(  );
 	auto appInstance = AppInstance::getAppInstance( );
 	QString dirPath = appInstance->getApplicationManage( )->applicationDirPath( );
 	appSettingPath = dirPath + "/program/";
@@ -66,8 +66,7 @@ AppDataManage::AppDataManage( ) {
 }
 
 AppDataManage::~AppDataManage( ) {
-	deleteResource( );
-	
+ deleteResource(  );
 }
 
 bool AppDataManage::deleteResource( ) {

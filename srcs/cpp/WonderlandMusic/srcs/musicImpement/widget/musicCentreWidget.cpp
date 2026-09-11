@@ -28,8 +28,6 @@
 
 #include "../../application/appInstance/appDataManage/appMusicManage.h"
 
-#include "../../head/q_debug_message_var_out.h"
-
 MusicCentreWidget::MusicCentreWidget( ) : QWidget( ), musicWindow( nullptr ) {
 	regClassTypeInfoRef( this );
 }
@@ -81,12 +79,10 @@ bool MusicCentreWidget::deleteResource( ) {
 
 void MusicCentreWidget::resizeEvent( QResizeEvent *event ) {
 	QWidget::resizeEvent( event );
-
 	synchronizationChildrenWidgetSize( );
 }
 
 void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
-	Q_Debug_MessageString( "鼠标移动" );
 	event->ignore( );
 	userMutex->lock( );
 	switch( readDragStatus ) {

@@ -5,8 +5,6 @@
 #include "../../component/playWindow/interface/widget/iPlayerWindowCentreWidget.h"
 
 class UserMutex;
-class PlayerInfoListWidgetScrollArea;
-class PlayerControlWidgetScrollArea;
 
 class PlayerWindowCentreWidget : public QWidget, public IPlayerWindowCentreWidget {
 	Q_OBJECT;
@@ -16,9 +14,6 @@ protected:
 	PlayWindow *playWindow = nullptr;
 	IPlayerInfoListWidget *playerInfoListWidget = nullptr;
 	IPlayerControlWidget *playerControlWidget = nullptr;
-
-	PlayerControlWidgetScrollArea *playerControlWidgetScrollArea = nullptr;
-	PlayerInfoListWidgetScrollArea *playerInfoListWidgetScrollArea = nullptr;
 
 public:
 	PlayerWindowCentreWidget( );

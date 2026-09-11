@@ -6,8 +6,6 @@
 
 #include <mutex/userMutex.h>
 
-#include "../../head/q_debug_message_var_out.h"
-
 #include "interface/widget/iPlayerControlWidget.h"
 #include "interface/widget/iPlayerWindowCentreWidget.h"
 

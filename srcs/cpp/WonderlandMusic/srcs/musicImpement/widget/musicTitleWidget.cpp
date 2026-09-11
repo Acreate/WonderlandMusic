@@ -18,8 +18,6 @@
 
 #include <component/musicWindow/interface/widget/iMusicCentreWidget.h>
 
-#include "../../head/q_debug_message_var_out.h"
-
 MusicTitleWidget::MusicTitleWidget( ) {
 	regClassTypeInfoRef( this );
 }
@@ -66,7 +64,6 @@ void MusicTitleWidget::paintEvent( QPaintEvent *event ) {
 	userMutex->unlock( );
 }
 void MusicTitleWidget::mouseMoveEvent( QMouseEvent *event ) {
-	Q_Debug_MessageString( "鼠标移动" );
 	event->ignore( );
 	if( userMutex == nullptr )
 		return;

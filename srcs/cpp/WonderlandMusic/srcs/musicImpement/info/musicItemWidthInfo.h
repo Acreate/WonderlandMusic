@@ -1,0 +1,59 @@
+﻿#ifndef MUSICITEMWIDTHINFO_H_H_HEAD__FILE__
+#define MUSICITEMWIDTHINFO_H_H_HEAD__FILE__
+#include <component/musicWindow/interface/info/iMusicItemWidthInfo.h>
+
+class MusicItemWidthInfo : public IMusicItemWidthInfo {
+private:
+	int suggestHeight;
+	int intervalWidth;
+	int separatorWidth;
+	int musicCodeWidth;
+	int musicNameWidth;
+	int musicSingerNameWidth;
+	int musicDurationTimeWidth;
+	IMusicTitleWidget *musicTitleWidget = nullptr;
+	IMusicCentreWidget *musicCentreWidget = nullptr;
+
+protected:
+	void setMusicCodeWidth( const int music_code_width ) override;
+	void setMusicDurationTimeWidth( const int music_duration_time_width ) override;
+	void setMusicNameWidth( const int music_name_width ) override;
+	void setMusicSingerNameWidth( const int music_singer_name_width ) override;
+	void setSuggestHeight( const int suggest_height ) override;
+	bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) override;
+
+public:
+	MusicItemWidthInfo( );
+	~MusicItemWidthInfo( ) override;
+	MusicItemWidthInfo( const MusicItemWidthInfo &other );
+	MusicItemWidthInfo & operator=( const MusicItemWidthInfo &other );
+
+protected:
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
+
+public:
+	int getSuggestHeight( ) const override;
+	int getCalculateMinWidth( ) const override;
+	int getIntervalWidth( ) const override;
+	int getSeparatorWidth( ) const override;
+	int getMusicCodeWidth( ) const override;
+	int getMusicNameWidth( ) const override;
+	int getMusicSingerNameWidth( ) const override;
+	int getMusicDurationTimeWidth( ) const override;
+	bool setIMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
+	bool initInfo( ) override;
+	IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) override;
+	IMusicTitleWidget * getMusicTitleWidget( ) override;
+	bool synchronization( ) override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
+	bool isSuggestHeight( const int *width_var_ptr ) const override;
+	bool isMusicCodeWidth( const int *width_var_ptr ) const override;
+	bool isMusicNameWidth( const int *width_var_ptr ) const override;
+	bool isMusicSingerNameWidth( const int *width_var_ptr ) const override;
+	bool isMusicDurationTimeWidth( const int *width_var_ptr ) const override;
+	bool getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, int x ) const override;
+};
+
+#endif // MUSICITEMWIDTHINFO_H_H_HEAD__FILE__

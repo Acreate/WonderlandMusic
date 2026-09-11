@@ -1,0 +1,3 @@
+[submodule "lib/libiconv_1.19"]
+	path = lib/libiconv_1.19
+	url = https://gitee.com/ChenYLhuman/libiconv_1.19.git

@@ -1,0 +1,1833 @@
+#ifndef CMAKE__VALUE_TO_C_CPP_HEADER_ENV_H_H_HEAD__FILE__
+#define CMAKE__VALUE_TO_C_CPP_HEADER_ENV_H_H_HEAD__FILE__
+/// @brief 
+#define cmake_value_CTEST_CURL_OPTIONS "${CTEST_CURL_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_CVS_CHECKOUT "${CTEST_CVS_CHECKOUT}"
+/// @brief 
+#define cmake_value_CTEST_SCP_COMMAND "${CTEST_SCP_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_TRIGGER_SITE "${CTEST_TRIGGER_SITE}"
+/// @brief 
+#define cmake_value_CMAKE_COMPILER_IS_GNUCC "${CMAKE_COMPILER_IS_GNUCC}"
+/// @brief 
+#define cmake_value_CMAKE_COMPILER_IS_GNUCXX "${CMAKE_COMPILER_IS_GNUCXX}"
+/// @brief 
+#define cmake_value_CMAKE_COMPILER_IS_GNUG77 "${CMAKE_COMPILER_IS_GNUG77}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOMOC_RELAXED_MODE "${CMAKE_AUTOMOC_RELAXED_MODE}"
+/// @brief 
+#define cmake_value_CMAKE_BACKWARDS_COMPATIBILITY "${CMAKE_BACKWARDS_COMPATIBILITY}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY "${CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY "${CMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY}"
+/// @brief 
+#define cmake_value_CMAKE_IOS_INSTALL_COMBINED "${CMAKE_IOS_INSTALL_COMBINED}"
+/// @brief 
+#define cmake_value_CMAKE_USE_RELATIVE_PATHS "${CMAKE_USE_RELATIVE_PATHS}"
+/// @brief 
+#define cmake_value_MSVC10 "${MSVC10}"
+/// @brief 
+#define cmake_value_MSVC11 "${MSVC11}"
+/// @brief 
+#define cmake_value_MSVC12 "${MSVC12}"
+/// @brief 
+#define cmake_value_MSVC14 "${MSVC14}"
+/// @brief 
+#define cmake_value_MSVC60 "${MSVC60}"
+/// @brief 
+#define cmake_value_MSVC70 "${MSVC70}"
+/// @brief 
+#define cmake_value_MSVC71 "${MSVC71}"
+/// @brief 
+#define cmake_value_MSVC80 "${MSVC80}"
+/// @brief 
+#define cmake_value_MSVC90 "${MSVC90}"
+/// @brief 
+#define cmake_value_CMAKE_EXTRA_GENERATOR "${CMAKE_EXTRA_GENERATOR}"
+/// @brief 
+#define cmake_value_CMAKE_HOME_DIRECTORY "${CMAKE_HOME_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_INTERNAL_PLATFORM_ABI "${CMAKE_INTERNAL_PLATFORM_ABI}"
+/// @brief 
+#define cmake_value_CMAKE_NOT_USING_CONFIG_FLAGS "${CMAKE_NOT_USING_CONFIG_FLAGS}"
+/// @brief 
+#define cmake_value_CMAKE_VS_INTEL_FORTRAN_PROJECT_VERSION "${CMAKE_VS_INTEL_Fortran_PROJECT_VERSION}"
+/// @brief 
+#define cmake_value_CPACK_ABSOLUTE_DESTINATION_FILES "${CPACK_ABSOLUTE_DESTINATION_FILES}"
+/// @brief 
+#define cmake_value_CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY "${CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY}"
+/// @brief 
+#define cmake_value_CPACK_CUSTOM_INSTALL_VARIABLES "${CPACK_CUSTOM_INSTALL_VARIABLES}"
+/// @brief 
+#define cmake_value_CPACK_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION "${CPACK_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION}"
+/// @brief 
+#define cmake_value_CPACK_INCLUDE_TOPLEVEL_DIRECTORY "${CPACK_INCLUDE_TOPLEVEL_DIRECTORY}"
+/// @brief 
+#define cmake_value_CPACK_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS "${CPACK_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS}"
+/// @brief 
+#define cmake_value_CPACK_PACKAGING_INSTALL_PREFIX "${CPACK_PACKAGING_INSTALL_PREFIX}"
+/// @brief 
+#define cmake_value_CPACK_SET_DESTDIR "${CPACK_SET_DESTDIR}"
+/// @brief 
+#define cmake_value_CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION "${CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION}"
+/// @brief 
+#define cmake_value_CTEST_BINARY_DIRECTORY "${CTEST_BINARY_DIRECTORY}"
+/// @brief 
+#define cmake_value_CTEST_BUILD_COMMAND "${CTEST_BUILD_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_BUILD_NAME "${CTEST_BUILD_NAME}"
+/// @brief 
+#define cmake_value_CTEST_BZR_COMMAND "${CTEST_BZR_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_BZR_UPDATE_OPTIONS "${CTEST_BZR_UPDATE_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_CHANGE_ID "${CTEST_CHANGE_ID}"
+/// @brief 
+#define cmake_value_CTEST_CHECKOUT_COMMAND "${CTEST_CHECKOUT_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_CONFIGURATION_TYPE "${CTEST_CONFIGURATION_TYPE}"
+/// @brief 
+#define cmake_value_CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_COVERAGE_COMMAND "${CTEST_COVERAGE_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_COVERAGE_EXTRA_FLAGS "${CTEST_COVERAGE_EXTRA_FLAGS}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_COVERAGE_EXCLUDE "${CTEST_CUSTOM_COVERAGE_EXCLUDE}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_ERROR_EXCEPTION "${CTEST_CUSTOM_ERROR_EXCEPTION}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_ERROR_MATCH "${CTEST_CUSTOM_ERROR_MATCH}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_ERROR_POST_CONTEXT "${CTEST_CUSTOM_ERROR_POST_CONTEXT}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_ERROR_PRE_CONTEXT "${CTEST_CUSTOM_ERROR_PRE_CONTEXT}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE "${CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS "${CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS "${CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE "${CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_MEMCHECK_IGNORE "${CTEST_CUSTOM_MEMCHECK_IGNORE}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_POST_MEMCHECK "${CTEST_CUSTOM_POST_MEMCHECK}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_POST_TEST "${CTEST_CUSTOM_POST_TEST}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_PRE_MEMCHECK "${CTEST_CUSTOM_PRE_MEMCHECK}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_PRE_TEST "${CTEST_CUSTOM_PRE_TEST}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_TEST_OUTPUT_TRUNCATION "${CTEST_CUSTOM_TEST_OUTPUT_TRUNCATION}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_TESTS_IGNORE "${CTEST_CUSTOM_TESTS_IGNORE}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_WARNING_EXCEPTION "${CTEST_CUSTOM_WARNING_EXCEPTION}"
+/// @brief 
+#define cmake_value_CTEST_CUSTOM_WARNING_MATCH "${CTEST_CUSTOM_WARNING_MATCH}"
+/// @brief 
+#define cmake_value_CTEST_CVS_COMMAND "${CTEST_CVS_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_CVS_UPDATE_OPTIONS "${CTEST_CVS_UPDATE_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_DROP_LOCATION "${CTEST_DROP_LOCATION}"
+/// @brief 
+#define cmake_value_CTEST_DROP_METHOD "${CTEST_DROP_METHOD}"
+/// @brief 
+#define cmake_value_CTEST_DROP_SITE "${CTEST_DROP_SITE}"
+/// @brief 
+#define cmake_value_CTEST_DROP_SITE_CDASH "${CTEST_DROP_SITE_CDASH}"
+/// @brief 
+#define cmake_value_CTEST_DROP_SITE_PASSWORD "${CTEST_DROP_SITE_PASSWORD}"
+/// @brief 
+#define cmake_value_CTEST_DROP_SITE_USER "${CTEST_DROP_SITE_USER}"
+/// @brief 
+#define cmake_value_CTEST_EXTRA_COVERAGE_GLOB "${CTEST_EXTRA_COVERAGE_GLOB}"
+/// @brief 
+#define cmake_value_CTEST_GIT_COMMAND "${CTEST_GIT_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_GIT_INIT_SUBMODULES "${CTEST_GIT_INIT_SUBMODULES}"
+/// @brief 
+#define cmake_value_CTEST_GIT_UPDATE_CUSTOM "${CTEST_GIT_UPDATE_CUSTOM}"
+/// @brief 
+#define cmake_value_CTEST_GIT_UPDATE_OPTIONS "${CTEST_GIT_UPDATE_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_HG_COMMAND "${CTEST_HG_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_HG_UPDATE_OPTIONS "${CTEST_HG_UPDATE_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_LABELS_FOR_SUBPROJECTS "${CTEST_LABELS_FOR_SUBPROJECTS}"
+/// @brief 
+#define cmake_value_CTEST_MEMORYCHECK_COMMAND "${CTEST_MEMORYCHECK_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_MEMORYCHECK_COMMAND_OPTIONS "${CTEST_MEMORYCHECK_COMMAND_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_MEMORYCHECK_SANITIZER_OPTIONS "${CTEST_MEMORYCHECK_SANITIZER_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_MEMORYCHECK_SUPPRESSIONS_FILE "${CTEST_MEMORYCHECK_SUPPRESSIONS_FILE}"
+/// @brief 
+#define cmake_value_CTEST_MEMORYCHECK_TYPE "${CTEST_MEMORYCHECK_TYPE}"
+/// @brief 
+#define cmake_value_CTEST_NIGHTLY_START_TIME "${CTEST_NIGHTLY_START_TIME}"
+/// @brief 
+#define cmake_value_CTEST_P4_CLIENT "${CTEST_P4_CLIENT}"
+/// @brief 
+#define cmake_value_CTEST_P4_COMMAND "${CTEST_P4_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_P4_OPTIONS "${CTEST_P4_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_P4_UPDATE_OPTIONS "${CTEST_P4_UPDATE_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_RESOURCE_SPEC_FILE "${CTEST_RESOURCE_SPEC_FILE}"
+/// @brief 
+#define cmake_value_CTEST_RUN_CURRENT_SCRIPT "${CTEST_RUN_CURRENT_SCRIPT}"
+/// @brief 
+#define cmake_value_CTEST_SCRIPT_DIRECTORY "${CTEST_SCRIPT_DIRECTORY}"
+/// @brief 
+#define cmake_value_CTEST_SITE "${CTEST_SITE}"
+/// @brief 
+#define cmake_value_CTEST_SOURCE_DIRECTORY "${CTEST_SOURCE_DIRECTORY}"
+/// @brief 
+#define cmake_value_CTEST_SUBMIT_INACTIVITY_TIMEOUT "${CTEST_SUBMIT_INACTIVITY_TIMEOUT}"
+/// @brief 
+#define cmake_value_CTEST_SUBMIT_URL "${CTEST_SUBMIT_URL}"
+/// @brief 
+#define cmake_value_CTEST_SVN_COMMAND "${CTEST_SVN_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_SVN_OPTIONS "${CTEST_SVN_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_SVN_UPDATE_OPTIONS "${CTEST_SVN_UPDATE_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_TEST_LOAD "${CTEST_TEST_LOAD}"
+/// @brief 
+#define cmake_value_CTEST_TEST_TIMEOUT "${CTEST_TEST_TIMEOUT}"
+/// @brief 
+#define cmake_value_CTEST_TLS_VERIFY "${CTEST_TLS_VERIFY}"
+/// @brief 
+#define cmake_value_CTEST_TLS_VERSION "${CTEST_TLS_VERSION}"
+/// @brief 
+#define cmake_value_CTEST_UPDATE_COMMAND "${CTEST_UPDATE_COMMAND}"
+/// @brief 
+#define cmake_value_CTEST_UPDATE_OPTIONS "${CTEST_UPDATE_OPTIONS}"
+/// @brief 
+#define cmake_value_CTEST_UPDATE_VERSION_ONLY "${CTEST_UPDATE_VERSION_ONLY}"
+/// @brief 
+#define cmake_value_CTEST_UPDATE_VERSION_OVERRIDE "${CTEST_UPDATE_VERSION_OVERRIDE}"
+/// @brief 
+#define cmake_value_CTEST_USE_LAUNCHERS "${CTEST_USE_LAUNCHERS}"
+/// @brief 
+#define cmake_value_CMAKE_C_COMPILE_FEATURES "${CMAKE_C_COMPILE_FEATURES}"
+/// @brief 
+#define cmake_value_CMAKE_C_EXTENSIONS "${CMAKE_C_EXTENSIONS}"
+/// @brief 
+#define cmake_value_CMAKE_C_STANDARD "${CMAKE_C_STANDARD}"
+/// @brief 
+#define cmake_value_CMAKE_C_STANDARD_REQUIRED "${CMAKE_C_STANDARD_REQUIRED}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_ARCHITECTURES "${CMAKE_CUDA_ARCHITECTURES}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_COMPILE_FEATURES "${CMAKE_CUDA_COMPILE_FEATURES}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_EXTENSIONS "${CMAKE_CUDA_EXTENSIONS}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_HOST_COMPILER "${CMAKE_CUDA_HOST_COMPILER}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_STANDARD "${CMAKE_CUDA_STANDARD}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_STANDARD_REQUIRED "${CMAKE_CUDA_STANDARD_REQUIRED}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES "${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_CXX_COMPILE_FEATURES "${CMAKE_CXX_COMPILE_FEATURES}"
+/// @brief 
+#define cmake_value_CMAKE_CXX_COMPILER_IMPORT_STD "${CMAKE_CXX_COMPILER_IMPORT_STD}"
+/// @brief 
+#define cmake_value_CMAKE_CXX_EXTENSIONS "${CMAKE_CXX_EXTENSIONS}"
+/// @brief 
+#define cmake_value_CMAKE_CXX_STANDARD "${CMAKE_CXX_STANDARD}"
+/// @brief 
+#define cmake_value_CMAKE_CXX_STANDARD_REQUIRED "${CMAKE_CXX_STANDARD_REQUIRED}"
+/// @brief 
+#define cmake_value_CMAKE_FORTRAN_MODDIR_DEFAULT "${CMAKE_Fortran_MODDIR_DEFAULT}"
+/// @brief 
+#define cmake_value_CMAKE_FORTRAN_MODDIR_FLAG "${CMAKE_Fortran_MODDIR_FLAG}"
+/// @brief 
+#define cmake_value_CMAKE_FORTRAN_MODOUT_FLAG "${CMAKE_Fortran_MODOUT_FLAG}"
+/// @brief 
+#define cmake_value_CMAKE_HIP_ARCHITECTURES "${CMAKE_HIP_ARCHITECTURES}"
+/// @brief 
+#define cmake_value_CMAKE_HIP_COMPILE_FEATURES "${CMAKE_HIP_COMPILE_FEATURES}"
+/// @brief 
+#define cmake_value_CMAKE_HIP_EXTENSIONS "${CMAKE_HIP_EXTENSIONS}"
+/// @brief 
+#define cmake_value_CMAKE_HIP_PLATFORM "${CMAKE_HIP_PLATFORM}"
+/// @brief 
+#define cmake_value_CMAKE_HIP_STANDARD "${CMAKE_HIP_STANDARD}"
+/// @brief 
+#define cmake_value_CMAKE_HIP_STANDARD_REQUIRED "${CMAKE_HIP_STANDARD_REQUIRED}"
+/// @brief 
+#define cmake_value_CMAKE_ISPC_HEADER_DIRECTORY "${CMAKE_ISPC_HEADER_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_ISPC_HEADER_SUFFIX "${CMAKE_ISPC_HEADER_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_ISPC_INSTRUCTION_SETS "${CMAKE_ISPC_INSTRUCTION_SETS}"
+/// @brief 
+#define cmake_value_CMAKE_OBJC_EXTENSIONS "${CMAKE_OBJC_EXTENSIONS}"
+/// @brief 
+#define cmake_value_CMAKE_OBJC_STANDARD "${CMAKE_OBJC_STANDARD}"
+/// @brief 
+#define cmake_value_CMAKE_OBJC_STANDARD_REQUIRED "${CMAKE_OBJC_STANDARD_REQUIRED}"
+/// @brief 
+#define cmake_value_CMAKE_OBJCXX_EXTENSIONS "${CMAKE_OBJCXX_EXTENSIONS}"
+/// @brief 
+#define cmake_value_CMAKE_OBJCXX_STANDARD "${CMAKE_OBJCXX_STANDARD}"
+/// @brief 
+#define cmake_value_CMAKE_OBJCXX_STANDARD_REQUIRED "${CMAKE_OBJCXX_STANDARD_REQUIRED}"
+/// @brief 
+#define cmake_value_CMAKE_SWIFT_LANGUAGE_VERSION "${CMAKE_Swift_LANGUAGE_VERSION}"
+/// @brief 
+#define cmake_value_BUILD_SHARED_LIBS "${BUILD_SHARED_LIBS}"
+/// @brief 
+#define cmake_value_CMAKE_ABSOLUTE_DESTINATION_FILES "${CMAKE_ABSOLUTE_DESTINATION_FILES}"
+/// @brief 
+#define cmake_value_CMAKE_ADD_CUSTOM_COMMAND_DEPENDS_EXPLICIT_ONLY "${CMAKE_ADD_CUSTOM_COMMAND_DEPENDS_EXPLICIT_ONLY}"
+/// @brief 
+#define cmake_value_CMAKE_APPBUNDLE_PATH "${CMAKE_APPBUNDLE_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}"
+/// @brief 
+#define cmake_value_CMAKE_CLANG_VFS_OVERLAY "${CMAKE_CLANG_VFS_OVERLAY}"
+/// @brief 
+#define cmake_value_CMAKE_CODEBLOCKS_COMPILER_ID "${CMAKE_CODEBLOCKS_COMPILER_ID}"
+/// @brief 
+#define cmake_value_CMAKE_CODEBLOCKS_EXCLUDE_EXTERNAL_FILES "${CMAKE_CODEBLOCKS_EXCLUDE_EXTERNAL_FILES}"
+/// @brief 
+#define cmake_value_CMAKE_CODELITE_USE_TARGETS "${CMAKE_CODELITE_USE_TARGETS}"
+/// @brief 
+#define cmake_value_CMAKE_COLOR_DIAGNOSTICS "${CMAKE_COLOR_DIAGNOSTICS}"
+/// @brief 
+#define cmake_value_CMAKE_COLOR_MAKEFILE "${CMAKE_COLOR_MAKEFILE}"
+/// @brief 
+#define cmake_value_CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}"
+/// @brief 
+#define cmake_value_CMAKE_DEPENDS_IN_PROJECT_ONLY "${CMAKE_DEPENDS_IN_PROJECT_ONLY}"
+/// @brief 
+#define cmake_value_CMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES "${CMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES}"
+/// @brief 
+#define cmake_value_CMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT "${CMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT}"
+/// @brief 
+#define cmake_value_CMAKE_ECLIPSE_MAKE_ARGUMENTS "${CMAKE_ECLIPSE_MAKE_ARGUMENTS}"
+/// @brief 
+#define cmake_value_CMAKE_ECLIPSE_RESOURCE_ENCODING "${CMAKE_ECLIPSE_RESOURCE_ENCODING}"
+/// @brief 
+#define cmake_value_CMAKE_ECLIPSE_VERSION "${CMAKE_ECLIPSE_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_ERROR_DEPRECATED "${CMAKE_ERROR_DEPRECATED}"
+/// @brief 
+#define cmake_value_CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION "${CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION}"
+/// @brief 
+#define cmake_value_CMAKE_EXECUTE_PROCESS_COMMAND_ECHO "${CMAKE_EXECUTE_PROCESS_COMMAND_ECHO}"
+/// @brief 
+#define cmake_value_CMAKE_EXPORT_BUILD_DATABASE "${CMAKE_EXPORT_BUILD_DATABASE}"
+/// @brief 
+#define cmake_value_CMAKE_EXPORT_COMPILE_COMMANDS "${CMAKE_EXPORT_COMPILE_COMMANDS}"
+/// @brief 
+#define cmake_value_CMAKE_EXPORT_PACKAGE_REGISTRY "${CMAKE_EXPORT_PACKAGE_REGISTRY}"
+/// @brief 
+#define cmake_value_CMAKE_EXPORT_NO_PACKAGE_REGISTRY "${CMAKE_EXPORT_NO_PACKAGE_REGISTRY}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_APPBUNDLE "${CMAKE_FIND_APPBUNDLE}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_FRAMEWORK "${CMAKE_FIND_FRAMEWORK}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_LIBRARY_CUSTOM_LIB_SUFFIX "${CMAKE_FIND_LIBRARY_CUSTOM_LIB_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_LIBRARY_PREFIXES "${CMAKE_FIND_LIBRARY_PREFIXES}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_LIBRARY_SUFFIXES "${CMAKE_FIND_LIBRARY_SUFFIXES}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_NO_INSTALL_PREFIX "${CMAKE_FIND_NO_INSTALL_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_PREFER_CONFIG "${CMAKE_FIND_PACKAGE_PREFER_CONFIG}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_RESOLVE_SYMLINKS "${CMAKE_FIND_PACKAGE_RESOLVE_SYMLINKS}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_TARGETS_GLOBAL "${CMAKE_FIND_PACKAGE_TARGETS_GLOBAL}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_WARN_NO_MODULE "${CMAKE_FIND_PACKAGE_WARN_NO_MODULE}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_ROOT_PATH "${CMAKE_FIND_ROOT_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_ROOT_PATH_MODE_INCLUDE "${CMAKE_FIND_ROOT_PATH_MODE_INCLUDE}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_ROOT_PATH_MODE_LIBRARY "${CMAKE_FIND_ROOT_PATH_MODE_LIBRARY}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_ROOT_PATH_MODE_PACKAGE "${CMAKE_FIND_ROOT_PATH_MODE_PACKAGE}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM "${CMAKE_FIND_ROOT_PATH_MODE_PROGRAM}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH "${CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_USE_CMAKE_PATH "${CMAKE_FIND_USE_CMAKE_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_USE_CMAKE_SYSTEM_PATH "${CMAKE_FIND_USE_CMAKE_SYSTEM_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_USE_INSTALL_PREFIX "${CMAKE_FIND_USE_INSTALL_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_USE_PACKAGE_REGISTRY "${CMAKE_FIND_USE_PACKAGE_REGISTRY}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_USE_PACKAGE_ROOT_PATH "${CMAKE_FIND_USE_PACKAGE_ROOT_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH "${CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY "${CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY}"
+/// @brief 
+#define cmake_value_CMAKE_FRAMEWORK_PATH "${CMAKE_FRAMEWORK_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_IGNORE_PATH "${CMAKE_IGNORE_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_IGNORE_PREFIX_PATH "${CMAKE_IGNORE_PREFIX_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_INCLUDE_DIRECTORIES_BEFORE "${CMAKE_INCLUDE_DIRECTORIES_BEFORE}"
+/// @brief 
+#define cmake_value_CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE "${CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE}"
+/// @brief 
+#define cmake_value_CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_DEFAULT_COMPONENT_NAME "${CMAKE_INSTALL_DEFAULT_COMPONENT_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS "${CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_MESSAGE "${CMAKE_INSTALL_MESSAGE}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT "${CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT}"
+/// @brief 
+#define cmake_value_CMAKE_KATE_FILES_MODE "${CMAKE_KATE_FILES_MODE}"
+/// @brief 
+#define cmake_value_CMAKE_KATE_MAKE_ARGUMENTS "${CMAKE_KATE_MAKE_ARGUMENTS}"
+/// @brief 
+#define cmake_value_CMAKE_LIBRARY_PATH "${CMAKE_LIBRARY_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_DIRECTORIES_BEFORE "${CMAKE_LINK_DIRECTORIES_BEFORE}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_LIBRARIES_ONLY_TARGETS "${CMAKE_LINK_LIBRARIES_ONLY_TARGETS}"
+/// @brief 
+#define cmake_value_CMAKE_MAXIMUM_RECURSION_DEPTH "${CMAKE_MAXIMUM_RECURSION_DEPTH}"
+/// @brief 
+#define cmake_value_CMAKE_MESSAGE_CONTEXT "${CMAKE_MESSAGE_CONTEXT}"
+/// @brief 
+#define cmake_value_CMAKE_MESSAGE_CONTEXT_SHOW "${CMAKE_MESSAGE_CONTEXT_SHOW}"
+/// @brief 
+#define cmake_value_CMAKE_MESSAGE_INDENT "${CMAKE_MESSAGE_INDENT}"
+/// @brief 
+#define cmake_value_CMAKE_MESSAGE_LOG_LEVEL "${CMAKE_MESSAGE_LOG_LEVEL}"
+/// @brief 
+#define cmake_value_CMAKE_MFC_FLAG "${CMAKE_MFC_FLAG}"
+/// @brief 
+#define cmake_value_CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_PROGRAM_PATH "${CMAKE_PROGRAM_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_INCLUDE "${CMAKE_PROJECT_INCLUDE}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_INCLUDE_BEFORE "${CMAKE_PROJECT_INCLUDE_BEFORE}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_TOP_LEVEL_INCLUDES "${CMAKE_PROJECT_TOP_LEVEL_INCLUDES}"
+/// @brief 
+#define cmake_value_CMAKE_SKIP_INSTALL_ALL_DEPENDENCY "${CMAKE_SKIP_INSTALL_ALL_DEPENDENCY}"
+/// @brief 
+#define cmake_value_CMAKE_SKIP_TEST_ALL_DEPENDENCY "${CMAKE_SKIP_TEST_ALL_DEPENDENCY}"
+/// @brief 
+#define cmake_value_CMAKE_STAGING_PREFIX "${CMAKE_STAGING_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_SUBLIME_TEXT_2_ENV_SETTINGS "${CMAKE_SUBLIME_TEXT_2_ENV_SETTINGS}"
+/// @brief 
+#define cmake_value_CMAKE_SUBLIME_TEXT_2_EXCLUDE_BUILD_TREE "${CMAKE_SUBLIME_TEXT_2_EXCLUDE_BUILD_TREE}"
+/// @brief 
+#define cmake_value_CMAKE_SUPPRESS_REGENERATION "${CMAKE_SUPPRESS_REGENERATION}"
+/// @brief 
+#define cmake_value_CMAKE_SYSROOT "${CMAKE_SYSROOT}"
+/// @brief 
+#define cmake_value_CMAKE_SYSROOT_COMPILE "${CMAKE_SYSROOT_COMPILE}"
+/// @brief 
+#define cmake_value_CMAKE_SYSROOT_LINK "${CMAKE_SYSROOT_LINK}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_APPBUNDLE_PATH "${CMAKE_SYSTEM_APPBUNDLE_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_FRAMEWORK_PATH "${CMAKE_SYSTEM_FRAMEWORK_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_IGNORE_PATH "${CMAKE_SYSTEM_IGNORE_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_IGNORE_PREFIX_PATH "${CMAKE_SYSTEM_IGNORE_PREFIX_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_INCLUDE_PATH "${CMAKE_SYSTEM_INCLUDE_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_LIBRARY_PATH "${CMAKE_SYSTEM_LIBRARY_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_PREFIX_PATH "${CMAKE_SYSTEM_PREFIX_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_PROGRAM_PATH "${CMAKE_SYSTEM_PROGRAM_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_TLS_CAINFO "${CMAKE_TLS_CAINFO}"
+/// @brief 
+#define cmake_value_CMAKE_TLS_VERIFY "${CMAKE_TLS_VERIFY}"
+/// @brief 
+#define cmake_value_CMAKE_TLS_VERSION "${CMAKE_TLS_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_USER_MAKE_RULES_OVERRIDE}"
+/// @brief 
+#define cmake_value_CMAKE_WARN_DEPRECATED "${CMAKE_WARN_DEPRECATED}"
+/// @brief 
+#define cmake_value_CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION "${CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_GENERATE_SCHEME "${CMAKE_XCODE_GENERATE_SCHEME}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY "${CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_LINK_BUILD_PHASE_MODE "${CMAKE_XCODE_LINK_BUILD_PHASE_MODE}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_ADDRESS_SANITIZER "${CMAKE_XCODE_SCHEME_ADDRESS_SANITIZER}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_ADDRESS_SANITIZER_USE_AFTER_RETURN "${CMAKE_XCODE_SCHEME_ADDRESS_SANITIZER_USE_AFTER_RETURN}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_DEBUG_DOCUMENT_VERSIONING "${CMAKE_XCODE_SCHEME_DEBUG_DOCUMENT_VERSIONING}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_DISABLE_MAIN_THREAD_CHECKER "${CMAKE_XCODE_SCHEME_DISABLE_MAIN_THREAD_CHECKER}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_DYNAMIC_LIBRARY_LOADS "${CMAKE_XCODE_SCHEME_DYNAMIC_LIBRARY_LOADS}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_DYNAMIC_LINKER_API_USAGE "${CMAKE_XCODE_SCHEME_DYNAMIC_LINKER_API_USAGE}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_API_VALIDATION "${CMAKE_XCODE_SCHEME_ENABLE_GPU_API_VALIDATION}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_FRAME_CAPTURE_MODE "${CMAKE_XCODE_SCHEME_ENABLE_GPU_FRAME_CAPTURE_MODE}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_SHADER_VALIDATION "${CMAKE_XCODE_SCHEME_ENABLE_GPU_SHADER_VALIDATION}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_ENVIRONMENT "${CMAKE_XCODE_SCHEME_ENVIRONMENT}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_GUARD_MALLOC "${CMAKE_XCODE_SCHEME_GUARD_MALLOC}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_LAUNCH_CONFIGURATION "${CMAKE_XCODE_SCHEME_LAUNCH_CONFIGURATION}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_LAUNCH_MODE "${CMAKE_XCODE_SCHEME_LAUNCH_MODE}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_MAIN_THREAD_CHECKER_STOP "${CMAKE_XCODE_SCHEME_MAIN_THREAD_CHECKER_STOP}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_MALLOC_GUARD_EDGES "${CMAKE_XCODE_SCHEME_MALLOC_GUARD_EDGES}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_MALLOC_SCRIBBLE "${CMAKE_XCODE_SCHEME_MALLOC_SCRIBBLE}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_MALLOC_STACK "${CMAKE_XCODE_SCHEME_MALLOC_STACK}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_THREAD_SANITIZER "${CMAKE_XCODE_SCHEME_THREAD_SANITIZER}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_THREAD_SANITIZER_STOP "${CMAKE_XCODE_SCHEME_THREAD_SANITIZER_STOP}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_UNDEFINED_BEHAVIOUR_SANITIZER "${CMAKE_XCODE_SCHEME_UNDEFINED_BEHAVIOUR_SANITIZER}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_UNDEFINED_BEHAVIOUR_SANITIZER_STOP "${CMAKE_XCODE_SCHEME_UNDEFINED_BEHAVIOUR_SANITIZER_STOP}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_WORKING_DIRECTORY "${CMAKE_XCODE_SCHEME_WORKING_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_SCHEME_ZOMBIE_OBJECTS "${CMAKE_XCODE_SCHEME_ZOMBIE_OBJECTS}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_XCCONFIG "${CMAKE_XCODE_XCCONFIG}"
+/// @brief 
+#define cmake_value_CMAKE_ADSP_ROOT "${CMAKE_ADSP_ROOT}"
+/// @brief 
+#define cmake_value_CMAKE_AIX_SHARED_LIBRARY_ARCHIVE "${CMAKE_AIX_SHARED_LIBRARY_ARCHIVE}"
+/// @brief 
+#define cmake_value_CMAKE_AIX_EXPORT_ALL_SYMBOLS "${CMAKE_AIX_EXPORT_ALL_SYMBOLS}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_ANT_ADDITIONAL_OPTIONS "${CMAKE_ANDROID_ANT_ADDITIONAL_OPTIONS}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_API "${CMAKE_ANDROID_API}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_API_MIN "${CMAKE_ANDROID_API_MIN}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_ARCH "${CMAKE_ANDROID_ARCH}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_ARCH_ABI "${CMAKE_ANDROID_ARCH_ABI}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_ARM_MODE "${CMAKE_ANDROID_ARM_MODE}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_ARM_NEON "${CMAKE_ANDROID_ARM_NEON}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_ASSETS_DIRECTORIES "${CMAKE_ANDROID_ASSETS_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_EXCEPTIONS "${CMAKE_ANDROID_EXCEPTIONS}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_GUI "${CMAKE_ANDROID_GUI}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_JAR_DEPENDENCIES "${CMAKE_ANDROID_JAR_DEPENDENCIES}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_JAR_DIRECTORIES "${CMAKE_ANDROID_JAR_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_JAVA_SOURCE_DIR "${CMAKE_ANDROID_JAVA_SOURCE_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_NATIVE_LIB_DEPENDENCIES "${CMAKE_ANDROID_NATIVE_LIB_DEPENDENCIES}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_NATIVE_LIB_DIRECTORIES "${CMAKE_ANDROID_NATIVE_LIB_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_NDK "${CMAKE_ANDROID_NDK}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_NDK_DEPRECATED_HEADERS "${CMAKE_ANDROID_NDK_DEPRECATED_HEADERS}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG "${CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION "${CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_PROCESS_MAX "${CMAKE_ANDROID_PROCESS_MAX}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_PROGUARD "${CMAKE_ANDROID_PROGUARD}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_PROGUARD_CONFIG_PATH "${CMAKE_ANDROID_PROGUARD_CONFIG_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_RTTI "${CMAKE_ANDROID_RTTI}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_SECURE_PROPS_PATH "${CMAKE_ANDROID_SECURE_PROPS_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_SKIP_ANT_STEP "${CMAKE_ANDROID_SKIP_ANT_STEP}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_STANDALONE_TOOLCHAIN "${CMAKE_ANDROID_STANDALONE_TOOLCHAIN}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_STL_TYPE "${CMAKE_ANDROID_STL_TYPE}"
+/// @brief 
+#define cmake_value_CMAKE_APPLE_SILICON_PROCESSOR "${CMAKE_APPLE_SILICON_PROCESSOR}"
+/// @brief 
+#define cmake_value_CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOGEN_BETTER_GRAPH_MULTI_CONFIG "${CMAKE_AUTOGEN_BETTER_GRAPH_MULTI_CONFIG}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOGEN_COMMAND_LINE_LENGTH_MAX "${CMAKE_AUTOGEN_COMMAND_LINE_LENGTH_MAX}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOGEN_ORIGIN_DEPENDS "${CMAKE_AUTOGEN_ORIGIN_DEPENDS}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOGEN_PARALLEL "${CMAKE_AUTOGEN_PARALLEL}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOGEN_USE_SYSTEM_INCLUDE "${CMAKE_AUTOGEN_USE_SYSTEM_INCLUDE}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOGEN_VERBOSE "${CMAKE_AUTOGEN_VERBOSE}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOMOC "${CMAKE_AUTOMOC}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOMOC_COMPILER_PREDEFINES "${CMAKE_AUTOMOC_COMPILER_PREDEFINES}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOMOC_DEPEND_FILTERS "${CMAKE_AUTOMOC_DEPEND_FILTERS}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOMOC_MACRO_NAMES "${CMAKE_AUTOMOC_MACRO_NAMES}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOMOC_MOC_OPTIONS "${CMAKE_AUTOMOC_MOC_OPTIONS}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOMOC_PATH_PREFIX "${CMAKE_AUTOMOC_PATH_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOMOC_EXECUTABLE "${CMAKE_AUTOMOC_EXECUTABLE}"
+/// @brief 
+#define cmake_value_CMAKE_AUTORCC "${CMAKE_AUTORCC}"
+/// @brief 
+#define cmake_value_CMAKE_AUTORCC_OPTIONS "${CMAKE_AUTORCC_OPTIONS}"
+/// @brief 
+#define cmake_value_CMAKE_AUTORCC_EXECUTABLE "${CMAKE_AUTORCC_EXECUTABLE}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOUIC "${CMAKE_AUTOUIC}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOUIC_OPTIONS "${CMAKE_AUTOUIC_OPTIONS}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOUIC_SEARCH_PATHS "${CMAKE_AUTOUIC_SEARCH_PATHS}"
+/// @brief 
+#define cmake_value_CMAKE_AUTOUIC_EXECUTABLE "${CMAKE_AUTOUIC_EXECUTABLE}"
+/// @brief 
+#define cmake_value_CMAKE_BUILD_RPATH "${CMAKE_BUILD_RPATH}"
+/// @brief 
+#define cmake_value_CMAKE_BUILD_RPATH_USE_ORIGIN "${CMAKE_BUILD_RPATH_USE_ORIGIN}"
+/// @brief 
+#define cmake_value_CMAKE_BUILD_WITH_INSTALL_NAME_DIR "${CMAKE_BUILD_WITH_INSTALL_NAME_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_BUILD_WITH_INSTALL_RPATH "${CMAKE_BUILD_WITH_INSTALL_RPATH}"
+/// @brief 
+#define cmake_value_CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_COMPILE_WARNING_AS_ERROR "${CMAKE_COMPILE_WARNING_AS_ERROR}"
+/// @brief 
+#define cmake_value_CMAKE_CROSS_CONFIGS "${CMAKE_CROSS_CONFIGS}"
+/// @brief 
+#define cmake_value_CMAKE_CTEST_ARGUMENTS "${CMAKE_CTEST_ARGUMENTS}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_RESOLVE_DEVICE_SYMBOLS "${CMAKE_CUDA_RESOLVE_DEVICE_SYMBOLS}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_RUNTIME_LIBRARY "${CMAKE_CUDA_RUNTIME_LIBRARY}"
+/// @brief 
+#define cmake_value_CMAKE_CUDA_SEPARABLE_COMPILATION "${CMAKE_CUDA_SEPARABLE_COMPILATION}"
+/// @brief 
+#define cmake_value_CMAKE_CXX_MODULE_STD "${CMAKE_CXX_MODULE_STD}"
+/// @brief 
+#define cmake_value_CMAKE_CXX_SCAN_FOR_MODULES "${CMAKE_CXX_SCAN_FOR_MODULES}"
+/// @brief 
+#define cmake_value_CMAKE_DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}"
+/// @brief 
+#define cmake_value_CMAKE_DEFAULT_BUILD_TYPE "${CMAKE_DEFAULT_BUILD_TYPE}"
+/// @brief 
+#define cmake_value_CMAKE_DEFAULT_CONFIGS "${CMAKE_DEFAULT_CONFIGS}"
+/// @brief 
+#define cmake_value_CMAKE_DEPENDS_USE_COMPILER "${CMAKE_DEPENDS_USE_COMPILER}"
+/// @brief 
+#define cmake_value_CMAKE_DISABLE_PRECOMPILE_HEADERS "${CMAKE_DISABLE_PRECOMPILE_HEADERS}"
+/// @brief 
+#define cmake_value_CMAKE_DLL_NAME_WITH_SOVERSION "${CMAKE_DLL_NAME_WITH_SOVERSION}"
+/// @brief 
+#define cmake_value_CMAKE_ENABLE_EXPORTS "${CMAKE_ENABLE_EXPORTS}"
+/// @brief 
+#define cmake_value_CMAKE_EXECUTABLE_ENABLE_EXPORTS "${CMAKE_EXECUTABLE_ENABLE_EXPORTS}"
+/// @brief 
+#define cmake_value_CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}"
+/// @brief 
+#define cmake_value_CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS_INIT}"
+/// @brief 
+#define cmake_value_CMAKE_EXPORT_FIND_PACKAGE_NAME "${CMAKE_EXPORT_FIND_PACKAGE_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_FOLDER "${CMAKE_FOLDER}"
+/// @brief 
+#define cmake_value_CMAKE_FORTRAN_FORMAT "${CMAKE_Fortran_FORMAT}"
+/// @brief 
+#define cmake_value_CMAKE_FORTRAN_MODULE_DIRECTORY "${CMAKE_Fortran_MODULE_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_FORTRAN_PREPROCESS "${CMAKE_Fortran_PREPROCESS}"
+/// @brief 
+#define cmake_value_CMAKE_FRAMEWORK "${CMAKE_FRAMEWORK}"
+/// @brief 
+#define cmake_value_CMAKE_GHS_NO_SOURCE_GROUP_FILE "${CMAKE_GHS_NO_SOURCE_GROUP_FILE}"
+/// @brief 
+#define cmake_value_CMAKE_GLOBAL_AUTOGEN_TARGET "${CMAKE_GLOBAL_AUTOGEN_TARGET}"
+/// @brief 
+#define cmake_value_CMAKE_GLOBAL_AUTOGEN_TARGET_NAME "${CMAKE_GLOBAL_AUTOGEN_TARGET_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_GLOBAL_AUTORCC_TARGET "${CMAKE_GLOBAL_AUTORCC_TARGET}"
+/// @brief 
+#define cmake_value_CMAKE_GLOBAL_AUTORCC_TARGET_NAME "${CMAKE_GLOBAL_AUTORCC_TARGET_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_GNUTOMS "${CMAKE_GNUtoMS}"
+/// @brief 
+#define cmake_value_CMAKE_INCLUDE_CURRENT_DIR "${CMAKE_INCLUDE_CURRENT_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE "${CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_NAME_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_REMOVE_ENVIRONMENT_RPATH "${CMAKE_INSTALL_REMOVE_ENVIRONMENT_RPATH}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH}"
+/// @brief 
+#define cmake_value_CMAKE_INSTALL_RPATH_USE_LINK_PATH "${CMAKE_INSTALL_RPATH_USE_LINK_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_INTERPROCEDURAL_OPTIMIZATION "${CMAKE_INTERPROCEDURAL_OPTIMIZATION}"
+/// @brief 
+#define cmake_value_CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_LIBRARY_PATH_FLAG "${CMAKE_LIBRARY_PATH_FLAG}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_DEF_FILE_FLAG "${CMAKE_LINK_DEF_FILE_FLAG}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_DEPENDS_NO_SHARED "${CMAKE_LINK_DEPENDS_NO_SHARED}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_DEPENDS_USE_LINKER "${CMAKE_LINK_DEPENDS_USE_LINKER}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_INTERFACE_LIBRARIES "${CMAKE_LINK_INTERFACE_LIBRARIES}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_LIBRARIES_STRATEGY "${CMAKE_LINK_LIBRARIES_STRATEGY}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_LIBRARY_FILE_FLAG "${CMAKE_LINK_LIBRARY_FILE_FLAG}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_LIBRARY_FLAG "${CMAKE_LINK_LIBRARY_FLAG}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_WHAT_YOU_USE "${CMAKE_LINK_WHAT_YOU_USE}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_WHAT_YOU_USE_CHECK "${CMAKE_LINK_WHAT_YOU_USE_CHECK}"
+/// @brief 
+#define cmake_value_CMAKE_LINKER_TYPE "${CMAKE_LINKER_TYPE}"
+/// @brief 
+#define cmake_value_CMAKE_MACOSX_BUNDLE "${CMAKE_MACOSX_BUNDLE}"
+/// @brief 
+#define cmake_value_CMAKE_MACOSX_RPATH "${CMAKE_MACOSX_RPATH}"
+/// @brief 
+#define cmake_value_CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}"
+/// @brief 
+#define cmake_value_CMAKE_MODULE_LINKER_FLAGS_INIT "${CMAKE_MODULE_LINKER_FLAGS_INIT}"
+/// @brief 
+#define cmake_value_CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "${CMAKE_MSVC_DEBUG_INFORMATION_FORMAT}"
+/// @brief 
+#define cmake_value_CMAKE_MSVC_RUNTIME_LIBRARY "${CMAKE_MSVC_RUNTIME_LIBRARY}"
+/// @brief 
+#define cmake_value_CMAKE_MSVCIDE_RUN_PATH "${CMAKE_MSVCIDE_RUN_PATH}"
+/// @brief 
+#define cmake_value_CMAKE_NINJA_OUTPUT_PATH_PREFIX "${CMAKE_NINJA_OUTPUT_PATH_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_NO_BUILTIN_CHRPATH "${CMAKE_NO_BUILTIN_CHRPATH}"
+/// @brief 
+#define cmake_value_CMAKE_NO_SYSTEM_FROM_IMPORTED "${CMAKE_NO_SYSTEM_FROM_IMPORTED}"
+/// @brief 
+#define cmake_value_CMAKE_OPTIMIZE_DEPENDENCIES "${CMAKE_OPTIMIZE_DEPENDENCIES}"
+/// @brief 
+#define cmake_value_CMAKE_OSX_ARCHITECTURES "${CMAKE_OSX_ARCHITECTURES}"
+/// @brief 
+#define cmake_value_CMAKE_OSX_DEPLOYMENT_TARGET "${CMAKE_OSX_DEPLOYMENT_TARGET}"
+/// @brief 
+#define cmake_value_CMAKE_OSX_SYSROOT "${CMAKE_OSX_SYSROOT}"
+/// @brief 
+#define cmake_value_CMAKE_PCH_INSTANTIATE_TEMPLATES "${CMAKE_PCH_INSTANTIATE_TEMPLATES}"
+/// @brief 
+#define cmake_value_CMAKE_PCH_WARN_INVALID "${CMAKE_PCH_WARN_INVALID}"
+/// @brief 
+#define cmake_value_CMAKE_PDB_OUTPUT_DIRECTORY "${CMAKE_PDB_OUTPUT_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_PLATFORM_NO_VERSIONED_SONAME "${CMAKE_PLATFORM_NO_VERSIONED_SONAME}"
+/// @brief 
+#define cmake_value_CMAKE_POSITION_INDEPENDENT_CODE "${CMAKE_POSITION_INDEPENDENT_CODE}"
+/// @brief 
+#define cmake_value_CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_SHARED_LIBRARY_ENABLE_EXPORTS "${CMAKE_SHARED_LIBRARY_ENABLE_EXPORTS}"
+/// @brief 
+#define cmake_value_CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}"
+/// @brief 
+#define cmake_value_CMAKE_SHARED_LINKER_FLAGS_INIT "${CMAKE_SHARED_LINKER_FLAGS_INIT}"
+/// @brief 
+#define cmake_value_CMAKE_SKIP_BUILD_RPATH "${CMAKE_SKIP_BUILD_RPATH}"
+/// @brief 
+#define cmake_value_CMAKE_SKIP_INSTALL_RPATH "${CMAKE_SKIP_INSTALL_RPATH}"
+/// @brief 
+#define cmake_value_CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}"
+/// @brief 
+#define cmake_value_CMAKE_STATIC_LINKER_FLAGS_INIT "${CMAKE_STATIC_LINKER_FLAGS_INIT}"
+/// @brief 
+#define cmake_value_CMAKE_TASKING_TOOLSET "${CMAKE_TASKING_TOOLSET}"
+/// @brief 
+#define cmake_value_CMAKE_TRY_COMPILE_CONFIGURATION "${CMAKE_TRY_COMPILE_CONFIGURATION}"
+/// @brief 
+#define cmake_value_CMAKE_TRY_COMPILE_NO_PLATFORM_VARIABLES "${CMAKE_TRY_COMPILE_NO_PLATFORM_VARIABLES}"
+/// @brief 
+#define cmake_value_CMAKE_TRY_COMPILE_PLATFORM_VARIABLES "${CMAKE_TRY_COMPILE_PLATFORM_VARIABLES}"
+/// @brief 
+#define cmake_value_CMAKE_TRY_COMPILE_TARGET_TYPE "${CMAKE_TRY_COMPILE_TARGET_TYPE}"
+/// @brief 
+#define cmake_value_CMAKE_UNITY_BUILD "${CMAKE_UNITY_BUILD}"
+/// @brief 
+#define cmake_value_CMAKE_UNITY_BUILD_BATCH_SIZE "${CMAKE_UNITY_BUILD_BATCH_SIZE}"
+/// @brief 
+#define cmake_value_CMAKE_UNITY_BUILD_UNIQUE_ID "${CMAKE_UNITY_BUILD_UNIQUE_ID}"
+/// @brief 
+#define cmake_value_CMAKE_VERIFY_INTERFACE_HEADER_SETS "${CMAKE_VERIFY_INTERFACE_HEADER_SETS}"
+/// @brief 
+#define cmake_value_CMAKE_VISIBILITY_INLINES_HIDDEN "${CMAKE_VISIBILITY_INLINES_HIDDEN}"
+/// @brief 
+#define cmake_value_CMAKE_VS_DEBUGGER_COMMAND "${CMAKE_VS_DEBUGGER_COMMAND}"
+/// @brief 
+#define cmake_value_CMAKE_VS_DEBUGGER_COMMAND_ARGUMENTS "${CMAKE_VS_DEBUGGER_COMMAND_ARGUMENTS}"
+/// @brief 
+#define cmake_value_CMAKE_VS_DEBUGGER_ENVIRONMENT "${CMAKE_VS_DEBUGGER_ENVIRONMENT}"
+/// @brief 
+#define cmake_value_CMAKE_VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_VS_DEBUGGER_WORKING_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_VS_GLOBALS "${CMAKE_VS_GLOBALS}"
+/// @brief 
+#define cmake_value_CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD "${CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD}"
+/// @brief 
+#define cmake_value_CMAKE_VS_INCLUDE_PACKAGE_TO_DEFAULT_BUILD "${CMAKE_VS_INCLUDE_PACKAGE_TO_DEFAULT_BUILD}"
+/// @brief 
+#define cmake_value_CMAKE_VS_JUST_MY_CODE_DEBUGGING "${CMAKE_VS_JUST_MY_CODE_DEBUGGING}"
+/// @brief 
+#define cmake_value_CMAKE_VS_NO_COMPILE_BATCHING "${CMAKE_VS_NO_COMPILE_BATCHING}"
+/// @brief 
+#define cmake_value_CMAKE_VS_SDK_EXCLUDE_DIRECTORIES "${CMAKE_VS_SDK_EXCLUDE_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_VS_SDK_EXECUTABLE_DIRECTORIES "${CMAKE_VS_SDK_EXECUTABLE_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_VS_SDK_INCLUDE_DIRECTORIES "${CMAKE_VS_SDK_INCLUDE_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_VS_SDK_LIBRARY_DIRECTORIES "${CMAKE_VS_SDK_LIBRARY_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_VS_SDK_LIBRARY_WINRT_DIRECTORIES "${CMAKE_VS_SDK_LIBRARY_WINRT_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_VS_SDK_REFERENCE_DIRECTORIES "${CMAKE_VS_SDK_REFERENCE_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_VS_SDK_SOURCE_DIRECTORIES "${CMAKE_VS_SDK_SOURCE_DIRECTORIES}"
+/// @brief 
+#define cmake_value_CMAKE_VS_WINRT_BY_DEFAULT "${CMAKE_VS_WINRT_BY_DEFAULT}"
+/// @brief 
+#define cmake_value_CMAKE_WATCOM_RUNTIME_LIBRARY "${CMAKE_WATCOM_RUNTIME_LIBRARY}"
+/// @brief 
+#define cmake_value_CMAKE_WIN32_EXECUTABLE "${CMAKE_WIN32_EXECUTABLE}"
+/// @brief 
+#define cmake_value_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "${CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS}"
+/// @brief 
+#define cmake_value_EXECUTABLE_OUTPUT_PATH "${EXECUTABLE_OUTPUT_PATH}"
+/// @brief 
+#define cmake_value_LIBRARY_OUTPUT_PATH "${LIBRARY_OUTPUT_PATH}"
+/// @brief 
+#define cmake_value_ANDROID "${ANDROID}"
+/// @brief 
+#define cmake_value_APPLE "${APPLE}"
+/// @brief 
+#define cmake_value_BORLAND "${BORLAND}"
+/// @brief 
+#define cmake_value_BSD "${BSD}"
+/// @brief 
+#define cmake_value_CMAKE_ANDROID_NDK_VERSION "${CMAKE_ANDROID_NDK_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_CL_64 "${CMAKE_CL_64}"
+/// @brief 
+#define cmake_value_CMAKE_COMPILER_2005 "${CMAKE_COMPILER_2005}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_APPLE "${CMAKE_HOST_APPLE}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_BSD "${CMAKE_HOST_BSD}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_EXECUTABLE_SUFFIX "${CMAKE_HOST_EXECUTABLE_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_LINUX "${CMAKE_HOST_LINUX}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_SOLARIS "${CMAKE_HOST_SOLARIS}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_SYSTEM "${CMAKE_HOST_SYSTEM}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_SYSTEM_NAME "${CMAKE_HOST_SYSTEM_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_SYSTEM_PROCESSOR "${CMAKE_HOST_SYSTEM_PROCESSOR}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_SYSTEM_VERSION "${CMAKE_HOST_SYSTEM_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_UNIX "${CMAKE_HOST_UNIX}"
+/// @brief 
+#define cmake_value_CMAKE_HOST_WIN32 "${CMAKE_HOST_WIN32}"
+/// @brief 
+#define cmake_value_CMAKE_LIBRARY_ARCHITECTURE "${CMAKE_LIBRARY_ARCHITECTURE}"
+/// @brief 
+#define cmake_value_CMAKE_LIBRARY_ARCHITECTURE_REGEX "${CMAKE_LIBRARY_ARCHITECTURE_REGEX}"
+/// @brief 
+#define cmake_value_CMAKE_OBJECT_PATH_MAX "${CMAKE_OBJECT_PATH_MAX}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM "${CMAKE_SYSTEM}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_PROCESSOR "${CMAKE_SYSTEM_PROCESSOR}"
+/// @brief 
+#define cmake_value_CMAKE_SYSTEM_VERSION "${CMAKE_SYSTEM_VERSION}"
+/// @brief 
+#define cmake_value_CYGWIN "${CYGWIN}"
+/// @brief 
+#define cmake_value_GHSMULTI "${GHSMULTI}"
+/// @brief 
+#define cmake_value_IOS "${IOS}"
+/// @brief 
+#define cmake_value_LINUX "${LINUX}"
+/// @brief 
+#define cmake_value_MINGW "${MINGW}"
+/// @brief 
+#define cmake_value_MSVC "${MSVC}"
+/// @brief 
+#define cmake_value_MSVC_IDE "${MSVC_IDE}"
+/// @brief 
+#define cmake_value_MSVC_TOOLSET_VERSION "${MSVC_TOOLSET_VERSION}"
+/// @brief 
+#define cmake_value_MSVC_VERSION "${MSVC_VERSION}"
+/// @brief 
+#define cmake_value_MSYS "${MSYS}"
+/// @brief 
+#define cmake_value_UNIX "${UNIX}"
+/// @brief 
+#define cmake_value_WASI "${WASI}"
+/// @brief 
+#define cmake_value_WIN32 "${WIN32}"
+/// @brief 
+#define cmake_value_WINCE "${WINCE}"
+/// @brief 
+#define cmake_value_WINDOWS_PHONE "${WINDOWS_PHONE}"
+/// @brief 
+#define cmake_value_WINDOWS_STORE "${WINDOWS_STORE}"
+/// @brief 
+#define cmake_value_XCODE "${XCODE}"
+/// @brief 
+#define cmake_value_XCODE_VERSION "${XCODE_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_AR "${CMAKE_AR}"
+/// @brief 
+#define cmake_value_CMAKE_ARGC "${CMAKE_ARGC}"
+/// @brief 
+#define cmake_value_CMAKE_ARGV0 "${CMAKE_ARGV0}"
+/// @brief 
+#define cmake_value_CMAKE_BINARY_DIR "${CMAKE_BINARY_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_BUILD_TOOL "${CMAKE_BUILD_TOOL}"
+/// @brief 
+#define cmake_value_CMAKE_CACHE_MAJOR_VERSION "${CMAKE_CACHE_MAJOR_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_CACHE_MINOR_VERSION "${CMAKE_CACHE_MINOR_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_CACHE_PATCH_VERSION "${CMAKE_CACHE_PATCH_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_CACHEFILE_DIR "${CMAKE_CACHEFILE_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_CFG_INTDIR "${CMAKE_CFG_INTDIR}"
+/// @brief 
+#define cmake_value_CMAKE_COMMAND "${CMAKE_COMMAND}"
+/// @brief 
+#define cmake_value_CMAKE_CPACK_COMMAND "${CMAKE_CPACK_COMMAND}"
+/// @brief 
+#define cmake_value_CMAKE_CROSSCOMPILING "${CMAKE_CROSSCOMPILING}"
+/// @brief 
+#define cmake_value_CMAKE_CROSSCOMPILING_EMULATOR "${CMAKE_CROSSCOMPILING_EMULATOR}"
+/// @brief 
+#define cmake_value_CMAKE_CTEST_COMMAND "${CMAKE_CTEST_COMMAND}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_FUNCTION "${CMAKE_CURRENT_FUNCTION}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_FUNCTION_LIST_DIR "${CMAKE_CURRENT_FUNCTION_LIST_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_FUNCTION_LIST_FILE "${CMAKE_CURRENT_FUNCTION_LIST_FILE}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_FUNCTION_LIST_LINE "${CMAKE_CURRENT_FUNCTION_LIST_LINE}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_LIST_FILE "${CMAKE_CURRENT_LIST_FILE}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_LIST_LINE "${CMAKE_CURRENT_LIST_LINE}"
+/// @brief 
+#define cmake_value_CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_DEBUG_TARGET_PROPERTIES "${CMAKE_DEBUG_TARGET_PROPERTIES}"
+/// @brief 
+#define cmake_value_CMAKE_DIRECTORY_LABELS "${CMAKE_DIRECTORY_LABELS}"
+/// @brief 
+#define cmake_value_CMAKE_DL_LIBS "${CMAKE_DL_LIBS}"
+/// @brief 
+#define cmake_value_CMAKE_DOTNET_SDK "${CMAKE_DOTNET_SDK}"
+/// @brief 
+#define cmake_value_CMAKE_DOTNET_TARGET_FRAMEWORK "${CMAKE_DOTNET_TARGET_FRAMEWORK}"
+/// @brief 
+#define cmake_value_CMAKE_DOTNET_TARGET_FRAMEWORK_VERSION "${CMAKE_DOTNET_TARGET_FRAMEWORK_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_EDIT_COMMAND "${CMAKE_EDIT_COMMAND}"
+/// @brief 
+#define cmake_value_CMAKE_EXECUTABLE_SUFFIX "${CMAKE_EXECUTABLE_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_EXTRA_SHARED_LIBRARY_SUFFIXES "${CMAKE_EXTRA_SHARED_LIBRARY_SUFFIXES}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_DEBUG_MODE "${CMAKE_FIND_DEBUG_MODE}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_NAME "${CMAKE_FIND_PACKAGE_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_REDIRECTS_DIR "${CMAKE_FIND_PACKAGE_REDIRECTS_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_SORT_DIRECTION "${CMAKE_FIND_PACKAGE_SORT_DIRECTION}"
+/// @brief 
+#define cmake_value_CMAKE_FIND_PACKAGE_SORT_ORDER "${CMAKE_FIND_PACKAGE_SORT_ORDER}"
+/// @brief 
+#define cmake_value_CMAKE_GENERATOR "${CMAKE_GENERATOR}"
+/// @brief 
+#define cmake_value_CMAKE_GENERATOR_INSTANCE "${CMAKE_GENERATOR_INSTANCE}"
+/// @brief 
+#define cmake_value_CMAKE_GENERATOR_PLATFORM "${CMAKE_GENERATOR_PLATFORM}"
+/// @brief 
+#define cmake_value_CMAKE_GENERATOR_TOOLSET "${CMAKE_GENERATOR_TOOLSET}"
+/// @brief 
+#define cmake_value_CMAKE_IMPORT_LIBRARY_PREFIX "${CMAKE_IMPORT_LIBRARY_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_IMPORT_LIBRARY_SUFFIX "${CMAKE_IMPORT_LIBRARY_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_JOB_POOL_COMPILE "${CMAKE_JOB_POOL_COMPILE}"
+/// @brief 
+#define cmake_value_CMAKE_JOB_POOL_LINK "${CMAKE_JOB_POOL_LINK}"
+/// @brief 
+#define cmake_value_CMAKE_JOB_POOL_PRECOMPILE_HEADER "${CMAKE_JOB_POOL_PRECOMPILE_HEADER}"
+/// @brief 
+#define cmake_value_CMAKE_JOB_POOLS "${CMAKE_JOB_POOLS}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_LIBRARY_SUFFIX "${CMAKE_LINK_LIBRARY_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_SEARCH_END_STATIC "${CMAKE_LINK_SEARCH_END_STATIC}"
+/// @brief 
+#define cmake_value_CMAKE_LINK_SEARCH_START_STATIC "${CMAKE_LINK_SEARCH_START_STATIC}"
+/// @brief 
+#define cmake_value_CMAKE_MAJOR_VERSION "${CMAKE_MAJOR_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_MAKE_PROGRAM "${CMAKE_MAKE_PROGRAM}"
+/// @brief 
+#define cmake_value_CMAKE_MATCH_COUNT "${CMAKE_MATCH_COUNT}"
+/// @brief 
+#define cmake_value_CMAKE_MINIMUM_REQUIRED_VERSION "${CMAKE_MINIMUM_REQUIRED_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_MINOR_VERSION "${CMAKE_MINOR_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_NETRC "${CMAKE_NETRC}"
+/// @brief 
+#define cmake_value_CMAKE_NETRC_FILE "${CMAKE_NETRC_FILE}"
+/// @brief 
+#define cmake_value_CMAKE_PARENT_LIST_FILE "${CMAKE_PARENT_LIST_FILE}"
+/// @brief 
+#define cmake_value_CMAKE_PATCH_VERSION "${CMAKE_PATCH_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_DESCRIPTION "${CMAKE_PROJECT_DESCRIPTION}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_HOMEPAGE_URL "${CMAKE_PROJECT_HOMEPAGE_URL}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_NAME "${CMAKE_PROJECT_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_VERSION "${CMAKE_PROJECT_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_VERSION_MAJOR "${CMAKE_PROJECT_VERSION_MAJOR}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_VERSION_MINOR "${CMAKE_PROJECT_VERSION_MINOR}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_VERSION_PATCH "${CMAKE_PROJECT_VERSION_PATCH}"
+/// @brief 
+#define cmake_value_CMAKE_PROJECT_VERSION_TWEAK "${CMAKE_PROJECT_VERSION_TWEAK}"
+/// @brief 
+#define cmake_value_CMAKE_RANLIB "${CMAKE_RANLIB}"
+/// @brief 
+#define cmake_value_CMAKE_ROOT "${CMAKE_ROOT}"
+/// @brief 
+#define cmake_value_CMAKE_RULE_MESSAGES "${CMAKE_RULE_MESSAGES}"
+/// @brief 
+#define cmake_value_CMAKE_SCRIPT_MODE_FILE "${CMAKE_SCRIPT_MODE_FILE}"
+/// @brief 
+#define cmake_value_CMAKE_SHARED_LIBRARY_PREFIX "${CMAKE_SHARED_LIBRARY_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_SHARED_LIBRARY_SUFFIX "${CMAKE_SHARED_LIBRARY_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_SHARED_LIBRARY_ARCHIVE_SUFFIX "${CMAKE_SHARED_LIBRARY_ARCHIVE_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_SHARED_MODULE_PREFIX "${CMAKE_SHARED_MODULE_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_SHARED_MODULE_SUFFIX "${CMAKE_SHARED_MODULE_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_SIZEOF_VOID_P "${CMAKE_SIZEOF_VOID_P}"
+/// @brief 
+#define cmake_value_CMAKE_SKIP_INSTALL_RULES "${CMAKE_SKIP_INSTALL_RULES}"
+/// @brief 
+#define cmake_value_CMAKE_SKIP_RPATH "${CMAKE_SKIP_RPATH}"
+/// @brief 
+#define cmake_value_CMAKE_SOURCE_DIR "${CMAKE_SOURCE_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_STATIC_LIBRARY_PREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}"
+/// @brief 
+#define cmake_value_CMAKE_STATIC_LIBRARY_SUFFIX "${CMAKE_STATIC_LIBRARY_SUFFIX}"
+/// @brief 
+#define cmake_value_CMAKE_SWIFT_COMPILATION_MODE "${CMAKE_Swift_COMPILATION_MODE}"
+/// @brief 
+#define cmake_value_CMAKE_SWIFT_MODULE_DIRECTORY "${CMAKE_Swift_MODULE_DIRECTORY}"
+/// @brief 
+#define cmake_value_CMAKE_SWIFT_NUM_THREADS "${CMAKE_Swift_NUM_THREADS}"
+/// @brief 
+#define cmake_value_CMAKE_TEST_LAUNCHER "${CMAKE_TEST_LAUNCHER}"
+/// @brief 
+#define cmake_value_CMAKE_TOOLCHAIN_FILE "${CMAKE_TOOLCHAIN_FILE}"
+/// @brief 
+#define cmake_value_CMAKE_TWEAK_VERSION "${CMAKE_TWEAK_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_VERBOSE_MAKEFILE "${CMAKE_VERBOSE_MAKEFILE}"
+/// @brief 
+#define cmake_value_CMAKE_VERSION "${CMAKE_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_VS_DEVENV_COMMAND "${CMAKE_VS_DEVENV_COMMAND}"
+/// @brief 
+#define cmake_value_CMAKE_VS_MSBUILD_COMMAND "${CMAKE_VS_MSBUILD_COMMAND}"
+/// @brief 
+#define cmake_value_CMAKE_VS_NSIGHTTEGRA_VERSION "${CMAKE_VS_NsightTegra_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_VS_NUGET_PACKAGE_RESTORE "${CMAKE_VS_NUGET_PACKAGE_RESTORE}"
+/// @brief 
+#define cmake_value_CMAKE_VS_PLATFORM_NAME "${CMAKE_VS_PLATFORM_NAME}"
+/// @brief 
+#define cmake_value_CMAKE_VS_PLATFORM_NAME_DEFAULT "${CMAKE_VS_PLATFORM_NAME_DEFAULT}"
+/// @brief 
+#define cmake_value_CMAKE_VS_PLATFORM_TOOLSET "${CMAKE_VS_PLATFORM_TOOLSET}"
+/// @brief 
+#define cmake_value_CMAKE_VS_PLATFORM_TOOLSET_CUDA "${CMAKE_VS_PLATFORM_TOOLSET_CUDA}"
+/// @brief 
+#define cmake_value_CMAKE_VS_PLATFORM_TOOLSET_CUDA_CUSTOM_DIR "${CMAKE_VS_PLATFORM_TOOLSET_CUDA_CUSTOM_DIR}"
+/// @brief 
+#define cmake_value_CMAKE_VS_PLATFORM_TOOLSET_FORTRAN "${CMAKE_VS_PLATFORM_TOOLSET_FORTRAN}"
+/// @brief 
+#define cmake_value_CMAKE_VS_PLATFORM_TOOLSET_HOST_ARCHITECTURE "${CMAKE_VS_PLATFORM_TOOLSET_HOST_ARCHITECTURE}"
+/// @brief 
+#define cmake_value_CMAKE_VS_PLATFORM_TOOLSET_VERSION "${CMAKE_VS_PLATFORM_TOOLSET_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_VS_TARGET_FRAMEWORK_IDENTIFIER "${CMAKE_VS_TARGET_FRAMEWORK_IDENTIFIER}"
+/// @brief 
+#define cmake_value_CMAKE_VS_TARGET_FRAMEWORK_TARGETS_VERSION "${CMAKE_VS_TARGET_FRAMEWORK_TARGETS_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_VS_TARGET_FRAMEWORK_VERSION "${CMAKE_VS_TARGET_FRAMEWORK_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_VS_USE_DEBUG_LIBRARIES "${CMAKE_VS_USE_DEBUG_LIBRARIES}"
+/// @brief 
+#define cmake_value_CMAKE_VS_VERSION_BUILD_NUMBER "${CMAKE_VS_VERSION_BUILD_NUMBER}"
+/// @brief 
+#define cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM}"
+/// @brief 
+#define cmake_value_CMAKE_WINDOWS_KMDF_VERSION "${CMAKE_WINDOWS_KMDF_VERSION}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_BUILD_SYSTEM "${CMAKE_XCODE_BUILD_SYSTEM}"
+/// @brief 
+#define cmake_value_CMAKE_XCODE_PLATFORM_TOOLSET "${CMAKE_XCODE_PLATFORM_TOOLSET}"
+/// @brief 
+#define cmake_value_PROJECT_BINARY_DIR "${PROJECT_BINARY_DIR}"
+/// @brief 
+#define cmake_value_PROJECT_DESCRIPTION "${PROJECT_DESCRIPTION}"
+/// @brief 
+#define cmake_value_PROJECT_HOMEPAGE_URL "${PROJECT_HOMEPAGE_URL}"
+/// @brief 
+#define cmake_value_PROJECT_IS_TOP_LEVEL "${PROJECT_IS_TOP_LEVEL}"
+/// @brief 
+#define cmake_value_PROJECT_NAME "${PROJECT_NAME}"
+/// @brief 
+#define cmake_value_PROJECT_SOURCE_DIR "${PROJECT_SOURCE_DIR}"
+/// @brief 
+#define cmake_value_PROJECT_VERSION "${PROJECT_VERSION}"
+/// @brief 
+#define cmake_value_PROJECT_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}"
+/// @brief 
+#define cmake_value_PROJECT_VERSION_MINOR "${PROJECT_VERSION_MINOR}"
+/// @brief 
+#define cmake_value_PROJECT_VERSION_PATCH "${PROJECT_VERSION_PATCH}"
+/// @brief 
+#define cmake_value_PROJECT_VERSION_TWEAK "${PROJECT_VERSION_TWEAK}"
+
+#include <utility>
+#include <string>
+#include <vector>
+/// @brief 
+#define DEF_ALL_CMAKE_VALUE_VALUE_STD_VECTOR( ) \
+const static std::vector<std::pair<std::string, std::string>> cmake_value_name_all_value = { \
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CURL_OPTIONS", cmake_value_CTEST_CURL_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CVS_CHECKOUT", cmake_value_CTEST_CVS_CHECKOUT),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SCP_COMMAND", cmake_value_CTEST_SCP_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_TRIGGER_SITE", cmake_value_CTEST_TRIGGER_SITE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COMPILER_IS_GNUCC", cmake_value_CMAKE_COMPILER_IS_GNUCC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COMPILER_IS_GNUCXX", cmake_value_CMAKE_COMPILER_IS_GNUCXX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COMPILER_IS_GNUG77", cmake_value_CMAKE_COMPILER_IS_GNUG77),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOMOC_RELAXED_MODE", cmake_value_CMAKE_AUTOMOC_RELAXED_MODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_BACKWARDS_COMPATIBILITY", cmake_value_CMAKE_BACKWARDS_COMPATIBILITY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY", cmake_value_CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY", cmake_value_CMAKE_FIND_PACKAGE_NO_SYSTEM_PACKAGE_REGISTRY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_IOS_INSTALL_COMBINED", cmake_value_CMAKE_IOS_INSTALL_COMBINED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_USE_RELATIVE_PATHS", cmake_value_CMAKE_USE_RELATIVE_PATHS),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC10", cmake_value_MSVC10),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC11", cmake_value_MSVC11),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC12", cmake_value_MSVC12),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC14", cmake_value_MSVC14),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC60", cmake_value_MSVC60),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC70", cmake_value_MSVC70),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC71", cmake_value_MSVC71),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC80", cmake_value_MSVC80),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC90", cmake_value_MSVC90),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXTRA_GENERATOR", cmake_value_CMAKE_EXTRA_GENERATOR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOME_DIRECTORY", cmake_value_CMAKE_HOME_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INTERNAL_PLATFORM_ABI", cmake_value_CMAKE_INTERNAL_PLATFORM_ABI),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_NOT_USING_CONFIG_FLAGS", cmake_value_CMAKE_NOT_USING_CONFIG_FLAGS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_INTEL_FORTRAN_PROJECT_VERSION", cmake_value_CMAKE_VS_INTEL_FORTRAN_PROJECT_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_ABSOLUTE_DESTINATION_FILES", cmake_value_CPACK_ABSOLUTE_DESTINATION_FILES),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY", cmake_value_CPACK_COMPONENT_INCLUDE_TOPLEVEL_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_CUSTOM_INSTALL_VARIABLES", cmake_value_CPACK_CUSTOM_INSTALL_VARIABLES),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION", cmake_value_CPACK_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_INCLUDE_TOPLEVEL_DIRECTORY", cmake_value_CPACK_INCLUDE_TOPLEVEL_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS", cmake_value_CPACK_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_PACKAGING_INSTALL_PREFIX", cmake_value_CPACK_PACKAGING_INSTALL_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_SET_DESTDIR", cmake_value_CPACK_SET_DESTDIR),\
+	std::pair<std::string, std::string>( "cmake_value_CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION", cmake_value_CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_BINARY_DIRECTORY", cmake_value_CTEST_BINARY_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_BUILD_COMMAND", cmake_value_CTEST_BUILD_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_BUILD_NAME", cmake_value_CTEST_BUILD_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_BZR_COMMAND", cmake_value_CTEST_BZR_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_BZR_UPDATE_OPTIONS", cmake_value_CTEST_BZR_UPDATE_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CHANGE_ID", cmake_value_CTEST_CHANGE_ID),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CHECKOUT_COMMAND", cmake_value_CTEST_CHECKOUT_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CONFIGURATION_TYPE", cmake_value_CTEST_CONFIGURATION_TYPE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CONFIGURE_COMMAND", cmake_value_CTEST_CONFIGURE_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_COVERAGE_COMMAND", cmake_value_CTEST_COVERAGE_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_COVERAGE_EXTRA_FLAGS", cmake_value_CTEST_COVERAGE_EXTRA_FLAGS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_COVERAGE_EXCLUDE", cmake_value_CTEST_CUSTOM_COVERAGE_EXCLUDE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_ERROR_EXCEPTION", cmake_value_CTEST_CUSTOM_ERROR_EXCEPTION),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_ERROR_MATCH", cmake_value_CTEST_CUSTOM_ERROR_MATCH),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_ERROR_POST_CONTEXT", cmake_value_CTEST_CUSTOM_ERROR_POST_CONTEXT),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_ERROR_PRE_CONTEXT", cmake_value_CTEST_CUSTOM_ERROR_PRE_CONTEXT),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE", cmake_value_CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS", cmake_value_CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS", cmake_value_CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE", cmake_value_CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_MEMCHECK_IGNORE", cmake_value_CTEST_CUSTOM_MEMCHECK_IGNORE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_POST_MEMCHECK", cmake_value_CTEST_CUSTOM_POST_MEMCHECK),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_POST_TEST", cmake_value_CTEST_CUSTOM_POST_TEST),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_PRE_MEMCHECK", cmake_value_CTEST_CUSTOM_PRE_MEMCHECK),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_PRE_TEST", cmake_value_CTEST_CUSTOM_PRE_TEST),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_TEST_OUTPUT_TRUNCATION", cmake_value_CTEST_CUSTOM_TEST_OUTPUT_TRUNCATION),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_TESTS_IGNORE", cmake_value_CTEST_CUSTOM_TESTS_IGNORE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_WARNING_EXCEPTION", cmake_value_CTEST_CUSTOM_WARNING_EXCEPTION),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CUSTOM_WARNING_MATCH", cmake_value_CTEST_CUSTOM_WARNING_MATCH),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CVS_COMMAND", cmake_value_CTEST_CVS_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_CVS_UPDATE_OPTIONS", cmake_value_CTEST_CVS_UPDATE_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_DROP_LOCATION", cmake_value_CTEST_DROP_LOCATION),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_DROP_METHOD", cmake_value_CTEST_DROP_METHOD),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_DROP_SITE", cmake_value_CTEST_DROP_SITE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_DROP_SITE_CDASH", cmake_value_CTEST_DROP_SITE_CDASH),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_DROP_SITE_PASSWORD", cmake_value_CTEST_DROP_SITE_PASSWORD),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_DROP_SITE_USER", cmake_value_CTEST_DROP_SITE_USER),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_EXTRA_COVERAGE_GLOB", cmake_value_CTEST_EXTRA_COVERAGE_GLOB),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_GIT_COMMAND", cmake_value_CTEST_GIT_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_GIT_INIT_SUBMODULES", cmake_value_CTEST_GIT_INIT_SUBMODULES),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_GIT_UPDATE_CUSTOM", cmake_value_CTEST_GIT_UPDATE_CUSTOM),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_GIT_UPDATE_OPTIONS", cmake_value_CTEST_GIT_UPDATE_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_HG_COMMAND", cmake_value_CTEST_HG_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_HG_UPDATE_OPTIONS", cmake_value_CTEST_HG_UPDATE_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_LABELS_FOR_SUBPROJECTS", cmake_value_CTEST_LABELS_FOR_SUBPROJECTS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_MEMORYCHECK_COMMAND", cmake_value_CTEST_MEMORYCHECK_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_MEMORYCHECK_COMMAND_OPTIONS", cmake_value_CTEST_MEMORYCHECK_COMMAND_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_MEMORYCHECK_SANITIZER_OPTIONS", cmake_value_CTEST_MEMORYCHECK_SANITIZER_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_MEMORYCHECK_SUPPRESSIONS_FILE", cmake_value_CTEST_MEMORYCHECK_SUPPRESSIONS_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_MEMORYCHECK_TYPE", cmake_value_CTEST_MEMORYCHECK_TYPE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_NIGHTLY_START_TIME", cmake_value_CTEST_NIGHTLY_START_TIME),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_P4_CLIENT", cmake_value_CTEST_P4_CLIENT),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_P4_COMMAND", cmake_value_CTEST_P4_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_P4_OPTIONS", cmake_value_CTEST_P4_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_P4_UPDATE_OPTIONS", cmake_value_CTEST_P4_UPDATE_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_RESOURCE_SPEC_FILE", cmake_value_CTEST_RESOURCE_SPEC_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_RUN_CURRENT_SCRIPT", cmake_value_CTEST_RUN_CURRENT_SCRIPT),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SCRIPT_DIRECTORY", cmake_value_CTEST_SCRIPT_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SITE", cmake_value_CTEST_SITE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SOURCE_DIRECTORY", cmake_value_CTEST_SOURCE_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SUBMIT_INACTIVITY_TIMEOUT", cmake_value_CTEST_SUBMIT_INACTIVITY_TIMEOUT),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SUBMIT_URL", cmake_value_CTEST_SUBMIT_URL),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SVN_COMMAND", cmake_value_CTEST_SVN_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SVN_OPTIONS", cmake_value_CTEST_SVN_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_SVN_UPDATE_OPTIONS", cmake_value_CTEST_SVN_UPDATE_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_TEST_LOAD", cmake_value_CTEST_TEST_LOAD),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_TEST_TIMEOUT", cmake_value_CTEST_TEST_TIMEOUT),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_TLS_VERIFY", cmake_value_CTEST_TLS_VERIFY),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_TLS_VERSION", cmake_value_CTEST_TLS_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_UPDATE_COMMAND", cmake_value_CTEST_UPDATE_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_UPDATE_OPTIONS", cmake_value_CTEST_UPDATE_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_UPDATE_VERSION_ONLY", cmake_value_CTEST_UPDATE_VERSION_ONLY),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_UPDATE_VERSION_OVERRIDE", cmake_value_CTEST_UPDATE_VERSION_OVERRIDE),\
+	std::pair<std::string, std::string>( "cmake_value_CTEST_USE_LAUNCHERS", cmake_value_CTEST_USE_LAUNCHERS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_C_COMPILE_FEATURES", cmake_value_CMAKE_C_COMPILE_FEATURES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_C_EXTENSIONS", cmake_value_CMAKE_C_EXTENSIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_C_STANDARD", cmake_value_CMAKE_C_STANDARD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_C_STANDARD_REQUIRED", cmake_value_CMAKE_C_STANDARD_REQUIRED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_ARCHITECTURES", cmake_value_CMAKE_CUDA_ARCHITECTURES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_COMPILE_FEATURES", cmake_value_CMAKE_CUDA_COMPILE_FEATURES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_EXTENSIONS", cmake_value_CMAKE_CUDA_EXTENSIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_HOST_COMPILER", cmake_value_CMAKE_CUDA_HOST_COMPILER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_STANDARD", cmake_value_CMAKE_CUDA_STANDARD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_STANDARD_REQUIRED", cmake_value_CMAKE_CUDA_STANDARD_REQUIRED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES", cmake_value_CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CXX_COMPILE_FEATURES", cmake_value_CMAKE_CXX_COMPILE_FEATURES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CXX_COMPILER_IMPORT_STD", cmake_value_CMAKE_CXX_COMPILER_IMPORT_STD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CXX_EXTENSIONS", cmake_value_CMAKE_CXX_EXTENSIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CXX_STANDARD", cmake_value_CMAKE_CXX_STANDARD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CXX_STANDARD_REQUIRED", cmake_value_CMAKE_CXX_STANDARD_REQUIRED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FORTRAN_MODDIR_DEFAULT", cmake_value_CMAKE_FORTRAN_MODDIR_DEFAULT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FORTRAN_MODDIR_FLAG", cmake_value_CMAKE_FORTRAN_MODDIR_FLAG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FORTRAN_MODOUT_FLAG", cmake_value_CMAKE_FORTRAN_MODOUT_FLAG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HIP_ARCHITECTURES", cmake_value_CMAKE_HIP_ARCHITECTURES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HIP_COMPILE_FEATURES", cmake_value_CMAKE_HIP_COMPILE_FEATURES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HIP_EXTENSIONS", cmake_value_CMAKE_HIP_EXTENSIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HIP_PLATFORM", cmake_value_CMAKE_HIP_PLATFORM),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HIP_STANDARD", cmake_value_CMAKE_HIP_STANDARD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HIP_STANDARD_REQUIRED", cmake_value_CMAKE_HIP_STANDARD_REQUIRED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ISPC_HEADER_DIRECTORY", cmake_value_CMAKE_ISPC_HEADER_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ISPC_HEADER_SUFFIX", cmake_value_CMAKE_ISPC_HEADER_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ISPC_INSTRUCTION_SETS", cmake_value_CMAKE_ISPC_INSTRUCTION_SETS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OBJC_EXTENSIONS", cmake_value_CMAKE_OBJC_EXTENSIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OBJC_STANDARD", cmake_value_CMAKE_OBJC_STANDARD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OBJC_STANDARD_REQUIRED", cmake_value_CMAKE_OBJC_STANDARD_REQUIRED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OBJCXX_EXTENSIONS", cmake_value_CMAKE_OBJCXX_EXTENSIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OBJCXX_STANDARD", cmake_value_CMAKE_OBJCXX_STANDARD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OBJCXX_STANDARD_REQUIRED", cmake_value_CMAKE_OBJCXX_STANDARD_REQUIRED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SWIFT_LANGUAGE_VERSION", cmake_value_CMAKE_SWIFT_LANGUAGE_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_BUILD_SHARED_LIBS", cmake_value_BUILD_SHARED_LIBS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ABSOLUTE_DESTINATION_FILES", cmake_value_CMAKE_ABSOLUTE_DESTINATION_FILES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ADD_CUSTOM_COMMAND_DEPENDS_EXPLICIT_ONLY", cmake_value_CMAKE_ADD_CUSTOM_COMMAND_DEPENDS_EXPLICIT_ONLY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_APPBUNDLE_PATH", cmake_value_CMAKE_APPBUNDLE_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_BUILD_TYPE", cmake_value_CMAKE_BUILD_TYPE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CLANG_VFS_OVERLAY", cmake_value_CMAKE_CLANG_VFS_OVERLAY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CODEBLOCKS_COMPILER_ID", cmake_value_CMAKE_CODEBLOCKS_COMPILER_ID),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CODEBLOCKS_EXCLUDE_EXTERNAL_FILES", cmake_value_CMAKE_CODEBLOCKS_EXCLUDE_EXTERNAL_FILES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CODELITE_USE_TARGETS", cmake_value_CMAKE_CODELITE_USE_TARGETS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COLOR_DIAGNOSTICS", cmake_value_CMAKE_COLOR_DIAGNOSTICS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COLOR_MAKEFILE", cmake_value_CMAKE_COLOR_MAKEFILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CONFIGURATION_TYPES", cmake_value_CMAKE_CONFIGURATION_TYPES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DEPENDS_IN_PROJECT_ONLY", cmake_value_CMAKE_DEPENDS_IN_PROJECT_ONLY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES", cmake_value_CMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT", cmake_value_CMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ECLIPSE_MAKE_ARGUMENTS", cmake_value_CMAKE_ECLIPSE_MAKE_ARGUMENTS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ECLIPSE_RESOURCE_ENCODING", cmake_value_CMAKE_ECLIPSE_RESOURCE_ENCODING),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ECLIPSE_VERSION", cmake_value_CMAKE_ECLIPSE_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ERROR_DEPRECATED", cmake_value_CMAKE_ERROR_DEPRECATED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION", cmake_value_CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXECUTE_PROCESS_COMMAND_ECHO", cmake_value_CMAKE_EXECUTE_PROCESS_COMMAND_ECHO),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXPORT_BUILD_DATABASE", cmake_value_CMAKE_EXPORT_BUILD_DATABASE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXPORT_COMPILE_COMMANDS", cmake_value_CMAKE_EXPORT_COMPILE_COMMANDS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXPORT_PACKAGE_REGISTRY", cmake_value_CMAKE_EXPORT_PACKAGE_REGISTRY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXPORT_NO_PACKAGE_REGISTRY", cmake_value_CMAKE_EXPORT_NO_PACKAGE_REGISTRY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_APPBUNDLE", cmake_value_CMAKE_FIND_APPBUNDLE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_FRAMEWORK", cmake_value_CMAKE_FIND_FRAMEWORK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_LIBRARY_CUSTOM_LIB_SUFFIX", cmake_value_CMAKE_FIND_LIBRARY_CUSTOM_LIB_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_LIBRARY_PREFIXES", cmake_value_CMAKE_FIND_LIBRARY_PREFIXES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_LIBRARY_SUFFIXES", cmake_value_CMAKE_FIND_LIBRARY_SUFFIXES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_NO_INSTALL_PREFIX", cmake_value_CMAKE_FIND_NO_INSTALL_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_PREFER_CONFIG", cmake_value_CMAKE_FIND_PACKAGE_PREFER_CONFIG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_RESOLVE_SYMLINKS", cmake_value_CMAKE_FIND_PACKAGE_RESOLVE_SYMLINKS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_TARGETS_GLOBAL", cmake_value_CMAKE_FIND_PACKAGE_TARGETS_GLOBAL),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_WARN_NO_MODULE", cmake_value_CMAKE_FIND_PACKAGE_WARN_NO_MODULE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_ROOT_PATH", cmake_value_CMAKE_FIND_ROOT_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_ROOT_PATH_MODE_INCLUDE", cmake_value_CMAKE_FIND_ROOT_PATH_MODE_INCLUDE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_ROOT_PATH_MODE_LIBRARY", cmake_value_CMAKE_FIND_ROOT_PATH_MODE_LIBRARY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_ROOT_PATH_MODE_PACKAGE", cmake_value_CMAKE_FIND_ROOT_PATH_MODE_PACKAGE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM", cmake_value_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH", cmake_value_CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_USE_CMAKE_PATH", cmake_value_CMAKE_FIND_USE_CMAKE_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_USE_CMAKE_SYSTEM_PATH", cmake_value_CMAKE_FIND_USE_CMAKE_SYSTEM_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_USE_INSTALL_PREFIX", cmake_value_CMAKE_FIND_USE_INSTALL_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_USE_PACKAGE_REGISTRY", cmake_value_CMAKE_FIND_USE_PACKAGE_REGISTRY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_USE_PACKAGE_ROOT_PATH", cmake_value_CMAKE_FIND_USE_PACKAGE_ROOT_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH", cmake_value_CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY", cmake_value_CMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FRAMEWORK_PATH", cmake_value_CMAKE_FRAMEWORK_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_IGNORE_PATH", cmake_value_CMAKE_IGNORE_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_IGNORE_PREFIX_PATH", cmake_value_CMAKE_IGNORE_PREFIX_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INCLUDE_DIRECTORIES_BEFORE", cmake_value_CMAKE_INCLUDE_DIRECTORIES_BEFORE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE", cmake_value_CMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INCLUDE_PATH", cmake_value_CMAKE_INCLUDE_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_DEFAULT_COMPONENT_NAME", cmake_value_CMAKE_INSTALL_DEFAULT_COMPONENT_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS", cmake_value_CMAKE_INSTALL_DEFAULT_DIRECTORY_PERMISSIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_MESSAGE", cmake_value_CMAKE_INSTALL_MESSAGE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_PREFIX", cmake_value_CMAKE_INSTALL_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT", cmake_value_CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_KATE_FILES_MODE", cmake_value_CMAKE_KATE_FILES_MODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_KATE_MAKE_ARGUMENTS", cmake_value_CMAKE_KATE_MAKE_ARGUMENTS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LIBRARY_PATH", cmake_value_CMAKE_LIBRARY_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_DIRECTORIES_BEFORE", cmake_value_CMAKE_LINK_DIRECTORIES_BEFORE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_LIBRARIES_ONLY_TARGETS", cmake_value_CMAKE_LINK_LIBRARIES_ONLY_TARGETS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MAXIMUM_RECURSION_DEPTH", cmake_value_CMAKE_MAXIMUM_RECURSION_DEPTH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MESSAGE_CONTEXT", cmake_value_CMAKE_MESSAGE_CONTEXT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MESSAGE_CONTEXT_SHOW", cmake_value_CMAKE_MESSAGE_CONTEXT_SHOW),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MESSAGE_INDENT", cmake_value_CMAKE_MESSAGE_INDENT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MESSAGE_LOG_LEVEL", cmake_value_CMAKE_MESSAGE_LOG_LEVEL),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MFC_FLAG", cmake_value_CMAKE_MFC_FLAG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MODULE_PATH", cmake_value_CMAKE_MODULE_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PREFIX_PATH", cmake_value_CMAKE_PREFIX_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROGRAM_PATH", cmake_value_CMAKE_PROGRAM_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_INCLUDE", cmake_value_CMAKE_PROJECT_INCLUDE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_INCLUDE_BEFORE", cmake_value_CMAKE_PROJECT_INCLUDE_BEFORE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_TOP_LEVEL_INCLUDES", cmake_value_CMAKE_PROJECT_TOP_LEVEL_INCLUDES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SKIP_INSTALL_ALL_DEPENDENCY", cmake_value_CMAKE_SKIP_INSTALL_ALL_DEPENDENCY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SKIP_TEST_ALL_DEPENDENCY", cmake_value_CMAKE_SKIP_TEST_ALL_DEPENDENCY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_STAGING_PREFIX", cmake_value_CMAKE_STAGING_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SUBLIME_TEXT_2_ENV_SETTINGS", cmake_value_CMAKE_SUBLIME_TEXT_2_ENV_SETTINGS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SUBLIME_TEXT_2_EXCLUDE_BUILD_TREE", cmake_value_CMAKE_SUBLIME_TEXT_2_EXCLUDE_BUILD_TREE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SUPPRESS_REGENERATION", cmake_value_CMAKE_SUPPRESS_REGENERATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSROOT", cmake_value_CMAKE_SYSROOT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSROOT_COMPILE", cmake_value_CMAKE_SYSROOT_COMPILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSROOT_LINK", cmake_value_CMAKE_SYSROOT_LINK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_APPBUNDLE_PATH", cmake_value_CMAKE_SYSTEM_APPBUNDLE_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_FRAMEWORK_PATH", cmake_value_CMAKE_SYSTEM_FRAMEWORK_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_IGNORE_PATH", cmake_value_CMAKE_SYSTEM_IGNORE_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_IGNORE_PREFIX_PATH", cmake_value_CMAKE_SYSTEM_IGNORE_PREFIX_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_INCLUDE_PATH", cmake_value_CMAKE_SYSTEM_INCLUDE_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_LIBRARY_PATH", cmake_value_CMAKE_SYSTEM_LIBRARY_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_PREFIX_PATH", cmake_value_CMAKE_SYSTEM_PREFIX_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_PROGRAM_PATH", cmake_value_CMAKE_SYSTEM_PROGRAM_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TLS_CAINFO", cmake_value_CMAKE_TLS_CAINFO),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TLS_VERIFY", cmake_value_CMAKE_TLS_VERIFY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TLS_VERSION", cmake_value_CMAKE_TLS_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_USER_MAKE_RULES_OVERRIDE", cmake_value_CMAKE_USER_MAKE_RULES_OVERRIDE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_WARN_DEPRECATED", cmake_value_CMAKE_WARN_DEPRECATED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION", cmake_value_CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_GENERATE_SCHEME", cmake_value_CMAKE_XCODE_GENERATE_SCHEME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY", cmake_value_CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_LINK_BUILD_PHASE_MODE", cmake_value_CMAKE_XCODE_LINK_BUILD_PHASE_MODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_ADDRESS_SANITIZER", cmake_value_CMAKE_XCODE_SCHEME_ADDRESS_SANITIZER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_ADDRESS_SANITIZER_USE_AFTER_RETURN", cmake_value_CMAKE_XCODE_SCHEME_ADDRESS_SANITIZER_USE_AFTER_RETURN),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_DEBUG_DOCUMENT_VERSIONING", cmake_value_CMAKE_XCODE_SCHEME_DEBUG_DOCUMENT_VERSIONING),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_DISABLE_MAIN_THREAD_CHECKER", cmake_value_CMAKE_XCODE_SCHEME_DISABLE_MAIN_THREAD_CHECKER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_DYNAMIC_LIBRARY_LOADS", cmake_value_CMAKE_XCODE_SCHEME_DYNAMIC_LIBRARY_LOADS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_DYNAMIC_LINKER_API_USAGE", cmake_value_CMAKE_XCODE_SCHEME_DYNAMIC_LINKER_API_USAGE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_API_VALIDATION", cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_API_VALIDATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_FRAME_CAPTURE_MODE", cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_FRAME_CAPTURE_MODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_SHADER_VALIDATION", cmake_value_CMAKE_XCODE_SCHEME_ENABLE_GPU_SHADER_VALIDATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_ENVIRONMENT", cmake_value_CMAKE_XCODE_SCHEME_ENVIRONMENT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_GUARD_MALLOC", cmake_value_CMAKE_XCODE_SCHEME_GUARD_MALLOC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_LAUNCH_CONFIGURATION", cmake_value_CMAKE_XCODE_SCHEME_LAUNCH_CONFIGURATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_LAUNCH_MODE", cmake_value_CMAKE_XCODE_SCHEME_LAUNCH_MODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_MAIN_THREAD_CHECKER_STOP", cmake_value_CMAKE_XCODE_SCHEME_MAIN_THREAD_CHECKER_STOP),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_MALLOC_GUARD_EDGES", cmake_value_CMAKE_XCODE_SCHEME_MALLOC_GUARD_EDGES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_MALLOC_SCRIBBLE", cmake_value_CMAKE_XCODE_SCHEME_MALLOC_SCRIBBLE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_MALLOC_STACK", cmake_value_CMAKE_XCODE_SCHEME_MALLOC_STACK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_THREAD_SANITIZER", cmake_value_CMAKE_XCODE_SCHEME_THREAD_SANITIZER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_THREAD_SANITIZER_STOP", cmake_value_CMAKE_XCODE_SCHEME_THREAD_SANITIZER_STOP),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_UNDEFINED_BEHAVIOUR_SANITIZER", cmake_value_CMAKE_XCODE_SCHEME_UNDEFINED_BEHAVIOUR_SANITIZER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_UNDEFINED_BEHAVIOUR_SANITIZER_STOP", cmake_value_CMAKE_XCODE_SCHEME_UNDEFINED_BEHAVIOUR_SANITIZER_STOP),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_WORKING_DIRECTORY", cmake_value_CMAKE_XCODE_SCHEME_WORKING_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_SCHEME_ZOMBIE_OBJECTS", cmake_value_CMAKE_XCODE_SCHEME_ZOMBIE_OBJECTS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_XCCONFIG", cmake_value_CMAKE_XCODE_XCCONFIG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ADSP_ROOT", cmake_value_CMAKE_ADSP_ROOT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AIX_SHARED_LIBRARY_ARCHIVE", cmake_value_CMAKE_AIX_SHARED_LIBRARY_ARCHIVE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AIX_EXPORT_ALL_SYMBOLS", cmake_value_CMAKE_AIX_EXPORT_ALL_SYMBOLS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_ANT_ADDITIONAL_OPTIONS", cmake_value_CMAKE_ANDROID_ANT_ADDITIONAL_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_API", cmake_value_CMAKE_ANDROID_API),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_API_MIN", cmake_value_CMAKE_ANDROID_API_MIN),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_ARCH", cmake_value_CMAKE_ANDROID_ARCH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_ARCH_ABI", cmake_value_CMAKE_ANDROID_ARCH_ABI),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_ARM_MODE", cmake_value_CMAKE_ANDROID_ARM_MODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_ARM_NEON", cmake_value_CMAKE_ANDROID_ARM_NEON),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_ASSETS_DIRECTORIES", cmake_value_CMAKE_ANDROID_ASSETS_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_EXCEPTIONS", cmake_value_CMAKE_ANDROID_EXCEPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_GUI", cmake_value_CMAKE_ANDROID_GUI),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_JAR_DEPENDENCIES", cmake_value_CMAKE_ANDROID_JAR_DEPENDENCIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_JAR_DIRECTORIES", cmake_value_CMAKE_ANDROID_JAR_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_JAVA_SOURCE_DIR", cmake_value_CMAKE_ANDROID_JAVA_SOURCE_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_NATIVE_LIB_DEPENDENCIES", cmake_value_CMAKE_ANDROID_NATIVE_LIB_DEPENDENCIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_NATIVE_LIB_DIRECTORIES", cmake_value_CMAKE_ANDROID_NATIVE_LIB_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_NDK", cmake_value_CMAKE_ANDROID_NDK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_NDK_DEPRECATED_HEADERS", cmake_value_CMAKE_ANDROID_NDK_DEPRECATED_HEADERS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG", cmake_value_CMAKE_ANDROID_NDK_TOOLCHAIN_HOST_TAG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION", cmake_value_CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_PROCESS_MAX", cmake_value_CMAKE_ANDROID_PROCESS_MAX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_PROGUARD", cmake_value_CMAKE_ANDROID_PROGUARD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_PROGUARD_CONFIG_PATH", cmake_value_CMAKE_ANDROID_PROGUARD_CONFIG_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_RTTI", cmake_value_CMAKE_ANDROID_RTTI),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_SECURE_PROPS_PATH", cmake_value_CMAKE_ANDROID_SECURE_PROPS_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_SKIP_ANT_STEP", cmake_value_CMAKE_ANDROID_SKIP_ANT_STEP),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_STANDALONE_TOOLCHAIN", cmake_value_CMAKE_ANDROID_STANDALONE_TOOLCHAIN),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_STL_TYPE", cmake_value_CMAKE_ANDROID_STL_TYPE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_APPLE_SILICON_PROCESSOR", cmake_value_CMAKE_APPLE_SILICON_PROCESSOR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ARCHIVE_OUTPUT_DIRECTORY", cmake_value_CMAKE_ARCHIVE_OUTPUT_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOGEN_BETTER_GRAPH_MULTI_CONFIG", cmake_value_CMAKE_AUTOGEN_BETTER_GRAPH_MULTI_CONFIG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOGEN_COMMAND_LINE_LENGTH_MAX", cmake_value_CMAKE_AUTOGEN_COMMAND_LINE_LENGTH_MAX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOGEN_ORIGIN_DEPENDS", cmake_value_CMAKE_AUTOGEN_ORIGIN_DEPENDS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOGEN_PARALLEL", cmake_value_CMAKE_AUTOGEN_PARALLEL),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOGEN_USE_SYSTEM_INCLUDE", cmake_value_CMAKE_AUTOGEN_USE_SYSTEM_INCLUDE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOGEN_VERBOSE", cmake_value_CMAKE_AUTOGEN_VERBOSE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOMOC", cmake_value_CMAKE_AUTOMOC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOMOC_COMPILER_PREDEFINES", cmake_value_CMAKE_AUTOMOC_COMPILER_PREDEFINES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOMOC_DEPEND_FILTERS", cmake_value_CMAKE_AUTOMOC_DEPEND_FILTERS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOMOC_MACRO_NAMES", cmake_value_CMAKE_AUTOMOC_MACRO_NAMES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOMOC_MOC_OPTIONS", cmake_value_CMAKE_AUTOMOC_MOC_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOMOC_PATH_PREFIX", cmake_value_CMAKE_AUTOMOC_PATH_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOMOC_EXECUTABLE", cmake_value_CMAKE_AUTOMOC_EXECUTABLE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTORCC", cmake_value_CMAKE_AUTORCC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTORCC_OPTIONS", cmake_value_CMAKE_AUTORCC_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTORCC_EXECUTABLE", cmake_value_CMAKE_AUTORCC_EXECUTABLE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOUIC", cmake_value_CMAKE_AUTOUIC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOUIC_OPTIONS", cmake_value_CMAKE_AUTOUIC_OPTIONS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOUIC_SEARCH_PATHS", cmake_value_CMAKE_AUTOUIC_SEARCH_PATHS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AUTOUIC_EXECUTABLE", cmake_value_CMAKE_AUTOUIC_EXECUTABLE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_BUILD_RPATH", cmake_value_CMAKE_BUILD_RPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_BUILD_RPATH_USE_ORIGIN", cmake_value_CMAKE_BUILD_RPATH_USE_ORIGIN),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_BUILD_WITH_INSTALL_NAME_DIR", cmake_value_CMAKE_BUILD_WITH_INSTALL_NAME_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_BUILD_WITH_INSTALL_RPATH", cmake_value_CMAKE_BUILD_WITH_INSTALL_RPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY", cmake_value_CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COMPILE_WARNING_AS_ERROR", cmake_value_CMAKE_COMPILE_WARNING_AS_ERROR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CROSS_CONFIGS", cmake_value_CMAKE_CROSS_CONFIGS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CTEST_ARGUMENTS", cmake_value_CMAKE_CTEST_ARGUMENTS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_RESOLVE_DEVICE_SYMBOLS", cmake_value_CMAKE_CUDA_RESOLVE_DEVICE_SYMBOLS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_RUNTIME_LIBRARY", cmake_value_CMAKE_CUDA_RUNTIME_LIBRARY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CUDA_SEPARABLE_COMPILATION", cmake_value_CMAKE_CUDA_SEPARABLE_COMPILATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CXX_MODULE_STD", cmake_value_CMAKE_CXX_MODULE_STD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CXX_SCAN_FOR_MODULES", cmake_value_CMAKE_CXX_SCAN_FOR_MODULES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DEBUG_POSTFIX", cmake_value_CMAKE_DEBUG_POSTFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DEFAULT_BUILD_TYPE", cmake_value_CMAKE_DEFAULT_BUILD_TYPE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DEFAULT_CONFIGS", cmake_value_CMAKE_DEFAULT_CONFIGS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DEPENDS_USE_COMPILER", cmake_value_CMAKE_DEPENDS_USE_COMPILER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DISABLE_PRECOMPILE_HEADERS", cmake_value_CMAKE_DISABLE_PRECOMPILE_HEADERS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DLL_NAME_WITH_SOVERSION", cmake_value_CMAKE_DLL_NAME_WITH_SOVERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ENABLE_EXPORTS", cmake_value_CMAKE_ENABLE_EXPORTS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXECUTABLE_ENABLE_EXPORTS", cmake_value_CMAKE_EXECUTABLE_ENABLE_EXPORTS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXE_LINKER_FLAGS", cmake_value_CMAKE_EXE_LINKER_FLAGS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXE_LINKER_FLAGS_INIT", cmake_value_CMAKE_EXE_LINKER_FLAGS_INIT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXPORT_FIND_PACKAGE_NAME", cmake_value_CMAKE_EXPORT_FIND_PACKAGE_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FOLDER", cmake_value_CMAKE_FOLDER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FORTRAN_FORMAT", cmake_value_CMAKE_FORTRAN_FORMAT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FORTRAN_MODULE_DIRECTORY", cmake_value_CMAKE_FORTRAN_MODULE_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FORTRAN_PREPROCESS", cmake_value_CMAKE_FORTRAN_PREPROCESS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FRAMEWORK", cmake_value_CMAKE_FRAMEWORK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GHS_NO_SOURCE_GROUP_FILE", cmake_value_CMAKE_GHS_NO_SOURCE_GROUP_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GLOBAL_AUTOGEN_TARGET", cmake_value_CMAKE_GLOBAL_AUTOGEN_TARGET),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GLOBAL_AUTOGEN_TARGET_NAME", cmake_value_CMAKE_GLOBAL_AUTOGEN_TARGET_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GLOBAL_AUTORCC_TARGET", cmake_value_CMAKE_GLOBAL_AUTORCC_TARGET),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GLOBAL_AUTORCC_TARGET_NAME", cmake_value_CMAKE_GLOBAL_AUTORCC_TARGET_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GNUTOMS", cmake_value_CMAKE_GNUTOMS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INCLUDE_CURRENT_DIR", cmake_value_CMAKE_INCLUDE_CURRENT_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE", cmake_value_CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_NAME_DIR", cmake_value_CMAKE_INSTALL_NAME_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_REMOVE_ENVIRONMENT_RPATH", cmake_value_CMAKE_INSTALL_REMOVE_ENVIRONMENT_RPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_RPATH", cmake_value_CMAKE_INSTALL_RPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INSTALL_RPATH_USE_LINK_PATH", cmake_value_CMAKE_INSTALL_RPATH_USE_LINK_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_INTERPROCEDURAL_OPTIMIZATION", cmake_value_CMAKE_INTERPROCEDURAL_OPTIMIZATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LIBRARY_OUTPUT_DIRECTORY", cmake_value_CMAKE_LIBRARY_OUTPUT_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LIBRARY_PATH_FLAG", cmake_value_CMAKE_LIBRARY_PATH_FLAG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_DEF_FILE_FLAG", cmake_value_CMAKE_LINK_DEF_FILE_FLAG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_DEPENDS_NO_SHARED", cmake_value_CMAKE_LINK_DEPENDS_NO_SHARED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_DEPENDS_USE_LINKER", cmake_value_CMAKE_LINK_DEPENDS_USE_LINKER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_INTERFACE_LIBRARIES", cmake_value_CMAKE_LINK_INTERFACE_LIBRARIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_LIBRARIES_STRATEGY", cmake_value_CMAKE_LINK_LIBRARIES_STRATEGY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_LIBRARY_FILE_FLAG", cmake_value_CMAKE_LINK_LIBRARY_FILE_FLAG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_LIBRARY_FLAG", cmake_value_CMAKE_LINK_LIBRARY_FLAG),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_WHAT_YOU_USE", cmake_value_CMAKE_LINK_WHAT_YOU_USE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_WHAT_YOU_USE_CHECK", cmake_value_CMAKE_LINK_WHAT_YOU_USE_CHECK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINKER_TYPE", cmake_value_CMAKE_LINKER_TYPE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MACOSX_BUNDLE", cmake_value_CMAKE_MACOSX_BUNDLE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MACOSX_RPATH", cmake_value_CMAKE_MACOSX_RPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MODULE_LINKER_FLAGS", cmake_value_CMAKE_MODULE_LINKER_FLAGS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MODULE_LINKER_FLAGS_INIT", cmake_value_CMAKE_MODULE_LINKER_FLAGS_INIT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MSVC_DEBUG_INFORMATION_FORMAT", cmake_value_CMAKE_MSVC_DEBUG_INFORMATION_FORMAT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MSVC_RUNTIME_LIBRARY", cmake_value_CMAKE_MSVC_RUNTIME_LIBRARY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MSVCIDE_RUN_PATH", cmake_value_CMAKE_MSVCIDE_RUN_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_NINJA_OUTPUT_PATH_PREFIX", cmake_value_CMAKE_NINJA_OUTPUT_PATH_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_NO_BUILTIN_CHRPATH", cmake_value_CMAKE_NO_BUILTIN_CHRPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_NO_SYSTEM_FROM_IMPORTED", cmake_value_CMAKE_NO_SYSTEM_FROM_IMPORTED),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OPTIMIZE_DEPENDENCIES", cmake_value_CMAKE_OPTIMIZE_DEPENDENCIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OSX_ARCHITECTURES", cmake_value_CMAKE_OSX_ARCHITECTURES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OSX_DEPLOYMENT_TARGET", cmake_value_CMAKE_OSX_DEPLOYMENT_TARGET),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OSX_SYSROOT", cmake_value_CMAKE_OSX_SYSROOT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PCH_INSTANTIATE_TEMPLATES", cmake_value_CMAKE_PCH_INSTANTIATE_TEMPLATES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PCH_WARN_INVALID", cmake_value_CMAKE_PCH_WARN_INVALID),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PDB_OUTPUT_DIRECTORY", cmake_value_CMAKE_PDB_OUTPUT_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PLATFORM_NO_VERSIONED_SONAME", cmake_value_CMAKE_PLATFORM_NO_VERSIONED_SONAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_POSITION_INDEPENDENT_CODE", cmake_value_CMAKE_POSITION_INDEPENDENT_CODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_RUNTIME_OUTPUT_DIRECTORY", cmake_value_CMAKE_RUNTIME_OUTPUT_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SHARED_LIBRARY_ENABLE_EXPORTS", cmake_value_CMAKE_SHARED_LIBRARY_ENABLE_EXPORTS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SHARED_LINKER_FLAGS", cmake_value_CMAKE_SHARED_LINKER_FLAGS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SHARED_LINKER_FLAGS_INIT", cmake_value_CMAKE_SHARED_LINKER_FLAGS_INIT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SKIP_BUILD_RPATH", cmake_value_CMAKE_SKIP_BUILD_RPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SKIP_INSTALL_RPATH", cmake_value_CMAKE_SKIP_INSTALL_RPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_STATIC_LINKER_FLAGS", cmake_value_CMAKE_STATIC_LINKER_FLAGS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_STATIC_LINKER_FLAGS_INIT", cmake_value_CMAKE_STATIC_LINKER_FLAGS_INIT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TASKING_TOOLSET", cmake_value_CMAKE_TASKING_TOOLSET),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TRY_COMPILE_CONFIGURATION", cmake_value_CMAKE_TRY_COMPILE_CONFIGURATION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TRY_COMPILE_NO_PLATFORM_VARIABLES", cmake_value_CMAKE_TRY_COMPILE_NO_PLATFORM_VARIABLES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TRY_COMPILE_PLATFORM_VARIABLES", cmake_value_CMAKE_TRY_COMPILE_PLATFORM_VARIABLES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TRY_COMPILE_TARGET_TYPE", cmake_value_CMAKE_TRY_COMPILE_TARGET_TYPE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_UNITY_BUILD", cmake_value_CMAKE_UNITY_BUILD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_UNITY_BUILD_BATCH_SIZE", cmake_value_CMAKE_UNITY_BUILD_BATCH_SIZE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_UNITY_BUILD_UNIQUE_ID", cmake_value_CMAKE_UNITY_BUILD_UNIQUE_ID),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VERIFY_INTERFACE_HEADER_SETS", cmake_value_CMAKE_VERIFY_INTERFACE_HEADER_SETS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VISIBILITY_INLINES_HIDDEN", cmake_value_CMAKE_VISIBILITY_INLINES_HIDDEN),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_DEBUGGER_COMMAND", cmake_value_CMAKE_VS_DEBUGGER_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_DEBUGGER_COMMAND_ARGUMENTS", cmake_value_CMAKE_VS_DEBUGGER_COMMAND_ARGUMENTS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_DEBUGGER_ENVIRONMENT", cmake_value_CMAKE_VS_DEBUGGER_ENVIRONMENT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_DEBUGGER_WORKING_DIRECTORY", cmake_value_CMAKE_VS_DEBUGGER_WORKING_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_GLOBALS", cmake_value_CMAKE_VS_GLOBALS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD", cmake_value_CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_INCLUDE_PACKAGE_TO_DEFAULT_BUILD", cmake_value_CMAKE_VS_INCLUDE_PACKAGE_TO_DEFAULT_BUILD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_JUST_MY_CODE_DEBUGGING", cmake_value_CMAKE_VS_JUST_MY_CODE_DEBUGGING),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_NO_COMPILE_BATCHING", cmake_value_CMAKE_VS_NO_COMPILE_BATCHING),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_SDK_EXCLUDE_DIRECTORIES", cmake_value_CMAKE_VS_SDK_EXCLUDE_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_SDK_EXECUTABLE_DIRECTORIES", cmake_value_CMAKE_VS_SDK_EXECUTABLE_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_SDK_INCLUDE_DIRECTORIES", cmake_value_CMAKE_VS_SDK_INCLUDE_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_SDK_LIBRARY_DIRECTORIES", cmake_value_CMAKE_VS_SDK_LIBRARY_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_SDK_LIBRARY_WINRT_DIRECTORIES", cmake_value_CMAKE_VS_SDK_LIBRARY_WINRT_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_SDK_REFERENCE_DIRECTORIES", cmake_value_CMAKE_VS_SDK_REFERENCE_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_SDK_SOURCE_DIRECTORIES", cmake_value_CMAKE_VS_SDK_SOURCE_DIRECTORIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_WINRT_BY_DEFAULT", cmake_value_CMAKE_VS_WINRT_BY_DEFAULT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_WATCOM_RUNTIME_LIBRARY", cmake_value_CMAKE_WATCOM_RUNTIME_LIBRARY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_WIN32_EXECUTABLE", cmake_value_CMAKE_WIN32_EXECUTABLE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS", cmake_value_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS),\
+	std::pair<std::string, std::string>( "cmake_value_EXECUTABLE_OUTPUT_PATH", cmake_value_EXECUTABLE_OUTPUT_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_LIBRARY_OUTPUT_PATH", cmake_value_LIBRARY_OUTPUT_PATH),\
+	std::pair<std::string, std::string>( "cmake_value_ANDROID", cmake_value_ANDROID),\
+	std::pair<std::string, std::string>( "cmake_value_APPLE", cmake_value_APPLE),\
+	std::pair<std::string, std::string>( "cmake_value_BORLAND", cmake_value_BORLAND),\
+	std::pair<std::string, std::string>( "cmake_value_BSD", cmake_value_BSD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ANDROID_NDK_VERSION", cmake_value_CMAKE_ANDROID_NDK_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CL_64", cmake_value_CMAKE_CL_64),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COMPILER_2005", cmake_value_CMAKE_COMPILER_2005),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_APPLE", cmake_value_CMAKE_HOST_APPLE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_BSD", cmake_value_CMAKE_HOST_BSD),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_EXECUTABLE_SUFFIX", cmake_value_CMAKE_HOST_EXECUTABLE_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_LINUX", cmake_value_CMAKE_HOST_LINUX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_SOLARIS", cmake_value_CMAKE_HOST_SOLARIS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_SYSTEM", cmake_value_CMAKE_HOST_SYSTEM),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_SYSTEM_NAME", cmake_value_CMAKE_HOST_SYSTEM_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_SYSTEM_PROCESSOR", cmake_value_CMAKE_HOST_SYSTEM_PROCESSOR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_SYSTEM_VERSION", cmake_value_CMAKE_HOST_SYSTEM_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_UNIX", cmake_value_CMAKE_HOST_UNIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_HOST_WIN32", cmake_value_CMAKE_HOST_WIN32),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LIBRARY_ARCHITECTURE", cmake_value_CMAKE_LIBRARY_ARCHITECTURE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LIBRARY_ARCHITECTURE_REGEX", cmake_value_CMAKE_LIBRARY_ARCHITECTURE_REGEX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_OBJECT_PATH_MAX", cmake_value_CMAKE_OBJECT_PATH_MAX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM", cmake_value_CMAKE_SYSTEM),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_NAME", cmake_value_CMAKE_SYSTEM_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_PROCESSOR", cmake_value_CMAKE_SYSTEM_PROCESSOR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SYSTEM_VERSION", cmake_value_CMAKE_SYSTEM_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CYGWIN", cmake_value_CYGWIN),\
+	std::pair<std::string, std::string>( "cmake_value_GHSMULTI", cmake_value_GHSMULTI),\
+	std::pair<std::string, std::string>( "cmake_value_IOS", cmake_value_IOS),\
+	std::pair<std::string, std::string>( "cmake_value_LINUX", cmake_value_LINUX),\
+	std::pair<std::string, std::string>( "cmake_value_MINGW", cmake_value_MINGW),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC", cmake_value_MSVC),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC_IDE", cmake_value_MSVC_IDE),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC_TOOLSET_VERSION", cmake_value_MSVC_TOOLSET_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_MSVC_VERSION", cmake_value_MSVC_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_MSYS", cmake_value_MSYS),\
+	std::pair<std::string, std::string>( "cmake_value_UNIX", cmake_value_UNIX),\
+	std::pair<std::string, std::string>( "cmake_value_WASI", cmake_value_WASI),\
+	std::pair<std::string, std::string>( "cmake_value_WIN32", cmake_value_WIN32),\
+	std::pair<std::string, std::string>( "cmake_value_WINCE", cmake_value_WINCE),\
+	std::pair<std::string, std::string>( "cmake_value_WINDOWS_PHONE", cmake_value_WINDOWS_PHONE),\
+	std::pair<std::string, std::string>( "cmake_value_WINDOWS_STORE", cmake_value_WINDOWS_STORE),\
+	std::pair<std::string, std::string>( "cmake_value_XCODE", cmake_value_XCODE),\
+	std::pair<std::string, std::string>( "cmake_value_XCODE_VERSION", cmake_value_XCODE_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_AR", cmake_value_CMAKE_AR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ARGC", cmake_value_CMAKE_ARGC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ARGV0", cmake_value_CMAKE_ARGV0),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_BINARY_DIR", cmake_value_CMAKE_BINARY_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_BUILD_TOOL", cmake_value_CMAKE_BUILD_TOOL),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CACHE_MAJOR_VERSION", cmake_value_CMAKE_CACHE_MAJOR_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CACHE_MINOR_VERSION", cmake_value_CMAKE_CACHE_MINOR_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CACHE_PATCH_VERSION", cmake_value_CMAKE_CACHE_PATCH_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CACHEFILE_DIR", cmake_value_CMAKE_CACHEFILE_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CFG_INTDIR", cmake_value_CMAKE_CFG_INTDIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_COMMAND", cmake_value_CMAKE_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CPACK_COMMAND", cmake_value_CMAKE_CPACK_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CROSSCOMPILING", cmake_value_CMAKE_CROSSCOMPILING),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CROSSCOMPILING_EMULATOR", cmake_value_CMAKE_CROSSCOMPILING_EMULATOR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CTEST_COMMAND", cmake_value_CMAKE_CTEST_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_BINARY_DIR", cmake_value_CMAKE_CURRENT_BINARY_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_FUNCTION", cmake_value_CMAKE_CURRENT_FUNCTION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_FUNCTION_LIST_DIR", cmake_value_CMAKE_CURRENT_FUNCTION_LIST_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_FUNCTION_LIST_FILE", cmake_value_CMAKE_CURRENT_FUNCTION_LIST_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_FUNCTION_LIST_LINE", cmake_value_CMAKE_CURRENT_FUNCTION_LIST_LINE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_LIST_DIR", cmake_value_CMAKE_CURRENT_LIST_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_LIST_FILE", cmake_value_CMAKE_CURRENT_LIST_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_LIST_LINE", cmake_value_CMAKE_CURRENT_LIST_LINE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_CURRENT_SOURCE_DIR", cmake_value_CMAKE_CURRENT_SOURCE_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DEBUG_TARGET_PROPERTIES", cmake_value_CMAKE_DEBUG_TARGET_PROPERTIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DIRECTORY_LABELS", cmake_value_CMAKE_DIRECTORY_LABELS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DL_LIBS", cmake_value_CMAKE_DL_LIBS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DOTNET_SDK", cmake_value_CMAKE_DOTNET_SDK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DOTNET_TARGET_FRAMEWORK", cmake_value_CMAKE_DOTNET_TARGET_FRAMEWORK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_DOTNET_TARGET_FRAMEWORK_VERSION", cmake_value_CMAKE_DOTNET_TARGET_FRAMEWORK_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EDIT_COMMAND", cmake_value_CMAKE_EDIT_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXECUTABLE_SUFFIX", cmake_value_CMAKE_EXECUTABLE_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_EXTRA_SHARED_LIBRARY_SUFFIXES", cmake_value_CMAKE_EXTRA_SHARED_LIBRARY_SUFFIXES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_DEBUG_MODE", cmake_value_CMAKE_FIND_DEBUG_MODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_NAME", cmake_value_CMAKE_FIND_PACKAGE_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_REDIRECTS_DIR", cmake_value_CMAKE_FIND_PACKAGE_REDIRECTS_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_SORT_DIRECTION", cmake_value_CMAKE_FIND_PACKAGE_SORT_DIRECTION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_FIND_PACKAGE_SORT_ORDER", cmake_value_CMAKE_FIND_PACKAGE_SORT_ORDER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GENERATOR", cmake_value_CMAKE_GENERATOR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GENERATOR_INSTANCE", cmake_value_CMAKE_GENERATOR_INSTANCE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GENERATOR_PLATFORM", cmake_value_CMAKE_GENERATOR_PLATFORM),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_GENERATOR_TOOLSET", cmake_value_CMAKE_GENERATOR_TOOLSET),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_IMPORT_LIBRARY_PREFIX", cmake_value_CMAKE_IMPORT_LIBRARY_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_IMPORT_LIBRARY_SUFFIX", cmake_value_CMAKE_IMPORT_LIBRARY_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_JOB_POOL_COMPILE", cmake_value_CMAKE_JOB_POOL_COMPILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_JOB_POOL_LINK", cmake_value_CMAKE_JOB_POOL_LINK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_JOB_POOL_PRECOMPILE_HEADER", cmake_value_CMAKE_JOB_POOL_PRECOMPILE_HEADER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_JOB_POOLS", cmake_value_CMAKE_JOB_POOLS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_LIBRARY_SUFFIX", cmake_value_CMAKE_LINK_LIBRARY_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_SEARCH_END_STATIC", cmake_value_CMAKE_LINK_SEARCH_END_STATIC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_LINK_SEARCH_START_STATIC", cmake_value_CMAKE_LINK_SEARCH_START_STATIC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MAJOR_VERSION", cmake_value_CMAKE_MAJOR_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MAKE_PROGRAM", cmake_value_CMAKE_MAKE_PROGRAM),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MATCH_COUNT", cmake_value_CMAKE_MATCH_COUNT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MINIMUM_REQUIRED_VERSION", cmake_value_CMAKE_MINIMUM_REQUIRED_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_MINOR_VERSION", cmake_value_CMAKE_MINOR_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_NETRC", cmake_value_CMAKE_NETRC),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_NETRC_FILE", cmake_value_CMAKE_NETRC_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PARENT_LIST_FILE", cmake_value_CMAKE_PARENT_LIST_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PATCH_VERSION", cmake_value_CMAKE_PATCH_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_DESCRIPTION", cmake_value_CMAKE_PROJECT_DESCRIPTION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_HOMEPAGE_URL", cmake_value_CMAKE_PROJECT_HOMEPAGE_URL),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_NAME", cmake_value_CMAKE_PROJECT_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_VERSION", cmake_value_CMAKE_PROJECT_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_VERSION_MAJOR", cmake_value_CMAKE_PROJECT_VERSION_MAJOR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_VERSION_MINOR", cmake_value_CMAKE_PROJECT_VERSION_MINOR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_VERSION_PATCH", cmake_value_CMAKE_PROJECT_VERSION_PATCH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_PROJECT_VERSION_TWEAK", cmake_value_CMAKE_PROJECT_VERSION_TWEAK),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_RANLIB", cmake_value_CMAKE_RANLIB),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_ROOT", cmake_value_CMAKE_ROOT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_RULE_MESSAGES", cmake_value_CMAKE_RULE_MESSAGES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SCRIPT_MODE_FILE", cmake_value_CMAKE_SCRIPT_MODE_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SHARED_LIBRARY_PREFIX", cmake_value_CMAKE_SHARED_LIBRARY_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SHARED_LIBRARY_SUFFIX", cmake_value_CMAKE_SHARED_LIBRARY_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SHARED_LIBRARY_ARCHIVE_SUFFIX", cmake_value_CMAKE_SHARED_LIBRARY_ARCHIVE_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SHARED_MODULE_PREFIX", cmake_value_CMAKE_SHARED_MODULE_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SHARED_MODULE_SUFFIX", cmake_value_CMAKE_SHARED_MODULE_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SIZEOF_VOID_P", cmake_value_CMAKE_SIZEOF_VOID_P),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SKIP_INSTALL_RULES", cmake_value_CMAKE_SKIP_INSTALL_RULES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SKIP_RPATH", cmake_value_CMAKE_SKIP_RPATH),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SOURCE_DIR", cmake_value_CMAKE_SOURCE_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_STATIC_LIBRARY_PREFIX", cmake_value_CMAKE_STATIC_LIBRARY_PREFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_STATIC_LIBRARY_SUFFIX", cmake_value_CMAKE_STATIC_LIBRARY_SUFFIX),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SWIFT_COMPILATION_MODE", cmake_value_CMAKE_SWIFT_COMPILATION_MODE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SWIFT_MODULE_DIRECTORY", cmake_value_CMAKE_SWIFT_MODULE_DIRECTORY),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_SWIFT_NUM_THREADS", cmake_value_CMAKE_SWIFT_NUM_THREADS),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TEST_LAUNCHER", cmake_value_CMAKE_TEST_LAUNCHER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TOOLCHAIN_FILE", cmake_value_CMAKE_TOOLCHAIN_FILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_TWEAK_VERSION", cmake_value_CMAKE_TWEAK_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VERBOSE_MAKEFILE", cmake_value_CMAKE_VERBOSE_MAKEFILE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VERSION", cmake_value_CMAKE_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_DEVENV_COMMAND", cmake_value_CMAKE_VS_DEVENV_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_MSBUILD_COMMAND", cmake_value_CMAKE_VS_MSBUILD_COMMAND),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_NSIGHTTEGRA_VERSION", cmake_value_CMAKE_VS_NSIGHTTEGRA_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_NUGET_PACKAGE_RESTORE", cmake_value_CMAKE_VS_NUGET_PACKAGE_RESTORE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_PLATFORM_NAME", cmake_value_CMAKE_VS_PLATFORM_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_PLATFORM_NAME_DEFAULT", cmake_value_CMAKE_VS_PLATFORM_NAME_DEFAULT),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_PLATFORM_TOOLSET", cmake_value_CMAKE_VS_PLATFORM_TOOLSET),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_PLATFORM_TOOLSET_CUDA", cmake_value_CMAKE_VS_PLATFORM_TOOLSET_CUDA),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_PLATFORM_TOOLSET_CUDA_CUSTOM_DIR", cmake_value_CMAKE_VS_PLATFORM_TOOLSET_CUDA_CUSTOM_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_PLATFORM_TOOLSET_FORTRAN", cmake_value_CMAKE_VS_PLATFORM_TOOLSET_FORTRAN),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_PLATFORM_TOOLSET_HOST_ARCHITECTURE", cmake_value_CMAKE_VS_PLATFORM_TOOLSET_HOST_ARCHITECTURE),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_PLATFORM_TOOLSET_VERSION", cmake_value_CMAKE_VS_PLATFORM_TOOLSET_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_TARGET_FRAMEWORK_IDENTIFIER", cmake_value_CMAKE_VS_TARGET_FRAMEWORK_IDENTIFIER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_TARGET_FRAMEWORK_TARGETS_VERSION", cmake_value_CMAKE_VS_TARGET_FRAMEWORK_TARGETS_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_TARGET_FRAMEWORK_VERSION", cmake_value_CMAKE_VS_TARGET_FRAMEWORK_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_USE_DEBUG_LIBRARIES", cmake_value_CMAKE_VS_USE_DEBUG_LIBRARIES),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_VERSION_BUILD_NUMBER", cmake_value_CMAKE_VS_VERSION_BUILD_NUMBER),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION", cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION", cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM", cmake_value_CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_WINDOWS_KMDF_VERSION", cmake_value_CMAKE_WINDOWS_KMDF_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_BUILD_SYSTEM", cmake_value_CMAKE_XCODE_BUILD_SYSTEM),\
+	std::pair<std::string, std::string>( "cmake_value_CMAKE_XCODE_PLATFORM_TOOLSET", cmake_value_CMAKE_XCODE_PLATFORM_TOOLSET),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_BINARY_DIR", cmake_value_PROJECT_BINARY_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_DESCRIPTION", cmake_value_PROJECT_DESCRIPTION),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_HOMEPAGE_URL", cmake_value_PROJECT_HOMEPAGE_URL),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_IS_TOP_LEVEL", cmake_value_PROJECT_IS_TOP_LEVEL),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_NAME", cmake_value_PROJECT_NAME),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_SOURCE_DIR", cmake_value_PROJECT_SOURCE_DIR),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_VERSION", cmake_value_PROJECT_VERSION),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_VERSION_MAJOR", cmake_value_PROJECT_VERSION_MAJOR),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_VERSION_MINOR", cmake_value_PROJECT_VERSION_MINOR),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_VERSION_PATCH", cmake_value_PROJECT_VERSION_PATCH),\
+	std::pair<std::string, std::string>( "cmake_value_PROJECT_VERSION_TWEAK", cmake_value_PROJECT_VERSION_TWEAK),\
+}
+/// @brief 定义获取有效 cmake 属性的函数，该声明前必须调用 DEF_ALL_CMAKE_VALUE_VALUE_STD_VECTOR( ) 
+#define DEF_ALL_CMAKE_VALUE_VALUE_GET_VALID_PAIRS_STD_VECTOR( ) \
+inline static std::vector< std::pair< std::string, std::string > > getValidCmakeValuePairs( ) { \
+	std::vector< std::pair< std::string, std::string > > result; \
+	for( auto &pair : cmake_value_name_all_value ) \
+		if( !pair.second.ends_with( "-NOTFOUND" ) && !pair.second.empty( ) ) \
+			result.emplace_back( pair ); \
+	return result; \
+} \
+extern const std::vector< std::pair< std::string, std::string > > cmake_value_name_all_value
+#endif // CMAKE__VALUE_TO_C_CPP_HEADER_ENV_H_H_HEAD__FILE__

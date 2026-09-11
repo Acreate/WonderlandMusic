@@ -1,0 +1,57 @@
+﻿#ifndef IMUSICCENTREWIDGET_H_H_HEAD__FILE__
+#define IMUSICCENTREWIDGET_H_H_HEAD__FILE__
+#include <interface/iAppResourceCore.h>
+
+#include <interface/iAppJsonData.h>
+
+#include "../../../../classTypeInfo/classTypeInfoVar.h"
+
+class IMusicItem;
+class IMusicFavoriteItem;
+class IMusicWidgetSizeInfo;
+class IMusicListMenu;
+class IMusicFavoriteMenu;
+class IMusicDataManage;
+class IMusicTitleWidget;
+class IMusicListWidget;
+class IMusicFavoriteWidget;
+class MusicWindow;
+
+class IMusicCentreWidget : public IAppJsonData, public IAppResourceCore, public virtual ClassTypeInfoVar {
+protected:
+	~IMusicCentreWidget( ) override;
+
+public:
+	IMusicCentreWidget( );
+	virtual int setFavoriteWidth( const int &favoriet_width );
+	virtual int setTitleHeight( const int &title_height );
+	virtual bool setMusicWindow( MusicWindow *music_window ) =0;
+	virtual bool execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point );
+	virtual bool execMenu( IMusicListWidget *music_list_widget, IMusicItem *music_item, const QPoint &mouse_global_point );
+	virtual MusicWindow * getMusicWindow( ) const = 0;
+	virtual IMusicFavoriteWidget * getMusicFavoriteWidget( ) const = 0;
+	virtual IMusicListWidget * getMusicListWidget( ) const = 0;
+	virtual IMusicTitleWidget * getMusicTitleWidget( ) const = 0;
+	virtual IMusicDataManage * getMusicDataManage( ) const = 0;
+	virtual IMusicFavoriteMenu * getMusicFavoriteMenu( ) const = 0;
+	virtual IMusicListMenu * getMusicListMenu( ) const = 0;
+	virtual IMusicWidgetSizeInfo * getMusicWidgetSizeInfo( ) const = 0;
+	virtual bool setMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) = 0;
+	virtual bool setMusicListWidget( IMusicListWidget *const music_list_widget ) = 0;
+	virtual bool setMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) = 0;
+	virtual bool setMusicDataManage( IMusicDataManage *const music_data_manage ) = 0;
+
+	virtual bool removeMusicFavoriteWidget( IMusicFavoriteWidget *const music_favorite_widget ) = 0;
+	virtual bool removeMusicListWidget( IMusicListWidget *const music_list_widget ) = 0;
+	virtual bool removeMusicTitleWidget( IMusicTitleWidget *const music_title_widget ) = 0;
+
+	virtual bool repaintListWidget( ) = 0;
+	virtual bool repaintTitleWidget( ) = 0;
+	virtual bool repaintFavoriteWidget( ) = 0;
+	virtual bool repaintMusicCentreWidget( ) = 0;
+	virtual bool synchronizationChildrenWidgetSize( ) = 0;
+	virtual QWidget * toWidget( ) = 0;
+	virtual bool setCurrentMusicFavoriteItem( IMusicFavoriteItem *music_favorite_item ) =0;
+};
+
+#endif // IMUSICCENTREWIDGET_H_H_HEAD__FILE__

@@ -1,0 +1,46 @@
+﻿#ifndef IMUSICITEMWIDTHINFO_H_H_HEAD__FILE__
+#define IMUSICITEMWIDTHINFO_H_H_HEAD__FILE__
+
+#include <interface/iAppJsonData.h>
+
+#include "../musicCentreWidgetChild/iMusicCentreWidgetChild.h"
+
+class IMusicTitleWidget;
+
+class IMusicItemWidthInfo : public IMusicCentreWidgetChild, public IAppJsonData {
+protected:
+	~IMusicItemWidthInfo( ) override;
+
+public:
+	IMusicItemWidthInfo( );
+
+	virtual void setSuggestHeight( const int suggest_height ) = 0;
+	virtual void setMusicCodeWidth( const int music_code_width ) = 0;
+	virtual void setMusicNameWidth( const int music_name_width ) = 0;
+	virtual void setMusicSingerNameWidth( const int music_singer_name_width ) = 0;
+	virtual void setMusicDurationTimeWidth( const int music_duration_time_width ) = 0;
+	virtual bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) = 0;
+	virtual int getSuggestHeight( ) const = 0;
+	virtual int getCalculateMinWidth( ) const = 0;
+	virtual int getIntervalWidth( ) const = 0;
+	virtual int getSeparatorWidth( ) const = 0;
+	virtual int getMusicCodeWidth( ) const = 0;
+	virtual int getMusicNameWidth( ) const = 0;
+	virtual int getMusicSingerNameWidth( ) const = 0;
+	virtual int getMusicDurationTimeWidth( ) const = 0;
+	virtual bool isSuggestHeight( const int *width_var_ptr ) const = 0;
+	virtual bool isMusicCodeWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isMusicNameWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isMusicSingerNameWidth( const int *width_var_ptr ) const = 0;
+	virtual bool isMusicDurationTimeWidth( const int *width_var_ptr ) const = 0;
+	virtual bool setIMusicItemWidthInfo( const IMusicItemWidthInfo &music_item_width_info ) = 0;
+	virtual bool initInfo( ) = 0;
+	virtual bool synchronization( ) = 0;
+	virtual IMusicTitleWidget * setMusicTitleWidget( IMusicTitleWidget *music_title_widget ) = 0;
+	virtual IMusicTitleWidget * getMusicTitleWidget( ) = 0;
+	virtual bool getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, const QPoint &pos ) const;
+	virtual bool getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, const int x, int y ) const;
+	virtual bool getPosItemWidthPtr( const int *&result_width_var_ptr, int &result_index, int x ) const = 0;
+};
+
+#endif // IMUSICITEMWIDTHINFO_H_H_HEAD__FILE__

@@ -1,0 +1,22 @@
+{
+    "music.centre.widget.json": {
+        "MusicFavoriteWidget": {
+            "favorite.count": "1",
+            "favorite.vector": {
+                "0": {
+                    "": "默认",
+                    "music.item.count": "0"
+                }
+            }
+        },
+        "MusicListWidget": {
+            "currentFavoriteItem": "默认"
+        },
+        "MusicTitleWidget": {
+            "musicCodeWidth": "38",
+            "musicDurationTimeWidth": "38",
+            "musicNameWidth": "38",
+            "musicSingerNameWidth": "38"
+        }
+    }
+}

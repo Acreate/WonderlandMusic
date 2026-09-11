@@ -1,0 +1,53 @@
+﻿#ifndef MUSICTITLEWIDGET_H_H_HEAD__FILE__
+#define MUSICTITLEWIDGET_H_H_HEAD__FILE__
+#include <QWidget>
+
+#include <component/musicWindow/interface/widget/iMusicTitleWidget.h>
+
+#include <interface/iAppResourceCore.h>
+
+class UserMutex;
+
+class MusicTitleWidget : public QWidget, public IMusicTitleWidget, public IAppResourceCore {
+	Q_OBJECT;
+
+protected:
+	IMusicCentreWidget *musicCentreWidget = nullptr;
+	IMusicItemWidthInfo *musicItemWidthInfo = nullptr;
+	QImage *renderBuff = nullptr;
+	UserMutex *userMutex = nullptr;
+	const int *resuntIndexVarPtr = nullptr;
+	int resultIndex;
+	int orgX;
+	int orgWidth;
+	Qt::CursorShape currentCursor;
+	bool isDrag = false;
+
+public:
+	MusicTitleWidget( );
+	~MusicTitleWidget( ) override;
+	bool getJsonData( QJsonObject &get_json_object ) const override;
+	bool setJsonData( const QJsonObject &set_json_object ) override;
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
+
+protected:
+	bool deleteResource( ) override;
+	void paintEvent( QPaintEvent *event ) override;
+	void mouseMoveEvent( QMouseEvent *event ) override;
+	void mousePressEvent( QMouseEvent *event ) override;
+	void mouseReleaseEvent( QMouseEvent *event ) override;
+
+public:
+	bool initBefore( ) override;
+	bool init( ) override;
+	bool initAfter( ) override;
+
+	QWidget * toWidget( ) override;
+	IMusicCentreWidget * getMusicCentreWidget( ) const override;
+	bool setMusicItemWidthInfo( IMusicItemWidthInfo *music_item_width_info ) override;
+	IMusicItemWidthInfo * getMusicItemWidthInfo( ) const override;
+	bool updateMusicItemWidthInfoLayout( ) override;
+	int setAdapiveHeight( const int &adaptive_height ) override;
+};
+
+#endif // MUSICTITLEWIDGET_H_H_HEAD__FILE__

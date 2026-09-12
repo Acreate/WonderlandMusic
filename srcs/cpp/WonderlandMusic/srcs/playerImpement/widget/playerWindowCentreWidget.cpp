@@ -109,19 +109,15 @@ bool PlayerWindowCentreWidget::deleteResource( ) {
 }
 void PlayerWindowCentreWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
 	QWidget::mouseDoubleClickEvent( event );
-	event->ignore( );
 }
 void PlayerWindowCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
 	QWidget::mouseMoveEvent( event );
-	event->ignore( );
 }
 void PlayerWindowCentreWidget::mousePressEvent( QMouseEvent *event ) {
 	QWidget::mousePressEvent( event );
-	event->ignore( );
 }
 void PlayerWindowCentreWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	QWidget::mouseReleaseEvent( event );
-	event->ignore( );
 }
 bool PlayerWindowCentreWidget::initBefore( ) {
 	deleteResource( );

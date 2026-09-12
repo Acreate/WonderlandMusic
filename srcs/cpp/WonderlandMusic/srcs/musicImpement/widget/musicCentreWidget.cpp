@@ -83,7 +83,7 @@ void MusicCentreWidget::resizeEvent( QResizeEvent *event ) {
 }
 
 void MusicCentreWidget::mouseMoveEvent( QMouseEvent *event ) {
-	event->ignore( );
+	event->accept( );
 	userMutex->lock( );
 	switch( readDragStatus ) {
 		case Drag_Status::None : {

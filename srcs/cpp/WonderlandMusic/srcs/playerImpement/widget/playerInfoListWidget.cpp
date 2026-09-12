@@ -20,19 +20,15 @@ void PlayerInfoListWidget::paintEvent( QPaintEvent *event ) {
 }
 void PlayerInfoListWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
 	OptionWindow::mouseDoubleClickEvent( event );
-	event->ignore( );
 }
 void PlayerInfoListWidget::mouseMoveEvent( QMouseEvent *event ) {
 	OptionWindow::mouseMoveEvent( event );
-	event->ignore( );
 }
 void PlayerInfoListWidget::mousePressEvent( QMouseEvent *event ) {
 	OptionWindow::mousePressEvent( event );
-	event->ignore( );
 }
 void PlayerInfoListWidget::mouseReleaseEvent( QMouseEvent *event ) {
 	OptionWindow::mouseReleaseEvent( event );
-	event->ignore( );
 }
 bool PlayerInfoListWidget::hideOptionPanel( ) {
 	bool result = OptionWindow::hideOptionPanel( );

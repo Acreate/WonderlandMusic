@@ -61,16 +61,20 @@ void PlayerControlWidget::paintEvent( QPaintEvent *event ) {
 	QWidget::paintEvent( event );
 }
 void PlayerControlWidget::mouseDoubleClickEvent( QMouseEvent *event ) {
-	event->ignore( );
+	QWidget::mouseDoubleClickEvent( event );
 }
 void PlayerControlWidget::mouseMoveEvent( QMouseEvent *event ) {
-	event->ignore( );
+	QWidget::mouseMoveEvent( event );
 }
 void PlayerControlWidget::mousePressEvent( QMouseEvent *event ) {
-	event->ignore( );
+	QWidget::mousePressEvent( event );
 }
 void PlayerControlWidget::mouseReleaseEvent( QMouseEvent *event ) {
-	event->ignore( );
+	QWidget::mouseReleaseEvent( event );
+}
+
+void PlayerControlWidget::resizeEvent( QResizeEvent *event ) {
+	QWidget::resizeEvent( event );
 }
 bool PlayerControlWidget::initBefore( ) {
 	deleteResource( );

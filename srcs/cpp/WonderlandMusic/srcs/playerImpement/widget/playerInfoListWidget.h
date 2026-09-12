@@ -18,6 +18,7 @@ protected:
 	void mouseReleaseEvent( QMouseEvent *event ) override;
 	bool hideOptionPanel( ) override;
 	bool hideOptionPanel( OptionPanel *option_panel ) override;
+	void resizeEvent( QResizeEvent *event ) override;
 
 public:
 	bool showOptionButton( OptionButton *option_button ) override;

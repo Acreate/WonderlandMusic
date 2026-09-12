@@ -10,7 +10,11 @@ class PlayerControlWidget : public QWidget, public IPlayerControlWidget, public 
 	Q_OBJECT;
 
 protected:
+	UserMutex* userMutex =nullptr;
 	IPlayerWindowCentreWidget *playerWindowCentreWidget = nullptr;
+	IPlayerSortOption *playerSortOption = nullptr;
+	IPlayerSelectOption *playerSelectOption = nullptr;
+	IPlayerbackProgressBar *playerbackProgressBar = nullptr;
 
 public:
 	PlayerControlWidget( );
@@ -23,6 +27,12 @@ public:
 	bool stop( ) override;
 	bool terminate( ) override;
 	bool setPlayerTime( const int64_t &player_mill_second_time ) override;
+	IPlayerSortOption * getPlayerSortOption( ) const override;
+	IPlayerSelectOption * getPlayerSelectOption( ) const override;
+	IPlayerbackProgressBar * getPlayerbackProgressBar( ) const override;
+	bool setPlayerSortOption( IPlayerSortOption *player_sort_option ) override;
+	bool setPlayerSelectOption( IPlayerSelectOption *player_select_option ) override;
+	bool setPlayerbackProgressBar( IPlayerbackProgressBar *playerback_progress_bar ) override;
 
 protected:
 	bool deleteResource( ) override;

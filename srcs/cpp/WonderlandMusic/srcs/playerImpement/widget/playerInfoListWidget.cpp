@@ -1,12 +1,7 @@
 ﻿#include "playerInfoListWidget.h"
 
-#include <QMouseEvent>
-#include <QPainter>
-
 #include "../../component/playWindow/playWindow.h"
 #include "../../component/playWindow/interface/widget/iPlayerWindowCentreWidget.h"
-
-#include "../../head/release_macro.h"
 
 bool PlayerInfoListWidget::deleteResource( ) {
 	bool result = OptionWindow::deleteResource( );
@@ -41,6 +36,10 @@ bool PlayerInfoListWidget::hideOptionPanel( OptionPanel *option_panel ) {
 	if( playerWindowCentreWidget )
 		playerWindowCentreWidget->updateLayout( );
 	return result;
+}
+void PlayerInfoListWidget::resizeEvent( QResizeEvent *event ) {
+	OptionWindow::resizeEvent( event );
+	updateLayout( );
 }
 bool PlayerInfoListWidget::showOptionButton( OptionButton *option_button ) {
 	bool result = OptionWindow::showOptionButton( option_button );
@@ -112,6 +111,9 @@ IPlayerWindowCentreWidget * PlayerInfoListWidget::getPlayerWindowCentre( ) const
 bool PlayerInfoListWidget::updateLayout( ) {
 	if( playerWindowCentreWidget == nullptr )
 		return false;
+	if( isHidden( ) )
+		return false;
+	OptionWindow::updateWindow( );
 	return true;
 }
 PlayerInfoListWidget::~PlayerInfoListWidget( ) {

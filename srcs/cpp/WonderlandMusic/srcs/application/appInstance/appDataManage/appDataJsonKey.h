@@ -41,7 +41,7 @@ protected:
 	MusicItemWidthInfoJsonKey *musicItemWidthInfo = nullptr;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	~AppDataJsonKey( ) override;

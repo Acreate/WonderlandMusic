@@ -35,7 +35,7 @@ public:
 	bool initAfter( ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	bool event( QEvent *event ) override;
 };
 #endif // MAINWINDOW_H_H_HEAD__FILE__

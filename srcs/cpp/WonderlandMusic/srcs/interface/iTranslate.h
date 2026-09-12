@@ -8,7 +8,7 @@ namespace AppTranslateTools {
 
 class ITranslate : public IAppResourceCore {
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	~ITranslate( ) override;
 
 public:

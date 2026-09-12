@@ -28,7 +28,7 @@ public:
 	IPlayerControlWidget * getPlayerControlWidget( ) const override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	void mouseDoubleClickEvent( QMouseEvent *event ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;

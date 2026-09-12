@@ -26,7 +26,7 @@ public:
 	~AboutWidget( ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	QWidget * toWidget( ) override;

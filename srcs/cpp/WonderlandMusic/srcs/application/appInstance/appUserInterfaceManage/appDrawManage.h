@@ -21,7 +21,7 @@ public:
 	~AppDrawManage( ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	bool init( ) override;

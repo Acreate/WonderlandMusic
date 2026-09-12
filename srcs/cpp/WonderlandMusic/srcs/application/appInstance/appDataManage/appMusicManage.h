@@ -30,7 +30,7 @@ protected:
 	std::vector< QString > supperDecodeFileSuffix;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	virtual bool unsafeClearMusicFavoriteItem( );
 
 public:

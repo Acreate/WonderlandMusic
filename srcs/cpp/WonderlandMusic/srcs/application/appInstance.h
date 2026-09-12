@@ -75,7 +75,7 @@ public:
 	virtual int quit( );
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	virtual AppDataManage * getAppDataManage( ) const;

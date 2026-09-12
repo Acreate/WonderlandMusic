@@ -31,7 +31,7 @@ public:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	void paintEvent( QPaintEvent *event ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;

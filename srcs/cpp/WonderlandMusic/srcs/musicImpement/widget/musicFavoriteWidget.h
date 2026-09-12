@@ -30,7 +30,7 @@ public:
 	void peelMusicFavoriteItem( ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;

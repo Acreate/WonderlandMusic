@@ -27,7 +27,7 @@ protected:
 	QPen *drawPen = nullptr;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	virtual bool renderTxt( QImage &result_render_image, const QString &render_txt, const QFont &font, const QFontMetrics &font_metrics ) const;
 	virtual bool getTxtSize( QSize &result_txt_size, const QString &render_txt, const QFontMetrics &font_metrics ) const;
 

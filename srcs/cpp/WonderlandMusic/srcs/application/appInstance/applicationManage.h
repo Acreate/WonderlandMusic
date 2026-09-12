@@ -17,7 +17,7 @@ protected:
 	AppUserInterfaceManage *appUserInterfaceManage = nullptr;
 	AppDataManage *appDataManage = nullptr;
 	MainWindow *mainWindow = nullptr;
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	bool initBefore( ) override;

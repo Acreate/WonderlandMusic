@@ -8,7 +8,7 @@ class SystemTrayIcon : public QSystemTrayIcon, public IAppResourceCore {
 	Q_OBJECT;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 protected Q_SLOTS:
 	virtual void activated_slot( QSystemTrayIcon::ActivationReason reason );

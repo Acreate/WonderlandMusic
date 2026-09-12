@@ -10,7 +10,7 @@ namespace AppJsonKeyTools {
 class IJsonKey : public IAppResourceCore {
 protected:
 	QString filePath;
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	virtual QString getNormalJsonKeyFile( const QString &json_file_last_file_path ) const;
 	~IJsonKey( ) override;
 

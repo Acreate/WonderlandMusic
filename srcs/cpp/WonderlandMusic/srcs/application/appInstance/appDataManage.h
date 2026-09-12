@@ -49,7 +49,7 @@ public:
 	~AppDataManage( ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	virtual AppTranslate * getTranslate( ) const;

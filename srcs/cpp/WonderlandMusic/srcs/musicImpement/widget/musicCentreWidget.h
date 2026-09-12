@@ -67,7 +67,7 @@ public:
 	~MusicCentreWidget( ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	void resizeEvent( QResizeEvent *event ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;

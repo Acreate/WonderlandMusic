@@ -42,7 +42,7 @@ public:
 protected:
 	void paintEvent( QPaintEvent *event ) override;
 
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	bool initBefore( ) override;

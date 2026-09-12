@@ -6,8 +6,6 @@ class IAppResourceCore {
 	friend class AppResourceTools;
 
 protected:
-	virtual bool deleteResource( ) = 0;
-
 	virtual ~IAppResourceCore( );
 
 public:

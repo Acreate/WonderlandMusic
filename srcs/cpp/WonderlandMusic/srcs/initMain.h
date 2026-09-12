@@ -33,7 +33,7 @@ protected:
 	void initTimeInfo( );
 	void satrtProcess( );
 	int endProcess( int exit_code );
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	InitMain( int argc, char *argv[ ], char *envp[ ] );

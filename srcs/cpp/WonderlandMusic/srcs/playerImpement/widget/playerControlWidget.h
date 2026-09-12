@@ -35,7 +35,7 @@ public:
 	bool setPlayerbackProgressBar( IPlayerbackProgressBar *playerback_progress_bar ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	void paintEvent( QPaintEvent *event ) override;
 	void mouseDoubleClickEvent( QMouseEvent *event ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;

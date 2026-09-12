@@ -26,7 +26,7 @@ public:
 	~MusicListMenu( ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	bool initBefore( ) override;

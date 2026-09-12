@@ -10,7 +10,7 @@ class PlayerInfoListWidget : public OptionWindow, public IPlayerInfoListWidget {
 protected:
 	IPlayerWindowCentreWidget *playerWindowCentreWidget = nullptr;
 
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	void paintEvent( QPaintEvent *event ) override;
 	void mouseDoubleClickEvent( QMouseEvent *event ) override;
 	void mouseMoveEvent( QMouseEvent *event ) override;

@@ -66,7 +66,7 @@ protected:
 	AppMenuManage *appMenuManage = nullptr;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;

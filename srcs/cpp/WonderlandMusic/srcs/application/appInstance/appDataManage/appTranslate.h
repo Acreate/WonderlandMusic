@@ -42,7 +42,7 @@ protected:
 	MusicListMenuTranslate *musicListMenu = nullptr;
 	StringEditorWidgetTranslate *stringEditorWidget = nullptr;
 	MusicItemTranslate *musicItem = nullptr;
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	~AppTranslate( ) override;

@@ -20,7 +20,7 @@ public:
 	bool initAfter( ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	AppDateTimerManage( );

@@ -16,7 +16,7 @@ private:
 	void slot_quitApp( );
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	SystemTrayIconMenu( QWidget *parent = nullptr );

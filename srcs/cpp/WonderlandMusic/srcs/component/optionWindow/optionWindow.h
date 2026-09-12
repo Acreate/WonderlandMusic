@@ -47,7 +47,7 @@ public:
 	virtual bool showOptionPanel( OptionPanel *option_panel );
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 
 public:
 	bool initBefore( ) override;

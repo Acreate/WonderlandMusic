@@ -25,7 +25,7 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 
 protected:
-	bool deleteResource( ) override;
+	bool deleteResource( );
 	void mouseMoveEvent( QMouseEvent *event ) override;
 	void mousePressEvent( QMouseEvent *event ) override;
 	void mouseReleaseEvent( QMouseEvent *event ) override;

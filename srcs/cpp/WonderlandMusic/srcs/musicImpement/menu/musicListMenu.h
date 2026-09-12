@@ -10,7 +10,7 @@ class MusicListMenu : public QMenu, public IMusicListMenu {
 	Q_OBJECT;
 
 private:
-	UserMutex* userMutex = nullptr;
+	UserMutex *userMutex = nullptr;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 
 	QAction *playMusicItem = nullptr;
@@ -36,7 +36,6 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 
-protected:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	bool execMenu( IMusicListWidget *music_list_widget, IMusicItem *music_item, const QPoint &mouse_global_point ) override;
 

@@ -14,7 +14,6 @@ public:
 	~MusicWidgetSizeInfo( ) override;
 
 protected:
-	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 
 public:
 	bool initInfo( ) override;
@@ -24,8 +23,7 @@ public:
 	bool getJsonData( QJsonObject &get_json_object ) const override;
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
-
-protected:
+	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	int setFavoriteWidth( const int &favoriet_width ) override;
 	int setTitleHeight( const int &title_height ) override;
 };

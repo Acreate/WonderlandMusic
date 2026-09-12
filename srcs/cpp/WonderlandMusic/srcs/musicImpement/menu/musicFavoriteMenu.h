@@ -35,9 +35,10 @@ public:
 	bool setJsonData( const QJsonObject &set_json_object ) override;
 	IMusicCentreWidget * getMusicCentreWidget( ) const override;
 
-protected:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
 	bool execMenu( IMusicFavoriteWidget *music_favorite_widget, IMusicFavoriteItem *favorite_item, const QPoint &mouse_global_point ) override;
+
+protected:
 	void hideEvent( QHideEvent * ) override;
 
 private Q_SLOTS :

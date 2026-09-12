@@ -14,22 +14,20 @@ private:
 	IMusicTitleWidget *musicTitleWidget = nullptr;
 	IMusicCentreWidget *musicCentreWidget = nullptr;
 
-protected:
-	void setMusicCodeWidth( const int music_code_width ) override;
-	void setMusicDurationTimeWidth( const int music_duration_time_width ) override;
-	void setMusicNameWidth( const int music_name_width ) override;
-	void setMusicSingerNameWidth( const int music_singer_name_width ) override;
-	void setSuggestHeight( const int suggest_height ) override;
-	bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) override;
-
 public:
 	MusicItemWidthInfo( );
 	~MusicItemWidthInfo( ) override;
 	MusicItemWidthInfo( const MusicItemWidthInfo &other );
 	MusicItemWidthInfo & operator=( const MusicItemWidthInfo &other );
 
-protected:
 	bool setMusicCentreWidget( IMusicCentreWidget *music_centre_widget ) override;
+
+	void setMusicCodeWidth( const int music_code_width ) override;
+	void setMusicDurationTimeWidth( const int music_duration_time_width ) override;
+	void setMusicNameWidth( const int music_name_width ) override;
+	void setMusicSingerNameWidth( const int music_singer_name_width ) override;
+	void setSuggestHeight( const int suggest_height ) override;
+	bool setPosItemWidthPtrVar( const int *&result_width_var_ptr, int &result_index, int new_width ) override;
 
 public:
 	int getSuggestHeight( ) const override;
